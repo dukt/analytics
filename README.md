@@ -1,4 +1,4 @@
-# Craft Analytics
+# Analytics *for Craft*
 
 This plugin helps you print Google Analytics tracking code.
 
