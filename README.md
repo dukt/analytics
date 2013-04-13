@@ -4,7 +4,7 @@ This plugin helps you print Google Analytics tracking code.
 
 ## Example
 
-Put this code *after the opening `<body>` tag* as they say :
+Put this code *"after the opening `<body>` tag"* as they say :
 
     {{craft.analytics.code("UA-XXXXXXX-X")}}
 
