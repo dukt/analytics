@@ -2,6 +2,10 @@
 
 This plugin helps you print Google Analytics tracking code.
 
+## Installation
+
+Put the **analytics/** folder inside **craft/plugins/**.
+
 ## Example
 
 Put this code *"after the opening `<body>` tag"* as they say :
