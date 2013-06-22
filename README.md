@@ -6,11 +6,56 @@ This plugin helps you print Google Analytics tracking code.
 
 Put the **analytics/** folder inside **craft/plugins/**.
 
-## Example
+## Usage
 
 Put this code *"after the opening `<body>` tag"* as they say :
 
-    {{craft.analytics.code("UA-XXXXXXX-X")}}
+    {{craft.analytics.code('UA-XXXXXXX-XX')}}
+
+Alternatively, you can pass a custom entry, but remember that tracking data will be added to this entry.
+
+    {% if entry is defined %}
+        {{craft.analytics.code('UA-XXXXXXX-XX', entry)}}
+    {% else %}
+        {{craft.analytics.code('UA-XXXXXXX-XX')}}
+    {% endif %}
+
+## Tracked Data
+
+Data being tracked through Google Analytics custom metrics :
+
+- session
+    - logged in
+- entry
+    - section name
+    - author name
+    - tags
+    - publication year
+
+## Tracking Downloads
+
+Downloads are tracked through Google Analytics Events.
+
+    <a href="http://domain/to/plugin.zip" onclick="{{craft.analytics.trackDownload()}}">Download</a>
+
+You can categorize downloads by passing the category name as a parameter :
+
+    <a href="http://domain/to/plugin.zip" onclick="{{craft.analytics.trackDownload('Plugins')}}">Download</a>
+
+## Tracking Custom Events
+
+- **category :** Typically the object that was interacted with (e.g. button)
+- **action :** The type of interaction (e.g. click)
+- **label :** Useful for categorizing events (e.g. nav buttons)
+- **value :** Values must be non-negative. Useful to pass counts (e.g. 4 times)
+
+Example :
+
+    <a
+        href="http://domain/to/plugin.zip"
+        onclick="{{craft.analytics.trackEvent('Category', 'Action', 'Label', 4)}}"
+    >Download</a>
+
 
 ## Feedback
 
