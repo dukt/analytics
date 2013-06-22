@@ -1,0 +1,19 @@
+{% extends "_layouts/cp" %}
+
+{% set title = "Analytics"|t %}
+
+{% set extraPageHeaderHtml %}
+    <a class="btn settings icon" href="{{ url('analytics/settings') }}" title="{{ 'Settings'|t }}"></a>
+{% endset %}
+
+
+{% set crumbs = [
+    { label: "Settings"|t, url: url('settings') }
+] %}
+
+
+{% set tabs = {
+    accounts: { label: "Accounts"|t, url: url('analytics/accounts') },
+    properties: { label: "Web Properties"|t, url: url('analytics/properties') },
+    fields: { label: "Fields"|t, url: url('settings/assets/fields') }
+} %}

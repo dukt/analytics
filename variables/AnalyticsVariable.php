@@ -15,8 +15,33 @@ namespace Craft;
 
 class AnalyticsVariable
 {
-    public function code($id)
+    public function event($category, $action, $label, $value)
     {
-        return craft()->analytics->code($id);
+        return "
+            ga('send', 'event', '".$category."', '".$action."', '".$label."', ".$value.");
+
+            var el=this;
+
+            setTimeout(function() {
+                location.href = el.href;
+            }, 100);
+
+            return false;
+            ";
+    }
+
+    public function code($id, $entry = NULL)
+    {
+        return craft()->analytics->code($id, $entry);
+    }
+
+    public function accounts()
+    {
+        return craft()->analytics->accounts();
+    }
+
+    public function api()
+    {
+        return craft()->analytics->api();
     }
 }

@@ -1,1 +1,82 @@
-{{craft.analytics.code(123)}}
+{% set provider = 'Google' %}
+{% set accountId = '1547168' %}
+{% set webPropertyId = 'UA-1547168-20' %}
+
+{% set account = craft.oauth.getAccount('analytics.system', provider) %}
+
+{% if not account %}
+    {% redirect 'analytics/settings' %}
+{% endif %}
+
+{% extends "_layouts/cp" %}
+
+{% set title = "Analytics"|t %}
+
+{% set extraPageHeaderHtml %}
+    <a class="btn settings icon" href="{{ url('analytics/settings') }}" title="{{ 'Settings'|t }}"></a>
+{% endset %}
+
+{% import "_includes/forms" as forms %}
+
+
+{% set content %}
+
+    {% if account %}
+
+        {% set profiles = craft.analytics.api.management_profiles.listManagementProfiles(accountId, webPropertyId) %}
+        {% set profileId = profiles.items[0].id %}
+
+        {% set optParams = {
+            'dimensions' : 'ga:day',
+            'max-results' : '21'
+            } %}
+
+        {% set results = craft.analytics.api.data_ga.get(
+           'ga:' ~ profileId,
+           '2013-06-01',
+           '2013-06-21',
+           'ga:visits', optParams) %}
+
+
+        {#<p><strong>Visites pour dukt.net le 3 mars 2012 : </strong> {{results.rows[0][0]}}</p>#}
+
+
+
+    <script type="text/javascript" src="http://playground.craft.dk/admin/resources/lib/jquery-1.9.1.min.js"></script>
+        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+        <script type="text/javascript">
+          google.load("visualization", "1", {packages:["corechart"]});
+          google.setOnLoadCallback(drawChart);
+          function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+              ['Year', 'Sales'],
+              {% for row in results.rows %}
+                  ['{{row[0]}}',  {{row[1]}}],
+              {% endfor %}
+            ]);
+
+            var options = {
+              title: 'Company Performance'
+            };
+
+            var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+          }
+
+          $(window).resize(function() {
+                drawChart();
+          });
+        </script>
+
+
+
+        <div id="chart_div" style="width: 100%; height: 500px;"></div>
+
+        {# <pre>{{dump(results.rows)}}</pre> #}
+
+        <p>
+            Google account connected : {{account.email}}. <a href="{{craft.oauth.deauthenticate('analytics.system', provider)}}" class="btn small">Disconnect</a>
+        </p>
+    {% endif %}
+{% endset %}
+
