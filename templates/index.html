@@ -5,6 +5,8 @@
 {% else %}
 
 
+
+
   {% set provider = 'Google' %}
 
 
@@ -27,75 +29,80 @@
 
   {% set content %}
 
+    {% if not craft.analytics.api %}
+      {% redirect 'analytics/settings' %}
+    {% else %}
 
-      {% set accountId = false %}
-      {% set webPropertyId = false %}
 
-      {% set properties = craft.analytics.api.management_webproperties.listManagementWebproperties("~all") %}
+        {% set accountId = false %}
+        {% set webPropertyId = false %}
 
-      {% for item in properties.items %}
-        {% if item.id ==  craft.analytics.getSetting('profileId') %}
+        {% set properties = craft.analytics.api.management_webproperties.listManagementWebproperties("~all") %}
 
-          {% set accountId = item.accountId %}
-          {% set webPropertyId = item.id %}
+        {% for item in properties.items %}
+          {% if item.id ==  craft.analytics.getSetting('profileId') %}
+
+            {% set accountId = item.accountId %}
+            {% set webPropertyId = item.id %}
+
+          {% endif %}
+        {% endfor %}
+
+
+        {% if accountId is defined and webPropertyId is defined %}
+
+            {% set profiles = craft.analytics.api.management_profiles.listManagementProfiles(accountId, webPropertyId) %}
+            {% set profileId = profiles.items[0].id %}
+
+            {% set optParams = {
+                'dimensions' : 'ga:year, ga:month, ga:day'
+                } %}
+
+            {% set results = craft.analytics.api.data_ga.get(
+               'ga:' ~ profileId,
+               now|date_modify("-1 month")|date("Y-m-d"),
+               now|date("Y-m-d"),
+               'ga:visits', optParams) %}
+
+
+            {#<p><strong>Visites pour dukt.net le 3 mars 2012 : </strong> {{results.rows[0][0]}}</p>#}
+
+        <script type="text/javascript" src="http://playground.craft.dk/admin/resources/lib/jquery-1.9.1.min.js"></script>
+            <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+            <script type="text/javascript">
+              google.load("visualization", "1", {packages:["corechart"]});
+              google.setOnLoadCallback(drawChart);
+              function drawChart() {
+                var data = google.visualization.arrayToDataTable([
+                  ['Day', 'Visitors'],
+                  {% for row in results.rows %}
+                      ['{{row[2]}}/{{row[1]}}',  {{row[3]}}],
+                  {% endfor %}
+                ]);
+
+                var options = {
+                  title: 'Last 30 days',
+                  legend:{position:'bottom'},
+                  chartArea : {width:'90%'},
+                  vAxis: {minValue: 4, format: '#'},
+                  hAxis: {minValue: 4, format: '#', showTextEvery:5}
+                };
+
+                var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+                chart.draw(data, options);
+              }
+
+              $(window).resize(function() {
+                    drawChart();
+              });
+            </script>
+
+
+
+            <div id="chart_div" style="width: 100%; height: 500px;"></div>
 
         {% endif %}
-      {% endfor %}
-
-
-      {% if accountId is defined and webPropertyId is defined %}
-
-          {% set profiles = craft.analytics.api.management_profiles.listManagementProfiles(accountId, webPropertyId) %}
-          {% set profileId = profiles.items[0].id %}
-
-          {% set optParams = {
-              'dimensions' : 'ga:year, ga:month, ga:day'
-              } %}
-
-          {% set results = craft.analytics.api.data_ga.get(
-             'ga:' ~ profileId,
-             now|date_modify("-1 month")|date("Y-m-d"),
-             now|date("Y-m-d"),
-             'ga:visits', optParams) %}
-
-
-          {#<p><strong>Visites pour dukt.net le 3 mars 2012 : </strong> {{results.rows[0][0]}}</p>#}
-
-      <script type="text/javascript" src="http://playground.craft.dk/admin/resources/lib/jquery-1.9.1.min.js"></script>
-          <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-          <script type="text/javascript">
-            google.load("visualization", "1", {packages:["corechart"]});
-            google.setOnLoadCallback(drawChart);
-            function drawChart() {
-              var data = google.visualization.arrayToDataTable([
-                ['Day', 'Visitors'],
-                {% for row in results.rows %}
-                    ['{{row[2]}}/{{row[1]}}',  {{row[3]}}],
-                {% endfor %}
-              ]);
-
-              var options = {
-                title: 'Last 30 days',
-                legend:{position:'bottom'},
-                chartArea : {width:'90%'},
-                vAxis: {minValue: 4, format: '#'},
-                hAxis: {minValue: 4, format: '#', showTextEvery:5}
-              };
-
-              var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-              chart.draw(data, options);
-            }
-
-            $(window).resize(function() {
-                  drawChart();
-            });
-          </script>
-
-
-
-          <div id="chart_div" style="width: 100%; height: 500px;"></div>
-
-      {% endif %}
+    {% endif %}
   {% endset %}
 
 
