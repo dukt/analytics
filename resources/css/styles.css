@@ -1,0 +1,13 @@
+.analytics-setting.closed .analytics-setting-content {
+    display: none;
+}
+
+.analytics-setting.done h2 {
+    color:#ccc;
+    text-decoration: line-through;
+}
+
+
+.center {
+    text-align: center;
+}

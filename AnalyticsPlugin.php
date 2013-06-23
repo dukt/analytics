@@ -22,7 +22,7 @@ class AnalyticsPlugin extends BasePlugin
     {
         return Craft::t('Analytics');
     }
-    
+
     // --------------------------------------------------------------------
 
     /**
@@ -30,9 +30,9 @@ class AnalyticsPlugin extends BasePlugin
      */
     function getVersion()
     {
-        return '1.0';
+        return '1.1.3';
     }
-    
+
     // --------------------------------------------------------------------
 
     /**
@@ -42,7 +42,7 @@ class AnalyticsPlugin extends BasePlugin
     {
         return 'Dukt';
     }
-    
+
     // --------------------------------------------------------------------
 
     /**
@@ -52,7 +52,7 @@ class AnalyticsPlugin extends BasePlugin
     {
         return 'http://dukt.net/';
     }
-    
+
     // --------------------------------------------------------------------
 
     /**

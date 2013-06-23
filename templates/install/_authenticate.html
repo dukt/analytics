@@ -1,0 +1,14 @@
+{% set scope = [
+            'https://www.googleapis.com/auth/userinfo.profile',
+            'https://www.googleapis.com/auth/userinfo.email',
+            'https://www.googleapis.com/auth/analytics'
+            ] %}
+
+{% if account %}
+    {% redirect 'analytics/settings' %}
+    <p>Connected as {{account.email}}.</p>
+    <p><a class="btn" href="{{craft.oauth.deauthenticate('analytics.system', provider)}}">Disconnect from {{provider}}</a></p>
+{% else %}
+    <p>Last but not least, authenticate with {{provider}} so we can start gathering data from the API.</p>
+    <p><a class="btn submit" href="{{ craft.oauth.authenticate('analytics.system', provider, scope) }}">Authenticate with {{provider}}</a></p>
+{% endif %}

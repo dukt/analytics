@@ -37,6 +37,31 @@ class AnalyticsService extends BaseApplicationComponent
         return new \Twig_Markup($html, $charset);
     }
 
+    public function getSetting($k) {
+        $settings = Analytics_SettingsRecord::model()->find();
+
+        if(!$settings) {
+            return false;
+        }
+
+        return $settings->options[$k];
+    }
+
+    public function properties()
+    {
+        $response = craft()->analytics->api()->management_webproperties->listManagementWebproperties("~all");
+
+        $items = $response['items'];
+
+        $properties = array();
+
+        foreach($items as $item) {
+            $properties[$item['id']] = '('.$item['id'].') '.$item['websiteUrl'];
+        }
+
+        return $properties;
+    }
+
     public function api()
     {
         $provider = craft()->oauth->getProvider('analytics.system', 'Google');

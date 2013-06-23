@@ -9,9 +9,12 @@
     });
 
     {% if entry %}
-        ga('send', 'pageview', {
-          'dimension15':  '{{entry.slug}}'
-        });
+        ga('send', 'pageview');
+
+        var dimensionValue = '{{entry.slug}}';
+
+        ga('set', 'dimension1', dimensionValue);
+
     {% else %}
         ga('send', 'pageview');
     {% endif %}

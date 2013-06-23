@@ -30,6 +30,16 @@ class AnalyticsVariable
             ";
     }
 
+    public function getSetting($k)
+    {
+        return craft()->analytics->getSetting($k);
+    }
+
+    public function properties()
+    {
+        return craft()->analytics->properties();
+    }
+
     public function code($id, $entry = NULL)
     {
         return craft()->analytics->code($id, $entry);
