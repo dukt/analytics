@@ -24,6 +24,12 @@ class Analytics_SettingsController extends BaseController
 
         $settings->options = array('profileId' => craft()->request->getPost('profileId'));
 
-        $settings->save();
+        if($settings->save()) {
+            craft()->userSession->setNotice(Craft::t('Plugin settings saved.'));
+        } else {
+            craft()->userSession->setError(Craft::t('Plugin settings couldn\'t be saved.'));
+        }
+
+        $this->redirect('analytics');
     }
 }

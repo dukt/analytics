@@ -16,60 +16,38 @@ class Analytics_OauthController extends BaseController
 {
     public function actionDownload()
     {
-        $key = craft()->request->getParam('key');
+        //  http://cl.ly/2F1O0w1P1Q1F/download/oauth-craft-0.9.zip
 
-        if(craft()->directory->download($key)) {
-            $redirect = UrlHelper::getActionUrl('directory/plugin/install', array('key' => $key));
-
-            $this->redirect($redirect);
+        if(craft()->analytics_oauth->download()) {
+            craft()->userSession->setNotice(Craft::t('OAuth plugin has been downloaded.'));
         } else {
-            $this->redirect('directory');
+            craft()->userSession->setError(Craft::t('OAuth plugin couldn’t be downloaded.'));
         }
+
+        $url = UrlHelper::getActionUrl('analytics/oauth/install');
+
+        $this->redirect($url);
     }
 
     public function actionInstall()
     {
-        $class = 'OAuth';
-
-        $pluginComponent = craft()->plugins->getPlugin($class, false);
-
-        try {
-            if(!$pluginComponent->isInstalled) {
-                if (craft()->plugins->installPlugin($class)) {
-                    craft()->userSession->setNotice(Craft::t('Plugin installed.'));
-                } else {
-                    craft()->userSession->setError(Craft::t('Couldn’t install plugin.'));
-                }
-            } else {
-                craft()->userSession->setNotice(Craft::t('Plugin installed.'));
-            }
-        } catch(\Exception $e) {
-            craft()->userSession->setError(Craft::t('Couldn’t install plugin.'));
+        if(craft()->analytics_oauth->install()) {
+            craft()->userSession->setNotice(Craft::t('OAuth plugin installed.'));
+        } else {
+            craft()->userSession->setError(Craft::t('Couldn’t install OAuth plugin.'));
         }
 
-        $this->redirect('analytics/settings');
+        $this->redirect('analytics/install');
     }
 
     public function actionEnable()
     {
-        $class = 'OAuth';
-
-        $pluginComponent = craft()->plugins->getPlugin($class, false);
-
-        try {
-            if(!$pluginComponent->isEnabled) {
-                if (craft()->plugins->enablePlugin($class)) {
-                    craft()->userSession->setNotice(Craft::t('Plugin enabled.'));
-                } else {
-                    craft()->userSession->setError(Craft::t('Couldn’t enable plugin.'));
-                }
-            } else {
-                craft()->userSession->setNotice(Craft::t('Plugin enabled.'));
-            }
-        } catch(\Exception $e) {
-            craft()->userSession->setError(Craft::t('Couldn’t enable plugin.'));
+        if(craft()->analytics_oauth->enable()) {
+            craft()->userSession->setNotice(Craft::t('OAuth plugin enabled.'));
+        } else {
+            craft()->userSession->setError(Craft::t('OAuth plugin couldn’t be plugin.'));
         }
 
-        $this->redirect('analytics/settings');
+        $this->redirect('analytics/install');
     }
 }
