@@ -1,11 +1,23 @@
-# Analytics *for Craft*
+# Analytics <small>_for Craft CMS_</small>
 
-This plugin helps you print Google Analytics tracking code.
+Advanced Analytics tracking for your Craft CMS website.
 
+- [Installation](#install)
+- [Usage](#usage)
+- [Tracking Downloads](#track-downloads)
+- [Tracking Custom Events](#track-events)
+- [API Reference](#api)
+- [Feedback](#feedback)
+
+
+<a id="install"></a>
 ## Installation
 
-Put the **analytics/** folder inside **craft/plugins/**.
+1. Unzip and drop the Analytics plugin in your `craft/plugin` directory.
+2. Go to **Admin / Analytics** and follow the installation instructions.
+3. Once installed, select a website profile to work with
 
+<a id="usage"></a>
 ## Usage
 
 Put this code *"after the opening `<body>` tag"* as they say :
@@ -20,7 +32,7 @@ Alternatively, you can pass a custom entry, but remember that tracking data will
         {{craft.analytics.code('UA-XXXXXXX-XX')}}
     {% endif %}
 
-## Tracked Data
+### Tracked Data (not implemented yet)
 
 Data being tracked through Google Analytics custom metrics :
 
@@ -32,6 +44,7 @@ Data being tracked through Google Analytics custom metrics :
     - tags
     - publication year
 
+<a id="track-downloads"></a>
 ## Tracking Downloads
 
 Downloads are tracked through Google Analytics Events.
@@ -42,6 +55,7 @@ You can categorize downloads by passing the category name as a parameter :
 
     <a href="http://domain/to/plugin.zip" onclick="{{craft.analytics.trackDownload('Plugins')}}">Download</a>
 
+<a id="track-events"></a>
 ## Tracking Custom Events
 
 - **category :** Typically the object that was interacted with (e.g. button)
@@ -57,6 +71,15 @@ Example :
     >Download</a>
 
 
+<a id="api"></a>
+## API Reference
+
+### {{craft.analytics.code(code, entry)}}
+### {{craft.analytics.trackDownload(category)}}
+### {{craft.analytics.trackEvent(category, action, label, number)}}
+### {{craft.analytics.api}}
+
+<a id="feedback"></a>
 ## Feedback
 
 **Please provide feedback!** We want this plugin to make fit your needs as much as possible.
