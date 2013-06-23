@@ -52,6 +52,10 @@ class AnalyticsVariable
 
     public function api()
     {
-        return craft()->analytics->api();
+        try {
+            return craft()->analytics->api();
+        } catch(\Exception $e) {
+            return false;
+        }
     }
 }

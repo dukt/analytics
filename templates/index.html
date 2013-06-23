@@ -29,6 +29,7 @@
 
   {% set content %}
 
+
     {% if not craft.analytics.api %}
       {% redirect 'analytics/settings' %}
     {% else %}
@@ -65,9 +66,7 @@
                'ga:visits', optParams) %}
 
 
-            {#<p><strong>Visites pour dukt.net le 3 mars 2012 : </strong> {{results.rows[0][0]}}</p>#}
-
-        <script type="text/javascript" src="http://playground.craft.dk/admin/resources/lib/jquery-1.9.1.min.js"></script>
+            <script type="text/javascript" src="http://playground.craft.dk/admin/resources/lib/jquery-1.9.1.min.js"></script>
             <script type="text/javascript" src="https://www.google.com/jsapi"></script>
             <script type="text/javascript">
               google.load("visualization", "1", {packages:["corechart"]});
