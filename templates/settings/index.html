@@ -1,0 +1,69 @@
+{% set title = "Analytics Settings"|t %}
+
+
+
+{% set provider = 'Google' %}
+
+
+
+{% extends "_layouts/cp" %}
+
+{% import "_includes/forms" as forms %}
+
+{% includeCssResource "analytics/css/styles.css" %}
+{% includeJsResource "analytics/js/scripts.js" %}
+
+{% set crumbs = [
+    { label: "Analytics"|t, url: url('analytics') },
+] %}
+
+{% set content %}
+
+    {% if craft.oauth is not defined %}
+
+    {% else %}
+        {% set account = craft.oauth.getAccount('analytics.system', provider) %}
+        {% set service = craft.oauth.getServiceByProviderClass('Google') %}
+    {% endif %}
+
+    {% if account is not defined %}
+        {% redirect 'analytics/install' %}
+    {% else %}
+        {% if not account %}
+            {% redirect 'analytics/install' %}
+        {% else %}
+
+            {% set properties = craft.analytics.api.management_webproperties.listManagementWebproperties("~all") %}
+
+<!--             <div class="select">
+                <select>
+                    {% for item in properties.items %}
+                        <option value="">{{item.name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+ -->
+
+            <form method="post" action="" accept-charset="UTF-8">
+                <input type="hidden" name="action" value="analytics/settings/save" />
+                <input type="hidden" name="redirect" value="analytics" />
+
+                {{ forms.selectField({
+                    label: "Web Profile",
+                    instructions: "Select an Analytics web profile to associate with your Craft website"|t,
+                    options: craft.analytics.properties(),
+                    name: 'profileId',
+                    value: craft.analytics.getSetting('profileId')
+                }) }}
+
+                <p><input type="submit" value="Save" class="btn submit" /></p>
+            </form>
+
+            <hr />
+
+            <p>Connected as {{account.email}}. <a class="btn small" href="{{craft.oauth.deauthenticate('analytics.system', provider)}}">Disconnect from {{provider}}</a></p>
+        {% endif %}
+    {% endif %}
+
+
+{% endset %}
