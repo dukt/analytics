@@ -31,7 +31,7 @@
     {% endfor %}
 
     <p>
-        Google account connected : {{account.email}}. <a href="{{craft.oauth.deauthenticate('analytics.system', provider)}}" class="btn small">Disconnect</a>
+        Google account connected : {{account.email}}. <a href="{{craft.oauth.disconnect('analytics.system', provider)}}" class="btn small">Disconnect</a>
     </p>
     {% endif %}
 {% endset %}

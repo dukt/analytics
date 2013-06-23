@@ -1,8 +1,8 @@
-{% set serviceProviderClass = 'Google' %}
+{% set serviceProviderClass = providerClass %}
 
 <form method="post" action="" accept-charset="UTF-8">
     <input type="hidden" name="action" value="oauth/settings/saveService">
-    <input type="hidden" name="redirect" value="analytics/settings" />
+    <input type="hidden" name="redirect" value="{{pluginHandle}}/settings" />
     <input type="hidden" name="serviceProviderClass" value="{{ serviceProviderClass }}" />
 
     <p>Create an OAuth 2.0 application and enable Analytics service in the <a target="_blank" href="https://code.google.com/apis/console/">Google Console</a>.</p>

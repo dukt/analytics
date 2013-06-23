@@ -23,14 +23,14 @@
 
     {% else %}
         {% set account = craft.oauth.getAccount('analytics.system', provider) %}
-        {% set service = craft.oauth.getServiceByProviderClass('Google') %}
+        {% set service = craft.oauth.getProvider('Google') %}
     {% endif %}
 
     {% if account is not defined %}
-        {% redirect 'analytics/install' %}
+        {% redirect 'analytics/oauth' %}
     {% else %}
         {% if not account %}
-            {% redirect 'analytics/install' %}
+            {% redirect 'analytics/oauth' %}
         {% else %}
 
             {% set properties = craft.analytics.api.management_webproperties.listManagementWebproperties("~all") %}
@@ -61,7 +61,7 @@
 
             <hr />
 
-            <p>Connected as {{account.email}}. <a class="btn small" href="{{craft.oauth.deauthenticate('analytics.system', provider)}}">Disconnect from {{provider}}</a></p>
+            <p>Connected as {{account.email}}. <a class="btn small" href="{{craft.oauth.disconnect('analytics.system', provider)}}">Disconnect from {{provider}}</a></p>
         {% endif %}
     {% endif %}
 

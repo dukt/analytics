@@ -1,37 +1,35 @@
-{% set title = "Analytics Installation"|t %}
-
-
-
-{% set provider = 'Google' %}
-
-
-
 {% extends "_layouts/cp" %}
-
 {% import "_includes/forms" as forms %}
 
-{% includeCssResource "analytics/css/styles.css" %}
-{% includeJsResource "analytics/js/scripts.js" %}
+{% set title = "Analytics Installation"|t %}
+{% set providerClass = 'Google' %}
+{% set pluginHandle = 'analytics' %}
 
+{% includeCssResource pluginHandle~"/css/styles.css" %}
+{% includeJsResource pluginHandle~"/js/scripts.js" %}
 
 {% set content %}
 
-    {% if craft.oauth is not defined %}
-
-    {% else %}
-        {% set account = craft.oauth.getAccount('analytics.system', provider) %}
-        {% set service = craft.oauth.getServiceByProviderClass('Google') %}
+    {% if craft.oauth is defined %}
+        {% set account = craft.oauth.getAccount('analytics.system', providerClass) %}
+        {% set service = craft.oauth.getProvider(providerClass) %}
     {% endif %}
+
+
+    <!-- INSTALL OAUTH PLUGIN -->
 
     <div class="analytics-setting{% if craft.oauth is defined %} closed done{% endif %}">
         <h2>1. Install OAuth plugin</h2>
 
         <div class="analytics-setting-content">
-            {% include 'analytics/install/_oauth' %}
+            {% include pluginHandle~'/oauth/_install' %}
         </div>
     </div>
 
     <hr />
+
+
+    <!-- CONFIGURE CLIENT ID & SECRET -->
 
     <div class="analytics-setting{% if service is defined %}{% if service.clientId is not null and service.clientSecret is not null %} closed done{% endif %}{% endif %}">
 
@@ -41,12 +39,15 @@
 
         <div class="analytics-setting-content">
             {% if craft.oauth is defined %}
-                {% include 'analytics/install/_configureGoogle' %}
+                {% include pluginHandle~'/oauth/_configure' %}
             {% endif %}
         </div>
     </div>
 
     <hr />
+
+
+    <!-- AUTHENTICATE -->
 
     <div class="analytics-setting{% if account is defined %}{% if account %} done{% endif %}{% endif %}">
         <h2>3. Authenticate</h2>
@@ -54,22 +55,10 @@
         <div class="analytics-setting-content">
             {% if service is defined %}
                 {% if service.id is not null %}
-                    {% include 'analytics/install/_authenticate' %}
+                    {% include pluginHandle~'/oauth/_authenticate' %}
                 {% endif %}
             {% endif %}
         </div>
     </div>
-
-
-<!--         <h3>Configuration Checklist</h3>
-
-    <ol>
-        <li><del>Check that OAuth plugin is install otherwise auto download/install it</del></li>
-        <li>Configure OAuth Google Client ID &amp; Secret</li>
-        <li>Connect to Analytics with OAuth Plugin</li>
-        <li>Create a system token</li>
-    </ol>
-
-    <hr /> -->
 
 {% endset %}
