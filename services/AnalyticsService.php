@@ -64,7 +64,7 @@ class AnalyticsService extends BaseApplicationComponent
 
     public function api()
     {
-        $provider = craft()->oauth->getProvider('analytics.system', 'Google');
+        $provider = craft()->oauth->getProviderLibrary('analytics.system', 'Google');
 
         // var_dump($provider);
         // die();
