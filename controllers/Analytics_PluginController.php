@@ -22,15 +22,22 @@ class Analytics_PluginController extends BaseController
 
     public function actionDownload()
     {
-        $download = craft()->analytics_plugin->download('Analytics', 'analytics');
+        $pluginClass = craft()->request->getParam('pluginClass');
+        $pluginHandle = craft()->request->getParam('pluginHandle');
+
+        $download = craft()->analytics_plugin->download($pluginClass, $pluginHandle);
 
         if($download['success'] == true) {
-            craft()->userSession->setNotice(Craft::t('Analytics plugin updated.'));
+            craft()->userSession->setNotice(Craft::t($pluginClass.' plugin updated.'));
         } else {
-            craft()->userSession->setError(Craft::t('Couldn’t update Analytics plugin.'));
+            $msg = 'Couldn’t update '.$pluginClass.' plugin.';
+            if(isset($download['msg'])) {
+                $msg = $download['msg'];
+            }
+            craft()->userSession->setError(Craft::t($msg));
         }
 
 
-        $this->redirect('analytics/settings');
+        $this->redirect('analytics/oauth');
     }
 }

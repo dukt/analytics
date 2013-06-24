@@ -22,11 +22,18 @@ class Analytics_PluginService extends BaseApplicationComponent
 {
     public function download($pluginClass, $pluginHandle)
     {
-        $lastVersion = $this->getLastVersion();
+        $r = array('success' => false);
+
+       $lastVersion = $this->getLastVersion($pluginClass, $pluginHandle);
+
+        if(!$lastVersion) {
+            $r['msg'] = "Couldn't get plugin last version";
+            return $r;
+        }
 
         $pluginZipUrl = $lastVersion['xml']->enclosure['url'];
 
-        $r = array('success' => false);
+
 
         $filesystem = new Filesystem();
         $unzipper  = new Unzip();
@@ -96,9 +103,11 @@ class Analytics_PluginService extends BaseApplicationComponent
         return $r;
     }
 
-    public function getLastVersion($url = 'http://dukt.net/craft/analytics/releases.xml')
+    public function getLastVersion($pluginClass = 'Analytics', $pluginHandle = 'analytics')
     {
 
+        $url = 'http://dukt.net/craft/'.$pluginHandle.'/releases.xml';
+        echo $url;
         // or refresh cache and get new updates if cache expired or forced update
 
         $xml = simplexml_load_file($url);
@@ -124,7 +133,7 @@ class Analytics_PluginService extends BaseApplicationComponent
 
         $last_version = array_pop($versions);
 
-        $current_version = craft()->plugins->getPlugin('Analytics')->getVersion();
+        $current_version = craft()->plugins->getPlugin($pluginClass)->getVersion();
 
         if($last_version['addon']->version > $current_version) {
 
