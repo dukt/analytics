@@ -94,8 +94,9 @@ class Analytics_PluginService extends BaseApplicationComponent
         return $r;
     }
 
-    public getLastVersion($url = 'http://dukt.net/craft/analytics/releases.xml';)
+    public function getLastVersion($url = 'http://dukt.net/craft/analytics/releases.xml')
     {
+
         // or refresh cache and get new updates if cache expired or forced update
 
         $xml = simplexml_load_file($url);
