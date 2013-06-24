@@ -1,0 +1,29 @@
+<div id="{{id}}" class="dchart{% if half %} half{% endif %}">
+
+    <script type="text/javascript">
+        {% set profiles = craft.analytics.api.management_profiles.listManagementProfiles(accountId, webPropertyId) %}
+        {% set profileId = profiles.items[0].id %}
+
+        {% set resultsSource = craft.analytics.api.data_ga.get(
+           'ga:' ~ profileId,
+           now|date_modify("-1 month")|date("Y-m-d"),
+           now|date("Y-m-d"),
+           'ga:visits', sourceParams) %}
+
+        setTimeout(function() {
+            $('#{{id}}').dchart([
+                  ['Day', 'Visitors'],
+                  {% for row in resultsSource.rows %}
+                        {% if row|length == 2 %}
+                            ['{{row[0]}}',  {{row[1]}}],
+                        {% else %}
+                            ['{{row[2]}}/{{row[1]}}',  {{row[3]}}],
+                        {% endif %}
+                  {% endfor %}
+                ],
+                {{options|json_encode|raw}});
+        }, 1000);
+
+    </script>
+
+</div>

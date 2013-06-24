@@ -9,8 +9,6 @@
 {% else %}
 
 
-
-
   {% set provider = 'Google' %}
 
 
@@ -56,155 +54,95 @@
 
         {% if accountId is defined and webPropertyId is defined %}
 
-            {% set profiles = craft.analytics.api.management_profiles.listManagementProfiles(accountId, webPropertyId) %}
-            {% set profileId = profiles.items[0].id %}
-
-            {% set optParams = {
-                'dimensions' : 'ga:year, ga:month, ga:day'
-                } %}
-
-            {% set resultsLinechart = craft.analytics.api.data_ga.get(
-               'ga:' ~ profileId,
-               now|date_modify("-1 month")|date("Y-m-d"),
-               now|date("Y-m-d"),
-               'ga:visits', optParams) %}
-
-
-            {% set optParams = {
-                'dimensions' : 'ga:country'
-                } %}
-
-            {% set resultsCountry = craft.analytics.api.data_ga.get(
-               'ga:' ~ profileId,
-               now|date_modify("-1 month")|date("Y-m-d"),
-               now|date("Y-m-d"),
-               'ga:visits', optParams) %}
-
-
-            {% set optParams = {
-                'dimensions' : 'ga:isMobile'
-                } %}
-
-            {% set resultsType = craft.analytics.api.data_ga.get(
-               'ga:' ~ profileId,
-               now|date_modify("-1 month")|date("Y-m-d"),
-               now|date("Y-m-d"),
-               'ga:visits', optParams) %}
-
-            {% set optParams = {
-                'dimensions' : 'ga:socialNetwork'
-                } %}
-
-            {% set resultsSocial = craft.analytics.api.data_ga.get(
-               'ga:' ~ profileId,
-               now|date_modify("-1 month")|date("Y-m-d"),
-               now|date("Y-m-d"),
-               'ga:visits', optParams) %}
-
+            <h2 class="center">Last 30 days</h2>
 
             <script type="text/javascript" src="http://playground.craft.dk/admin/resources/lib/jquery-1.9.1.min.js"></script>
             <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+            {% includeJsResource "analytics/js/dchart.js" %}
+
             <script type="text/javascript">
-              google.load("visualization", "1", {packages:["corechart"]});
-              google.setOnLoadCallback(drawChart);
-              function drawChart() {
-                var data = google.visualization.arrayToDataTable([
-                  ['Day', 'Visitors'],
-                  {% for row in resultsLinechart.rows %}
-                      ['{{row[2]}}/{{row[1]}}',  {{row[3]}}],
-                  {% endfor %}
-                ]);
 
-                var data2 = google.visualization.arrayToDataTable([
-                  ['Day', 'Visitors'],
-                  {% for row in resultsCountry.rows %}
-                      ['{{row[0]}}',  {{row[1]}}],
-                  {% endfor %}
-                ]);
-                var data3 = google.visualization.arrayToDataTable([
-                  ['Day', 'Visitors'],
-                  {% for row in resultsType.rows %}
-                      ['{{row[0]}}',  {{row[1]}}],
-                  {% endfor %}
-                ]);
-                var data4 = google.visualization.arrayToDataTable([
-                  ['Day', 'Visitors'],
-                  {% for row in resultsSocial.rows %}
-                      ['{{row[0]}}',  {{row[1]}}],
-                  {% endfor %}
-                ]);
+                    var charts = {};
 
-                var options = {
-                  title: 'Last 30 days',
-                  legend:{position:'bottom'},
-                  chartArea : {width:'90%'},
-                  vAxis: {minValue: 4, format: '#'},
-                  hAxis: {minValue: 4, format: '#', showTextEvery:5}
-                };
+                    google.load("visualization", "1", {packages:["corechart"]});
+                    google.setOnLoadCallback(function() {
+                          // initialize all dcharts once ready
+                    });
 
-
-                var options2 = {
-                  title: 'Countries',
-                  legend:'none',
-                  sliceVisibilityThreshold:1/50,
-                  pieHole:0.5,
-                  chartArea : {width:'90%'},
-                };
-                var options3 = {
-                  title: 'Is Mobile',
-                  legend:'none',
-                  sliceVisibilityThreshold:1/50,
-                  pieHole:0.5,
-                  chartArea : {width:'90%'},
-                };
-                var options4 = {
-                  title: 'Social Network',
-                  legend:'none',
-                  sliceVisibilityThreshold:1/50,
-                  pieHole:0.5,
-                  chartArea : {width:'90%'},
-                };
-
-
-                var chart = new google.visualization.LineChart(document.getElementById('linechart'));
-                var chart2 = new google.visualization.PieChart(document.getElementById('country'));
-                var chart3 = new google.visualization.PieChart(document.getElementById('type'));
-                var chart4 = new google.visualization.PieChart(document.getElementById('social'));
-                chart.draw(data, options);
-                chart2.draw(data2, options2);
-                chart3.draw(data3, options3);
-                chart4.draw(data4, options4);
-              }
-
-              $(window).resize(function() {
-                    drawChart();
-              });
             </script>
 
-
-
-            <div id="linechart" style="width: 100%; height: 400px;"></div>
-
         {% endif %}
+
+
+
+        {% include 'analytics/_chart' with {
+            id:'visits',
+            options: {
+                title: 'Visits',
+                chartType:'line'
+            },
+            half: false,
+            sourceParams: {
+                'dimensions' : 'ga:year, ga:month, ga:day'
+            }
+        } %}
+
+
+        <div class="charts">
+
+            {% include 'analytics/_chart' with {
+                id:'countries',
+                options: {
+                    title: 'Countries',
+                    chartType:'donut'
+                },
+                half: true,
+                sourceParams: {
+                    'dimensions' : 'ga:country'
+                }
+            } %}
+
+            {% include 'analytics/_chart' with {
+                id:'isMobile',
+                options: {
+                    title: 'Is Mobile',
+                    chartType:'donut'
+                },
+                half: true,
+                sourceParams: {
+                    'dimensions' : 'ga:isMobile'
+                }
+            } %}
+
+            {% include 'analytics/_chart' with {
+                id:'socialNetworks',
+                options: {
+                    title: 'Social Networks',
+                    chartType:'donut'
+                },
+                half: true,
+                sourceParams: {
+                    'dimensions' : 'ga:socialNetwork'
+                }
+            } %}
+
+
+            {% include 'analytics/_chart' with {
+                id:'sources',
+                options: {
+                    title: 'Sources',
+                    chartType:'donut'
+                },
+                half: true,
+                sourceParams: {
+                    'dimensions' : 'ga:source'
+                }
+            } %}
+
+          <div class="clear"></div>
+        </div>
     {% endif %}
-
-
-    <div class="charts">
-
-        <div id="country" class="chart half">
-
-        </div>
-
-        <div id="type" class="chart half">
-
-        </div>
-
-        <div id="social" class="chart half">
-
-        </div>
-
-      <div class="clear"></div>
-    </div>
   {% endset %}
 
 

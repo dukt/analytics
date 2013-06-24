@@ -33,6 +33,11 @@
             {% redirect 'analytics/oauth' %}
         {% else %}
 
+            {% if craft.analytics.getUpdates() %}
+                <p class="center">There is an update available for the Analytics plugin. <a href="{{actionUrl('analytics/plugin/update')}}" class="btn submit small">Update now</a></p>
+                <hr>
+            {% endif %}
+
             {% set properties = craft.analytics.api.management_webproperties.listManagementWebproperties("~all") %}
 
 <!--             <div class="select">
@@ -61,7 +66,7 @@
 
             <hr />
 
-            <p>Connected as {{account.email}}. <a class="btn small" href="{{craft.oauth.disconnect('analytics.system', provider)}}">Disconnect from {{provider}}</a></p>
+            <p class="center">Connected as {{account.email}}. <a class="btn small" href="{{craft.oauth.disconnect('analytics.system', provider)}}">Disconnect from {{provider}}</a></p>
         {% endif %}
     {% endif %}
 
