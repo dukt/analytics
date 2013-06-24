@@ -54,9 +54,9 @@ class Analytics_PluginService extends BaseApplicationComponent
 
             // make a backup here ?
 
-            $filesystem->rename(CRAFT_PLUGINS_PATH.$this->pluginHandle.'.git',
+            $filesystem->rename(CRAFT_PLUGINS_PATH.$this->pluginHandle.'/.git',
                 $pluginZipDir.$content[0].'/.git');
-            $filesystem->remove(CRAFT_PLUGINS_PATH.$this->pluginHandle.'.gitignore',
+            $filesystem->remove(CRAFT_PLUGINS_PATH.$this->pluginHandle.'/.gitignore',
                 $pluginZipDir.$content[0].'/.gitignore');
 
             $filesystem->remove(CRAFT_PLUGINS_PATH.$this->pluginHandle);
