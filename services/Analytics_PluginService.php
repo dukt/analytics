@@ -128,7 +128,7 @@ class Analytics_PluginService extends BaseApplicationComponent
 
             // there is an update available
 
-            return (string) $xml_versions[$last_version];
+            return $last_version;
         } else {
             return false;
         }
