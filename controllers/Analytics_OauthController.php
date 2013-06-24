@@ -22,7 +22,7 @@ class Analytics_OauthController extends BaseController
 
     public function actionDownload()
     {
-        if(craft()->{$this->pluginHandle.'_oauth'}->download()) {
+        if(craft()->{$this->pluginHandle.'_plugin'}->download()) {
             craft()->userSession->setNotice(Craft::t('OAuth plugin has been downloaded.'));
         } else {
             craft()->userSession->setError(Craft::t('OAuth plugin couldn’t be downloaded.'));
@@ -37,7 +37,7 @@ class Analytics_OauthController extends BaseController
 
     public function actionInstall()
     {
-        if(craft()->{$this->pluginHandle.'_oauth'}->install()) {
+        if(craft()->{$this->pluginHandle.'_plugin'}->install()) {
             craft()->userSession->setNotice(Craft::t('OAuth plugin installed.'));
         } else {
             craft()->userSession->setError(Craft::t('Couldn’t install OAuth plugin.'));
@@ -50,7 +50,7 @@ class Analytics_OauthController extends BaseController
 
     public function actionEnable()
     {
-        if(craft()->{$this->pluginHandle.'_oauth'}->enable()) {
+        if(craft()->{$this->pluginHandle.'_plugin'}->enable()) {
             craft()->userSession->setNotice(Craft::t('OAuth plugin enabled.'));
         } else {
             craft()->userSession->setError(Craft::t('OAuth plugin couldn’t be plugin.'));

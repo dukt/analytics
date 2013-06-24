@@ -20,10 +20,7 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class Analytics_PluginService extends BaseApplicationComponent
 {
-    private $pluginClass = 'Analytics';
-    private $pluginHandle = 'analytics';
-
-    public function update()
+    public function download($pluginClass, $pluginHandle)
     {
         $lastVersion = $this->getLastVersion();
 
@@ -34,13 +31,13 @@ class Analytics_PluginService extends BaseApplicationComponent
         $filesystem = new Filesystem();
         $unzipper  = new Unzip();
 
-        $pluginComponent = craft()->plugins->getPlugin($this->pluginClass, false);
+        $pluginComponent = craft()->plugins->getPlugin($pluginClass, false);
 
 
         // plugin path
 
-        $pluginZipDir = CRAFT_PLUGINS_PATH."_".$this->pluginHandle."/";
-        $pluginZipPath = CRAFT_PLUGINS_PATH."_".$this->pluginHandle.".zip";
+        $pluginZipDir = CRAFT_PLUGINS_PATH."_".$pluginHandle."/";
+        $pluginZipPath = CRAFT_PLUGINS_PATH."_".$pluginHandle.".zip";
 
         try {
 
@@ -60,23 +57,23 @@ class Analytics_PluginService extends BaseApplicationComponent
 
             // try to keep .git and .gitignore files
 
-            if(file_exists(CRAFT_PLUGINS_PATH.$this->pluginHandle.'/.git') && !$pluginZipDir.$content[0].'/.git') {
-                $filesystem->rename(CRAFT_PLUGINS_PATH.$this->pluginHandle.'/.git',
+            if(file_exists(CRAFT_PLUGINS_PATH.$pluginHandle.'/.git') && !$pluginZipDir.$content[0].'/.git') {
+                $filesystem->rename(CRAFT_PLUGINS_PATH.$pluginHandle.'/.git',
                     $pluginZipDir.$content[0].'/.git');
             }
 
-            if(file_exists(CRAFT_PLUGINS_PATH.$this->pluginHandle.'/.gitignore')) {
-                $filesystem->copy(CRAFT_PLUGINS_PATH.$this->pluginHandle.'/.gitignore',
-                    $pluginZipDir.$content[0].'/.gitignore', true);
-            }
+            // if(file_exists(CRAFT_PLUGINS_PATH.$pluginHandle.'/.gitignore')) {
+            //     $filesystem->copy(CRAFT_PLUGINS_PATH.$pluginHandle.'/.gitignore',
+            //         $pluginZipDir.$content[0].'/.gitignore', true);
+            // }
 
             // remove current files
 
-            $filesystem->remove(CRAFT_PLUGINS_PATH.$this->pluginHandle);
+            $filesystem->remove(CRAFT_PLUGINS_PATH.$pluginHandle);
 
             // move new files
 
-            $filesystem->rename($pluginZipDir.$content[0].'/', CRAFT_PLUGINS_PATH.$this->pluginHandle);
+            $filesystem->rename($pluginZipDir.$content[0].'/', CRAFT_PLUGINS_PATH.$pluginHandle);
 
         } catch (\Exception $e) {
             $r['msg'] = $e->getMessage();
@@ -135,6 +132,48 @@ class Analytics_PluginService extends BaseApplicationComponent
 
             return $last_version;
         } else {
+            return false;
+        }
+    }
+
+    // --------------------------------------------------------------------
+
+    public function install($pluginClass)
+    {
+        $pluginComponent = craft()->plugins->getPlugin($pluginClass, false);
+
+        try {
+            if(!$pluginComponent->isInstalled) {
+                if (craft()->plugins->installPlugin($pluginClass)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return true;
+            }
+        } catch(\Exception $e) {
+            return false;
+        }
+    }
+
+    // --------------------------------------------------------------------
+
+    public function enable($pluginClass)
+    {
+        $pluginComponent = craft()->plugins->getPlugin($pluginClass, false);
+
+        try {
+            if(!$pluginComponent->isEnabled) {
+                if (craft()->plugins->enablePlugin($pluginClass)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return true;
+            }
+        } catch(\Exception $e) {
             return false;
         }
     }

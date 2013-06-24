@@ -22,13 +22,7 @@ class Analytics_PluginController extends BaseController
 
     public function actionUpdate()
     {
-        // $updates = craft()->analytics->getUpdates();
-
-        // var_dump($updates);
-        // die();
-
-
-        $update = craft()->analytics_plugin->update();
+        $update = craft()->analytics_plugin->download('Analytics', 'analytics');
 
         if($update['success'] == true) {
             craft()->userSession->setNotice(Craft::t('Analytics plugin updated.'));
