@@ -20,15 +20,65 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class Analytics_PluginService extends BaseApplicationComponent
 {
+    private $pluginClass = 'Analytics';
+    private $pluginHandle = 'Analytics';
+
     public function update()
     {
-        $zip = $this->getUpdates();
-        var_dump($zip);
-        // die();
-        return true;
+        $r = array('success' => false);
+
+        $filesystem = new Filesystem();
+        $unzipper  = new Unzip();
+
+        $pluginComponent = craft()->plugins->getPlugin($this->pluginClass, false);
+
+
+        // plugin path
+
+        $pluginZipDir = CRAFT_PLUGINS_PATH."_".$this->pluginHandle."/";
+        $pluginZipPath = CRAFT_PLUGINS_PATH."_".$this->pluginHandle.".zip";
+
+        try {
+
+            // download
+
+            $current = file_get_contents($this->getLastZip());
+
+            file_put_contents($pluginZipPath, $current);
+
+
+            // unzip
+
+            $content = $unzipper->extract($pluginZipPath, $pluginZipDir);
+
+
+            // make a backup here ?
+
+            $filesystem->remove(CRAFT_PLUGINS_PATH.$this->pluginHandle);
+            $filesystem->rename($pluginZipDir.$content[0].'/', CRAFT_PLUGINS_PATH.$this->pluginHandle);
+
+        } catch (\Exception $e) {
+            $r['msg'] = $e->getMessage();
+            return $r;
+        }
+
+        try {
+            // remove download files
+
+            $filesystem->remove($pluginZipDir);
+            $filesystem->remove($pluginZipPath);
+        } catch(\Exception $e) {
+            $r['msg'] = $e->getMessage();
+
+            return $r;
+        }
+
+        $r['success'] = true;
+
+        return $r;
     }
 
-    public function getUpdates()
+    public function getLastZip()
     {
         // get update from cache
 
@@ -44,12 +94,15 @@ class Analytics_PluginService extends BaseApplicationComponent
         $namespaces = $xml->getNameSpaces(true);
         $versions = array();
         $zips = array();
+        $xml_version = array();
+
         if (!empty($xml->channel->item)) {
             foreach ($xml->channel->item as $version) {
                 $ee_addon       = $version->children($namespaces['ee_addon']);
                 $version_number = (string) $ee_addon->version;
                 $versions[$version_number] = $version_number;
                 $zips[$version_number] = 'http://google.fr';
+                $xml_versions[$version_number] = $version;
                 //var_dump($ee_addon);
             }
         }
@@ -59,8 +112,13 @@ class Analytics_PluginService extends BaseApplicationComponent
         $last_version = array_pop($versions);
         $current_version = craft()->plugins->getPlugin('Analytics')->getVersion();
 
+
+
         if($last_version > $current_version) {
-            return $zips[$last_version];
+
+            // there is an update available
+
+            return (string) $xml_versions[$last_version]->enclosure['url'];
         } else {
             return false;
         }
