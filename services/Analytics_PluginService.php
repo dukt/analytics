@@ -21,7 +21,7 @@ use Symfony\Component\Filesystem\Filesystem;
 class Analytics_PluginService extends BaseApplicationComponent
 {
     private $pluginClass = 'Analytics';
-    private $pluginHandle = 'Analytics';
+    private $pluginHandle = 'analytics';
 
     public function update()
     {
@@ -54,7 +54,13 @@ class Analytics_PluginService extends BaseApplicationComponent
 
             // make a backup here ?
 
+            $filesystem->rename(CRAFT_PLUGINS_PATH.$this->pluginHandle.'.git',
+                $pluginZipDir.$content[0].'/.git');
+            $filesystem->remove(CRAFT_PLUGINS_PATH.$this->pluginHandle.'.gitignore',
+                $pluginZipDir.$content[0].'/.gitignore');
+
             $filesystem->remove(CRAFT_PLUGINS_PATH.$this->pluginHandle);
+
             $filesystem->rename($pluginZipDir.$content[0].'/', CRAFT_PLUGINS_PATH.$this->pluginHandle);
 
         } catch (\Exception $e) {
