@@ -60,10 +60,15 @@ class Analytics_PluginService extends BaseApplicationComponent
 
             // try to keep .git and .gitignore files
 
-            @$filesystem->rename(CRAFT_PLUGINS_PATH.$this->pluginHandle.'/.git',
-                $pluginZipDir.$content[0].'/.git');
-            @$filesystem->rename(CRAFT_PLUGINS_PATH.$this->pluginHandle.'/.gitignore',
-                $pluginZipDir.$content[0].'/.gitignore');
+            if(file_exists(CRAFT_PLUGINS_PATH.$this->pluginHandle.'/.git') && !$pluginZipDir.$content[0].'/.git') {
+                $filesystem->rename(CRAFT_PLUGINS_PATH.$this->pluginHandle.'/.git',
+                    $pluginZipDir.$content[0].'/.git');
+            }
+
+            if(file_exists(CRAFT_PLUGINS_PATH.$this->pluginHandle.'/.gitignore')) {
+                $filesystem->copy(CRAFT_PLUGINS_PATH.$this->pluginHandle.'/.gitignore',
+                    $pluginZipDir.$content[0].'/.gitignore', true);
+            }
 
             // remove current files
 
