@@ -27,16 +27,24 @@
     {% endif %}
 
     {% if account is not defined %}
-        {% redirect 'analytics/oauth' %}
+        {% redirect 'analytics/install' %}
     {% else %}
         {% if not account %}
-            {% redirect 'analytics/oauth' %}
+            {% redirect 'analytics/install' %}
         {% else %}
 
-            {% if craft.analytics.getUpdates() %}
+            {% if craft.analytics.checkUpdates('Analytics', 'analytics') %}
                 <p class="center">There is an update available for the Analytics plugin. <a href="{{actionUrl('analytics/plugin/update')}}" class="btn submit small">Update now</a></p>
                 <hr>
             {% endif %}
+
+            {% set pluginParams = {pluginClass:'OAuth', pluginHandle:'oauth'} %}
+
+            {% if craft.analytics.checkUpdates(pluginParams.pluginClass, pluginParams.pluginHandle) %}
+                <p class="center">There is an update available for the OAuth plugin. <a href="{{actionUrl('analytics/plugin/update', pluginParams)}}" class="btn submit small">Update now</a></p>
+                <hr>
+            {% endif %}
+
 
             {% set properties = craft.analytics.api.management_webproperties.listManagementWebproperties("~all") %}
 

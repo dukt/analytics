@@ -107,7 +107,7 @@ class Analytics_PluginService extends BaseApplicationComponent
     {
 
         $url = 'http://dukt.net/craft/'.$pluginHandle.'/releases.xml';
-        echo $url;
+
         // or refresh cache and get new updates if cache expired or forced update
 
         $xml = simplexml_load_file($url);
@@ -133,22 +133,24 @@ class Analytics_PluginService extends BaseApplicationComponent
 
         $last_version = array_pop($versions);
 
-        $currentPlugin = craft()->plugins->getPlugin($pluginClass);
+        return $last_version;
 
-        if(!$currentPlugin) {
-            return $last_version;
-        }
+        // $currentPlugin = craft()->plugins->getPlugin($pluginClass);
 
-        $current_version = $currentPlugin->getVersion();
+        // if(!$currentPlugin) {
+        //     return $last_version;
+        // }
 
-        if($last_version['addon']->version > $current_version) {
+        // $current_version = $currentPlugin->getVersion();
 
-            // there is an update available
+        // if($last_version['addon']->version > $current_version) {
 
-            return $last_version;
-        } else {
-            return false;
-        }
+        //     // there is an update available
+
+        //     return $last_version;
+        // } else {
+        //     return false;
+        // }
     }
 
     // --------------------------------------------------------------------

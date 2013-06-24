@@ -15,9 +15,9 @@ namespace Craft;
 
 class AnalyticsVariable
 {
-    public function getUpdates()
+    public function checkUpdates($pluginClass, $pluginHandle)
     {
-        return craft()->analytics->getUpdates();
+        return craft()->analytics->checkUpdates($pluginClass, $pluginHandle);
     }
 
     public function event($category, $action, $label, $value)

@@ -38,7 +38,7 @@ class Analytics_PluginController extends BaseController
         }
 
 
-        $this->redirect('analytics/oauth');
+        $this->redirect('analytics/install');
     }
 
     public function actionInstall()
@@ -52,6 +52,6 @@ class Analytics_PluginController extends BaseController
             craft()->userSession->setError(Craft::t("Couldn't install ".$pluginClass." plugin."));
         }
 
-        $this->redirect('analytics/oauth');
+        $this->redirect('analytics/install');
     }
 }

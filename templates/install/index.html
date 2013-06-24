@@ -14,15 +14,15 @@
 {% set content %}
 
     {% if craft.oauth is not defined %}
-        {% include pluginHandle~'/oauth/_install' %}
+        {% include pluginHandle~'/install/_oauth' %}
     {% else %}
         {% set account = craft.oauth.getAccount('analytics.system', providerClass) %}
         {% set service = craft.oauth.getProvider(providerClass) %}
 
-        {% if not craft.oauth.providerIsConfigured(providerClass) or craft.request.getSegment(3) == 'configure' %}
-            {% include pluginHandle~'/oauth/_configure' %}
+        {% if not craft.oauth.providerIsConfigured(providerClass) or craft.request.getSegment(3) == 'api' %}
+            {% include pluginHandle~'/install/_api' %}
         {% else %}
-            {% include pluginHandle~'/oauth/_authenticate' %}
+            {% include pluginHandle~'/install/_authenticate' %}
         {% endif %}
     {% endif %}
 
