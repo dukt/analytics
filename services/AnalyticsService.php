@@ -22,6 +22,42 @@ use \Google_AnalyticsService;
 
 class AnalyticsService extends BaseApplicationComponent
 {
+    public function getUpdates()
+    {
+        // get update from cache
+
+        // or refresh cache and get new updates if cache expired or forced update
+
+        $url = 'http://dukt.net/craft/analytics/releases.xml';
+
+        $xml = simplexml_load_file($url);
+
+
+        // XML from here on
+
+        $namespaces = $xml->getNameSpaces(true);
+        $versions = array();
+        if (!empty($xml->channel->item)) {
+            foreach ($xml->channel->item as $version) {
+                $ee_addon       = $version->children($namespaces['ee_addon']);
+                $version_number = (string) $ee_addon->version;
+                $versions[$version_number] = $version_number;
+                //var_dump($ee_addon);
+            }
+        }
+
+        ksort($versions);
+
+        $last_version = array_pop($versions);
+        $current_version = craft()->plugins->getPlugin('Analytics')->getVersion();
+
+        if($last_version > $current_version) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function code($id, $entry = NULL)
     {
         $variables = array('id' => $id, 'entry' => $entry);

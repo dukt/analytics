@@ -15,6 +15,11 @@ namespace Craft;
 
 class AnalyticsVariable
 {
+    public function getUpdates()
+    {
+        return craft()->analytics->getUpdates();
+    }
+
     public function event($category, $action, $label, $value)
     {
         return "
