@@ -11,3 +11,24 @@
 .center {
     text-align: center;
 }
+
+.charts {
+
+}
+
+.chart {
+    float: left;
+    overflow: hidden;
+}
+
+.charts.half {
+    width: 40%;
+    height: 400px;
+}
+
+.chart.half {
+    width: 43%;
+    height: 400px;
+    border: 10px solid #eee;
+    margin: 2%;
+}

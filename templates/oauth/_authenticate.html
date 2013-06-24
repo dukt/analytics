@@ -8,10 +8,30 @@
 
     {% redirect pluginHandle~'/settings' %}
 
-    <p>Connected as {{account.email}}.</p>
-    <p><a class="btn" href="{{craft.oauth.disconnect(pluginHandle~'.system', providerClass)}}">Disconnect from {{providerClass}}</a></p>
-
 {% else %}
-    <p>Last but not least, authenticate with {{providerClass}} so we can start gathering data from the API.</p>
-    <p><a class="btn submit" href="{{ craft.oauth.connect(pluginHandle~'.system', providerClass, false, scope) }}">Authenticate with {{providerClass}}</a></p>
+
+    <!-- AUTHENTICATE -->
+
+    <div class="analytics-setting">
+        <h2>Authenticate</h2>
+
+        <div class="analytics-setting-content">
+            {% if service is defined %}
+                {% if service.id is not null %}
+
+                    <p>Authenticate with {{providerClass}} so we can start gathering data from the API.</p>
+                    <p>
+                        <a class="btn submit" href="{{ craft.oauth.connect(pluginHandle~'.system', providerClass, false, scope) }}">Authenticate with {{providerClass}}</a> &nbsp;
+
+                    </p>
+                    <p>
+                        <a class="btn small" href="{{url('analytics/oauth/configure')}}">Change Client ID &amp; secret</a>
+                    </p>
+
+
+
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
 {% endif %}

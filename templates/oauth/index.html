@@ -2,63 +2,28 @@
 {% import "_includes/forms" as forms %}
 
 {% set title = "Analytics Installation"|t %}
+
+
 {% set providerClass = 'Google' %}
 {% set pluginHandle = 'analytics' %}
 
 {% includeCssResource pluginHandle~"/css/styles.css" %}
 {% includeJsResource pluginHandle~"/js/scripts.js" %}
 
+
 {% set content %}
 
-    {% if craft.oauth is defined %}
+    {% if craft.oauth is not defined %}
+        {% include pluginHandle~'/oauth/_install' %}
+    {% else %}
         {% set account = craft.oauth.getAccount('analytics.system', providerClass) %}
         {% set service = craft.oauth.getProvider(providerClass) %}
+
+        {% if not craft.oauth.providerIsConfigured(providerClass) or craft.request.getSegment(3) == 'configure' %}
+            {% include pluginHandle~'/oauth/_configure' %}
+        {% else %}
+            {% include pluginHandle~'/oauth/_authenticate' %}
+        {% endif %}
     {% endif %}
-
-
-    <!-- INSTALL OAUTH PLUGIN -->
-
-    <div class="analytics-setting{% if craft.oauth is defined %} closed done{% endif %}">
-        <h2>1. Install OAuth plugin</h2>
-
-        <div class="analytics-setting-content">
-            {% include pluginHandle~'/oauth/_install' %}
-        </div>
-    </div>
-
-    <hr />
-
-
-    <!-- CONFIGURE CLIENT ID & SECRET -->
-
-    <div class="analytics-setting{% if service is defined %}{% if service.clientId is not null and service.clientSecret is not null %} closed done{% endif %}{% endif %}">
-
-        <div class="right"><a href="#" class="btn small change">Change</a></div>
-
-        <h2>2. Client ID &amp; Secret</h2>
-
-        <div class="analytics-setting-content">
-            {% if craft.oauth is defined %}
-                {% include pluginHandle~'/oauth/_configure' %}
-            {% endif %}
-        </div>
-    </div>
-
-    <hr />
-
-
-    <!-- AUTHENTICATE -->
-
-    <div class="analytics-setting{% if account is defined %}{% if account %} done{% endif %}{% endif %}">
-        <h2>3. Authenticate</h2>
-
-        <div class="analytics-setting-content">
-            {% if service is defined %}
-                {% if service.id is not null %}
-                    {% include pluginHandle~'/oauth/_authenticate' %}
-                {% endif %}
-            {% endif %}
-        </div>
-    </div>
 
 {% endset %}

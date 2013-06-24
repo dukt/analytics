@@ -20,41 +20,37 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class Analytics_OauthService extends BaseApplicationComponent
 {
+    // --------------------------------------------------------------------
+
+    private $oauthPluginZip = 'http://cl.ly/2F1O0w1P1Q1F/download/oauth-craft-0.9.zip';
+
+    // --------------------------------------------------------------------
+
+    private $oauthPluginClass = 'Oauth';
+    private $oauthPluginHandle = 'oauth';
+
+    // --------------------------------------------------------------------
+
     public function download()
     {
-        $r = array(
-                'success' => false
-            );
+        $r = array('success' => false);
 
         $filesystem = new Filesystem();
         $unzipper  = new Unzip();
 
-        $className = 'Oauth';
-        $pluginHandle = 'oauth';
+        $pluginComponent = craft()->plugins->getPlugin($this->oauthPluginClass, false);
 
-
-        $pluginComponent = craft()->plugins->getPlugin($className, false);
-
-
-
-        // is github or zip ?
-
-        $pluginZipUrl = 'http://cl.ly/2F1O0w1P1Q1F/download/oauth-craft-0.9.zip';
 
         // plugin path
 
-
-
-
-
-        $pluginZipDir = CRAFT_PLUGINS_PATH."_".$pluginHandle."/";
-        $pluginZipPath = CRAFT_PLUGINS_PATH."_".$pluginHandle.".zip";
+        $pluginZipDir = CRAFT_PLUGINS_PATH."_".$this->oauthPluginHandle."/";
+        $pluginZipPath = CRAFT_PLUGINS_PATH."_".$this->oauthPluginHandle.".zip";
 
         try {
 
             // download
 
-            $current = file_get_contents($pluginZipUrl);
+            $current = file_get_contents($this->oauthPluginZip);
 
             file_put_contents($pluginZipPath, $current);
 
@@ -63,10 +59,11 @@ class Analytics_OauthService extends BaseApplicationComponent
 
             $content = $unzipper->extract($pluginZipPath, $pluginZipDir);
 
+
             // make a backup here ?
 
-            $filesystem->remove(CRAFT_PLUGINS_PATH.$pluginHandle);
-            $filesystem->rename($pluginZipDir.$content[0].'/', CRAFT_PLUGINS_PATH.$pluginHandle);
+            $filesystem->remove(CRAFT_PLUGINS_PATH.$this->oauthPluginHandle);
+            $filesystem->rename($pluginZipDir.$content[0].'/', CRAFT_PLUGINS_PATH.$this->oauthPluginHandle);
 
         } catch (\Exception $e) {
             $r['msg'] = $e->getMessage();
@@ -85,17 +82,19 @@ class Analytics_OauthService extends BaseApplicationComponent
         }
 
         $r['success'] = true;
+
         return $r;
     }
 
-    public function install() {
-        $class = 'OAuth';
+    // --------------------------------------------------------------------
 
-        $pluginComponent = craft()->plugins->getPlugin($class, false);
+    public function install()
+    {
+        $pluginComponent = craft()->plugins->getPlugin($this->oauthPluginClass, false);
 
         try {
             if(!$pluginComponent->isInstalled) {
-                if (craft()->plugins->installPlugin($class)) {
+                if (craft()->plugins->installPlugin($this->oauthPluginClass)) {
                     return true;
                 } else {
                     return false;
@@ -108,14 +107,15 @@ class Analytics_OauthService extends BaseApplicationComponent
         }
     }
 
-    public function enable() {
-        $class = 'OAuth';
+    // --------------------------------------------------------------------
 
-        $pluginComponent = craft()->plugins->getPlugin($class, false);
+    public function enable()
+    {
+        $pluginComponent = craft()->plugins->getPlugin($this->oauthPluginClass, false);
 
         try {
             if(!$pluginComponent->isEnabled) {
-                if (craft()->plugins->enablePlugin($class)) {
+                if (craft()->plugins->enablePlugin($this->oauthPluginClass)) {
                     return true;
                 } else {
                     return false;
@@ -127,5 +127,7 @@ class Analytics_OauthService extends BaseApplicationComponent
             return false;
         }
     }
+
+    // --------------------------------------------------------------------
 }
 

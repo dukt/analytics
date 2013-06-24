@@ -62,4 +62,12 @@ class AnalyticsPlugin extends BasePlugin
     {
         return true;
     }
+
+
+    public function hookRegisterCpRoutes()
+    {
+        return array(
+            'analytics\/oauth\/(?P<page>.*)' => 'analytics/oauth/index',
+        );
+    }
 }

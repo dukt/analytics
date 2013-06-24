@@ -1,5 +1,9 @@
 {% set title = "Analytics"|t %}
 
+
+{% includeCssResource "analytics/css/styles.css" %}
+{% includeJsResource "analytics/js/scripts.js" %}
+
 {% if craft.oauth is not defined %}
   {% redirect 'analytics/settings' %}
 {% else %}
@@ -59,7 +63,39 @@
                 'dimensions' : 'ga:year, ga:month, ga:day'
                 } %}
 
-            {% set results = craft.analytics.api.data_ga.get(
+            {% set resultsLinechart = craft.analytics.api.data_ga.get(
+               'ga:' ~ profileId,
+               now|date_modify("-1 month")|date("Y-m-d"),
+               now|date("Y-m-d"),
+               'ga:visits', optParams) %}
+
+
+            {% set optParams = {
+                'dimensions' : 'ga:country'
+                } %}
+
+            {% set resultsCountry = craft.analytics.api.data_ga.get(
+               'ga:' ~ profileId,
+               now|date_modify("-1 month")|date("Y-m-d"),
+               now|date("Y-m-d"),
+               'ga:visits', optParams) %}
+
+
+            {% set optParams = {
+                'dimensions' : 'ga:isMobile'
+                } %}
+
+            {% set resultsType = craft.analytics.api.data_ga.get(
+               'ga:' ~ profileId,
+               now|date_modify("-1 month")|date("Y-m-d"),
+               now|date("Y-m-d"),
+               'ga:visits', optParams) %}
+
+            {% set optParams = {
+                'dimensions' : 'ga:socialNetwork'
+                } %}
+
+            {% set resultsSocial = craft.analytics.api.data_ga.get(
                'ga:' ~ profileId,
                now|date_modify("-1 month")|date("Y-m-d"),
                now|date("Y-m-d"),
@@ -74,8 +110,27 @@
               function drawChart() {
                 var data = google.visualization.arrayToDataTable([
                   ['Day', 'Visitors'],
-                  {% for row in results.rows %}
+                  {% for row in resultsLinechart.rows %}
                       ['{{row[2]}}/{{row[1]}}',  {{row[3]}}],
+                  {% endfor %}
+                ]);
+
+                var data2 = google.visualization.arrayToDataTable([
+                  ['Day', 'Visitors'],
+                  {% for row in resultsCountry.rows %}
+                      ['{{row[0]}}',  {{row[1]}}],
+                  {% endfor %}
+                ]);
+                var data3 = google.visualization.arrayToDataTable([
+                  ['Day', 'Visitors'],
+                  {% for row in resultsType.rows %}
+                      ['{{row[0]}}',  {{row[1]}}],
+                  {% endfor %}
+                ]);
+                var data4 = google.visualization.arrayToDataTable([
+                  ['Day', 'Visitors'],
+                  {% for row in resultsSocial.rows %}
+                      ['{{row[0]}}',  {{row[1]}}],
                   {% endfor %}
                 ]);
 
@@ -87,8 +142,38 @@
                   hAxis: {minValue: 4, format: '#', showTextEvery:5}
                 };
 
-                var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
+                var options2 = {
+                  title: 'Countries',
+                  legend:'none',
+                  sliceVisibilityThreshold:1/50,
+                  pieHole:0.5,
+                  chartArea : {width:'90%'},
+                };
+                var options3 = {
+                  title: 'Is Mobile',
+                  legend:'none',
+                  sliceVisibilityThreshold:1/50,
+                  pieHole:0.5,
+                  chartArea : {width:'90%'},
+                };
+                var options4 = {
+                  title: 'Social Network',
+                  legend:'none',
+                  sliceVisibilityThreshold:1/50,
+                  pieHole:0.5,
+                  chartArea : {width:'90%'},
+                };
+
+
+                var chart = new google.visualization.LineChart(document.getElementById('linechart'));
+                var chart2 = new google.visualization.PieChart(document.getElementById('country'));
+                var chart3 = new google.visualization.PieChart(document.getElementById('type'));
+                var chart4 = new google.visualization.PieChart(document.getElementById('social'));
                 chart.draw(data, options);
+                chart2.draw(data2, options2);
+                chart3.draw(data3, options3);
+                chart4.draw(data4, options4);
               }
 
               $(window).resize(function() {
@@ -98,10 +183,28 @@
 
 
 
-            <div id="chart_div" style="width: 100%; height: 500px;"></div>
+            <div id="linechart" style="width: 100%; height: 400px;"></div>
 
         {% endif %}
     {% endif %}
+
+
+    <div class="charts">
+
+        <div id="country" class="chart half">
+
+        </div>
+
+        <div id="type" class="chart half">
+
+        </div>
+
+        <div id="social" class="chart half">
+
+        </div>
+
+      <div class="clear"></div>
+    </div>
   {% endset %}
 
 
