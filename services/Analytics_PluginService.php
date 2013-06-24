@@ -25,6 +25,10 @@ class Analytics_PluginService extends BaseApplicationComponent
 
     public function update()
     {
+        $lastVersion = $this->getLastVersion();
+
+        $pluginZipUrl = $lastVersion['xml']->enclosure['url'];
+
         $r = array('success' => false);
 
         $filesystem = new Filesystem();
@@ -42,7 +46,7 @@ class Analytics_PluginService extends BaseApplicationComponent
 
             // download
 
-            $current = file_get_contents($this->getLastZip());
+            $current = file_get_contents($pluginZipUrl);
 
             file_put_contents($pluginZipPath, $current);
 
@@ -90,13 +94,9 @@ class Analytics_PluginService extends BaseApplicationComponent
         return $r;
     }
 
-    public function getLastZip()
+    public getLastVersion($url = 'http://dukt.net/craft/analytics/releases.xml';)
     {
-        // get update from cache
-
         // or refresh cache and get new updates if cache expired or forced update
-
-        $url = 'http://dukt.net/craft/analytics/releases.xml';
 
         $xml = simplexml_load_file($url);
 
@@ -104,6 +104,7 @@ class Analytics_PluginService extends BaseApplicationComponent
         // XML from here on
 
         $namespaces = $xml->getNameSpaces(true);
+
         $versions = array();
         $zips = array();
         $xml_version = array();
@@ -112,25 +113,21 @@ class Analytics_PluginService extends BaseApplicationComponent
             foreach ($xml->channel->item as $version) {
                 $ee_addon       = $version->children($namespaces['ee_addon']);
                 $version_number = (string) $ee_addon->version;
-                $versions[$version_number] = $version_number;
-                $zips[$version_number] = 'http://google.fr';
-                $xml_versions[$version_number] = $version;
-                //var_dump($ee_addon);
+                $versions[$version_number] = array('xml' => $version, 'addon' => $ee_addon);
             }
         }
 
         ksort($versions);
 
         $last_version = array_pop($versions);
+
         $current_version = craft()->plugins->getPlugin('Analytics')->getVersion();
 
-
-
-        if($last_version > $current_version) {
+        if($last_version['addon']->version > $current_version) {
 
             // there is an update available
 
-            return (string) $xml_versions[$last_version]->enclosure['url'];
+            return (string) $xml_versions[$last_version];
         } else {
             return false;
         }
