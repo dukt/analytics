@@ -22,70 +22,16 @@ use \Google_AnalyticsService;
 
 class AnalyticsService extends BaseApplicationComponent
 {
+
     // --------------------------------------------------------------------
 
-    public function isConfigured()
+    public function code()
     {
-        if(!$this->isInstalled())
-        {
-            return false;
-        }
-
-        // is analytics properly installed
-
         $profileId = craft()->analytics->getSetting('profileId');
 
-        if(!$profileId) {
-            return false;
-        }
+        // $variables = array('id' => $profileId, 'entry' => $entry);
 
-        return true;
-    }
-
-    // --------------------------------------------------------------------
-
-    public function isInstalled()
-    {
-        // is oauth installed
-
-        $oauth = craft()->plugins->getPlugin('OAuth', false);
-
-        if(!$oauth->isInstalled) {
-            return false;
-        }
-
-        return true;
-    }
-
-    // --------------------------------------------------------------------
-
-    public function checkUpdates($pluginClass, $pluginHandle)
-    {
-        $last = craft()->analytics_plugin->getLastVersion($pluginClass, $pluginHandle);
-
-        $currentPlugin = craft()->plugins->getPlugin($pluginClass);
-
-        if(!$currentPlugin) {
-            return $last_version;
-        }
-
-        $current_version = $currentPlugin->getVersion();
-
-        if($last['addon']->version > $current_version) {
-
-            // there is an update available
-
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    // --------------------------------------------------------------------
-
-    public function code($id, $entry = NULL)
-    {
-        $variables = array('id' => $id, 'entry' => $entry);
+        $variables = array('id' => $profileId);
 
         $templatePath = craft()->path->getPluginsPath().'analytics/templates/';
 
@@ -100,33 +46,29 @@ class AnalyticsService extends BaseApplicationComponent
 
     // --------------------------------------------------------------------
 
-    public function getSetting($k) {
-        $settings = Analytics_SettingsRecord::model()->find();
-
-        if(!$settings) {
-            return false;
-        }
-
-        return $settings->options[$k];
+    public function trackDownload($category=null)
+    {
+        return $this->trackEvent($category, $action, $label, $value);
     }
 
     // --------------------------------------------------------------------
 
-    public function properties()
+    public function trackEvent($category, $action, $label=null, $value=null)
     {
-        $response = craft()->analytics->api()->management_webproperties->listManagementWebproperties("~all");
+        return "
+            ga('send', 'event', '".$category."', '".$action."', '".$label."', ".$value.");
 
-        $items = $response['items'];
+            var el=this;
 
-        $properties = array();
+            setTimeout(function() {
+                location.href = el.href;
+            }, 100);
 
-        foreach($items as $item) {
-            $properties[$item['id']] = '('.$item['id'].') '.$item['websiteUrl'];
-        }
-
-        return $properties;
+            return false;
+            ";
     }
 
+    // --------------------------------------------------------------------
     // --------------------------------------------------------------------
 
     public function api()
@@ -157,5 +99,107 @@ class AnalyticsService extends BaseApplicationComponent
 
         return $api;
     }
+
+    // --------------------------------------------------------------------
+
+    public function checkUpdates($pluginClass, $pluginHandle)
+    {
+        $last = craft()->analytics_plugin->getLastVersion($pluginClass, $pluginHandle);
+
+        $currentPlugin = craft()->plugins->getPlugin($pluginClass);
+
+        if(!$currentPlugin) {
+            return $last_version;
+        }
+
+        $current_version = $currentPlugin->getVersion();
+
+        if($last['addon']->version > $current_version) {
+
+            // there is an update available
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // --------------------------------------------------------------------
+
+    public function getSetting($k)
+    {
+        $settings = Analytics_SettingsRecord::model()->find();
+
+        if(!$settings) {
+            return false;
+        }
+
+        return $settings->options[$k];
+    }
+
+    // --------------------------------------------------------------------
+
+    public function isConfigured()
+    {
+        // check if plugin has finished installation process
+
+        if(!$this->isInstalled()) {
+            return false;
+        }
+
+
+        // check if api is available
+
+        $api = craft()->analytics->api();
+
+        if(!$api) {
+            return false;
+        }
+
+
+        // is analytics properly installed
+
+        $profileId = craft()->analytics->getSetting('profileId');
+
+        if(!$profileId) {
+            return false;
+        }
+
+        return true;
+    }
+
+    // --------------------------------------------------------------------
+
+    public function isInstalled()
+    {
+        // is oauth installed
+
+        $oauth = craft()->plugins->getPlugin('OAuth', false);
+
+        if(!$oauth->isInstalled) {
+            return false;
+        }
+
+        return true;
+    }
+
+    // --------------------------------------------------------------------
+
+    public function properties()
+    {
+        $response = craft()->analytics->api()->management_webproperties->listManagementWebproperties("~all");
+
+        $items = $response['items'];
+
+        $properties = array();
+
+        foreach($items as $item) {
+            $properties[$item['id']] = '('.$item['id'].') '.$item['websiteUrl'];
+        }
+
+        return $properties;
+    }
+
+    // --------------------------------------------------------------------
 }
 

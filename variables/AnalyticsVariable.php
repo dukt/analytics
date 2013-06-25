@@ -38,19 +38,16 @@ class AnalyticsVariable
 
     // --------------------------------------------------------------------
 
-    public function event($category, $action, $label, $value)
+    public function trackDownload($category = null)
     {
-        return "
-            ga('send', 'event', '".$category."', '".$action."', '".$label."', ".$value.");
+        return craft()->analytics->trackEvent($category);
+    }
 
-            var el=this;
+    // --------------------------------------------------------------------
 
-            setTimeout(function() {
-                location.href = el.href;
-            }, 100);
-
-            return false;
-            ";
+    public function trackEvent($category, $action, $label=null, $value=null)
+    {
+        return craft()->analytics->trackEvent($category, $action, $label, $value);
     }
 
     // --------------------------------------------------------------------
@@ -69,26 +66,15 @@ class AnalyticsVariable
 
     // --------------------------------------------------------------------
 
-    public function code($id, $entry = NULL)
+    public function code()
     {
-        return craft()->analytics->code($id, $entry);
-    }
-
-    // --------------------------------------------------------------------
-
-    public function accounts()
-    {
-        return craft()->analytics->accounts();
+        return craft()->analytics->code();
     }
 
     // --------------------------------------------------------------------
 
     public function api()
     {
-        // try {
             return craft()->analytics->api();
-        // } catch(\Exception $e) {
-        //     return false;
-        // }
     }
 }
