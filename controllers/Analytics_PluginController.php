@@ -37,8 +37,9 @@ class Analytics_PluginController extends BaseController
             craft()->userSession->setError(Craft::t($msg));
         }
 
+        $referer = $_SERVER['HTTP_REFERER'];
 
-        $this->redirect('analytics/install');
+        $this->redirect($referer);
     }
 
     public function actionInstall()
@@ -52,6 +53,9 @@ class Analytics_PluginController extends BaseController
             craft()->userSession->setError(Craft::t("Couldn't install ".$pluginClass." plugin."));
         }
 
-        $this->redirect('analytics/install');
+
+        $referer = $_SERVER['HTTP_REFERER'];
+
+        $this->redirect($referer);
     }
 }

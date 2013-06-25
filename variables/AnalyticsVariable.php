@@ -15,10 +15,28 @@ namespace Craft;
 
 class AnalyticsVariable
 {
+    // --------------------------------------------------------------------
+
+    public function isInstalled()
+    {
+        return craft()->analytics->isInstalled();
+    }
+
+    // --------------------------------------------------------------------
+
+    public function isConfigured()
+    {
+        return craft()->analytics->isConfigured();
+    }
+
+    // --------------------------------------------------------------------
+
     public function checkUpdates($pluginClass, $pluginHandle)
     {
         return craft()->analytics->checkUpdates($pluginClass, $pluginHandle);
     }
+
+    // --------------------------------------------------------------------
 
     public function event($category, $action, $label, $value)
     {
@@ -35,32 +53,42 @@ class AnalyticsVariable
             ";
     }
 
+    // --------------------------------------------------------------------
+
     public function getSetting($k)
     {
         return craft()->analytics->getSetting($k);
     }
+
+    // --------------------------------------------------------------------
 
     public function properties()
     {
         return craft()->analytics->properties();
     }
 
+    // --------------------------------------------------------------------
+
     public function code($id, $entry = NULL)
     {
         return craft()->analytics->code($id, $entry);
     }
+
+    // --------------------------------------------------------------------
 
     public function accounts()
     {
         return craft()->analytics->accounts();
     }
 
+    // --------------------------------------------------------------------
+
     public function api()
     {
-        try {
+        // try {
             return craft()->analytics->api();
-        } catch(\Exception $e) {
-            return false;
-        }
+        // } catch(\Exception $e) {
+        //     return false;
+        // }
     }
 }

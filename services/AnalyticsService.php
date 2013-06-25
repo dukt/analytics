@@ -22,6 +22,43 @@ use \Google_AnalyticsService;
 
 class AnalyticsService extends BaseApplicationComponent
 {
+    // --------------------------------------------------------------------
+
+    public function isConfigured()
+    {
+        if(!$this->isInstalled())
+        {
+            return false;
+        }
+
+        // is analytics properly installed
+
+        $profileId = craft()->analytics->getSetting('profileId');
+
+        if(!$profileId) {
+            return false;
+        }
+
+        return true;
+    }
+
+    // --------------------------------------------------------------------
+
+    public function isInstalled()
+    {
+        // is oauth installed
+
+        $oauth = craft()->plugins->getPlugin('OAuth', false);
+
+        if(!$oauth->isInstalled) {
+            return false;
+        }
+
+        return true;
+    }
+
+    // --------------------------------------------------------------------
+
     public function checkUpdates($pluginClass, $pluginHandle)
     {
         $last = craft()->analytics_plugin->getLastVersion($pluginClass, $pluginHandle);
@@ -44,6 +81,8 @@ class AnalyticsService extends BaseApplicationComponent
         }
     }
 
+    // --------------------------------------------------------------------
+
     public function code($id, $entry = NULL)
     {
         $variables = array('id' => $id, 'entry' => $entry);
@@ -59,6 +98,8 @@ class AnalyticsService extends BaseApplicationComponent
         return new \Twig_Markup($html, $charset);
     }
 
+    // --------------------------------------------------------------------
+
     public function getSetting($k) {
         $settings = Analytics_SettingsRecord::model()->find();
 
@@ -68,6 +109,8 @@ class AnalyticsService extends BaseApplicationComponent
 
         return $settings->options[$k];
     }
+
+    // --------------------------------------------------------------------
 
     public function properties()
     {
@@ -84,12 +127,11 @@ class AnalyticsService extends BaseApplicationComponent
         return $properties;
     }
 
+    // --------------------------------------------------------------------
+
     public function api()
     {
         $provider = craft()->oauth->getProviderLibrary('Google', 'analytics.system');
-
-        // var_dump($provider);
-        // die();
 
         if(!$provider) {
             return false;

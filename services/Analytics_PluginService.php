@@ -20,6 +20,8 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class Analytics_PluginService extends BaseApplicationComponent
 {
+    // --------------------------------------------------------------------
+
     public function download($pluginClass, $pluginHandle)
     {
         $r = array('success' => false);
@@ -102,6 +104,8 @@ class Analytics_PluginService extends BaseApplicationComponent
 
         return $r;
     }
+
+    // --------------------------------------------------------------------
 
     public function getLastVersion($pluginClass = 'Analytics', $pluginHandle = 'analytics')
     {
