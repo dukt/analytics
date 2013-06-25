@@ -1,13 +1,16 @@
 # Analytics <small>_for Craft CMS_</small>
 
-Advanced Analytics tracking for your Craft CMS website.
+Advanced Google Analytics tracking for Craft CMS.
 
 - [Installation](#install)
+- [Updating the plugin](#update)
 - [Usage](#usage)
 - [Tracking Downloads](#track-downloads)
 - [Tracking Custom Events](#track-events)
 - [API Reference](#api)
+- [Developer API Reference](#developer-api)
 - [Feedback](#feedback)
+- [Licensing](#license)
 
 
 <a id="install"></a>
@@ -17,32 +20,20 @@ Advanced Analytics tracking for your Craft CMS website.
 2. Go to **Admin / Analytics** and follow the installation instructions.
 3. Once installed, select a website profile to work with
 
+
+<a id="update"></a>
+## Updating the plugin
+
+Analytics add-on notices you when an update is available and lets you download and install it automatically.
+
+If you need to manually update Analytics, simply replace **craft/plugins/analytics** folder.
+
 <a id="usage"></a>
 ## Usage
 
 Put this code *"after the opening `<body>` tag"* as they say :
 
-    {{craft.analytics.code('UA-XXXXXXX-XX')}}
-
-Alternatively, you can pass a custom entry, but remember that tracking data will be added to this entry.
-
-    {% if entry is defined %}
-        {{craft.analytics.code('UA-XXXXXXX-XX', entry)}}
-    {% else %}
-        {{craft.analytics.code('UA-XXXXXXX-XX')}}
-    {% endif %}
-
-### Tracked Data (not implemented yet)
-
-Data being tracked through Google Analytics custom metrics :
-
-- session
-    - logged in
-- entry
-    - section name
-    - author name
-    - tags
-    - publication year
+    {{craft.analytics.code}}
 
 <a id="track-downloads"></a>
 ## Tracking Downloads
@@ -74,10 +65,26 @@ Example :
 <a id="api"></a>
 ## API Reference
 
-### {{craft.analytics.code(code, entry)}}
-### {{craft.analytics.trackDownload(category)}}
-### {{craft.analytics.trackEvent(category, action, label, number)}}
-### {{craft.analytics.api}}
+### craft.analytics.code()
+Returns Google Analytics tracking code
+
+### craft.analytics.trackDownload(category)
+Returns JavaScript for tracking downloads
+
+### craft.analytics.trackEvent(category, action, label, number)
+Returns JavaScript for tracking events
+
+<a id="developer-api"></a>
+## Developer API Reference
+
+End-user shouldn't be using these APIs as they are made for developers. Please be careful.
+
+### craft.analytics.api
+### craft.analytics.checkUpdates(pluginClass, pluginHandle)
+### craft.analytics.getSetting(settingKey)
+### craft.analytics.isConfigured()
+### craft.analytics.isInstalled()
+### craft.analytics.properties()
 
 <a id="feedback"></a>
 ## Feedback
@@ -86,3 +93,11 @@ Example :
 Please [get in touch](mailto:hello@dukt.net), and point out what you do and don't like. **No issue is too small.**
 
 This plugin is actively maintained by [Benjamin David](https://github.com/benjamindavid), from [Dukt](http://dukt.net/).
+
+
+<a id="license"></a>
+## Licensing
+
+Analytics is free to use during beta. You are not allowed to reuse / distribute this software.
+
+Dukt © 2013 - All rights reserved
