@@ -27,11 +27,13 @@ class AnalyticsService extends BaseApplicationComponent
 
     public function code()
     {
+        $element = craft()->urlManager->getMatchedElement();
+
         $profileId = craft()->analytics->getSetting('profileId');
 
         // $variables = array('id' => $profileId, 'entry' => $entry);
 
-        $variables = array('id' => $profileId);
+        $variables = array('id' => $profileId, 'element' => $element);
 
         $templatePath = craft()->path->getPluginsPath().'analytics/templates/';
 
