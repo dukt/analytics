@@ -5,8 +5,8 @@ Advanced Google Analytics tracking for Craft CMS.
 - [Installation](#install)
 - [Updating the plugin](#update)
 - [Usage](#usage)
+- [Tracking Events](#track-events)
 - [Tracking Downloads](#track-downloads)
-- [Tracking Custom Events](#track-events)
 - [API Reference](#api)
 - [Developer API Reference](#developer-api)
 - [Feedback](#feedback)
@@ -37,15 +37,8 @@ Place this code in each page of your website that your want to track.
 
     {{craft.analytics.code}}
 
-<a id="track-downloads"></a>
-## Tracking Downloads
-
-Downloads are tracked through Google Analytics Events.
-
-    <a href="http://domain/to/plugin.zip" onclick="{{craft.analytics.trackEvent('Download', 'My Plugin')}}">Download</a>
-
 <a id="track-events"></a>
-## Tracking Custom Events
+## Tracking Events
 
 - **Category :** Typically the object that was interacted with (e.g. button)
 - **Action :** The type of interaction (e.g. click)
@@ -55,6 +48,14 @@ Downloads are tracked through Google Analytics Events.
 Example :
 
     <a href="http://some/link" onclick="{{craft.analytics.trackEvent('Category', 'Action', 'Label', 4)}}">Download</a>
+
+
+<a id="track-downloads"></a>
+## Tracking Downloads
+
+Downloads are tracked through Google Analytics Events.
+
+    <a href="http://domain/to/plugin.zip" onclick="{{craft.analytics.trackEvent('Download', 'My Plugin')}}">Download</a>
 
 
 <a id="api"></a>
