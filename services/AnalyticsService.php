@@ -46,19 +46,16 @@ class AnalyticsService extends BaseApplicationComponent
 
     // --------------------------------------------------------------------
 
-    public function trackDownload($category=null)
+    public function trackEvent($category, $action, $label=null, $value=0)
     {
-        return $this->trackEvent($category, $action, $label, $value);
-    }
+        $r = "
+            var el=this;
+        ";
 
-    // --------------------------------------------------------------------
-
-    public function trackEvent($category, $action, $label=null, $value=null)
-    {
-        return "
+        $r .= "
             ga('send', 'event', '".$category."', '".$action."', '".$label."', ".$value.");
 
-            var el=this;
+
 
             setTimeout(function() {
                 location.href = el.href;
@@ -66,6 +63,8 @@ class AnalyticsService extends BaseApplicationComponent
 
             return false;
             ";
+
+        return $r;
     }
 
     // --------------------------------------------------------------------

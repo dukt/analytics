@@ -31,7 +31,9 @@ If you need to manually update Analytics, simply replace **craft/plugins/analyti
 <a id="usage"></a>
 ## Usage
 
-Put this code *"after the opening `<body>` tag"* as they say :
+You must have selected a website profile in **Admin / Analytics** in order to get the Google Analytics code up and running.
+
+Place this code in each page of your website that your want to track.
 
     {{craft.analytics.code}}
 
@@ -40,26 +42,19 @@ Put this code *"after the opening `<body>` tag"* as they say :
 
 Downloads are tracked through Google Analytics Events.
 
-    <a href="http://domain/to/plugin.zip" onclick="{{craft.analytics.trackDownload()}}">Download</a>
-
-You can categorize downloads by passing the category name as a parameter :
-
-    <a href="http://domain/to/plugin.zip" onclick="{{craft.analytics.trackDownload('Plugins')}}">Download</a>
+    <a href="http://domain/to/plugin.zip" onclick="{{craft.analytics.trackEvent('Download', 'My Plugin')}}">Download</a>
 
 <a id="track-events"></a>
 ## Tracking Custom Events
 
-- **category :** Typically the object that was interacted with (e.g. button)
-- **action :** The type of interaction (e.g. click)
-- **label :** Useful for categorizing events (e.g. nav buttons)
-- **value :** Values must be non-negative. Useful to pass counts (e.g. 4 times)
+- **Category :** Typically the object that was interacted with (e.g. button)
+- **Action :** The type of interaction (e.g. click)
+- **Label :** Useful for categorizing events (e.g. nav buttons)
+- **Value :** Values must be non-negative. Useful to pass counts (e.g. 4 times)
 
 Example :
 
-    <a
-        href="http://domain/to/plugin.zip"
-        onclick="{{craft.analytics.trackEvent('Category', 'Action', 'Label', 4)}}"
-    >Download</a>
+    <a href="http://some/link" onclick="{{craft.analytics.trackEvent('Category', 'Action', 'Label', 4)}}">Download</a>
 
 
 <a id="api"></a>
@@ -68,16 +63,13 @@ Example :
 ### craft.analytics.code()
 Returns Google Analytics tracking code
 
-### craft.analytics.trackDownload(category)
-Returns JavaScript for tracking downloads
-
-### craft.analytics.trackEvent(category, action, label, number)
+### craft.analytics.trackEvent(category, action, label=null, number=0)
 Returns JavaScript for tracking events
 
 <a id="developer-api"></a>
 ## Developer API Reference
 
-End-user shouldn't be using these APIs as they are made for developers. Please be careful.
+Developer APIs have been created for the development of this plugin. They can be subject to change and shouldn't be used by end-users.
 
 ### craft.analytics.api
 ### craft.analytics.checkUpdates(pluginClass, pluginHandle)

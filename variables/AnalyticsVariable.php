@@ -36,16 +36,10 @@ class AnalyticsVariable
         return craft()->analytics->checkUpdates($pluginClass, $pluginHandle);
     }
 
-    // --------------------------------------------------------------------
-
-    public function trackDownload($category = null)
-    {
-        return craft()->analytics->trackEvent($category);
-    }
 
     // --------------------------------------------------------------------
 
-    public function trackEvent($category, $action, $label=null, $value=null)
+    public function trackEvent($category, $action=null, $label=null, $value=0)
     {
         return craft()->analytics->trackEvent($category, $action, $label, $value);
     }
