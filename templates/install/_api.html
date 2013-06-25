@@ -2,56 +2,49 @@
 
 <h2>Client ID &amp; Secret</h2>
 
+{% set serviceProviderClass = providerClass %}
 
-{% if craft.oauth is defined %}
+<form method="post" action="" accept-charset="UTF-8">
+    <input type="hidden" name="action" value="oauth/settings/saveService">
+    <input type="hidden" name="redirect" value="{{pluginHandle}}/settings" />
+    <input type="hidden" name="serviceProviderClass" value="{{ serviceProviderClass }}" />
 
+    {% set providerLibrary = craft.oauth.getProviderLibrary(serviceProviderClass) %}
 
-    {% set serviceProviderClass = providerClass %}
+    <p>Create an OAuth 2.0 application and enable Analytics service in the <a target="_blank" href="{{providerLibrary.consoleUrl}}">Google Console</a>.</p>
 
-    <form method="post" action="" accept-charset="UTF-8">
-        <input type="hidden" name="action" value="oauth/settings/saveService">
-        <input type="hidden" name="redirect" value="{{pluginHandle}}/settings" />
-        <input type="hidden" name="serviceProviderClass" value="{{ serviceProviderClass }}" />
+    <p>Once created, configure the application with the following settings :</p>
 
-        {% set providerLibrary = craft.oauth.getProviderLibrary(serviceProviderClass) %}
+    <ul>
+        <li>Authorized Redirect URI : {{craft.oauth.providerCallbackUrl(serviceProviderClass)}}</li>
+        <li>Authorized JavaScript Origins : {{siteUrl}}</li>
+    </ul>
 
-        <p>Create an OAuth 2.0 application and enable Analytics service in the <a target="_blank" href="{{providerLibrary.consoleUrl}}">Google Console</a>.</p>
+    {{ forms.textField({
+        label: 'Client Id'|t,
+        required: true,
+        name: 'service[clientId]',
+        value: service ? service.clientId : null,
+        errors: service ? service.errors('clientId') : null,
+        disabled: ((service.token is defined and service.token|length) > 0 ? true : false)
+    }) }}
 
-        <p>Once created, configure the application with the following settings :</p>
+    {{ forms.textField({
+        label: 'Client Secret'|t,
+        required: true,
+        name: 'service[clientSecret]',
+        value: service ? service.clientSecret : null,
+        errors: service ? service.errors('clientSecret') : null,
+        disabled: (service.token is defined and service.token|length > 0 ? true : false)
+    }) }}
 
-        <ul>
-            <li>Authorized Redirect URI : {{craft.oauth.providerCallbackUrl(serviceProviderClass)}}</li>
-            <li>Authorized JavaScript Origins : {{siteUrl}}</li>
-        </ul>
-
-        {{ forms.textField({
-            label: 'Client Id'|t,
-            required: true,
-            name: 'service[clientId]',
-            value: service ? service.clientId : null,
-            errors: service ? service.errors('clientId') : null,
-            disabled: ((service.token is defined and service.token|length) > 0 ? true : false)
-        }) }}
-
-        {{ forms.textField({
-            label: 'Client Secret'|t,
-            required: true,
-            name: 'service[clientSecret]',
-            value: service ? service.clientSecret : null,
-            errors: service ? service.errors('clientSecret') : null,
-            disabled: (service.token is defined and service.token|length > 0 ? true : false)
-        }) }}
-
-        <div class="buttons">
-            {% if (service.token is defined and service.token|length == 0) or service.token is not defined %}
+    <div class="buttons">
+        {% if (service.token is defined and service.token|length == 0) or service.token is not defined %}
             <input class="btn submit" type="submit" value="{{ 'Save API credentials'|t }}">
-            {% elseif service.id is defined %}
-                <a class="btn" href="{{actionUrl('connect/settings/resetServiceToken', {providerClass:serviceProviderClass})}}">Reset Token</a>
-            {% endif %}
-        </div>
-    </form>
+        {% elseif service.id is defined %}
+            <a class="btn" href="{{actionUrl('connect/settings/resetServiceToken', {providerClass:serviceProviderClass})}}">Reset Token</a>
+        {% endif %}
+    </div>
+</form>
 
-
-
-{% endif %}
 

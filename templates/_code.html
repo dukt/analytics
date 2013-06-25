@@ -8,7 +8,7 @@
         'cookieDomain': 'none'
     });
 
-    {% if entry %}
+    {% if entry is defined %}
         ga('send', 'pageview');
 
         var dimensionValue = '{{entry.slug}}';

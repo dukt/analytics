@@ -12,26 +12,24 @@
 
     <!-- AUTHENTICATE -->
 
-    <div class="analytics-setting">
+
         <h2>Authenticate</h2>
 
-        <div class="analytics-setting-content">
-            {% if service is defined %}
-                {% if service.id is not null %}
+        {% if service is defined %}
+            {% if service.id is not null %}
 
-                    <p>Authenticate with {{providerClass}} so we can start gathering data from the API.</p>
-                    <p>
-                        <a class="btn submit" href="{{ craft.oauth.connect(pluginHandle~'.system', providerClass, false, scope) }}">Authenticate with {{providerClass}}</a> &nbsp;
+                <p>Authenticate with {{providerClass}} so we can start gathering data from the API.</p>
+                <p>
+                    <a class="btn submit" href="{{ craft.oauth.connect(pluginHandle~'.system', providerClass, false, scope) }}">Authenticate with {{providerClass}}</a> &nbsp;
 
-                    </p>
-                    <p>
-                        <a class="btn small" href="{{url('analytics/install/api')}}">Change API Client ID &amp; secret</a>
-                    </p>
-
+                </p>
+                <p>
+                    <a class="btn small" href="{{url(pluginHandle~'/install/api')}}">Change API Client ID &amp; secret</a>
+                </p>
 
 
-                {% endif %}
+
             {% endif %}
-        </div>
-    </div>
+        {% endif %}
+
 {% endif %}
