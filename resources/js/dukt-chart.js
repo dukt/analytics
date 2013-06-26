@@ -9,8 +9,9 @@ $(document).ready(function() {
         Craft.postActionRequest('analytics/charts/parse', json, function(response) {
 
             response = $.parseJSON(response);
+
             $(v).dchart(response, json);
-            // $(v).html(response);
+
         });
     });
 });

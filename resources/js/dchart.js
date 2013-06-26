@@ -26,8 +26,6 @@ google.setOnLoadCallback(function() {
 
        }, jsonOptions);
 
-       console.log('### JSONOPTIONS', jsonOptions);
-       console.log('### SETTINGS', settings);
        // Public method
 
        this.drawChart = function()
@@ -38,8 +36,6 @@ google.setOnLoadCallback(function() {
 
             if(settings.chartOptions.chartType == 'line') {
 
-                console.log('### PIE');
-
                 var chartOptions = $.extend({
                     title: settings.chartOptions.title,
                     legend:{position:'bottom'},
@@ -49,7 +45,6 @@ google.setOnLoadCallback(function() {
                  }, settings.chartOptions || {});
 
             } else {
-                console.log('### DONUT');
 
                 var chartOptions = $.extend({
                       title: settings.chartOptions.title,
@@ -71,8 +66,6 @@ google.setOnLoadCallback(function() {
 
 
             chart.draw(data, chartOptions);
-
-            console.log('publicMethod() called!');
        };
 
       $(window).resize(function() {
