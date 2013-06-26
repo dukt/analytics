@@ -36,3 +36,13 @@
     width: 45%;
     height: 400px;
 }
+
+
+.dukt-update {
+    display: none;
+    opacity: 0;
+    margin: 0 -30px;
+    margin-top: -30px;
+    padding: 30px;
+    border-bottom: 1px solid #eee;
+}

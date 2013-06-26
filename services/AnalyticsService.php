@@ -136,7 +136,20 @@ class AnalyticsService extends BaseApplicationComponent
 
         $updates = craft()->analytics->checkUpdates($plugin['class'], $plugin['handle']);
 
-        if(!$updates) {
+        if($updates) {
+            return $plugin;
+        }
+
+        // check oauth updates
+
+        $plugin = array(
+                'class' => "Oauth",
+                'handle' => 'oauth'
+            );
+
+        $updates = craft()->analytics->checkUpdates($plugin['class'], $plugin['handle']);
+
+        if($updates) {
             return $plugin;
         }
 
