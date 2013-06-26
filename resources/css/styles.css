@@ -22,7 +22,7 @@
     height: 400px;
 }
 
-.dchart {
+.dukt-chart {
     float: left;
     width: 96%;
     overflow: hidden;
@@ -32,7 +32,7 @@
 }
 
 
-.dchart.half {
+.ddukt-chart.half {
     width: 45%;
     height: 400px;
 }

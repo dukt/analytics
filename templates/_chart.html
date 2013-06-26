@@ -1,4 +1,5 @@
-<div id="{{id}}" class="dchart{% if half %} half{% endif %}">
+{#
+<div id="{% if id is defined %}{{id}}{% endif %}" class="dchart{% if half %} half{% endif %}">
 
     <script type="text/javascript">
         {% set profiles = craft.analytics.api.management_profiles.listManagementProfiles(accountId, webPropertyId) %}
@@ -27,3 +28,4 @@
     </script>
 
 </div>
+#}

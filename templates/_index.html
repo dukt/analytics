@@ -5,7 +5,14 @@
 {% set provider = 'Google' %}
 
 {% includeCssResource "analytics/css/styles.css" %}
-{% includeJsResource "analytics/js/scripts.js" %}
+
+{%- includeJsResource 'analytics/js/jsapi.js' first %}
+
+{% includeJsResource 'analytics/js/dchart.js' %}
+{% includeJsResource 'analytics/js/dukt-chart.js' %}
+
+
+
 
 
 {% set extraPageHeaderHtml %}
@@ -31,34 +38,55 @@
     {% endfor %}
 
 
+    {% set profiles = craft.analytics.api.management_profiles.listManagementProfiles(accountId, webPropertyId) %}
+    {% set profileId = profiles.items[0].id %}
+
+
+
     <h2 class="center">Last 30 days</h2>
 
-    <script type="text/javascript" src="http://playground.craft.dk/admin/resources/lib/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    {% include 'analytics/_chart2' with {
+        chart: {
+            options: {
+                id:'visits',
+                half: false,
+            },
+            chartQuery: {
+                param1 : 'ga:' ~ profileId,
+                param2 : now|date_modify("-1 month")|date("Y-m-d"),
+                param3 : now|date("Y-m-d"),
+                param4 : 'ga:visits',
+                param5 : {
+                    'dimensions' : 'ga:year, ga:month, ga:day'
+                }
+            },
+            chartOptions: {
+                title: 'Visits',
+                chartType:'line'
 
-    {% includeJsResource "analytics/js/dchart.js" %}
+            }
+        }
+    } %}
 
-    <script type="text/javascript">
-
-            var charts = {};
-
-            google.load("visualization", "1", {packages:["corechart"]});
-            google.setOnLoadCallback(function() {
-                  // initialize all dcharts once ready
-            });
-
-    </script>
-
-
-    {% include 'analytics/_chart' with {
-        id:'visits',
-        options: {
-            title: 'Visits',
-            chartType:'line'
-        },
-        half: false,
-        sourceParams: {
-            'dimensions' : 'ga:year, ga:month, ga:day'
+    {% include 'analytics/_chart2' with {
+        chart: {
+            options: {
+                id:'countries',
+                half: true,
+            },
+            chartQuery: {
+                param1 : 'ga:' ~ profileId,
+                param2 : now|date_modify("-1 month")|date("Y-m-d"),
+                param3 : now|date("Y-m-d"),
+                param4 : 'ga:visits',
+                param5 : {
+                    'dimensions' : 'ga:country'
+                }
+            },
+            chartOptions: {
+                title: 'Countries',
+                chartType:'donut'
+            }
         }
     } %}
 
