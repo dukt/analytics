@@ -37,8 +37,8 @@ class Analytics_PluginController extends BaseController
 
                 $url = UrlHelper::getActionUrl('analytics/plugin/install',
                             array(
-                                'pluginClass' => $plugin['class'],
-                                'pluginHandle' => $plugin['handle']
+                                'pluginClass' => $pluginClass,
+                                'pluginHandle' => $pluginHandle
 
                             )
                         );
