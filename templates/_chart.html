@@ -1,31 +1,30 @@
-{#
-<div id="{% if id is defined %}{{id}}{% endif %}" class="dchart{% if half %} half{% endif %}">
+{% if half is not defined %}
+    {% set half = false %}
+{% endif %}
 
-    <script type="text/javascript">
-        {% set profiles = craft.analytics.api.management_profiles.listManagementProfiles(accountId, webPropertyId) %}
-        {% set profileId = profiles.items[0].id %}
+{% if title is not defined %}
+    {% set title = "Default Title" %}
+{% endif %}
 
-        {% set resultsSource = craft.analytics.api.data_ga.get(
-           'ga:' ~ profileId,
-           now|date_modify("-1 month")|date("Y-m-d"),
-           now|date("Y-m-d"),
-           'ga:visits', sourceParams) %}
+{% if type is not defined %}
+    {% set type = "line" %}
+{% endif %}
 
-        setTimeout(function() {
-            $('#{{id}}').dchart([
-                  ['Day', 'Visitors'],
-                  {% for row in resultsSource.rows %}
-                        {% if row|length == 2 %}
-                            ['{{row[0]}}',  {{row[1]}}],
-                        {% else %}
-                            ['{{row[2]}}/{{row[1]}}',  {{row[3]}}],
-                        {% endif %}
-                  {% endfor %}
-                ],
-                {{options|json_encode|raw}});
-        }, 1000);
-
-    </script>
-
-</div>
-#}
+{% include 'analytics/_chartElement' with {
+    half:half,
+    chart: {
+        chartQuery: {
+            param1 : 'ga:' ~ profileId,
+            param2 : now|date_modify("-1 month")|date("Y-m-d"),
+            param3 : now|date("Y-m-d"),
+            param4 : 'ga:visits',
+            param5 : {
+                'dimensions' : dimensions
+            }
+        },
+        chartOptions: {
+            title: title,
+            chartType:type
+        }
+    }
+} %}

@@ -1,42 +1,29 @@
-.analytics-setting.closed .analytics-setting-content {
-    display: none;
-}
-
-.analytics-setting.done h2 {
-    color:#ccc;
-    text-decoration: line-through;
-}
-
-
 .center {
     text-align: center;
 }
 
-.charts {
-
-}
-
-
-.charts.half {
-    width: 40%;
-    height: 400px;
-}
-
 .dukt-chart {
+
+
+
     float: left;
     width: 96%;
     overflow: hidden;
     border: 1px solid #eee;
+    background: url(../images/spinner.gif) no-repeat 50% 50%;
     margin: 2%;
     height: 400px;
 }
 
 
-.ddukt-chart.half {
+.dukt-chart.half {
     width: 45%;
     height: 400px;
 }
 
+.dukt-chart .data {
+    display: none;
+}
 
 .dukt-update {
     display: none;

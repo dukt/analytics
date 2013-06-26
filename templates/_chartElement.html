@@ -1,0 +1,12 @@
+{% set profiles = craft.analytics.api.management_profiles.listManagementProfiles(accountId, webPropertyId) %}
+{% set profileId = profiles.items[0].id %}
+
+{% if half is not defined %}
+    {% set half = false %}
+{% endif %}
+
+<div class="dukt-chart{% if half == true %} half{% endif %}">
+  <div class="data">
+      {{chart|json_encode()}}
+  </div>
+</div>

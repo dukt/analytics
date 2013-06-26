@@ -45,104 +45,40 @@
 
     <h2 class="center">Last 30 days</h2>
 
-    {% include 'analytics/_chart2' with {
-        chart: {
-            options: {
-                id:'visits',
-                half: false,
-            },
-            chartQuery: {
-                param1 : 'ga:' ~ profileId,
-                param2 : now|date_modify("-1 month")|date("Y-m-d"),
-                param3 : now|date("Y-m-d"),
-                param4 : 'ga:visits',
-                param5 : {
-                    'dimensions' : 'ga:year, ga:month, ga:day'
-                }
-            },
-            chartOptions: {
-                title: 'Visits',
-                chartType:'line'
-
-            }
-        }
+    {% include 'analytics/_chart' with {
+        half:false,
+        dimensions:'ga:year, ga:month, ga:day',
+        title: 'Visits'
     } %}
 
-    {% include 'analytics/_chart2' with {
-        chart: {
-            options: {
-                id:'countries',
-                half: true,
-            },
-            chartQuery: {
-                param1 : 'ga:' ~ profileId,
-                param2 : now|date_modify("-1 month")|date("Y-m-d"),
-                param3 : now|date("Y-m-d"),
-                param4 : 'ga:visits',
-                param5 : {
-                    'dimensions' : 'ga:country'
-                }
-            },
-            chartOptions: {
-                title: 'Countries',
-                chartType:'donut'
-            }
-        }
+    {% include 'analytics/_chart' with {
+        half:true,
+        dimensions:'ga:country',
+        title: 'Countries',
+        type:'donut'
+    } %}
+
+    {% include 'analytics/_chart' with {
+        half:true,
+        dimensions:'ga:isMobile',
+        title: 'Is Mobile',
+        type:'donut'
+    } %}
+
+    {% include 'analytics/_chart' with {
+        half:true,
+        dimensions:'ga:socialNetwork',
+        title: 'Social Networks',
+        type:'donut'
     } %}
 
 
-    <div class="charts">
+    {% include 'analytics/_chart' with {
+        half:true,
+        dimensions:'ga:source',
+        title: 'Sources',
+        type:'donut'
+    } %}
 
-        {% include 'analytics/_chart' with {
-            id:'countries',
-            options: {
-                title: 'Countries',
-                chartType:'donut'
-            },
-            half: true,
-            sourceParams: {
-                'dimensions' : 'ga:country'
-            }
-        } %}
-
-        {% include 'analytics/_chart' with {
-            id:'isMobile',
-            options: {
-                title: 'Is Mobile',
-                chartType:'donut'
-            },
-            half: true,
-            sourceParams: {
-                'dimensions' : 'ga:isMobile'
-            }
-        } %}
-
-        {% include 'analytics/_chart' with {
-            id:'socialNetworks',
-            options: {
-                title: 'Social Networks',
-                chartType:'donut'
-            },
-            half: true,
-            sourceParams: {
-                'dimensions' : 'ga:socialNetwork'
-            }
-        } %}
-
-
-        {% include 'analytics/_chart' with {
-            id:'sources',
-            options: {
-                title: 'Sources',
-                chartType:'donut'
-            },
-            half: true,
-            sourceParams: {
-                'dimensions' : 'ga:source'
-            }
-        } %}
-
-      <div class="clear"></div>
-    </div>
-
+    <div class="clear"></div>
 {% endset %}

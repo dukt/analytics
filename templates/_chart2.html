@@ -1,7 +1,0 @@
-
-{% set profiles = craft.analytics.api.management_profiles.listManagementProfiles(accountId, webPropertyId) %}
-{% set profileId = profiles.items[0].id %}
-
-<div class="dukt-chart">
-  {{chart|json_encode()}}
-</div>
