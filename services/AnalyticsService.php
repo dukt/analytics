@@ -125,6 +125,24 @@ class AnalyticsService extends BaseApplicationComponent
         }
     }
 
+    public function checkUpdatesNew()
+    {
+        // check analytics updates
+
+        $plugin = array(
+                'class' => "Analytics",
+                'handle' => 'analytics'
+            );
+
+        $updates = craft()->analytics->checkUpdates($plugin['class'], $plugin['handle']);
+
+        if(!$updates) {
+            return $plugin;
+        }
+
+        return false;
+    }
+
     // --------------------------------------------------------------------
 
     public function getSetting($k)

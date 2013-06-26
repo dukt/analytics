@@ -58,4 +58,32 @@ class Analytics_PluginController extends BaseController
 
         $this->redirect($referer);
     }
+
+    public function update()
+    {
+        $plugin = craft()->analytics->checkUpdatesNew();
+
+        if($plugin) {
+
+            $url = UrlHelper::getActionUrl('analytics/plugin/download',
+                        array(
+                            'pluginClass' => $plugin['class'],
+                            'pluginHandle' => $plugin['handle']
+
+                        )
+                    );
+
+            $this->redirect($url);
+
+        } else {
+            $this->redirect('analytics/settings');
+        }
+    }
+
+    public function actionCheckUpdates()
+    {
+        $plugin = craft()->analytics->checkUpdatesNew();
+
+        $this->returnJson($plugin);
+    }
 }
