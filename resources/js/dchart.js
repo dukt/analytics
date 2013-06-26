@@ -36,20 +36,8 @@ google.setOnLoadCallback(function() {
 
 
 
-            if(settings.chartOptions.chartType == 'donut') {
-                console.log('### DONUT');
+            if(settings.chartOptions.chartType == 'line') {
 
-                var chartOptions = $.extend({
-                      title: settings.chartOptions.title,
-                      legend:'none',
-                      sliceVisibilityThreshold:1/50,
-                      pieHole:0.5,
-                      chartArea : {width:'90%'},
-               }, settings.chartOptions || {});
-
-                var chart = new google.visualization.PieChart(element);
-
-            } else {
                 console.log('### PIE');
 
                 var chartOptions = $.extend({
@@ -60,8 +48,27 @@ google.setOnLoadCallback(function() {
                     hAxis: {minValue: 4, format: '#', showTextEvery:5}
                  }, settings.chartOptions || {});
 
-                var chart = new google.visualization.LineChart(element);
+            } else {
+                console.log('### DONUT');
+
+                var chartOptions = $.extend({
+                      title: settings.chartOptions.title,
+                      legend:'none',
+                      sliceVisibilityThreshold:1/50,
+                      pieHole:0.5,
+                      chartArea : {width:'90%'},
+               }, settings.chartOptions || {});
             }
+
+
+            if(settings.chartOptions.chartType == 'column') {
+              var chart = new google.visualization.ColumnChart(element);
+            } else if(settings.chartOptions.chartType == 'donut') {
+              var chart = new google.visualization.PieChart(element);
+            } else {
+              var chart = new google.visualization.LineChart(element);
+            }
+
 
             chart.draw(data, chartOptions);
 
