@@ -1,6 +1,6 @@
 # Analytics <small>_for Craft CMS_</small>
 
-Advanced Google Analytics tracking for Craft CMS.
+Connect your Craft website to Google Analytics and get advanced reports and simplified event tracking.
 
 - [Installation](#install)
 - [Updating the plugin](#update)
