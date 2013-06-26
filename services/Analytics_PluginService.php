@@ -164,6 +164,11 @@ class Analytics_PluginService extends BaseApplicationComponent
         $pluginComponent = craft()->plugins->getPlugin($pluginClass, false);
 
         try {
+            if(!$pluginComponent)
+            {
+                return false;
+            }
+
             if(!$pluginComponent->isInstalled) {
                 if (craft()->plugins->installPlugin($pluginClass)) {
                     return true;
