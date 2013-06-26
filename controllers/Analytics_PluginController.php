@@ -59,7 +59,7 @@ class Analytics_PluginController extends BaseController
         $this->redirect($referer);
     }
 
-    public function update()
+    public function actionUpdate()
     {
         $plugin = craft()->analytics->checkUpdatesNew();
 
