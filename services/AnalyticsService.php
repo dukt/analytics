@@ -208,6 +208,10 @@ class AnalyticsService extends BaseApplicationComponent
 
         $oauth = craft()->plugins->getPlugin('OAuth', false);
 
+        if(!$oauth) {
+            return false;
+        }
+
         if(!$oauth->isInstalled) {
             return false;
         }
