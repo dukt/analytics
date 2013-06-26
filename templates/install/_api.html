@@ -13,11 +13,20 @@
 
     <p>Create an OAuth 2.0 application and enable Analytics service in the <a target="_blank" href="{{providerLibrary.consoleUrl}}">Google Console</a>.</p>
 
+
+    <p>Please note that Google OAuth authentication callback only works with remote and specific local domains :</p>
+
+    <ul>
+        <li><strong>Works :</strong> http://site.com/</li>
+        <li><strong>Works :</strong> http://localhost/</li>
+        <li><strong>Doesn't work :</strong> http://site.dev </li>
+    </ul>
+
     <p>Once created, configure the application with the following settings :</p>
 
     <ul>
-        <li>Authorized Redirect URI : {{craft.oauth.providerCallbackUrl(serviceProviderClass)}}</li>
-        <li>Authorized JavaScript Origins : {{siteUrl}}</li>
+        <li><strong>Authorized Redirect URI :</strong> {{craft.oauth.providerCallbackUrl(serviceProviderClass)}}</li>
+        <li><strong>Authorized JavaScript Origins :</strong> {{siteUrl}}</li>
     </ul>
 
     {{ forms.textField({
