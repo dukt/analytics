@@ -29,15 +29,11 @@ class Analytics_PluginController extends BaseController
 
         if($download['success'] == true) {
 
-            $url = UrlHelper::getActionUrl('analytics/plugin/install',
-                        array(
-                            'pluginClass' => $pluginClass,
-                            'pluginHandle' => $pluginHandle
-
-                        )
-                    );
-
-            $this->redirect($url);
+            if(craft()->analytics_plugin->install($pluginClass)) {
+                craft()->userSession->setNotice(Craft::t($pluginClass.' plugin installed.'));
+            } else {
+                craft()->userSession->setError(Craft::t("Couldn't install ".$pluginClass." plugin."));
+            }
 
         } else {
             $msg = 'Couldn’t install '.$pluginClass.' plugin.';
