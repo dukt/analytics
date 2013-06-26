@@ -58,7 +58,7 @@ class Analytics_PluginController extends BaseController
 
         if(craft()->analytics_plugin->install($pluginClass))
         {
-            craft()->userSession->setNotice(Craft::t($pluginClass.' plugin updated.'));
+            craft()->userSession->setNotice(Craft::t($pluginClass.' plugin installed.'));
         } else {
             craft()->userSession->setError(Craft::t("Couldn't install ".$pluginClass." plugin."));
         }
