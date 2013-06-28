@@ -1,3 +1,5 @@
+{% set title = "Analytics"|t %}
+
 {% if not craft.analytics.isOk %}
     {% redirect 'analytics/settings' %}
 {% else %}
@@ -5,7 +7,6 @@
     {% extends "_layouts/cp" %}
     {% import "_includes/forms" as forms %}
 
-    {% set title = "Analytics"|t %}
     {% set provider = 'Google' %}
 
     {% includeCssResource "analytics/css/styles.css" %}
