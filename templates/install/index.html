@@ -1,28 +1,34 @@
-{% extends "_layouts/cp" %}
-{% import "_includes/forms" as forms %}
 
-{% set title = "Analytics Installation"|t %}
+    {% set title = "Analytics Installation"|t %}
+
+{% if craft.analytics.isInstalled %}
+    {% redirect 'analytics/settings' %}
+{% else %}
+
+    {% extends "_layouts/cp" %}
+    {% import "_includes/forms" as forms %}
 
 
-{% set providerClass = 'Google' %}
-{% set pluginHandle = 'analytics' %}
+    {% set providerClass = 'Google' %}
+    {% set pluginHandle = 'analytics' %}
 
-{% includeCssResource pluginHandle~"/css/styles.css" %}
-{% includeJsResource pluginHandle~"/js/scripts.js" %}
+    {% includeCssResource pluginHandle~"/css/styles.css" %}
+    {% includeJsResource pluginHandle~"/js/scripts.js" %}
 
-{% set content %}
+    {% set content %}
 
-    {% if craft.oauth is not defined %}
-        {% include pluginHandle~'/install/_oauth' %}
-    {% else %}
-        {% set account = craft.oauth.getAccount(pluginHandle~'.system', providerClass) %}
-        {% set service = craft.oauth.getProvider(providerClass) %}
-
-        {% if not craft.oauth.providerIsConfigured(providerClass) or craft.request.getSegment(3) == 'api' %}
-            {% include pluginHandle~'/install/_api' %}
+        {% if craft.oauth is not defined %}
+            {% include pluginHandle~'/install/_oauth' %}
         {% else %}
-            {% include pluginHandle~'/install/_authenticate' %}
-        {% endif %}
-    {% endif %}
+            {% set account = craft.oauth.getAccount(pluginHandle~'.system', providerClass) %}
+            {% set service = craft.oauth.getProvider(providerClass) %}
 
-{% endset %}
+            {% if not craft.oauth.providerIsConfigured(providerClass) or craft.request.getSegment(3) == 'api' %}
+                {% include pluginHandle~'/install/_api' %}
+            {% else %}
+                {% include pluginHandle~'/install/_authenticate' %}
+            {% endif %}
+        {% endif %}
+
+    {% endset %}
+{% endif %}

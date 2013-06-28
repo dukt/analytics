@@ -25,13 +25,87 @@ class AnalyticsService extends BaseApplicationComponent
 
     // --------------------------------------------------------------------
 
+    public function isConfigured()
+    {
+        // check if plugin has finished installation process
+
+        if(!$this->isInstalled()) {
+            return false;
+        }
+
+
+        // check if api is available
+
+        $api = craft()->analytics->api();
+
+        if(!$api) {
+            return false;
+        }
+
+
+        // is analytics properly installed
+
+        $profileId = craft()->analytics->getSetting('profileId');
+
+        if(!$profileId) {
+            return false;
+        }
+
+        return true;
+    }
+
+    // --------------------------------------------------------------------
+
+    public function isInstalled()
+    {
+        // is oauth present in craft
+
+        $oauth = craft()->plugins->getPlugin('OAuth', false);
+
+        if(!$oauth) {
+            return false;
+        }
+
+        // if present, is it installed
+
+        if(!$oauth->isInstalled) {
+            return false;
+        }
+
+        // dummy call to GA API, if it works then we are connected
+
+        $props = $this->properties();
+
+        if(!$props)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    // --------------------------------------------------------------------
+
+    public function isOk()
+    {
+        // we're ok to roll when we're configured, installed, and that we have a defined profileId
+
+        $profileId = craft()->analytics->getSetting('profileId');
+
+        if($this->isConfigured() && $this->isInstalled() && $profileId)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    // --------------------------------------------------------------------
+
     public function code()
     {
         $element = craft()->urlManager->getMatchedElement();
 
         $profileId = craft()->analytics->getSetting('profileId');
-
-        // $variables = array('id' => $profileId, 'entry' => $entry);
 
         $variables = array('id' => $profileId, 'element' => $element);
 
@@ -88,7 +162,7 @@ class AnalyticsService extends BaseApplicationComponent
         $client->setClientId($provider->client_id);
         $client->setClientSecret($provider->client_secret);
         $client->setRedirectUri($provider->redirect_uri);
-        //$client->setDeveloperKey('AIzaSyA0pR4R2Pp2Ku5IKDoYoPC0Bay-1cGpee4');
+
         $api = new Google_AnalyticsService($client);
 
 
@@ -125,6 +199,8 @@ class AnalyticsService extends BaseApplicationComponent
         }
     }
 
+    // --------------------------------------------------------------------
+
     public function checkUpdatesNew()
     {
         // check analytics updates
@@ -139,6 +215,7 @@ class AnalyticsService extends BaseApplicationComponent
         if($updates) {
             return $plugin;
         }
+
 
         // check oauth updates
 
@@ -171,69 +248,31 @@ class AnalyticsService extends BaseApplicationComponent
 
     // --------------------------------------------------------------------
 
-    public function isConfigured()
-    {
-        // check if plugin has finished installation process
-
-        if(!$this->isInstalled()) {
-            return false;
-        }
-
-
-        // check if api is available
-
-        $api = craft()->analytics->api();
-
-        if(!$api) {
-            return false;
-        }
-
-
-        // is analytics properly installed
-
-        $profileId = craft()->analytics->getSetting('profileId');
-
-        if(!$profileId) {
-            return false;
-        }
-
-        return true;
-    }
-
-    // --------------------------------------------------------------------
-
-    public function isInstalled()
-    {
-        // is oauth installed
-
-        $oauth = craft()->plugins->getPlugin('OAuth', false);
-
-        if(!$oauth) {
-            return false;
-        }
-
-        if(!$oauth->isInstalled) {
-            return false;
-        }
-
-        return true;
-    }
-
-    // --------------------------------------------------------------------
-
     public function properties()
     {
-        $response = craft()->analytics->api()->management_webproperties->listManagementWebproperties("~all");
+        try {
+            $api = craft()->analytics->api();
 
-        $items = $response['items'];
+            if(!$api) {
+                return false;
+            }
+            $response = $api->management_webproperties->listManagementWebproperties("~all");
 
-        $properties = array();
+            if(!$response) {
+                return false;
+            }
+            $items = $response['items'];
 
-        foreach($items as $item) {
-            $properties[$item['id']] = '('.$item['id'].') '.$item['websiteUrl'];
+            $properties = array();
+
+            foreach($items as $item) {
+                $properties[$item['id']] = '('.$item['id'].') '.$item['websiteUrl'];
+            }
+
+            return $properties;
+        } catch(\Exception $e) {
+            return false;
         }
-
-        return $properties;
     }
 
     // --------------------------------------------------------------------

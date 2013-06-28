@@ -31,11 +31,17 @@ class AnalyticsVariable
 
     // --------------------------------------------------------------------
 
+    public function isOk()
+    {
+        return craft()->analytics->isOk();
+    }
+
+    // --------------------------------------------------------------------
+
     public function checkUpdates($pluginClass, $pluginHandle)
     {
         return craft()->analytics->checkUpdates($pluginClass, $pluginHandle);
     }
-
 
     // --------------------------------------------------------------------
 
