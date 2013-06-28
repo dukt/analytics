@@ -20,6 +20,13 @@ class Analytics_PluginController extends BaseController
 
     // --------------------------------------------------------------------
 
+    public function __construct()
+    {
+        $this->referer = $_SERVER['HTTP_REFERER'];
+    }
+
+    // --------------------------------------------------------------------
+
     public function actionDownload()
     {
         $pluginClass = craft()->request->getParam('pluginClass');
@@ -47,34 +54,34 @@ class Analytics_PluginController extends BaseController
             }
 
         } else {
+
             $msg = 'Couldn’t install '.$pluginClass.' plugin.';
+
             if(isset($download['msg'])) {
                 $msg = $download['msg'];
             }
             craft()->userSession->setError(Craft::t($msg));
         }
 
-        $referer = $_SERVER['HTTP_REFERER'];
-
-        $this->redirect($referer);
+        $this->redirect($this->referer);
     }
+
+    // --------------------------------------------------------------------
 
     public function actionInstall()
     {
         $pluginClass = craft()->request->getParam('pluginClass');
 
-        if(craft()->analytics_plugin->install($pluginClass))
-        {
+        if(craft()->analytics_plugin->install($pluginClass)) {
             craft()->userSession->setNotice(Craft::t($pluginClass.' plugin installed.'));
         } else {
             craft()->userSession->setError(Craft::t("Couldn't install ".$pluginClass." plugin."));
         }
 
-
-        $referer = $_SERVER['HTTP_REFERER'];
-
-        $this->redirect($referer);
+        $this->redirect($this->referer);
     }
+
+    // --------------------------------------------------------------------
 
     public function actionUpdate()
     {
@@ -97,10 +104,14 @@ class Analytics_PluginController extends BaseController
         }
     }
 
+    // --------------------------------------------------------------------
+
     public function actionCheckUpdates()
     {
         $plugin = craft()->analytics->checkUpdatesNew();
 
         $this->returnJson($plugin);
     }
+
+    // --------------------------------------------------------------------
 }

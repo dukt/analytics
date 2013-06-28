@@ -138,23 +138,6 @@ class Analytics_PluginService extends BaseApplicationComponent
         $last_version = array_pop($versions);
 
         return $last_version;
-
-        // $currentPlugin = craft()->plugins->getPlugin($pluginClass);
-
-        // if(!$currentPlugin) {
-        //     return $last_version;
-        // }
-
-        // $current_version = $currentPlugin->getVersion();
-
-        // if($last_version['addon']->version > $current_version) {
-
-        //     // there is an update available
-
-        //     return $last_version;
-        // } else {
-        //     return false;
-        // }
     }
 
     // --------------------------------------------------------------------
