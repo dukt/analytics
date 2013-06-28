@@ -17,6 +17,7 @@ class Analytics_PluginController extends BaseController
     // --------------------------------------------------------------------
 
     private $pluginHandle = 'analytics';
+    private $referer;
 
     // --------------------------------------------------------------------
 
