@@ -10,7 +10,6 @@ Connect your Craft website to Google Analytics and get advanced reports and simp
 - [API Reference](#api)
 - [Developer API Reference](#developer-api)
 - [Feedback](#feedback)
-- [Licensing](#license)
 
 
 <a id="install"></a>
@@ -86,11 +85,5 @@ Developer APIs have been created for the development of this plugin. They can be
 Please [get in touch](mailto:hello@dukt.net), and point out what you do and don't like. **No issue is too small.**
 
 This plugin is actively maintained by [Benjamin David](https://github.com/benjamindavid), from [Dukt](http://dukt.net/).
-
-
-<a id="license"></a>
-## Licensing
-
-Analytics is free to use during beta. You are not allowed to reuse / distribute this software.
 
 Dukt © 2013 - All rights reserved
