@@ -145,16 +145,17 @@ class Analytics_PluginService extends BaseApplicationComponent
                 $ee_addon       = $version->children($namespaces['ee_addon']);
                 $version_number = (string) $ee_addon->version;
                 $versions[$version_number] = array('xml' => $version, 'addon' => $ee_addon);
+                return $versions[$version_number];
             }
         } else {
             Craft::log(__METHOD__.' : Could not get channel items', LogLevel::Info, true);
         }
 
-        ksort($versions);
+        // ksort($versions);
 
-        $last_version = array_pop($versions);
+        // $last_version = array_pop($versions);
 
-        return $last_version;
+        // return $last_version;
     }
 
     // --------------------------------------------------------------------

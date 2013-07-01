@@ -216,9 +216,9 @@ class AnalyticsService extends BaseApplicationComponent
         }
 
         $current_version = $currentPlugin->getVersion();
+        $remoteVersion = trim((string) $last['addon']->version);
 
-        if($last['addon']->version > $current_version) {
-
+        if($remoteVersion > $current_version) {
             // there is an update available
             Craft::log(__METHOD__.' : Update available ', LogLevel::Info, true);
             return true;
