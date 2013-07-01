@@ -23,7 +23,9 @@ class Analytics_PluginController extends BaseController
 
     public function __construct()
     {
-        $this->referer = $_SERVER['HTTP_REFERER'];
+        if(isset($_SERVER['HTTP_REFERER'])) {
+            $this->referer = $_SERVER['HTTP_REFERER'];
+        }
     }
 
     // --------------------------------------------------------------------
