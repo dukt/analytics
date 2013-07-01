@@ -30,6 +30,8 @@ class Analytics_PluginController extends BaseController
 
     public function actionDownload()
     {
+        Craft::log(__METHOD__, LogLevel::Info, true);
+
         $pluginClass = craft()->request->getParam('pluginClass');
         $pluginHandle = craft()->request->getParam('pluginHandle');
 
@@ -39,9 +41,12 @@ class Analytics_PluginController extends BaseController
 
             if(craft()->analytics_plugin->install($pluginClass)) {
 
+                Craft::log(__METHOD__.' : '.$pluginClass.' plugin installed.', LogLevel::Info, true);
+
                 craft()->userSession->setNotice(Craft::t($pluginClass.' plugin installed.'));
 
             } else {
+                Craft::log(__METHOD__.' : '.$pluginClass.' plugin not installed.', LogLevel::Info, true);
 
                 $url = UrlHelper::getActionUrl('analytics/plugin/install',
                             array(
@@ -61,6 +66,9 @@ class Analytics_PluginController extends BaseController
             if(isset($download['msg'])) {
                 $msg = $download['msg'];
             }
+
+            Craft::log(__METHOD__.' : '.$msg, LogLevel::Info, true);
+
             craft()->userSession->setError(Craft::t($msg));
         }
 
@@ -71,11 +79,18 @@ class Analytics_PluginController extends BaseController
 
     public function actionInstall()
     {
+        Craft::log(__METHOD__, LogLevel::Info, true);
+
         $pluginClass = craft()->request->getParam('pluginClass');
 
         if(craft()->analytics_plugin->install($pluginClass)) {
+
+            Craft::log(__METHOD__." : ".$pluginClass.' plugin installed.', LogLevel::Info, true);
+
             craft()->userSession->setNotice(Craft::t($pluginClass.' plugin installed.'));
         } else {
+            Craft::log(__METHOD__." : Couldn't install ".$pluginClass." plugin.", LogLevel::Info, true);
+
             craft()->userSession->setError(Craft::t("Couldn't install ".$pluginClass." plugin."));
         }
 
@@ -86,9 +101,13 @@ class Analytics_PluginController extends BaseController
 
     public function actionUpdate()
     {
+        Craft::log(__METHOD__, LogLevel::Info, true);
+
         $plugin = craft()->analytics->checkUpdatesNew();
 
         if($plugin) {
+
+            Craft::log(__METHOD__." : Updates checked", LogLevel::Info, true);
 
             $url = UrlHelper::getActionUrl('analytics/plugin/download',
                         array(
@@ -101,6 +120,8 @@ class Analytics_PluginController extends BaseController
             $this->redirect($url);
 
         } else {
+            Craft::log(__METHOD__." : Coudln't check updates", LogLevel::Info, true);
+
             $this->redirect('analytics/settings');
         }
     }
@@ -109,6 +130,8 @@ class Analytics_PluginController extends BaseController
 
     public function actionCheckUpdates()
     {
+        Craft::log(__METHOD__, LogLevel::Info, true);
+
         $plugin = craft()->analytics->checkUpdatesNew();
 
         $this->returnJson($plugin);

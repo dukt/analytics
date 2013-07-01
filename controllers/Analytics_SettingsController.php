@@ -16,6 +16,8 @@ class Analytics_SettingsController extends BaseController
 {
     public function actionSave()
     {
+        Craft::log(__METHOD__, LogLevel::Info, true);
+
         $settings = Analytics_SettingsRecord::model()->find();
 
         if(!$settings) {
@@ -25,8 +27,10 @@ class Analytics_SettingsController extends BaseController
         $settings->options = array('profileId' => craft()->request->getPost('profileId'));
 
         if($settings->save()) {
+            Craft::log(__METHOD__." : Plugins settings saved", LogLevel::Info, true);
             craft()->userSession->setNotice(Craft::t('Plugin settings saved.'));
         } else {
+            Craft::log(__METHOD__." : Plugins settings could not be saved", LogLevel::Info, true);
             craft()->userSession->setError(Craft::t('Plugin settings couldn\'t be saved.'));
         }
 

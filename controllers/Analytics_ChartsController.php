@@ -16,6 +16,8 @@ class Analytics_ChartsController extends BaseController
 {
     public function actionParse()
     {
+        Craft::log(__METHOD__, LogLevel::Info, true);
+
         $accountId = false;
         $webPropertyId = false;
 
@@ -64,7 +66,7 @@ class Analytics_ChartsController extends BaseController
         $charset = craft()->templates->getTwig()->getCharset();
 
         echo new \Twig_Markup($html, $charset);
-        exit();
 
+        exit();
     }
 }

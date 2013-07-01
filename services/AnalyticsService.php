@@ -27,6 +27,9 @@ class AnalyticsService extends BaseApplicationComponent
 
     public function isConfigured()
     {
+
+        Craft::log('AnalyticsService->isConfigured()', LogLevel::Info, true);
+
         // check if plugin has finished installation process
 
         if(!$this->isInstalled()) {
@@ -39,6 +42,7 @@ class AnalyticsService extends BaseApplicationComponent
         $api = craft()->analytics->api();
 
         if(!$api) {
+            Craft::log(__METHOD__.' : Analytics API not available', LogLevel::Info, true);
             return false;
         }
 
@@ -48,6 +52,7 @@ class AnalyticsService extends BaseApplicationComponent
         $profileId = craft()->analytics->getSetting('profileId');
 
         if(!$profileId) {
+            Craft::log(__METHOD__.' : Analytics profileId not found', LogLevel::Info, true);
             return false;
         }
 
@@ -58,17 +63,21 @@ class AnalyticsService extends BaseApplicationComponent
 
     public function isInstalled()
     {
+        Craft::log(__METHOD__, LogLevel::Info, true);
+
         // is oauth present in craft
 
         $oauth = craft()->plugins->getPlugin('OAuth', false);
 
         if(!$oauth) {
+            Craft::log(__METHOD__.' : OAuth plugin files not present', LogLevel::Info, true);
             return false;
         }
 
         // if present, is it installed
 
         if(!$oauth->isInstalled) {
+            Craft::log(__METHOD__.' : OAuth plugin not installed', LogLevel::Info, true);
             return false;
         }
 
@@ -78,6 +87,8 @@ class AnalyticsService extends BaseApplicationComponent
 
         if(!$props)
         {
+            Craft::log(__METHOD__.' : Properties could not be found', LogLevel::Info, true);
+
             return false;
         }
 
@@ -88,14 +99,20 @@ class AnalyticsService extends BaseApplicationComponent
 
     public function isOk()
     {
+        Craft::log(__METHOD__, LogLevel::Info, true);
+
         // we're ok to roll when we're configured, installed, and that we have a defined profileId
 
         $profileId = craft()->analytics->getSetting('profileId');
 
         if($this->isConfigured() && $this->isInstalled() && $profileId)
         {
+            Craft::log(__METHOD__.' : true', LogLevel::Info, true);
             return true;
         }
+
+        Craft::log(__METHOD__.' : false. Not configured, not installed, or profileId not found', LogLevel::Info, true);
+
         return false;
     }
 
@@ -103,6 +120,8 @@ class AnalyticsService extends BaseApplicationComponent
 
     public function code()
     {
+        Craft::log(__METHOD__, LogLevel::Info, true);
+
         $element = craft()->urlManager->getMatchedElement();
 
         $profileId = craft()->analytics->getSetting('profileId');
@@ -124,6 +143,8 @@ class AnalyticsService extends BaseApplicationComponent
 
     public function trackEvent($category, $action, $label=null, $value=0)
     {
+        Craft::log(__METHOD__, LogLevel::Info, true);
+
         $r = "
             var el=this;
         ";
@@ -148,9 +169,14 @@ class AnalyticsService extends BaseApplicationComponent
 
     public function api()
     {
+        Craft::log(__METHOD__, LogLevel::Info, true);
+
         $provider = craft()->oauth->getProviderLibrary('Google', 'analytics.system');
 
         if(!$provider) {
+
+            Craft::log(__METHOD__.' : Could not get provider library', LogLevel::Info, true);
+
             return false;
         }
 
@@ -179,6 +205,8 @@ class AnalyticsService extends BaseApplicationComponent
 
     public function checkUpdates($pluginClass, $pluginHandle)
     {
+        Craft::log(__METHOD__, LogLevel::Info, true);
+
         $last = craft()->analytics_plugin->getLastVersion($pluginClass, $pluginHandle);
 
         $currentPlugin = craft()->plugins->getPlugin($pluginClass);
@@ -192,9 +220,11 @@ class AnalyticsService extends BaseApplicationComponent
         if($last['addon']->version > $current_version) {
 
             // there is an update available
-
+            Craft::log(__METHOD__.' : Update available ', LogLevel::Info, true);
             return true;
         } else {
+            Craft::log(__METHOD__.' : No update available ', LogLevel::Info, true);
+
             return false;
         }
     }
@@ -203,6 +233,8 @@ class AnalyticsService extends BaseApplicationComponent
 
     public function checkUpdatesNew()
     {
+        Craft::log(__METHOD__, LogLevel::Info, true);
+
         // check analytics updates
 
         $plugin = array(
@@ -237,9 +269,13 @@ class AnalyticsService extends BaseApplicationComponent
 
     public function getSetting($k)
     {
+        Craft::log(__METHOD__, LogLevel::Info, true);
+
         $settings = Analytics_SettingsRecord::model()->find();
 
         if(!$settings) {
+            Craft::log(__METHOD__.' : Setting not found', LogLevel::Info, true);
+
             return false;
         }
 
@@ -250,15 +286,21 @@ class AnalyticsService extends BaseApplicationComponent
 
     public function properties()
     {
+        Craft::log(__METHOD__, LogLevel::Info, true);
+
         try {
             $api = craft()->analytics->api();
 
             if(!$api) {
+                Craft::log(__METHOD__.' : Could not get API', LogLevel::Info, true);
+
                 return false;
             }
+
             $response = $api->management_webproperties->listManagementWebproperties("~all");
 
             if(!$response) {
+                Craft::log(__METHOD__.' : Could not list management web properties', LogLevel::Info, true);
                 return false;
             }
             $items = $response['items'];
@@ -271,6 +313,9 @@ class AnalyticsService extends BaseApplicationComponent
 
             return $properties;
         } catch(\Exception $e) {
+
+            Craft::log(__METHOD__.' : Crashed with error : '.$e->getMessage(), LogLevel::Info, true);
+
             return false;
         }
     }

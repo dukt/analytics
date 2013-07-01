@@ -24,12 +24,17 @@ class Analytics_PluginService extends BaseApplicationComponent
 
     public function download($pluginClass, $pluginHandle)
     {
+        Craft::log(__METHOD__, LogLevel::Info, true);
+
         $r = array('success' => false);
 
        $lastVersion = $this->getLastVersion($pluginClass, $pluginHandle);
 
         if(!$lastVersion) {
             $r['msg'] = "Couldn't get plugin last version";
+
+            Craft::log(__METHOD__.' : Could not get last version' , LogLevel::Info, true);
+
             return $r;
         }
 
@@ -85,7 +90,11 @@ class Analytics_PluginService extends BaseApplicationComponent
             $filesystem->rename($pluginZipDir.$content[0].'/', CRAFT_PLUGINS_PATH.$pluginHandle);
 
         } catch (\Exception $e) {
+
             $r['msg'] = $e->getMessage();
+
+            Craft::log(__METHOD__.' : Crashed : '.$e->getMessage() , LogLevel::Info, true);
+
             return $r;
         }
 
@@ -95,10 +104,15 @@ class Analytics_PluginService extends BaseApplicationComponent
             $filesystem->remove($pluginZipDir);
             $filesystem->remove($pluginZipPath);
         } catch(\Exception $e) {
+
             $r['msg'] = $e->getMessage();
+
+            Craft::log(__METHOD__.' : Crashed : '.$e->getMessage() , LogLevel::Info, true);
 
             return $r;
         }
+
+        Craft::log(__METHOD__.' : Success : '.$e->getMessage() , LogLevel::Info, true);
 
         $r['success'] = true;
 
@@ -109,6 +123,7 @@ class Analytics_PluginService extends BaseApplicationComponent
 
     public function getLastVersion($pluginClass = 'Analytics', $pluginHandle = 'analytics')
     {
+        Craft::log(__METHOD__, LogLevel::Info, true);
 
         $url = 'http://dukt.net/craft/'.$pluginHandle.'/releases.xml';
 
@@ -131,6 +146,8 @@ class Analytics_PluginService extends BaseApplicationComponent
                 $version_number = (string) $ee_addon->version;
                 $versions[$version_number] = array('xml' => $version, 'addon' => $ee_addon);
             }
+        } else {
+            Craft::log(__METHOD__.' : Could not get channel items', LogLevel::Info, true);
         }
 
         ksort($versions);
@@ -144,11 +161,15 @@ class Analytics_PluginService extends BaseApplicationComponent
 
     public function install($pluginClass)
     {
+        Craft::log(__METHOD__, LogLevel::Info, true);
+
         $pluginComponent = craft()->plugins->getPlugin($pluginClass, false);
 
         try {
             if(!$pluginComponent)
             {
+                Craft::log(__METHOD__.' : '.$pluginClass.' component not found', LogLevel::Info, true);
+
                 return false;
             }
 
@@ -156,12 +177,18 @@ class Analytics_PluginService extends BaseApplicationComponent
                 if (craft()->plugins->installPlugin($pluginClass)) {
                     return true;
                 } else {
+
+                    Craft::log(__METHOD__.' : '.$pluginClass.' component not installed', LogLevel::Info, true);
+
                     return false;
                 }
             } else {
                 return true;
             }
         } catch(\Exception $e) {
+
+            Craft::log(__METHOD__.' : Crashed : '.$e->getMessage(), LogLevel::Info, true);
+
             return false;
         }
     }
@@ -170,6 +197,7 @@ class Analytics_PluginService extends BaseApplicationComponent
 
     public function enable($pluginClass)
     {
+        Craft::log(__METHOD__, LogLevel::Info, true);
         $pluginComponent = craft()->plugins->getPlugin($pluginClass, false);
 
         try {
@@ -183,6 +211,7 @@ class Analytics_PluginService extends BaseApplicationComponent
                 return true;
             }
         } catch(\Exception $e) {
+            Craft::log(__METHOD__.' : Crashed : '.$e->getMessage(), LogLevel::Info, true);
             return false;
         }
     }
