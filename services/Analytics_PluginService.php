@@ -112,7 +112,7 @@ class Analytics_PluginService extends BaseApplicationComponent
             return $r;
         }
 
-        Craft::log(__METHOD__.' : Success : '.$e->getMessage() , LogLevel::Info, true);
+        Craft::log(__METHOD__.' : Success : ' , LogLevel::Info, true);
 
         $r['success'] = true;
 
