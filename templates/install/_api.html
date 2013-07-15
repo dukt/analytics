@@ -11,10 +11,9 @@
 
     {% set providerLibrary = craft.oauth.getProviderLibrary(serviceProviderClass) %}
 
-    <p>Create an OAuth 2.0 application and enable Analytics service in the <a target="_blank" href="{{providerLibrary.consoleUrl}}">Google Console</a>.</p>
+    <p>Create an OAuth 2.0 application in the <a target="_blank" href="{{providerLibrary.consoleUrl}}">Google Console</a>.</p>
 
-
-    <p>Please note that Google OAuth authentication callback only works with remote and specific local domains :</p>
+    <p>Note that Google OAuth authentication callback only works with remote and specific local domains :</p>
 
     <ul>
         <li><strong>Works :</strong> http://site.com/</li>
@@ -22,12 +21,16 @@
         <li><strong>Doesn't work :</strong> http://site.dev </li>
     </ul>
 
-    <p>Once created, configure the application with the following settings :</p>
+    <p>Configure the application with the following settings :</p>
 
     <ul>
         <li><strong>Authorized Redirect URI :</strong> {{craft.oauth.providerCallbackUrl(serviceProviderClass)}}</li>
         <li><strong>Authorized JavaScript Origins :</strong> {{siteUrl}}</li>
     </ul>
+
+    <p>You also need to enable Analytics for this newly created Application, under <strong>Google Console / Your App / Services</strong>.</p>
+
+    <p>Once configured, copy / paste your Client ID &amp; Secret below.</p>
 
     {{ forms.textField({
         label: 'Client Id'|t,
