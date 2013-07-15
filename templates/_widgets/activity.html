@@ -1,0 +1,36 @@
+
+{% includeCssResource "analytics/css/styles.css" %}
+{% includeCssResource "analytics/css/widget-activity.css" %}
+
+{%- includeJsResource 'analytics/js/jsapi.js' first %}
+
+{% includeJsResource 'analytics/js/dchart.js' %}
+{% includeJsResource 'analytics/js/dukt-chart.js' %}
+
+
+{% set provider = 'Google' %}
+
+{% set accountId = false %}
+{% set webPropertyId = false %}
+
+{% set properties = craft.analytics.api.management_webproperties.listManagementWebproperties("~all") %}
+
+{% for item in properties.items %}
+  {% if item.id ==  craft.analytics.getSetting('profileId') %}
+
+    {% set accountId = item.accountId %}
+    {% set webPropertyId = item.id %}
+
+  {% endif %}
+{% endfor %}
+
+
+{% set profiles = craft.analytics.api.management_profiles.listManagementProfiles(accountId, webPropertyId) %}
+{% set profileId = profiles.items[0].id %}
+
+
+{% include 'analytics/_chart' with {
+    half:false,
+    dimensions:'ga:year, ga:month, ga:day',
+    title: 'Visits'
+} %}

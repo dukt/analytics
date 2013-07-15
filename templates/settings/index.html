@@ -39,6 +39,7 @@
             <input type="hidden" name="redirect" value="analytics" />
 
             {{ forms.selectField({
+                first: true,
                 label: "Web Profile",
                 instructions: "Select an Analytics web profile to associate with your Craft website"|t,
                 options: craft.analytics.properties(),
