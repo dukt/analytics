@@ -218,7 +218,7 @@ class AnalyticsService extends BaseApplicationComponent
         $current_version = $currentPlugin->getVersion();
         $remoteVersion = trim((string) $last['addon']->version);
 
-        if($remoteVersion > $current_version) {
+        if($this->sortableTag($remoteVersion) > $this->sortableTag($current_version)) {
             // there is an update available
             Craft::log(__METHOD__.' : Update available ', LogLevel::Info, true);
             return true;
@@ -227,6 +227,31 @@ class AnalyticsService extends BaseApplicationComponent
 
             return false;
         }
+    }
+
+    // --------------------------------------------------------------------
+
+    private function sortableTag($tag)
+    {
+        $tagExploded = explode(".", $tag);
+
+        $maxLength = 5;
+
+        foreach($tagExploded as $k => $v) {
+            $fillLength = $maxLength - strlen($v);
+
+            $fill = "";
+
+            for($i = 0; $i < $fillLength; $i++) {
+                $fill .= "0";
+            }
+
+            $tagExploded[$k] = $fill.$v;
+        }
+
+        $sortableTag = implode(".", $tagExploded);
+
+        return $sortableTag;
     }
 
     // --------------------------------------------------------------------
