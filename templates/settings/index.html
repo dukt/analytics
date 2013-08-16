@@ -20,7 +20,7 @@
 
 
 
-    {% set account = craft.oauth.getAccount('analytics.system', provider) %}
+    {% set account = craft.oauth.getAccount(provider, 'analytics.system') %}
     {% set service = craft.oauth.getProvider('Google') %}
 
 

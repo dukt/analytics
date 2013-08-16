@@ -12,7 +12,7 @@
 
         <p>Authenticate with {{providerClass}} so we can start gathering data from the API.</p>
         <p>
-            <a class="btn submit" href="{{ craft.oauth.connect(pluginHandle~'.system', providerClass, false, scope) }}">Authenticate with {{providerClass}}</a> &nbsp;
+            <a class="btn submit" href="{{ craft.oauth.connect(providerClass, scope, pluginHandle~'.system') }}">Authenticate with {{providerClass}}</a> &nbsp;
 
         </p>
         <p>
