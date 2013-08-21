@@ -52,7 +52,7 @@
 
         <hr />
 
-        <p>Connected as {{account.email}}. <a class="btn small" href="{{craft.oauth.disconnect('analytics.system', provider)}}">Disconnect from {{provider}}</a></p>
+        <p>Connected as {{account.email}}. <a class="btn small" href="{{craft.oauth.disconnect(provider, 'analytics.system')}}">Disconnect from {{provider}}</a></p>
     {% endif %}
 
 

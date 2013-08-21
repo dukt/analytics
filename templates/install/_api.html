@@ -4,12 +4,23 @@
 
 {% set serviceProviderClass = providerClass %}
 
+{% if service is not defined %}
+    {% if serviceProviderClass %}
+        {% set service = craft.oauth.getProvider(serviceProviderClass) %}
+
+        {% if not service %}{% exit 404 %}{% endif %}
+    {% else %}
+        {% set service = null %}
+    {% endif %}
+{% endif %}
+
+
 <form method="post" action="" accept-charset="UTF-8">
-    <input type="hidden" name="action" value="oauth/settings/saveService">
+    <input type="hidden" name="action" value="oauth/settings/providerSave">
     <input type="hidden" name="redirect" value="{{pluginHandle}}/settings" />
     <input type="hidden" name="serviceProviderClass" value="{{ serviceProviderClass }}" />
 
-    {% set providerLibrary = craft.oauth.getProviderLibrary(serviceProviderClass) %}
+    {% set providerLibrary = craft.oauth.providerInstantiate(serviceProviderClass) %}
 
     <p>Create an OAuth 2.0 application in the <a target="_blank" href="{{providerLibrary.consoleUrl}}">Google Console</a>.</p>
 
@@ -24,7 +35,7 @@
     <p>Configure the application with the following settings :</p>
 
     <ul>
-        <li><strong>Authorized Redirect URI :</strong> {{craft.oauth.providerCallbackUrl(serviceProviderClass)}}</li>
+        <li><strong>Authorized Redirect URI :</strong> {{craft.oauth.connectCallback(serviceProviderClass)}}</li>
         <li><strong>Authorized JavaScript Origins :</strong> {{siteUrl}}</li>
     </ul>
 
@@ -54,7 +65,7 @@
         {% if (service.token is defined and service.token|length == 0) or service.token is not defined %}
             <input class="btn submit" type="submit" value="{{ 'Save API credentials'|t }}">
         {% elseif service.id is defined %}
-            <a class="btn" href="{{actionUrl('connect/settings/resetServiceToken', {providerClass:serviceProviderClass})}}">Reset Token</a>
+            <a class="btn" href="{{actionUrl('connect/settings/tokenReset', {providerClass:serviceProviderClass})}}">Reset Token</a>
         {% endif %}
     </div>
 </form>

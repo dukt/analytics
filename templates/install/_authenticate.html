@@ -4,6 +4,17 @@
     'https://www.googleapis.com/auth/analytics'
     ] %}
 
+{% set serviceProviderClass = providerClass %}
+
+{% if service is not defined %}
+    {% if serviceProviderClass %}
+        {% set service = craft.oauth.getProvider(serviceProviderClass) %}
+
+        {% if not service %}{% exit 404 %}{% endif %}
+    {% else %}
+        {% set service = null %}
+    {% endif %}
+{% endif %}
 
 <h2>Authenticate</h2>
 

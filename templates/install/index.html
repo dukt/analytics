@@ -19,8 +19,7 @@
         {% if craft.oauth is not defined %}
             {% include pluginHandle~'/install/_oauth' %}
         {% else %}
-            {% set account = craft.oauth.getAccount(pluginHandle~'.system', providerClass) %}
-            {% set service = craft.oauth.getProvider(providerClass) %}
+            {% set account = craft.oauth.getAccount(providerClass, pluginHandle~'.system') %}
 
             {% if not craft.oauth.providerIsConfigured(providerClass) or craft.request.getSegment(3) == 'api' %}
                 {% include pluginHandle~'/install/_api' %}
