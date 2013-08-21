@@ -171,7 +171,26 @@ class AnalyticsService extends BaseApplicationComponent
     {
         Craft::log(__METHOD__, LogLevel::Info, true);
 
-        $provider = craft()->oauth->getProviderLibrary('Google', 'analytics.system');
+        $providerClass = 'Google';
+        $namespace = 'analytics.system';
+
+        // get token
+
+        if($namespace) {
+            $tokenRecord = craft()->oauth->tokenRecordByNamespace($providerClass, $namespace);
+        } else {
+            $tokenRecord = craft()->oauth->tokenRecordByCurrentUser($providerClass);
+        }
+
+        if(!$tokenRecord) {
+            return null;
+        }
+
+        $token = unserialize(base64_decode($tokenRecord->token));
+
+        // provider
+
+        $provider = craft()->oauth->providerInstantiate($providerClass, $token);
 
         if(!$provider) {
 
