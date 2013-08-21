@@ -81,6 +81,18 @@ class AnalyticsService extends BaseApplicationComponent
             return false;
         }
 
+        // try to get an account
+
+        $account = craft()->oauth->getAccount('Google', 'analytics.system');
+
+        if(!$account)
+        {
+            Craft::log(__METHOD__.' : Account could not be found', LogLevel::Info, true);
+
+            return false;
+        }
+
+
         // dummy call to GA API, if it works then we are connected
 
         $props = $this->properties();
