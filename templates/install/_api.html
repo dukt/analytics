@@ -2,27 +2,13 @@
 
 <h2>Client ID &amp; Secret</h2>
 
-{% set serviceProviderClass = providerClass %}
-
-{% if service is not defined %}
-    {% if serviceProviderClass %}
-        {% set service = craft.oauth.getProvider(serviceProviderClass) %}
-
-        {% if not service %}{% exit 404 %}{% endif %}
-    {% else %}
-        {% set service = null %}
-    {% endif %}
-{% endif %}
-
-
 <form method="post" action="" accept-charset="UTF-8">
     <input type="hidden" name="action" value="oauth/settings/providerSave">
     <input type="hidden" name="redirect" value="{{pluginHandle}}/settings" />
-    <input type="hidden" name="serviceProviderClass" value="{{ serviceProviderClass }}" />
+    <input type="hidden" name="providerClass" value="{{ providerClass }}" />
+    {% if provider %}<input type="hidden" name="providerId" value="{{ provider.id }}" />{% endif %}
 
-    {% set providerLibrary = craft.oauth.providerInstantiate(serviceProviderClass) %}
-
-    <p>Create an OAuth 2.0 application in the <a target="_blank" href="{{providerLibrary.consoleUrl}}">Google Console</a>.</p>
+    <p>Create an OAuth 2.0 application in the <a target="_blank" href="{{providerSource.consoleUrl}}">Google Console</a>.</p>
 
     <p>Note that Google OAuth authentication callback only works with remote and specific local domains :</p>
 
@@ -35,39 +21,63 @@
     <p>Configure the application with the following settings :</p>
 
     <ul>
-        <li><strong>Authorized Redirect URI :</strong> {{craft.oauth.connectCallback(serviceProviderClass)}}</li>
+        <li><strong>Authorized Redirect URI :</strong> {{craft.oauth.callbackUrl(providerClass)}}</li>
         <li><strong>Authorized JavaScript Origins :</strong> {{siteUrl}}</li>
     </ul>
 
-    <p>You also need to enable Analytics for this newly created Application, under <strong>Google Console / Your App / Services</strong>.</p>
+    <p>You also need to enable Analytics for this newly created Application, under <strong>Google Console / Your App / providers</strong>.</p>
 
     <p>Once configured, copy / paste your Client ID &amp; Secret below.</p>
 
     {{ forms.textField({
         label: 'Client Id'|t,
         required: true,
-        name: 'service[clientId]',
-        value: service ? service.clientId : null,
-        errors: service ? service.errors('clientId') : null,
-        disabled: ((service.token is defined and service.token|length) > 0 ? true : false)
+        name: 'provider[clientId]',
+        value: provider ? provider.clientId : null,
+        errors: provider ? provider.errors('clientId') : null,
+
     }) }}
 
     {{ forms.textField({
         label: 'Client Secret'|t,
         required: true,
-        name: 'service[clientSecret]',
-        value: service ? service.clientSecret : null,
-        errors: service ? service.errors('clientSecret') : null,
-        disabled: (service.token is defined and service.token|length > 0 ? true : false)
+        name: 'provider[clientSecret]',
+        value: provider ? provider.clientSecret : null,
+        errors: provider ? provider.errors('clientSecret') : null,
+
     }) }}
 
     <div class="buttons">
-        {% if (service.token is defined and service.token|length == 0) or service.token is not defined %}
+        <input class="btn submit" type="submit" value="{{ 'Save API credentials'|t }}">
+    </div>
+
+    {#
+    {{ forms.textField({
+        label: 'Client Id'|t,
+        required: true,
+        name: 'provider[clientId]',
+        value: provider ? provider.clientId : null,
+        errors: provider ? provider.errors('clientId') : null,
+        disabled: ((provider.token is defined and provider.token|length) > 0 ? true : false)
+    }) }}
+
+    {{ forms.textField({
+        label: 'Client Secret'|t,
+        required: true,
+        name: 'provider[clientSecret]',
+        value: provider ? provider.clientSecret : null,
+        errors: provider ? provider.errors('clientSecret') : null,
+        disabled: (provider.token is defined and provider.token|length > 0 ? true : false)
+    }) }}
+
+    <div class="buttons">
+        {% if (provider.token is defined and provider.token|length == 0) or provider.token is not defined %}
             <input class="btn submit" type="submit" value="{{ 'Save API credentials'|t }}">
-        {% elseif service.id is defined %}
-            <a class="btn" href="{{actionUrl('connect/settings/tokenReset', {providerClass:serviceProviderClass})}}">Reset Token</a>
+        {% elseif provider.id is defined %}
+            <a class="btn" href="{{actionUrl('connect/settings/tokenReset', {providerClass:providerClass})}}">Reset Token</a>
         {% endif %}
     </div>
+    #}
 </form>
 
 

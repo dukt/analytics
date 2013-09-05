@@ -4,31 +4,22 @@
     'https://www.googleapis.com/auth/analytics'
     ] %}
 
-{% set serviceProviderClass = providerClass %}
+{% set provider = craft.oauth.getProvider(providerClass) %}
 
-{% if service is not defined %}
-    {% if serviceProviderClass %}
-        {% set service = craft.oauth.getProvider(serviceProviderClass) %}
-
-        {% if not service %}{% exit 404 %}{% endif %}
-    {% else %}
-        {% set service = null %}
-    {% endif %}
-{% endif %}
+{% if not provider %}{% exit 404 %}{% endif %}
 
 <h2>Authenticate</h2>
 
-{% if service is defined %}
-    {% if service.id is not null %}
+{% if provider is defined %}
 
-        <p>Authenticate with {{providerClass}} so we can start gathering data from the API.</p>
-        <p>
-            <a class="btn submit" href="{{ craft.oauth.connect(providerClass, scope, pluginHandle~'.system') }}">Authenticate with {{providerClass}}</a> &nbsp;
+    <p>Authenticate with {{providerClass}} so we can start gathering data from the API.</p>
 
-        </p>
-        <p>
-            <a class="btn small" href="{{url(pluginHandle~'/install/api')}}">Change API Client ID &amp; secret</a>
-        </p>
+    <p>
+        <a class="btn submit" href="{{ craft.oauth.connect(providerClass, scope, pluginHandle~'.system') }}">Authenticate with {{providerClass}}</a> &nbsp;
+    </p>
 
-    {% endif %}
+    <p>
+        <a class="btn small" href="{{url(pluginHandle~'/install/api')}}">Change API Client ID &amp; secret</a>
+    </p>
+
 {% endif %}

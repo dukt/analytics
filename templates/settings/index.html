@@ -18,45 +18,44 @@
         { label: "Analytics"|t, url: url('analytics') },
     ] %}
 
-
-
-    {% set account = craft.oauth.getAccount(provider, 'analytics.system') %}
-    {% set service = craft.oauth.getProvider('Google') %}
-
+    {% set providerSource = craft.oauth.getProviderSource('Google') %}
+    {% set account = craft.oauth.getAccount(providerSource.handle, 'analytics.system') %}
 
     {% set content %}
 
+        {% if not craft.analytics.isInstalled %}
+            {% redirect 'analytics/settings' %}
+        {% else %}
+            <div class="dukt-update">
+                <p class="center">There is an update available for the <strong class="plugin-name">[pluginClass]</strong> plugin. <a href="{{actionUrl('analytics/plugin/update')}}" class="btn submit small">Update now</a></p>
+            </div>
 
-    {% if not craft.analytics.isInstalled %}
-        {% redirect 'analytics/settings' %}
-    {% else %}
-        <div class="dukt-update">
-            <p class="center">There is an update available for the <strong class="plugin-name">[pluginClass]</strong> plugin. <a href="{{actionUrl('analytics/plugin/update')}}" class="btn submit small">Update now</a></p>
-        </div>
+            <form method="post" action="" accept-charset="UTF-8">
+                <input type="hidden" name="action" value="analytics/settings/save" />
+                <input type="hidden" name="redirect" value="analytics" />
 
-        <form method="post" action="" accept-charset="UTF-8">
-            <input type="hidden" name="action" value="analytics/settings/save" />
-            <input type="hidden" name="redirect" value="analytics" />
+                {{ forms.selectField({
+                    first: true,
+                    label: "Web Profile",
+                    instructions: "Select an Analytics web profile to associate with your Craft website"|t,
+                    options: craft.analytics.properties(),
+                    name: 'profileId',
+                    value: craft.analytics.getSetting('profileId')
+                }) }}
 
-            {{ forms.selectField({
-                first: true,
-                label: "Web Profile",
-                instructions: "Select an Analytics web profile to associate with your Craft website"|t,
-                options: craft.analytics.properties(),
-                name: 'profileId',
-                value: craft.analytics.getSetting('profileId')
-            }) }}
+                <p><input type="submit" value="Save" class="btn submit" /></p>
+            </form>
 
-            <p><input type="submit" value="Save" class="btn submit" /></p>
-        </form>
+            <hr />
 
-        <hr />
+            <p>
+                Connected as {{account.email}}. 
 
-        <p>Connected as {{account.email}}. <a class="btn small" href="{{craft.oauth.disconnect(provider, 'analytics.system')}}">Disconnect from {{provider}}</a></p>
-    {% endif %}
-
-
-
+                <a class="btn small" href="{{craft.oauth.disconnect(providerSource.handle, 'analytics.system')}}">
+                    Disconnect from {{providerSource.name}}
+                </a>
+            </p>
+        {% endif %}
 
     {% endset %}
 {% endif %}

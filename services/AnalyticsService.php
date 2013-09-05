@@ -177,7 +177,6 @@ class AnalyticsService extends BaseApplicationComponent
     }
 
     // --------------------------------------------------------------------
-    // --------------------------------------------------------------------
 
     public function api()
     {
@@ -186,48 +185,38 @@ class AnalyticsService extends BaseApplicationComponent
         $providerClass = 'Google';
         $namespace = 'analytics.system';
 
+
         // get token
 
-        if($namespace) {
-            $tokenRecord = craft()->oauth->tokenRecordByNamespace($providerClass, $namespace);
-        } else {
-            $tokenRecord = craft()->oauth->tokenRecordByCurrentUser($providerClass);
-        }
-
-        if(!$tokenRecord) {
-            return null;
-        }
-
-        $token = unserialize(base64_decode($tokenRecord->token));
+        $token = craft()->oauth->getToken($providerClass, $namespace);
+         
 
         // provider
 
-        $provider = craft()->oauth->providerInstantiate($providerClass, $token);
+        $providerSource = craft()->oauth->getProviderSource($providerClass);
 
-        if(!$provider) {
+        $providerSource->connect($token->getRealToken());
 
-            Craft::log(__METHOD__.' : Could not get provider library', LogLevel::Info, true);
+        if(!$providerSource) {
+
+            Craft::log(__METHOD__.' : Could not get provider connected', LogLevel::Info, true);
 
             return false;
         }
 
         $client = new Google_Client();
-
-
         $client->setApplicationName('Google+ PHP Starter Application');
-
-        $client->setClientId($provider->client_id);
-        $client->setClientSecret($provider->client_secret);
-        $client->setRedirectUri($provider->redirect_uri);
+        $client->setClientId($providerSource->providerSource->client_id);
+        $client->setClientSecret($providerSource->providerSource->client_secret);
+        $client->setRedirectUri($providerSource->providerSource->redirect_uri);
 
         $api = new Google_AnalyticsService($client);
 
+        $providerSource->providerSource->token->created = 0;
+        $providerSource->providerSource->token->expires_in = $providerSource->providerSource->token->expires;
+        $providerSource->providerSource->token = json_encode($providerSource->providerSource->token);
 
-        $provider->token->created = 0;
-        $provider->token->expires_in = $provider->token->expires;
-        $provider->token = json_encode($provider->token);
-
-        $client->setAccessToken($provider->token);
+        $client->setAccessToken($providerSource->providerSource->token);
 
         return $api;
     }
@@ -342,12 +331,15 @@ class AnalyticsService extends BaseApplicationComponent
 
     public function properties()
     {
+
         Craft::log(__METHOD__, LogLevel::Info, true);
 
-        try {
+        // try {
+
             $api = craft()->analytics->api();
 
             if(!$api) {
+
                 Craft::log(__METHOD__.' : Could not get API', LogLevel::Info, true);
 
                 return false;
@@ -368,12 +360,12 @@ class AnalyticsService extends BaseApplicationComponent
             }
 
             return $properties;
-        } catch(\Exception $e) {
+        // } catch(\Exception $e) {
 
-            Craft::log(__METHOD__.' : Crashed with error : '.$e->getMessage(), LogLevel::Info, true);
+        //     Craft::log(__METHOD__.' : Crashed with error : '.$e->getMessage(), LogLevel::Info, true);
 
-            return false;
-        }
+        //     return false;
+        // }
     }
 
     // --------------------------------------------------------------------
