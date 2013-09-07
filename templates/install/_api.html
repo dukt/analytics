@@ -5,10 +5,10 @@
 <form method="post" action="" accept-charset="UTF-8">
     <input type="hidden" name="action" value="oauth/settings/providerSave">
     <input type="hidden" name="redirect" value="{{pluginHandle}}/settings" />
-    <input type="hidden" name="providerClass" value="{{ providerClass }}" />
+    <input type="hidden" name="providerHandle" value="{{ providerHandle }}" />
     {% if provider %}<input type="hidden" name="providerId" value="{{ provider.id }}" />{% endif %}
 
-    <p>Create an OAuth 2.0 application in the <a target="_blank" href="{{providerSource.consoleUrl}}">Google Console</a>.</p>
+    <p>Create an OAuth 2.0 application in the <a target="_blank" href="{{provider.consoleUrl}}">Google Console</a>.</p>
 
     <p>Note that Google OAuth authentication callback only works with remote and specific local domains :</p>
 
@@ -21,7 +21,7 @@
     <p>Configure the application with the following settings :</p>
 
     <ul>
-        <li><strong>Authorized Redirect URI :</strong> {{craft.oauth.callbackUrl(providerClass)}}</li>
+        <li><strong>Authorized Redirect URI :</strong> {{craft.oauth.callbackUrl(providerHandle)}}</li>
         <li><strong>Authorized JavaScript Origins :</strong> {{siteUrl}}</li>
     </ul>
 
@@ -74,7 +74,7 @@
         {% if (provider.token is defined and provider.token|length == 0) or provider.token is not defined %}
             <input class="btn submit" type="submit" value="{{ 'Save API credentials'|t }}">
         {% elseif provider.id is defined %}
-            <a class="btn" href="{{actionUrl('connect/settings/tokenReset', {providerClass:providerClass})}}">Reset Token</a>
+            <a class="btn" href="{{actionUrl('connect/settings/tokenReset', {providerHandle:providerHandle})}}">Reset Token</a>
         {% endif %}
     </div>
     #}

@@ -4,7 +4,7 @@
     'https://www.googleapis.com/auth/analytics'
     ] %}
 
-{% set provider = craft.oauth.getProvider(providerClass) %}
+{% set provider = craft.oauth.getProvider(providerHandle) %}
 
 {% if not provider %}{% exit 404 %}{% endif %}
 
@@ -12,10 +12,10 @@
 
 {% if provider is defined %}
 
-    <p>Authenticate with {{providerClass}} so we can start gathering data from the API.</p>
+    <p>Authenticate with {{provider.name}} so we can start gathering data from the API.</p>
 
     <p>
-        <a class="btn submit" href="{{ craft.oauth.connect(providerClass, scope, pluginHandle~'.system') }}">Authenticate with {{providerClass}}</a> &nbsp;
+        <a class="btn submit" href="{{ craft.oauth.connect(providerHandle, scope, pluginHandle~'.system') }}">Authenticate with {{provider.name}}</a> &nbsp;
     </p>
 
     <p>

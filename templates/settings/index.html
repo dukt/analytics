@@ -18,8 +18,8 @@
         { label: "Analytics"|t, url: url('analytics') },
     ] %}
 
-    {% set providerSource = craft.oauth.getProviderSource('Google') %}
-    {% set account = craft.oauth.getAccount(providerSource.handle, 'analytics.system') %}
+    {% set provider = craft.oauth.getProvider('Google') %}
+    {% set account = craft.oauth.getAccount(provider.handle, 'analytics.system') %}
 
     {% set content %}
 
@@ -51,8 +51,8 @@
             <p>
                 Connected as {{account.email}}. 
 
-                <a class="btn small" href="{{craft.oauth.disconnect(providerSource.handle, 'analytics.system')}}">
-                    Disconnect from {{providerSource.name}}
+                <a class="btn small" href="{{craft.oauth.disconnect(provider.handle, 'analytics.system')}}">
+                    Disconnect from {{provider.name}}
                 </a>
             </p>
         {% endif %}

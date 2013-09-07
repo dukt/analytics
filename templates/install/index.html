@@ -1,5 +1,6 @@
 {% set title = "Analytics Installation"|t %}
-{% set providerClass = 'Google' %}
+
+{% set providerHandle = 'google' %}
 {% set pluginHandle = 'analytics' %}
 
 {% if craft.analytics.isInstalled %}
@@ -17,10 +18,9 @@
         {% if craft.oauth is not defined %}
             {% include pluginHandle~'/install/_oauth' %}
         {% else %}
-            {% set provider = craft.oauth.getProvider(providerClass) %}
-            {% set providerSource = craft.oauth.getProviderSource(providerClass) %}
+            {% set provider = craft.oauth.getProvider(providerHandle, false) %}
 
-            {% if provider.isConfigured == false or craft.request.getSegment(3) == 'api' %}
+            {% if provider.isConfigured() == false or craft.request.getSegment(3) == 'api' %}
                 {% include pluginHandle~'/install/_api' %}
             {% else %}
                 {% include pluginHandle~'/install/_authenticate' %}
