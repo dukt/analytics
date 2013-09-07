@@ -22,25 +22,62 @@ class Analytics_PluginService extends BaseApplicationComponent
 {
     // --------------------------------------------------------------------
 
+    public function checkUpdates($pluginClass, $pluginHandle)
+    {
+        Craft::log(__METHOD__, LogLevel::Info, true);
+
+
+        // get remote plugin (xml)
+
+        $remotePlugin = $this->getRemotePlugin($pluginClass, $pluginHandle);
+
+        if(!is_object($remotePlugin['addon'])) {
+            return false;
+        }
+
+
+        $remoteVersion = trim((string) $remotePlugin['addon']->version);
+
+
+        // get current version (object)
+
+        $currentPlugin = craft()->plugins->getPlugin($pluginClass);
+
+
+        if(!$currentPlugin) {
+            return $remoteVersion;
+        }
+
+        $currentVersion = $currentPlugin->getVersion();
+
+
+        // compare versions
+
+        if($this->sortableTag($remoteVersion) > $this->sortableTag($currentVersion)) {
+
+            Craft::log(__METHOD__.' : Update available ', LogLevel::Info, true);
+
+            return true;
+
+        } else {
+
+            Craft::log(__METHOD__.' : No update available ', LogLevel::Info, true);
+
+            return false;
+        }
+    }
+
+    // --------------------------------------------------------------------
+
     public function download($pluginClass, $pluginHandle)
     {
         Craft::log(__METHOD__, LogLevel::Info, true);
 
-        $r = array('success' => false);
+        // -------------------------------
+        // Get ready to download & unzip
+        // -------------------------------
 
-       $lastVersion = $this->getLastVersion($pluginClass, $pluginHandle);
-
-        if(!$lastVersion) {
-            $r['msg'] = "Couldn't get plugin last version";
-
-            Craft::log(__METHOD__.' : Could not get last version' , LogLevel::Info, true);
-
-            return $r;
-        }
-
-        $pluginZipUrl = $lastVersion['xml']->enclosure['url'];
-
-
+        $return = array('success' => false);
 
         $filesystem = new Filesystem();
         $unzipper  = new Unzip();
@@ -53,79 +90,108 @@ class Analytics_PluginService extends BaseApplicationComponent
         $pluginZipDir = CRAFT_PLUGINS_PATH."_".$pluginHandle."/";
         $pluginZipPath = CRAFT_PLUGINS_PATH."_".$pluginHandle.".zip";
 
+
+        // remote plugin zip url
+
+        $remotePlugin = $this->getRemotePlugin($pluginClass, $pluginHandle);
+
+        if(!$remotePlugin) {
+            $return['msg'] = "Couldn't get plugin last version";
+
+            Craft::log(__METHOD__.' : Could not get last version' , LogLevel::Info, true);
+
+            return $return;
+        }
+
+        $remotePluginZipUrl = $remotePlugin['xml']->enclosure['url'];
+
+        // -------------------------------
+        // Download & Install
+        // -------------------------------
+
         try {
 
-            // download
+            // download remotePluginZipUrl to pluginZipPath
 
-            $current = file_get_contents($pluginZipUrl);
+            $zipContents = file_get_contents($remotePluginZipUrl);
 
-            file_put_contents($pluginZipPath, $current);
-
-
-            // unzip
-
-            $content = $unzipper->extract($pluginZipPath, $pluginZipDir);
+            file_put_contents($pluginZipPath, $zipContents);
 
 
-            // make a backup here ?
+            // unzip pluginZipPath into pluginZipDir
 
-            // try to keep .git and .gitignore files
+            $contents = $unzipper->extract($pluginZipPath, $pluginZipDir);
 
-            if(file_exists(CRAFT_PLUGINS_PATH.$pluginHandle.'/.git') && !$pluginZipDir.$content[0].'/.git') {
+
+            // move files we want to keep from their current location to unzipped location
+            // keep : .git
+
+            if(file_exists(CRAFT_PLUGINS_PATH.$pluginHandle.'/.git') && !$pluginZipDir.$contents[0].'/.git') {
                 $filesystem->rename(CRAFT_PLUGINS_PATH.$pluginHandle.'/.git',
-                    $pluginZipDir.$content[0].'/.git');
+                    $pluginZipDir.$contents[0].'/.git');
             }
 
-            // if(file_exists(CRAFT_PLUGINS_PATH.$pluginHandle.'/.gitignore')) {
-            //     $filesystem->copy(CRAFT_PLUGINS_PATH.$pluginHandle.'/.gitignore',
-            //         $pluginZipDir.$content[0].'/.gitignore', true);
-            // }
 
             // remove current files
+            // make a backup of existing plugin (to storage ?) ?
 
             $filesystem->remove(CRAFT_PLUGINS_PATH.$pluginHandle);
 
-            // move new files
 
-            $filesystem->rename($pluginZipDir.$content[0].'/', CRAFT_PLUGINS_PATH.$pluginHandle);
+            // move new files to final destination
+
+            $filesystem->rename($pluginZipDir.$contents[0].'/', CRAFT_PLUGINS_PATH.$pluginHandle);
 
         } catch (\Exception $e) {
 
-            $r['msg'] = $e->getMessage();
+            $return['msg'] = $e->getMessage();
 
             Craft::log(__METHOD__.' : Crashed : '.$e->getMessage() , LogLevel::Info, true);
 
-            return $r;
+            return $return;
         }
 
-        try {
-            // remove download files
 
+        // remove download files
+
+        try {
             $filesystem->remove($pluginZipDir);
             $filesystem->remove($pluginZipPath);
         } catch(\Exception $e) {
 
-            $r['msg'] = $e->getMessage();
+            $return['msg'] = $e->getMessage();
 
             Craft::log(__METHOD__.' : Crashed : '.$e->getMessage() , LogLevel::Info, true);
 
-            return $r;
+            return $return;
         }
 
         Craft::log(__METHOD__.' : Success : ' , LogLevel::Info, true);
 
-        $r['success'] = true;
+        $return['success'] = true;
 
-        return $r;
+        return $return;
     }
 
     // --------------------------------------------------------------------
 
-    public function getLastVersion($pluginClass = 'Analytics', $pluginHandle = 'analytics')
+    public function getRemotePlugin($pluginClass, $pluginHandle)
     {
         Craft::log(__METHOD__, LogLevel::Info, true);
 
         $url = 'http://dukt.net/craft/'.$pluginHandle.'/releases.xml';
+
+
+
+        // devMode
+
+        $pluginHashes = craft()->config->get('pluginHashes');
+
+        if(isset($pluginHashes[$pluginHandle])) {
+
+            $url = 'http://dukt.net/actions/tracks/updates/'.$pluginHashes[$pluginHandle].'/develop/xml';
+        }
+
 
         // or refresh cache and get new updates if cache expired or forced update
 
@@ -150,12 +216,6 @@ class Analytics_PluginService extends BaseApplicationComponent
         } else {
             Craft::log(__METHOD__.' : Could not get channel items', LogLevel::Info, true);
         }
-
-        // ksort($versions);
-
-        // $last_version = array_pop($versions);
-
-        // return $last_version;
     }
 
     // --------------------------------------------------------------------
@@ -199,9 +259,11 @@ class Analytics_PluginService extends BaseApplicationComponent
     public function enable($pluginClass)
     {
         Craft::log(__METHOD__, LogLevel::Info, true);
+
         $pluginComponent = craft()->plugins->getPlugin($pluginClass, false);
 
         try {
+
             if(!$pluginComponent->isEnabled) {
                 if (craft()->plugins->enablePlugin($pluginClass)) {
                     return true;
@@ -211,10 +273,40 @@ class Analytics_PluginService extends BaseApplicationComponent
             } else {
                 return true;
             }
+
         } catch(\Exception $e) {
+
             Craft::log(__METHOD__.' : Crashed : '.$e->getMessage(), LogLevel::Info, true);
+
             return false;
         }
     }
+
+    // --------------------------------------------------------------------
+
+    private function sortableTag($tag)
+    {
+        $tagExploded = explode(".", $tag);
+
+        $maxLength = 5;
+
+        foreach($tagExploded as $k => $v) {
+            $fillLength = $maxLength - strlen($v);
+
+            $fill = "";
+
+            for($i = 0; $i < $fillLength; $i++) {
+                $fill .= "0";
+            }
+
+            $tagExploded[$k] = $fill.$v;
+        }
+
+        $sortableTag = implode(".", $tagExploded);
+
+        return $sortableTag;
+    }
+
+    // --------------------------------------------------------------------
 }
 

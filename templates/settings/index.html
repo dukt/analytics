@@ -26,6 +26,34 @@
         {% if not craft.analytics.isInstalled %}
             {% redirect 'analytics/settings' %}
         {% else %}
+
+            {% set oauthUpdates = craft.analytics.pluginCheckUpdates('Oauth', 'oauth') %}
+            {% set analyticsUpdates = craft.analytics.pluginCheckUpdates('Analytics', 'analytics') %}
+
+            {% if oauthUpdates or analyticsUpdates %}
+                <h2 class="first">Updates</h2>
+
+                <p>There are updates available for the following plugins :</p>
+
+                <ul>
+                    {% if oauthUpdates %}
+                    <li>OAuth</li>
+                    {% endif %}
+
+                    {% if analyticsUpdates %}
+                    <li>Analytics</li>
+                    {% endif %}
+                </ul>
+
+                <div class="buttons">
+                    <a href="{{actionUrl('analytics/plugin/updateAllPlugins')}}" class="btn">Update Plugins</a>
+                </div>
+
+                <hr />
+
+            {% endif %}
+
+
             <div class="dukt-update">
                 <p class="center">There is an update available for the <strong class="plugin-name">[pluginClass]</strong> plugin. <a href="{{actionUrl('analytics/plugin/update')}}" class="btn submit small">Update now</a></p>
             </div>
@@ -49,7 +77,7 @@
             <hr />
 
             <p>
-                Connected as {{account.email}}. 
+                Connected as {{account.email}}.
 
                 <a class="btn small" href="{{craft.oauth.disconnect(provider.handle, 'analytics.system')}}">
                     Disconnect from {{provider.name}}

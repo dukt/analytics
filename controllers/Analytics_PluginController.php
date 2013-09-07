@@ -1,31 +1,32 @@
 <?php
 
-/**
- * Craft Directory by Dukt
- *
- * @package   Craft Directory
- * @author    Benjamin David
- * @copyright Copyright (c) 2013, Dukt
- * @license   http://docs.dukt.net/craft/directory/license
- * @link      http://dukt.net/craft/analytics/license
- */
-
 namespace Craft;
 
 class Analytics_PluginController extends BaseController
 {
     // --------------------------------------------------------------------
 
-    private $pluginHandle = 'analytics';
+    private $pluginService;
     private $referer;
 
     // --------------------------------------------------------------------
 
     public function __construct()
     {
-        if(isset($_SERVER['HTTP_REFERER'])) {
-            $this->referer = $_SERVER['HTTP_REFERER'];
-        }
+        $this->pluginService = craft()->analytics_plugin;
+    }
+
+    // --------------------------------------------------------------------
+
+    public function actionEnable()
+    {
+        Craft::log(__METHOD__, LogLevel::Info, true);
+
+        $pluginClass = craft()->request->getParam('pluginClass');
+
+        $this->pluginService->enable($pluginClass);
+
+        $this->redirect($_SERVER['HTTP_REFERER']);
     }
 
     // --------------------------------------------------------------------
@@ -37,31 +38,33 @@ class Analytics_PluginController extends BaseController
         $pluginClass = craft()->request->getParam('pluginClass');
         $pluginHandle = craft()->request->getParam('pluginHandle');
 
-        $download = craft()->analytics_plugin->download($pluginClass, $pluginHandle);
+
+        // download plugin (includes download, unzip)
+
+        $download = $this->pluginService->download($pluginClass, $pluginHandle);
 
         if($download['success'] == true) {
 
-            if(craft()->analytics_plugin->install($pluginClass)) {
+            // install plugin
+
+            if($this->pluginService->install($pluginClass)) {
 
                 Craft::log(__METHOD__.' : '.$pluginClass.' plugin installed.', LogLevel::Info, true);
 
                 craft()->userSession->setNotice(Craft::t($pluginClass.' plugin installed.'));
 
             } else {
+
+                // plugin couldn't be installed
+
                 Craft::log(__METHOD__.' : '.$pluginClass.' plugin not installed.', LogLevel::Info, true);
 
-                $url = UrlHelper::getActionUrl('analytics/plugin/install',
-                            array(
-                                'pluginClass' => $pluginClass,
-                                'pluginHandle' => $pluginHandle
-
-                            )
-                        );
-
-                $this->redirect($url);
+                $this->redirect($_SERVER['HTTP_REFERER']);
             }
 
         } else {
+
+            // download failure
 
             $msg = 'Couldn’t install '.$pluginClass.' plugin.';
 
@@ -74,7 +77,10 @@ class Analytics_PluginController extends BaseController
             craft()->userSession->setError(Craft::t($msg));
         }
 
-        $this->redirect($this->referer);
+
+        // redirect
+
+        $this->redirect($_SERVER['HTTP_REFERER']);
     }
 
     // --------------------------------------------------------------------
@@ -83,20 +89,33 @@ class Analytics_PluginController extends BaseController
     {
         Craft::log(__METHOD__, LogLevel::Info, true);
 
+        // pluginClass
+
         $pluginClass = craft()->request->getParam('pluginClass');
 
-        if(craft()->analytics_plugin->install($pluginClass)) {
+
+        // install plugin
+
+        if($this->pluginService->install($pluginClass)) {
+
+            // install success
 
             Craft::log(__METHOD__." : ".$pluginClass.' plugin installed.', LogLevel::Info, true);
 
             craft()->userSession->setNotice(Craft::t($pluginClass.' plugin installed.'));
         } else {
+
+            // install failure
+
             Craft::log(__METHOD__." : Couldn't install ".$pluginClass." plugin.", LogLevel::Info, true);
 
             craft()->userSession->setError(Craft::t("Couldn't install ".$pluginClass." plugin."));
         }
 
-        $this->redirect($this->referer);
+
+        // redirect
+
+        $this->redirect($_SERVER['HTTP_REFERER']);
     }
 
     // --------------------------------------------------------------------
@@ -105,27 +124,37 @@ class Analytics_PluginController extends BaseController
     {
         Craft::log(__METHOD__, LogLevel::Info, true);
 
-        $plugin = craft()->analytics->checkUpdatesNew();
+        $plugin = $this->pluginService->checkUpdates();
 
         if($plugin) {
 
             Craft::log(__METHOD__." : Updates checked", LogLevel::Info, true);
 
-            $url = UrlHelper::getActionUrl('analytics/plugin/download',
-                        array(
-                            'pluginClass' => $plugin['class'],
-                            'pluginHandle' => $plugin['handle']
-
-                        )
-                    );
-
-            $this->redirect($url);
+            $this->redirect($_SERVER['HTTP_REFERER']);
 
         } else {
             Craft::log(__METHOD__." : Coudln't check updates", LogLevel::Info, true);
 
-            $this->redirect('analytics/settings');
+            $this->redirect($_SERVER['HTTP_REFERER']);
         }
+    }
+
+    // --------------------------------------------------------------------
+
+    public function actionUpdateAllPlugins()
+    {
+        Craft::log(__METHOD__, LogLevel::Info, true);
+
+        $plugins = array(
+                array('pluginClass' => 'Oauth', 'pluginHandle' => 'oauth'),
+                array('pluginClass' => 'Analytics', 'pluginHandle' => 'analytics')
+            );
+
+        foreach($plugins as $p) {
+            $this->pluginService->download($p['pluginClass'], $p['pluginHandle']);
+        }
+
+        $this->redirect($_SERVER['HTTP_REFERER']);
     }
 
     // --------------------------------------------------------------------
@@ -134,7 +163,7 @@ class Analytics_PluginController extends BaseController
     {
         Craft::log(__METHOD__, LogLevel::Info, true);
 
-        $plugin = craft()->analytics->checkUpdatesNew();
+        $plugin = $this->pluginService->checkUpdates();
 
         $this->returnJson($plugin);
     }

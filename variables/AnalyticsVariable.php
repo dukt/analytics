@@ -77,4 +77,13 @@ class AnalyticsVariable
     {
             return craft()->analytics->api();
     }
+
+    // --------------------------------------------------------------------
+
+    public function pluginCheckUpdates($pluginClass, $pluginHandle)
+    {
+        return craft()->analytics_plugin->checkUpdates($pluginClass, $pluginHandle);
+    }
+
+    // --------------------------------------------------------------------
 }
