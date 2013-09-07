@@ -83,7 +83,7 @@ class AnalyticsService extends BaseApplicationComponent
 
         // try to get an account
 
-        $account = craft()->oauth->getAccount('Google', 'analytics.system');
+        $account = craft()->oauth->getAccount('google', 'analytics.system');
 
         if(!$account)
         {
@@ -182,22 +182,22 @@ class AnalyticsService extends BaseApplicationComponent
     {
         Craft::log(__METHOD__, LogLevel::Info, true);
 
-        $providerClass = 'Google';
+        $handle = 'google';
         $namespace = 'analytics.system';
 
 
         // get token
 
-        $token = craft()->oauth->getToken($providerClass, $namespace);
-         
+        $token = craft()->oauth->getToken($handle, $namespace);
+
 
         // provider
 
-        $providerSource = craft()->oauth->getProviderSource($providerClass);
+        $provider = craft()->oauth->getProvider($handle);
 
-        $providerSource->connect($token->getRealToken());
+        $provider->connect($token->getDecodedToken());
 
-        if(!$providerSource) {
+        if(!$provider) {
 
             Craft::log(__METHOD__.' : Could not get provider connected', LogLevel::Info, true);
 
@@ -206,17 +206,18 @@ class AnalyticsService extends BaseApplicationComponent
 
         $client = new Google_Client();
         $client->setApplicationName('Google+ PHP Starter Application');
-        $client->setClientId($providerSource->providerSource->client_id);
-        $client->setClientSecret($providerSource->providerSource->client_secret);
-        $client->setRedirectUri($providerSource->providerSource->redirect_uri);
+        $client->setClientId($provider->getClientId());
+        $client->setClientSecret($provider->getClientSecret());
+        // $client->setRedirectUri($provider->getRedirectUri());
 
         $api = new Google_AnalyticsService($client);
 
-        $providerSource->providerSource->token->created = 0;
-        $providerSource->providerSource->token->expires_in = $providerSource->providerSource->token->expires;
-        $providerSource->providerSource->token = json_encode($providerSource->providerSource->token);
+        $providerSourceToken = $provider->getToken();
+        $providerSourceToken->created = 0;
+        $providerSourceToken->expires_in = $providerSourceToken->expires;
+        $providerSourceToken = json_encode($providerSourceToken);
 
-        $client->setAccessToken($providerSource->providerSource->token);
+        $client->setAccessToken($providerSourceToken);
 
         return $api;
     }
