@@ -195,7 +195,7 @@ class AnalyticsService extends BaseApplicationComponent
 
         $provider = craft()->oauth->getProvider($handle);
 
-        $provider->connect($token->getDecodedToken());
+        $provider->setToken($token->getDecodedToken());
 
         if(!$provider) {
 
@@ -206,9 +206,9 @@ class AnalyticsService extends BaseApplicationComponent
 
         $client = new Google_Client();
         $client->setApplicationName('Google+ PHP Starter Application');
-        $client->setClientId($provider->getClientId());
-        $client->setClientSecret($provider->getClientSecret());
-        // $client->setRedirectUri($provider->getRedirectUri());
+        $client->setClientId($provider->clientId);
+        $client->setClientSecret($provider->clientSecret);
+        $client->setRedirectUri($provider->getRedirectUri());
 
         $api = new Google_AnalyticsService($client);
 
