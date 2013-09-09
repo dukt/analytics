@@ -15,11 +15,11 @@
 
     {% set content %}
 
-        {% include 'oauth/updates/_check' with {plugins:['oauth', 'analytics']} %}
-
         {% if craft.oauth is not defined %}
             {% include pluginHandle~'/install/_oauth' %}
         {% else %}
+            {% include 'oauth/updates/_check' with {plugins:['oauth', 'analytics']} %}
+
             {% set provider = craft.oauth.getProvider(providerHandle, false) %}
 
             {% if provider.isConfigured() == false or craft.request.getSegment(3) == 'api' %}
