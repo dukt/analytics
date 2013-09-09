@@ -15,10 +15,7 @@
 
     {% set content %}
 
-
-
-
-
+        {% include 'oauth/updates/_check' with {plugins:['oauth', 'analytics']} %}
 
         {% if craft.oauth is not defined %}
             {% include pluginHandle~'/install/_oauth' %}
