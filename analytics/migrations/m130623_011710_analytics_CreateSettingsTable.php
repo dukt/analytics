@@ -1,4 +1,15 @@
 <?php
+
+/**
+ * Craft Analytics by Dukt
+ *
+ * @package   Craft Analytics
+ * @author    Benjamin David
+ * @copyright Copyright (c) 2013, Dukt
+ * @license   http://dukt.net/craft/analytics/docs#license
+ * @link      http://dukt.net/craft/analytics/
+ */
+
 namespace Craft;
 
 /**
