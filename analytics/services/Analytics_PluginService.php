@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Craft Analytics
+ * Craft OAuth
  *
- * @package     Craft Analytics
+ * @package     Craft OAuth
  * @version     Version 1.0
  * @author      Benjamin David
  * @copyright   Copyright (c) 2013 - DUKT
- * @link        http://dukt.net/add-ons/craft/analytics/
+ * @link        http://dukt.net/add-ons/craft/Oauth/
  *
  */
 
@@ -22,54 +22,7 @@ class Analytics_PluginService extends BaseApplicationComponent
 {
     // --------------------------------------------------------------------
 
-    public function checkUpdates($pluginClass, $pluginHandle)
-    {
-        Craft::log(__METHOD__, LogLevel::Info, true);
-
-
-        // get remote plugin (xml)
-
-        $remotePlugin = $this->getRemotePlugin($pluginClass, $pluginHandle);
-
-        if(!is_object($remotePlugin['addon'])) {
-            return false;
-        }
-
-
-        $remoteVersion = trim((string) $remotePlugin['addon']->version);
-
-
-        // get current version (object)
-
-        $currentPlugin = craft()->plugins->getPlugin($pluginClass);
-
-
-        if(!$currentPlugin) {
-            return $remoteVersion;
-        }
-
-        $currentVersion = $currentPlugin->getVersion();
-
-
-        // compare versions
-
-        if($this->sortableTag($remoteVersion) > $this->sortableTag($currentVersion)) {
-
-            Craft::log(__METHOD__.' : Update available ', LogLevel::Info, true);
-
-            return true;
-
-        } else {
-
-            Craft::log(__METHOD__.' : No update available ', LogLevel::Info, true);
-
-            return false;
-        }
-    }
-
-    // --------------------------------------------------------------------
-
-    public function download($pluginClass, $pluginHandle)
+    public function download($pluginHandle)
     {
         Craft::log(__METHOD__, LogLevel::Info, true);
 
@@ -82,7 +35,7 @@ class Analytics_PluginService extends BaseApplicationComponent
         $filesystem = new Filesystem();
         $unzipper  = new Unzip();
 
-        $pluginComponent = craft()->plugins->getPlugin($pluginClass, false);
+        $pluginComponent = craft()->plugins->getPlugin($pluginHandle, false);
 
 
         // plugin path
@@ -93,7 +46,7 @@ class Analytics_PluginService extends BaseApplicationComponent
 
         // remote plugin zip url
 
-        $remotePlugin = $this->getRemotePlugin($pluginClass, $pluginHandle);
+        $remotePlugin = $this->_getRemotePlugin($pluginHandle);
 
         if(!$remotePlugin) {
             $return['msg'] = "Couldn't get plugin last version";
@@ -175,7 +128,73 @@ class Analytics_PluginService extends BaseApplicationComponent
 
     // --------------------------------------------------------------------
 
-    public function getRemotePlugin($pluginClass, $pluginHandle)
+    public function enable($pluginHandle)
+    {
+        Craft::log(__METHOD__, LogLevel::Info, true);
+
+        $pluginComponent = craft()->plugins->getPlugin($pluginHandle, false);
+
+        try {
+
+            if(!$pluginComponent->isEnabled) {
+                if (craft()->plugins->enablePlugin($pluginHandle)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return true;
+            }
+
+        } catch(\Exception $e) {
+
+            Craft::log(__METHOD__.' : Crashed : '.$e->getMessage(), LogLevel::Info, true);
+
+            return false;
+        }
+    }
+
+    // --------------------------------------------------------------------
+
+    public function install($pluginHandle)
+    {
+        Craft::log(__METHOD__, LogLevel::Info, true);
+
+        craft()->plugins->loadPlugins();
+
+        $pluginComponent = craft()->plugins->getPlugin($pluginHandle, false);
+
+        try {
+            if(!$pluginComponent)
+            {
+                Craft::log(__METHOD__.' : '.$pluginHandle.' component not found', LogLevel::Info, true);
+
+                return false;
+            }
+
+            if(!$pluginComponent->isInstalled) {
+                if (craft()->plugins->installPlugin($pluginHandle)) {
+                    return true;
+                } else {
+
+                    Craft::log(__METHOD__.' : '.$pluginHandle.' component not installed', LogLevel::Info, true);
+
+                    return false;
+                }
+            } else {
+                return true;
+            }
+        } catch(\Exception $e) {
+
+            Craft::log(__METHOD__.' : Crashed : '.$e->getMessage(), LogLevel::Info, true);
+
+            return false;
+        }
+    }
+
+    // --------------------------------------------------------------------
+
+    private function _getRemotePlugin($pluginHandle)
     {
         Craft::log(__METHOD__, LogLevel::Info, true);
 
@@ -216,95 +235,6 @@ class Analytics_PluginService extends BaseApplicationComponent
         } else {
             Craft::log(__METHOD__.' : Could not get channel items', LogLevel::Info, true);
         }
-    }
-
-    // --------------------------------------------------------------------
-
-    public function install($pluginClass)
-    {
-        Craft::log(__METHOD__, LogLevel::Info, true);
-
-        $pluginComponent = craft()->plugins->getPlugin($pluginClass, false);
-
-        try {
-            if(!$pluginComponent)
-            {
-                Craft::log(__METHOD__.' : '.$pluginClass.' component not found', LogLevel::Info, true);
-
-                return false;
-            }
-
-            if(!$pluginComponent->isInstalled) {
-                if (craft()->plugins->installPlugin($pluginClass)) {
-                    return true;
-                } else {
-
-                    Craft::log(__METHOD__.' : '.$pluginClass.' component not installed', LogLevel::Info, true);
-
-                    return false;
-                }
-            } else {
-                return true;
-            }
-        } catch(\Exception $e) {
-
-            Craft::log(__METHOD__.' : Crashed : '.$e->getMessage(), LogLevel::Info, true);
-
-            return false;
-        }
-    }
-
-    // --------------------------------------------------------------------
-
-    public function enable($pluginClass)
-    {
-        Craft::log(__METHOD__, LogLevel::Info, true);
-
-        $pluginComponent = craft()->plugins->getPlugin($pluginClass, false);
-
-        try {
-
-            if(!$pluginComponent->isEnabled) {
-                if (craft()->plugins->enablePlugin($pluginClass)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            } else {
-                return true;
-            }
-
-        } catch(\Exception $e) {
-
-            Craft::log(__METHOD__.' : Crashed : '.$e->getMessage(), LogLevel::Info, true);
-
-            return false;
-        }
-    }
-
-    // --------------------------------------------------------------------
-
-    private function sortableTag($tag)
-    {
-        $tagExploded = explode(".", $tag);
-
-        $maxLength = 5;
-
-        foreach($tagExploded as $k => $v) {
-            $fillLength = $maxLength - strlen($v);
-
-            $fill = "";
-
-            for($i = 0; $i < $fillLength; $i++) {
-                $fill .= "0";
-            }
-
-            $tagExploded[$k] = $fill.$v;
-        }
-
-        $sortableTag = implode(".", $tagExploded);
-
-        return $sortableTag;
     }
 
     // --------------------------------------------------------------------
