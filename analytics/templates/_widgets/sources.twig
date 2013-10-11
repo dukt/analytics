@@ -1,0 +1,13 @@
+{% extends "analytics/_widgets/_layout" %}
+
+{% block body %}
+
+	{% include 'analytics/_widgets/_chart' with {
+	    half:false,
+	    dimensions:'ga:source',
+	    title: 'Sources',
+	    metric: 'ga:visits',
+	    type: 'donut'
+	} %}
+
+{% endblock %}

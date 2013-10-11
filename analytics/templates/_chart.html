@@ -1,30 +1,51 @@
-{% if half is not defined %}
-    {% set half = false %}
-{% endif %}
-
 {% if title is not defined %}
     {% set title = "Default Title" %}
 {% endif %}
 
-{% if type is not defined %}
-    {% set type = "line" %}
+{% if metric is not defined %}
+    {% set metric = "" %}
 {% endif %}
 
-{% include 'analytics/_chartElement' with {
-    half:half,
-    chart: {
-        chartQuery: {
-            param1 : 'ga:' ~ profileId,
-            param2 : now|date_modify("-1 month")|date("Y-m-d"),
-            param3 : now|date("Y-m-d"),
-            param4 : 'ga:visits',
-            param5 : {
-                'dimensions' : dimensions
-            }
-        },
-        chartOptions: {
-            title: title,
-            chartType:type
-        }
+{% if type is not defined %}
+    {% set type = "column" %}
+{% endif %}
+
+{% set profile = craft.analytics.profile %}
+{% set webProperty = craft.analytics.webProperty %}
+
+{% set chartQuery = {
+    param1 : 'ga:' ~ profile.id,
+    param2 : now|date_modify("-1 month")|date("Y-m-d"),
+    param3 : now|date("Y-m-d"),
+    param4 : metric,
+    param5 : {
+        'dimensions' : dimensions
     }
 } %}
+
+{% set defaultChartOptions = {
+    title: title,
+    chartType:type,
+    chartArea : {
+        width:'100%',
+
+        left:'auto',
+        right:'auto',
+        top:'auto',
+        bottom:'auto'
+    }
+} %}
+
+{% if chartOptions is not defined %}
+    {% set chartOptions = defaultChartOptions %}
+{% endif %}
+
+
+{% set chart = {
+    chart: {
+        chartQuery: chartQuery,
+        chartOptions: chartOptions
+    }
+} %}
+
+{% include 'analytics/_chartElement' with chart %}

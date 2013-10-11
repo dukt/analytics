@@ -18,21 +18,6 @@ class Analytics_ChartsController extends BaseController
     {
         Craft::log(__METHOD__, LogLevel::Info, true);
 
-        $accountId = false;
-        $webPropertyId = false;
-
-        $properties = craft()->analytics->api()->management_webproperties->listManagementWebproperties("~all");
-
-        foreach($properties['items'] as $item) {
-            if($item['id'] == craft()->analytics->getSetting('profileId')) {
-                $accountId = $item['accountId'];
-                $webPropertyId = $item['id'];
-            }
-        }
-
-        $profiles = craft()->analytics->api()->management_profiles->listManagementProfiles($accountId, $webPropertyId);
-        $profileId = $profiles['items'][0]['id'];
-
         $chartQuery = $_POST['chartQuery'];
 
         $results = craft()->analytics->api()->data_ga->get(
@@ -43,15 +28,37 @@ class Analytics_ChartsController extends BaseController
             $chartQuery['param5']
         );
 
+
+        // ga:keywords
+        // ga:visits
+
+        // array(2) {
+        //   [0]=>
+        //   string(32) ""ajax search"+"expressionengine""
+        //   [1]=>
+        //   string(1) "1"
+        // }
+
+
+        // ga:day, ga:month, ga:year
+        // ga:visits
+        // [0]=> array(4) {
+        //     [0]=> string(2) "01" [1]=> string(2) "01" [2]=> string(4) "2012" [3]=> string(2) "13"
+        // }
+
+
         $json = array(
                 array('Day', 'Visitors')
             );
 
         foreach($results['rows'] as $row) {
-            if(count($row) == 2) {
-                array_push($json, array($row[0], (int) $row[1]));
-            } else {
-                array_push($json, array($row[2].'/'.$row[1], (int) $row[3]));
+            $itemMetric = (int) array_pop($row);
+            $itemDimension = implode('.', $row);
+            // $itemDimension = md5($itemDimension);
+
+            if($itemDimension != "(not provided)" && $itemDimension != "(not set)") {
+                $item = array($itemDimension, $itemMetric);
+                array_push($json, $item);
             }
         }
 

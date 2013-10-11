@@ -1,0 +1,78 @@
+{% import "_includes/forms" as forms %}
+
+<hr />
+
+<h2>Chart Settings</h2>
+{{ forms.textField({
+	label: "Title"|t,
+	id: 'title',
+	name: 'title',
+	value: settings.title,
+	errors: settings.getErrors('title')
+}) }}
+
+{{ forms.selectField({
+    label: "Chart Type",
+    options: {
+		'column':'Column',
+		'donut':'Donut',
+		'pie':'Pie',
+		'table':'Table'
+	},
+    name: 'chartType',
+	value: settings.chartType,
+	errors: settings.getErrors('chartType')
+}) }}
+
+
+
+{{ forms.textField({
+	label: "Dimensions"|t,
+	id: 'dimensions',
+	name: 'dimensions',
+	placeholder: 'ga:year, ga:month, ga:day'|t,
+	value: settings.dimensions,
+	errors: settings.getErrors('dimensions')
+}) }}
+
+{{ forms.textField({
+	label: "Metric"|t,
+	placeholder: 'ga:visits'|t,
+	id: 'metric',
+	name: 'metric',
+	value: settings.metric,
+	errors: settings.getErrors('metric')
+}) }}
+
+
+<hr />
+
+<h2>Covered period before today</h2>
+
+
+{{ forms.textField({
+
+	placeholder:"1",
+	id: 'periodQuantity',
+	name: 'periodQuantity',
+	size:4,
+	value: (settings.periodQuantity != '' ? settings.periodQuantity : '1'),
+	errors: settings.getErrors('periodQuantity')
+}) }}
+
+{{ forms.selectField({
+
+    options: {
+		'hour':'Hour',
+		'day':'Day',
+		'week':'Week',
+		'month':'Month',
+		'year':'Year',
+	},
+    name: 'periodUnit',
+	value: (settings.periodUnit != '' ? settings.periodUnit : 'month'),
+	errors: settings.getErrors('periodUnit')
+}) }}
+
+
+<hr>

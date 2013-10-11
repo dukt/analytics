@@ -20,6 +20,43 @@ use \Google_AnalyticsService;
 
 class AnalyticsService extends BaseApplicationComponent
 {
+    public function getWebProperty()
+    {
+        $webProperty = craft()->fileCache->get('analytics.webProperty');
+
+        if(!$webProperty) {
+
+            $webProperties = $this->api()->management_webproperties->listManagementWebproperties("~all");
+
+            foreach($webProperties['items'] as $webPropertyItem) {
+
+                if($webPropertyItem['id'] == $this->getSetting('profileId')) {
+                    $webProperty = $webPropertyItem;
+                }
+            }
+
+            craft()->fileCache->set('analytics.webProperty', $webProperty);
+        }
+
+        return $webProperty;
+    }
+
+    public function getProfile()
+    {
+        $webProperty = $this->getWebProperty();
+
+        $profile = craft()->fileCache->get('analytics.profile');
+
+        if(!$profile) {
+            $profiles = $this->api()->management_profiles->listManagementProfiles($webProperty['accountId'], $webProperty['id']);
+
+            $profile = $profiles['items'][0];
+
+            craft()->fileCache->set('analytics.profile', $profile);
+        }
+
+        return $profile;
+    }
 
     // --------------------------------------------------------------------
 

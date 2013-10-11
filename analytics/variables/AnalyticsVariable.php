@@ -14,6 +14,17 @@ namespace Craft;
 
 class AnalyticsVariable
 {
+    public function getProfile()
+    {
+        return craft()->analytics->getProfile();
+    }
+
+
+    public function getWebProperty()
+    {
+        return craft()->analytics->getWebProperty();
+    }
+
     // --------------------------------------------------------------------
 
     public function isInstalled()

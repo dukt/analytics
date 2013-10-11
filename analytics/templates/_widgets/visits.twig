@@ -1,0 +1,11 @@
+{% extends "analytics/_widgets/_layout" %}
+
+{% block body %}
+
+	{% include 'analytics/_widgets/_chart' with {
+	    dimensions:'ga:year, ga:month, ga:day',
+	    title: 'Visits',
+	    metric: 'ga:visits'
+	} %}
+
+{% endblock %}

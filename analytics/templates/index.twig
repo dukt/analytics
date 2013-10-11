@@ -1,0 +1,75 @@
+{% extends "analytics/_layout" %}
+
+{% set content %}
+
+    <h2 class="center">Last 30 days</h2>
+
+    <div class="chartBlock chartBlockS">
+        {% include 'analytics/_chart' with {
+            half:false,
+            metric: 'ga:visits',
+            dimensions:'ga:year, ga:month, ga:day',
+            title: 'Visits',
+            chartOptions: {
+                title: 'Visits',
+                chartType:'column',
+                chartArea : {
+                    width:'100%',
+                    height: '100%',
+                    top: 20,
+                    bottom: 0
+                }
+            }
+
+        } %}
+    </div>
+
+    <div class="clear"></div>
+
+    <div class="chartBlock half">
+        {% include 'analytics/_chart' with {
+            metric: 'ga:visits',
+            dimensions:'ga:source',
+            title: 'Sources',
+            type:'donut'
+        } %}
+    </div>
+
+    <div class="chartBlock half">
+        {% include 'analytics/_chart' with {
+            metric: 'ga:visits',
+            dimensions:'ga:pagePath',
+            title: 'Pages',
+            type:'donut'
+        } %}
+    </div>
+
+    <div class="chartBlock half">
+        {% include 'analytics/_chart' with {
+            metric: 'ga:visits',
+            dimensions:'ga:country',
+            title: 'Countries',
+            type:'donut'
+        } %}
+    </div>
+
+    <div class="chartBlock half">
+        {% include 'analytics/_chart' with {
+            metric: 'ga:visits',
+            dimensions:'ga:isMobile',
+            title: 'Is Mobile',
+            type:'donut'
+        } %}
+    </div>
+
+    <div class="chartBlock half">
+        {% include 'analytics/_chart' with {
+            metric: 'ga:visits',
+            dimensions:'ga:socialNetwork',
+            title: 'Social Networks',
+            type:'donut'
+        } %}
+    </div>
+
+    <div class="clear"></div>
+{% endset %}

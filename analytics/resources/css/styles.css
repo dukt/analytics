@@ -2,24 +2,58 @@
     text-align: center;
 }
 
-.dukt-chart {
+/**************************************************/
+
+.dukt-chart.column {
+    height: 150px;
+}
+
+.dukt-chart.donut {
+    height: 250px;
+}
+
+/**************************************************/
 
 
-
-    float: left;
-    width: 96%;
+.chartBlock {
     overflow: hidden;
     border: 1px solid #eee;
     background: url(../images/spinner.gif) no-repeat 50% 50%;
     margin: 2%;
-    height: 400px;
+}
+
+@media (min-width: 600px) {
+    .chartBlock.half {
+        float: left;
+        width: 45%;
+    }
 }
 
 
-.dukt-chart.half {
-    width: 45%;
+.chartBlock .dukt-chart {
+    padding: 30px;
+    height: 300px;
+}
+
+.chartBlockS .dukt-chart {
+    height: 250px;
+}
+
+.chartBlockM .dukt-chart {
+    height: 300px;
+}
+.chartBlockL .dukt-chart {
     height: 400px;
 }
+
+.chartBlock .dukt-chart.table {
+    height: auto;
+}
+
+
+/**************************************************/
+
+
 
 .dukt-chart .data {
     display: none;

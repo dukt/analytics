@@ -12,25 +12,32 @@
 
 namespace Craft;
 
-class Analytics_ActivityWidget extends BaseWidget
+class Analytics_SourcesWidget extends BaseWidget
 {
     public function getName()
     {
-        return Craft::t('Analytics Activity');
+        return Craft::t('Analytics Sources');
     }
 
     public function getBodyHtml()
     {
-    	$variables = array();
+
+        $variables = array();
+
+        $originalTemplatesPath = craft()->path->getTemplatesPath();
 
         $templatePath = craft()->path->getPluginsPath().'analytics/templates/';
 
         craft()->path->setTemplatesPath($templatePath);
 
-        $html = craft()->templates->render('_widgets/activity', $variables);
+        $html = craft()->templates->render('_widgets/sources', $variables);
 
         $charset = craft()->templates->getTwig()->getCharset();
 
-        return new \Twig_Markup($html, $charset);
+        $return = new \Twig_Markup($html, $charset);
+
+        craft()->path->setTemplatesPath($originalTemplatesPath);
+
+        return $return;
     }
 }

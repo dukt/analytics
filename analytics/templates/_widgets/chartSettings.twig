@@ -1,0 +1,16 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.selectField({
+    first: true,
+    label: "Chart Template",
+    options: {
+		visits:'Visits',
+		pages:'Pages',
+		sources:'Sources : All Sources',
+		sourcesCountries:'Sources : Countries',
+		sourcesIsMobile:'Sources : Is Mobile ?'
+	},
+    name: 'chartTemplate',
+	value: settings.chartTemplate,
+	errors: settings.getErrors('chartTemplate')
+}) }}
