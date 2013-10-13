@@ -1,23 +1,9 @@
+{% extends "analytics/_widgets/_layout" %}
 
+{% block body %}
 
-{% if craft.analytics.isOk %}
-
-	{% includeCssResource "analytics/css/styles.css" %}
-	{% includeCssResource "analytics/css/widget-activity.css" %}
-
-	{%- includeJsResource 'analytics/js/jsapi.js' first %}
-
-	{% includeJsResource 'analytics/js/dchart.js' %}
-	{% includeJsResource 'analytics/js/dukt-chart.js' %}
-
-	<a href="{{url('analytics')}}">
 	{% include 'analytics/_widgets/_chart' with {
-	    settings : settings
+	    settings:settings
 	} %}
-	</a>
 
-{% else %}
-
-	<p><a href="{{url('analytics/settings')}}">Configure Analytics</a> plugin in order to get started.</p>
-
-{% endif %}
+{% endblock %}
