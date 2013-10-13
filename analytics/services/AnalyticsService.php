@@ -62,7 +62,6 @@ class AnalyticsService extends BaseApplicationComponent
 
     public function isConfigured()
     {
-
         Craft::log('AnalyticsService->isConfigured()', LogLevel::Info, true);
 
         // check if plugin has finished installation process
@@ -73,6 +72,8 @@ class AnalyticsService extends BaseApplicationComponent
 
 
         // check if api is available
+
+
 
         $api = craft()->analytics->api();
 
@@ -127,18 +128,6 @@ class AnalyticsService extends BaseApplicationComponent
             return false;
         }
 
-
-        // dummy call to GA API, if it works then we are connected
-
-        $props = $this->properties();
-
-        if(!$props)
-        {
-            Craft::log(__METHOD__.' : Properties could not be found', LogLevel::Info, true);
-
-            return false;
-        }
-
         return true;
     }
 
@@ -146,6 +135,7 @@ class AnalyticsService extends BaseApplicationComponent
 
     public function isOk()
     {
+
         Craft::log(__METHOD__, LogLevel::Info, true);
 
         // we're ok to roll when we're configured, installed, and that we have a defined profileId
