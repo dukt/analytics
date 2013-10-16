@@ -29,7 +29,7 @@ google.setOnLoadCallback(function() {
             },
             chartOptions: {
                 chartType: 'line',
-                title:'Default Title'
+                // title:'Default Title'
             }
 
         }, jsonOptions);
@@ -51,7 +51,7 @@ google.setOnLoadCallback(function() {
             switch(settings.chartOptions.chartType) {
                 case 'line':
                     chartOptions = $.extend({
-                        title: settings.chartOptions.title,
+                        // title: settings.chartOptions.title,
                         legend:{position:'bottom'},
                         chartArea : {
                             width:'100%',
@@ -92,22 +92,25 @@ google.setOnLoadCallback(function() {
                 case 'donut':
 
                     chartOptions = $.extend(true, {
-
+                        // legend:{position:'bottom'},
                         legend:'none',
                         sliceVisibilityThreshold:1/50,
                         pieHole:0.5,
-                        chartArea : {
-                            width:'85%',
-                            height: '85%'
-                        },
                     }, settings.chartOptions);
+
+                    chartOptions.chartArea.top = '5%';
+                    chartOptions.chartArea.bottom = '5%';
+                    chartOptions.chartArea.left = '5%';
+                    chartOptions.chartArea.right = '5%';
+                    chartOptions.chartArea.width = '90%';
+                    chartOptions.chartArea.height = '90%';
 
                     chart = new google.visualization.PieChart(element);
                     break;
 
                 case 'table':
                     chartOptions = $.extend({
-                        title: settings.chartOptions.title,
+                        // title: settings.chartOptions.title,
                         legend:'none',
                         sliceVisibilityThreshold:1/50,
                         pieHole:0.5,
@@ -121,7 +124,7 @@ google.setOnLoadCallback(function() {
                 default:
 
                     chartOptions = $.extend({
-                        title: settings.chartOptions.title,
+                        // title: settings.chartOptions.title,
                         legend:'none',
                         sliceVisibilityThreshold:1/50,
                         pieHole:0.5,

@@ -20,4 +20,10 @@
       <a class="btn settings icon" href="{{ url('analytics/settings') }}" title="{{ 'Settings'|t }}"></a>
     {% endset %}
 
+    {% set tabs = {
+        audience: { label: "Audience"|t, url: url('analytics/audience') },
+        acquisition: { label: "Acquisition"|t, url: url('analytics/acquisition') },
+        behavior: { label: "Behavior"|t, url: url('analytics/behavior') }
+    } %}
+
 {% endif %}

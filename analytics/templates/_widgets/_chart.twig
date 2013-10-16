@@ -37,8 +37,10 @@
 
 {% if settings.chartType == "donut" %}
 
+    {# title: settings.title, #}
+
     {% set defaultChartOptions = {
-        title: settings.title,
+
         chartType:settings.chartType,
         chartArea : {
             width:'100%',

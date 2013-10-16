@@ -1,0 +1,10 @@
+{% set data = {
+	title:"Audience : Country",
+	chartType:'donut',
+	dimensions:'ga:country',
+	metric:'ga:visits',
+	periodQuantity: settings.periodQuantity,
+	periodUnit: settings.periodUnit
+} %}
+
+{{data|json_encode()|raw}}

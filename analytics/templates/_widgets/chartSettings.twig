@@ -3,14 +3,50 @@
 {{ forms.selectField({
     first: true,
     label: "Chart Template",
-    options: {
-		visits:'Visits',
-		pages:'Pages',
-		sources:'Sources : All Sources',
-		sourcesCountries:'Sources : Countries',
-		sourcesIsMobile:'Sources : Is Mobile ?'
-	},
+    options: chartTemplatesOpts,
     name: 'chartTemplate',
 	value: settings.chartTemplate,
 	errors: settings.getErrors('chartTemplate')
 }) }}
+
+
+{{ forms.textField({
+	label: "Custom Widget Title"|t,
+	id: 'title',
+	name: 'title',
+	value: settings.title,
+	errors: settings.getErrors('title')
+}) }}
+
+
+<hr />
+
+<h2>Covered period before today</h2>
+
+
+{{ forms.textField({
+
+	placeholder:"1",
+	id: 'periodQuantity',
+	name: 'periodQuantity',
+	size:4,
+	value: (settings.periodQuantity != '' ? settings.periodQuantity : '1'),
+	errors: settings.getErrors('periodQuantity')
+}) }}
+
+{{ forms.selectField({
+
+    options: {
+		'hour':'Hour',
+		'day':'Day',
+		'week':'Week',
+		'month':'Month',
+		'year':'Year',
+	},
+    name: 'periodUnit',
+	value: (settings.periodUnit != '' ? settings.periodUnit : 'month'),
+	errors: settings.getErrors('periodUnit')
+}) }}
+
+
+<hr>

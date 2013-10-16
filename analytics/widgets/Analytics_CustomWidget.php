@@ -31,6 +31,15 @@ class Analytics_CustomWidget extends BaseWidget
         );
     }
 
+    public function getTitle()
+    {
+        $settings = $this->getSettings();
+
+        return $settings->title;
+    }
+
+
+
     public function getBodyHtml()
     {
 

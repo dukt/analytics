@@ -1,0 +1,10 @@
+{% set data = {
+	title:"Audience : Visits",
+	chartType:'column',
+	dimensions:'ga:day, ga:month, ga:year',
+	metric:'ga:visits',
+	periodQuantity: settings.periodQuantity,
+	periodUnit: settings.periodUnit
+} %}
+
+{{data|json_encode()|raw}}

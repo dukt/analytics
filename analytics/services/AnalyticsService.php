@@ -20,6 +20,7 @@ use \Google_AnalyticsService;
 
 class AnalyticsService extends BaseApplicationComponent
 {
+
     public function getWebProperty()
     {
         $webProperty = craft()->fileCache->get('analytics.webProperty');
@@ -85,7 +86,8 @@ class AnalyticsService extends BaseApplicationComponent
 
         // is analytics properly installed
 
-        $profileId = craft()->analytics->getSetting('profileId');
+        $profileId = $this->getSetting('profileId');
+
 
         if(!$profileId) {
             Craft::log(__METHOD__.' : Analytics profileId not found', LogLevel::Info, true);
@@ -140,7 +142,7 @@ class AnalyticsService extends BaseApplicationComponent
 
         // we're ok to roll when we're configured, installed, and that we have a defined profileId
 
-        $profileId = craft()->analytics->getSetting('profileId');
+        $profileId = $this->getSetting('profileId');
 
         if($this->isConfigured() && $this->isInstalled() && $profileId)
         {
@@ -161,7 +163,7 @@ class AnalyticsService extends BaseApplicationComponent
 
         $element = craft()->urlManager->getMatchedElement();
 
-        $profileId = craft()->analytics->getSetting('profileId');
+        $profileId = $this->getSetting('profileId');
 
         $variables = array('id' => $profileId, 'element' => $element);
 
@@ -251,17 +253,11 @@ class AnalyticsService extends BaseApplicationComponent
 
     public function getSetting($k)
     {
-        Craft::log(__METHOD__, LogLevel::Info, true);
+        $plugin = craft()->plugins->getPlugin('analytics');
+        $settings = $plugin->getSettings();
 
-        $settings = Analytics_SettingsRecord::model()->find();
 
-        if(!$settings) {
-            Craft::log(__METHOD__.' : Setting not found', LogLevel::Info, true);
-
-            return false;
-        }
-
-        return $settings->options[$k];
+        return $settings[$k];
     }
 
     // --------------------------------------------------------------------

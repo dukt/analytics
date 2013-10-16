@@ -1,0 +1,10 @@
+{% set data = {
+	title:"Audience : Language",
+	chartType:'donut',
+	dimensions:'ga:language',
+	metric:'ga:visits',
+	periodQuantity: settings.periodQuantity,
+	periodUnit: settings.periodUnit
+} %}
+
+{{data|json_encode()|raw}}

@@ -1,0 +1,10 @@
+{% set data = {
+	title:"Acquisition : Keywords",
+	chartType:'donut',
+	dimensions:'ga:keyword',
+	metric:'ga:visits',
+	periodQuantity: settings.periodQuantity,
+	periodUnit: settings.periodUnit
+} %}
+
+{{data|json_encode()|raw}}

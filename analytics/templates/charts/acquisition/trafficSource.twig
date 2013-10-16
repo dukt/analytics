@@ -1,0 +1,10 @@
+{% set data = {
+	title:"Acquisition : Traffic Sources",
+	chartType:'donut',
+	dimensions:'ga:source',
+	metric:'ga:visits',
+	periodQuantity: settings.periodQuantity,
+	periodUnit: settings.periodUnit
+} %}
+
+{{data|json_encode()|raw}}

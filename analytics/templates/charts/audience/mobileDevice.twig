@@ -1,0 +1,10 @@
+{% set data = {
+	title:"Audience : Mobile Device",
+	chartType:'donut',
+	dimensions:'ga:mobileDeviceInfo',
+	metric:'ga:visits',
+	periodQuantity: settings.periodQuantity,
+	periodUnit: settings.periodUnit
+} %}
+
+{{data|json_encode()|raw}}

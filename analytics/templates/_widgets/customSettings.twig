@@ -1,15 +1,17 @@
 {% import "_includes/forms" as forms %}
 
-<hr />
-
-<h2>Chart Settings</h2>
 {{ forms.textField({
-	label: "Title"|t,
+	label: "Custom Widget Title"|t,
 	id: 'title',
 	name: 'title',
 	value: settings.title,
 	errors: settings.getErrors('title')
 }) }}
+
+
+<hr />
+
+<h2>Chart Settings</h2>
 
 {{ forms.selectField({
     label: "Chart Type",

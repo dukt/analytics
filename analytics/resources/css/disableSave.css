@@ -1,0 +1,7 @@
+#content input.submit {
+	display: none;
+}
+
+.force {
+	display: inline !important;
+}

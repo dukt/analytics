@@ -1,0 +1,30 @@
+{% extends "analytics/_layout" %}
+
+
+{% set selectedTab = 'acquisition' %}
+
+{% set content %}
+
+
+    <div class="chartBlock">
+        {% include 'analytics/_chart' with {
+            metric: 'ga:visits',
+            dimensions:'ga:source',
+            title: 'Sources',
+            type:'donut'
+        } %}
+    </div>
+
+    <hr />
+
+    <div class="chartBlock">
+        {% include 'analytics/_chart' with {
+            dimensions:'ga:keyword',
+            metric: 'ga:visits',
+            title: 'Search Keywords',
+            type:'donut'
+        } %}
+    </div>
+
+    <div class="clear"></div>
+{% endset %}

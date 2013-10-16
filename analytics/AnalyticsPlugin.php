@@ -59,9 +59,15 @@ class AnalyticsPlugin extends BasePlugin
      */
     public function hasCpSection()
     {
-        return true;
+        return false;
     }
 
+    protected function defineSettings()
+    {
+        return array(
+            'profileId' => array(AttributeType::String),
+        );
+    }
 
     public function hookRegisterCpRoutes()
     {
@@ -69,4 +75,12 @@ class AnalyticsPlugin extends BasePlugin
             'analytics\/install\/(?P<page>.*)' => 'analytics/install/index',
         );
     }
+
+
+    public function getSettingsHtml()
+    {
+       return craft()->templates->render('analytics/settings', array(
+           'settings' => $this->getSettings()
+       ));
+   }
 }
