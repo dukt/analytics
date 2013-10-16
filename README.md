@@ -4,7 +4,8 @@ Connect your Craft website to Google Analytics and get advanced reports and simp
 
 - [Installation](#install)
 - [Updating the plugin](#update)
-- [Usage](#usage)
+- [Widgets](#widgets)
+- [Tracking Code](#code)
 - [Tracking Events](#track-events)
 - [Tracking Downloads](#track-downloads)
 - [API Reference](#api)
@@ -23,12 +24,35 @@ Connect your Craft website to Google Analytics and get advanced reports and simp
 <a id="update"></a>
 ## Updating the plugin
 
-Analytics add-on notices you when an update is available and lets you download and install it automatically.
+During beta, you might have to uninstall/reinstall Analytics when an update is released.
 
-If you need to manually update Analytics, simply replace **craft/plugins/analytics** folder.
+Simply replace the analytics plugin files and install the plugin in **Settings / Plugins**.
 
-<a id="usage"></a>
-## Usage
+<a id="widgets"></a>
+## Widgets
+
+**Analytics Chart Widget**
+
+You can use Analytics Chart widget to display several information from Google Analytics :
+
+- Audience
+	- Browser
+	- Country
+	- Is Mobile
+	- Language
+	- Mobile Device
+	- Visits
+- Acquisition
+	- Keywords
+	- Social
+	- Traffic
+- Behavior
+	- Pages
+
+You can set up as many widgets as you like in order to get the right infos on you Dashboard, in a colorful way.
+
+<a id="code"></a>
+## Tracking Code
 
 You must have selected a website profile in **Admin / Analytics** in order to get the Google Analytics code up and running.
 

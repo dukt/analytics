@@ -12,7 +12,7 @@
 
 namespace Craft;
 
-class Analytics_CustomWidget extends BaseWidget
+class Analytics_CustomWidget_disabled extends BaseWidget
 {
     public function getName()
     {
