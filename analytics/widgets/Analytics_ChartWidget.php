@@ -2,7 +2,7 @@
 
 namespace Craft;
 
-class Analytics_ChartWidget extends BaseWidget
+class Analytics_ChartWidget_disabled extends BaseWidget
 {
     public function getName()
     {

@@ -1,0 +1,57 @@
+{% extends "analytics/_widgets/_layout" %}
+
+{% includeJsResource 'analytics/js/widget.js' %}
+
+{% block body %}
+
+	<div class="analyticsTabs">
+		<ul class="analyticsNav">
+			<li><a href="#week">All</a></li>
+			<li><a href="#year">Landing</a></li>
+			<li><a href="#year">Exit</a></li>
+		</ul>
+
+		<div class="clear"></div>
+
+		<div class="analyticsTab hidden">
+			{% include 'analytics/_widgets/_chart' with {
+			    settings: {
+					title:"Pages : All",
+					chartType:'donut',
+					dimensions:'ga:pagePath',
+					metric:'ga:visits',
+					periodQuantity: 1,
+					periodUnit: 'month'
+				}
+			} %}
+		</div>
+
+		<div class="analyticsTab hidden">
+			{% include 'analytics/_widgets/_chart' with {
+			    settings: {
+					title:"Pages : Landing",
+					chartType:'donut',
+					dimensions:'ga:landingPagePath',
+					metric:'ga:visits',
+					periodQuantity: 1,
+					periodUnit: 'month'
+				}
+			} %}
+		</div>
+
+		<div class="analyticsTab hidden">
+			{% include 'analytics/_widgets/_chart' with {
+			    settings: {
+					title:"Pages : Exit",
+					chartType:'donut',
+					dimensions:'ga:exitPagePath',
+					metric:'ga:visits',
+					periodQuantity: 1,
+					periodUnit: 'month'
+				}
+			} %}
+		</div>
+	</div>
+
+
+{% endblock %}

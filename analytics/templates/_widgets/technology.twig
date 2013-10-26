@@ -1,0 +1,57 @@
+{% extends "analytics/_widgets/_layout" %}
+
+{% includeJsResource 'analytics/js/widget.js' %}
+
+{% block body %}
+
+	<div class="analyticsTabs">
+		<ul class="analyticsNav">
+			<li><a href="#week">Browser</a></li>
+			<li><a href="#month">OS</a></li>
+			<li><a href="#year">Resolution</a></li>
+		</ul>
+
+		<div class="clear"></div>
+
+		<div class="analyticsTab hidden">
+			{% include 'analytics/_widgets/_chart' with {
+			    settings: {
+					title:"Audience : Browsers",
+					chartType:'donut',
+					dimensions:'ga:browser',
+					metric:'ga:visits',
+					periodQuantity: 1,
+					periodUnit: 'month'
+				}
+			} %}
+		</div>
+
+		<div class="analyticsTab hidden">
+			{% include 'analytics/_widgets/_chart' with {
+			    settings: {
+					title:"Audience : OS",
+					chartType:'donut',
+					dimensions:'ga:operatingSystem',
+					metric:'ga:visits',
+					periodQuantity: 1,
+					periodUnit: 'month'
+				}
+			} %}
+		</div>
+
+		<div class="analyticsTab hidden">
+			{% include 'analytics/_widgets/_chart' with {
+			    settings: {
+					title:"Audience : Resolution",
+					chartType:'donut',
+					dimensions:'ga:screenResolution',
+					metric:'ga:visits',
+					periodQuantity: 1,
+					periodUnit: 'month'
+				}
+			} %}
+		</div>
+	</div>
+
+
+{% endblock %}
