@@ -82,5 +82,5 @@ class AnalyticsPlugin extends BasePlugin
        return craft()->templates->render('analytics/settings', array(
            'settings' => $this->getSettings()
        ));
-   }
+    }
 }

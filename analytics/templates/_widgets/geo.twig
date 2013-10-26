@@ -1,0 +1,44 @@
+{% extends "analytics/_widgets/_layout" %}
+
+{% includeJsResource 'analytics/js/widget.js' %}
+
+{% block body %}
+
+	<div class="analyticsTabs">
+		<ul class="analyticsNav">
+			<li><a href="#week">Language</a></li>
+			<li><a href="#month">Location</a></li>
+		</ul>
+
+		<div class="clear"></div>
+
+		<div class="analyticsTab hidden">
+			{% include 'analytics/_widgets/_chart' with {
+			    settings: {
+					title:"Audience : Language",
+					chartType:'donut',
+					dimensions:'ga:language',
+					metric:'ga:visits',
+					periodQuantity: 1,
+					periodUnit: 'month'
+				}
+			} %}
+		</div>
+
+		<div class="analyticsTab hidden">
+			{% include 'analytics/_widgets/_chart' with {
+			    settings: {
+					title:"Audience : Country",
+					chartType:'donut',
+					dimensions:'ga:country',
+					metric:'ga:visits',
+					periodQuantity: 1,
+					periodUnit: 'month'
+				}
+			} %}
+		</div>
+
+	</div>
+
+
+{% endblock %}

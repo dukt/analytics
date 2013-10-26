@@ -56,7 +56,13 @@
 			{% endif %}
 		{% endif %}
 
+		{% set account = false %}
+
 		{% if token %}
+			{% set account = craft.oauth.getAccount('google', 'analytics.system') %}
+		{% endif %}
+
+		{% if account %}
 
 			<h2 class="first">Plugin Settings</h2>
 
@@ -76,8 +82,6 @@
 
 			<hr />
 
-			{% set account = craft.oauth.getAccount('google', 'analytics.system') %}
-
 			<h2 class="first">Google Analytics Account</h2>
 
 			<ul>
@@ -88,9 +92,6 @@
 			<div class="buttons">
 				<a class="btn small" href="{{craft.oauth.disconnect('google', 'analytics.system')}}">Disconnect</a>
 			</div>
-
-
-
 
 		{% else %}
 
