@@ -1,25 +1,3 @@
-{#
-{% set title = settings.title %}
-
-{% if title is not defined %}
-    {% set title = "Default Title" %}
-{% endif %}
-
-{% if metric is not defined %}
-    {% set metric = "" %}
-{% endif %}
-
-{% if type is not defined %}
-    {% set type = "column" %}
-{% endif %}
-
-
-'sort': '-ga:visits',
-        'max-results' : 10
-
-#}
-
-
 {% set profile = craft.analytics.profile %}
 {% set webProperty = craft.analytics.webProperty %}
 
@@ -29,15 +7,12 @@
     param3 : now|date("Y-m-d"),
     param4 : settings.metric,
     param5 : {
-        'dimensions' : settings.dimensions,
-
+        'dimensions' : settings.dimensions
     }
 } %}
 
 
 {% if settings.chartType == "donut" %}
-
-    {# title: settings.title, #}
 
     {% set defaultChartOptions = {
 
@@ -81,4 +56,4 @@
     }
 } %}
 
-{% include 'analytics/_chartElement' with chart %}
+{% include 'analytics/_includes/chartElement' with chart %}

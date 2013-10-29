@@ -64,11 +64,11 @@ class Analytics_ChartsController extends BaseController
 
         $variables = array('json' => $json);
 
-        $templatePath = craft()->path->getPluginsPath().'analytics/templates/';
+        // $templatePath = craft()->path->getPluginsPath().'analytics/templates/';
 
-        craft()->path->setTemplatesPath($templatePath);
+        // craft()->path->setTemplatesPath($templatePath);
 
-        $html = craft()->templates->render('_chartDraw', $variables);
+        $html = craft()->templates->render('analytics/_includes/chartDraw', $variables);
 
         $charset = craft()->templates->getTwig()->getCharset();
 

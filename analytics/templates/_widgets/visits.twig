@@ -2,6 +2,11 @@
 
 {% includeJsResource 'analytics/js/widget.js' %}
 
+
+{% set profile = craft.analytics.profile %}
+{% set webProperty = craft.analytics.webProperty %}
+
+
 {% block body %}
 
 	<div class="analyticsTabs">
@@ -14,41 +19,94 @@
 		<div class="clear"></div>
 
 		<div class="analyticsTab hidden">
-			{% include 'analytics/_widgets/_chart' with {
-			    settings: {
-					title:"Audience : Visits",
-					chartType:'column',
-					dimensions:'ga:day, ga:month, ga:year',
-					metric:'ga:visits',
-					periodQuantity: 1,
-					periodUnit: 'week'
-				}
+
+			{% include 'analytics/_includes/chartElement' with {
+			    chart: {
+			        chartQuery: {
+					    param1 : 'ga:' ~ profile.id,
+					    param2 : now|date_modify("-1 week")|date("Y-m-d"),
+					    param3 : now|date("Y-m-d"),
+					    param4 : 'ga:visits',
+					    param5 : {
+					        'dimensions' : 'ga:day, ga:month, ga:year',
+					        'sort' : 'ga:year, ga:month, ga:day',
+					    }
+					},
+			        chartOptions: {
+				        title: 'Audience Visits',
+				        chartType:'column',
+				        chartArea : {
+				            width:'100%',
+				            height:'100%',
+				            left:0,
+				            right:0,
+				            top:0,
+				            bottom:0
+				        }
+				    }
+			    }
 			} %}
+
 		</div>
 
 		<div class="analyticsTab hidden">
-			{% include 'analytics/_widgets/_chart' with {
-			    settings: {
-					title:"Audience : Visits",
-					chartType:'column',
-					dimensions:'ga:day, ga:month, ga:year',
-					metric:'ga:visits',
-					periodQuantity: 1,
-					periodUnit: 'month'
-				}
+
+			{% include 'analytics/_includes/chartElement' with {
+			    chart: {
+			        chartQuery: {
+					    param1 : 'ga:' ~ profile.id,
+					    param2 : now|date_modify("-1 month")|date("Y-m-d"),
+					    param3 : now|date("Y-m-d"),
+					    param4 : 'ga:visits',
+					    param5 : {
+					        'dimensions' : 'ga:day, ga:month, ga:year',
+					        'sort' : 'ga:year, ga:month, ga:day',
+					    }
+					},
+			        chartOptions: {
+				        title: 'Audience Visits',
+				        chartType:'column',
+				        chartArea : {
+				            width:'100%',
+				            height:'100%',
+				            left:0,
+				            right:0,
+				            top:0,
+				            bottom:0
+				        }
+				    }
+			    }
 			} %}
+
 		</div>
 
 		<div class="analyticsTab hidden">
-			{% include 'analytics/_widgets/_chart' with {
-			    settings: {
-					title:"Audience : Visits",
-					chartType:'column',
-					dimensions:'ga:day, ga:month, ga:year',
-					metric:'ga:visits',
-					periodQuantity: 1,
-					periodUnit: 'year'
-				}
+
+			{% include 'analytics/_includes/chartElement' with {
+			    chart: {
+			        chartQuery: {
+					    param1 : 'ga:' ~ profile.id,
+					    param2 : now|date_modify("-1 year")|date("Y-m-d"),
+					    param3 : now|date("Y-m-d"),
+					    param4 : 'ga:visits',
+					    param5 : {
+					        'dimensions' : 'ga:month, ga:year',
+					        'sort' : 'ga:year, ga:month',
+					    }
+					},
+			        chartOptions: {
+				        title: 'Audience : Visits',
+				        chartType:'column',
+				        chartArea : {
+				            width:'100%',
+				            height:'100%',
+				            left:0,
+				            right:0,
+				            top:0,
+				            bottom:0
+				        }
+				    }
+			    }
 			} %}
 		</div>
 	</div>

@@ -15,6 +15,7 @@ google.setOnLoadCallback(function() {
 
     var Dchart = function(element, dataArray, jsonOptions)
     {
+        console.log(dataArray);
         console.log('yo', dataArray);
         var elem = $(element);
         var obj = this;
