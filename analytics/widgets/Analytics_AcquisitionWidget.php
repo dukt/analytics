@@ -13,20 +13,10 @@ class Analytics_AcquisitionWidget extends BaseWidget
     {
         $variables = array();
 
-        $originalTemplatesPath = craft()->path->getTemplatesPath();
-
-        $templatePath = craft()->path->getPluginsPath().'analytics/templates/';
-
-        craft()->path->setTemplatesPath($templatePath);
-
-        $html = craft()->templates->render('_widgets/acquisition', $variables);
+        $html = craft()->templates->render('analytics/_widgets/acquisition', $variables);
 
         $charset = craft()->templates->getTwig()->getCharset();
 
-        $return = new \Twig_Markup($html, $charset);
-
-        craft()->path->setTemplatesPath($originalTemplatesPath);
-
-        return $return;
+        return new \Twig_Markup($html, $charset);
     }
 }
