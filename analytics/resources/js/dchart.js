@@ -2,25 +2,16 @@ var charts = {};
 
 google.load("visualization", "1", {packages:["corechart", "table"]});
 
-google.setOnLoadCallback(function() {
-
-    // initialize all dcharts once ready
-
-});
-
 (function($){
-
-
-
 
     var Dchart = function(element, dataArray, jsonOptions)
     {
-        console.log(dataArray);
-        console.log('yo', dataArray);
         var elem = $(element);
         var obj = this;
 
+
         // Merge options with defaults
+
         var settings = $.extend(true, {
             options: {
 
@@ -30,10 +21,10 @@ google.setOnLoadCallback(function() {
             },
             chartOptions: {
                 chartType: 'line',
-                // title:'Default Title'
             }
 
         }, jsonOptions);
+
 
         // Public method
 
@@ -48,7 +39,7 @@ google.setOnLoadCallback(function() {
         this.initChart = function()
         {
             data = google.visualization.arrayToDataTable(dataArray);
-            console.log(settings.chartOptions.chartType);
+
             switch(settings.chartOptions.chartType) {
                 case 'line':
                     chartOptions = $.extend({
@@ -76,16 +67,9 @@ google.setOnLoadCallback(function() {
                         legend:'none',
                         sliceVisibilityThreshold:1/50,
                         pieHole:0.5,
-                        // chartArea : {
-                        //     width:'100%',
-                        //     height: '100%',
-                        //     top:0,
-                        //     bottom:0
-                        // },
                         vAxis: {textPosition:'in'},
                     }, settings.chartOptions || {});
 
-                    console.log(chartOptions);
                     chart = new google.visualization.ColumnChart(element);
 
                     break;
@@ -93,7 +77,6 @@ google.setOnLoadCallback(function() {
                 case 'donut':
 
                     chartOptions = $.extend(true, {
-                        // legend:{position:'bottom'},
                         legend:'none',
                         sliceVisibilityThreshold:1/50,
                         pieHole:0.5,

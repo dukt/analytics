@@ -6,8 +6,6 @@ $(document).ready(function() {
 
         var json = $.parseJSON(html);
 
-        console.log(json);
-
         Craft.postActionRequest('analytics/charts/parse', json, function(response) {
 
             response = $.parseJSON(response);
