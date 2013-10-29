@@ -38,8 +38,6 @@ class Analytics_CustomWidget_disabled extends BaseWidget
         return $settings->title;
     }
 
-
-
     public function getBodyHtml()
     {
 
