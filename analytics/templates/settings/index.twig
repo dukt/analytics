@@ -18,15 +18,11 @@
 			OAuth READY
 		{% endif %}
 
-		<hr />
-
 		<div class="buttons">
 			<a class="btn" href="{{url('settings/plugins')}}">Manage plugins</a>
 		</div>
 	{% else %}
 		<p>Analytics plugin requires OAuth plugin for Craft.</p>
-
-		<hr />
 
 		<div class="buttons">
 			<a class="btn" href="{{actionUrl('analytics/plugin/download', {plugin:'oauth'})}}">Download OAuth plugin</a>
