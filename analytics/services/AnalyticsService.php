@@ -289,7 +289,15 @@ class AnalyticsService extends BaseApplicationComponent
             $properties = array();
 
             foreach($items as $item) {
-                $properties[$item['id']] = '('.$item['id'].') '.$item['websiteUrl'];
+                $name = $item['id'];
+
+                if(!empty($item['websiteUrl'])) {
+                    $name .= ' - '.$item['websiteUrl'];
+                } elseif(!empty($item['name'])) {
+                    $name .= ' - '.$item['name'];
+                }
+
+                $properties[$item['id']] = $name;
             }
 
             return $properties;
