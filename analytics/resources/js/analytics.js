@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    charts = $('.dukt-chart');
+    charts = $('.analyticsChart');
 
     charts.each(function(k,v) {
         var html = $('.data', v).html();

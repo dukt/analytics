@@ -1,12 +1,10 @@
 {% if craft.analytics.isConfigured %}
 
 	{% includeCssResource "analytics/css/styles.css" %}
-	{% includeCssResource "analytics/css/widget-activity.css" %}
 
 	{%- includeJsResource 'analytics/js/jsapi.js' first %}
-
 	{% includeJsResource 'analytics/js/dchart.js' %}
-	{% includeJsResource 'analytics/js/dukt-chart.js' %}
+	{% includeJsResource 'analytics/js/analytics.js' %}
 
 
 	{% block body %}

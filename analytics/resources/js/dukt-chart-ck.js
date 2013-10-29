@@ -1,1 +1,0 @@
-$(document).ready(function(){charts=$(".dukt-chart");charts.each(function(e,t){var n=$(".data",t).html(),r=$.parseJSON(n);console.log(r);Craft.postActionRequest("analytics/charts/parse",r,function(e){e=$.parseJSON(e);$(t).dchart(e,r)})})});
