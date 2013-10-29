@@ -24,7 +24,7 @@
 			<a class="btn" href="{{url('settings/plugins')}}">Manage plugins</a>
 		</div>
 	{% else %}
-		<p>Twitter plugin requires OAuth plugin for Craft.</p>
+		<p>Analytics plugin requires OAuth plugin for Craft.</p>
 
 		<hr />
 
@@ -39,7 +39,7 @@
 
 	{% if not provider %}
 		<h2 class="first">Google provider not configured</h2>
-		<p>Please fill API client id &amp; secret for Twitter provider.</p>
+		<p>Please fill API client id &amp; secret for Analytics provider.</p>
 
 		<hr />
 
@@ -64,6 +64,22 @@
 
 		{% if account %}
 
+
+			<h2 class="first">Google Analytics Account</h2>
+
+			<p>You are authenticated to Google Analytics with the following account :</p>
+
+			<ul>
+				<li><strong>UID : </strong> {{account.uid}}</li>
+				<li><strong>Name : </strong> {{account.name}}</li>
+			</ul>
+
+			<p>
+				<a class="btn small" href="{{craft.oauth.disconnect('google', 'analytics.system')}}">Disconnect</a>
+			</p>
+
+			<hr />
+
 			<h2 class="first">Plugin Settings</h2>
 
             {{ forms.selectField({
@@ -80,22 +96,10 @@
 				<input type="submit" class="btn submit force" value="Save">
 			</div>
 
-			<hr />
-
-			<h2 class="first">Google Analytics Account</h2>
-
-			<ul>
-				<li><strong>UID : </strong> {{account.uid}}</li>
-				<li><strong>Name : </strong> {{account.name}}</li>
-			</ul>
-
-			<div class="buttons">
-				<a class="btn small" href="{{craft.oauth.disconnect('google', 'analytics.system')}}">Disconnect</a>
-			</div>
 
 		{% else %}
 
-			<h2 class="first">Connect to Google</h2>
+			<h2 class="first">Google Analytics Account</h2>
 
 			<p>You need to connect Craft to a Google account in order to get started.</p>
 
