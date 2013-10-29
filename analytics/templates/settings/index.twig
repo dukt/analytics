@@ -38,8 +38,14 @@
 
 	{% set provider = craft.oauth.getProvider('google', 'analytics.system') %}
 
-	{% if provider.clientId is empty %}
-		{% set provider = false %}
+	{% if provider['clientId'] is defined %}
+
+		{% if provider.clientId is empty %}
+			{% set provider = false %}
+		{% endif %}
+
+	{% else %}
+	    {% set provider = false %}
 	{% endif %}
 
 	{% if not provider %}
@@ -47,7 +53,7 @@
 		<p>Please fill API client id &amp; secret for Analytics provider.</p>
 
 		<div class="buttons">
-			<a class="btn" href="{{url('oauth/settings/google')}}">Google OAuth settings</a>
+			<a class="btn" href="{{url('oauth/settings/google')}}" target="_blank">Google OAuth settings</a>
 		</div>
 	{% else %}
 
