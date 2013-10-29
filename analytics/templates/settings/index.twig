@@ -29,7 +29,8 @@
 		<hr />
 
 		<div class="buttons">
-			<a class="btn" target="_blank" href="https://dukt.net/craft/oauth/">Download OAuth plugin</a>
+			<!-- <a class="btn" target="_blank" href="https://dukt.net/craft/oauth/">Download OAuth plugin</a> -->
+			<a class="btn" target="_blank" href="{{actionUrl('analytics/plugin/download', {plugin:'oauth'})}}">Download OAuth plugin</a>
 		</div>
 	{% endif %}
 
@@ -37,11 +38,13 @@
 
 	{% set provider = craft.oauth.getProvider('google', 'analytics.system') %}
 
+	{% if provider.clientId is empty %}
+		{% set provider = false %}
+	{% endif %}
+
 	{% if not provider %}
 		<h2 class="first">Google provider not configured</h2>
 		<p>Please fill API client id &amp; secret for Analytics provider.</p>
-
-		<hr />
 
 		<div class="buttons">
 			<a class="btn" href="{{url('oauth/settings/google')}}">Google OAuth settings</a>
@@ -103,15 +106,19 @@
 
 			<p>You need to connect Craft to a Google account in order to get started.</p>
 
+			<p>Getting errors trying to connect ? Make sure that your <a href="{{url('oauth/settings/google')}}" target="_blank">Google OAuth Settings API key &amp; secret</a> are correct.</p>
+
 			{% set scope = [
 			    'https://www.googleapis.com/auth/userinfo.profile',
 			    'https://www.googleapis.com/auth/userinfo.email',
 			    'https://www.googleapis.com/auth/analytics'
 			    ] %}
 
-			<div class="buttons">
+			<p>
 				<a class="btn submit" href="{{craft.oauth.connect('google', scope, 'analytics.system')}}">Connect to Google Analytics</a>
-			</div>
+			</p>
+
+
 		{% endif %}
 	{% endif %}
 

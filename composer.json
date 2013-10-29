@@ -1,0 +1,10 @@
+{
+    "config": {
+        "vendor-dir": "analytics/vendor/"
+    },
+    "require": {
+        "php": ">=5.3.6",
+        "vipsoft/unzip": "dev-master",
+        "symfony/filesystem": "2.3.*@dev"
+    }
+}
