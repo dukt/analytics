@@ -25,75 +25,13 @@ class AnalyticsVariable
         return craft()->analytics->getWebProperty();
     }
 
-    // --------------------------------------------------------------------
-
-    public function isInstalled()
-    {
-        return craft()->analytics->isInstalled();
-    }
-
-    // --------------------------------------------------------------------
-
-    public function isConfigured()
-    {
-        return craft()->analytics->isConfigured();
-    }
-
-    // --------------------------------------------------------------------
-
     public function isOk()
     {
         return craft()->analytics->isOk();
     }
 
-    // --------------------------------------------------------------------
-
-    public function checkUpdates($pluginClass, $pluginHandle)
-    {
-        return craft()->analytics->checkUpdates($pluginClass, $pluginHandle);
-    }
-
-    // --------------------------------------------------------------------
-
-    public function trackEvent($category, $action=null, $label=null, $value=0)
-    {
-        return craft()->analytics->trackEvent($category, $action, $label, $value);
-    }
-
-    // --------------------------------------------------------------------
-
-    public function getSetting($k)
-    {
-        return craft()->analytics->getSetting($k);
-    }
-
-    // --------------------------------------------------------------------
-
     public function properties()
     {
         return craft()->analytics->properties();
     }
-
-    // --------------------------------------------------------------------
-
-    public function code()
-    {
-        return craft()->analytics->code();
-    }
-
-    // --------------------------------------------------------------------
-
-    public function api()
-    {
-            return craft()->analytics->api();
-    }
-
-    // --------------------------------------------------------------------
-
-    public function pluginCheckUpdates($pluginClass, $pluginHandle)
-    {
-        return craft()->analytics_plugin->checkUpdates($pluginClass, $pluginHandle);
-    }
-
-    // --------------------------------------------------------------------
 }
