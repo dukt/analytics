@@ -48,7 +48,7 @@
 		<p>Please fill API client id &amp; secret for Analytics provider.</p>
 
 		<div class="buttons">
-			<a class="btn" href="{{url('oauth/settings/google')}}" target="_blank">Google OAuth settings</a>
+			<a class="btn" href="{{url('oauth/settings/google')}}">Google OAuth settings</a>
 		</div>
 	{% else %}
 
@@ -107,7 +107,7 @@
 
 			<p>You need to connect Craft to a Google account in order to get started.</p>
 
-			<p>Getting errors trying to connect ? Make sure that your <a href="{{url('oauth/settings/google')}}" target="_blank">Google OAuth Settings API key &amp; secret</a> are correct.</p>
+			<p>Getting errors trying to connect ? Make sure that your <a href="{{url('oauth/settings/google')}}">Google OAuth Settings API key &amp; secret</a> are correct.</p>
 
 			{% set scope = [
 			    'https://www.googleapis.com/auth/userinfo.profile',
