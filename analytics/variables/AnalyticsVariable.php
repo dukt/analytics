@@ -25,9 +25,9 @@ class AnalyticsVariable
         return craft()->analytics->getWebProperty();
     }
 
-    public function isOk()
+    public function isConfigured()
     {
-        return craft()->analytics->isOk();
+        return craft()->analytics->isConfigured();
     }
 
     public function properties()

@@ -102,28 +102,6 @@ class AnalyticsService extends BaseApplicationComponent
         return $webProperty;
     }
 
-
-    public function isOk()
-    {
-
-        Craft::log(__METHOD__, LogLevel::Info, true);
-
-        // we're ok to roll when we're configured, installed, and that we have a defined profileId
-
-        $profileId = $this->getSetting('profileId');
-
-        if($this->isConfigured() && $this->isInstalled() && $profileId)
-        {
-            Craft::log(__METHOD__.' : true', LogLevel::Info, true);
-            return true;
-        }
-
-        Craft::log(__METHOD__.' : false. Not configured, not installed, or profileId not found', LogLevel::Info, true);
-
-        return false;
-    }
-
-
     public function properties()
     {
 
@@ -174,16 +152,14 @@ class AnalyticsService extends BaseApplicationComponent
     public function getSetting($k)
     {
         $plugin = craft()->plugins->getPlugin('analytics');
-        $settings = $plugin->getSettings();
 
+        $settings = $plugin->getSettings();
 
         return $settings[$k];
     }
 
     public function isConfigured()
     {
-        Craft::log('AnalyticsService->isConfigured()', LogLevel::Info, true);
-
         // check if plugin has finished installation process
 
         if(!$this->isInstalled()) {
@@ -193,8 +169,6 @@ class AnalyticsService extends BaseApplicationComponent
 
         // check if api is available
 
-
-
         $api = craft()->analytics->api();
 
         if(!$api) {
@@ -203,7 +177,7 @@ class AnalyticsService extends BaseApplicationComponent
         }
 
 
-        // is analytics properly installed
+        // check if profile id is set up
 
         $profileId = $this->getSetting('profileId');
 
@@ -235,6 +209,7 @@ class AnalyticsService extends BaseApplicationComponent
             Craft::log(__METHOD__.' : OAuth plugin not installed', LogLevel::Info, true);
             return false;
         }
+
 
         // try to get an account
 
