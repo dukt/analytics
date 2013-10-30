@@ -2,12 +2,10 @@
 
 {% includeJsResource 'analytics/js/widget.js' %}
 
-
-{% set profile = craft.analytics.profile %}
-{% set webProperty = craft.analytics.webProperty %}
-
-
 {% block body %}
+
+	{% set profile = craft.analytics.profile %}
+	{% set webProperty = craft.analytics.webProperty %}
 
 	<div class="analyticsTabs">
 		<ul class="analyticsNav">
