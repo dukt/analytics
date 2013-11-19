@@ -64,6 +64,16 @@ class AnalyticsService extends BaseApplicationComponent
         return $api;
     }
 
+    public function getAccount()
+    {
+
+        try {
+            return @craft()->oauth->getAccount('google', 'analytics.system');
+        } catch(\Exception $e) {
+            return false;
+        }
+    }
+
     public function getProfile()
     {
         $webProperty = $this->getWebProperty();
@@ -107,7 +117,7 @@ class AnalyticsService extends BaseApplicationComponent
 
         Craft::log(__METHOD__, LogLevel::Info, true);
 
-        // try {
+        try {
 
             $api = craft()->analytics->api();
 
@@ -141,12 +151,12 @@ class AnalyticsService extends BaseApplicationComponent
             }
 
             return $properties;
-        // } catch(\Exception $e) {
+        } catch(\Exception $e) {
 
-        //     Craft::log(__METHOD__.' : Crashed with error : '.$e->getMessage(), LogLevel::Info, true);
+            Craft::log(__METHOD__.' : Crashed with error : '.$e->getMessage(), LogLevel::Info, true);
 
-        //     return false;
-        // }
+            return false;
+        }
     }
 
     public function getSetting($k)

@@ -63,7 +63,7 @@
 		{% set account = false %}
 
 		{% if token %}
-			{% set account = craft.oauth.getAccount('google', 'analytics.system') %}
+			{% set account = craft.analytics.account() %}
 		{% endif %}
 
 		{% if account %}

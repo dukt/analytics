@@ -4,7 +4,7 @@ $(document).ready(function() {
 
 	analyticsRealtimeRequest();
 
-	setInterval(analyticsRealtimeRequest, 5000);
+	setInterval(analyticsRealtimeRequest, 10000);
 });
 
 function analyticsRealtimeRequest()

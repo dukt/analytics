@@ -34,39 +34,8 @@ class AnalyticsVariable
     {
         return craft()->analytics->properties();
     }
-
-    public function realtime2()
+    public function getAccount()
     {
-        $profile = $this->getProfile();
-
-        $optParams = array('dimensions' => 'ga:pagePath');
-
-
-        $results = craft()->analytics->api()->data_ga->get(
-            'ga:'.$profile['id'],
-            date('Y-m-d', strtotime('-1 week')),
-            date("Y-m-d"),
-            'ga:visits',
-            array(
-                'dimensions' => 'ga:day, ga:month, ga:year',
-                'sort' => 'ga:year, ga:month, ga:day',
-            )
-        );
-
-        var_dump($results);
-
-    }
-    public function realtime()
-    {
-        $profile = $this->getProfile();
-
-        $results = craft()->analytics->api()->data_realtime->get(
-            'ga:'.$profile['id'],
-            'ga:activeVisitors',
-            array('dimensions' => 'ga:pagePath')
-        );
-
-        var_dump($results);
-
+        return craft()->analytics->getAccount();
     }
 }
