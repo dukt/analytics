@@ -20,9 +20,14 @@ function analyticsRealtimeRequest()
 		// realtime
 		console.log('get realtime response', response);
 
-		$('.analytics-realtime .active-visitors .count').text(response.total);
+		var newVisitor = response.visitorType.newVisitor;
+		var returningVisitor = response.visitorType.returningVisitor;
 
-		if (response.total > 0) {
+		var calcTotal = ((returningVisitor * 1) + (newVisitor * 1));
+
+		$('.analytics-realtime .active-visitors .count').text(calcTotal);
+
+		if (calcTotal > 0) {
 			$('.analytics-realtime .progress').removeClass('hidden');
 			$('.analytics-realtime .legend').removeClass('hidden');
 		} else {
@@ -30,10 +35,6 @@ function analyticsRealtimeRequest()
 			$('.analytics-realtime .legend').addClass('hidden');
 		}
 
-		var newVisitor = response.visitorType.newVisitor;
-		var returningVisitor = response.visitorType.returningVisitor;
-
-		var calcTotal = (returningVisitor + newVisitor);
 
 		if(calcTotal > 0) {
 			var blue = Math.round(100 * newVisitor / calcTotal);
@@ -52,7 +53,7 @@ function analyticsRealtimeRequest()
 		// realtime content
 
 
-		if (response.total > 0) {
+		if (calcTotal > 0) {
 			$('.no-active-visitors').addClass('hidden');
 			$('.analytics-realtime-content table').removeClass('hidden');
 

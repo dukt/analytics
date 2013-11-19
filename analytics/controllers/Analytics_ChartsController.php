@@ -42,11 +42,29 @@ class Analytics_ChartsController extends BaseController
         }
 
         if(!empty($results['rows'][0][1])) {
-            $data['visitorType']['newVisitor'] = $results['rows'][0][1];
+            switch($results['rows'][0][0]) {
+                case "RETURNING":
+                $data['visitorType']['returningVisitor'] = $results['rows'][0][1];
+                break;
+
+                case "NEW":
+                $data['visitorType']['newVisitor'] = $results['rows'][0][1];
+                break;
+            }
+
         }
 
         if(!empty($results['rows'][1][1])) {
-            $data['visitorType']['returningVisitor'] = $results['rows'][1][1];
+            switch($results['rows'][1][0]) {
+                case "RETURNING":
+                $data['visitorType']['returningVisitor'] = $results['rows'][1][1];
+                break;
+
+                case "NEW":
+                $data['visitorType']['newVisitor'] = $results['rows'][1][1];
+                break;
+            }
+
         }
 
 
