@@ -24,7 +24,7 @@ if (!extension_loaded('pdo') || !extension_loaded('pdo_sqlite')) {
  * Include the library files for the api client and AdSense service class.
  */
 require_once "../../src/Google_Client.php";
-require_once "../../src/contrib/Google_AdsenseService.php";
+require_once "../../src/contrib/Google_AdSenseService.php";
 
 /**
  * Handles authentication and OAuth token storing.
@@ -67,6 +67,10 @@ class AdSenseAuth {
   public function authenticate($user) {
     $this->user = $user;
     $dbh = new PDO('sqlite:examples.sqlite');
+    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $stmt = $dbh->prepare('CREATE TABLE IF NOT EXISTS auth ' .
+        '(user VARCHAR(255), token VARCHAR(255))');
+    $stmt->execute();
     $token = $this->getToken($dbh);
     if (isset($token)) {
       // I already have the token.

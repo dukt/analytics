@@ -15,12 +15,8 @@
  * limitations under the License.
  */
 
-// Check for the required json and curl extensions, the Google APIs PHP Client
-// won't function without them.
-if (! function_exists('curl_init')) {
-  throw new Exception('Google PHP API Client requires the CURL PHP extension');
-}
-
+// Check for the json extension, the Google APIs PHP Client won't function
+// without it.
 if (! function_exists('json_decode')) {
   throw new Exception('Google PHP API Client requires the JSON PHP extension');
 }

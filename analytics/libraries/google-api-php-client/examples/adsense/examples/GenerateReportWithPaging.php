@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2011 Google Inc.
+ * Copyright 2012 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,10 +23,10 @@ require_once __DIR__ . "/../BaseExample.php";
  *
  * Please only use pagination if your application requires it due to memory or
  * storage constraints.
- * If you need to retrieve more than 5000 rows, please check generateReport, as
- * due to current limitations you will not be able to use paging for large
+ * If you need to retrieve more than 5000 rows, please check GenerateReport.php,
+ * as due to current limitations you will not be able to use paging for large
  * reports.
- * To get ad clients, run getAllAdClients.
+ * To get ad clients, run GetAllAdClients.php.
  * Tags: reports.generate
  *
  * @author Silvano Luciani <silvano.luciani@gmail.com>

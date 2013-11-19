@@ -21,7 +21,8 @@ require_once __DIR__ . "/../BaseExample.php";
 /**
  * Gets all custom channels an ad unit has been added to.
  *
- * To get ad clients, run getAllAdClients. To get ad units, run getAllAdUnits.
+ * To get ad clients, see GetAllAdClients.php.
+ * To get ad units, see GetAllAdUnits.php.
  * Tags: accounts.adunits.customchannels.list
  *
  * @author Silvano Luciani <silvano.luciani@gmail.com>
@@ -42,7 +43,7 @@ class GetAllCustomChannelsForAdUnit extends BaseExample {
           ->listAccountsAdunitsCustomchannels(
               $accountId, $adClientId, $adUnitId);
       $customChannels = $result['items'];
-      if (isset($customChannels)) {
+      if (empty($customChannels)) {
         foreach ($customChannels as $customChannel) {
           $content = array();
           $mainFormat =

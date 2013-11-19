@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2011 Google Inc.
+ * Copyright 2012 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ require_once __DIR__ . "/../BaseExample.php";
 /**
  * Gets all ad units in an ad client.
  *
- * To get ad clients, run getAllAdClients.
+ * To get ad clients, see GetAllAdClients.php.
  * Tags: adunits.list
  *
  * @author Silvano Luciani <silvano.luciani@gmail.com>

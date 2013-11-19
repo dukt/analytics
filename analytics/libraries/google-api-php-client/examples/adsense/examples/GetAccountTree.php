@@ -33,7 +33,7 @@ class GetAccountTree extends BaseExample {
     // Retrieve account with sub accounts.
     $account = $this->adSenseService->accounts->get($accountId, $optParams);
     $data = array();
-    $this->buildTree($account, &$data, null);
+    $this->buildTree($account, $data, null);
     $data = json_encode($data);
     $columns = array(
       array('string', 'Account ID'),
@@ -53,7 +53,7 @@ class GetAccountTree extends BaseExample {
    * @param array $data The data structure that represent the tree
    * @param string $parent The parent for the current node
    */
-  private function buildTree($account, $data, $parent) {
+  private function buildTree($account, &$data, $parent) {
     $data[] = array($account['name'], null, 1);
     if ($account['subAccounts']) {
       foreach($account['subAccounts'] as $subAccount) {

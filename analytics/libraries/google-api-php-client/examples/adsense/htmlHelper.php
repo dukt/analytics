@@ -140,6 +140,7 @@ function printListFooter() {
  */
 function printIndex($actions) {
   print '<ul class="nav">' . "\n";
+  sort($actions);
   foreach ($actions as $action) {
     print '<li><a class="highlight" href=?action=' . $action . '>'
         . actionNameToWords($action) . '</a></li>' . "\n";

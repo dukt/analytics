@@ -21,7 +21,7 @@ require_once __DIR__ . "/../BaseExample.php";
 /**
  * Gets all ad units corresponding to a specified custom channel.
  *
- * To get custom channels, run GetAllCustomChannels.
+ * To get custom channels, see GetAllCustomChannels.php.
  * Tags: accounts.customchannels.adunits.list
  *
  * @author Silvano Luciani <silvano.luciani@gmail.com>

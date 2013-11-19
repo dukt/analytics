@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2011 Google Inc.
+ * Copyright 2012 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ require_once __DIR__ . "/../BaseExample.php";
 /**
  * Gets all URL channels in an ad client.
  *
- * To get ad clients, run getAllAdClients.py.
+ * To get ad clients, see GetAllAdClients.php.
  * Tags: urlchannels.list
  *
  * @author Silvano Luciani <silvano.luciani@gmail.com>
@@ -39,7 +39,7 @@ class GetAllUrlChannels extends BaseExample {
       $result = $this->adSenseService->urlchannels
           ->listUrlchannels($adClientId, $optParams);
       $urlChannels = $result['items'];
-      if (isset($urlChannels)) {
+      if (empty($urlChannels)) {
         foreach ($urlChannels as $urlChannel) {
           $format = 'URL channel with URL pattern "%s" was found.';
           $content = sprintf($format, $urlChannel['urlPattern']);
