@@ -30,8 +30,13 @@ function analyticsRealtimeRequest()
 			$('.analytics-realtime .legend').addClass('hidden');
 		}
 
-		if(response.visitorType.newVisitor > 0) {
-			var blue = Math.round(100 * response.visitorType.returningVisitor / response.visitorType.newVisitor);
+		var newVisitor = response.visitorType.newVisitor;
+		var returningVisitor = response.visitorType.returningVisitor;
+
+		var calcTotal = (returningVisitor + newVisitor);
+
+		if(calcTotal > 0) {
+			var blue = Math.round(100 * newVisitor / calcTotal);
 		} else {
 			var blue = 100;
 		}
