@@ -1,0 +1,71 @@
+{% includeJsResource 'analytics/js/widget.js' %}
+{% includeJsResource 'analytics/js/realtime.js' %}
+{% includeCssResource 'analytics/css/styles.css' %}
+{% includeCssResource 'analytics/css/realtime.css' %}
+
+<div class="analyticsTabs">
+	<ul class="analyticsNav">
+		<li><a href="#visitors">Visitors</a></li>
+		<li><a href="#content">Content</a></li>
+	</ul>
+
+	<div class="analyticsTab hidden">
+
+		<div class="analytics-realtime">
+			<div class="active-visitors">
+				<span class="currently">Currently</span>
+				<strong class="count">0</strong>
+				<span class="txt">Active Visitors on your website</span>
+			</div>
+
+			<div class="progress hidden">
+				<div class="progress-bar blue" style="width: 35%">
+					<span>35%</span>
+				</div>
+				<div class="progress-bar green" style="width: 65%">
+					<span>65%</span>
+				</div>
+
+				<div class="clear"></div>
+			</div>
+
+			<ul class="legend hidden">
+				<li class="blue"><strong>50% </strong><span>Returning</span></li>
+				<li class="green"><strong>50% </strong><span>New</span></li>
+			</ul>
+		</div>
+
+	</div>
+
+
+	<div class="analyticsTab hidden">
+		<div class="analytics-realtime-content">
+
+			<div class="no-active-visitors">
+				<p class="center">There are not active visitors for now...</p>
+			</div>
+
+			<table class="data hidden">
+				<thead>
+					<tr>
+						<th>Page</th>
+						<th>Visitors</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr>
+						<td>/</td>
+						<td class="thin">2</td>
+					</tr>
+					<tr>
+						<td>/</td>
+						<td class="thin">1</td>
+					</tr>
+				</tbody>
+			</table>
+
+		</div>
+	</div>
+
+</div>

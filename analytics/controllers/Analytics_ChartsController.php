@@ -14,6 +14,59 @@ namespace Craft;
 
 class Analytics_ChartsController extends BaseController
 {
+    public function actionRealtime()
+    {
+        $profile = craft()->analytics->getProfile();
+
+        $data = array(
+            'total' => 0,
+            'visitorType' => array(
+                'newVisitor' => 0,
+                'returningVisitor' => 0
+            ),
+            'content' =>  array()
+        );
+
+
+        // visitor type
+
+        $results = craft()->analytics->api()->data_realtime->get(
+            'ga:'.$profile['id'],
+            'ga:activeVisitors',
+            array('dimensions' => 'ga:visitorType')
+        );
+
+
+        if(!empty($results['totalResults'])) {
+            $data['total'] = $results['totalResults'];
+        }
+
+        if(!empty($results['rows'][0][1])) {
+            $data['visitorType']['newVisitor'] = $results['rows'][0][1];
+        }
+
+        if(!empty($results['rows'][1][1])) {
+            $data['visitorType']['returningVisitor'] = $results['rows'][1][1];
+        }
+
+
+        // content
+
+        $results = craft()->analytics->api()->data_realtime->get(
+            'ga:'.$profile['id'],
+            'ga:activeVisitors',
+            array('dimensions' => 'ga:pagePath')
+        );
+
+        if(!empty($results['rows'])) {
+            foreach($results['rows'] as $row) {
+                $data['content'][$row[0]] = $row[1];
+            }
+        }
+
+        $this->returnJson($data);
+    }
+
     public function actionParse()
     {
         Craft::log(__METHOD__, LogLevel::Info, true);

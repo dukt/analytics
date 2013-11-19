@@ -1,0 +1,57 @@
+.analytics-realtime .active-visitors {
+  text-align: center;
+  margin-bottom: 1em;
+}
+.analytics-realtime .active-visitors .currently {
+  font-size: 1.5em;
+}
+.analytics-realtime .active-visitors .count {
+  display: block;
+  font-size: 10em;
+  line-height: 1.2em;
+}
+.analytics-realtime .progress {
+  background: red;
+  color: #fff;
+  margin: 2em 0;
+  text-align: center;
+}
+.analytics-realtime .progress .progress-bar {
+  float: left;
+}
+.analytics-realtime .progress .progress-bar span {
+  display: block;
+  padding: 0 0.5em;
+  line-height: 1.5em;
+}
+.analytics-realtime .progress .progress-bar.blue {
+  background: #058DC7;
+}
+.analytics-realtime .progress .progress-bar.green {
+  background: #50B431;
+}
+.analytics-realtime .legend {
+  text-align: center;
+}
+.analytics-realtime .legend li {
+  clear: left;
+  display: inline-block;
+  margin-right: 1em;
+}
+.analytics-realtime .legend li strong {
+  margin-top: 2px;
+  background: #eee;
+  width: 12px;
+  height: 12px;
+  border-radius: 12px;
+  display: block;
+  float: left;
+  margin-right: 0.3em;
+  text-indent: -3000px;
+}
+.analytics-realtime .legend li.blue strong {
+  background: #058dc7;
+}
+.analytics-realtime .legend li.green strong {
+  background: #50b431;
+}

@@ -14,6 +14,12 @@ namespace Craft;
 
 class AnalyticsPlugin extends BasePlugin
 {
+
+    public function hasCpSection()
+    {
+        return true;
+    }
+
     function getName()
     {
         return Craft::t('Analytics');
