@@ -5,7 +5,6 @@ namespace Craft;
 class Analytics_ReportsWidget extends BaseWidget
 {
 	private $types = array(
-		'all'           => 'All',
 		'acquisition' => "Acquisition",
 		'geo'         => "Geo",
 		'mobile'      => "Mobile",
@@ -46,7 +45,12 @@ class Analytics_ReportsWidget extends BaseWidget
 
     public function getBodyHtml()
     {
-        $variables = array();
+        $plugin = craft()->plugins->getPlugin('analytics');
+
+        $variables = array(
+            'settings' => $plugin->getSettings(),
+        );
+
         $settings = $this->getSettings();
 
         $html = craft()->templates->render('analytics/_widgets/'.$settings->type, $variables);

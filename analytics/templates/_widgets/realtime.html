@@ -1,3 +1,10 @@
+{% set myJs %}
+    var Analytics = {};
+    Analytics.realtimeRefreshInterval = {{settings.realtimeRefreshInterval|json_encode|raw}};
+{% endset %}
+
+{% includeJs myJs first %}
+
 {% includeJsResource 'analytics/js/widget.js' %}
 {% includeJsResource 'analytics/js/realtime.js' %}
 {% includeCssResource 'analytics/css/styles.css' %}

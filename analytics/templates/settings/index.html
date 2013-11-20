@@ -95,6 +95,14 @@
                 value: settings.profileId
             }) }}
 
+            {{ forms.textField({
+                label: "Real-Time Refresh Interval",
+                instructions: "Select an Analytics web profile to associate with your Craft website"|t,
+                name: 'realtimeRefreshInterval',
+                value: (settings.realtimeRefreshInterval ? settings.realtimeRefreshInterval : '10'),
+                size: 4
+            }) }}
+
 
 			<div class="buttons">
 				<input type="submit" class="btn submit force" value="Save">

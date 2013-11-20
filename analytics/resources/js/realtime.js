@@ -1,10 +1,18 @@
 $(document).ready(function() {
-
-	console.log('init realtime');
+	var refreshInterval = eval(Analytics.realtimeRefreshInterval);
+	console.log('realtime');
 
 	analyticsRealtimeRequest();
 
-	setInterval(analyticsRealtimeRequest, 10000);
+	if(refreshInterval == null) {
+		refreshInterval = 10; // Default to 10 seconds
+	} else if(refreshInterval<2) { // mini 2 seconds
+		refreshInterval = 100;
+	}
+
+	refreshInterval = refreshInterval * 1000; // to (ms)
+
+	setInterval(analyticsRealtimeRequest, refreshInterval);
 });
 
 function analyticsRealtimeRequest()
