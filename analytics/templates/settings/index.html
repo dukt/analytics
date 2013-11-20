@@ -88,7 +88,7 @@
 
             {{ forms.selectField({
                 first: true,
-                label: "Web Profile",
+                label: "Web Profile"|t,
                 instructions: "Select an Analytics web profile to associate with your Craft website"|t,
                 options: craft.analytics.properties(),
                 name: 'profileId',
@@ -96,7 +96,7 @@
             }) }}
 
             {{ forms.textField({
-                label: "Real-Time Refresh Interval",
+                label: "Real-Time Refresh Interval"|t,
                 instructions: "Interval in seconds between request to real-time API"|t,
                 name: 'realtimeRefreshInterval',
                 value: (settings.realtimeRefreshInterval ? settings.realtimeRefreshInterval : '10'),
