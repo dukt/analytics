@@ -37,9 +37,15 @@ class Analytics_ReportsWidget extends BaseWidget
 
     public function getSettingsHtml()
     {
+        $types = $this->getTypes();
+
+        if(!empty($types['realtime'])) {
+            $types['realtime'] .= ' (beta)';
+        }
+
         return craft()->templates->render('analytics/_widgets/settings', array(
            'settings' => $this->getSettings(),
-           'types' => $this->getTypes()
+           'types' => $types
         ));
     }
 
