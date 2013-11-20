@@ -11,7 +11,7 @@
 
 	{% if oauth %}
 		{% if not oauth.isInstalled %}
-			<p>{{'OAuth plugin is present but not installed. Please install &amp; enable it.'|t}}</p>
+			<p>{{'OAuth plugin is present but not installed. Please install & enable it.'|t}}</p>
 		{% elseif not oauth.isEnabled %}
 			<p>{{'OAuth is installed but is disabled. Please enable it.'|t}}</p>
 		{% else %}
@@ -45,7 +45,7 @@
 
 	{% if not provider %}
 		<h2 class="first">{{'Google provider not configured'|t}}</h2>
-		<p>{{'Please fill API client id &amp; secret for Analytics provider.'|t}}</p>
+		<p>{{'Please fill API client id & secret for Analytics provider.'|t}}</p>
 
 		<div class="buttons">
 			<a class="btn" href="{{url('oauth/settings/google')}}">{{'Google OAuth settings'|t}}</a>
@@ -115,7 +115,7 @@
 
 			<p>{{'You need to connect Craft to a Google account in order to get started.'|t}}</p>
 
-			<p>{{"Getting errors trying to connect"|t}} ? <a href="{{url('oauth/settings/google')}}">{{"Check Google API key &amp; secret in OAuth settings"|t}}</a>.</p>
+			<p>{{"Getting errors trying to connect"|t}} ? <a href="{{url('oauth/settings/google')}}">{{"Check Google API key & secret in OAuth settings"|t}}</a>.</p>
 
 			{% set scope = [
 			    'https://www.googleapis.com/auth/userinfo.profile',
