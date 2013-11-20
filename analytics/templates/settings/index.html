@@ -97,7 +97,7 @@
 
             {{ forms.textField({
                 label: "Real-Time Refresh Interval",
-                instructions: "Select an Analytics web profile to associate with your Craft website"|t,
+                instructions: "Interval in seconds between request to real-time API"|t,
                 name: 'realtimeRefreshInterval',
                 value: (settings.realtimeRefreshInterval ? settings.realtimeRefreshInterval : '10'),
                 size: 4
