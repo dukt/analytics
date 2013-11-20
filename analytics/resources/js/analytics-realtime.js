@@ -1,6 +1,7 @@
 $(document).ready(function() {
 	var refreshInterval = eval(Analytics.realtimeRefreshInterval);
-	console.log('realtime');
+
+	// console.log('realtime');
 
 	analyticsRealtimeRequest();
 
@@ -22,11 +23,12 @@ function analyticsRealtimeRequest()
 
 	};
 
-	console.log('send realtime request', data);
+	// console.log('send realtime request', data);
 
 	Craft.postActionRequest('analytics/charts/realtime', data, function(response) {
+
 		// realtime
-		console.log('get realtime response', response);
+		// console.log('get realtime response', response);
 
 		var newVisitor = response.visitorType.newVisitor;
 		var returningVisitor = response.visitorType.returningVisitor;
@@ -42,7 +44,6 @@ function analyticsRealtimeRequest()
 			$('.analytics-realtime .progress').addClass('hidden');
 			$('.analytics-realtime .legend').addClass('hidden');
 		}
-
 
 		if(calcTotal > 0) {
 			var blue = Math.round(100 * newVisitor / calcTotal);
