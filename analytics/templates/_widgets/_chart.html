@@ -1,6 +1,3 @@
-{% set profile = craft.analytics.profile %}
-{% set webProperty = craft.analytics.webProperty %}
-
 {% set chartQuery = {
     param1 : 'ga:' ~ profile.id,
     param2 : now|date_modify("-"~settings.periodQuantity~" "~settings.periodUnit~"s")|date("Y-m-d"),

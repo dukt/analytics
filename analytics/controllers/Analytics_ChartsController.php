@@ -16,73 +16,81 @@ class Analytics_ChartsController extends BaseController
 {
     public function actionRealtime()
     {
-        $profile = craft()->analytics->getProfile();
-
         $data = array(
-            'total' => 0,
+            'total' => '0',
             'visitorType' => array(
                 'newVisitor' => 0,
                 'returningVisitor' => 0
             ),
-            'content' =>  array()
+            'content' =>  array(),
+            'errors' => false
         );
 
+        try {
+            $profile = craft()->analytics->getProfile();
 
-        // visitor type
+            if(!empty($profile['id'])) {
 
-        $results = craft()->analytics->api()->data_realtime->get(
-            'ga:'.$profile['id'],
-            'ga:activeVisitors',
-            array('dimensions' => 'ga:visitorType')
-        );
+                // visitor type
+
+                $results = craft()->analytics->api()->data_realtime->get(
+                    'ga:'.$profile['id'],
+                    'ga:activeVisitors',
+                    array('dimensions' => 'ga:visitorType')
+                );
 
 
-        if(!empty($results['totalResults'])) {
-            $data['total'] = $results['totalResults'];
-        }
+                if(!empty($results['totalResults'])) {
+                    $data['total'] = $results['totalResults'];
+                }
 
-        if(!empty($results['rows'][0][1])) {
-            switch($results['rows'][0][0]) {
-                case "RETURNING":
-                $data['visitorType']['returningVisitor'] = $results['rows'][0][1];
-                break;
+                if(!empty($results['rows'][0][1])) {
+                    switch($results['rows'][0][0]) {
+                        case "RETURNING":
+                        $data['visitorType']['returningVisitor'] = $results['rows'][0][1];
+                        break;
 
-                case "NEW":
-                $data['visitorType']['newVisitor'] = $results['rows'][0][1];
-                break;
+                        case "NEW":
+                        $data['visitorType']['newVisitor'] = $results['rows'][0][1];
+                        break;
+                    }
+                }
+
+                if(!empty($results['rows'][1][1])) {
+                    switch($results['rows'][1][0]) {
+                        case "RETURNING":
+                        $data['visitorType']['returningVisitor'] = $results['rows'][1][1];
+                        break;
+
+                        case "NEW":
+                        $data['visitorType']['newVisitor'] = $results['rows'][1][1];
+                        break;
+                    }
+                }
+
+
+                // content
+
+                $results = craft()->analytics->api()->data_realtime->get(
+                    'ga:'.$profile['id'],
+                    'ga:activeVisitors',
+                    array('dimensions' => 'ga:pagePath')
+                );
+
+                if(!empty($results['rows'])) {
+                    foreach($results['rows'] as $row) {
+                        $data['content'][$row[0]] = $row[1];
+                    }
+                }
+            } else {
+                $data['errors'] = array(array('message' => "Please select a web profile"));
             }
-
-        }
-
-        if(!empty($results['rows'][1][1])) {
-            switch($results['rows'][1][0]) {
-                case "RETURNING":
-                $data['visitorType']['returningVisitor'] = $results['rows'][1][1];
-                break;
-
-                case "NEW":
-                $data['visitorType']['newVisitor'] = $results['rows'][1][1];
-                break;
-            }
-
-        }
-
-
-        // content
-
-        $results = craft()->analytics->api()->data_realtime->get(
-            'ga:'.$profile['id'],
-            'ga:activeVisitors',
-            array('dimensions' => 'ga:pagePath')
-        );
-
-        if(!empty($results['rows'])) {
-            foreach($results['rows'] as $row) {
-                $data['content'][$row[0]] = $row[1];
-            }
+        } catch(\Exception $e) {
+            $data['errors'] = $e->getErrors();
         }
 
         $this->returnJson($data);
+
     }
 
     public function actionParse()

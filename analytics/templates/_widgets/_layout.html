@@ -6,9 +6,23 @@
 	{% includeJsResource 'analytics/js/dchart.js' %}
 	{% includeJsResource 'analytics/js/analytics-charts.js' %}
 
+	{% set profile = craft.analytics.profile %}
+	{% set webProperty = craft.analytics.webProperty %}
 
-	{% block body %}
-	{% endblock %}
+    {% if profile.error is defined %}
+
+        <div class="center">
+            <p class="error">{{profile.error}}</p>
+
+            <p><a href="{{url('settings/plugins/analytics')}}" class="btn icon settings">Analytics settings</a></p>
+        </div>
+
+    {% else %}
+
+		{% block body %}
+		{% endblock %}
+
+	{% endif %}
 
 {% else %}
 

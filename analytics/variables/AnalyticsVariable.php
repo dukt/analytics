@@ -19,7 +19,6 @@ class AnalyticsVariable
         return craft()->analytics->getProfile();
     }
 
-
     public function getWebProperty()
     {
         return craft()->analytics->getWebProperty();

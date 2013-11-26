@@ -76,19 +76,28 @@ class AnalyticsService extends BaseApplicationComponent
 
     public function getProfile()
     {
-        $webProperty = $this->getWebProperty();
+        $r = array();
 
-        $profile = craft()->fileCache->get('analytics.profile');
+        try {
+            $webProperty = $this->getWebProperty();
 
-        if(!$profile) {
-            $profiles = $this->api()->management_profiles->listManagementProfiles($webProperty['accountId'], $webProperty['id']);
+            $profile = craft()->fileCache->get('analytics.profile');
 
-            $profile = $profiles['items'][0];
+            if(!$profile) {
+                $profiles = $this->api()->management_profiles->listManagementProfiles($webProperty['accountId'], $webProperty['id']);
 
-            craft()->fileCache->set('analytics.profile', $profile);
+                $profile = $profiles['items'][0];
+
+                craft()->fileCache->set('analytics.profile', $profile);
+            }
+
+            $r = $profile;
+
+        } catch(\Exception $e) {
+            $r['error'] = $e->getMessage();
         }
 
-        return $profile;
+        return $r;
     }
 
     public function getWebProperty()
@@ -115,6 +124,8 @@ class AnalyticsService extends BaseApplicationComponent
     public function properties()
     {
 
+        $properties = array("" => "Select");
+
         Craft::log(__METHOD__, LogLevel::Info, true);
 
         try {
@@ -136,7 +147,6 @@ class AnalyticsService extends BaseApplicationComponent
             }
             $items = $response['items'];
 
-            $properties = array();
 
             foreach($items as $item) {
                 $name = $item['id'];
