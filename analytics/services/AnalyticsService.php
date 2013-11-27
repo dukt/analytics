@@ -83,7 +83,7 @@ class AnalyticsService extends BaseApplicationComponent
 
             $profile = craft()->fileCache->get('analytics.profile');
 
-            if(!$profile) {
+            if(!$profile && !empty($webProperty['accountId'])) {
                 $profiles = $this->api()->management_profiles->listManagementProfiles($webProperty['accountId'], $webProperty['id']);
 
                 $profile = $profiles['items'][0];
@@ -91,7 +91,13 @@ class AnalyticsService extends BaseApplicationComponent
                 craft()->fileCache->set('analytics.profile', $profile);
             }
 
-            $r = $profile;
+            if($profile) {
+                $r = $profile;
+            } else {
+                $r['error'] = "Couldn't get profile";
+            }
+
+
 
         } catch(\Exception $e) {
             $r['error'] = $e->getMessage();
@@ -102,23 +108,34 @@ class AnalyticsService extends BaseApplicationComponent
 
     public function getWebProperty()
     {
-        $webProperty = craft()->fileCache->get('analytics.webProperty');
 
-        if(!$webProperty) {
+        $r = array();
 
-            $webProperties = $this->api()->management_webproperties->listManagementWebproperties("~all");
+        try {
 
-            foreach($webProperties['items'] as $webPropertyItem) {
+            $webProperty = craft()->fileCache->get('analytics.webProperty');
 
-                if($webPropertyItem['id'] == $this->getSetting('profileId')) {
-                    $webProperty = $webPropertyItem;
+            if(!$webProperty) {
+
+                $webProperties = $this->api()->management_webproperties->listManagementWebproperties("~all");
+
+                foreach($webProperties['items'] as $webPropertyItem) {
+
+                    if($webPropertyItem['id'] == $this->getSetting('profileId')) {
+                        $webProperty = $webPropertyItem;
+                    }
                 }
+
+                craft()->fileCache->set('analytics.webProperty', $webProperty);
             }
 
-            craft()->fileCache->set('analytics.webProperty', $webProperty);
+            $r = $webProperty;
+
+        } catch(\Exception $e) {
+            $r['error'] = $e->getMessage();
         }
 
-        return $webProperty;
+        return $r;
     }
 
     public function properties()
