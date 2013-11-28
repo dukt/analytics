@@ -1,90 +1,99 @@
-{% set myJs %}
-    var Analytics = {};
-    Analytics.realtimeRefreshInterval = {{settings.realtimeRefreshInterval|json_encode|raw}};
-{% endset %}
+{% if craft.analytics.isConfigured %}
 
-{% includeJs myJs first %}
+	{% set myJs %}
+	    var Analytics = {};
+	    Analytics.realtimeRefreshInterval = {{settings.realtimeRefreshInterval|json_encode|raw}};
+	{% endset %}
 
-{% includeJsResource 'analytics/js/analytics-tabs.js' %}
-{% includeJsResource 'analytics/js/analytics-realtime.js' %}
-{% includeCssResource 'analytics/css/styles.css' %}
-{% includeCssResource 'analytics/css/realtime.css' %}
+	{% includeJs myJs first %}
 
-<div class="analytics-widget-realtime">
+	{% includeJsResource 'analytics/js/analytics-tabs.js' %}
+	{% includeJsResource 'analytics/js/analytics-realtime.js' %}
+	{% includeCssResource 'analytics/css/styles.css' %}
+	{% includeCssResource 'analytics/css/realtime.css' %}
 
-	<div class="analytics-errors center hidden">
-		<div class="analytics-errors-inject">
+	<div class="analytics-widget-realtime">
+
+		<div class="analytics-errors center hidden">
+			<div class="analytics-errors-inject">
+			</div>
+
+			<p><a href="{{url('settings/plugins/analytics')}}" class="btn icon settings">Analytics settings</a></p>
 		</div>
 
-		<p><a href="{{url('settings/plugins/analytics')}}" class="btn icon settings">Analytics settings</a></p>
-	</div>
+		<div class="analytics-widget">
+			<div class="analyticsTabs">
+				<ul class="analyticsNav">
+					<li><a href="#visitors">{{'Visitors'|t}}</a></li>
+					<li><a href="#content">{{'Content'|t}}</a></li>
+				</ul>
 
-	<div class="analytics-widget">
-		<div class="analyticsTabs">
-			<ul class="analyticsNav">
-				<li><a href="#visitors">{{'Visitors'|t}}</a></li>
-				<li><a href="#content">{{'Content'|t}}</a></li>
-			</ul>
+				<div class="analyticsTab hidden">
 
-			<div class="analyticsTab hidden">
-
-				<div class="analytics-realtime">
-					<div class="active-visitors">
-						<span class="currently">{{'Currently'|t}}</span>
-						<strong class="count">•••</strong>
-						<span class="txt">{{'Active visitors on your website'|t}}</span>
-					</div>
-
-					<div class="progress hidden">
-						<div class="progress-bar blue" style="width: 35%">
-							<span>35%</span>
-						</div>
-						<div class="progress-bar green" style="width: 65%">
-							<span>65%</span>
+					<div class="analytics-realtime">
+						<div class="active-visitors">
+							<span class="currently">{{'Currently'|t}}</span>
+							<strong class="count">•••</strong>
+							<span class="txt">{{'Active visitors on your website'|t}}</span>
 						</div>
 
-						<div class="clear"></div>
+						<div class="progress hidden">
+							<div class="progress-bar blue" style="width: 35%">
+								<span>35%</span>
+							</div>
+							<div class="progress-bar green" style="width: 65%">
+								<span>65%</span>
+							</div>
+
+							<div class="clear"></div>
+						</div>
+
+						<ul class="legend hidden">
+							<li class="blue"><strong>50% </strong><span>{{'New'|t}}</span></li>
+							<li class="green"><strong>50% </strong><span>{{'Returning'|t}}</span></li>
+						</ul>
 					</div>
 
-					<ul class="legend hidden">
-						<li class="blue"><strong>50% </strong><span>{{'New'|t}}</span></li>
-						<li class="green"><strong>50% </strong><span>{{'Returning'|t}}</span></li>
-					</ul>
+				</div>
+
+
+				<div class="analyticsTab hidden">
+					<div class="analytics-realtime-content">
+
+						<div class="no-active-visitors">
+							<p class="center">{{'No active visitor'|t}}</p>
+						</div>
+
+						<table class="data hidden">
+							<thead>
+								<tr>
+									<th>{{'Page'|t}}</th>
+									<th>{{'Visitors'|t}}</th>
+								</tr>
+							</thead>
+
+							<tbody>
+								<tr>
+									<td>/</td>
+									<td class="thin">2</td>
+								</tr>
+								<tr>
+									<td>/</td>
+									<td class="thin">1</td>
+								</tr>
+							</tbody>
+						</table>
+
+					</div>
 				</div>
 
 			</div>
-
-
-			<div class="analyticsTab hidden">
-				<div class="analytics-realtime-content">
-
-					<div class="no-active-visitors">
-						<p class="center">{{'No active visitor'|t}}</p>
-					</div>
-
-					<table class="data hidden">
-						<thead>
-							<tr>
-								<th>{{'Page'|t}}</th>
-								<th>{{'Visitors'|t}}</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td>/</td>
-								<td class="thin">2</td>
-							</tr>
-							<tr>
-								<td>/</td>
-								<td class="thin">1</td>
-							</tr>
-						</tbody>
-					</table>
-
-				</div>
-			</div>
-
 		</div>
 	</div>
-</div>
+
+
+{% else %}
+
+	<p><a href="{{url('settings/plugins/analytics')}}">Configure Analytics</a> plugin in order to get started.</p>
+
+{% endif %}
