@@ -54,8 +54,12 @@ class AnalyticsPlugin extends BasePlugin
 
     public function getSettingsHtml()
     {
-       return craft()->templates->render('analytics/settings', array(
-           'settings' => $this->getSettings()
-       ));
+        if(craft()->request->getPath() == 'settings/plugins') {
+            return true;
+        }
+
+        return craft()->templates->render('analytics/settings', array(
+            'settings' => $this->getSettings()
+        ));
     }
 }
