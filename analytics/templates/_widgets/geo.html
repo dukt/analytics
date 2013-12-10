@@ -6,8 +6,9 @@
 
 	<div class="analyticsTabs">
 		<ul class="analyticsNav">
-			<li><a href="#week">{{'Language'|t}}</a></li>
-			<li><a href="#month">{{'Location'|t}}</a></li>
+			<li><a href="#language">{{'Language'|t}}</a></li>
+			<li><a href="#country">{{'Country'|t}}</a></li>
+			<li><a href="#city">{{'City'|t}}</a></li>
 		</ul>
 
 		<div class="clear"></div>
@@ -23,6 +24,11 @@
 					periodUnit: 'month'
 				}
 			} %}
+
+			{% include 'analytics/_widgets/_tableChart' with {
+				'label' : 'Language',
+				'dimensions' : 'ga:language'
+			} %}
 		</div>
 
 		<div class="analyticsTab hidden">
@@ -35,6 +41,46 @@
 					periodQuantity: 1,
 					periodUnit: 'month'
 				}
+			} %}
+
+			{% include 'analytics/_widgets/_tableChart' with {
+				'label' : 'Country',
+				'dimensions' : 'ga:country'
+			} %}
+		</div>
+
+		<div class="analyticsTab hidden">
+
+			{% include 'analytics/_includes/chartElement' with {
+			    chart: {
+			    	cols: [
+						{
+							'label' : 'City',
+							'type': 'string'
+						},
+						{
+							'label' : 'Visits',
+							'type': 'number'
+						}
+			    	],
+			        chartQuery: {
+					    param1 : 'ga:' ~ profile.id,
+					    param2 : now|date_modify("-1 month")|date("Y-m-d"),
+					    param3 : now|date("Y-m-d"),
+					    param4 : 'ga:visits',
+					    param5 : {
+					        'dimensions' : 'ga:city',
+					        'sort' : '-ga:visits'
+					    }
+					},
+			        chartOptions: {
+				        title: 'City',
+				        allowHtml: true,
+				        chartType:'table',
+				        chartArea : {
+				        }
+				    }
+			    }
 			} %}
 		</div>
 

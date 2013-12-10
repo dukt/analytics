@@ -1,6 +1,6 @@
 var charts = {};
 
-google.load("visualization", "1", {packages:["corechart", "table"]});
+google.load("visualization", "1", {packages:["corechart", "table", "geochart"]});
 
 (function($){
 
@@ -36,94 +36,134 @@ google.load("visualization", "1", {packages:["corechart", "table"]});
             chart.draw(data, chartOptions);
         };
 
+        this.initTableChart = function()
+        {
+
+            chartOptions = $.extend({
+                // title: settings.chartOptions.title,
+                legend:'none',
+                page: 'enable',
+                chartArea : {width:'100%', bottom: '50'},
+            }, settings.chartOptions || {});
+
+             // var JSONObject = {
+             //      cols: [{id: 'task', label: 'Task', type: 'string'},
+             //          {id: 'hours', label: 'Hours per Day', type: 'number'}],
+             //      rows: [{c:[{v: 'Work', p: {'style': 'border: 7px solid orange;'}}, {v: 11}]},
+             //          {c:[{v: 'Eat'}, {v: 2}]},
+             //          {c:[{v: 'Commute'}, {v: 2, f: '2.000'}]}]};
+
+            data = new google.visualization.DataTable(dataArray, 0.5);
+
+            chart = new google.visualization.Table(element);
+
+            this.drawChart();
+        }
+
         this.initChart = function()
         {
-            data = google.visualization.arrayToDataTable(dataArray);
+            if(settings.chartOptions.chartType == 'table') {
+                this.initTableChart();
+            } else {
+                data = google.visualization.arrayToDataTable(dataArray);
 
-            switch(settings.chartOptions.chartType) {
-                case 'line':
-                    chartOptions = $.extend({
-                        // title: settings.chartOptions.title,
-                        legend:{position:'bottom'},
-                        chartArea : {
-                            width:'100%',
-                            left:50,
-                            right:50,
-                            top:50,
-                            bottom:50
+                switch(settings.chartOptions.chartType) {
+                    case 'line':
+                        chartOptions = $.extend({
+                            // title: settings.chartOptions.title,
+                            legend:{position:'bottom'},
+                            chartArea : {
+                                width:'100%',
+                                left:50,
+                                right:50,
+                                top:50,
+                                bottom:50
 
-                        },
-                        vAxis: {minValue: 4, format: '#'},
-                        hAxis: {minValue: 4, format: '#', showTextEvery:5}
-                    }, settings.chartOptions || {});
+                            },
+                            vAxis: {minValue: 4, format: '#'},
+                            hAxis: {minValue: 4, format: '#', showTextEvery:5}
+                        }, settings.chartOptions || {});
 
-                    chart = new google.visualization.LineChart(element);
+                        chart = new google.visualization.LineChart(element);
 
-                    break;
+                        break;
 
-                case 'column':
+                    case 'column':
 
-                    chartOptions = $.extend({
-                        legend:'none',
-                        sliceVisibilityThreshold:1/50,
-                        pieHole:0.5,
-                        vAxis: {textPosition:'in'},
-                    }, settings.chartOptions || {});
+                        chartOptions = $.extend({
+                            sliceVisibilityThreshold:1/50,
+                            pieHole:0.5,
+                            vAxis: {textPosition:'in'},
+                        }, settings.chartOptions || {});
 
-                    chart = new google.visualization.ColumnChart(element);
+                        chart = new google.visualization.ColumnChart(element);
 
-                    break;
+                        break;
 
-                case 'donut':
+                    case 'bubble':
 
-                    chartOptions = $.extend(true, {
-                        legend:'none',
-                        sliceVisibilityThreshold:1/50,
-                        pieHole:0.5,
-                    }, settings.chartOptions);
+                        chartOptions = $.extend({
+                            legend:'none',
+                            sliceVisibilityThreshold:1/50,
+                            pieHole:0.5,
+                            vAxis: {textPosition:'in'},
+                        }, settings.chartOptions || {});
 
-                    chartOptions.chartArea.top = '5%';
-                    chartOptions.chartArea.bottom = '5%';
-                    chartOptions.chartArea.left = '5%';
-                    chartOptions.chartArea.right = '5%';
-                    chartOptions.chartArea.width = '90%';
-                    chartOptions.chartArea.height = '90%';
+                        chart = new google.visualization.BubbleChart(element);
 
-                    chart = new google.visualization.PieChart(element);
-                    break;
+                        break;
 
-                case 'table':
-                    chartOptions = $.extend({
-                        // title: settings.chartOptions.title,
-                        legend:'none',
-                        sliceVisibilityThreshold:1/50,
-                        pieHole:0.5,
-                        chartArea : {width:'90%'},
-                    }, settings.chartOptions || {});
+                    case 'bar':
 
-                    chart = new google.visualization.Table(element);
+                        chartOptions = $.extend({
+                            legend:'none',
+                            vAxis: {
+                                textPosition:'in',
+                            },
+                        }, settings.chartOptions || {});
 
-                    break;
+                        chart = new google.visualization.BarChart(element);
 
-                default:
+                        break;
 
-                    chartOptions = $.extend({
-                        // title: settings.chartOptions.title,
-                        legend:'none',
-                        sliceVisibilityThreshold:1/50,
-                        pieHole:0.5,
-                        chartArea : {
-                            left:50,
-                            right:50,
-                            top:50,
-                            bottom:50
-                        },
-                    }, settings.chartOptions || {});
+                    case 'donut':
 
-                    chart = new google.visualization.ColumnChart(element);
+                        chartOptions = $.extend(true, {
+                            legend:'none',
+                            sliceVisibilityThreshold:1/20,
+                            pieHole:0.5,
+                        }, settings.chartOptions);
+
+                        // chartOptions.chartArea.top = '5%';
+                        // chartOptions.chartArea.bottom = '5%';
+                        // chartOptions.chartArea.left = '5%';
+                        // chartOptions.chartArea.right = '5%';
+                        // chartOptions.chartArea.width = '80%';
+                        // chartOptions.chartArea.height = '60%';
+
+                        chart = new google.visualization.PieChart(element);
+                        break;
+
+                    default:
+
+                        chartOptions = $.extend({
+                            // title: settings.chartOptions.title,
+                            legend:'none',
+                            sliceVisibilityThreshold:1/50,
+                            pieHole:0.5,
+                            chartArea : {
+                                left:50,
+                                right:50,
+                                top:50,
+                                bottom:50
+                            },
+                        }, settings.chartOptions || {});
+
+                        chart = new google.visualization.ColumnChart(element);
+                }
+
+                chart.draw(data, chartOptions);
             }
-
-            chart.draw(data, chartOptions);
         };
 
         this.initChart();

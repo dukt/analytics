@@ -25,5 +25,25 @@ $(document).ready(function() {
 		$('.analyticsNav li:first-child a', v).trigger('click');
 	});
 
+	// more
+
+	$('.analyticsTabs').each(function(k, tab) {
+
+		$('a.more, a.less', tab).click(function() {
+			if($('div.more', tab).hasClass('hidden')) {
+				$('div.more', tab).removeClass('hidden');
+				$('a.more', tab).addClass('hidden');
+			} else {
+				$('div.more', tab).addClass('hidden');
+				$('a.more', tab).removeClass('hidden');
+			}
+
+			$(window).resize();
+
+			return false;
+		});
+
+
+	}) ;
 
 });

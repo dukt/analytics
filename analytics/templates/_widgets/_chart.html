@@ -12,15 +12,11 @@
 {% if settings.chartType == "donut" %}
 
     {% set defaultChartOptions = {
-
+        legend:'none',
         chartType:settings.chartType,
         chartArea : {
-            width:'100%',
-            height:'100%',
-            left:0,
-            right:0,
-            top:20,
-            bottom:20
+            width:'90%',
+            height: '90%'
         }
     } %}
 

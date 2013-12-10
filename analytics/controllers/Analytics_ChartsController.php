@@ -127,7 +127,10 @@ class Analytics_ChartsController extends BaseController
 
 
         $json = array(
-                array('Day', 'Visitors')
+                array(
+                    'Column 1',
+                    'Column 2'
+                )
             );
 
         foreach($results['rows'] as $row) {
@@ -138,6 +141,83 @@ class Analytics_ChartsController extends BaseController
             if($itemDimension != "(not provided)" && $itemDimension != "(not set)") {
                 $item = array($itemDimension, $itemMetric);
                 array_push($json, $item);
+            }
+        }
+
+        $variables = array('json' => $json);
+
+        // $templatePath = craft()->path->getPluginsPath().'analytics/templates/';
+
+        // craft()->path->setTemplatesPath($templatePath);
+
+        $html = craft()->templates->render('analytics/_includes/chartDraw', $variables);
+
+        $charset = craft()->templates->getTwig()->getCharset();
+
+        echo new \Twig_Markup($html, $charset);
+
+        exit();
+    }
+
+    public function actionParseTable()
+    {
+        Craft::log(__METHOD__, LogLevel::Info, true);
+
+        $cols = $_POST['cols'];
+        $chartQuery = $_POST['chartQuery'];
+
+        $results = craft()->analytics->api()->data_ga->get(
+            $chartQuery['param1'],
+            $chartQuery['param2'],
+            $chartQuery['param3'],
+            $chartQuery['param4'],
+            $chartQuery['param5']
+        );
+
+
+        // ga:keywords
+        // ga:visits
+
+        // array(2) {
+        //   [0]=>
+        //   string(32) ""ajax search"+"expressionengine""
+        //   [1]=>
+        //   string(1) "1"
+        // }
+
+
+        // ga:day, ga:month, ga:year
+        // ga:visits
+        // [0]=> array(4) {
+        //     [0]=> string(2) "01" [1]=> string(2) "01" [2]=> string(4) "2012" [3]=> string(2) "13"
+        // }
+
+         // var JSONObject = {
+         //      cols: [{id: 'task', label: 'Task', type: 'string'},
+         //          {id: 'hours', label: 'Hours per Day', type: 'number'}],
+         //      rows: [{c:[{v: 'Work', p: {'style': 'border: 7px solid orange;'}}, {v: 11}]},
+         //          {c:[{v: 'Eat'}, {v: 2}]},
+         //          {c:[{v: 'Commute'}, {v: 2, f: '2.000'}]}]};
+
+        $json = array(
+            'cols' => $cols,
+            'rows' => array()
+        );
+
+        foreach($results['rows'] as $row) {
+            $itemMetric = (int) array_pop($row);
+            $itemDimension = implode('.', $row);
+            // $itemDimension = md5($itemDimension);
+
+            if($itemDimension != "(not provided)" && $itemDimension != "(not set)") {
+                $item = array(
+                    'c' => array(
+                        array('v' => '<strong>'.$itemDimension.'</strong>', 'p' => array('style' => 'border:0; border-bottom: 1px dotted #e3e5e8;')),
+                        array('v' => $itemMetric, 'p' => array('style' => 'width:30%; border:0; border-bottom: 1px dotted #e3e5e8;')),
+                    )
+                );
+
+                array_push($json['rows'], $item);
             }
         }
 

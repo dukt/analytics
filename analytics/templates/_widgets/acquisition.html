@@ -24,6 +24,11 @@
 					periodUnit: 'month'
 				}
 			} %}
+
+			{% include 'analytics/_widgets/_tableChart' with {
+				'label' : 'Source',
+				'dimensions' : 'ga:source'
+			} %}
 		</div>
 
 		<div class="analyticsTab hidden">
@@ -37,6 +42,11 @@
 					periodUnit: 'month'
 				}
 			} %}
+
+			{% include 'analytics/_widgets/_tableChart' with {
+				'label' : 'Keyword',
+				'dimensions' : 'ga:keyword'
+			} %}
 		</div>
 
 		<div class="analyticsTab hidden">
@@ -49,6 +59,12 @@
 					periodQuantity: 1,
 					periodUnit: 'month'
 				}
+			} %}
+
+
+			{% include 'analytics/_widgets/_tableChart' with {
+				'label' : 'Social Network',
+				'dimensions' : 'ga:socialNetwork'
 			} %}
 		</div>
 

@@ -1,4 +1,4 @@
-<div class="analyticsChart {{chart.chartOptions.chartType}}">
+<div class="analyticsChart {{chart.chartOptions.chartType}}{{(chart.class is defined ? ' '~chart.class : '')}}">
   <div class="data">
       {{chart|json_encode()}}
   </div>

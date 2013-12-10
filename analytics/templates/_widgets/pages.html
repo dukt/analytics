@@ -24,6 +24,12 @@
 					periodUnit: 'month'
 				}
 			} %}
+
+
+			{% include 'analytics/_widgets/_tableChart' with {
+				'label' : 'Page',
+				'dimensions' : 'ga:pagePath'
+			} %}
 		</div>
 
 		<div class="analyticsTab hidden">
@@ -37,6 +43,12 @@
 					periodUnit: 'month'
 				}
 			} %}
+
+
+			{% include 'analytics/_widgets/_tableChart' with {
+				'label' : 'Page',
+				'dimensions' : 'ga:landingPagePath'
+			} %}
 		</div>
 
 		<div class="analyticsTab hidden">
@@ -49,6 +61,12 @@
 					periodQuantity: 1,
 					periodUnit: 'month'
 				}
+			} %}
+
+
+			{% include 'analytics/_widgets/_tableChart' with {
+				'label' : 'Page',
+				'dimensions' : 'ga:exitPagePath'
 			} %}
 		</div>
 	</div>
