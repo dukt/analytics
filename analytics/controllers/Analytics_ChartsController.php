@@ -23,6 +23,8 @@ class Analytics_ChartsController extends BaseController
                 'returningVisitor' => 0
             ),
             'content' =>  array(),
+            'sources' => array(),
+            'countries' => array(),
             'errors' => false
         );
 
@@ -80,6 +82,35 @@ class Analytics_ChartsController extends BaseController
                 if(!empty($results['rows'])) {
                     foreach($results['rows'] as $row) {
                         $data['content'][$row[0]] = $row[1];
+                    }
+                }
+
+
+                // sources
+
+                $results = craft()->analytics->api()->data_realtime->get(
+                    'ga:'.$profile['id'],
+                    'ga:activeVisitors',
+                    array('dimensions' => 'ga:source')
+                );
+
+                if(!empty($results['rows'])) {
+                    foreach($results['rows'] as $row) {
+                        $data['sources'][$row[0]] = $row[1];
+                    }
+                }
+
+                // countries
+
+                $results = craft()->analytics->api()->data_realtime->get(
+                    'ga:'.$profile['id'],
+                    'ga:activeVisitors',
+                    array('dimensions' => 'ga:country')
+                );
+
+                if(!empty($results['rows'])) {
+                    foreach($results['rows'] as $row) {
+                        $data['countries'][$row[0]] = $row[1];
                     }
                 }
             } else {

@@ -80,8 +80,10 @@ function analyticsRealtimeRequest()
 
 			if (calcTotal > 0) {
 				$('.no-active-visitors').addClass('hidden');
-				$('.analytics-realtime-content table').removeClass('hidden');
 
+				// content
+
+				$('.analytics-realtime-content table').removeClass('hidden');
 				$('.analytics-realtime-content tbody').html('');
 
 				$.each(response.content, function(k,v) {
@@ -89,9 +91,34 @@ function analyticsRealtimeRequest()
 
 					$('.analytics-realtime-content tbody').append(row);
 				});
+
+				// sources
+
+				$('.analytics-realtime-sources table').removeClass('hidden');
+				$('.analytics-realtime-sources tbody').html('');
+
+				$.each(response.sources, function(k,v) {
+					var row = $('<tr><td>'+k+'</td><td class="thin">'+v+'</td></td>');
+
+					$('.analytics-realtime-sources tbody').append(row);
+				});
+
+				// countries
+
+				$('.analytics-realtime-countries table').removeClass('hidden');
+				$('.analytics-realtime-countries tbody').html('');
+
+				$.each(response.countries, function(k,v) {
+					var row = $('<tr><td>'+k+'</td><td class="thin">'+v+'</td></td>');
+
+					$('.analytics-realtime-countries tbody').append(row);
+				});
+
 			} else {
 				$('.no-active-visitors').removeClass('hidden');
 				$('.analytics-realtime-content table').addClass('hidden');
+				$('.analytics-realtime-sources table').addClass('hidden');
+				$('.analytics-realtime-countries table').addClass('hidden');
 			}
 		}
 
