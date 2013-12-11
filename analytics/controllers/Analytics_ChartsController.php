@@ -177,17 +177,7 @@ class Analytics_ChartsController extends BaseController
 
         $variables = array('json' => $json);
 
-        // $templatePath = craft()->path->getPluginsPath().'analytics/templates/';
-
-        // craft()->path->setTemplatesPath($templatePath);
-
-        $html = craft()->templates->render('analytics/_includes/chartDraw', $variables);
-
-        $charset = craft()->templates->getTwig()->getCharset();
-
-        echo new \Twig_Markup($html, $charset);
-
-        exit();
+        $this->returnJson($json);
     }
 
     public function actionParseTable()
@@ -204,31 +194,6 @@ class Analytics_ChartsController extends BaseController
             $chartQuery['param4'],
             $chartQuery['param5']
         );
-
-
-        // ga:keywords
-        // ga:visits
-
-        // array(2) {
-        //   [0]=>
-        //   string(32) ""ajax search"+"expressionengine""
-        //   [1]=>
-        //   string(1) "1"
-        // }
-
-
-        // ga:day, ga:month, ga:year
-        // ga:visits
-        // [0]=> array(4) {
-        //     [0]=> string(2) "01" [1]=> string(2) "01" [2]=> string(4) "2012" [3]=> string(2) "13"
-        // }
-
-         // var JSONObject = {
-         //      cols: [{id: 'task', label: 'Task', type: 'string'},
-         //          {id: 'hours', label: 'Hours per Day', type: 'number'}],
-         //      rows: [{c:[{v: 'Work', p: {'style': 'border: 7px solid orange;'}}, {v: 11}]},
-         //          {c:[{v: 'Eat'}, {v: 2}]},
-         //          {c:[{v: 'Commute'}, {v: 2, f: '2.000'}]}]};
 
         $json = array(
             'cols' => $cols,
@@ -254,16 +219,6 @@ class Analytics_ChartsController extends BaseController
 
         $variables = array('json' => $json);
 
-        // $templatePath = craft()->path->getPluginsPath().'analytics/templates/';
-
-        // craft()->path->setTemplatesPath($templatePath);
-
-        $html = craft()->templates->render('analytics/_includes/chartDraw', $variables);
-
-        $charset = craft()->templates->getTwig()->getCharset();
-
-        echo new \Twig_Markup($html, $charset);
-
-        exit();
+        $this->returnJson($json);
     }
 }
