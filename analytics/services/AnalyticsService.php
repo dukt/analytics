@@ -250,11 +250,11 @@ class AnalyticsService extends BaseApplicationComponent
 
         // try to get an account
 
-        $account = craft()->oauth->getAccount('google', 'analytics.system');
+        $token = craft()->oauth->getSystemToken('google', 'analytics.system');
 
-        if(!$account)
+        if(!$token)
         {
-            Craft::log(__METHOD__.' : Account could not be found', LogLevel::Info, true);
+            Craft::log(__METHOD__." : Couldn't find a valid token", LogLevel::Info, true);
 
             return false;
         }
