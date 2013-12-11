@@ -33,13 +33,11 @@ function analyticsRealtimeRequest()
 
 		$('.analytics-widget-realtime .analytics-errors-inject').html('');
 
-		if(response.errors != false) {
+		if(typeof(response.error) != 'undefined') {
 			$('.analytics-widget-realtime .analytics-errors').removeClass('hidden');
 			$('.analytics-widget-realtime .analytics-widget').addClass('hidden');
 
-			$.each(response.errors, function(k, v) {
-				$('<p class="error">'+v.message+'</p>').appendTo('.analytics-widget-realtime .analytics-errors-inject');
-			});
+			$('<p class="error">'+response.error.message+'</p>').appendTo('.analytics-widget-realtime .analytics-errors-inject');
 		} else {
 
 			$('.analytics-widget-realtime .analytics-errors').addClass('hidden');

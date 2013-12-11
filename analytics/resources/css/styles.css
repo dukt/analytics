@@ -22,14 +22,20 @@ div.more .analyticsChart.table {
   margin-bottom: 20px;
   background: url(../images/spinner.gif) no-repeat 50% 50%;
 }
+.analyticsChart.dk-loaded {
+  background: none;
+}
+.analyticsChart.error {
+  min-height: 0 !important;
+}
 .analyticsChart.column {
-  height: 150px;
+  min-height: 150px;
 }
 .analyticsChart.doubleHeight {
-  height: 290px;
+  min-height: 290px;
 }
 .analyticsChart.donut {
-  height: 250px;
+  min-height: 250px;
 }
 .analyticsChart.table {
   margin: 0;

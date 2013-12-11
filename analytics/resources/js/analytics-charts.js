@@ -5,15 +5,28 @@ $(document).ready(function() {
     charts = $('.analyticsChart.bar, .analyticsChart.donut, .analyticsChart.bubble, .analyticsChart.column, .analyticsChart.line');
 
     charts.each(function(k,v) {
+
         var html = $('.data', v).html();
 
         var json = $.parseJSON(html);
 
-        setTimeout(function() {
-            Craft.postActionRequest('analytics/charts/parse', json, function(response) {
+
+        Craft.postActionRequest('analytics/charts/parse', json, function(response) {
+            if(typeof(response.error) != 'undefined') {
+                $('.error .inject', v).html(response.error.message);
+                $('.error', v).removeClass('hidden');
+
+                $(v).parents('.analyticsTab').find('.more').addClass('hidden');
+
+
+                $(v).addClass('error');
+            } else {
                 $(v).dchart(response, json);
-            });
-        }, 500);
+            }
+
+            $(v).addClass('dk-loaded');
+        });
+
     });
 
 
@@ -26,10 +39,18 @@ $(document).ready(function() {
 
         var json = $.parseJSON(options);
 
-        setTimeout(function() {
-            Craft.postActionRequest('analytics/charts/parseTable', json, function(response) {
+        Craft.postActionRequest('analytics/charts/parseTable', json, function(response) {
+            if(typeof(response.error) != 'undefined') {
+                $('.error .inject', v).html(response.error.message);
+                $('.error', v).removeClass('hidden');
+
+                $(v).addClass('error');
+            } else {
                 $(v).dchart(response, json);
-            });
-        }, 500);
+            }
+
+            $(v).addClass('dk-loaded');
+        });
+
     });
 });

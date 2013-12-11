@@ -1,45 +1,48 @@
-<div class="center"><a class="more" href="#">More Data</a></div>
+<div class="more">
 
-<div class="more hidden">
+    <div class="center"><a class="more" href="#">More Data</a></div>
 
-    <div class="center"><a class="less" href="#">Less</a></div>
+    <div class="more-content hidden">
 
-    {% include 'analytics/_includes/chartElement' with {
-        chart: {
-            cols: [
-                {
-                    'label' : label,
-                    'type': 'string'
+        <div class="center"><a class="less" href="#">Less</a></div>
+
+        {% include 'analytics/_includes/chartElement' with {
+            chart: {
+                cols: [
+                    {
+                        'label' : label,
+                        'type': 'string'
+                    },
+                    {
+                        'label' : 'Visits',
+                        'type': 'number'
+                    }
+                ],
+
+                chartQuery: {
+                    param1 : 'ga:' ~ profile.id,
+                    param2 : now|date_modify("-1 month")|date("Y-m-d"),
+                    param3 : now|date("Y-m-d"),
+                    param4 : 'ga:visits',
+                    param5 : {
+                        'dimensions' : dimensions,
+                        'sort' : '-ga:visits'
+                    }
                 },
-                {
-                    'label' : 'Visits',
-                    'type': 'number'
-                }
-            ],
 
-            chartQuery: {
-                param1 : 'ga:' ~ profile.id,
-                param2 : now|date_modify("-1 month")|date("Y-m-d"),
-                param3 : now|date("Y-m-d"),
-                param4 : 'ga:visits',
-                param5 : {
-                    'dimensions' : dimensions,
-                    'sort' : '-ga:visits'
-                }
-            },
-
-            chartOptions: {
-                allowHtml: true,
-                chartType:'table',
-                chartArea : {
-                    width:'100%',
-                    height:'50%',
-                    left:0,
-                    right:0,
-                    top:0,
-                    bottom:30
+                chartOptions: {
+                    allowHtml: true,
+                    chartType:'table',
+                    chartArea : {
+                        width:'100%',
+                        height:'50%',
+                        left:0,
+                        right:0,
+                        top:0,
+                        bottom:30
+                    }
                 }
             }
-        }
-    } %}
+        } %}
+    </div>
 </div>

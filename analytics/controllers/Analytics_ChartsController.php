@@ -114,10 +114,10 @@ class Analytics_ChartsController extends BaseController
                     }
                 }
             } else {
-                $data['errors'] = array(array('message' => "Please select a web profile"));
+                throw new Exception("Please select a web profile");
             }
         } catch(\Exception $e) {
-            $data['errors'] = $e->getErrors();
+            $this->returnErrorJson($e->getErrors()[0]);
         }
 
         $this->returnJson($data);
@@ -128,97 +128,91 @@ class Analytics_ChartsController extends BaseController
     {
         Craft::log(__METHOD__, LogLevel::Info, true);
 
-        $chartQuery = $_POST['chartQuery'];
+        try {
+            $chartQuery = $_POST['chartQuery'];
 
-        $results = craft()->analytics->api()->data_ga->get(
-            $chartQuery['param1'],
-            $chartQuery['param2'],
-            $chartQuery['param3'],
-            $chartQuery['param4'],
-            $chartQuery['param5']
-        );
-
-
-        // ga:keywords
-        // ga:visits
-
-        // array(2) {
-        //   [0]=>
-        //   string(32) ""ajax search"+"expressionengine""
-        //   [1]=>
-        //   string(1) "1"
-        // }
-
-
-        // ga:day, ga:month, ga:year
-        // ga:visits
-        // [0]=> array(4) {
-        //     [0]=> string(2) "01" [1]=> string(2) "01" [2]=> string(4) "2012" [3]=> string(2) "13"
-        // }
-
-
-        $json = array(
-                array(
-                    'Column 1',
-                    'Column 2'
-                )
+            $results = craft()->analytics->api()->data_ga->get(
+                $chartQuery['param1'],
+                $chartQuery['param2'],
+                $chartQuery['param3'],
+                $chartQuery['param4'],
+                $chartQuery['param5']
             );
 
-        foreach($results['rows'] as $row) {
-            $itemMetric = (int) array_pop($row);
-            $itemDimension = implode('.', $row);
-            // $itemDimension = md5($itemDimension);
+            $json = array(
+                    array(
+                        'Column 1',
+                        'Column 2'
+                    )
+                );
 
-            if($itemDimension != "(not provided)" && $itemDimension != "(not set)") {
-                $item = array($itemDimension, $itemMetric);
-                array_push($json, $item);
+            foreach($results['rows'] as $row) {
+                $itemMetric = (int) array_pop($row);
+                $itemDimension = implode('.', $row);
+                // $itemDimension = md5($itemDimension);
+
+                if($itemDimension != "(not provided)" && $itemDimension != "(not set)") {
+                    $item = array($itemDimension, $itemMetric);
+                    array_push($json, $item);
+                }
             }
+
+            $variables = array('json' => $json);
+
+            $this->returnJson($json);
+
+        } catch(\Exception $e) {
+
+            $this->returnErrorJson($e->getErrors()[0]);
         }
-
-        $variables = array('json' => $json);
-
-        $this->returnJson($json);
     }
 
     public function actionParseTable()
     {
         Craft::log(__METHOD__, LogLevel::Info, true);
 
-        $cols = $_POST['cols'];
-        $chartQuery = $_POST['chartQuery'];
+        try {
+            $cols = $_POST['cols'];
+            $chartQuery = $_POST['chartQuery'];
 
-        $results = craft()->analytics->api()->data_ga->get(
-            $chartQuery['param1'],
-            $chartQuery['param2'],
-            $chartQuery['param3'],
-            $chartQuery['param4'],
-            $chartQuery['param5']
-        );
+            $results = craft()->analytics->api()->data_ga->get(
+                $chartQuery['param1'],
+                $chartQuery['param2'],
+                $chartQuery['param3'],
+                $chartQuery['param4'],
+                $chartQuery['param5']
+            );
 
-        $json = array(
-            'cols' => $cols,
-            'rows' => array()
-        );
+            $json = array(
+                'cols' => $cols,
+                'rows' => array()
+            );
 
-        foreach($results['rows'] as $row) {
-            $itemMetric = (int) array_pop($row);
-            $itemDimension = implode('.', $row);
-            // $itemDimension = md5($itemDimension);
+            foreach($results['rows'] as $row) {
+                $itemMetric = (int) array_pop($row);
+                $itemDimension = implode('.', $row);
+                // $itemDimension = md5($itemDimension);
 
-            if($itemDimension != "(not provided)" && $itemDimension != "(not set)") {
-                $item = array(
-                    'c' => array(
-                        array('v' => '<strong>'.$itemDimension.'</strong>', 'p' => array('style' => 'border:0; border-bottom: 1px dotted #e3e5e8;')),
-                        array('v' => $itemMetric, 'p' => array('style' => 'width:30%; border:0; border-bottom: 1px dotted #e3e5e8;')),
-                    )
-                );
+                if($itemDimension != "(not provided)" && $itemDimension != "(not set)") {
+                    $item = array(
+                        'c' => array(
+                            array('v' => '<strong>'.$itemDimension.'</strong>', 'p' => array('style' => 'border:0; border-bottom: 1px dotted #e3e5e8;')),
+                            array('v' => $itemMetric, 'p' => array('style' => 'width:30%; border:0; border-bottom: 1px dotted #e3e5e8;')),
+                        )
+                    );
 
-                array_push($json['rows'], $item);
+                    array_push($json['rows'], $item);
+                }
             }
+
+            $variables = array('json' => $json);
+
+
+            $this->returnJson($json);
+
+        } catch(\Exception $e) {
+
+            $this->returnErrorJson($e->getErrors()[0]);
         }
-
-        $variables = array('json' => $json);
-
-        $this->returnJson($json);
     }
 }

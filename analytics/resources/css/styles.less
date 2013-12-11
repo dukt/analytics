@@ -26,19 +26,30 @@ div.more {
 
 .analyticsChart {
     margin-bottom: 20px;
-
     background: url(../images/spinner.gif) no-repeat 50% 50%;
 
+    &.dk-loaded {
+        background: none;
+
+        // & > * {
+        //     display: none;
+        // }
+    }
+
+    &.error {
+        min-height: 0 !important;
+    }
+
     &.column {
-        height: 150px;
+        min-height: 150px;
     }
 
     &.doubleHeight {
-        height: 290px;
+        min-height: 290px;
     }
 
     &.donut {
-        height: 250px;
+        min-height: 250px;
     }
 
     &.donut {
