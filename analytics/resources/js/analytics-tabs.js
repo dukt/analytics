@@ -25,6 +25,7 @@ $(document).ready(function() {
 		$('.analyticsNav li:first-child a', v).trigger('click');
 	});
 
+
 	// more
 
 	$('.analyticsTabs').each(function(k, tab) {

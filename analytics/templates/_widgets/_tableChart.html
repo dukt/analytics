@@ -1,8 +1,8 @@
-<a class="more" href="#">Show Data</a>
+<div class="center"><a class="more" href="#">More Data</a></div>
 
 <div class="more hidden">
 
-    <a class="less" href="#">Hide Data</a>
+    <div class="center"><a class="less" href="#">Less</a></div>
 
     {% include 'analytics/_includes/chartElement' with {
         chart: {
@@ -16,6 +16,7 @@
                     'type': 'number'
                 }
             ],
+
             chartQuery: {
                 param1 : 'ga:' ~ profile.id,
                 param2 : now|date_modify("-1 month")|date("Y-m-d"),
@@ -26,6 +27,7 @@
                     'sort' : '-ga:visits'
                 }
             },
+
             chartOptions: {
                 allowHtml: true,
                 chartType:'table',

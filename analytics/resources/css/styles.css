@@ -3,7 +3,6 @@
 }
 a.more,
 a.less {
-  display: block;
   margin: 0 -30px;
   text-align: center;
   padding: 0.5em;
@@ -14,8 +13,13 @@ a.more {
 a.less {
   margin-bottom: 10px;
 }
+div.more .analyticsChart.table {
+  margin-top: 30px;
+  margin-bottom: 0;
+}
 /* analyticsChart */
 .analyticsChart {
+  margin-bottom: 20px;
   background: url(../images/spinner.gif) no-repeat 50% 50%;
 }
 .analyticsChart.column {
@@ -24,10 +28,14 @@ a.less {
 .analyticsChart.doubleHeight {
   height: 290px;
 }
+.analyticsChart.donut {
+  height: 250px;
+}
 .analyticsChart.table {
   margin: 0;
   margin-bottom: 20px;
   position: relative;
+  min-height: 30px;
 }
 .analyticsChart.table > div {
   position: inherit;

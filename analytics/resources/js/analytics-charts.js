@@ -1,5 +1,7 @@
 $(document).ready(function() {
 
+    // bar, donut, bubble, column, line
+
     charts = $('.analyticsChart.bar, .analyticsChart.donut, .analyticsChart.bubble, .analyticsChart.column, .analyticsChart.line');
 
     charts.each(function(k,v) {
@@ -7,15 +9,15 @@ $(document).ready(function() {
 
         var json = $.parseJSON(html);
 
-        Craft.postActionRequest('analytics/charts/parse', json, function(response) {
-
-            response = $.parseJSON(response);
-
-            $(v).dchart(response, json);
-
-        });
+        setTimeout(function() {
+            Craft.postActionRequest('analytics/charts/parse', json, function(response) {
+                $(v).dchart(response, json);
+            });
+        }, 500);
     });
 
+
+    // table
 
     charts = $('.analyticsChart.table');
 
@@ -24,12 +26,10 @@ $(document).ready(function() {
 
         var json = $.parseJSON(options);
 
-        Craft.postActionRequest('analytics/charts/parseTable', json, function(response) {
-
-            response = $.parseJSON(response);
-
-            $(v).dchart(response, json);
-
-        });
+        setTimeout(function() {
+            Craft.postActionRequest('analytics/charts/parseTable', json, function(response) {
+                $(v).dchart(response, json);
+            });
+        }, 500);
     });
 });

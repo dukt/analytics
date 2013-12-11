@@ -2,26 +2,30 @@
     text-align: center;
 }
 
+a.more, a.less {
+    margin: 0 -30px;
+    text-align: center;
+    padding: 0.5em;
+}
 
-    a.more, a.less {
-        display: block;
-        margin: 0 -30px;
-        text-align: center;
-        padding: 0.5em;
-    }
+a.more {
+    margin-bottom: -20px;
+}
+a.less {
+    margin-bottom: 10px;
+}
 
-    a.more {
-        margin-bottom: -20px;
+div.more {
+    .analyticsChart.table {
+        margin-top: 30px;
+        margin-bottom: 0;
     }
-    a.less {
-        margin-bottom: 10px;
-    }
+}
 
 /* analyticsChart */
 
 .analyticsChart {
-
-
+    margin-bottom: 20px;
 
     background: url(../images/spinner.gif) no-repeat 50% 50%;
 
@@ -33,9 +37,9 @@
         height: 290px;
     }
 
-    // &.donut {
-    //     height: 380px;
-    // }
+    &.donut {
+        height: 250px;
+    }
 
     &.donut {
         // margin-bottom: 30px;
@@ -45,6 +49,7 @@
         margin: 0;
         margin-bottom: 20px;
         position: relative;
+        min-height: 30px;
 
         & > div {
             position: inherit;
