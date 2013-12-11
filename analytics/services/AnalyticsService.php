@@ -30,14 +30,12 @@ class AnalyticsService extends BaseApplicationComponent
 
         // get token
 
-        $token = craft()->oauth->getToken($handle, $namespace);
+        $token = craft()->oauth->getSystemToken($handle, $namespace);
 
 
         // provider
 
         $provider = craft()->oauth->getProvider($handle);
-
-        $provider->setToken($token->getDecodedToken());
 
         if(!$provider) {
 
@@ -45,6 +43,16 @@ class AnalyticsService extends BaseApplicationComponent
 
             return false;
         }
+
+        if(!$token) {
+
+            Craft::log(__METHOD__.' : No token defined', LogLevel::Info, true);
+
+            return false;
+        }
+
+
+        // init api
 
         $client = new Google_Client();
         $client->setApplicationName('Google+ PHP Starter Application');
@@ -54,12 +62,12 @@ class AnalyticsService extends BaseApplicationComponent
 
         $api = new Google_AnalyticsService($client);
 
-        $providerSourceToken = $provider->getToken();
-        $providerSourceToken->created = 0;
-        $providerSourceToken->expires_in = $providerSourceToken->expires;
-        $providerSourceToken = json_encode($providerSourceToken);
+        $realToken = $token->getRealToken();
+        $realToken->created = 0;
+        $realToken->expires_in = $realToken->expires;
+        $realToken = json_encode($realToken);
 
-        $client->setAccessToken($providerSourceToken);
+        $client->setAccessToken($realToken);
 
         return $api;
     }
