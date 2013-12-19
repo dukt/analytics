@@ -117,7 +117,15 @@ class Analytics_ChartsController extends BaseController
                 throw new Exception("Please select a web profile");
             }
         } catch(\Exception $e) {
-            $this->returnErrorJson($e->getErrors()[0]);
+            $errors = $e->getErrors();
+
+            if(is_array($errors)) {
+                $errors = $errors[0];
+            } else {
+                $errors = $e->getMessage();
+            }
+
+            $this->returnErrorJson($errors);
         }
 
         $this->returnJson($data);
@@ -163,7 +171,15 @@ class Analytics_ChartsController extends BaseController
 
         } catch(\Exception $e) {
 
-            $this->returnErrorJson($e->getErrors()[0]);
+            $errors = $e->getErrors();
+
+            if(is_array($errors)) {
+                $errors = $errors[0];
+            } else {
+                $errors = $e->getMessage();
+            }
+
+            $this->returnErrorJson($errors);
         }
     }
 
@@ -212,7 +228,15 @@ class Analytics_ChartsController extends BaseController
 
         } catch(\Exception $e) {
 
-            $this->returnErrorJson($e->getErrors()[0]);
+            $errors = $e->getErrors();
+
+            if(is_array($errors)) {
+                $errors = $errors[0];
+            } else {
+                $errors = $e->getMessage();
+            }
+
+            $this->returnErrorJson($errors);
         }
     }
 }
