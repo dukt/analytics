@@ -1,7 +1,5 @@
 # Craft Analytics License Agreement
 
-Analytics is free to use during beta. You are not allowed to reuse / distribute this software.
-
 ## Usage
 
 One license grants you the right to perform one installation of the Software on one website. You may install this software in a development environment as long as each production website has its license.
