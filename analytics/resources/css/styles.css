@@ -134,10 +134,10 @@ div.more .analyticsChart.table {
 }
 /* Tabs */
 .analyticsTabs .analyticsNav {
-  margin: 0 -30px;
+  margin: 0 -24px;
   margin-top: 10px;
-  margin-bottom: 30px;
-  padding: 0 30px;
+  margin-bottom: 24px;
+  padding: 0 24px;
   background: #fcfcfc;
   text-align: center;
 }

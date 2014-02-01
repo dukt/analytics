@@ -78,4 +78,9 @@ class Analytics_ReportsWidget extends BaseWidget
     {
         return $this->types;
     }
+
+    public function getColspan()
+    {
+        return 2;
+    }
 }
