@@ -1,31 +1,33 @@
-{% if craft.analytics.isConfigured %}
+<div class="{{ 'craft-'~craft.app.version|replace('.', '-') }}">
 
-	{% includeCssResource "analytics/css/styles.css" %}
+    {% if craft.analytics.isConfigured %}
 
-	{%- includeJsResource 'analytics/js/jsapi.js' first %}
-	{% includeJsResource 'analytics/js/dchart.js' %}
-	{% includeJsResource 'analytics/js/analytics-charts.js' %}
+    	{% includeCssResource "analytics/css/styles.css" %}
 
-	{% set profile = craft.analytics.profile %}
-	{% set webProperty = craft.analytics.webProperty %}
+    	{%- includeJsResource 'analytics/js/jsapi.js' first %}
+    	{% includeJsResource 'analytics/js/dchart.js' %}
+    	{% includeJsResource 'analytics/js/analytics-charts.js' %}
 
-    {% if profile.error is defined %}
+    	{% set profile = craft.analytics.profile %}
+    	{% set webProperty = craft.analytics.webProperty %}
 
-        <div class="center">
-            <p class="error">{{profile.error}}</p>
+        {% if profile.error is defined %}
 
-            <p><a href="{{url('settings/plugins/analytics')}}" class="btn icon settings">Analytics settings</a></p>
-        </div>
+            <div class="center">
+                <p class="error">{{profile.error}}</p>
+
+                <p><a href="{{url('settings/plugins/analytics')}}" class="btn icon settings">Analytics settings</a></p>
+            </div>
+
+        {% else %}
+
+    		{% block body %}
+    		{% endblock %}
+
+    	{% endif %}
 
     {% else %}
+    	<p><a href="{{url('settings/plugins/analytics')}}">Configure Analytics</a> plugin in order to get started.</p>
+    {% endif %}
 
-		{% block body %}
-		{% endblock %}
-
-	{% endif %}
-
-{% else %}
-
-	<p><a href="{{url('settings/plugins/analytics')}}">Configure Analytics</a> plugin in order to get started.</p>
-
-{% endif %}
+</div>
