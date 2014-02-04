@@ -14,9 +14,9 @@
         {% if profile.error is defined %}
 
             <div class="center">
-                <p class="error">{{profile.error}}</p>
+                <p class="error">{{ profile.error|t }}</p>
 
-                <p><a href="{{url('settings/plugins/analytics')}}" class="btn icon settings">Analytics settings</a></p>
+                <p><a href="{{url('settings/plugins/analytics')}}" class="btn icon settings">{{'Analytics settings'|t}}</a></p>
             </div>
 
         {% else %}
@@ -27,7 +27,7 @@
     	{% endif %}
 
     {% else %}
-    	<p><a href="{{url('settings/plugins/analytics')}}">Configure Analytics</a> plugin in order to get started.</p>
+    	<p><a href="{{url('settings/plugins/analytics')}}">{{'Configure Analytics plugin in order to get started'|t}}</a></p>
     {% endif %}
 
 </div>

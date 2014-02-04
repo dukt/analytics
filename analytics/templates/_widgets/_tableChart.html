@@ -1,10 +1,10 @@
 <div class="more">
 
-    <div class="center"><a class="more" href="#">More Data</a></div>
+    <div class="center"><a class="more" href="#">{{ 'More Data'|t }}</a></div>
 
     <div class="more-content hidden">
 
-        <div class="center"><a class="less" href="#">Less</a></div>
+        <div class="center"><a class="less" href="#">{{ 'Less'|t }}</a></div>
 
         {% include 'analytics/_includes/chartElement' with {
             chart: {
@@ -14,7 +14,7 @@
                         'type': 'string'
                     },
                     {
-                        'label' : 'Visits',
+                        'label' : 'Visits'|t,
                         'type': 'number'
                     }
                 ],

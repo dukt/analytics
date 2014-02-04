@@ -16,7 +16,7 @@
 		<div class="analyticsTab hidden">
 			{% include 'analytics/_widgets/_chart' with {
 			    settings: {
-					title:"Acquisition : Traffic Sources",
+					title:"Acquisition : Traffic Sources"|t,
 					chartType:'donut',
 					dimensions:'ga:source',
 					metric:'ga:visits',
@@ -26,7 +26,7 @@
 			} %}
 
 			{% include 'analytics/_widgets/_tableChart' with {
-				'label' : 'Source',
+				'label' : 'Source'|t,
 				'dimensions' : 'ga:source'
 			} %}
 		</div>
@@ -34,7 +34,7 @@
 		<div class="analyticsTab hidden">
 			{% include 'analytics/_widgets/_chart' with {
 			    settings: {
-					title:"Acquisition : Keywords",
+					title:"Acquisition : Keywords"|t,
 					chartType:'donut',
 					dimensions:'ga:keyword',
 					metric:'ga:visits',
@@ -44,7 +44,7 @@
 			} %}
 
 			{% include 'analytics/_widgets/_tableChart' with {
-				'label' : 'Keyword',
+				'label' : 'Keyword'|t,
 				'dimensions' : 'ga:keyword'
 			} %}
 		</div>
@@ -52,7 +52,7 @@
 		<div class="analyticsTab hidden">
 			{% include 'analytics/_widgets/_chart' with {
 			    settings: {
-					title:"Acquisition : Social Network",
+					title:"Acquisition : Social Network"|t,
 					chartType:'donut',
 					dimensions:'ga:socialNetwork',
 					metric:'ga:visits',
@@ -63,7 +63,7 @@
 
 
 			{% include 'analytics/_widgets/_tableChart' with {
-				'label' : 'Social Network',
+				'label' : 'Social Network'|t,
 				'dimensions' : 'ga:socialNetwork'
 			} %}
 		</div>

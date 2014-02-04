@@ -16,7 +16,7 @@
 		<div class="analyticsTab hidden">
 			{% include 'analytics/_widgets/_chart' with {
 			    settings: {
-					title:"Audience : Browsers",
+					title:"Audience : Browsers"|t,
 					chartType:'donut',
 					dimensions:'ga:browser',
 					metric:'ga:visits',
@@ -26,7 +26,7 @@
 			} %}
 
 			{% include 'analytics/_widgets/_tableChart' with {
-				'label' : 'Browser',
+				'label' : 'Browser'|t,
 				'dimensions' : 'ga:browser'
 			} %}
 		</div>
@@ -34,7 +34,7 @@
 		<div class="analyticsTab hidden">
 			{% include 'analytics/_widgets/_chart' with {
 			    settings: {
-					title:"Audience : OS",
+					title:"Audience : OS"|t,
 					chartType:'donut',
 					dimensions:'ga:operatingSystem',
 					metric:'ga:visits',
@@ -44,7 +44,7 @@
 			} %}
 
 			{% include 'analytics/_widgets/_tableChart' with {
-				'label' : 'OS',
+				'label' : 'OS'|t,
 				'dimensions' : 'ga:operatingSystem'
 			} %}
 		</div>
@@ -52,7 +52,7 @@
 		<div class="analyticsTab hidden">
 			{% include 'analytics/_widgets/_chart' with {
 			    settings: {
-					title:"Audience : Resolution",
+					title:"Audience : Resolution"|t,
 					chartType:'donut',
 					dimensions:'ga:screenResolution',
 					metric:'ga:visits',
@@ -62,7 +62,7 @@
 			} %}
 
 			{% include 'analytics/_widgets/_tableChart' with {
-				'label' : 'Resolution',
+				'label' : 'Resolution'|t,
 				'dimensions' : 'ga:screenResolution'
 			} %}
 		</div>

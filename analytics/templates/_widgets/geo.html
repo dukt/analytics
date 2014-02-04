@@ -16,7 +16,7 @@
 		<div class="analyticsTab hidden">
 			{% include 'analytics/_widgets/_chart' with {
 			    settings: {
-					title:"Audience : Language",
+					title:"Audience : Language"|t,
 					chartType:'donut',
 					dimensions:'ga:language',
 					metric:'ga:visits',
@@ -26,7 +26,7 @@
 			} %}
 
 			{% include 'analytics/_widgets/_tableChart' with {
-				'label' : 'Language',
+				'label' : 'Language'|t,
 				'dimensions' : 'ga:language'
 			} %}
 		</div>
@@ -34,7 +34,7 @@
 		<div class="analyticsTab hidden">
 			{% include 'analytics/_widgets/_chart' with {
 			    settings: {
-					title:"Audience : Country",
+					title:"Audience : Country"|t,
 					chartType:'donut',
 					dimensions:'ga:country',
 					metric:'ga:visits',
@@ -44,7 +44,7 @@
 			} %}
 
 			{% include 'analytics/_widgets/_tableChart' with {
-				'label' : 'Country',
+				'label' : 'Country'|t,
 				'dimensions' : 'ga:country'
 			} %}
 		</div>
@@ -55,11 +55,11 @@
 			    chart: {
 			    	cols: [
 						{
-							'label' : 'City',
+							'label' : 'City'|t,
 							'type': 'string'
 						},
 						{
-							'label' : 'Visits',
+							'label' : 'Visits'|t,
 							'type': 'number'
 						}
 			    	],
@@ -74,7 +74,7 @@
 					    }
 					},
 			        chartOptions: {
-				        title: 'City',
+				        title: 'City'|t,
 				        allowHtml: true,
 				        chartType:'table',
 				        chartArea : {

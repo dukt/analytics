@@ -4,7 +4,7 @@
 
 {% if craft.oauth is not defined %}
 
-	<h2 class="first">OAuth Not Installed</h2>
+	<h2 class="first">{{'OAuth Not Installed'|t}}</h2>
 
 
 	{% set oauth = craft.plugins.getPlugin('oauth', false) %}
@@ -105,7 +105,7 @@
 
 
 			<div class="buttons">
-				<input type="submit" class="btn submit force" value="Save">
+				<input type="submit" class="btn submit force" value="{{'Save'|t}}">
 			</div>
 
 

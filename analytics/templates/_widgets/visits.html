@@ -12,9 +12,9 @@
 	{% if profile.error is defined %}
 
 		<div class="center">
-			<p class="error">{{profile.error}}</p>
+			<p class="error">{{ profile.error|t }}</p>
 
-			<p><a href="{{url('settings/plugins/analytics')}}" class="btn icon settings">Analytics settings</a></p>
+			<p><a href="{{url('settings/plugins/analytics')}}" class="btn icon settings">{{'Analytics settings'|t}}</a></p>
 		</div>
 
 	{% else %}
@@ -44,7 +44,7 @@
 						    }
 						},
 				        chartOptions: {
-					        title: 'Audience Visits',
+					        title: 'Audience Visits'|t,
 					        chartType:'column',
 					        chartArea : {
 					            width:'100%',
@@ -75,7 +75,7 @@
 						    }
 						},
 				        chartOptions: {
-					        title: 'Audience Visits',
+					        title: 'Audience Visits'|t,
 					        chartType:'column',
 					        chartArea : {
 					            width:'100%',
@@ -106,7 +106,7 @@
 						    }
 						},
 				        chartOptions: {
-					        title: 'Audience : Visits',
+					        title: 'Audience : Visits'|t,
 					        chartType:'column',
 					        chartArea : {
 					            width:'100%',

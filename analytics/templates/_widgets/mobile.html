@@ -15,7 +15,7 @@
 		<div class="analyticsTab hidden">
 			{% include 'analytics/_widgets/_chart' with {
 			    settings: {
-					title:"Audience : Is Mobile ?",
+					title:"Audience : Is Mobile ?"|t,
 					chartType:'donut',
 					dimensions:'ga:isMobile',
 					metric:'ga:visits',
@@ -25,7 +25,7 @@
 			} %}
 
 			{% include 'analytics/_widgets/_tableChart' with {
-				'label' : 'Is Mobile',
+				'label' : 'Is Mobile'|t,
 				'dimensions' : 'ga:isMobile'
 			} %}
 		</div>
@@ -33,7 +33,7 @@
 		<div class="analyticsTab hidden">
 			{% include 'analytics/_widgets/_chart' with {
 			    settings: {
-					title:"Audience : Mobile Device",
+					title:"Audience : Mobile Device"|t,
 					chartType:'donut',
 					dimensions:'ga:mobileDeviceInfo',
 					metric:'ga:visits',
@@ -43,7 +43,7 @@
 			} %}
 
 			{% include 'analytics/_widgets/_tableChart' with {
-				'label' : 'Mobile Device',
+				'label' : 'Mobile Device'|t,
 				'dimensions' : 'ga:mobileDeviceInfo'
 			} %}
 		</div>

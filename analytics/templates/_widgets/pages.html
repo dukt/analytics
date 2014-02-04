@@ -16,7 +16,7 @@
 		<div class="analyticsTab hidden">
 			{% include 'analytics/_widgets/_chart' with {
 			    settings: {
-					title:"Pages : All",
+					title:"Pages : All"|t,
 					chartType:'donut',
 					dimensions:'ga:pagePath',
 					metric:'ga:visits',
@@ -27,7 +27,7 @@
 
 
 			{% include 'analytics/_widgets/_tableChart' with {
-				'label' : 'Page',
+				'label' : 'Page'|t,
 				'dimensions' : 'ga:pagePath'
 			} %}
 		</div>
@@ -35,7 +35,7 @@
 		<div class="analyticsTab hidden">
 			{% include 'analytics/_widgets/_chart' with {
 			    settings: {
-					title:"Pages : Landing",
+					title:"Pages : Landing"|t,
 					chartType:'donut',
 					dimensions:'ga:landingPagePath',
 					metric:'ga:visits',
@@ -46,7 +46,7 @@
 
 
 			{% include 'analytics/_widgets/_tableChart' with {
-				'label' : 'Page',
+				'label' : 'Page'|t,
 				'dimensions' : 'ga:landingPagePath'
 			} %}
 		</div>
@@ -54,7 +54,7 @@
 		<div class="analyticsTab hidden">
 			{% include 'analytics/_widgets/_chart' with {
 			    settings: {
-					title:"Pages : Exit",
+					title:"Pages : Exit"|t,
 					chartType:'donut',
 					dimensions:'ga:exitPagePath',
 					metric:'ga:visits',
@@ -65,7 +65,7 @@
 
 
 			{% include 'analytics/_widgets/_tableChart' with {
-				'label' : 'Page',
+				'label' : 'Page'|t,
 				'dimensions' : 'ga:exitPagePath'
 			} %}
 		</div>

@@ -28,7 +28,7 @@ class Analytics_ReportsWidget extends BaseWidget
         $type = $this->getType($settings->type);
 
         if($type) {
-            return Craft::t('Analytics')." ".$type;
+            return Craft::t('Analytics '.$type);
         }
 
         return Craft::t('Analytics');
@@ -38,6 +38,11 @@ class Analytics_ReportsWidget extends BaseWidget
     public function getSettingsHtml()
     {
         $types = $this->getTypes();
+
+        foreach($types as $k => $type)
+        {
+            $types[$k] = Craft::t($type);
+        }
 
         if(!empty($types['realtime'])) {
             $types['realtime'] .= ' (beta)';
