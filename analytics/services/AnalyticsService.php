@@ -20,6 +20,41 @@ use \Google_AnalyticsService;
 
 class AnalyticsService extends BaseApplicationComponent
 {
+    public function getChartFromData($data)
+    {
+        $query = $data['query'];
+
+        $result = craft()->analytics->api()->data_ga->get(
+            $query['param1'],
+            $query['param2'],
+            $query['param3'],
+            $query['param4'],
+            $query['param5']
+        );
+
+        $rows = array();
+
+        // foreach($result['rows'] as $v)
+        // {
+        //     $row = array($v[0], (int) $v[1]);
+        //     $rows[] = $row;
+        // }
+
+        foreach($result['rows'] as $v) {
+            $itemMetric = (int) array_pop($v);
+            $itemDimension = implode('.', $v);
+
+            if($itemDimension != "(not provided)" && $itemDimension != "(not set)") {
+                $item = array($itemDimension, $itemMetric);
+                array_push($rows, $item);
+            }
+        }
+
+        $data['rows'] = $rows;
+
+        return $data;
+    }
+
     public function api()
     {
         Craft::log(__METHOD__, LogLevel::Info, true);

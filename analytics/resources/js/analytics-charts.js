@@ -1,3 +1,4 @@
+
 $(document).ready(function() {
 
     // bar, donut, bubble, column, line

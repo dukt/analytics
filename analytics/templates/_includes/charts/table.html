@@ -1,0 +1,10 @@
+{% set defaultConfig = {
+    type: 'Table',
+    options: {
+        page: 'enable'
+    }
+} %}
+
+{% set config = defaultConfig|merge(config) %}
+
+{% include 'analytics/_includes/charts/chart' with config only %}

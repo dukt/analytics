@@ -37,4 +37,9 @@ class AnalyticsVariable
     {
         return craft()->analytics->getAccount();
     }
+
+    public function api()
+    {
+        return craft()->analytics->api();
+    }
 }

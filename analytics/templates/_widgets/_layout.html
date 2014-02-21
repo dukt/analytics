@@ -1,3 +1,5 @@
+{% import "analytics/_includes/charts" as charts %}
+
 <div class="{{ 'craft-'~craft.app.version|replace('.', '-') }}">
 
     {% if craft.analytics.isConfigured %}
@@ -5,8 +7,8 @@
     	{% includeCssResource "analytics/css/styles.css" %}
 
     	{%- includeJsResource 'analytics/js/jsapi.js' first %}
-    	{% includeJsResource 'analytics/js/dchart.js' %}
-    	{% includeJsResource 'analytics/js/analytics-charts.js' %}
+        {% includeJsResource 'analytics/js/analytics-tabs.js' %}
+    	{% includeJsResource 'analytics/js/AnalyticsChart.js' %}
 
     	{% set profile = craft.analytics.profile %}
     	{% set webProperty = craft.analytics.webProperty %}

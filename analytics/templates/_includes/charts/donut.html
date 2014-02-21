@@ -1,0 +1,17 @@
+{% set defaultConfig = {
+    type: 'PieChart',
+    options: {
+        legend: 'none',
+        pieHole:0.5,
+        sliceVisibilityThreshold:1/70,
+
+        chartArea:{
+            width:"90%",
+            height:"90%"
+        }
+    }
+} %}
+
+{% set config = defaultConfig|merge(config) %}
+
+{% include 'analytics/_includes/charts/chart' with config only %}

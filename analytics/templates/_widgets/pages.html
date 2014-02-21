@@ -14,60 +14,80 @@
 		<div class="clear"></div>
 
 		<div class="analyticsTab hidden">
-			{% include 'analytics/_widgets/_chart' with {
-			    settings: {
-					title:"Pages : All"|t,
-					chartType:'donut',
-					dimensions:'ga:pagePath',
-					metric:'ga:visits',
-					periodQuantity: 1,
-					periodUnit: 'month'
-				}
-			} %}
 
-
-			{% include 'analytics/_widgets/_tableChart' with {
-				'label' : 'Page'|t,
-				'dimensions' : 'ga:pagePath'
-			} %}
+			{{ charts.report({
+			    query: {
+			        param2: now|date_modify("-1 month")|date("Y-m-d"),
+			        param3: now|date("Y-m-d"),
+			        param4: 'ga:visits',
+			        param5: {
+				        'dimensions' : 'ga:pagePath',
+				        'sort' : '-ga:visits'
+			        }
+			    },
+			    columns: [
+			        {
+			            type: 'string',
+			            label: 'Page'
+			        },
+			        {
+			            type: 'number',
+			            label: 'Visits'
+			        }
+			    ]
+			}) }}
 		</div>
 
 		<div class="analyticsTab hidden">
-			{% include 'analytics/_widgets/_chart' with {
-			    settings: {
-					title:"Pages : Landing"|t,
-					chartType:'donut',
-					dimensions:'ga:landingPagePath',
-					metric:'ga:visits',
-					periodQuantity: 1,
-					periodUnit: 'month'
-				}
-			} %}
 
+			{{ charts.report({
+			    query: {
+			        param2: now|date_modify("-1 month")|date("Y-m-d"),
+			        param3: now|date("Y-m-d"),
+			        param4: 'ga:visits',
+			        param5: {
+				        'dimensions' : 'ga:landingPagePath',
+				        'sort' : '-ga:visits'
+			        }
+			    },
+			    columns: [
+			        {
+			            type: 'string',
+			            label: 'Landing Page'
+			        },
+			        {
+			            type: 'number',
+			            label: 'Visits'
+			        }
+			    ]
+			}) }}
 
-			{% include 'analytics/_widgets/_tableChart' with {
-				'label' : 'Page'|t,
-				'dimensions' : 'ga:landingPagePath'
-			} %}
 		</div>
 
 		<div class="analyticsTab hidden">
-			{% include 'analytics/_widgets/_chart' with {
-			    settings: {
-					title:"Pages : Exit"|t,
-					chartType:'donut',
-					dimensions:'ga:exitPagePath',
-					metric:'ga:visits',
-					periodQuantity: 1,
-					periodUnit: 'month'
-				}
-			} %}
 
+			{{ charts.report({
+			    query: {
+			        param2: now|date_modify("-1 month")|date("Y-m-d"),
+			        param3: now|date("Y-m-d"),
+			        param4: 'ga:visits',
+			        param5: {
+				        'dimensions' : 'ga:exitPagePath',
+				        'sort' : '-ga:visits'
+			        }
+			    },
+			    columns: [
+			        {
+			            type: 'string',
+			            label: 'Exit Page'
+			        },
+			        {
+			            type: 'number',
+			            label: 'Visits'
+			        }
+			    ]
+			}) }}
 
-			{% include 'analytics/_widgets/_tableChart' with {
-				'label' : 'Page'|t,
-				'dimensions' : 'ga:exitPagePath'
-			} %}
 		</div>
 	</div>
 

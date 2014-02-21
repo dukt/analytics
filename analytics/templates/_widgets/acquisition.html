@@ -1,7 +1,5 @@
 {% extends "analytics/_widgets/_layout" %}
 
-{% includeJsResource 'analytics/js/analytics-tabs.js' %}
-
 {% block body %}
 
 	<div class="analyticsTabs">
@@ -14,58 +12,78 @@
 		<div class="clear"></div>
 
 		<div class="analyticsTab hidden">
-			{% include 'analytics/_widgets/_chart' with {
-			    settings: {
-					title:"Acquisition : Traffic Sources"|t,
-					chartType:'donut',
-					dimensions:'ga:source',
-					metric:'ga:visits',
-					periodQuantity: 1,
-					periodUnit: 'month'
-				}
-			} %}
 
-			{% include 'analytics/_widgets/_tableChart' with {
-				'label' : 'Source'|t,
-				'dimensions' : 'ga:source'
-			} %}
+			{{ charts.report({
+			    query: {
+			        param2: now|date_modify("-1 month")|date("Y-m-d"),
+			        param3: now|date("Y-m-d"),
+			        param4: 'ga:visits',
+			        param5: {
+				        'dimensions' : 'ga:source',
+				        'sort' : '-ga:visits'
+			        }
+			    },
+			    columns: [
+			        {
+			            type: 'string',
+			            label: 'Sources'
+			        },
+			        {
+			            type: 'number',
+			            label: 'Visits'
+			        }
+			    ]
+			}) }}
+
 		</div>
 
 		<div class="analyticsTab hidden">
-			{% include 'analytics/_widgets/_chart' with {
-			    settings: {
-					title:"Acquisition : Keywords"|t,
-					chartType:'donut',
-					dimensions:'ga:keyword',
-					metric:'ga:visits',
-					periodQuantity: 1,
-					periodUnit: 'month'
-				}
-			} %}
 
-			{% include 'analytics/_widgets/_tableChart' with {
-				'label' : 'Keyword'|t,
-				'dimensions' : 'ga:keyword'
-			} %}
+			{{ charts.report({
+			    query: {
+			        param2: now|date_modify("-1 month")|date("Y-m-d"),
+			        param3: now|date("Y-m-d"),
+			        param4: 'ga:visits',
+			        param5: {
+				        'dimensions' : 'ga:keyword',
+				        'sort' : '-ga:visits'
+			        }
+			    },
+			    columns: [
+			        {
+			            type: 'string',
+			            label: 'Keywords'
+			        },
+			        {
+			            type: 'number',
+			            label: 'Visits'
+			        }
+			    ]
+			}) }}
 		</div>
 
 		<div class="analyticsTab hidden">
-			{% include 'analytics/_widgets/_chart' with {
-			    settings: {
-					title:"Acquisition : Social Network"|t,
-					chartType:'donut',
-					dimensions:'ga:socialNetwork',
-					metric:'ga:visits',
-					periodQuantity: 1,
-					periodUnit: 'month'
-				}
-			} %}
-
-
-			{% include 'analytics/_widgets/_tableChart' with {
-				'label' : 'Social Network'|t,
-				'dimensions' : 'ga:socialNetwork'
-			} %}
+			{{ charts.report({
+			    query: {
+			        param2: now|date_modify("-1 month")|date("Y-m-d"),
+			        param3: now|date("Y-m-d"),
+			        param4: 'ga:visits',
+			        param5: {
+				        'dimensions' : 'ga:socialNetwork',
+				        'sort' : '-ga:visits'
+			        }
+			    },
+			    columns: [
+			        {
+			            type: 'string',
+			            label: 'Social Network'
+			        },
+			        {
+			            type: 'number',
+			            label: 'Visits'
+			        }
+			    ]
+			}) }}
 		</div>
 
 	</div>

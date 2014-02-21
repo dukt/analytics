@@ -1,7 +1,5 @@
 {% extends "analytics/_widgets/_layout" %}
 
-{% includeJsResource 'analytics/js/analytics-tabs.js' %}
-
 {% block body %}
 
 	<div class="analyticsTabs">
@@ -14,74 +12,80 @@
 		<div class="clear"></div>
 
 		<div class="analyticsTab hidden">
-			{% include 'analytics/_widgets/_chart' with {
-			    settings: {
-					title:"Audience : Language"|t,
-					chartType:'donut',
-					dimensions:'ga:language',
-					metric:'ga:visits',
-					periodQuantity: 1,
-					periodUnit: 'month'
-				}
-			} %}
 
-			{% include 'analytics/_widgets/_tableChart' with {
-				'label' : 'Language'|t,
-				'dimensions' : 'ga:language'
-			} %}
-		</div>
+			{{ charts.report({
+			    query: {
+			        param2: now|date_modify("-1 month")|date("Y-m-d"),
+			        param3: now|date("Y-m-d"),
+			        param4: 'ga:visits',
+			        param5: {
+				        'dimensions' : 'ga:language',
+				        'sort' : '-ga:visits'
+			        }
+			    },
+			    columns: [
+			        {
+			            type: 'string',
+			            label: 'Language'
+			        },
+			        {
+			            type: 'number',
+			            label: 'Visits'
+			        }
+			    ]
+			}) }}
 
-		<div class="analyticsTab hidden">
-			{% include 'analytics/_widgets/_chart' with {
-			    settings: {
-					title:"Audience : Country"|t,
-					chartType:'donut',
-					dimensions:'ga:country',
-					metric:'ga:visits',
-					periodQuantity: 1,
-					periodUnit: 'month'
-				}
-			} %}
-
-			{% include 'analytics/_widgets/_tableChart' with {
-				'label' : 'Country'|t,
-				'dimensions' : 'ga:country'
-			} %}
 		</div>
 
 		<div class="analyticsTab hidden">
 
-			{% include 'analytics/_includes/chartElement' with {
-			    chart: {
-			    	cols: [
-						{
-							'label' : 'City'|t,
-							'type': 'string'
-						},
-						{
-							'label' : 'Visits'|t,
-							'type': 'number'
-						}
-			    	],
-			        chartQuery: {
-					    param1 : 'ga:' ~ profile.id,
-					    param2 : now|date_modify("-1 month")|date("Y-m-d"),
-					    param3 : now|date("Y-m-d"),
-					    param4 : 'ga:visits',
-					    param5 : {
-					        'dimensions' : 'ga:city',
-					        'sort' : '-ga:visits'
-					    }
-					},
-			        chartOptions: {
-				        title: 'City'|t,
-				        allowHtml: true,
-				        chartType:'table',
-				        chartArea : {
-				        }
-				    }
-			    }
-			} %}
+			{{ charts.report({
+			    query: {
+			        param2: now|date_modify("-1 month")|date("Y-m-d"),
+			        param3: now|date("Y-m-d"),
+			        param4: 'ga:visits',
+			        param5: {
+				        'dimensions' : 'ga:country',
+				        'sort' : '-ga:visits'
+			        }
+			    },
+			    columns: [
+			        {
+			            type: 'string',
+			            label: 'Country'
+			        },
+			        {
+			            type: 'number',
+			            label: 'Visits'
+			        }
+			    ]
+			}) }}
+
+		</div>
+
+		<div class="analyticsTab hidden">
+
+			{{ charts.report({
+			    query: {
+			        param2: now|date_modify("-1 month")|date("Y-m-d"),
+			        param3: now|date("Y-m-d"),
+			        param4: 'ga:visits',
+			        param5: {
+				        'dimensions' : 'ga:city',
+				        'sort' : '-ga:visits'
+			        }
+			    },
+			    columns: [
+			        {
+			            type: 'string',
+			            label: 'City'
+			        },
+			        {
+			            type: 'number',
+			            label: 'Visits'
+			        }
+			    ]
+			}) }}
 		</div>
 
 	</div>

@@ -14,9 +14,10 @@ $(document).ready(function() {
 				$($('.analyticsTab', v).get(k2)).removeClass('hidden');
 
 
-				// will re-draw the chart
+				// redraw the chart
+				$('body').trigger('redraw');
 
-				$(window).resize();
+				// $(window).trigger('resize');
 
 				return false;
 			});
@@ -39,7 +40,8 @@ $(document).ready(function() {
 				$('a.more', tab).removeClass('hidden');
 			}
 
-			$(window).resize();
+			// redraw the chart
+			$('body').trigger('redraw');
 
 			return false;
 		});

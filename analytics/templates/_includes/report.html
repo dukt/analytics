@@ -1,0 +1,15 @@
+{% import "analytics/_includes/charts" as charts %}
+
+{{ charts.donut(config) }}
+
+<div class="more">
+
+    <div class="center"><a class="more" href="#">{{ 'More Data'|t }}</a></div>
+
+    <div class="more-content hidden">
+
+        <div class="center"><a class="less" href="#">{{ 'Less'|t }}</a></div>
+
+        {{ charts.table(config) }}
+    </div>
+</div>

@@ -14,57 +14,78 @@
 		<div class="clear"></div>
 
 		<div class="analyticsTab hidden">
-			{% include 'analytics/_widgets/_chart' with {
-			    settings: {
-					title:"Audience : Browsers"|t,
-					chartType:'donut',
-					dimensions:'ga:browser',
-					metric:'ga:visits',
-					periodQuantity: 1,
-					periodUnit: 'month'
-				}
-			} %}
-
-			{% include 'analytics/_widgets/_tableChart' with {
-				'label' : 'Browser'|t,
-				'dimensions' : 'ga:browser'
-			} %}
+			{{ charts.report({
+			    query: {
+			        param2: now|date_modify("-1 month")|date("Y-m-d"),
+			        param3: now|date("Y-m-d"),
+			        param4: 'ga:visits',
+			        param5: {
+				        'dimensions' : 'ga:browser',
+				        'sort' : '-ga:visits'
+			        }
+			    },
+			    columns: [
+			        {
+			            type: 'string',
+			            label: 'Browser'
+			        },
+			        {
+			            type: 'number',
+			            label: 'Visits'
+			        }
+			    ]
+			}) }}
 		</div>
 
 		<div class="analyticsTab hidden">
-			{% include 'analytics/_widgets/_chart' with {
-			    settings: {
-					title:"Audience : OS"|t,
-					chartType:'donut',
-					dimensions:'ga:operatingSystem',
-					metric:'ga:visits',
-					periodQuantity: 1,
-					periodUnit: 'month'
-				}
-			} %}
+			{{ charts.report({
+			    query: {
+			        param2: now|date_modify("-1 month")|date("Y-m-d"),
+			        param3: now|date("Y-m-d"),
+			        param4: 'ga:visits',
+			        param5: {
+				        'dimensions' : 'ga:operatingSystem',
+				        'sort' : '-ga:visits'
+			        }
+			    },
+			    columns: [
+			        {
+			            type: 'string',
+			            label: 'Operating System'
+			        },
+			        {
+			            type: 'number',
+			            label: 'Visits'
+			        }
+			    ]
+			}) }}
 
-			{% include 'analytics/_widgets/_tableChart' with {
-				'label' : 'OS'|t,
-				'dimensions' : 'ga:operatingSystem'
-			} %}
 		</div>
 
 		<div class="analyticsTab hidden">
-			{% include 'analytics/_widgets/_chart' with {
-			    settings: {
-					title:"Audience : Resolution"|t,
-					chartType:'donut',
-					dimensions:'ga:screenResolution',
-					metric:'ga:visits',
-					periodQuantity: 1,
-					periodUnit: 'month'
-				}
-			} %}
 
-			{% include 'analytics/_widgets/_tableChart' with {
-				'label' : 'Resolution'|t,
-				'dimensions' : 'ga:screenResolution'
-			} %}
+			{{ charts.report({
+			    query: {
+			        param2: now|date_modify("-1 month")|date("Y-m-d"),
+			        param3: now|date("Y-m-d"),
+			        param4: 'ga:visits',
+			        param5: {
+				        'dimensions' : 'ga:screenResolution',
+				        'sort' : '-ga:visits'
+			        }
+			    },
+			    columns: [
+			        {
+			            type: 'string',
+			            label: 'Screen Resolution'
+			        },
+			        {
+			            type: 'number',
+			            label: 'Visits'
+			        }
+			    ]
+			}) }}
+
 		</div>
 	</div>
 

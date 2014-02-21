@@ -14,6 +14,15 @@ namespace Craft;
 
 class Analytics_ChartsController extends BaseController
 {
+    public function actionGetChart()
+    {
+        $data = craft()->request->getParam('data');
+
+        $chart = craft()->analytics->getChartFromData($data);
+
+        $this->returnJson(array('chart' => $chart));
+    }
+
     public function actionRealtime()
     {
         $data = array(

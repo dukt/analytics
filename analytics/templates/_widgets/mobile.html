@@ -13,39 +13,55 @@
 		<div class="clear"></div>
 
 		<div class="analyticsTab hidden">
-			{% include 'analytics/_widgets/_chart' with {
-			    settings: {
-					title:"Audience : Is Mobile ?"|t,
-					chartType:'donut',
-					dimensions:'ga:isMobile',
-					metric:'ga:visits',
-					periodQuantity: 1,
-					periodUnit: 'month'
-				}
-			} %}
 
-			{% include 'analytics/_widgets/_tableChart' with {
-				'label' : 'Is Mobile'|t,
-				'dimensions' : 'ga:isMobile'
-			} %}
+			{{ charts.report({
+			    query: {
+			        param2: now|date_modify("-1 month")|date("Y-m-d"),
+			        param3: now|date("Y-m-d"),
+			        param4: 'ga:visits',
+			        param5: {
+				        'dimensions' : 'ga:isMobile',
+				        'sort' : '-ga:visits'
+			        }
+			    },
+			    columns: [
+			        {
+			            type: 'string',
+			            label: 'Is Mobile'
+			        },
+			        {
+			            type: 'number',
+			            label: 'Visits'
+			        }
+			    ]
+			}) }}
+
 		</div>
 
 		<div class="analyticsTab hidden">
-			{% include 'analytics/_widgets/_chart' with {
-			    settings: {
-					title:"Audience : Mobile Device"|t,
-					chartType:'donut',
-					dimensions:'ga:mobileDeviceInfo',
-					metric:'ga:visits',
-					periodQuantity: 1,
-					periodUnit: 'month'
-				}
-			} %}
 
-			{% include 'analytics/_widgets/_tableChart' with {
-				'label' : 'Mobile Device'|t,
-				'dimensions' : 'ga:mobileDeviceInfo'
-			} %}
+			{{ charts.report({
+			    query: {
+			        param2: now|date_modify("-1 month")|date("Y-m-d"),
+			        param3: now|date("Y-m-d"),
+			        param4: 'ga:visits',
+			        param5: {
+				        'dimensions' : 'ga:mobileDeviceInfo',
+				        'sort' : '-ga:visits'
+			        }
+			    },
+			    columns: [
+			        {
+			            type: 'string',
+			            label: 'Mobile Device'
+			        },
+			        {
+			            type: 'number',
+			            label: 'Visits'
+			        }
+			    ]
+			}) }}
+
 		</div>
 	</div>
 

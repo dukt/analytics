@@ -1,0 +1,19 @@
+{% macro report(config) %}
+    {% include 'analytics/_includes/report' with {config: config} only %}
+{% endmacro %}
+
+{% macro line(config) %}
+    {% include 'analytics/_includes/charts/line' with {config: config} only %}
+{% endmacro %}
+
+{% macro area(config) %}
+    {% include 'analytics/_includes/charts/area' with {config: config} only %}
+{% endmacro %}
+
+{% macro donut(config) %}
+    {% include 'analytics/_includes/charts/donut' with {config: config} only %}
+{% endmacro %}
+
+{% macro table(config) %}
+    {% include 'analytics/_includes/charts/table' with {config: config} only %}
+{% endmacro %}

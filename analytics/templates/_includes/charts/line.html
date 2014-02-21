@@ -1,0 +1,7 @@
+{% set defaultConfig = {
+    type: 'LineChart'
+} %}
+
+{% set config = defaultConfig|merge(config) %}
+
+{% include 'analytics/_includes/charts/chart' with config only %}

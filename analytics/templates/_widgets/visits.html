@@ -1,13 +1,9 @@
 {% extends "analytics/_widgets/_layout" %}
 
-{% includeJsResource 'analytics/js/analytics-tabs.js' %}
-
 {% block body %}
 
 	{% set profile = craft.analytics.profile %}
 	{% set webProperty = craft.analytics.webProperty %}
-
-
 
 	{% if profile.error is defined %}
 
@@ -28,9 +24,9 @@
 
 			<div class="clear"></div>
 
-			<div class="analyticsTab hidden">
+			<div class="analyticsTab">
 
-
+{#
 				{% include 'analytics/_includes/chartElement' with {
 				    chart: {
 				        chartQuery: {
@@ -57,11 +53,33 @@
 					    }
 				    }
 				} %}
+ #}
+				{{ charts.area({
+			        query: {
+			            param2: now|date_modify("-1 week")|date("Y-m-d"),
+			            param3: now|date("Y-m-d"),
+			            param4: 'ga:visits',
+			            param5: {
+					        'dimensions' : 'ga:day, ga:month, ga:year',
+					        'sort' : 'ga:year, ga:month, ga:day',
+			            }
+			        },
+			        columns: [
+			            {
+			                type: 'string',
+			                label: 'Date'
+			            },
+			            {
+			                type: 'number',
+			                label: 'Visits'
+			            }
+			        ]
+			    }) }}
 
 			</div>
 
-			<div class="analyticsTab hidden">
-
+			<div class="analyticsTab">
+{#
 				{% include 'analytics/_includes/chartElement' with {
 				    chart: {
 				        chartQuery: {
@@ -88,12 +106,35 @@
 					    }
 				    }
 				} %}
+ #}
+
+				{{ charts.area({
+			        query: {
+			            param2: now|date_modify("-1 month")|date("Y-m-d"),
+			            param3: now|date("Y-m-d"),
+			            param4: 'ga:visits',
+			            param5: {
+					        'dimensions' : 'ga:day, ga:month, ga:year',
+					        'sort' : 'ga:year, ga:month, ga:day',
+			            }
+			        },
+			        columns: [
+			            {
+			                type: 'string',
+			                label: 'Date'
+			            },
+			            {
+			                type: 'number',
+			                label: 'Visits'
+			            }
+			        ]
+			    }) }}
 
 			</div>
 
-			<div class="analyticsTab hidden">
+			<div class="analyticsTab">
 
-				{% include 'analytics/_includes/chartElement' with {
+{# 				{% include 'analytics/_includes/chartElement' with {
 				    chart: {
 				        chartQuery: {
 						    param1 : 'ga:' ~ profile.id,
@@ -118,7 +159,30 @@
 					        }
 					    }
 				    }
-				} %}
+				} %} #}
+
+
+				{{ charts.area({
+			        query: {
+			            param2: now|date_modify("-1 year")|date("Y-m-d"),
+			            param3: now|date("Y-m-d"),
+			            param4: 'ga:visits',
+			            param5: {
+					        'dimensions' : 'ga:month, ga:year',
+					        'sort' : 'ga:year, ga:month',
+			            }
+			        },
+			        columns: [
+			            {
+			                type: 'string',
+			                label: 'Date'
+			            },
+			            {
+			                type: 'number',
+			                label: 'Visits'
+			            }
+			        ]
+			    }) }}
 			</div>
 		</div>
 	{% endif %}
