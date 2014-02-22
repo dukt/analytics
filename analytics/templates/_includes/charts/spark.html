@@ -1,0 +1,16 @@
+{% set defaultConfig = {
+    type: 'LineChart',
+    options: {
+        legend: 'none',
+
+        chartArea:{
+            width:"90%",
+            height:"90%"
+        }
+    }
+} %}
+
+{% set config = defaultConfig|merge(config) %}
+
+{% include 'analytics/_includes/charts/chart' with config only %}
+

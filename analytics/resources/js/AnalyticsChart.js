@@ -1,4 +1,24 @@
-google.load("visualization", "1", {packages:["corechart", 'table']});
+google.load("visualization", "1", {packages:['corechart', 'table', 'geochart']});
+
+
+AnalyticsCountReport = Garnish.Base.extend({
+    init: function(element)
+    {
+        this.$element = $(element);
+        this.$inject = $(element);
+
+        var data = {
+            start: this.$element.data('start'),
+            end: this.$element.data('end')
+        };
+
+        Craft.postActionRequest('analytics/charts/getCountReport', data, function(response) {
+            console.log('response', response);
+            this.$inject.html(response.html);
+        }, this);
+    },
+});
+
 
 AnalyticsChart = Garnish.Base.extend({
     $element: null,
@@ -75,6 +95,10 @@ AnalyticsChart = Garnish.Base.extend({
             this.$googleChart = new google.visualization.PieChart(this.$inject.get(0));
             break;
 
+            case 'GeoChart':
+            this.$googleChart = new google.visualization.GeoChart(this.$inject.get(0));
+            break;
+
         }
 
         this.drawChart();
@@ -104,5 +128,14 @@ $(document).ready(function() {
 
     charts.each(function(k, el) {
         rawCharts = new AnalyticsChart(el);
+    });
+
+
+    var sparks = $(".analyticsCountReport");
+
+    var rawSparks = [];
+
+    sparks.each(function(k, el) {
+        rawSparks = new AnalyticsCountReport(el);
     });
 });

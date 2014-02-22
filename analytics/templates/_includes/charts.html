@@ -17,3 +17,7 @@
 {% macro table(config) %}
     {% include 'analytics/_includes/charts/table' with {config: config} only %}
 {% endmacro %}
+
+{% macro geo(config) %}
+    {% include 'analytics/_includes/charts/geo' with {config: config} only %}
+{% endmacro %}

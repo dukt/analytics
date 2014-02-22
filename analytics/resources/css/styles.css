@@ -17,6 +17,39 @@ div.more .analyticsChart.table {
   margin-top: 30px;
   margin-bottom: 20px;
 }
+.analytics-count-report {
+  border: 1px solid red;
+  float: left;
+  width: 100%;
+}
+/* count report */
+.analyticsCountReport {
+  margin: -24px;
+  margin-top: 24px;
+}
+.analyticsCountReport .block {
+  width: 33%;
+  float: left;
+  margin-bottom: 24px;
+}
+.analyticsCountReport .block .in {
+  text-align: center;
+  line-height: 2em;
+}
+.analyticsCountReport .block .in strong {
+  display: block;
+  text-transform: uppercase;
+  opacity: .5;
+}
+.analyticsCountReport .block .in span {
+  font-weight: bold;
+  font-size: 2em;
+}
+@media screen and (max-width: 653px) {
+  .analyticsCountReport .block {
+    width: 50%;
+  }
+}
 /* analyticsChart */
 .analyticsChart {
   margin-bottom: 20px;

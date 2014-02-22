@@ -1,4 +1,5 @@
 {% extends "analytics/_widgets/_layout" %}
+{% import "analytics/_includes/charts" as charts %}
 
 {% block body %}
 
@@ -12,6 +13,7 @@
 		<div class="clear"></div>
 
 		<div class="analyticsTab hidden">
+
 
 			{{ charts.report({
 			    query: {
@@ -39,7 +41,8 @@
 
 		<div class="analyticsTab hidden">
 
-			{{ charts.report({
+
+			{% set config = {
 			    query: {
 			        param2: now|date_modify("-1 month")|date("Y-m-d"),
 			        param3: now|date("Y-m-d"),
@@ -59,7 +62,43 @@
 			            label: 'Visits'
 			        }
 			    ]
-			}) }}
+			} %}
+
+			{{ charts.geo(config) }}
+
+			<div class="more">
+
+			    <div class="center"><a class="more" href="#">{{ 'More Data'|t }}</a></div>
+
+			    <div class="more-content hidden">
+
+			        <div class="center"><a class="less" href="#">{{ 'Less'|t }}</a></div>
+
+			        {{ charts.table(config) }}
+			    </div>
+			</div>
+
+{# 			{{ charts.report({
+			    query: {
+			        param2: now|date_modify("-1 month")|date("Y-m-d"),
+			        param3: now|date("Y-m-d"),
+			        param4: 'ga:visits',
+			        param5: {
+				        'dimensions' : 'ga:country',
+				        'sort' : '-ga:visits'
+			        }
+			    },
+			    columns: [
+			        {
+			            type: 'string',
+			            label: 'Country'
+			        },
+			        {
+			            type: 'number',
+			            label: 'Visits'
+			        }
+			    ]
+			}) }} #}
 
 		</div>
 

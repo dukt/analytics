@@ -14,6 +14,129 @@ namespace Craft;
 
 class Analytics_ChartsController extends BaseController
 {
+    public function getRows($response)
+    {
+        $columns = $response['columnHeaders'];
+
+        $rows = $response['rows'];
+        $newRows = array();
+
+        foreach($rows as $row)
+        {
+            $newRow = array();
+
+            foreach($row as $k => $v)
+            {
+                $newRow[$columns[$k]['name']] = $this->formatCell($v, $columns[$k]);
+            }
+
+            array_push($newRows, $newRow);
+
+        }
+
+        return $newRows;
+    }
+
+    public function secondMinute($seconds)
+    {
+        $minResult = floor($seconds/60);
+        if($minResult < 10)
+        {
+            $minResult = 0 . $minResult;
+        }
+
+        $secResult = ($seconds/60 - $minResult) * 60;
+
+        if($secResult < 10){
+            $secResult = 0 . round($secResult);
+        }
+        else
+        {
+            $secResult = round($secResult);
+        }
+
+        return $minResult.":".$secResult;
+    }
+
+    public function formatCell($value, $column)
+    {
+        switch($column['name'])
+        {
+            case "ga:avgTimeOnPage":
+                $value = $this->secondMinute($value);
+                return $value;
+                break;
+
+            case 'ga:pageviewsPerVisit':
+
+                $value = round($value, 2);
+                return $value;
+
+                break;
+
+            case 'ga:entranceRate':
+            case 'ga:visitBounceRate':
+            case 'ga:exitRate':
+
+                $value = round($value, 2)."%";
+                return $value;
+
+                break;
+
+            default:
+                return $value;
+        }
+    }
+
+    public function actionGetCountReport()
+    {
+        $profile = craft()->analytics->getProfile();
+
+        $start = craft()->request->getParam('start');
+        $end = craft()->request->getParam('end');
+
+        if(empty($start))
+        {
+            $start = date('Y-m-d', strtotime('-1 month'));
+        }
+
+        if(empty($end))
+        {
+            $end = date('Y-m-d');
+        }
+
+        $response = craft()->analytics->api()->data_ga->get(
+            'ga:'.$profile['id'],
+            $start,
+            $end,
+            'ga:entrances, ga:exits, ga:pageviews, ga:timeOnPage, ga:exitRate, ga:entranceRate, ga:pageviewsPerVisit, ga:avgTimeOnPage, ga:visitBounceRate'
+        );
+
+        $rows = $this->getRows($response);
+
+        $row = array_pop($rows);
+
+        $counts = array(
+            'entrances'         => $row['ga:entrances'],
+            'exits'             => $row['ga:exits'],
+            'pageviews'         => $row['ga:pageviews'],
+            'timeOnPage'        => $row['ga:timeOnPage'],
+            'exitRate'   => $row['ga:exitRate'],
+            'entranceRate'      => $row['ga:entranceRate'],
+            'pageviewsPerVisit' => $row['ga:pageviewsPerVisit'],
+            'avgTimeOnPage'     => $row['ga:avgTimeOnPage'],
+            'visitBounceRate'          => $row['ga:visitBounceRate'],
+        );
+
+        $html = craft()->templates->render('analytics/_includes/countReport', array(
+            'counts' => $counts
+        ));
+
+        $this->returnJson(array(
+            'html' => $html
+        ));
+    }
+
     public function actionGetChart()
     {
         $data = craft()->request->getParam('data');

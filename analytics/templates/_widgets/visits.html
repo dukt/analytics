@@ -26,34 +26,6 @@
 
 			<div class="analyticsTab">
 
-{#
-				{% include 'analytics/_includes/chartElement' with {
-				    chart: {
-				        chartQuery: {
-						    param1 : 'ga:' ~ profile.id,
-						    param2 : now|date_modify("-1 week")|date("Y-m-d"),
-						    param3 : now|date("Y-m-d"),
-						    param4 : 'ga:visits',
-						    param5 : {
-						        'dimensions' : 'ga:day, ga:month, ga:year',
-						        'sort' : 'ga:year, ga:month, ga:day',
-						    }
-						},
-				        chartOptions: {
-					        title: 'Audience Visits'|t,
-					        chartType:'column',
-					        chartArea : {
-					            width:'100%',
-					            height:'100%',
-					            left:0,
-					            right:0,
-					            top:0,
-					            bottom:0
-					        }
-					    }
-				    }
-				} %}
- #}
 				{{ charts.area({
 			        query: {
 			            param2: now|date_modify("-1 week")|date("Y-m-d"),
@@ -76,37 +48,16 @@
 			        ]
 			    }) }}
 
+				<div class="analyticsCountReport"
+					 data-start="{{now|date_modify("-1 week")|date("Y-m-d")}}"
+					 data-end="{{now|date("Y-m-d")}}">
+
+					Count report loading...
+
+				</div>
 			</div>
 
 			<div class="analyticsTab">
-{#
-				{% include 'analytics/_includes/chartElement' with {
-				    chart: {
-				        chartQuery: {
-						    param1 : 'ga:' ~ profile.id,
-						    param2 : now|date_modify("-1 month")|date("Y-m-d"),
-						    param3 : now|date("Y-m-d"),
-						    param4 : 'ga:visits',
-						    param5 : {
-						        'dimensions' : 'ga:day, ga:month, ga:year',
-						        'sort' : 'ga:year, ga:month, ga:day',
-						    }
-						},
-				        chartOptions: {
-					        title: 'Audience Visits'|t,
-					        chartType:'column',
-					        chartArea : {
-					            width:'100%',
-					            height:'100%',
-					            left:0,
-					            right:0,
-					            top:0,
-					            bottom:0
-					        }
-					    }
-				    }
-				} %}
- #}
 
 				{{ charts.area({
 			        query: {
@@ -130,37 +81,16 @@
 			        ]
 			    }) }}
 
+				<div class="analyticsCountReport"
+					 data-start="{{now|date_modify("-1 month")|date("Y-m-d")}}"
+					 data-end="{{now|date("Y-m-d")}}">
+
+					Count report loading...
+
+				</div>
 			</div>
 
 			<div class="analyticsTab">
-
-{# 				{% include 'analytics/_includes/chartElement' with {
-				    chart: {
-				        chartQuery: {
-						    param1 : 'ga:' ~ profile.id,
-						    param2 : now|date_modify("-1 year")|date("Y-m-d"),
-						    param3 : now|date("Y-m-d"),
-						    param4 : 'ga:visits',
-						    param5 : {
-						        'dimensions' : 'ga:month, ga:year',
-						        'sort' : 'ga:year, ga:month',
-						    }
-						},
-				        chartOptions: {
-					        title: 'Audience : Visits'|t,
-					        chartType:'column',
-					        chartArea : {
-					            width:'100%',
-					            height:'100%',
-					            left:0,
-					            right:0,
-					            top:0,
-					            bottom:0
-					        }
-					    }
-				    }
-				} %} #}
-
 
 				{{ charts.area({
 			        query: {
@@ -183,6 +113,14 @@
 			            }
 			        ]
 			    }) }}
+
+				<div class="analyticsCountReport"
+					 data-start="{{now|date_modify("-1 year")|date("Y-m-d")}}"
+					 data-end="{{now|date("Y-m-d")}}">
+
+					Count report loading...
+
+				</div>
 			</div>
 		</div>
 	{% endif %}

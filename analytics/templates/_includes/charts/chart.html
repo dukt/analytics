@@ -40,9 +40,15 @@
 } %}
 
 <div class="analyticsChart {{type}}">
+
+    <div class="inject"></div>
+
     <div class="data">
         {{data|json_encode|raw}}
     </div>
 
-    <div class="inject"></div>
+    <div class="error center hidden">
+        <div class="inject"></div>
+        <p><a class="btn icon settings" href="{{url('settings/plugins/analytics')}}">Analytics Settings</a></p>
+    </div>
 </div>
