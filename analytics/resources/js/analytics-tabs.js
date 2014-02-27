@@ -1,11 +1,11 @@
 $(document).ready(function() {
-	$('.analyticsTabs').each(function(k, v) {
+	$('.analytics-tabs').each(function(k, v) {
 
-		$('.analyticsNav a', v).each(function(k2, v2) {
+		$('.analytics-nav a', v).each(function(k2, v2) {
 
 			$(v2).click(function() {
 
-				$('.analyticsNav a', v).removeClass('active');
+				$('.analytics-nav a', v).removeClass('active');
 
 				$(this).addClass('active');
 
@@ -23,13 +23,13 @@ $(document).ready(function() {
 			});
 		});
 
-		$('.analyticsNav li:first-child a', v).trigger('click');
+		$('.analytics-nav li:first-child a', v).trigger('click');
 	});
 
 
 	// more
 
-	$('.analyticsTabs').each(function(k, tab) {
+	$('.analytics-tabs').each(function(k, tab) {
 
 		$('a.more, a.less', tab).click(function() {
 			if($('div.more-content', tab).hasClass('hidden')) {

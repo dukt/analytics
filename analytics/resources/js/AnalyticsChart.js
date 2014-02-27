@@ -157,7 +157,8 @@ AnalyticsChart = Garnish.Base.extend({
 
     drawChart: function()
     {
-        console.log('redraw');
+        // console.log('redraw');
+
         if(this.$googleChart)
         {
             this.$googleChart.draw(this.$googleData, this.$chart.options);
@@ -166,7 +167,7 @@ AnalyticsChart = Garnish.Base.extend({
 });
 
 $(document).ready(function() {
-    var charts = $(".analyticsChart");
+    var charts = $(".analytics-chart");
 
     var rawCharts = [];
 
@@ -175,7 +176,7 @@ $(document).ready(function() {
     });
 
 
-    var sparks = $(".analyticsCountReport");
+    var sparks = $(".analytics-report-count");
 
     var rawSparks = [];
 

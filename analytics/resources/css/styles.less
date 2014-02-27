@@ -1,13 +1,18 @@
 /*
 
-Analytics:
+Table of contents:
 
-- Layout
-- Tabs
-- Reports
+- Basics
+- Widgets
 - Charts
+- Tabs
 
 */
+
+
+/************************
+ * Basics
+ ************************/
 
 .center {
     text-align: center;
@@ -31,26 +36,23 @@ a.less {
 }
 
 div.more {
-    .analyticsChart.table {
+    .analytics-chart.table {
         margin-top: 30px;
         margin-bottom: 20px;
     }
 }
 
-.analytics-count-report {
-    border:1px solid red;
-    float: left;
-    width: 100%;
+.analytics-loading {
+    background: url(../images/spinner.gif) no-repeat 50% 50%;
+    min-height: 40px;
 }
 
-.analytics-report-counts {
-    margin-top: -10px;
-}
 
-/* count report */
+/************************
+ * Widgets
+ *************************/
 
-.analyticsCountReport {
-    // margin: -24px;
+.analytics-report-count {
     margin-top: -12px;
 
     .blocks {
@@ -81,21 +83,21 @@ div.more {
 }
 
 .analytics-colspan-1 {
-    .analyticsCountReport {
+    .analytics-report-count {
         .block {
             width: 50%;
         }
     }
 }
 .analytics-colspan-2 {
-    .analyticsCountReport {
+    .analytics-report-count {
         .block {
             width: 33%;
         }
     }
 
     @media screen and (max-width: 653px) {
-        .analyticsCountReport {
+        .analytics-report-count {
             .block {
                 width: 50%;
             }
@@ -105,7 +107,7 @@ div.more {
 
 .analytics-colspan-3, .analytics-colspan-4 {
     @media screen and (min-width: 970px) {
-        .analyticsCountReport {
+        .analytics-report-count {
             .block {
                 width: 16.66%;
             }
@@ -113,7 +115,7 @@ div.more {
     }
 
     @media screen and (max-width: 653px) {
-        .analyticsCountReport {
+        .analytics-report-count {
             .block {
                 width: 50%;
             }
@@ -121,14 +123,12 @@ div.more {
     }
 }
 
-.analytics-loading {
-    background: url(../images/spinner.gif) no-repeat 50% 50%;
-    min-height: 40px;
-}
 
-/* analyticsChart */
+/************************
+ * Charts
+ *************************/
 
-.analyticsChart {
+.analytics-chart {
     margin-bottom: 20px;
 
     min-height: 100px;
@@ -151,10 +151,6 @@ div.more {
 
     &.donut {
         min-height: 250px;
-    }
-
-    &.donut {
-        // margin-bottom: 30px;
     }
 
     &.AreaChart {
@@ -215,8 +211,6 @@ div.more {
         }
 
         td {
-            // background: #fff;
-            // padding: 5px;
             width: 100px;
 
             strong {
@@ -230,20 +224,8 @@ div.more {
             }
         }
 
+        .google-visualization-table-tr-sel,
         .google-visualization-table-tr-over {
-
-            td {
-                background-color: #fff;
-            }
-
-            &.google-visualization-table-tr-odd {
-                td {
-                    background-color: #fff;
-                }
-            }
-        }
-
-        .google-visualization-table-tr-sel {
             td {
                 background-color: #fff;
             }
@@ -316,11 +298,14 @@ div.more {
     }
 }
 
-/* Tabs */
 
-.analyticsTabs {
+/************
+ * Tabs
+ *************/
 
-    .analyticsNav {
+.analytics-tabs {
+
+    .analytics-nav {
         margin: 0 -30px;
         margin-top: 10px;
         margin-bottom: 30px;
@@ -353,9 +338,14 @@ div.more {
     }
 }
 
+
+/************************
+ * Craft compatibility
+ **************************/
+
 .craft-1-4 {
-    .analyticsTabs {
-        .analyticsNav {
+    .analytics-tabs {
+        .analytics-nav {
             margin: 0 -24px;
             margin-bottom: 24px;
             padding: 0 24px;
