@@ -1,9 +1,23 @@
+/*
+
+Analytics:
+
+- Layout
+- Tabs
+- Reports
+- Charts
+
+*/
 .center {
   text-align: center;
 }
 a.more,
 a.less {
+  position: relative;
+  display: block;
   margin: 0 -30px;
+  margin-top: -20px !important;
+  margin-bottom: -11px !important;
   text-align: center;
   padding: 0.5em;
 }
@@ -11,7 +25,7 @@ a.more {
   margin-bottom: -20px;
 }
 a.less {
-  margin-bottom: 10px;
+  margin-bottom: 10px !important;
 }
 div.more .analyticsChart.table {
   margin-top: 30px;
@@ -22,38 +36,66 @@ div.more .analyticsChart.table {
   float: left;
   width: 100%;
 }
+.analytics-report-counts {
+  margin-top: -10px;
+}
 /* count report */
 .analyticsCountReport {
-  margin: -24px;
-  margin-top: 24px;
+  margin-top: -12px;
 }
-.analyticsCountReport .block {
+.analyticsCountReport .blocks {
+  margin-bottom: -24px;
+}
+.analyticsCountReport .blocks .block {
   width: 33%;
   float: left;
   margin-bottom: 24px;
 }
-.analyticsCountReport .block .in {
+.analyticsCountReport .blocks .block .in {
   text-align: center;
   line-height: 2em;
 }
-.analyticsCountReport .block .in strong {
+.analyticsCountReport .blocks .block .in strong {
   display: block;
   text-transform: uppercase;
   opacity: .5;
+  font-size: 0.9em;
 }
-.analyticsCountReport .block .in span {
+.analyticsCountReport .blocks .block .in span {
   font-weight: bold;
-  font-size: 2em;
+  font-size: 1.6em;
+}
+.analytics-colspan-1 .analyticsCountReport .block {
+  width: 50%;
+}
+.analytics-colspan-2 .analyticsCountReport .block {
+  width: 33%;
 }
 @media screen and (max-width: 653px) {
-  .analyticsCountReport .block {
+  .analytics-colspan-2 .analyticsCountReport .block {
     width: 50%;
   }
+}
+@media screen and (min-width: 970px) {
+  .analytics-colspan-3 .analyticsCountReport .block,
+  .analytics-colspan-4 .analyticsCountReport .block {
+    width: 16.66%;
+  }
+}
+@media screen and (max-width: 653px) {
+  .analytics-colspan-3 .analyticsCountReport .block,
+  .analytics-colspan-4 .analyticsCountReport .block {
+    width: 50%;
+  }
+}
+.analytics-loading {
+  background: url(../images/spinner.gif) no-repeat 50% 50%;
+  min-height: 40px;
 }
 /* analyticsChart */
 .analyticsChart {
   margin-bottom: 20px;
-  background: url(../images/spinner.gif) no-repeat 50% 50%;
+  min-height: 100px;
 }
 .analyticsChart.dk-loaded {
   background: none;
@@ -69,6 +111,9 @@ div.more .analyticsChart.table {
 }
 .analyticsChart.donut {
   min-height: 250px;
+}
+.analyticsChart.AreaChart {
+  margin-bottom: 0px;
 }
 .analyticsChart.Table {
   margin: 0;
@@ -93,6 +138,12 @@ div.more .analyticsChart.table {
 }
 .analyticsChart.Table .google-visualization-table-th:last-child {
   text-align: right;
+}
+.analyticsChart.Table td.google-visualization-table-td {
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .analyticsChart.Table td {
   width: 100px;

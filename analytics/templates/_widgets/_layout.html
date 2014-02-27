@@ -1,10 +1,10 @@
 {% import "analytics/_includes/charts" as charts %}
 
-<div class="{{ 'craft-'~craft.app.version|replace('.', '-') }}">
+{% includeCssResource "analytics/css/styles.css" %}
+
+<div class="{{ 'craft-'~craft.app.version|replace('.', '-') }} {{'analytics-colspan-'~colspan}} {{'analytics-report-'~type}}">
 
     {% if craft.analytics.isConfigured %}
-
-    	{% includeCssResource "analytics/css/styles.css" %}
 
     	{%- includeJsResource 'analytics/js/jsapi.js' first %}
         {% includeJsResource 'analytics/js/analytics-tabs.js' %}

@@ -15,33 +15,6 @@
 		<div class="analyticsTab hidden">
 
 
-			{{ charts.report({
-			    query: {
-			        param2: now|date_modify("-1 month")|date("Y-m-d"),
-			        param3: now|date("Y-m-d"),
-			        param4: 'ga:visits',
-			        param5: {
-				        'dimensions' : 'ga:language',
-				        'sort' : '-ga:visits'
-			        }
-			    },
-			    columns: [
-			        {
-			            type: 'string',
-			            label: 'Language'
-			        },
-			        {
-			            type: 'number',
-			            label: 'Visits'
-			        }
-			    ]
-			}) }}
-
-		</div>
-
-		<div class="analyticsTab hidden">
-
-
 			{% set config = {
 			    query: {
 			        param2: now|date_modify("-1 month")|date("Y-m-d"),
@@ -77,28 +50,32 @@
 			        {{ charts.table(config) }}
 			    </div>
 			</div>
+		</div>
 
-{# 			{{ charts.report({
+		<div class="analyticsTab hidden">
+
+
+			{{ charts.report({
 			    query: {
 			        param2: now|date_modify("-1 month")|date("Y-m-d"),
 			        param3: now|date("Y-m-d"),
 			        param4: 'ga:visits',
 			        param5: {
-				        'dimensions' : 'ga:country',
+				        'dimensions' : 'ga:language',
 				        'sort' : '-ga:visits'
 			        }
 			    },
 			    columns: [
 			        {
 			            type: 'string',
-			            label: 'Country'
+			            label: 'Language'
 			        },
 			        {
 			            type: 'number',
 			            label: 'Visits'
 			        }
 			    ]
-			}) }} #}
+			}) }}
 
 		</div>
 

@@ -45,16 +45,9 @@
 			                type: 'number',
 			                label: 'Visits'
 			            }
-			        ]
+			        ],
+			        showTextEvery: 2
 			    }) }}
-
-				<div class="analyticsCountReport"
-					 data-start="{{now|date_modify("-1 week")|date("Y-m-d")}}"
-					 data-end="{{now|date("Y-m-d")}}">
-
-					Count report loading...
-
-				</div>
 			</div>
 
 			<div class="analyticsTab">
@@ -78,16 +71,10 @@
 			                type: 'number',
 			                label: 'Visits'
 			            }
-			        ]
+			        ],
+
+				    showTextEvery: 10
 			    }) }}
-
-				<div class="analyticsCountReport"
-					 data-start="{{now|date_modify("-1 month")|date("Y-m-d")}}"
-					 data-end="{{now|date("Y-m-d")}}">
-
-					Count report loading...
-
-				</div>
 			</div>
 
 			<div class="analyticsTab">
@@ -111,16 +98,9 @@
 			                type: 'number',
 			                label: 'Visits'
 			            }
-			        ]
+			        ],
+			        showTextEvery: 3
 			    }) }}
-
-				<div class="analyticsCountReport"
-					 data-start="{{now|date_modify("-1 year")|date("Y-m-d")}}"
-					 data-end="{{now|date("Y-m-d")}}">
-
-					Count report loading...
-
-				</div>
 			</div>
 		</div>
 	{% endif %}

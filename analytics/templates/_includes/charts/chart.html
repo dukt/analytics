@@ -39,7 +39,7 @@
     options: options
 } %}
 
-<div class="analyticsChart {{type}}">
+<div class="analyticsChart {{type}}  analytics-loading">
 
     <div class="inject"></div>
 
@@ -47,7 +47,7 @@
         {{data|json_encode|raw}}
     </div>
 
-    <div class="error center hidden">
+    <div class="analytics-error error center hidden">
         <div class="inject"></div>
         <p><a class="btn icon settings" href="{{url('settings/plugins/analytics')}}">Analytics Settings</a></p>
     </div>

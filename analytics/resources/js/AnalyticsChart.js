@@ -5,16 +5,31 @@ AnalyticsCountReport = Garnish.Base.extend({
     init: function(element)
     {
         this.$element = $(element);
-        this.$inject = $(element);
+        this.$inject = $('.analytics-inject', element);
+        this.$error = $('.analytics-error', element);
 
         var data = {
             start: this.$element.data('start'),
             end: this.$element.data('end')
         };
 
+        this.$element.addClass('analytics-loading');
+
         Craft.postActionRequest('analytics/charts/getCountReport', data, function(response) {
-            console.log('response', response);
-            this.$inject.html(response.html);
+
+            if(typeof(response.error) != 'undefined') {
+                $('.inject', this.$error).html(response.error);
+                this.$error.removeClass('hidden');
+
+                // $(v).parents('.analyticsTab').find('.more').addClass('hidden');
+
+
+                $(this.$element).addClass('error');
+            } else {
+                this.$inject.html(response.html);
+            }
+
+            this.$element.removeClass('analytics-loading');
         }, this);
     },
 });
@@ -27,12 +42,15 @@ AnalyticsChart = Garnish.Base.extend({
     $chart: null,
     $googleData: null,
     $googleChart: null,
+    $lastWindowWidth: null,
 
     init: function(element)
     {
 
         this.$element = element;
         this.$inject = $('.inject', element);
+        this.$error = $('.analytics-error', element);
+
 
         this.$data = $('.data', element);
         this.$data.css('display', 'none');
@@ -41,7 +59,21 @@ AnalyticsChart = Garnish.Base.extend({
         this.$data = $.parseJSON(this.$data);
 
         Craft.postActionRequest('analytics/charts/getChart', {data:this.$data}, function(response) {
-            this.initChart(response.chart);
+
+            if(typeof(response.error) != 'undefined') {
+                $('.inject', this.$error).html(response.error);
+                this.$error.removeClass('hidden');
+
+                // $(v).parents('.analyticsTab').find('.more').addClass('hidden');
+
+
+                $(this.$element).addClass('error');
+            } else {
+                this.initChart(response.chart);
+            }
+
+            $(this.$element).removeClass('analytics-loading');
+
         }, this);
     },
 
@@ -107,6 +139,17 @@ AnalyticsChart = Garnish.Base.extend({
             $this.drawChart();
         });
 
+        $(window).resize(function() {
+            var el = $($this.$element);
+
+            if(el.width() > 0 && $this.$lastWindowWidth != el.width())
+            {
+                $this.drawChart();
+            }
+
+            $this.$lastWindowWidth = el.width();
+        });
+
         // $(window).resize(function() {
         //     $this.drawChart();
         // });
@@ -114,6 +157,7 @@ AnalyticsChart = Garnish.Base.extend({
 
     drawChart: function()
     {
+        console.log('redraw');
         if(this.$googleChart)
         {
             this.$googleChart.draw(this.$googleData, this.$chart.options);

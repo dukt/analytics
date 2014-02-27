@@ -5,19 +5,21 @@ namespace Craft;
 class Analytics_ReportsWidget extends BaseWidget
 {
 	private $types = array(
-		'acquisition' => "Acquisition",
-		'geo'         => "Geo",
-		'mobile'      => "Mobile",
-		'pages'       => "Pages",
-		'realtime'    => "Real-Time",
-		'technology'  => "Technology",
-		'visits'      => "Visits"
+        'acquisition' => "Acquisition",
+        'counts'      => "Counts",
+        'geo'         => "Geo",
+        'mobile'      => "Mobile",
+        'pages'       => "Pages",
+        'realtime'    => "Real-Time",
+        'technology'  => "Technology",
+        'visits'      => "Visits"
 	);
 
     protected function defineSettings()
     {
         return array(
-           'type' => array(AttributeType::String)
+           'type' => array(AttributeType::String),
+           'colspan' => array(AttributeType::Number, 'default' => 2),
         );
     }
 
@@ -25,10 +27,17 @@ class Analytics_ReportsWidget extends BaseWidget
     {
         $settings = $this->getSettings();
 
-        $type = $this->getType($settings->type);
+        if($settings->type == 'counts' && craft()->request->getSegment(2) != 'settings')
+        {
+            return null;
+        }
+        else
+        {
+            $type = $this->getType($settings->type);
 
-        if($type) {
-            return Craft::t('Analytics '.$type);
+            if($type) {
+                return Craft::t('Analytics '.$type);
+            }
         }
 
         return Craft::t('Analytics');
@@ -58,8 +67,12 @@ class Analytics_ReportsWidget extends BaseWidget
     {
         $plugin = craft()->plugins->getPlugin('analytics');
 
+        $settings = $this->getSettings();
+
         $variables = array(
             'settings' => $plugin->getSettings(),
+            'colspan' => $this->getColspan(),
+            'type' => $settings['type']
         );
 
         $settings = $this->getSettings();
@@ -86,6 +99,16 @@ class Analytics_ReportsWidget extends BaseWidget
 
     public function getColspan()
     {
+        $settings = $this->getSettings();
+
+        if(!isset($settings->colspan))
+        {
+            if($settings->colspan > 0)
+            {
+                return $settings->colspan;
+            }
+        }
+
         return 2;
     }
 }

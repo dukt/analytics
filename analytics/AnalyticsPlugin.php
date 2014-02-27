@@ -24,11 +24,6 @@ class AnalyticsPlugin extends BasePlugin
         return '1.0.59';
     }
 
-    function hasCpSection()
-    {
-        return true;
-    }
-
     function getDeveloper()
     {
         return 'Dukt';

@@ -8,3 +8,13 @@
     name: 'type',
     value: settings.type
 }) }}
+
+{% set colspanOptions = { 1:1, 2:2 } %}
+
+{{ forms.selectField({
+    first: true,
+    label: "Columns"|t,
+    options: colspanOptions,
+    name: 'colspan',
+    value: (settings.colspan is not null ? settings.colspan : 2)
+}) }}
