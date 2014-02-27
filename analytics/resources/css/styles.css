@@ -225,6 +225,9 @@ div.more .analytics-chart.table {
 .analytics-chart .data {
   display: none;
 }
+.analytics-colspan-2 .GeoChart .inject {
+  height: 300px;
+}
 /************
  * Tabs
  *************/
