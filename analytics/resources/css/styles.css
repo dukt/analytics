@@ -117,6 +117,9 @@ div.more .analytics-chart.table {
 .analytics-chart.AreaChart .inject {
   height: 150px;
 }
+.analytics-chart.GeoChart .inject {
+  height: 200px;
+}
 .analytics-chart.Table {
   margin: 0;
   margin-bottom: 20px;

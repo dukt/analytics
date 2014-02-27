@@ -99,16 +99,19 @@ class Analytics_ReportsWidget extends BaseWidget
 
     public function getColspan()
     {
-        $settings = $this->getSettings();
-
-        if(isset($settings->colspan))
+        if(craft()->version > 1.3)
         {
-            if($settings->colspan > 0)
+            $settings = $this->getSettings();
+
+            if(isset($settings->colspan))
             {
-                return $settings->colspan;
+                if($settings->colspan > 0)
+                {
+                    return $settings->colspan;
+                }
             }
         }
 
-        return 2;
+        return 1;
     }
 }
