@@ -78,7 +78,7 @@ class Analytics_ChartsController extends BaseController
                     'ga:'.$profile['id'],
                     $start,
                     $end,
-                    'ga:entrances, ga:exits, ga:pageviews, ga:timeOnPage, ga:exitRate, ga:entranceRate, ga:pageviewsPerVisit, ga:avgTimeOnPage, ga:visitBounceRate'
+                    'ga:visits, ga:entrances, ga:exits, ga:pageviews, ga:timeOnPage, ga:exitRate, ga:entranceRate, ga:pageviewsPerVisit, ga:avgTimeOnPage, ga:visitBounceRate'
                 );
 
                 craft()->fileCache->set($cacheKey, $response, $this->cacheExpiry());
@@ -89,6 +89,7 @@ class Analytics_ChartsController extends BaseController
             $row = array_pop($rows);
 
             $counts = array(
+                'visits'         => $row['ga:visits'],
                 'entrances'         => $row['ga:entrances'],
                 'exits'             => $row['ga:exits'],
                 'pageviews'         => $row['ga:pageviews'],
