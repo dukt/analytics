@@ -127,9 +127,9 @@ div.more .analyticsChart.table {
 .analyticsChart.Table .google-visualization-table-th {
   background: none;
   border: 0;
-  border-top: 1px solid #e3e5e8;
-  border-bottom: 1px solid #e3e5e8;
-  color: rgba(0, 0, 0, 0.498039);
+  border-top: 1px dotted #e3e5e8;
+  border-bottom: 1px dotted #e3e5e8;
+  color: rgba(0, 0, 0, 0.298039);
   font-size: 0.8em;
   white-space: nowrap;
 }
@@ -139,11 +139,22 @@ div.more .analyticsChart.table {
 .analyticsChart.Table .google-visualization-table-th:last-child {
   text-align: right;
 }
+.analyticsChart.Table .google-visualization-table-th span {
+  display: none;
+}
 .analyticsChart.Table td.google-visualization-table-td {
   max-width: 100px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  background: #fff;
+  border-left: 0;
+  border-right: 0;
+  border-top: 0;
+  border-bottom: 1px dotted #e3e5e8;
+}
+.analyticsChart.Table td.google-visualization-table-td:hover {
+  background: #fff;
 }
 .analyticsChart.Table td {
   width: 100px;
@@ -156,14 +167,11 @@ div.more .analyticsChart.table {
   overflow: hidden;
   font-weight: normal;
 }
-.analyticsChart.Table .google-visualization-table-td {
-  background: #fff;
-}
 .analyticsChart.Table .google-visualization-table-tr-over td {
-  background-color: #fafafa;
+  background-color: #fff;
 }
 .analyticsChart.Table .google-visualization-table-tr-over.google-visualization-table-tr-odd td {
-  background-color: #fafafa;
+  background-color: #fff;
 }
 .analyticsChart.Table .google-visualization-table-tr-sel td {
   background-color: #fff;
