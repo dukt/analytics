@@ -14,12 +14,33 @@ namespace Craft;
 
 class Analytics_ChartsController extends BaseController
 {
+    private function cacheExpiry()
+    {
+        $cacheExpiry = craft()->config->get('analyticsCacheExpiry');
+
+        if(!$cacheExpiry)
+        {
+            $cacheExpiry = 30 * 60; // 30 min cache
+        }
+
+        return $cacheExpiry;
+    }
     public function actionGetChart()
     {
         try {
+
             $data = craft()->request->getParam('data');
 
-            $chart = craft()->analytics->getChartFromData($data);
+            $cacheKey = 'analytics/getCharts/'.md5(serialize($data));
+
+            $chart = craft()->fileCache->get($cacheKey);
+
+            if(!$chart)
+            {
+                $chart = craft()->analytics->getChartFromData($data);
+
+                craft()->fileCache->set($cacheKey, $chart, $this->cacheExpiry());
+            }
 
             $this->returnJson(array('chart' => $chart));
         }
@@ -47,12 +68,21 @@ class Analytics_ChartsController extends BaseController
                 $end = date('Y-m-d');
             }
 
-            $response = craft()->analytics->api()->data_ga->get(
-                'ga:'.$profile['id'],
-                $start,
-                $end,
-                'ga:entrances, ga:exits, ga:pageviews, ga:timeOnPage, ga:exitRate, ga:entranceRate, ga:pageviewsPerVisit, ga:avgTimeOnPage, ga:visitBounceRate'
-            );
+            $cacheKey = 'analytics/getCountReport/'.md5(serialize(array($profile['id'], $start, $end)));
+
+            $response = craft()->fileCache->get($cacheKey);
+
+            if(!$response)
+            {
+                $response = craft()->analytics->api()->data_ga->get(
+                    'ga:'.$profile['id'],
+                    $start,
+                    $end,
+                    'ga:entrances, ga:exits, ga:pageviews, ga:timeOnPage, ga:exitRate, ga:entranceRate, ga:pageviewsPerVisit, ga:avgTimeOnPage, ga:visitBounceRate'
+                );
+
+                craft()->fileCache->set($cacheKey, $response, $this->cacheExpiry());
+            }
 
             $rows = $this->getRows($response);
 
