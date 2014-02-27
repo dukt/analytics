@@ -12,13 +12,13 @@
 	{% includeCssResource 'analytics/css/styles.css' %}
 	{% includeCssResource 'analytics/css/realtime.css' %}
 
-	<div class="analytics-widget-realtime">
+	<div class="analytics-widget-realtime {{ 'craft-'~craft.app.version|replace('.', '-') }} {{'analytics-colspan-'~colspan}} {{'analytics-report-'~type}}">
 
 		<div class="analytics-errors center hidden">
 			<div class="analytics-errors-inject">
 			</div>
 
-			<p><a href="{{url('settings/plugins/analytics')}}" class="btn icon settings">Analytics settings</a></p>
+			<p><a href="{{url('settings/plugins/analytics')}}" class="btn icon settings">{{'Analytics settings'|t}}</a></p>
 		</div>
 
 		<div class="analytics-widget">
