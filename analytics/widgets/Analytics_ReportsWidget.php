@@ -101,7 +101,7 @@ class Analytics_ReportsWidget extends BaseWidget
     {
         $settings = $this->getSettings();
 
-        if(!isset($settings->colspan))
+        if(isset($settings->colspan))
         {
             if($settings->colspan > 0)
             {
