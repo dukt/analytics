@@ -9,12 +9,16 @@
     value: settings.type
 }) }}
 
-{% set colspanOptions = { 1:1, 2:2 } %}
+{% if craft.app.version > 1.3 %}
 
-{{ forms.selectField({
-    first: true,
-    label: "Columns"|t,
-    options: colspanOptions,
-    name: 'colspan',
-    value: (settings.colspan is not null ? settings.colspan : 2)
-}) }}
+    {% set colspanOptions = { 1:1, 2:2 } %}
+
+    {{ forms.selectField({
+        first: true,
+        label: "Columns"|t,
+        options: colspanOptions,
+        name: 'colspan',
+        value: (settings.colspan is not null ? settings.colspan : 2)
+    }) }}
+
+{% endif %}

@@ -59,11 +59,11 @@ div.more .analyticsChart.table {
   display: block;
   text-transform: uppercase;
   opacity: .5;
-  font-size: 0.9em;
+  font-size: 0.8em;
 }
 .analyticsCountReport .blocks .block .in span {
   font-weight: bold;
-  font-size: 1.6em;
+  font-size: 1.5em;
 }
 .analytics-colspan-1 .analyticsCountReport .block {
   width: 50%;
@@ -114,6 +114,9 @@ div.more .analyticsChart.table {
 }
 .analyticsChart.AreaChart {
   margin-bottom: 0px;
+}
+.analyticsChart.AreaChart .inject {
+  height: 150px;
 }
 .analyticsChart.Table {
   margin: 0;
