@@ -161,6 +161,9 @@ div.more .analytics-chart.table {
 .analytics-chart.Table td.google-visualization-table-td:hover {
   background: #fff;
 }
+.analytics-chart.Table td.google-visualization-table-td.google-visualization-table-td-number {
+  text-align: right;
+}
 .analytics-chart.Table td {
   width: 100px;
 }
