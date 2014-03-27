@@ -19,6 +19,7 @@ class Analytics_ReportsWidget extends BaseWidget
     protected function defineSettings()
     {
         return array(
+           'name' => array(AttributeType::String),
            'type' => array(AttributeType::String),
            'colspan' => array(AttributeType::Number, 'default' => 2),
         );
@@ -28,16 +29,23 @@ class Analytics_ReportsWidget extends BaseWidget
     {
         $settings = $this->getSettings();
 
-        if($settings->type == 'counts' && craft()->request->getSegment(2) != 'settings')
+        if(!empty($settings->name))
         {
-            return null;
+            return $settings->name;
         }
         else
         {
-            $type = $this->getType($settings->type);
+            if($settings->type == 'counts' && craft()->request->getSegment(2) != 'settings')
+            {
+                return null;
+            }
+            else
+            {
+                $type = $this->getType($settings->type);
 
-            if($type) {
-                return Craft::t('Analytics '.$type);
+                if($type) {
+                    return Craft::t('Analytics '.$type);
+                }
             }
         }
 

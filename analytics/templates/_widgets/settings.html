@@ -1,9 +1,15 @@
 {% import "_includes/forms" as forms %}
 
+{{ forms.textField({
+    first: true,
+    label: "Name"|t,
+    name: 'name',
+    placeholder: 'My Widget',
+    value: settings.name
+}) }}
 
 {{ forms.selectField({
-    first: true,
-    label: "Reports"|t,
+    label: "Report"|t,
     options: types,
     name: 'type',
     value: settings.type
