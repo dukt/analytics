@@ -15,7 +15,7 @@ AnalyticsCountReport = Garnish.Base.extend({
 
         this.$element.addClass('analytics-loading');
 
-        Craft.postActionRequest('analytics/charts/getCountReport', data, function(response) {
+        Craft.queueActionRequest('analytics/charts/getCountReport', data, $.proxy(function(response) {
 
             if(typeof(response.error) != 'undefined') {
                 $('.inject', this.$error).html(response.error);
@@ -30,10 +30,9 @@ AnalyticsCountReport = Garnish.Base.extend({
             }
 
             this.$element.removeClass('analytics-loading');
-        }, this);
+        }, this));
     },
 });
-
 
 AnalyticsChart = Garnish.Base.extend({
     $element: null,
@@ -46,11 +45,9 @@ AnalyticsChart = Garnish.Base.extend({
 
     init: function(element)
     {
-
         this.$element = element;
         this.$inject = $('.inject', element);
         this.$error = $('.analytics-error', element);
-
 
         this.$data = $('.data', element);
         this.$data.css('display', 'none');
@@ -58,23 +55,24 @@ AnalyticsChart = Garnish.Base.extend({
         this.$data = this.$data.html();
         this.$data = $.parseJSON(this.$data);
 
-        Craft.postActionRequest('analytics/charts/getChart', {data:this.$data}, function(response) {
+        Craft.queueActionRequest('analytics/charts/getChart', {data:this.$data}, $.proxy(function(response) {
 
-            if(typeof(response.error) != 'undefined') {
+            if(typeof(response.error) != 'undefined')
+            {
                 $('.inject', this.$error).html(response.error);
+
                 this.$error.removeClass('hidden');
 
-                // $(v).parents('.analyticsTab').find('.more').addClass('hidden');
-
-
                 $(this.$element).addClass('error');
-            } else {
+            }
+            else
+            {
                 this.initChart(response.chart);
             }
 
             $(this.$element).removeClass('analytics-loading');
 
-        }, this);
+        }, this));
     },
 
     initChart: function(chart)
@@ -149,16 +147,10 @@ AnalyticsChart = Garnish.Base.extend({
 
             $this.$lastWindowWidth = el.width();
         });
-
-        // $(window).resize(function() {
-        //     $this.drawChart();
-        // });
     },
 
     drawChart: function()
     {
-        // console.log('redraw');
-
         if(this.$googleChart)
         {
             this.$googleChart.draw(this.$googleData, this.$chart.options);
