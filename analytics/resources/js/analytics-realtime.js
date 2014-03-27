@@ -59,19 +59,44 @@ function analyticsRealtimeRequest()
 				$('.analytics-widget-realtime .legend').addClass('hidden');
 			}
 
-			if(calcTotal > 0) {
+			if(calcTotal > 0)
+			{
 				var blue = Math.round(100 * newVisitor / calcTotal);
-			} else {
+			}
+			else
+			{
 				var blue = 100;
 			}
 
 			var green = 100 - blue;
 
-			$('.analytics-widget-realtime .progress-bar.blue').css('width', blue+'%');
-			$('.analytics-widget-realtime .progress-bar.green').css('width', green+'%');
+			// blue
 
+			$('.analytics-widget-realtime .progress-bar.blue').css('width', blue+'%');
 			$('.analytics-widget-realtime .progress-bar.blue span').text(blue+'%');
+
+			if(blue > 0)
+			{
+				$('.analytics-widget-realtime .progress-bar.blue').removeClass('hidden');
+			}
+			else
+			{
+				$('.analytics-widget-realtime .progress-bar.blue').addClass('hidden');
+			}
+
+			// green
+
+			$('.analytics-widget-realtime .progress-bar.green').css('width', green+'%');
 			$('.analytics-widget-realtime .progress-bar.green span').text(green+'%');
+
+			if(green > 0)
+			{
+				$('.analytics-widget-realtime .progress-bar.green').removeClass('hidden');
+			}
+			else
+			{
+				$('.analytics-widget-realtime .progress-bar.green').addClass('hidden');
+			}
 
 			// realtime content
 
