@@ -1,0 +1,31 @@
+{% extends "analytics/_widgets/_layout" %}
+
+{% includeJsResource 'analytics/js/analytics-tabs.js' %}
+
+{% block body %}
+
+    {{ charts.area({
+        query: {
+            param2: now|date_modify("-1 month")|date("Y-m-d"),
+            param3: now|date("Y-m-d"),
+            param4: 'ga:goalCompletionsAll',
+            param5: {
+                'dimensions' : 'ga:day, ga:month, ga:year',
+                'sort' : 'ga:year, ga:month, ga:day',
+            }
+        },
+        columns: [
+            {
+                type: 'string',
+                label: 'Date'|t
+            },
+            {
+                type: 'number',
+                label: 'Goals Completed'|t
+            }
+        ],
+        showTextEvery: 10
+    }) }}
+
+
+{% endblock %}

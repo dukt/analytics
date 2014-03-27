@@ -6,6 +6,7 @@ class Analytics_ReportsWidget extends BaseWidget
 {
 	private $types = array(
         'acquisition' => "Acquisition",
+        'conversions' => "Conversions",
         'counts'      => "Counts",
         'geo'         => "Geo",
         'mobile'      => "Mobile",
