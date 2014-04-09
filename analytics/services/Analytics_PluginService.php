@@ -19,7 +19,6 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class Analytics_PluginService extends BaseApplicationComponent
 {
-    // --------------------------------------------------------------------
 
     public function download($pluginHandle)
     {
@@ -125,8 +124,6 @@ class Analytics_PluginService extends BaseApplicationComponent
         return $return;
     }
 
-    // --------------------------------------------------------------------
-
     public function enable($pluginHandle)
     {
         Craft::log(__METHOD__, LogLevel::Info, true);
@@ -152,8 +149,6 @@ class Analytics_PluginService extends BaseApplicationComponent
             return false;
         }
     }
-
-    // --------------------------------------------------------------------
 
     public function install($pluginHandle)
     {
@@ -191,24 +186,12 @@ class Analytics_PluginService extends BaseApplicationComponent
         }
     }
 
-    // --------------------------------------------------------------------
 
     private function _getRemotePlugin($pluginHandle)
     {
         Craft::log(__METHOD__, LogLevel::Info, true);
 
         $url = 'http://dukt.net/craft/'.$pluginHandle.'/releases.xml';
-
-
-
-        // devMode
-
-        $pluginHashes = craft()->config->get('pluginHashes');
-
-        if(isset($pluginHashes[$pluginHandle])) {
-
-            $url = 'http://dukt.net/actions/tracks/updates/'.$pluginHashes[$pluginHandle].'/develop/xml';
-        }
 
 
         // or refresh cache and get new updates if cache expired or forced update
@@ -235,7 +218,5 @@ class Analytics_PluginService extends BaseApplicationComponent
             Craft::log(__METHOD__.' : Could not get channel items', LogLevel::Info, true);
         }
     }
-
-    // --------------------------------------------------------------------
 }
 
