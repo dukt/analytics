@@ -89,16 +89,16 @@ class Analytics_ChartsController extends BaseController
             $row = array_pop($rows);
 
             $counts = array(
-                'visits'         => $row['ga:visits'],
+                'visits'            => $row['ga:visits'],
                 'entrances'         => $row['ga:entrances'],
                 'exits'             => $row['ga:exits'],
                 'pageviews'         => $row['ga:pageviews'],
                 'timeOnPage'        => $row['ga:timeOnPage'],
-                'exitRate'   => $row['ga:exitRate'],
+                'exitRate'          => $row['ga:exitRate'],
                 'entranceRate'      => $row['ga:entranceRate'],
                 'pageviewsPerVisit' => $row['ga:pageviewsPerVisit'],
                 'avgTimeOnPage'     => $row['ga:avgTimeOnPage'],
-                'visitBounceRate'          => $row['ga:visitBounceRate'],
+                'visitBounceRate'   => $row['ga:visitBounceRate'],
             );
 
             $html = craft()->templates->render('analytics/_includes/reports/counts', array(

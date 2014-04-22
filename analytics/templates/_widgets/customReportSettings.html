@@ -1,0 +1,118 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.textField({
+    first: true,
+    label: "Name"|t,
+    name: 'name',
+    placeholder: 'My Widget',
+    value: settings.name
+}) }}
+
+
+{% set colspanOptions = { 1:1, 2:2, 3:3, 4:4 } %}
+
+{{ forms.selectField({
+    first: true,
+    label: "Columns"|t,
+    options: colspanOptions,
+    name: 'colspan',
+    value: (settings.colspan is not null ? settings.colspan : 2)
+}) }}
+
+
+<hr>
+
+{{ forms.selectField({
+    label: "Report Type"|t,
+    options: {standard:"Standard", realtime:"Real-Time"},
+    name: 'options[reportType]',
+    value: (settings.options.reportType is defined ? settings.options.reportType : '')
+}) }}
+
+{{ forms.selectField({
+    label: "Chart Type"|t,
+    options: {
+        "AreaChart":"Area Chart",
+        "BarChart":"Bar Chart",
+        "ColumnChart":"Column Chart",
+        "PieChart":"Pie Chart",
+    },
+    name: 'options[chartType]',
+    value: (settings.options.chartType is defined ? settings.options.chartType : '')
+}) }}
+
+<hr>
+
+{{ forms.selectField({
+    label: "Metric"|t,
+    options: metricsOpts,
+    name: 'options[metric]',
+    value: (settings.options.metric is defined ? settings.options.metric : '')
+}) }}
+
+{{ forms.selectField({
+    label: "Dimension"|t,
+    options: dimensionsOpts,
+    name: 'options[dimension]',
+    value: (settings.options.dimension is defined ? settings.options.dimension : '')
+}) }}
+
+<hr>
+
+{#
+
+    Standard
+
+    Geomap
+
+        (green)
+        City
+        Continent
+        Country / Territory
+        Metro
+        Region
+        Sub Continent Region
+
+        (blue)
+        All Metrics
+
+        (region)
+
+        The World
+            The World
+        Continents
+            Africa
+            Americas
+            Asia
+            Europe
+            Oceania
+        Sub Continents
+            Australasia
+            Caribbean
+            ...
+    Pie
+
+        (Create a pie chart showing - blue)
+        All Metrics
+
+        (Grouped by... - green)
+        Dimensions?
+
+        Show up to
+            2 slices
+            3 slices
+            4 slices
+            5 slices
+
+        Use Donut Chart
+            true / false
+
+    Bar
+
+        (Create a bar chart showing - blue)
+        All Metrics
+
+        (Grouped by... - green)
+        Dimensions?
+
+#}
