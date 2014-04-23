@@ -15,13 +15,19 @@ $('.analytics-trigger-load').click(function() {
         var chartData = new google.visualization.DataTable();
 
         $.each(response.apiResponse.columnHeaders, function(k, columnHeader) {
-            //console.log('Column H', k, columnHeader);
+            console.log('Column H', k, columnHeader);
 
             $type = 'string';
 
-            if(columnHeader.dataType == 'INTEGER')
+            if(columnHeader.name == 'ga:date') {
+                $type = 'date';
+            }
+            else
             {
-                $type = 'number';
+                if(columnHeader.dataType == 'INTEGER')
+                {
+                    $type = 'number';
+                }
             }
 
             chartData.addColumn($type, columnHeader.name);
@@ -33,10 +39,24 @@ $('.analytics-trigger-load').click(function() {
 
 
             $.each(response.apiResponse.columnHeaders, function(k2, columnHeader) {
-                if(columnHeader.dataType == 'INTEGER')
-                {
-                    response.apiResponse.rows[k][k2] = eval(response.apiResponse.rows[k][k2]);
+
+                if(columnHeader.name == 'ga:date') {
+
+                        $date = response.apiResponse.rows[k][k2];
+                        $year = $date.substr(0, 4);
+                        $month = $date.substr(4, 2);
+                        $day = $date.substr(6, 2);
+                        response.apiResponse.rows[k][k2] = new Date($year, $month, $day);
+
                 }
+                else
+                {
+                    if(columnHeader.dataType == 'INTEGER')
+                    {
+                        response.apiResponse.rows[k][k2] = eval(response.apiResponse.rows[k][k2]);
+                    }
+                }
+
             });
         });
 
@@ -98,38 +118,3 @@ $('.analytics-trigger-load').click(function() {
 $(document).ready(function() {
     $('.analytics-trigger-load').trigger('click');
 });
-
-// function drawChart() {
-//     var data = google.visualization.arrayToDataTable([
-//       ['Year', 'Sales'],
-//       ['2004',  1000],
-//       ['2005',  1170],
-//       ['2006',  660],
-//       ['2007',  1030]
-//     ]);
-
-//     // response.columnHeaders
-//     // response.rows
-
-//     // // Declare columns
-//     // data.addColumn('string', 'Employee Name');
-//     // data.addColumn('DateTime', 'Hire Date');
-
-//     // // Add data.
-//     // data.addRows([
-//     //   ['Mike', {v:new Date(2008,1,28), f:'February 28, 2008'}], // Example of specifying actual and formatted values.
-//     //   ['Bob', new Date(2007,5,1)],                              // More typically this would be done using a
-//     //   ['Alice', new Date(2006,7,16)],                           // formatter.
-//     //   ['Frank', new Date(2007,11,28)],
-//     //   ['Floyd', new Date(2005,3,13)],
-//     //   ['Fritz', new Date(2011,6,1)]
-//     // ]);
-
-//     var options = {
-//       title: 'Company Performance',
-//       vAxis: {title: 'Year',  titleTextStyle: {color: 'red'}}
-//     };
-
-//     var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-//     chart.draw(data, options);
-// }
