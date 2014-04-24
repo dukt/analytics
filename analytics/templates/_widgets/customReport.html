@@ -1,13 +1,16 @@
 {# <a href="{{actionUrl('analytics/customReport', {id:widget.model.id})}}">Go to controller</a> #}
-<a href="#" data-widget-id="{{widget.model.id}}" class="analytics-trigger-load">Load Data</a>
+{# <a href="#" data-widget-id="{{widget.model.id}}" class="analytics-trigger-load">Load Data</a> #}
 
-{% includeCssResource "analytics/css/styles.css" %}
+{% includeCssResource "analytics/css/customReport.css" %}
 {%- includeJsResource 'analytics/js/jsapi.js' first %}
 {% includeJsResource 'analytics/js/customReport.js' %}
 
-<div class="{{'analytics-colspan-'~colspan}}">
+<div
+    id="analytics-widget-{{widget.model.id}}"
+    data-widget-id="{{widget.model.id}}"
+    class="{{'analytics-colspan-'~colspan}}">
 
-    <div id="chart_div"></div>
-    <ul id="chart_totals"></ul>
+    <div class="chart {{settings.options.chartType|lower}}"></div>
+    <ul class="totals"></ul>
 
 </div>

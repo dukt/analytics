@@ -1,3 +1,6 @@
-#chart_div {
-  width: 100%;
+.chart {
+  border-top: 1px dotted #e3e5e8;
+}
+.chart.piechart {
+  height: 280px;
 }

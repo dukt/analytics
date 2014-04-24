@@ -1,4 +1,5 @@
 {% import "_includes/forms" as forms %}
+{% includeJsResource 'analytics/js/customReportSettings.js' %}
 
 {{ forms.textField({
     first: true,
@@ -21,7 +22,7 @@
 
 
 <hr>
-
+<h2>Report</h2>
 {{ forms.selectField({
     label: "Report Type"|t,
     options: {standard:"Standard", realtime:"Real-Time"},
@@ -29,20 +30,54 @@
     value: (settings.options.reportType is defined ? settings.options.reportType : '')
 }) }}
 
+
+{% set chartType = (settings.options.chartType is defined ? settings.options.chartType : '') %}
+
 {{ forms.selectField({
     label: "Chart Type"|t,
     options: {
         "AreaChart":"Area Chart",
-        "BarChart":"Bar Chart",
         "ColumnChart":"Column Chart",
         "PieChart":"Pie Chart",
     },
     name: 'options[chartType]',
-    value: (settings.options.chartType is defined ? settings.options.chartType : '')
+    value: chartType,
+    toggle: true,
+    targetPrefix: 'type-',
 }) }}
+
+
+
+<div id="type-AreaChart"{% if chartType != 'AreaChart' %} class="hidden"{% endif %}>
+    AreaChart
+</div>
+
+<div id="type-BarChart"{% if chartType != 'BarChart' %} class="hidden"{% endif %}>
+    BarChart
+</div>
+
+<div id="type-ColumnChart"{% if chartType != 'ColumnChart' %} class="hidden"{% endif %}>
+    ColumnChart
+</div>
+
+<div id="type-PieChart"{% if chartType != 'PieChart' %} class="hidden"{% endif %}>
+    {{ forms.selectField({
+        label: "Number of slices"|t,
+        options: {
+            "2":"2",
+            "3":"3",
+            "4":"4",
+            "5":"5",
+            "6":"6",
+        },
+        name: 'options[slices]',
+        value: (settings.options.slices is defined ? settings.options.slices : 2),
+    }) }}
+</div>
 
 <hr>
 
+<h2>Dimensions &amp; Metrics</h2>
 {{ forms.selectField({
     label: "Metric"|t,
     options: metricsOpts,
@@ -57,6 +92,100 @@
     value: (settings.options.dimension is defined ? settings.options.dimension : '')
 }) }}
 
+<hr>
+
+<h2>Filter Data</h2>
+
+{% set dataFilters = (settings.options.filters is defined ? settings.options.filters : false) %}
+
+<table class="data analytics-filters">
+    <tbody>
+        {% for dataFilter in dataFilters %}
+            {% set k = loop.index0 %}
+            <tr>
+                <td>
+                    {{ forms.selectField({
+                        options: {
+                            show:"Show",
+                            hide:"Don't Show"
+                        },
+                        name: 'options[filters]['~k~'][visibility]',
+                        value: (dataFilter.visibility is defined ? dataFilter.visibility : '')
+                    }) }}
+                </td>
+                <td>
+
+                    {{ forms.selectField({
+                        options: dimensionsOpts,
+                        name: 'options[filters]['~k~'][dimension]',
+                        value: (dataFilter.dimension is defined ? dataFilter.dimension : '')
+                    }) }}
+                </td>
+                <td>
+                    {{ forms.selectField({
+                        options: {
+                            exactMatch:"Exact Match",
+                            regularExpression:"Regular Expression",
+                            contains:"Contains",
+                        },
+                        name: 'options[filters]['~k~'][operator]',
+                        value: (dataFilter.operator is defined ? dataFilter.operator : 'contains')
+                    }) }}
+                </td>
+                <td>
+                    {{ forms.textField({
+                        name: 'options[filters]['~k~'][value]',
+                        value: (dataFilter.value is defined ? dataFilter.value : '')
+                    }) }}
+                </td>
+                <td>
+                    <span class="btn small analytics-remove-filter">Remove</span>
+                </td>
+            </tr>
+        {% endfor %}
+        <tr class="prototype hidden">
+            <td>
+                {{ forms.selectField({
+                    options: {
+                        show:"Show",
+                        hide:"Don't Show"
+                    },
+                    name: 'options[filters][{index}][visibility]'
+                }) }}
+            </td>
+            <td>
+
+                {{ forms.selectField({
+                    options: dimensionsOpts,
+                    name: 'options[filters][{index}][dimension]'
+                }) }}
+            </td>
+            <td>
+                {{ forms.selectField({
+                    options: {
+                        exactMatch:"Exact Match",
+                        regularExpression:"Regular Expression",
+                        contains:"Contains",
+                    },
+                    name: 'options[filters][{index}][operator]',
+                    value: 'contains'
+                }) }}
+            </td>
+            <td>
+                {{ forms.textField({
+                    name: 'options[filters][{index}][value]'
+                }) }}
+            </td>
+            <td>
+                <span class="btn small analytics-remove-filter">Remove</span>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<p>
+    <span class="btn small analytics-add-filter">Add Filter</span>
+</p>
 <hr>
 
 {#

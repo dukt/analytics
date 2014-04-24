@@ -16,6 +16,12 @@ class AnalyticsController extends BaseController
 {
     public function actionCustomReport(array $variables = array())
     {
+        // widget
+
+        $id = craft()->request->getParam('id');
+        $widget = craft()->dashboard->getUserWidgetById($id);
+
+
         // profile
         $profile = craft()->analytics->getProfile();
 
@@ -33,23 +39,95 @@ class AnalyticsController extends BaseController
             $end = date('Y-m-d');
         }
 
-        // widget
+        // filters
+        $filters = false;
+        $queryFilters = '';
 
-        $id = craft()->request->getParam('id');
+        if(!empty($widget->settings['options']['filters']))
+        {
+            $filters = $widget->settings['options']['filters'];
 
-        $widget = craft()->dashboard->getUserWidgetById($id);
+            foreach($filters as $filter)
+            {
+                $visibility = $filter['visibility'];
+
+
+
+                switch($filter['operator'])
+                {
+                    case 'exactMatch':
+                    $operator = ($visibility == 'hide' ? '!=' : '==');
+                    break;
+
+                    case 'regularExpression':
+                    $operator = ($visibility == 'hide' ? '!~' : '=~');
+                    break;
+
+                    case 'contains':
+                    // contains or doesn't contain
+                    $operator = ($visibility == 'hide' ? '!@' : '=@');
+                    break;
+                }
+
+                $queryFilter = '';
+                $queryFilter .= $filter['dimension'];
+                $queryFilter .= $operator;
+                $queryFilter .= $filter['value'];
+
+                $queryFilters .= $queryFilter.";"; //AND
+            }
+
+            if(strlen($queryFilters) > 0)
+            {
+                // remove last AND
+                $queryFilters = substr($queryFilters, 0, -1);
+            }
+        }
+
+        // dimensions & metrics
 
         $metric = $widget->settings['options']['metric'];
 
-        $dimensions = array('dimensions' => $widget->settings['options']['dimension']);
-
-        $response = craft()->analytics->api()->data_ga->get(
-            'ga:'.$profile['id'],
-            $start,
-            $end,
-            $metric,
-            $dimensions
+        $options = array(
+            'dimensions' => $widget->settings['options']['dimension']
         );
+
+        if(!empty($queryFilters))
+        {
+            $options['filters'] = $queryFilters;
+        }
+        switch($widget->settings['options']['chartType'])
+        {
+            case 'PieChart':
+                $slices = (!empty($widget->settings['options']['slices']) ? $widget->settings['options']['slices'] : 2);
+
+                $options['sort'] = '-'.$widget->settings['options']['metric'];
+                $options['max-results'] = $slices;
+
+                $response = craft()->analytics->api()->data_ga->get(
+                    'ga:'.$profile['id'],
+                    $start,
+                    $end,
+                    $metric,
+                    $options
+                );
+
+                break;
+
+            default:
+
+                $response = craft()->analytics->api()->data_ga->get(
+                    'ga:'.$profile['id'],
+                    $start,
+                    $end,
+                    $metric,
+                    $options
+                );
+
+                break;
+        }
+
+
 
         $this->returnJson(array(
             'widget' => $widget,

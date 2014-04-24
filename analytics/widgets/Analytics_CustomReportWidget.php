@@ -27,7 +27,16 @@ class Analytics_CustomReportWidget extends BaseWidget
 
     public function getName()
     {
-        return Craft::t('Analytics Custom Report');
+        $settings = $this->getSettings();
+
+        if(!empty($settings->name))
+        {
+            return $settings->name;
+        }
+        else
+        {
+            return Craft::t('Analytics Custom Report');
+        }
     }
 
 
@@ -67,6 +76,8 @@ class Analytics_CustomReportWidget extends BaseWidget
             'widget' => $this,
             'colspan' => $this->getColspan()
         );
+
+        craft()->templates->includeJs('new AnalyticsCustomReport("analytics-widget-'.$this->model->id.'");');
 
         $html = craft()->templates->render('analytics/_widgets/customReport', $variables);
 
@@ -261,15 +272,6 @@ class Analytics_CustomReportWidget extends BaseWidget
                         'label' => 'ga:goalAbandonRateAll',
                         'value' => 'ga:goalAbandonRateAll'
                     ),
-
-            // Platform or Device
-            array('optgroup' => 'Platform or Device'),
-
-            // Geo Network
-            array('optgroup' => 'Geo Network'),
-
-            // System
-            array('optgroup' => 'System'),
 
             // Social Activities
             array('optgroup' => 'Social Activities'),
@@ -641,24 +643,12 @@ class Analytics_CustomReportWidget extends BaseWidget
                     'value' => 'ga:fatalExceptionsPerScreenview'
                 ),
 
-            // Content Experiments
-            array('optgroup' => 'Content Experiments'),
-
             // Custom Variables or Columns
             array('optgroup' => 'Custom Variables or Columns'),
                 array(
                     'label' => 'ga:metricXX',
                     'value' => 'ga:metricXX'
                 ),
-
-            // System
-            array('optgroup' => 'System'),
-
-            // Time
-            array('optgroup' => 'Time'),
-
-            // Audience
-            array('optgroup' => 'Audience'),
 
             // Other
             array('optgroup' => 'Other'),
@@ -1128,9 +1118,6 @@ class Analytics_CustomReportWidget extends BaseWidget
                     'value' => 'ga:searchDestinationPage'
                 ),
 
-            // Site Speed
-            array('optgroup' => 'Site Speed'),
-
             // App Tracking
             array('optgroup' => 'App Tracking'),
                 array(
@@ -1393,9 +1380,6 @@ class Analytics_CustomReportWidget extends BaseWidget
                     'label' => 'ga:interestInMarketCategory',
                     'value' => 'ga:interestInMarketCategory'
                 ),
-
-            // Other
-            array('optgroup' => 'Other'),
         );
     }
 }
