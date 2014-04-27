@@ -1,0 +1,12 @@
+.analytics-field {
+  background: #fff;
+  margin: 0 -24px;
+  padding: 12px 24px;
+  border: 1px solid #e3e5e8;
+  border-left: 0;
+  border-right: 0;
+}
+.analytics-field .chart {
+  width: 100%;
+  height: 200px;
+}

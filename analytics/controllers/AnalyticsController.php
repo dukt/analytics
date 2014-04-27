@@ -14,6 +14,31 @@ namespace Craft;
 
 class AnalyticsController extends BaseController
 {
+    public function actionElementReport(array $variables = array())
+    {
+        $elementId = craft()->request->getParam('id');
+        $element = craft()->elements->getElementById($elementId);
+
+        $profile = craft()->analytics->getProfile();
+        $start = date('Y-m-d', strtotime('-1 month'));
+        $end = date('Y-m-d');
+        $metrics = 'ga:sessions,ga:bounces';
+        $dimensions = 'ga:date';
+
+        $response = craft()->analytics->api()->data_ga->get(
+            'ga:'.$profile['id'],
+            $start,
+            $end,
+            $metrics,
+            array(
+                'dimensions' => $dimensions,
+                'filters' => "ga:pagePath==/".$element->uri
+            )
+        );
+
+        $this->returnJson(array('apiResponse' => $response));
+    }
+
     public function actionCustomReport(array $variables = array())
     {
         // widget

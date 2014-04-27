@@ -1,0 +1,11 @@
+{% includeCssResource "analytics/css/AnalyticsField.css" %}
+{%- includeJsResource 'analytics/js/jsapi.js' first %}
+{% includeJsResource 'analytics/js/AnalyticsField.js' %}
+
+<div
+    data-element-id="{{element.id}}"
+    class="analytics-field">
+
+    <div class="chart"></div>
+
+</div>
