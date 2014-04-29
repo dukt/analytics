@@ -14,6 +14,18 @@ namespace Craft;
 
 class AnalyticsController extends BaseController
 {
+    private function cacheExpiry()
+    {
+        $cacheExpiry = craft()->config->get('analyticsCacheExpiry');
+
+        if(!$cacheExpiry)
+        {
+            $cacheExpiry = 30 * 60; // 30 min cache
+        }
+
+        return $cacheExpiry;
+    }
+
     public function actionElementReport(array $variables = array())
     {
         try {
@@ -27,16 +39,35 @@ class AnalyticsController extends BaseController
             $metrics = $metric;
             $dimensions = 'ga:date';
 
-            $response = craft()->analytics->api()->data_ga->get(
-                'ga:'.$profile['id'],
+            $options = array(
+                    'dimensions' => $dimensions,
+                    'filters' => "ga:pagePath==/".$element->uri
+                );
+
+            $data = array(
+                $profile['id'],
                 $start,
                 $end,
                 $metrics,
-                array(
-                    'dimensions' => $dimensions,
-                    'filters' => "ga:pagePath==/".$element->uri
-                )
+                $options
             );
+
+            $cacheKey = 'analytics/elementReport/'.md5(serialize($data));
+
+            $response = craft()->fileCache->get($cacheKey);
+
+            if(!$response)
+            {
+                $response = craft()->analytics->api()->data_ga->get(
+                    'ga:'.$profile['id'],
+                    $start,
+                    $end,
+                    $metrics,
+                    $options
+                );
+
+                craft()->fileCache->set($cacheKey, $response, $this->cacheExpiry());
+            }
 
             $this->returnJson(array('apiResponse' => $response));
         }
@@ -45,6 +76,199 @@ class AnalyticsController extends BaseController
             $this->returnErrorJson($e->getMessage());
         }
     }
+
+    public function _actionCustomReport(array $variables = array())
+    {
+        try {
+            // widget
+
+            $id = craft()->request->getParam('id');
+            $widget = craft()->dashboard->getUserWidgetById($id);
+
+
+            // profile
+            $profile = craft()->analytics->getProfile();
+
+            // start / end dates
+            $start = craft()->request->getParam('start');
+            $end = craft()->request->getParam('end');
+
+            if(empty($start))
+            {
+                $start = date('Y-m-d', strtotime('-1 month'));
+            }
+
+            if(empty($end))
+            {
+                $end = date('Y-m-d');
+            }
+
+            // filters
+            $filters = false;
+            $queryFilters = '';
+
+            if(!empty($widget->settings['options']['filters']))
+            {
+                $filters = $widget->settings['options']['filters'];
+
+                foreach($filters as $filter)
+                {
+                    $visibility = $filter['visibility'];
+
+
+
+                    switch($filter['operator'])
+                    {
+                        case 'exactMatch':
+                        $operator = ($visibility == 'hide' ? '!=' : '==');
+                        break;
+
+                        case 'regularExpression':
+                        $operator = ($visibility == 'hide' ? '!~' : '=~');
+                        break;
+
+                        case 'contains':
+                        // contains or doesn't contain
+                        $operator = ($visibility == 'hide' ? '!@' : '=@');
+                        break;
+                    }
+
+                    $queryFilter = '';
+                    $queryFilter .= $filter['dimension'];
+                    $queryFilter .= $operator;
+                    $queryFilter .= $filter['value'];
+
+                    $queryFilters .= $queryFilter.";"; //AND
+                }
+
+                if(strlen($queryFilters) > 0)
+                {
+                    // remove last AND
+                    $queryFilters = substr($queryFilters, 0, -1);
+                }
+            }
+
+            // dimensions & metrics
+
+            $metric = $widget->settings['options']['metric'];
+
+            $options = array(
+                'dimensions' => $widget->settings['options']['dimension']
+            );
+
+            if(!empty($queryFilters))
+            {
+                $options['filters'] = $queryFilters;
+            }
+
+            // setup options
+
+            switch($widget->settings['options']['chartType'])
+            {
+                case 'ColumnChart':
+                case 'PieChart':
+                case 'Table':
+                    $slices = (!empty($widget->settings['options']['slices']) ? $widget->settings['options']['slices'] : 2);
+
+                    $options['sort'] = '-'.$widget->settings['options']['metric'];
+                    $options['max-results'] = $slices;
+
+                    $response = craft()->analytics->api()->data_ga->get(
+                        'ga:'.$profile['id'],
+                        $start,
+                        $end,
+                        $metric,
+                        $options
+                    );
+
+                    break;
+
+                case 'GeoChart':
+
+                    $options['sort'] = '-'.$widget->settings['options']['metric'];
+
+                    $continent = $this->continents($widget->settings['options']['region']);
+                    $subContinent = $this->subContinents($widget->settings['options']['region']);
+                    $country = $this->countries($widget->settings['options']['region']);
+
+                    $options['filters'] = (!empty($options['filters']) ? $options['filters'].';' : '');
+                    $options['filters'] = $widget->settings['options']['dimension'].'!=(not set)';
+
+
+                    if($continent)
+                    {
+                        //$options['filters'] = (!empty($options['filters']) ? $options['filters'].';' : '');
+                        $options['filters'] .= ';ga:continent=='.$continent;
+                    }
+                    elseif ($subContinent)
+                    {
+                        //$options['filters'] = (!empty($options['filters']) ? $options['filters'].';' : '');
+                        $options['filters'] .= ';ga:subContinent=='.$subContinent;
+                    }
+                    elseif ($country)
+                    {
+                        $options['filters'] .= ';ga:country=='.$country;
+                    }
+
+                    if($widget->settings['options']['chartType'] == 'GeoChart'
+                        && $widget->settings['options']['dimension'] == 'ga:city')
+                    {
+                        $options['dimensions'] = "ga:latitude,ga:longitude,".$options['dimensions'];
+                    }
+
+                    $response = craft()->analytics->api()->data_ga->get(
+                        'ga:'.$profile['id'],
+                        $start,
+                        $end,
+                        $metric,
+                        $options
+                    );
+
+                    foreach($response['rows'] as $k => $row)
+                    {
+                        $continent = $this->rcontinents($row[0]);
+                        $subContinent = $this->rsubContinents($row[0]);
+
+                        if($continent)
+                        {
+                            $response['rows'][$k][0] = $continent;
+                        }
+                        elseif($subContinent)
+                        {
+                            $response['rows'][$k][0] = $subContinent;
+                        }
+                    }
+
+                    break;
+
+                default:
+
+                    $response = craft()->analytics->api()->data_ga->get(
+                        'ga:'.$profile['id'],
+                        $start,
+                        $end,
+                        $metric,
+                        $options
+                    );
+
+                    break;
+            }
+
+            // request
+
+            // response
+
+            $this->returnJson(array(
+                'widget' => $widget,
+                'apiResponse' => $response
+            ));
+        }
+        catch(\Exception $e)
+        {
+            $this->returnErrorJson($e->getMessage());
+        }
+    }
+
 
     public function actionCustomReport(array $variables = array())
     {
@@ -129,6 +353,9 @@ class AnalyticsController extends BaseController
             {
                 $options['filters'] = $queryFilters;
             }
+
+            // setup options
+
             switch($widget->settings['options']['chartType'])
             {
                 case 'ColumnChart':
@@ -138,14 +365,6 @@ class AnalyticsController extends BaseController
 
                     $options['sort'] = '-'.$widget->settings['options']['metric'];
                     $options['max-results'] = $slices;
-
-                    $response = craft()->analytics->api()->data_ga->get(
-                        'ga:'.$profile['id'],
-                        $start,
-                        $end,
-                        $metric,
-                        $options
-                    );
 
                     break;
 
@@ -190,26 +409,6 @@ class AnalyticsController extends BaseController
                         $options
                     );
 
-                    foreach($response['rows'] as $k => $row)
-                    {
-                        $continent = $this->rcontinents($row[0]);
-                        $subContinent = $this->rsubContinents($row[0]);
-                        $usState = $this->usstates($row[0]);
-
-                        if($continent)
-                        {
-                            $response['rows'][$k][0] = $continent;
-                        }
-                        elseif($subContinent)
-                        {
-                            $response['rows'][$k][0] = $subContinent;
-                        }
-                        elseif($usState)
-                        {
-                            //$response['rows'][$k][0] = $usState;
-                        }
-                    }
-
                     break;
 
                 default:
@@ -225,7 +424,54 @@ class AnalyticsController extends BaseController
                     break;
             }
 
+            // request
 
+            $cacheKey = 'analytics/customReport/'.md5(serialize(array(
+                'ga:'.$profile['id'],
+                $start,
+                $end,
+                $metric,
+                $options
+            )));
+
+            $response = craft()->fileCache->get($cacheKey);
+
+            if(!$response)
+            {
+                $response = craft()->analytics->api()->data_ga->get(
+                    'ga:'.$profile['id'],
+                    $start,
+                    $end,
+                    $metric,
+                    $options
+                );
+
+                craft()->fileCache->set($cacheKey, $response, $this->cacheExpiry());
+            }
+
+            // response
+
+            switch($widget->settings['options']['chartType'])
+            {
+                case 'GeoChart':
+                    foreach($response['rows'] as $k => $row)
+                    {
+                        $continent = $this->rcontinents($row[0]);
+                        $subContinent = $this->rsubContinents($row[0]);
+
+                        if($continent)
+                        {
+                            $response['rows'][$k][0] = $continent;
+                        }
+                        elseif($subContinent)
+                        {
+                            $response['rows'][$k][0] = $subContinent;
+                        }
+                    }
+                break;
+            }
+
+            // json return
 
             $this->returnJson(array(
                 'widget' => $widget,
