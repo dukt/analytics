@@ -17,12 +17,13 @@ class AnalyticsController extends BaseController
     public function actionElementReport(array $variables = array())
     {
         $elementId = craft()->request->getParam('id');
+        $metric = craft()->request->getParam('metric');
         $element = craft()->elements->getElementById($elementId);
 
         $profile = craft()->analytics->getProfile();
         $start = date('Y-m-d', strtotime('-1 month'));
         $end = date('Y-m-d');
-        $metrics = 'ga:sessions,ga:bounces';
+        $metrics = $metric;
         $dimensions = 'ga:date';
 
         $response = craft()->analytics->api()->data_ga->get(

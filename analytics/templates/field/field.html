@@ -1,3 +1,5 @@
+{% import "_includes/forms" as forms %}
+
 {% includeCssResource "analytics/css/AnalyticsField.css" %}
 {%- includeJsResource 'analytics/js/jsapi.js' first %}
 {% includeJsResource 'analytics/js/AnalyticsField.js' %}
@@ -5,6 +7,20 @@
 <div
     data-element-id="{{element.id}}"
     class="analytics-field">
+
+    {{ forms.select({
+        class:'analytics-metric',
+        options: craft.analytics.metricOpts([
+            'ga:exitRate',
+            'ga:avgTimeOnPage',
+            'ga:bounceRate',
+            'ga:pageviews',
+            'ga:uniquePageviews',
+        ])
+    }) }}
+
+    <br />
+    <br />
 
     <div class="chart"></div>
 

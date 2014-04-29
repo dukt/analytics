@@ -1,0 +1,26 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.textField({
+    first: true,
+    label: "Name"|t,
+    name: 'name',
+    placeholder: 'My Widget',
+    value: settings.name
+}) }}
+
+{{ forms.selectField({
+    label: "Report"|t,
+    options: types,
+    name: 'type',
+    value: settings.type
+}) }}
+
+{% set colspanOptions = { 1:1, 2:2, 3:3, 4:4 } %}
+
+{{ forms.selectField({
+    first: true,
+    label: "Columns"|t,
+    options: colspanOptions,
+    name: 'colspan',
+    value: (settings.colspan is not null ? settings.colspan : 2)
+}) }}

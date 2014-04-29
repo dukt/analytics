@@ -16,6 +16,10 @@ class Analytics_ReportsWidget extends BaseWidget
         'visits'      => "Visits"
 	);
 
+    // public function isSelectable()
+    // {
+    //     return false;
+    // }
     protected function defineSettings()
     {
         return array(
@@ -49,7 +53,7 @@ class Analytics_ReportsWidget extends BaseWidget
             }
         }
 
-        return Craft::t('Analytics');
+        return Craft::t('Analytics Report');
     }
 
 
@@ -66,7 +70,7 @@ class Analytics_ReportsWidget extends BaseWidget
             $types['realtime'] .= ' (beta)';
         }
 
-        return craft()->templates->render('analytics/_widgets/settings', array(
+        return craft()->templates->render('analytics/_widgets/report/settings', array(
            'settings' => $this->getSettings(),
            'types' => $types
         ));
@@ -86,7 +90,7 @@ class Analytics_ReportsWidget extends BaseWidget
 
         $settings = $this->getSettings();
 
-        $html = craft()->templates->render('analytics/_widgets/'.$settings->type, $variables);
+        $html = craft()->templates->render('analytics/_widgets/report/'.$settings->type, $variables);
 
         $charset = craft()->templates->getTwig()->getCharset();
 
@@ -96,7 +100,7 @@ class Analytics_ReportsWidget extends BaseWidget
 
     public function getType($k)
     {
-        if(!empty($k)) {
+        if(!empty($this->types[$k])) {
             return $this->types[$k];
         }
     }

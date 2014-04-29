@@ -22,13 +22,15 @@
 
 
 <hr>
-
+{#
 {{ forms.selectField({
     label: "Report Type"|t,
     options: {standard:"Standard", realtime:"Real-Time"},
     name: 'options[reportType]',
     value: (settings.options.reportType is defined ? settings.options.reportType : '')
-}) }}
+}) }} #}
+
+<input type="hidden" name="options[reportType]" value="standard" />
 
 
 {% set chartType = (settings.options.chartType is defined ? settings.options.chartType : 'AreaChart') %}
@@ -48,21 +50,21 @@
     targetPrefix: 'type-',
 }) }}
 
-<hr>
 
-    {{ forms.selectField({
-        label: "Metric"|t,
-        options: craft.analytics.metricOpts,
-        name: 'options[metric]',
-        value: (settings.options.metric is defined ? settings.options.metric : '')
-    }) }}
 
-    {% include 'analytics/_widgets/customReport/settings/area' %}
-    {% include 'analytics/_widgets/customReport/settings/bar' %}
-    {% include 'analytics/_widgets/customReport/settings/column' %}
-    {% include 'analytics/_widgets/customReport/settings/geo' %}
-    {% include 'analytics/_widgets/customReport/settings/pie' %}
-    {% include 'analytics/_widgets/customReport/settings/table' %}
+{{ forms.selectField({
+    label: "Metric"|t,
+    options: craft.analytics.metricOpts,
+    name: 'options[metric]',
+    value: (settings.options.metric is defined ? settings.options.metric : '')
+}) }}
+
+{% include 'analytics/_widgets/customReport/settings/area' %}
+{% include 'analytics/_widgets/customReport/settings/bar' %}
+{% include 'analytics/_widgets/customReport/settings/column' %}
+{% include 'analytics/_widgets/customReport/settings/geo' %}
+{% include 'analytics/_widgets/customReport/settings/pie' %}
+{% include 'analytics/_widgets/customReport/settings/table' %}
 
 <hr>
 
