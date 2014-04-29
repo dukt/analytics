@@ -15,6 +15,10 @@
   margin-bottom: 1em;
   text-align: center;
 }
+.analytics-field .uri {
+  margin-top: 14px;
+  margin-right: 20px;
+}
 .analytics-field.analytics-error .chart {
   display: none;
 }
@@ -26,7 +30,7 @@
 }
 .analytics-field .spinner {
   position: absolute;
-  top: 11px;
+  top: 20px;
   right: 10px;
 }
 .analytics-field .select {
