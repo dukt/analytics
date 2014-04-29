@@ -37,7 +37,7 @@ var AnalyticsUtils = {
                 }
             }
 
-            console.log('header', $type, columnHeader.name);
+            // console.log('header', $type, columnHeader.name);
 
             columns[k] = {
                 'type': $type,

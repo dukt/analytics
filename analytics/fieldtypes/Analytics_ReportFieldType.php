@@ -30,34 +30,6 @@ class Analytics_ReportFieldType extends BaseFieldType
 
         if($this->element->uri)
         {
-
-            // let's roll
-
-            // profile
-            $profile = craft()->analytics->getProfile();
-
-            // date
-            $start = date('Y-m-d', strtotime('-1 month'));
-            $end = date('Y-m-d', strtotime('-1 day'));
-
-            // metrics
-            $metrics = 'ga:pageviews, ga:bounces';
-
-            // options & dimensions
-            $options = array(
-                'dimensions' => 'ga:date',
-                'filters' => "ga:pagePath==/".$this->element->uri
-            );
-
-            // api request
-            $result = craft()->analytics->api()->data_ga->get(
-                        'ga:'.$profile['id'],
-                        $start,
-                        $end,
-                        $metrics,
-                        $options
-                    );
-
             craft()->templates->includeJs('new AnalyticsField("'.$namespacedId.'-field");');
 
             // render HTML
@@ -67,10 +39,7 @@ class Analytics_ReportFieldType extends BaseFieldType
                 'name'  => $name,
                 'value' => $value,
                 'model' => $this->model,
-                'element' => $this->element,
-                'start' => $start,
-                'end' => $end,
-                'result' => $result
+                'element' => $this->element
             ));
         }
         else

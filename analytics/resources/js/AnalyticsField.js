@@ -3,8 +3,6 @@ google.load("visualization", "1", {packages:['corechart', 'table', 'geochart']})
 AnalyticsField = Garnish.Base.extend({
     init: function(fieldId)
     {
-        console.log('fieldId', fieldId);
-
         this.$element = $("#"+fieldId);
         this.$field = $(".analytics-field", this.$element);
         this.$spinner = $('.spinner', this.$element);

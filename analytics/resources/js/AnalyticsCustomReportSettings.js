@@ -14,8 +14,6 @@ $(document).ready(function() {
     });
 
     $('.analytics-toggle select').change(function() {
-        console.log('change', $(this).val());
-
         $('.geo-dimension').addClass('hidden');
         $('.geo-dimension[rel="'+$(this).val()+'"]').removeClass('hidden');
     });

@@ -97,7 +97,7 @@ AnalyticsCustomReport = Garnish.Base.extend({
 
 
                     case 'GeoChart':
-                    console.log('region', response.widget.settings.options.region);
+                    // console.log('region', response.widget.settings.options.region);
 
                     options = {
                         theme: 'maximized',
@@ -156,7 +156,7 @@ AnalyticsCustomReport = Garnish.Base.extend({
 
                 if(typeof(this.$chart) != 'undefined')
                 {
-                    console.log('options', options);
+                    // console.log('options', options);
                     this.$chart.draw(chartData, options);
                 }
 

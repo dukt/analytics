@@ -33,43 +33,58 @@ class AnalyticsController extends BaseController
             $metric = craft()->request->getParam('metric');
             $element = craft()->elements->getElementById($elementId);
 
-            $profile = craft()->analytics->getProfile();
-            $start = date('Y-m-d', strtotime('-1 month'));
-            $end = date('Y-m-d');
-            $metrics = $metric;
-            $dimensions = 'ga:date';
 
-            $options = array(
-                    'dimensions' => $dimensions,
-                    'filters' => "ga:pagePath==/".$element->uri
-                );
-
-            $data = array(
-                $profile['id'],
-                $start,
-                $end,
-                $metrics,
-                $options
-            );
-
-            $cacheKey = 'analytics/elementReport/'.md5(serialize($data));
-
-            $response = craft()->fileCache->get($cacheKey);
-
-            if(!$response)
+            if($element->uri)
             {
-                $response = craft()->analytics->api()->data_ga->get(
-                    'ga:'.$profile['id'],
+                $uri = $element->uri;
+
+                if($uri == '__home__')
+                {
+                    $uri = '';
+                }
+
+                $profile = craft()->analytics->getProfile();
+                $start = date('Y-m-d', strtotime('-1 month'));
+                $end = date('Y-m-d');
+                $metrics = $metric;
+                $dimensions = 'ga:date';
+
+                $options = array(
+                        'dimensions' => $dimensions,
+                        'filters' => "ga:pagePath==/".$uri
+                    );
+
+                $data = array(
+                    $profile['id'],
                     $start,
                     $end,
                     $metrics,
                     $options
                 );
 
-                craft()->fileCache->set($cacheKey, $response, $this->cacheExpiry());
-            }
+                $cacheKey = 'analytics/elementReport/'.md5(serialize($data));
 
-            $this->returnJson(array('apiResponse' => $response));
+                $response = craft()->fileCache->get($cacheKey);
+
+                if(!$response)
+                {
+                    $response = craft()->analytics->api()->data_ga->get(
+                        'ga:'.$profile['id'],
+                        $start,
+                        $end,
+                        $metrics,
+                        $options
+                    );
+
+                    craft()->fileCache->set($cacheKey, $response, $this->cacheExpiry());
+                }
+
+                $this->returnJson(array('apiResponse' => $response));
+            }
+            else
+            {
+               throw new Exception("Element doesn't support URLs.", 1);
+            }
         }
         catch(\Exception $e)
         {
