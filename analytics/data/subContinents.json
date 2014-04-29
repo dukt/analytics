@@ -1,0 +1,88 @@
+[{
+    "label":"Australia and New Zeland",
+    "code":"053"
+},
+{
+    "label":"Caribbean",
+    "code":"029"
+},
+{
+    "label":"Central America",
+    "code":"013"
+},
+{
+    "label":"Central Asia",
+    "code":"143"
+},
+{
+    "label":"Eastern Africa",
+    "code":"014"
+},
+{
+    "label":"Eastern Asia",
+    "code":"030"
+},
+{
+    "label":"Eastern Europe",
+    "code":"151"
+},
+{
+    "label":"Melanesia",
+    "code":"054"
+},
+{
+    "label":"Micronesia",
+    "code":"057"
+},
+{
+    "label":"Middle Africa",
+    "code":"017"
+},
+{
+    "label":"Northern Africa",
+    "code":"015"
+},
+{
+    "label":"Northern America",
+    "code":"021"
+},
+{
+    "label":"Northern Europe",
+    "code":"154"
+},
+{
+    "label":"Polynesia",
+    "code":"061"
+},
+{
+    "label":"South America",
+    "code":"005"
+},
+{
+    "label":"South-Eastern Asia",
+    "code":"035"
+},
+{
+    "label":"Southern Africa",
+    "code":"018"
+},
+{
+    "label":"Southern Asia",
+    "code":"034"
+},
+{
+    "label":"Southern Europe",
+    "code":"039"
+},
+{
+    "label":"Western Africa",
+    "code":"011"
+},
+{
+    "label":"Western Asia",
+    "code":"145"
+},
+{
+    "label":"Western Europe",
+    "code":"155"
+}]
