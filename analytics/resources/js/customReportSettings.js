@@ -1,4 +1,24 @@
 $(document).ready(function() {
+
+    // form
+
+    $('#content form').submit(function() {
+        $('.analytics-chart-type.hidden').remove();
+        $('.geo-dimension.hidden').remove();
+    });
+
+    // toggles
+    $('.analytics-toggle select').change(function() {
+        console.log('change', $(this).val());
+
+        $('.geo-dimension').addClass('hidden');
+        $('.geo-dimension[rel="'+$(this).val()+'"]').removeClass('hidden');
+    });
+
+    $('.analytics-toggle select').trigger('change');
+
+    // filters
+
     $('.analytics-add-filter').click(function() {
         $id = $('.analytics-filters tr').length - 1;
 

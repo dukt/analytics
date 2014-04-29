@@ -15,13 +15,23 @@ AnalyticsCustomReport = Garnish.Base.extend({
 
         Craft.postActionRequest('analytics/customReport', {id: $id}, function(response) {
 
+            console.log(response.widget.settings.options.chartType, response);
             $.each(response.apiResponse.columnHeaders, function(k, columnHeader) {
 
 
                 $type = 'string';
 
-                if(columnHeader.name == 'ga:date') {
+                if(columnHeader.name == 'ga:date')
+                {
                     $type = 'date';
+                }
+                else if(columnHeader.name == 'ga:latitude')
+                {
+                    $type = 'number';
+                }
+                else if(columnHeader.name == 'ga:longitude')
+                {
+                    $type = 'number';
                 }
                 else
                 {
@@ -31,6 +41,11 @@ AnalyticsCustomReport = Garnish.Base.extend({
                     }
                 }
 
+                if(response.widget.settings.options.chartType == 'PieChart' && k == 0)
+                {
+                    $type = 'string';
+                }
+
                 chartData.addColumn($type, columnHeader.name);
 
             });
@@ -38,7 +53,29 @@ AnalyticsCustomReport = Garnish.Base.extend({
             $.each(response.apiResponse.rows, function(k, row) {
 
                 $.each(response.apiResponse.columnHeaders, function(k2, columnHeader) {
-                    if(k > -1)
+
+                    if(response.widget.settings.options.chartType == 'PieChart')
+                    {
+                        if(k2 == 0)
+                        {
+                            response.apiResponse.columnHeaders[k2].dataType = 'STRING';
+                            response.apiResponse.rows[k][k2] = response.apiResponse.rows[k][k2];
+                        }
+                        else
+                        {
+                            if(columnHeader.dataType == 'INTEGER'
+                                || columnHeader.name == 'ga:latitude'
+                                || columnHeader.name == 'ga:longitude')
+                            {
+                                response.apiResponse.rows[k][k2] = eval(response.apiResponse.rows[k][k2]);
+                            }
+                            else if(columnHeader.name == 'ga:continent' || columnHeader.name == 'ga:subContinent')
+                            {
+                                response.apiResponse.rows[k][k2].v = ""+response.apiResponse.rows[k][k2].v;
+                            }
+                        }
+                    }
+                    else
                     {
                         if(columnHeader.name == 'ga:date')
                         {
@@ -53,22 +90,24 @@ AnalyticsCustomReport = Garnish.Base.extend({
                         }
                         else
                         {
-                            if(columnHeader.dataType == 'INTEGER')
+                            if(columnHeader.dataType == 'INTEGER'
+                                || columnHeader.name == 'ga:latitude'
+                                || columnHeader.name == 'ga:longitude')
                             {
                                 response.apiResponse.rows[k][k2] = eval(response.apiResponse.rows[k][k2]);
                             }
+                            else if(columnHeader.name == 'ga:continent' || columnHeader.name == 'ga:subContinent')
+                            {
+                                response.apiResponse.rows[k][k2].v = ""+response.apiResponse.rows[k][k2].v;
+                            }
                         }
-
-                    }
-                    else
-                    {
-                        response.apiResponse.rows[k] = null;
                     }
                 });
 
 
             });
 
+            console.log('rows', response.apiResponse.rows);
 
             chartData.addRows(response.apiResponse.rows);
 
@@ -141,10 +180,42 @@ AnalyticsCustomReport = Garnish.Base.extend({
                         top:40,
                         bottom:0,
                         width:"100%",
-                        height:"70%"
+                        height:"auto"
                     }
                 };
                 this.$chart = new google.visualization.ColumnChart(this.$chartElement.get(0));
+                break;
+
+
+                case 'GeoChart':
+                console.log('region', response.widget.settings.options.region);
+
+                options = {
+                    region: response.widget.settings.options.region,
+                };
+
+                if(response.widget.settings.options.dimension == 'ga:continent')
+                {
+                    options.resolution = 'continents';
+                    options.displayMode = 'regions';
+                }
+                else if(response.widget.settings.options.dimension == 'ga:subContinent')
+                {
+                    options.resolution = 'subcontinents';
+                    options.displayMode = 'regions';
+                }
+                else if(response.widget.settings.options.dimension == 'ga:region')
+                {
+                    options.resolution = 'provinces';
+                    //options.displayMode = 'regions';
+                }
+                else if(response.widget.settings.options.dimension == 'ga:metro')
+                {
+                    options.resolution = 'metros';
+                    //options.displayMode = 'regions';
+                }
+
+                this.$chart = new google.visualization.GeoChart(this.$chartElement.get(0));
                 break;
 
                 case "PieChart":
@@ -165,6 +236,11 @@ AnalyticsCustomReport = Garnish.Base.extend({
 
                 this.$chart = new google.visualization.PieChart(this.$chartElement.get(0));
                 break;
+
+                case "Table":
+                this.$chart = new google.visualization.Table(this.$chartElement.get(0));
+                break;
+
             }
 
             if(typeof(this.$chart) != 'undefined')

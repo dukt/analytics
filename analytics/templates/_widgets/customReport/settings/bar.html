@@ -1,0 +1,18 @@
+<div id="type-BarChart" class="analytics-chart-type{% if chartType != 'BarChart' %} hidden{% endif %}">
+    {{ forms.selectField({
+        label: "Dimension"|t,
+        options: craft.analytics.dimensionOpts([
+            'ga:city',
+            'ga:continent',
+            'ga:country',
+            'ga:region',
+            'ga:subContinent',
+
+        ]),
+        class : 'analytics-toggle',
+        name: 'options[dimension]',
+        value: (settings.options.dimension is defined ? settings.options.dimension : ''),
+        toggle: true,
+        targetPrefix: 'geo-dimension-',
+    }) }}
+</div>

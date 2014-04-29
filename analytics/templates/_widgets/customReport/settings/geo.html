@@ -1,0 +1,89 @@
+<div id="type-GeoChart" class="analytics-chart-type{% if chartType != 'GeoChart' %} hidden{% endif %}">
+
+    {{ forms.selectField({
+        label: "Dimension"|t,
+        options: craft.analytics.dimensionOpts([
+            'ga:city',
+            'ga:continent',
+            'ga:country',
+            'ga:region',
+            'ga:subContinent',
+
+        ]),
+        class : 'analytics-toggle',
+        name: 'options[dimension]',
+        value: (settings.options.dimension is defined ? settings.options.dimension : ''),
+        toggle: true,
+        targetPrefix: 'geo-dimension-',
+    }) }}
+
+    {# 'ga:metro', #}
+
+    <div rel="ga:city" class="geo-dimension hidden">
+        {{ forms.selectField({
+            label: "Region"|t,
+            name: 'options[region]',
+            value: (settings.options.region is defined ? settings.options.region : 'world'),
+            options: craft.analytics.geoRegionOpts({
+                'world': true,
+                'continents': true,
+                'subContinents': true,
+                'countries': true
+            })
+        }) }}
+    </div>
+    <div rel="ga:continent" class="geo-dimension hidden">
+        {{ forms.selectField({
+            label: "Region"|t,
+            name: 'options[region]',
+            value: (settings.options.region is defined ? settings.options.region : 'world'),
+            options: craft.analytics.geoRegionOpts({
+                'world': true
+            })
+        }) }}
+    </div>
+    <div rel="ga:country" class="geo-dimension hidden">
+        {{ forms.selectField({
+            label: "Region"|t,
+            name: 'options[region]',
+            value: (settings.options.region is defined ? settings.options.region : 'world'),
+            options: craft.analytics.geoRegionOpts({
+                'world': true,
+                'continents': true,
+                'subContinents': true,
+            })
+        }) }}
+    </div>
+    <div rel="ga:metro" class="geo-dimension hidden">
+        {{ forms.selectField({
+            label: "Region"|t,
+            name: 'options[region]',
+            value: (settings.options.region is defined ? settings.options.region : 'world'),
+            options: craft.analytics.geoRegionOpts({
+                'countries': ['US']
+            })
+        }) }}
+    </div>
+    <div rel="ga:region" class="geo-dimension hidden">
+        {{ forms.selectField({
+            label: "Region"|t,
+            name: 'options[region]',
+            value: (settings.options.region is defined ? settings.options.region : 'world'),
+            options: craft.analytics.geoRegionOpts({
+                'countries': ['AR', 'AU', 'AT', 'BO', 'BA', 'BR', 'BG', 'CA', 'CL', 'CO', 'KM', 'HR', 'CY', 'CZ', 'DK', 'EC', 'EG', 'ER', 'FR', 'DE', 'HU', 'IN', 'IR', 'IL', 'JP', 'MY', 'MX', 'ME', 'MA', 'NL', 'NG', 'NO', 'PE', 'PL', 'PT', 'RO', 'RU', 'SA', 'ZA', 'KR', 'SE', 'CH', 'TH', 'TR', 'UA', 'UK', 'US', 'VE']
+            })
+        }) }}
+    </div>
+    <div rel="ga:subContinent" class="geo-dimension hidden">
+        {{ forms.selectField({
+            label: "Region"|t,
+            name: 'options[region]',
+            value: (settings.options.region is defined ? settings.options.region : 'world'),
+            options: craft.analytics.geoRegionOpts({
+                'world': true,
+                'continents': true
+            })
+        }) }}
+    </div>
+
+</div>

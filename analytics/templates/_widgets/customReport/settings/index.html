@@ -22,7 +22,7 @@
 
 
 <hr>
-<h2>Report</h2>
+
 {{ forms.selectField({
     label: "Report Type"|t,
     options: {standard:"Standard", realtime:"Real-Time"},
@@ -31,14 +31,16 @@
 }) }}
 
 
-{% set chartType = (settings.options.chartType is defined ? settings.options.chartType : '') %}
+{% set chartType = (settings.options.chartType is defined ? settings.options.chartType : 'AreaChart') %}
 
 {{ forms.selectField({
     label: "Chart Type"|t,
     options: {
         "AreaChart":"Area Chart",
         "ColumnChart":"Column Chart",
+        "GeoChart":"Geo Chart",
         "PieChart":"Pie Chart",
+        "Table":"Table",
     },
     name: 'options[chartType]',
     value: chartType,
@@ -46,55 +48,25 @@
     targetPrefix: 'type-',
 }) }}
 
+<hr>
 
-
-<div id="type-AreaChart"{% if chartType != 'AreaChart' %} class="hidden"{% endif %}>
-    AreaChart
-</div>
-
-<div id="type-BarChart"{% if chartType != 'BarChart' %} class="hidden"{% endif %}>
-    BarChart
-</div>
-
-<div id="type-ColumnChart"{% if chartType != 'ColumnChart' %} class="hidden"{% endif %}>
-    ColumnChart
-</div>
-
-<div id="type-PieChart"{% if chartType != 'PieChart' %} class="hidden"{% endif %}>
     {{ forms.selectField({
-        label: "Number of slices"|t,
-        options: {
-            "2":"2",
-            "3":"3",
-            "4":"4",
-            "5":"5",
-            "6":"6",
-        },
-        name: 'options[slices]',
-        value: (settings.options.slices is defined ? settings.options.slices : 2),
+        label: "Metric"|t,
+        options: craft.analytics.metricOpts,
+        name: 'options[metric]',
+        value: (settings.options.metric is defined ? settings.options.metric : '')
     }) }}
-</div>
+
+    {% include 'analytics/_widgets/customReport/settings/area' %}
+    {% include 'analytics/_widgets/customReport/settings/bar' %}
+    {% include 'analytics/_widgets/customReport/settings/column' %}
+    {% include 'analytics/_widgets/customReport/settings/geo' %}
+    {% include 'analytics/_widgets/customReport/settings/pie' %}
+    {% include 'analytics/_widgets/customReport/settings/table' %}
 
 <hr>
 
-<h2>Dimensions &amp; Metrics</h2>
-{{ forms.selectField({
-    label: "Metric"|t,
-    options: metricsOpts,
-    name: 'options[metric]',
-    value: (settings.options.metric is defined ? settings.options.metric : '')
-}) }}
 
-{{ forms.selectField({
-    label: "Dimension"|t,
-    options: dimensionsOpts,
-    name: 'options[dimension]',
-    value: (settings.options.dimension is defined ? settings.options.dimension : '')
-}) }}
-
-<hr>
-
-<h2>Filter Data</h2>
 
 {% set dataFilters = (settings.options.filters is defined ? settings.options.filters : false) %}
 
@@ -116,7 +88,7 @@
                 <td>
 
                     {{ forms.selectField({
-                        options: dimensionsOpts,
+                        options: craft.analytics.dimensionOpts,
                         name: 'options[filters]['~k~'][dimension]',
                         value: (dataFilter.dimension is defined ? dataFilter.dimension : '')
                     }) }}
@@ -156,7 +128,7 @@
             <td>
 
                 {{ forms.selectField({
-                    options: dimensionsOpts,
+                    options: craft.analytics.dimensionOpts,
                     name: 'options[filters][{index}][dimension]'
                 }) }}
             </td>
@@ -186,62 +158,5 @@
 <p>
     <span class="btn small analytics-add-filter">Add Filter</span>
 </p>
+
 <hr>
-
-{#
-
-    Standard
-
-    Geomap
-
-        (green)
-        City
-        Continent
-        Country / Territory
-        Metro
-        Region
-        Sub Continent Region
-
-        (blue)
-        All Metrics
-
-        (region)
-
-        The World
-            The World
-        Continents
-            Africa
-            Americas
-            Asia
-            Europe
-            Oceania
-        Sub Continents
-            Australasia
-            Caribbean
-            ...
-    Pie
-
-        (Create a pie chart showing - blue)
-        All Metrics
-
-        (Grouped by... - green)
-        Dimensions?
-
-        Show up to
-            2 slices
-            3 slices
-            4 slices
-            5 slices
-
-        Use Donut Chart
-            true / false
-
-    Bar
-
-        (Create a bar chart showing - blue)
-        All Metrics
-
-        (Grouped by... - green)
-        Dimensions?
-
-#}

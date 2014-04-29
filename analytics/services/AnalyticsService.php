@@ -304,5 +304,110 @@ class AnalyticsService extends BaseApplicationComponent
 
         return true;
     }
+
+
+    public function getMetricOpts($params = array())
+    {
+        // metrics
+
+        $json = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/metrics.json');
+        $metrics = json_decode($json);
+
+        $newMetrics = array();
+
+        foreach($metrics as $group => $groupMetrics)
+        {
+            $newMetrics[] = array('optgroup' => $group);
+
+            foreach($groupMetrics as $metric)
+            {
+                $newMetrics[] = array(
+                    'label' => $metric,
+                    'value' => $metric,
+                );
+            }
+        }
+
+        $metrics = $newMetrics;
+
+
+        // params
+
+        if(count($params) > 0)
+        {
+            $newMetrics = array();
+
+            foreach($metrics as $metric)
+            {
+                foreach($params as $param)
+                {
+
+                    if(isset($metric['value']))
+                    {
+                        if($metric['value'] == $param)
+                        {
+                            $newMetrics[] = $metric;
+                        }
+                    }
+                }
+            }
+
+            return $newMetrics;
+        }
+
+        return $metrics;
+    }
+
+    public function getDimensionOpts($params = array())
+    {
+        // dimensions
+
+        $json = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/dimensions.json');
+        $dimensions = json_decode($json);
+
+        $newDimensions = array();
+
+        foreach($dimensions as $group => $groupDimensions)
+        {
+            $newDimensions[] = array('optgroup' => $group);
+
+            foreach($groupDimensions as $dimension)
+            {
+                $newDimensions[] = array(
+                    'label' => $dimension,
+                    'value' => $dimension,
+                );
+            }
+        }
+
+        $dimensions = $newDimensions;
+
+
+        // params
+
+        if(count($params) > 0)
+        {
+            $newDimensions = array();
+
+            foreach($dimensions as $dimension)
+            {
+                foreach($params as $param)
+                {
+                    if(isset($dimension['value']))
+                    {
+                        // echo $dimension['value'].":".$param.'<br />';
+                        if($dimension['value'] == $param)
+                        {
+                            $newDimensions[] = $dimension;
+                        }
+                    }
+                }
+            }
+
+            return $newDimensions;
+        }
+
+        return $dimensions;
+    }
 }
 
