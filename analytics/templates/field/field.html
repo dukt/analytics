@@ -5,25 +5,34 @@
 {% includeJsResource 'analytics/js/AnalyticsUtils.js' %}
 {% includeJsResource 'analytics/js/AnalyticsField.js' %}
 
-<div
-    data-element-id="{{element.id}}"
-    class="analytics-field">
+{% if hasUrl %}
+    <div
+        data-element-id="{{element.id}}"
+        class="analytics-field">
 
-    {{ forms.select({
-        class:'analytics-metric',
-        value:'ga:pageviews',
-        options: craft.analytics.metricOpts([
-            'ga:exitRate',
-            'ga:avgTimeOnPage',
-            'ga:bounceRate',
-            'ga:pageviews',
-            'ga:uniquePageviews',
-        ])
-    }) }}
+        {{ forms.select({
+            class:'analytics-metric',
+            value:'ga:pageviews',
+            options: craft.analytics.metricOpts([
+                'ga:exitRate',
+                'ga:avgTimeOnPage',
+                'ga:bounceRate',
+                'ga:pageviews',
+                'ga:uniquePageviews',
+            ])
+        }) }}
 
-    <div class="spinner hidden"></div>
+        <div class="spinner hidden"></div>
 
-    <div class="chart"></div>
-    <div class="error"></div>
+        <div class="chart"></div>
+        <div class="error"></div>
 
-</div>
+    </div>
+{% else %}
+    <div
+        class="analytics-field analytics-error">
+
+        <div class="error">This element doesn't support urls.</div>
+
+    </div>
+{% endif %}

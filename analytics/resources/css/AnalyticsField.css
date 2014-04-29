@@ -5,16 +5,20 @@
   border: 1px solid #e3e5e8;
   border-left: 0;
   border-right: 0;
-  text-align: center;
+  position: relative;
 }
 .analytics-field .error {
   background: url("../images/error.png") no-repeat center 20px;
-  padding-top: 90px;
+  padding-top: 80px;
   color: #aaa !important;
   display: none;
   margin-bottom: 1em;
+  text-align: center;
 }
 .analytics-field.analytics-error .chart {
+  display: none;
+}
+.analytics-field.analytics-error .select {
   display: none;
 }
 .analytics-field.analytics-error .error {
@@ -22,8 +26,8 @@
 }
 .analytics-field .spinner {
   position: absolute;
-  top: 21px;
-  right: 0;
+  top: 11px;
+  right: 10px;
 }
 .analytics-field .select {
   margin: 10px 0;

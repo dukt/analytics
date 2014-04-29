@@ -28,45 +28,56 @@ class Analytics_ReportFieldType extends BaseFieldType
         // Figure out what that ID is going to look like once it has been namespaced
         $namespacedId = craft()->templates->namespaceInputId($id);
 
-        // let's roll
+        if($this->element->uri)
+        {
 
-        // profile
-        $profile = craft()->analytics->getProfile();
+            // let's roll
 
-        // date
-        $start = date('Y-m-d', strtotime('-1 month'));
-        $end = date('Y-m-d', strtotime('-1 day'));
+            // profile
+            $profile = craft()->analytics->getProfile();
 
-        // metrics
-        $metrics = 'ga:pageviews, ga:bounces';
+            // date
+            $start = date('Y-m-d', strtotime('-1 month'));
+            $end = date('Y-m-d', strtotime('-1 day'));
 
-        // options & dimensions
-        $options = array(
-            'dimensions' => 'ga:date',
-            'filters' => "ga:pagePath==/".$this->element->uri
-        );
+            // metrics
+            $metrics = 'ga:pageviews, ga:bounces';
 
-        // api request
-        $result = craft()->analytics->api()->data_ga->get(
-                    'ga:'.$profile['id'],
-                    $start,
-                    $end,
-                    $metrics,
-                    $options
-                );
+            // options & dimensions
+            $options = array(
+                'dimensions' => 'ga:date',
+                'filters' => "ga:pagePath==/".$this->element->uri
+            );
 
-        craft()->templates->includeJs('new AnalyticsField("'.$namespacedId.'-field");');
+            // api request
+            $result = craft()->analytics->api()->data_ga->get(
+                        'ga:'.$profile['id'],
+                        $start,
+                        $end,
+                        $metrics,
+                        $options
+                    );
 
-        // render HTML
-        return craft()->templates->render('analytics/field/field', array(
-            'id'    => $id,
-            'name'  => $name,
-            'value' => $value,
-            'model' => $this->model,
-            'element' => $this->element,
-            'start' => $start,
-            'end' => $end,
-            'result' => $result
-        ));
+            craft()->templates->includeJs('new AnalyticsField("'.$namespacedId.'-field");');
+
+            // render HTML
+            return craft()->templates->render('analytics/field/field', array(
+                'hasUrl' => true,
+                'id'    => $id,
+                'name'  => $name,
+                'value' => $value,
+                'model' => $this->model,
+                'element' => $this->element,
+                'start' => $start,
+                'end' => $end,
+                'result' => $result
+            ));
+        }
+        else
+        {
+            return craft()->templates->render('analytics/field/field', array(
+                'hasUrl' => false,
+            ));
+        }
     }
 }

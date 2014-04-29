@@ -16,7 +16,7 @@ AnalyticsField = Garnish.Base.extend({
         this.$elementId = $('.analytics-field', this.$element).data('element-id');
         this.$chart = false;
 
-        $('#'+fieldId+' .heading').addClass('hidden');
+        // $('#'+fieldId+' .heading').addClass('hidden');
 
         var $this = this;
 
