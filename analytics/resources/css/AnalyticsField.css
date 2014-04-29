@@ -1,12 +1,38 @@
 .analytics-field {
-  background: #fff;
+  background: #fdfdfd;
   margin: 0 -24px;
   padding: 12px 24px;
   border: 1px solid #e3e5e8;
   border-left: 0;
   border-right: 0;
+  text-align: center;
+}
+.analytics-field .error {
+  background: url("../images/error.png") no-repeat center 20px;
+  padding-top: 90px;
+  color: #aaa !important;
+  display: none;
+  margin-bottom: 1em;
+}
+.analytics-field.analytics-error .chart {
+  display: none;
+}
+.analytics-field.analytics-error .error {
+  display: block;
+}
+.analytics-field .spinner {
+  position: absolute;
+  top: 21px;
+  right: 0;
+}
+.analytics-field .select {
+  margin: 10px 0;
+  border: 1px solid #ddd;
+}
+.analytics-field .select select {
+  font-size: 0.9em;
 }
 .analytics-field .chart {
-  width: 100%;
+  clear: both;
   height: 150px;
 }

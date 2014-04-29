@@ -8,6 +8,11 @@ $(document).ready(function() {
     });
 
     // toggles
+
+    $('.analytics-chart-type-2 > .fieldtoggle').change(function() {
+        $('.analytics-toggle:visible:first select').trigger('change');
+    });
+
     $('.analytics-toggle select').change(function() {
         console.log('change', $(this).val());
 

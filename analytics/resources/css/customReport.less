@@ -1,8 +1,36 @@
+.analytics-custom-report {
+    background: url("../images/spinner.gif") no-repeat center center;
+
+    &.error {
+        background: url("../images/error.png") no-repeat center 20px;
+        padding-top: 90px;
+        text-align: center;
+
+        .error {
+            color: #aaa !important;
+        }
+
+        .chart {
+            display: none;
+        }
+    }
+}
+
 .chart {
 
     border-top:1px dotted #e3e5e8;
 
     &.areachart {
+        border-top: 0;
+        height: 200px;
+    }
+
+    &.columnchart {
+        height: 280px;
+    }
+
+    &.geochart {
+        height: 600px;
     }
 
     &.piechart {
@@ -145,3 +173,83 @@
         }
     }
 }
+
+.analytics-colspan-1 {
+    .chart {
+        &.geochart {
+            height: 200px;
+        }
+    }
+}
+
+.analytics-colspan-2 {
+    .chart {
+        &.geochart {
+            height: 400px;
+        }
+    }
+}
+
+.analytics-colspan-3 {
+    .chart {
+        &.geochart {
+            height: 500px;
+        }
+    }
+}
+
+@media screen and (max-width: 1292px) {
+    .analytics-colspan-4 {
+        .chart {
+            &.geochart {
+                height: 500px;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 973px) {
+    .analytics-colspan-4 {
+        .chart {
+            &.geochart {
+                height: 400px;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 653px) {
+    .analytics-colspan-4 {
+        .chart {
+            &.geochart {
+                height: 300px;
+            }
+        }
+    }
+}
+
+
+@media screen and (max-width: 973px) {
+    .analytics-colspan-2,
+    .analytics-colspan-3 {
+        .chart {
+            &.geochart {
+                height: 400px;
+            }
+        }
+    }
+}
+
+
+@media screen and (max-width: 653px) {
+    .analytics-colspan-1,
+    .analytics-colspan-2,
+    .analytics-colspan-3 {
+        .chart {
+            &.geochart {
+                height: 300px;
+            }
+        }
+    }
+}
+

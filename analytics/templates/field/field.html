@@ -2,6 +2,7 @@
 
 {% includeCssResource "analytics/css/AnalyticsField.css" %}
 {%- includeJsResource 'analytics/js/jsapi.js' first %}
+{% includeJsResource 'analytics/js/AnalyticsUtils.js' %}
 {% includeJsResource 'analytics/js/AnalyticsField.js' %}
 
 <div
@@ -10,6 +11,7 @@
 
     {{ forms.select({
         class:'analytics-metric',
+        value:'ga:pageviews',
         options: craft.analytics.metricOpts([
             'ga:exitRate',
             'ga:avgTimeOnPage',
@@ -19,9 +21,9 @@
         ])
     }) }}
 
-    <br />
-    <br />
+    <div class="spinner hidden"></div>
 
     <div class="chart"></div>
+    <div class="error"></div>
 
 </div>

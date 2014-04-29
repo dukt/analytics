@@ -5,10 +5,15 @@ AnalyticsField = Garnish.Base.extend({
     {
         console.log('fieldId', fieldId);
 
-        this.$field = $("#"+fieldId);
-        this.$metricElement = $('.analytics-metric select', this.$field);
-        this.$chartElement = $('.chart', this.$field);
-        this.$elementId = $('.analytics-field', this.$field).data('element-id');
+        this.$element = $("#"+fieldId);
+        this.$field = $(".analytics-field", this.$element);
+        this.$spinner = $('.spinner', this.$element);
+
+        this.$errorElement = $('.error', this.$element);
+
+        this.$metricElement = $('.analytics-metric select', this.$element);
+        this.$chartElement = $('.chart', this.$element);
+        this.$elementId = $('.analytics-field', this.$element).data('element-id');
         this.$chart = false;
 
         $('#'+fieldId+' .heading').addClass('hidden');
@@ -30,131 +35,90 @@ AnalyticsField = Garnish.Base.extend({
         var chartData = new google.visualization.DataTable();
         var options = {};
 
-        Craft.postActionRequest('analytics/elementReport', { id: this.$elementId, metric: this.$metric }, function(response) {
+        this.$spinner.removeClass('hidden');
 
-            $.each(response.apiResponse.columnHeaders, function(k, columnHeader) {
+        Craft.postActionRequest('analytics/elementReport', { id: this.$elementId, metric: this.$metric }, $.proxy(function(response) {
 
-                $type = 'string';
+            this.$spinner.addClass('hidden');
 
-                if(columnHeader.name == 'ga:date') {
-                    $type = 'date';
-                }
-                else
-                {
-                    if(columnHeader.dataType == 'INTEGER'
-                        || columnHeader.dataType == 'PERCENT'
-                        || columnHeader.dataType == 'TIME')
-                    {
-                        $type = 'number';
-                    }
-                }
+            if(typeof(response.error) != 'undefined')
+            {
+                this.$errorElement.html(response.error);
+                this.$field.addClass('analytics-error');
+            }
+            else
+            {
+                this.$field.removeClass('analytics-error');
 
-                console.log('header', $type, columnHeader.name);
-
-                chartData.addColumn($type, columnHeader.name);
-
-            });
-
-            $.each(response.apiResponse.rows, function(k, row) {
-
-                $.each(response.apiResponse.columnHeaders, function(k2, columnHeader) {
-
-                    if(columnHeader.name == 'ga:date')
-                    {
-                        $date = response.apiResponse.rows[k][k2];
-                        $year = eval($date.substr(0, 4));
-                        $month = eval($date.substr(4, 2)) - 1;
-                        $day = eval($date.substr(6, 2));
-
-                        newDate = new Date($year, $month, $day);
-
-                        response.apiResponse.rows[k][k2] = newDate;
-                    }
-                    else
-                    {
-                        if(columnHeader.dataType == 'INTEGER')
-                        {
-                            response.apiResponse.rows[k][k2] = eval(response.apiResponse.rows[k][k2]);
-                        }
-                        else if(columnHeader.dataType == 'PERCENT')
-                        {
-                            response.apiResponse.rows[k][k2] = {
-                                'f': (Math.round(eval(response.apiResponse.rows[k][k2]) * 100) / 100)+" %",
-                                'v': eval(response.apiResponse.rows[k][k2])
-                            };
-                        }
-                        else if(columnHeader.dataType == 'TIME')
-                        {
-                            response.apiResponse.rows[k][k2] = {
-                                'f' : eval(response.apiResponse.rows[k][k2])+" seconds",
-                                'v' : eval(response.apiResponse.rows[k][k2]),
-                            };
-                        }
-                    }
+                var columns = AnalyticsUtils.getColumns(response);
+                $.each(columns, function(k, column) {
+                    chartData.addColumn(column.type, column.name);
                 });
 
+                var rows = AnalyticsUtils.getRows(response);
+                chartData.addRows(rows);
 
-            });
-
-            console.log(response);
-
-            chartData.addRows(response.apiResponse.rows);
-
-            options = {
-                areaOpacity: 0.1,
-                pointSize: 8,
-                lineWidth: 4,
-                legend: false,
-                hAxis: {
-                    baselineColor: '#fff',
-                    gridlines: {
-                        color: 'none'
-                    }
-                },
-                series:{
-                    0:{targetAxisIndex:0},
-                    1:{targetAxisIndex:1}
-                },
-                vAxes: [
-                    {
-                        format: '#',
-                        textPosition: 'in',
-                        baselineColor: '#ccc',
+                options = {
+                    colors: ['#058DC7'],
+                    backgroundColor: '#fdfdfd',
+                    areaOpacity: 0.1,
+                    pointSize: 8,
+                    lineWidth: 4,
+                    legend: false,
+                    hAxis: {
+                        textStyle: { color: '#888' },
+                        baselineColor: '#fff',
                         gridlines: {
-                            color: '#eee'
+                            color: 'none'
                         }
                     },
-                    {
-                        format: '#',
-                        textPosition: 'in',
-                        baselineColor: '#ccc',
-                        gridlines: {
-                            color: '#eee'
+                    series:{
+                        0:{targetAxisIndex:0},
+                        1:{targetAxisIndex:1}
+                    },
+                    vAxes: [
+                        {
+                            textStyle: { color: '#888' },
+                            format: '#',
+                            textPosition: 'in',
+                            baselineColor: '#eee',
+                            gridlines: {
+                                color: '#eee'
+                            }
+                        },
+                        {
+                            textStyle: { color: '#888' },
+                            format: '#',
+                            textPosition: 'in',
+                            baselineColor: '#eee',
+                            gridlines: {
+                                color: '#eee'
+                            }
                         }
+                    ],
+                    chartArea:{
+                        top:10,
+                        bottom:10,
+                        width:"100%",
+                        height:"80%"
                     }
-                ],
-                chartArea:{
-                    top:10,
-                    bottom:10,
-                    width:"100%",
-                    height:"80%"
+                };
+
+                this.$chart = new google.visualization.AreaChart(this.$chartElement.get(0));
+
+                if(typeof(this.$chart) != 'undefined')
+                {
+                    this.$chart.draw(chartData, options);
                 }
-            };
 
-            this.$chart = new google.visualization.AreaChart(this.$chartElement.get(0));
+                var $this = this;
 
-            if(typeof(this.$chart) != 'undefined')
-            {
-                this.$chart.draw(chartData, options);
+                $(window).resize(function() {
+                    $this.$chart.draw(chartData, options);
+                });
             }
 
-            var $this = this;
-
-            $(window).resize(function() {
-                $this.$chart.draw(chartData, options);
-            });
-
-        }, this);
+        }, this));
     }
 });
 
