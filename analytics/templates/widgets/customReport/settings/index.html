@@ -1,5 +1,5 @@
 {% import "_includes/forms" as forms %}
-{% includeJsResource 'analytics/js/customReportSettings.js' %}
+{% includeJsResource 'analytics/js/AnalyticsCustomReportSettings.js' %}
 
 {{ forms.textField({
     first: true,
@@ -60,12 +60,12 @@
     value: (settings.options.metric is defined ? settings.options.metric : '')
 }) }}
 
-{% include 'analytics/_widgets/customReport/settings/area' %}
-{% include 'analytics/_widgets/customReport/settings/bar' %}
-{% include 'analytics/_widgets/customReport/settings/column' %}
-{% include 'analytics/_widgets/customReport/settings/geo' %}
-{% include 'analytics/_widgets/customReport/settings/pie' %}
-{% include 'analytics/_widgets/customReport/settings/table' %}
+{% include 'analytics/widgets/customReport/settings/area' %}
+{% include 'analytics/widgets/customReport/settings/bar' %}
+{% include 'analytics/widgets/customReport/settings/column' %}
+{% include 'analytics/widgets/customReport/settings/geo' %}
+{% include 'analytics/widgets/customReport/settings/pie' %}
+{% include 'analytics/widgets/customReport/settings/table' %}
 
 <hr>
 

@@ -48,80 +48,6 @@ div.more {
 }
 
 
-/************************
- * Widgets
- *************************/
-
-.analytics-report-count {
-    margin-top: -12px;
-
-    .blocks {
-        margin-bottom: -24px;
-        .block {
-            width: 33%;
-            float: left;
-            margin-bottom: 24px;
-
-            .in {
-                text-align: center;
-                line-height: 2em;
-
-                strong {
-                    display: block;
-                    text-transform: uppercase;
-                    opacity: .5;
-                    font-size: 0.8em;
-                }
-
-                span {
-                    font-weight: bold;
-                    font-size: 1.5em;
-                }
-            }
-        }
-    }
-}
-
-.analytics-colspan-1 {
-    .analytics-report-count {
-        .block {
-            width: 50%;
-        }
-    }
-}
-.analytics-colspan-2 {
-    .analytics-report-count {
-        .block {
-            width: 33%;
-        }
-    }
-
-    @media screen and (max-width: 653px) {
-        .analytics-report-count {
-            .block {
-                width: 50%;
-            }
-        }
-    }
-}
-
-.analytics-colspan-3, .analytics-colspan-4 {
-    @media screen and (min-width: 970px) {
-        .analytics-report-count {
-            .block {
-                width: 16.66%;
-            }
-        }
-    }
-
-    @media screen and (max-width: 653px) {
-        .analytics-report-count {
-            .block {
-                width: 50%;
-            }
-        }
-    }
-}
 
 
 /************************
@@ -316,45 +242,6 @@ div.more {
     }
 }
 
-
-/************
- * Tabs
- *************/
-
-.analytics-tabs {
-
-    .analytics-nav {
-        margin: 0 -30px;
-        margin-top: 10px;
-        margin-bottom: 30px;
-        padding: 0 30px;
-
-        background: #fcfcfc;
-        text-align: center;
-
-        li {
-            display: inline-block;
-            margin-right: 0.8em;
-
-            a {
-                // font-weight: bold;
-                padding: 5px 0px;
-                padding-top: 8px;
-                display: block;
-                color: #888;
-
-                &:hover {
-                    text-decoration: none;
-                }
-
-                &.active {
-                    color: #333;
-                    border-bottom: 2px solid rgb(13, 120, 242);
-                }
-            }
-        }
-    }
-}
 
 
 /************************

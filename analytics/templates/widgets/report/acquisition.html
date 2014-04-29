@@ -1,13 +1,12 @@
-{% extends "analytics/_widgets/_layout" %}
-
-{% includeJsResource 'analytics/js/analytics-tabs.js' %}
+{% extends "analytics/widgets/report/_layout" %}
 
 {% block body %}
 
 	<div class="analytics-tabs">
 		<ul class="analytics-nav">
-			<li><a href="#week">{{'Is Mobile'|t}}</a></li>
-			<li><a href="#year">{{'Mobile Device'|t}}</a></li>
+			<li><a href="#week">{{'Sources'|t}}</a></li>
+			<li><a href="#week">{{'Keywords'|t}}</a></li>
+			<li><a href="#month">{{'Networks'|t}}</a></li>
 		</ul>
 
 		<div class="clear"></div>
@@ -20,14 +19,14 @@
 			        param3: now|date("Y-m-d"),
 			        param4: 'ga:visits',
 			        param5: {
-				        'dimensions' : 'ga:isMobile',
+				        'dimensions' : 'ga:source',
 				        'sort' : '-ga:visits'
 			        }
 			    },
 			    columns: [
 			        {
 			            type: 'string',
-			            label: 'Is Mobile'
+			            label: 'Sources'
 			        },
 			        {
 			            type: 'number',
@@ -46,14 +45,14 @@
 			        param3: now|date("Y-m-d"),
 			        param4: 'ga:visits',
 			        param5: {
-				        'dimensions' : 'ga:mobileDeviceInfo',
+				        'dimensions' : 'ga:keyword',
 				        'sort' : '-ga:visits'
 			        }
 			    },
 			    columns: [
 			        {
 			            type: 'string',
-			            label: 'Mobile Device'
+			            label: 'Keywords'
 			        },
 			        {
 			            type: 'number',
@@ -61,8 +60,32 @@
 			        }
 			    ]
 			}) }}
-
 		</div>
+
+		<div class="analyticsTab hidden">
+			{{ charts.report({
+			    query: {
+			        param2: now|date_modify("-1 month")|date("Y-m-d"),
+			        param3: now|date("Y-m-d"),
+			        param4: 'ga:visits',
+			        param5: {
+				        'dimensions' : 'ga:socialNetwork',
+				        'sort' : '-ga:visits'
+			        }
+			    },
+			    columns: [
+			        {
+			            type: 'string',
+			            label: 'Social Network'
+			        },
+			        {
+			            type: 'number',
+			            label: 'Visits'|t
+			        }
+			    ]
+			}) }}
+		</div>
+
 	</div>
 
 

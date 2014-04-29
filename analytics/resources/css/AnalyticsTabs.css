@@ -1,0 +1,28 @@
+/************
+ * Tabs
+ *************/
+.analytics-tabs .analytics-nav {
+  margin: 0 -24px;
+  margin-top: 10px;
+  margin-bottom: 24px;
+  padding: 0 24px;
+  background: #fcfcfc;
+  text-align: center;
+}
+.analytics-tabs .analytics-nav li {
+  display: inline-block;
+  margin-right: 0.8em;
+}
+.analytics-tabs .analytics-nav li a {
+  padding: 5px 0px;
+  padding-top: 8px;
+  display: block;
+  color: #888;
+}
+.analytics-tabs .analytics-nav li a:hover {
+  text-decoration: none;
+}
+.analytics-tabs .analytics-nav li a.active {
+  color: #333;
+  border-bottom: 2px solid #0d78f2;
+}

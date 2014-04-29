@@ -1,0 +1,112 @@
+@import url("AnalyticsCommon.less");
+@import url("AnalyticsTabs.less");
+
+/* more */
+
+a.more, a.less {
+    position: relative;
+    display: block;
+    margin: 0 -30px;
+    margin-top: -0px !important;
+    margin-bottom: -11px !important;
+    text-align: center;
+    padding: 0.5em;
+}
+
+a.more {
+    margin-bottom: -20px;
+}
+a.less {
+    margin-bottom: 10px !important;
+}
+
+div.more {
+    .analytics-chart.table {
+        margin-top: 30px;
+        margin-bottom: 20px;
+    }
+}
+
+/* loading */
+
+.analytics-loading {
+    background: url(../images/spinner.gif) no-repeat 50% 50%;
+    min-height: 40px;
+}
+
+
+/************************
+ * Count Report
+ *************************/
+
+.analytics-report-count {
+    margin-top: -12px;
+
+    .blocks {
+        margin-bottom: -24px;
+        .block {
+            width: 33%;
+            float: left;
+            margin-bottom: 24px;
+
+            .in {
+                text-align: center;
+                line-height: 2em;
+
+                strong {
+                    display: block;
+                    text-transform: uppercase;
+                    opacity: .5;
+                    font-size: 0.8em;
+                }
+
+                span {
+                    font-weight: bold;
+                    font-size: 1.5em;
+                }
+            }
+        }
+    }
+}
+
+.analytics-colspan-1 {
+    .analytics-report-count {
+        .block {
+            width: 50%;
+        }
+    }
+}
+.analytics-colspan-2 {
+    .analytics-report-count {
+        .block {
+            width: 33%;
+        }
+    }
+
+    @media screen and (max-width: 653px) {
+        .analytics-report-count {
+            .block {
+                width: 50%;
+            }
+        }
+    }
+}
+
+.analytics-colspan-3, .analytics-colspan-4 {
+    @media screen and (min-width: 970px) {
+        .analytics-report-count {
+            .block {
+                width: 16.66%;
+            }
+        }
+    }
+
+    @media screen and (max-width: 653px) {
+        .analytics-report-count {
+            .block {
+                width: 50%;
+            }
+        }
+    }
+}
+

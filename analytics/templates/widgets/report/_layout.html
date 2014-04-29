@@ -1,13 +1,13 @@
 {% import "analytics/_includes/charts" as charts %}
 
-{% includeCssResource "analytics/css/styles.css" %}
+{% includeCssResource "analytics/css/AnalyticsReport.css" %}
 
 <div class="{{ 'craft-'~craft.app.version|replace('.', '-') }} {{'analytics-colspan-'~colspan}} {{'analytics-report-'~type}}">
 
     {% if craft.analytics.isConfigured %}
 
     	{%- includeJsResource 'analytics/js/jsapi.js' first %}
-        {% includeJsResource 'analytics/js/analytics-tabs.js' %}
+        {% includeJsResource 'analytics/js/AnalyticsTabs.js' %}
     	{% includeJsResource 'analytics/js/AnalyticsChart.js' %}
 
     	{% set profile = craft.analytics.profile %}

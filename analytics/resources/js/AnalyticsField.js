@@ -67,7 +67,7 @@ AnalyticsField = Garnish.Base.extend({
                     legend: false,
                     hAxis: {
                         textStyle: { color: '#888' },
-                        baselineColor: '#fff',
+                        baselineColor: '#fdfdfd',
                         gridlines: {
                             color: 'none'
                         }

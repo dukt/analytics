@@ -39,57 +39,6 @@ div.more .analytics-chart.table {
   min-height: 40px;
 }
 /************************
- * Widgets
- *************************/
-.analytics-report-count {
-  margin-top: -12px;
-}
-.analytics-report-count .blocks {
-  margin-bottom: -24px;
-}
-.analytics-report-count .blocks .block {
-  width: 33%;
-  float: left;
-  margin-bottom: 24px;
-}
-.analytics-report-count .blocks .block .in {
-  text-align: center;
-  line-height: 2em;
-}
-.analytics-report-count .blocks .block .in strong {
-  display: block;
-  text-transform: uppercase;
-  opacity: .5;
-  font-size: 0.8em;
-}
-.analytics-report-count .blocks .block .in span {
-  font-weight: bold;
-  font-size: 1.5em;
-}
-.analytics-colspan-1 .analytics-report-count .block {
-  width: 50%;
-}
-.analytics-colspan-2 .analytics-report-count .block {
-  width: 33%;
-}
-@media screen and (max-width: 653px) {
-  .analytics-colspan-2 .analytics-report-count .block {
-    width: 50%;
-  }
-}
-@media screen and (min-width: 970px) {
-  .analytics-colspan-3 .analytics-report-count .block,
-  .analytics-colspan-4 .analytics-report-count .block {
-    width: 16.66%;
-  }
-}
-@media screen and (max-width: 653px) {
-  .analytics-colspan-3 .analytics-report-count .block,
-  .analytics-colspan-4 .analytics-report-count .block {
-    width: 50%;
-  }
-}
-/************************
  * Charts
  *************************/
 .analytics-chart {
@@ -230,34 +179,6 @@ div.more .analytics-chart.table {
 }
 .analytics-colspan-2 .GeoChart .inject {
   height: 400px;
-}
-/************
- * Tabs
- *************/
-.analytics-tabs .analytics-nav {
-  margin: 0 -30px;
-  margin-top: 10px;
-  margin-bottom: 30px;
-  padding: 0 30px;
-  background: #fcfcfc;
-  text-align: center;
-}
-.analytics-tabs .analytics-nav li {
-  display: inline-block;
-  margin-right: 0.8em;
-}
-.analytics-tabs .analytics-nav li a {
-  padding: 5px 0px;
-  padding-top: 8px;
-  display: block;
-  color: #888;
-}
-.analytics-tabs .analytics-nav li a:hover {
-  text-decoration: none;
-}
-.analytics-tabs .analytics-nav li a.active {
-  color: #333;
-  border-bottom: 2px solid #0d78f2;
 }
 /************************
  * Craft compatibility

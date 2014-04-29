@@ -53,7 +53,7 @@ class Analytics_CustomReportWidget extends BaseWidget
             $types['realtime'] .= ' (beta)';
         }
 
-        return craft()->templates->render('analytics/_widgets/customReport/settings', array(
+        return craft()->templates->render('analytics/widgets/customReport/settings', array(
            'settings' => $this->getSettings(),
            'types' => $types
         ));
@@ -74,7 +74,7 @@ class Analytics_CustomReportWidget extends BaseWidget
 
         craft()->templates->includeJs('new AnalyticsCustomReport("analytics-widget-'.$this->model->id.'");');
 
-        $html = craft()->templates->render('analytics/_widgets/customReport', $variables);
+        $html = craft()->templates->render('analytics/widgets/customReport', $variables);
 
         $charset = craft()->templates->getTwig()->getCharset();
 

@@ -7,10 +7,9 @@
 
 	{% includeJs myJs first %}
 
-	{% includeJsResource 'analytics/js/analytics-tabs.js' %}
-	{% includeJsResource 'analytics/js/analytics-realtime.js' %}
-	{% includeCssResource 'analytics/css/styles.css' %}
-	{% includeCssResource 'analytics/css/realtime.css' %}
+	{% includeJsResource 'analytics/js/AnalyticsTabs.js' %}
+	{% includeJsResource 'analytics/js/AnalyticsRealtime.js' %}
+	{% includeCssResource 'analytics/css/AnalyticsRealtime.css' %}
 
 	<div class="analytics-widget-realtime {{ 'craft-'~craft.app.version|replace('.', '-') }} {{'analytics-colspan-'~colspan}} {{'analytics-report-'~type}}">
 

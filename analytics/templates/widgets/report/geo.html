@@ -1,32 +1,73 @@
-{% extends "analytics/_widgets/_layout" %}
+{% extends "analytics/widgets/report/_layout" %}
+{% import "analytics/_includes/charts" as charts %}
 
 {% block body %}
 
 	<div class="analytics-tabs">
 		<ul class="analytics-nav">
-			<li><a href="#week">{{'Sources'|t}}</a></li>
-			<li><a href="#week">{{'Keywords'|t}}</a></li>
-			<li><a href="#month">{{'Networks'|t}}</a></li>
+			<li><a href="#country">{{'Country'|t}}</a></li>
+			<li><a href="#language">{{'Language'|t}}</a></li>
+			<li><a href="#city">{{'City'|t}}</a></li>
 		</ul>
 
 		<div class="clear"></div>
 
 		<div class="analyticsTab hidden">
 
-			{{ charts.report({
+			{% set config = {
 			    query: {
 			        param2: now|date_modify("-1 month")|date("Y-m-d"),
 			        param3: now|date("Y-m-d"),
 			        param4: 'ga:visits',
 			        param5: {
-				        'dimensions' : 'ga:source',
+				        'dimensions' : 'ga:country',
 				        'sort' : '-ga:visits'
 			        }
 			    },
 			    columns: [
 			        {
 			            type: 'string',
-			            label: 'Sources'
+			            label: 'Country'
+			        },
+			        {
+			            type: 'number',
+			            label: 'Visits'|t
+			        }
+			    ]
+			} %}
+
+			{{ charts.geo(config) }}
+
+			<div class="more">
+
+			    <div class="center"><a class="more" href="#">{{ 'More Data'|t }}</a></div>
+
+			    <div class="more-content hidden">
+
+			        <div class="center"><a class="less" href="#">{{ 'Less'|t }}</a></div>
+
+			        {{ charts.table(config) }}
+			    </div>
+			</div>
+		</div>
+
+		<div class="analyticsTab hidden">
+
+
+			{{ charts.report({
+			    query: {
+			        param2: now|date_modify("-1 month")|date("Y-m-d"),
+			        param3: now|date("Y-m-d"),
+			        param4: 'ga:visits',
+			        param5: {
+				        'dimensions' : 'ga:language',
+				        'sort' : '-ga:visits'
+			        }
+			    },
+			    columns: [
+			        {
+			            type: 'string',
+			            label: 'Language'
 			        },
 			        {
 			            type: 'number',
@@ -45,38 +86,14 @@
 			        param3: now|date("Y-m-d"),
 			        param4: 'ga:visits',
 			        param5: {
-				        'dimensions' : 'ga:keyword',
+				        'dimensions' : 'ga:city',
 				        'sort' : '-ga:visits'
 			        }
 			    },
 			    columns: [
 			        {
 			            type: 'string',
-			            label: 'Keywords'
-			        },
-			        {
-			            type: 'number',
-			            label: 'Visits'|t
-			        }
-			    ]
-			}) }}
-		</div>
-
-		<div class="analyticsTab hidden">
-			{{ charts.report({
-			    query: {
-			        param2: now|date_modify("-1 month")|date("Y-m-d"),
-			        param3: now|date("Y-m-d"),
-			        param4: 'ga:visits',
-			        param5: {
-				        'dimensions' : 'ga:socialNetwork',
-				        'sort' : '-ga:visits'
-			        }
-			    },
-			    columns: [
-			        {
-			            type: 'string',
-			            label: 'Social Network'
+			            label: 'City'
 			        },
 			        {
 			            type: 'number',

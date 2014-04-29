@@ -70,7 +70,7 @@ class Analytics_ReportsWidget extends BaseWidget
             $types['realtime'] .= ' (beta)';
         }
 
-        return craft()->templates->render('analytics/_widgets/report/settings', array(
+        return craft()->templates->render('analytics/widgets/report/settings', array(
            'settings' => $this->getSettings(),
            'types' => $types
         ));
@@ -90,7 +90,7 @@ class Analytics_ReportsWidget extends BaseWidget
 
         $settings = $this->getSettings();
 
-        $html = craft()->templates->render('analytics/_widgets/report/'.$settings->type, $variables);
+        $html = craft()->templates->render('analytics/widgets/report/'.$settings->type, $variables);
 
         $charset = craft()->templates->getTwig()->getCharset();
 
