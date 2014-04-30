@@ -26,7 +26,7 @@ function analyticsRealtimeRequest()
 
 	// console.log('send realtime request', data);
 
-	Craft.postActionRequest('analytics/charts/realtime', data, function(response) {
+	Craft.postActionRequest('analytics/realtime', data, function(response) {
 
 		// realtime
 		// console.log('get realtime response', response);

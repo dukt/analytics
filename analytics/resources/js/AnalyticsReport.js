@@ -14,7 +14,7 @@ AnalyticsCountReport = Garnish.Base.extend({
 
         this.$element.addClass('analytics-loading');
 
-        Craft.queueActionRequest('analytics/charts/getCountReport', data, $.proxy(function(response) {
+        Craft.queueActionRequest('analytics/getCountReport', data, $.proxy(function(response) {
 
             if(typeof(response.error) != 'undefined') {
                 $('.inject', this.$error).html(response.error);
