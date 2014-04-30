@@ -18,15 +18,15 @@
 			{{'OAuth is ready'|t}}
 		{% endif %}
 
-		<div class="buttons">
+		<p>
 			<a class="btn" href="{{url('settings/plugins')}}">{{'Manage plugins'|t}}</a>
-		</div>
+		</p>
 	{% else %}
 		<p>{{'Analytics plugin requires OAuth plugin for Craft.'|t}}</p>
 
-		<div class="buttons">
+		<p>
 			<a class="btn" href="{{actionUrl('analytics/plugin/download', {plugin:'oauth'})}}">{{'Download OAuth plugin'|t}}</a>
-		</div>
+		</p>
 	{% endif %}
 
 {% else %}
@@ -47,9 +47,9 @@
 		<h2 class="first">{{'Google provider not configured'|t}}</h2>
 		<p>{{'Please fill API client id & secret for Analytics provider.'|t}}</p>
 
-		<div class="buttons">
+		<p>
 			<a class="btn" href="{{url('oauth/settings/google')}}">{{'Google OAuth settings'|t}}</a>
-		</div>
+		</p>
 	{% else %}
 
 		{% set token = craft.oauth.getSystemToken('google', 'analytics.system') %}
@@ -104,9 +104,9 @@
             }) }}
 
 
-			<div class="buttons">
+			<p>
 				<input type="submit" class="btn submit force" value="{{'Save'|t}}">
-			</div>
+			</p>
 
 
 		{% else %}

@@ -1,47 +1,60 @@
 {% import "_includes/forms" as forms %}
 
 {% includeCssResource "analytics/css/AnalyticsField.css" %}
-{%- includeJsResource 'analytics/js/jsapi.js' first %}
-{% includeJsResource 'analytics/js/AnalyticsUtils.js' %}
-{% includeJsResource 'analytics/js/AnalyticsField.js' %}
 
-{% if hasUrl %}
-    <div
-        data-element-id="{{element.id}}"
-        class="analytics-field">
+{% if craft.analytics.isConfigured %}
 
-        <span class="uri light right">&nbsp; URI: /{{element.uri}}</span>
+    {%- includeJsResource 'analytics/js/jsapi.js' first %}
+    {% includeJsResource 'analytics/js/AnalyticsUtils.js' %}
+    {% includeJsResource 'analytics/js/AnalyticsField.js' %}
 
-        {{ forms.select({
-            class:'analytics-metric',
-            value:'ga:pageviews',
-            options: craft.analytics.metricOpts([
-                'ga:exitRate',
-                'ga:avgTimeOnPage',
-                'ga:bounceRate',
-                'ga:pageviews',
-                'ga:uniquePageviews',
-            ])
-        }) }}
+    {% if hasUrl %}
+        <div
+            data-element-id="{{element.id}}"
+            class="analytics-field">
 
-        <div class="spinner hidden"></div>
+            <span class="uri light right">&nbsp; URI: /{{element.uri}}</span>
 
-        <div class="chart"></div>
-        <div class="error"></div>
+            {{ forms.select({
+                class:'analytics-metric',
+                value:'ga:pageviews',
+                options: craft.analytics.metricOpts([
+                    'ga:exitRate',
+                    'ga:avgTimeOnPage',
+                    'ga:bounceRate',
+                    'ga:pageviews',
+                    'ga:uniquePageviews',
+                ])
+            }) }}
 
-    </div>
-{% elseif isNew %}
-    <div
-        class="analytics-field analytics-error disable-icon">
+            <div class="spinner hidden"></div>
 
-        <div class="error">Report will appear when the element is saved.</div>
+            <div class="chart"></div>
+            <div class="error"></div>
 
-    </div>
+        </div>
+    {% elseif isNew %}
+        <div
+            class="analytics-field analytics-error disable-icon">
+
+            <div class="error">Report will appear when the element is saved.</div>
+
+        </div>
+    {% else %}
+        <div
+            class="analytics-field analytics-error">
+
+            <div class="error">This element doesn't support urls.</div>
+
+        </div>
+    {% endif %}
+
 {% else %}
-    <div
-        class="analytics-field analytics-error">
 
-        <div class="error">This element doesn't support urls.</div>
+    <div
+        class="analytics-field center">
+
+            <p><a href="{{url('settings/plugins/analytics')}}">{{'Configure Analytics plugin in order to get started'|t}}</a></p>
 
     </div>
 {% endif %}

@@ -1,15 +1,21 @@
-{% includeCssResource "analytics/css/AnalyticsCustomReport.css" %}
-{%- includeJsResource 'analytics/js/jsapi.js' first %}
-{% includeJsResource 'analytics/js/AnalyticsUtils.js' %}
-{% includeJsResource 'analytics/js/AnalyticsCustomReport.js' %}
+{% extends "analytics/widgets/_base" %}
 
-<div
-    id="analytics-widget-{{widget.model.id}}"
-    data-widget-id="{{widget.model.id}}"
-    class="analytics-custom-report {{'analytics-colspan-'~colspan}}">
+{% block body %}
 
-    <div class="chart {{settings.options.chartType|lower}}"></div>
-    <ul class="totals"></ul>
-    <div class="error"></div>
+    {% includeCssResource "analytics/css/AnalyticsCustomReport.css" %}
+    {%- includeJsResource 'analytics/js/jsapi.js' first %}
+    {% includeJsResource 'analytics/js/AnalyticsUtils.js' %}
+    {% includeJsResource 'analytics/js/AnalyticsCustomReport.js' %}
 
-</div>
+    <div
+        id="analytics-widget-{{widget.model.id}}"
+        data-widget-id="{{widget.model.id}}"
+        class="analytics-custom-report {{'analytics-colspan-'~colspan}}">
+
+        <div class="chart {{settings.options.chartType|lower}}"></div>
+        <ul class="totals"></ul>
+        <div class="error"></div>
+
+    </div>
+
+{% endblock %}
