@@ -15,6 +15,10 @@
   margin-bottom: 1em;
   text-align: center;
 }
+.analytics-field.analytics-error.disable-icon .error {
+  background: none;
+  padding-top: inherit;
+}
 .analytics-field .uri {
   margin-top: 14px;
   margin-right: 20px;

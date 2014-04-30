@@ -34,18 +34,27 @@ class Analytics_ReportFieldType extends BaseFieldType
 
             // render HTML
             return craft()->templates->render('analytics/field/field', array(
+                'isNew' => false,
                 'hasUrl' => true,
                 'id'    => $id,
                 'name'  => $name,
                 'value' => $value,
                 'model' => $this->model,
-                'element' => $this->element
+                'element' => $this->element,
+            ));
+        }
+        elseif(!$this->element->id)
+        {
+            return craft()->templates->render('analytics/field/field', array(
+                'hasUrl' => false,
+                'isNew' => true,
             ));
         }
         else
         {
             return craft()->templates->render('analytics/field/field', array(
                 'hasUrl' => false,
+                'isNew' => false,
             ));
         }
     }
