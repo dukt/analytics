@@ -346,11 +346,33 @@ class AnalyticsController extends BaseController
                     $options
                 );
 
-                $cacheKey = 'analytics/elementReport/'.md5(serialize($data));
+                $enableCache = true;
 
-                $response = craft()->fileCache->get($cacheKey);
+                if(craft()->config->get('disableCache', 'analytics') == true)
+                {
+                    $enableCache = false;
+                }
 
-                if(!$response)
+                if($enableCache)
+                {
+                    $cacheKey = 'analytics/elementReport/'.md5(serialize($data));
+
+                    $response = craft()->fileCache->get($cacheKey);
+
+                    if(!$response)
+                    {
+                        $response = craft()->analytics->api()->data_ga->get(
+                            'ga:'.$profile['id'],
+                            $start,
+                            $end,
+                            $metrics,
+                            $options
+                        );
+
+                        craft()->fileCache->set($cacheKey, $response, $this->cacheExpiry());
+                    }
+                }
+                else
                 {
                     $response = craft()->analytics->api()->data_ga->get(
                         'ga:'.$profile['id'],
@@ -359,8 +381,6 @@ class AnalyticsController extends BaseController
                         $metrics,
                         $options
                     );
-
-                    craft()->fileCache->set($cacheKey, $response, $this->cacheExpiry());
                 }
 
                 $this->returnJson(array('apiResponse' => $response));
@@ -725,17 +745,40 @@ class AnalyticsController extends BaseController
 
             // request
 
-            $cacheKey = 'analytics/customReport/'.md5(serialize(array(
-                'ga:'.$profile['id'],
-                $start,
-                $end,
-                $metric,
-                $options
-            )));
+            $enableCache = true;
 
-            $response = craft()->fileCache->get($cacheKey);
+            if(craft()->config->get('disableCache', 'analytics') == true)
+            {
+                $enableCache = false;
+            }
 
-            if(!$response)
+            if($enableCache)
+            {
+
+                $cacheKey = 'analytics/customReport/'.md5(serialize(array(
+                    'ga:'.$profile['id'],
+                    $start,
+                    $end,
+                    $metric,
+                    $options
+                )));
+
+                $response = craft()->fileCache->get($cacheKey);
+
+                if(!$response)
+                {
+                    $response = craft()->analytics->api()->data_ga->get(
+                        'ga:'.$profile['id'],
+                        $start,
+                        $end,
+                        $metric,
+                        $options
+                    );
+
+                    craft()->fileCache->set($cacheKey, $response, $this->cacheExpiry());
+                }
+            }
+            else
             {
                 $response = craft()->analytics->api()->data_ga->get(
                     'ga:'.$profile['id'],
@@ -744,8 +787,6 @@ class AnalyticsController extends BaseController
                     $metric,
                     $options
                 );
-
-                craft()->fileCache->set($cacheKey, $response, $this->cacheExpiry());
             }
 
             // response
