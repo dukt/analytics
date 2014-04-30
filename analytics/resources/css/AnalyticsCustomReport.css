@@ -1,20 +1,3 @@
-.analytics-custom-report {
-  background: url("../images/spinner.gif") no-repeat center center;
-}
-.analytics-custom-report.error {
-  background: url("../images/error.png") no-repeat center 20px;
-  padding-top: 90px;
-  text-align: center;
-}
-.analytics-custom-report.error .error {
-  color: #aaa !important;
-}
-.analytics-custom-report.error .chart {
-  display: none;
-}
-.chart {
-  border-top: 1px dotted #e3e5e8;
-}
 .chart.areachart {
   border-top: 0;
   height: 200px;
@@ -33,6 +16,7 @@
   margin-bottom: 20px;
   position: relative;
   min-height: 30px;
+  border-top: 1px dotted #e3e5e8;
 }
 .chart.table > div {
   position: inherit;
@@ -168,4 +152,18 @@
   .analytics-colspan-3 .chart.geochart {
     height: 300px;
   }
+}
+.analytics-custom-report {
+  background: url("../images/spinner.gif") no-repeat center center;
+}
+.analytics-custom-report.error {
+  background: url("../images/error.png") no-repeat center 20px;
+  padding-top: 90px;
+  text-align: center;
+}
+.analytics-custom-report.error .error {
+  color: #aaa !important;
+}
+.analytics-custom-report.error .chart {
+  display: none;
 }

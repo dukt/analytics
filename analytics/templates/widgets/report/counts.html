@@ -1,17 +1,20 @@
-{% extends "analytics/widgets/report/_layout" %}
+{%- includeJsResource 'analytics/js/jsapi.js' first %}
+{% includeJsResource 'analytics/js/AnalyticsUtils.js' %}
+{% includeJsResource 'analytics/js/AnalyticsTabs.js' %}
+{% includeJsResource 'analytics/js/AnalyticsReport.js' %}
+{% includeCssResource "analytics/css/AnalyticsReport.css" %}
 
-{% block body %}
 
-    <div class="analytics-report-count analytics-loading"
-            data-start="{{now|date_modify("-1 month")|date("Y-m-d")}}"
-            data-end="{{now|date("Y-m-d")}}">
+<div
+    id="analytics-widget-{{widget.model.id}}"
+    data-widget-id="{{widget.model.id}}"
+    class="analytics-report-count {{'analytics-colspan-'~colspan}}">
 
-        <div class="analytics-inject"></div>
+   <div class="analytics-inject"></div>
 
-        <div class="analytics-error error center hidden">
-            <div class="inject"></div>
-            <p><a class="btn icon settings" href="{{url('settings/plugins/analytics')}}">{{"Analytics Settings"|t}}</a></p>
-        </div>
+    <div class="analytics-error error center hidden">
+        <div class="inject"></div>
+        <p><a class="btn icon settings" href="{{url('settings/plugins/analytics')}}">{{"Analytics Settings"|t}}</a></p>
     </div>
 
-{% endblock %}
+</div>

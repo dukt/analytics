@@ -1,7 +1,14 @@
-{% extends "analytics/widgets/report/_layout" %}
-{% import "analytics/_includes/charts" as charts %}
+{%- includeJsResource 'analytics/js/jsapi.js' first %}
+{% includeJsResource 'analytics/js/AnalyticsUtils.js' %}
+{% includeJsResource 'analytics/js/AnalyticsTabs.js' %}
+{% includeJsResource 'analytics/js/AnalyticsReport.js' %}
+{% includeCssResource "analytics/css/AnalyticsReport.css" %}
 
-{% block body %}
+
+<div
+    id="analytics-widget-{{widget.model.id}}"
+    data-widget-id="{{widget.model.id}}"
+    class="analytics-report {{'analytics-colspan-'~colspan}}">
 
 	<div class="analytics-tabs">
 		<ul class="analytics-nav">
@@ -11,99 +18,22 @@
 		</ul>
 
 		<div class="clear"></div>
-
-		<div class="analyticsTab hidden">
-
-			{% set config = {
-			    query: {
-			        param2: now|date_modify("-1 month")|date("Y-m-d"),
-			        param3: now|date("Y-m-d"),
-			        param4: 'ga:visits',
-			        param5: {
-				        'dimensions' : 'ga:country',
-				        'sort' : '-ga:visits'
-			        }
-			    },
-			    columns: [
-			        {
-			            type: 'string',
-			            label: 'Country'
-			        },
-			        {
-			            type: 'number',
-			            label: 'Visits'|t
-			        }
-			    ]
-			} %}
-
-			{{ charts.geo(config) }}
-
-			<div class="more">
-
-			    <div class="center"><a class="more" href="#">{{ 'More Data'|t }}</a></div>
-
-			    <div class="more-content hidden">
-
-			        <div class="center"><a class="less" href="#">{{ 'Less'|t }}</a></div>
-
-			        {{ charts.table(config) }}
+			<div class="analyticsTab hidden">
+			    <div class="chart geochart">chart</div>
+			    <div class="more">
+			        <div class="center"><a class="more" href="#">{{ 'More Data'|t }}</a></div>
+			        <div class="more-content hidden">
+			            <div class="center"><a class="less" href="#">{{ 'Less'|t }}</a></div>
+			            <div class="chart table">table</div>
+			        </div>
 			    </div>
 			</div>
-		</div>
-
-		<div class="analyticsTab hidden">
-
-
-			{{ charts.report({
-			    query: {
-			        param2: now|date_modify("-1 month")|date("Y-m-d"),
-			        param3: now|date("Y-m-d"),
-			        param4: 'ga:visits',
-			        param5: {
-				        'dimensions' : 'ga:language',
-				        'sort' : '-ga:visits'
-			        }
-			    },
-			    columns: [
-			        {
-			            type: 'string',
-			            label: 'Language'
-			        },
-			        {
-			            type: 'number',
-			            label: 'Visits'|t
-			        }
-			    ]
-			}) }}
-
-		</div>
-
-		<div class="analyticsTab hidden">
-
-			{{ charts.report({
-			    query: {
-			        param2: now|date_modify("-1 month")|date("Y-m-d"),
-			        param3: now|date("Y-m-d"),
-			        param4: 'ga:visits',
-			        param5: {
-				        'dimensions' : 'ga:city',
-				        'sort' : '-ga:visits'
-			        }
-			    },
-			    columns: [
-			        {
-			            type: 'string',
-			            label: 'City'
-			        },
-			        {
-			            type: 'number',
-			            label: 'Visits'|t
-			        }
-			    ]
-			}) }}
-		</div>
-
+			<div class="analyticsTab hidden">
+			    <div class="chart table">chart</div>
+			</div>
+			<div class="analyticsTab hidden">
+			    <div class="chart table">chart</div>
+			</div>
 	</div>
 
-
-{% endblock %}
+</div>

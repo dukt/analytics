@@ -1,31 +1,25 @@
-{% extends "analytics/widgets/report/_layout" %}
-
+{%- includeJsResource 'analytics/js/jsapi.js' first %}
+{% includeJsResource 'analytics/js/AnalyticsUtils.js' %}
 {% includeJsResource 'analytics/js/AnalyticsTabs.js' %}
-
-{% block body %}
-
-    {{ charts.area({
-        query: {
-            param2: now|date_modify("-1 month")|date("Y-m-d"),
-            param3: now|date("Y-m-d"),
-            param4: 'ga:goalCompletionsAll',
-            param5: {
-                'dimensions' : 'ga:day, ga:month, ga:year',
-                'sort' : 'ga:year, ga:month, ga:day',
-            }
-        },
-        columns: [
-            {
-                type: 'string',
-                label: 'Date'|t
-            },
-            {
-                type: 'number',
-                label: 'Completed Goals'|t
-            }
-        ],
-        showTextEvery: 10
-    }) }}
+{% includeJsResource 'analytics/js/AnalyticsReport.js' %}
+{% includeCssResource "analytics/css/AnalyticsReport.css" %}
 
 
-{% endblock %}
+<div
+    id="analytics-widget-{{widget.model.id}}"
+    data-widget-id="{{widget.model.id}}"
+    class="analytics-report {{'analytics-colspan-'~colspan}}">
+
+    <div class="analytics-tabs">
+        <ul class="analytics-nav">
+            <li><a href="#conversions">{{'Conversions'|t}}</a></li>
+        </ul>
+
+        <div class="clear"></div>
+
+        <div class="analyticsTab hidden">
+            <div class="chart areachart">chart</div>
+        </div>
+    </div>
+
+</div>

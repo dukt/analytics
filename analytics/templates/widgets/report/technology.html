@@ -1,93 +1,27 @@
-{% extends "analytics/widgets/report/_layout" %}
-
+{%- includeJsResource 'analytics/js/jsapi.js' first %}
+{% includeJsResource 'analytics/js/AnalyticsUtils.js' %}
 {% includeJsResource 'analytics/js/AnalyticsTabs.js' %}
+{% includeJsResource 'analytics/js/AnalyticsReport.js' %}
+{% includeCssResource "analytics/css/AnalyticsReport.css" %}
 
-{% block body %}
+
+<div
+    id="analytics-widget-{{widget.model.id}}"
+    data-widget-id="{{widget.model.id}}"
+    class="analytics-report {{'analytics-colspan-'~colspan}}">
 
 	<div class="analytics-tabs">
 		<ul class="analytics-nav">
-			<li><a href="#week">{{'Browser'|t}}</a></li>
-			<li><a href="#month">{{'OS'|t}}</a></li>
-			<li><a href="#year">{{'Resolution'|t}}</a></li>
+			<li><a href="#browser">{{'Browser'|t}}</a></li>
+			<li><a href="#os">{{'OS'|t}}</a></li>
+			<li><a href="#resolution">{{'Resolution'|t}}</a></li>
 		</ul>
 
 		<div class="clear"></div>
 
-		<div class="analyticsTab hidden">
-			{{ charts.report({
-			    query: {
-			        param2: now|date_modify("-1 month")|date("Y-m-d"),
-			        param3: now|date("Y-m-d"),
-			        param4: 'ga:visits',
-			        param5: {
-				        'dimensions' : 'ga:browser',
-				        'sort' : '-ga:visits'
-			        }
-			    },
-			    columns: [
-			        {
-			            type: 'string',
-			            label: 'Browser'
-			        },
-			        {
-			            type: 'number',
-			            label: 'Visits'|t
-			        }
-			    ]
-			}) }}
-		</div>
-
-		<div class="analyticsTab hidden">
-			{{ charts.report({
-			    query: {
-			        param2: now|date_modify("-1 month")|date("Y-m-d"),
-			        param3: now|date("Y-m-d"),
-			        param4: 'ga:visits',
-			        param5: {
-				        'dimensions' : 'ga:operatingSystem',
-				        'sort' : '-ga:visits'
-			        }
-			    },
-			    columns: [
-			        {
-			            type: 'string',
-			            label: 'Operating System'
-			        },
-			        {
-			            type: 'number',
-			            label: 'Visits'|t
-			        }
-			    ]
-			}) }}
-
-		</div>
-
-		<div class="analyticsTab hidden">
-
-			{{ charts.report({
-			    query: {
-			        param2: now|date_modify("-1 month")|date("Y-m-d"),
-			        param3: now|date("Y-m-d"),
-			        param4: 'ga:visits',
-			        param5: {
-				        'dimensions' : 'ga:screenResolution',
-				        'sort' : '-ga:visits'
-			        }
-			    },
-			    columns: [
-			        {
-			            type: 'string',
-			            label: 'Screen Resolution'
-			        },
-			        {
-			            type: 'number',
-			            label: 'Visits'|t
-			        }
-			    ]
-			}) }}
-
-		</div>
+		{% include 'analytics/widgets/report/_tab' %}
+		{% include 'analytics/widgets/report/_tab' %}
+		{% include 'analytics/widgets/report/_tab' %}
 	</div>
 
-
-{% endblock %}
+</div>

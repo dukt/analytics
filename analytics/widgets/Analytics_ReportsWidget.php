@@ -85,16 +85,24 @@ class Analytics_ReportsWidget extends BaseWidget
         $variables = array(
             'settings' => $plugin->getSettings(),
             'colspan' => $this->getColspan(),
-            'type' => $settings['type']
+            'type' => $settings['type'],
+            'widget' => $this,
         );
 
         $settings = $this->getSettings();
 
-        $html = craft()->templates->render('analytics/widgets/report/'.$settings->type, $variables);
+        switch($settings->type)
+        {
+            case 'counts':
+            craft()->templates->includeJs('new AnalyticsCountReport("analytics-widget-'.$this->model->id.'");');
+            break;
 
-        $charset = craft()->templates->getTwig()->getCharset();
+            default:
+            craft()->templates->includeJs('new AnalyticsReport("analytics-widget-'.$this->model->id.'");');
+        }
 
-        return new \Twig_Markup($html, $charset);
+
+        return craft()->templates->render('analytics/widgets/report/'.$settings->type, $variables);
     }
 
 

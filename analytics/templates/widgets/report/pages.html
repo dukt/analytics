@@ -1,95 +1,27 @@
-{% extends "analytics/widgets/report/_layout" %}
-
+{%- includeJsResource 'analytics/js/jsapi.js' first %}
+{% includeJsResource 'analytics/js/AnalyticsUtils.js' %}
 {% includeJsResource 'analytics/js/AnalyticsTabs.js' %}
+{% includeJsResource 'analytics/js/AnalyticsReport.js' %}
+{% includeCssResource "analytics/css/AnalyticsReport.css" %}
 
-{% block body %}
+
+<div
+    id="analytics-widget-{{widget.model.id}}"
+    data-widget-id="{{widget.model.id}}"
+    class="analytics-report {{'analytics-colspan-'~colspan}}">
 
 	<div class="analytics-tabs">
 		<ul class="analytics-nav">
-			<li><a href="#week">{{'All'|t}}</a></li>
-			<li><a href="#year">{{'Landing'|t}}</a></li>
-			<li><a href="#year">{{'Exit'|t}}</a></li>
+			<li><a href="#all">{{'All'|t}}</a></li>
+			<li><a href="#landing">{{'Landing'|t}}</a></li>
+			<li><a href="#exit">{{'Exit'|t}}</a></li>
 		</ul>
 
 		<div class="clear"></div>
 
-		<div class="analyticsTab hidden">
-
-			{{ charts.report({
-			    query: {
-			        param2: now|date_modify("-1 month")|date("Y-m-d"),
-			        param3: now|date("Y-m-d"),
-			        param4: 'ga:visits',
-			        param5: {
-				        'dimensions' : 'ga:pagePath',
-				        'sort' : '-ga:visits'
-			        }
-			    },
-			    columns: [
-			        {
-			            type: 'string',
-			            label: 'Page'
-			        },
-			        {
-			            type: 'number',
-			            label: 'Visits'|t
-			        }
-			    ]
-			}) }}
-		</div>
-
-		<div class="analyticsTab hidden">
-
-			{{ charts.report({
-			    query: {
-			        param2: now|date_modify("-1 month")|date("Y-m-d"),
-			        param3: now|date("Y-m-d"),
-			        param4: 'ga:visits',
-			        param5: {
-				        'dimensions' : 'ga:landingPagePath',
-				        'sort' : '-ga:visits'
-			        }
-			    },
-			    columns: [
-			        {
-			            type: 'string',
-			            label: 'Landing Page'
-			        },
-			        {
-			            type: 'number',
-			            label: 'Visits'|t
-			        }
-			    ]
-			}) }}
-
-		</div>
-
-		<div class="analyticsTab hidden">
-
-			{{ charts.report({
-			    query: {
-			        param2: now|date_modify("-1 month")|date("Y-m-d"),
-			        param3: now|date("Y-m-d"),
-			        param4: 'ga:visits',
-			        param5: {
-				        'dimensions' : 'ga:exitPagePath',
-				        'sort' : '-ga:visits'
-			        }
-			    },
-			    columns: [
-			        {
-			            type: 'string',
-			            label: 'Exit Page'
-			        },
-			        {
-			            type: 'number',
-			            label: 'Visits'|t
-			        }
-			    ]
-			}) }}
-
-		</div>
+		{% include 'analytics/widgets/report/_tab' %}
+		{% include 'analytics/widgets/report/_tab' %}
+		{% include 'analytics/widgets/report/_tab' %}
 	</div>
 
-
-{% endblock %}
+</div>
