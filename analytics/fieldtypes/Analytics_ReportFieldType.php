@@ -28,12 +28,13 @@ class Analytics_ReportFieldType extends BaseFieldType
         // Figure out what that ID is going to look like once it has been namespaced
         $namespacedId = craft()->templates->namespaceInputId($id);
 
+        $variables = array();
+
         if($this->element->uri)
         {
             craft()->templates->includeJs('new AnalyticsField("'.$namespacedId.'-field");');
 
-            // render HTML
-            return craft()->templates->render('analytics/field/field', array(
+            $variables = array(
                 'isNew' => false,
                 'hasUrl' => true,
                 'id'    => $id,
@@ -41,21 +42,23 @@ class Analytics_ReportFieldType extends BaseFieldType
                 'value' => $value,
                 'model' => $this->model,
                 'element' => $this->element,
-            ));
+            );
         }
         elseif(!$this->element->id)
         {
-            return craft()->templates->render('analytics/field/field', array(
+            $variables = array(
                 'hasUrl' => false,
                 'isNew' => true,
-            ));
+            );
         }
         else
         {
-            return craft()->templates->render('analytics/field/field', array(
+            $variables = array(
                 'hasUrl' => false,
                 'isNew' => false,
-            ));
+            );
         }
+
+        return craft()->templates->render('analytics/field/field', $variables);
     }
 }
