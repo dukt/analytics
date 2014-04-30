@@ -19,10 +19,6 @@ AnalyticsCountReport = Garnish.Base.extend({
             if(typeof(response.error) != 'undefined') {
                 $('.inject', this.$error).html(response.error);
                 this.$error.removeClass('hidden');
-
-                // $(v).parents('.analyticsTab').find('.more').addClass('hidden');
-
-
                 $(this.$element).addClass('error');
             } else {
                 this.$inject.html(response.html);
@@ -43,7 +39,6 @@ AnalyticsReport = Garnish.Base.extend({
         this.$charts = [];
         this.$chartData = [];
 
-        console.log('element', this.$element);
 
 
         // tabs
@@ -114,7 +109,6 @@ AnalyticsReport = Garnish.Base.extend({
                 $reportElements = this.$reportElements;
 
                 $.each($reports, $.proxy(function (k, report) {
-                    console.log('report', report);
 
                     var pieElement = $('.chart.piechart', $reportElements[k]).get(0);
                     var geoElement = $('.chart.geochart', $reportElements[k]).get(0);
@@ -153,25 +147,19 @@ AnalyticsReport = Garnish.Base.extend({
                         this.$charts[k]['table'] = AnalyticsUtils.getChart(tableElement, 'Table', report.options);
                     }
 
-
                     if(typeof(this.$charts[k]) != 'undefined')
                     {
                         this.redraw();
                     }
 
                     this.$element.bind('redraw', $.proxy(function () {
-                        // this.$charts[k]['chart'].chart.draw(this.$chartData[k], this.$charts[k]['chart'].chartOptions);
-                        // this.$charts[k]['table'].chart.draw(this.$chartData[k], this.$charts[k]['table'].chartOptions);
                         this.redraw();
-                        // this.$charts[k]['chart'].chart.draw(chartData, this.$charts[k]['chart'].chartOptions);
-                        // this.$charts[k]['table'].chart.draw(chartData, this.$charts[k]['table'].chartOptions);
                     }, this));
 
                     $(window).resize($.proxy(function () {
-                        //this.redraw();
-                        // this.$charts[k]['chart'].chart.draw(this.$chartData[k], this.$charts[k]['chart'].chartOptions);
-                        // this.$charts[k]['table'].chart.draw(this.$chartData[k], this.$charts[k]['table'].chartOptions);
+                        this.redraw();
                     }, this));
+
                 }, this));
             }
 
@@ -180,7 +168,6 @@ AnalyticsReport = Garnish.Base.extend({
 
     redraw: function() {
         var countElements = this.$reportElements.length;
-        console.log('count elements', countElements, this.$chartData);
         for(i=0; i < countElements; i++)
         {
             if(typeof(this.$charts[i]) != 'undefined')

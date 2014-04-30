@@ -1,4 +1,6 @@
-{% if craft.analytics.isConfigured %}
+{% extends "analytics/widgets/report/_layout" %}
+
+{% block body %}
 
 	{% set myJs %}
 	    var Analytics = {};
@@ -154,8 +156,4 @@
 	</div>
 
 
-{% else %}
-
-	<p><a href="{{url('settings/plugins/analytics')}}">{{'Configure Analytics plugin in order to get started'|t}}</a></p>
-
-{% endif %}
+{% endblock %}

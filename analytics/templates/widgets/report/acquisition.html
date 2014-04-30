@@ -1,27 +1,32 @@
-{%- includeJsResource 'analytics/js/jsapi.js' first %}
-{% includeJsResource 'analytics/js/AnalyticsUtils.js' %}
-{% includeJsResource 'analytics/js/AnalyticsTabs.js' %}
-{% includeJsResource 'analytics/js/AnalyticsReport.js' %}
-{% includeCssResource "analytics/css/AnalyticsReport.css" %}
+{% extends "analytics/widgets/report/_layout" %}
 
+{% block body %}
 
-<div
-    id="analytics-widget-{{widget.model.id}}"
-    data-widget-id="{{widget.model.id}}"
-    class="analytics-report {{'analytics-colspan-'~colspan}}">
+    {%- includeJsResource 'analytics/js/jsapi.js' first %}
+    {% includeJsResource 'analytics/js/AnalyticsUtils.js' %}
+    {% includeJsResource 'analytics/js/AnalyticsTabs.js' %}
+    {% includeJsResource 'analytics/js/AnalyticsReport.js' %}
+    {% includeCssResource "analytics/css/AnalyticsReport.css" %}
 
-	<div class="analytics-tabs">
-		<ul class="analytics-nav">
-			<li><a href="#sources">{{'Sources'|t}}</a></li>
-			<li><a href="#keywords">{{'Keywords'|t}}</a></li>
-			<li><a href="#networks">{{'Networks'|t}}</a></li>
-		</ul>
+    <div
+        id="analytics-widget-{{widget.model.id}}"
+        data-widget-id="{{widget.model.id}}"
+        class="analytics-report {{'analytics-colspan-'~colspan}}">
 
-		<div class="clear"></div>
+    	<div class="analytics-tabs">
+    		<ul class="analytics-nav">
+    			<li><a href="#sources">{{'Sources'|t}}</a></li>
+    			<li><a href="#keywords">{{'Keywords'|t}}</a></li>
+    			<li><a href="#networks">{{'Networks'|t}}</a></li>
+    		</ul>
 
-		{% include 'analytics/widgets/report/_tab' %}
-		{% include 'analytics/widgets/report/_tab' %}
-		{% include 'analytics/widgets/report/_tab' %}
-	</div>
+    		<div class="clear"></div>
 
-</div>
+    		{% include 'analytics/widgets/report/_tab' %}
+    		{% include 'analytics/widgets/report/_tab' %}
+    		{% include 'analytics/widgets/report/_tab' %}
+    	</div>
+
+    </div>
+
+{% endblock %}

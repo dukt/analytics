@@ -1,3 +1,7 @@
+{% extends "analytics/widgets/report/_layout" %}
+
+{% block body %}
+
 {%- includeJsResource 'analytics/js/jsapi.js' first %}
 {% includeJsResource 'analytics/js/AnalyticsUtils.js' %}
 {% includeJsResource 'analytics/js/AnalyticsTabs.js' %}
@@ -23,3 +27,6 @@
     </div>
 
 </div>
+
+
+{% endblock %}
