@@ -33,59 +33,65 @@ class Analytics_ReportController extends BaseController
 
     public function init()
     {
-        // widget
-        $id = craft()->request->getParam('id');
-        $this->widget = craft()->dashboard->getUserWidgetById($id);
+        try {
+            // widget
+            $id = craft()->request->getParam('id');
+            $this->widget = craft()->dashboard->getUserWidgetById($id);
 
-        if($this->widget)
-        {
-            // profile
-            $this->profile = craft()->analytics->getProfile();
-
-            // start / end dates
-            $this->start = date('Y-m-d', strtotime('-1 month'));
-            $this->end = date('Y-m-d');
-
-
-            $enableCache = true;
-
-            if(craft()->config->get('disableCache', 'analytics') == true)
+            if($this->widget)
             {
-                $enableCache = false;
-            }
+                // profile
+                $this->profile = craft()->analytics->getProfile();
 
-            if($enableCache)
-            {
-                $cacheKey = 'analytics/report/'.md5(serialize(array(
-                    $this->profile,
-                    $this->start,
-                    $this->end,
-                    $this->widget->settings['type']
-                )));
+                // start / end dates
+                $this->start = date('Y-m-d', strtotime('-1 month'));
+                $this->end = date('Y-m-d');
 
-                $reports = craft()->fileCache->get($cacheKey);
 
-                if(!$reports)
+                $enableCache = true;
+
+                if(craft()->config->get('disableCache', 'analytics') == true)
                 {
-                    // call controller
-                    $reports = $this->{$this->widget->settings['type']}();
-
-                    craft()->fileCache->set($cacheKey, $reports, $this->cacheExpiry());
+                    $enableCache = false;
                 }
+
+                if($enableCache)
+                {
+                    $cacheKey = 'analytics/report/'.md5(serialize(array(
+                        $this->profile,
+                        $this->start,
+                        $this->end,
+                        $this->widget->settings['type']
+                    )));
+
+                    $reports = craft()->fileCache->get($cacheKey);
+
+                    if(!$reports)
+                    {
+                        // call controller
+                        $reports = $this->{$this->widget->settings['type']}();
+
+                        craft()->fileCache->set($cacheKey, $reports, $this->cacheExpiry());
+                    }
+                }
+                else
+                {
+                    $reports = $this->{$this->widget->settings['type']}();
+                }
+
+
+                $this->returnJson(array(
+                    'reports' => $reports
+                ));
             }
             else
             {
-                $reports = $this->{$this->widget->settings['type']}();
+                $this->returnErrorJson('Widget not found');
             }
-
-
-            $this->returnJson(array(
-                'reports' => $reports
-            ));
         }
-        else
+        catch(\Exception $e)
         {
-            $this->returnErrorJson('Widget not found');
+            $this->returnErrorJson($e->getMessage());
         }
     }
 

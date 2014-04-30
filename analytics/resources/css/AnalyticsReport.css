@@ -29,6 +29,9 @@
   color: #333;
   border-bottom: 2px solid #0d78f2;
 }
+.chart {
+  background: url("../images/spinner.gif") no-repeat center center;
+}
 .chart.areachart {
   border-top: 0;
   height: 200px;
@@ -48,6 +51,7 @@
   position: relative;
   min-height: 30px;
   border-top: 1px dotted #e3e5e8;
+  min-height: 60px;
 }
 .chart.table > div {
   position: inherit;
@@ -183,6 +187,18 @@
   .analytics-colspan-3 .chart.geochart {
     height: 300px;
   }
+}
+.analytics-report.analytics-error .analytics-tabs {
+  display: none;
+}
+.analytics-report.analytics-error .error {
+  background: url("../images/error.png") no-repeat center 20px;
+  padding-top: 90px;
+  text-align: center;
+  color: #aaa !important;
+}
+.analytics-report.analytics-error .chart {
+  display: none;
 }
 /* more */
 a.more,

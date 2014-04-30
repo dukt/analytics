@@ -37,6 +37,7 @@ AnalyticsReport = Garnish.Base.extend({
     init: function(element)
     {
         this.$element = $("#"+element);
+        this.$errorElement = $('.error', this.$element);
         $id = this.$element.data('widget-id');
         this.$reportElements = $('.analyticsTab', this.$element);
         this.$charts = [];
@@ -104,8 +105,8 @@ AnalyticsReport = Garnish.Base.extend({
             if(typeof(response.error) != 'undefined')
             {
                 // handle error
-                // this.$errorElement.html(response.error);
-                // this.$element.addClass('error');
+                this.$errorElement.html(response.error);
+                this.$element.addClass('analytics-error');
             }
             else
             {

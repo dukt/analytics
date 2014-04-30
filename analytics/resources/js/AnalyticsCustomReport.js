@@ -11,10 +11,9 @@ AnalyticsCustomReport = Garnish.Base.extend({
 
         $id = this.$element.data('widget-id');
 
-        var chartData = new google.visualization.DataTable();
-        var options = {};
 
         Craft.queueActionRequest('analytics/customReport', {id: $id}, $.proxy(function(response) {
+
             if(typeof(response.error) != 'undefined')
             {
                 this.$errorElement.html(response.error);
@@ -22,6 +21,9 @@ AnalyticsCustomReport = Garnish.Base.extend({
             }
             else
             {
+                var chartData = new google.visualization.DataTable();
+                var options = {};
+
                 var columns = AnalyticsUtils.getColumns(response);
                 $.each(columns, function(k, column) {
                     chartData.addColumn(column.type, column.name);

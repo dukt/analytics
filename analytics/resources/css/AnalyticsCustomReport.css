@@ -1,3 +1,6 @@
+.chart {
+  background: url("../images/spinner.gif") no-repeat center center;
+}
 .chart.areachart {
   border-top: 0;
   height: 200px;
@@ -17,6 +20,7 @@
   position: relative;
   min-height: 30px;
   border-top: 1px dotted #e3e5e8;
+  min-height: 60px;
 }
 .chart.table > div {
   position: inherit;

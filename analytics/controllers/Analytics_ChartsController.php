@@ -101,7 +101,7 @@ class Analytics_ChartsController extends BaseController
                 'visitBounceRate'   => $row['ga:visitBounceRate'],
             );
 
-            $html = craft()->templates->render('analytics/_includes/reports/counts', array(
+            $html = craft()->templates->render('analytics/widgets/report/_counts', array(
                 'counts' => $counts
             ));
 
