@@ -108,6 +108,10 @@ class Analytics_ReportsWidget extends BaseWidget
             craft()->templates->includeJs('new AnalyticsCountReport("analytics-widget-'.$this->model->id.'");');
             break;
 
+            case 'realtime':
+            craft()->templates->includeJs('new AnalyticsRealtimeReport("analytics-widget-'.$this->model->id.'");');
+            break;
+
             default:
             craft()->templates->includeJs('new AnalyticsReport("analytics-widget-'.$this->model->id.'");');
         }

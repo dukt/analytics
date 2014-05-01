@@ -1,151 +1,156 @@
-$(document).ready(function() {
-	var refreshInterval = eval(Analytics.realtimeRefreshInterval);
+AnalyticsRealtimeReport = Garnish.Base.extend({
+    init: function(element)
+    {
+    	$(document).ready(function() {
+			var refreshInterval = eval(Analytics.realtimeRefreshInterval);
 
-	// console.log('realtime');
+			// console.log('realtime');
 
-	analyticsRealtimeRequest();
+			analyticsRealtimeRequest();
 
-	if(refreshInterval == null) {
-		refreshInterval = 10; // Default to 10 seconds
-	} else if(refreshInterval<2) { // mini 2 seconds
-		refreshInterval = 100;
-	}
-
-	refreshInterval = refreshInterval * 1000; // to (ms)
-
-	setInterval(analyticsRealtimeRequest, refreshInterval);
-});
-
-function analyticsRealtimeRequest()
-{
-	$('.analytics-widget-realtime').parent().parent().addClass('loading');
-
-	var data = {
-
-	};
-
-	// console.log('send realtime request', data);
-
-	Craft.postActionRequest('analytics/realtime', data, function(response) {
-
-		// realtime
-		// console.log('get realtime response', response);
-
-		$('.analytics-widget-realtime .analytics-errors-inject').html('');
-
-		if(typeof(response.error) != 'undefined') {
-			$('.analytics-widget-realtime .analytics-errors').removeClass('hidden');
-			$('.analytics-widget-realtime .analytics-widget').addClass('hidden');
-
-			$('<p class="error">'+response.error.message+'</p>').appendTo('.analytics-widget-realtime .analytics-errors-inject');
-		} else {
-
-			$('.analytics-widget-realtime .analytics-errors').addClass('hidden');
-			$('.analytics-widget-realtime .analytics-widget').removeClass('hidden');
-
-
-			var newVisitor = response.visitorType.newVisitor;
-			var returningVisitor = response.visitorType.returningVisitor;
-
-			var calcTotal = ((returningVisitor * 1) + (newVisitor * 1));
-
-			$('.analytics-widget-realtime .active-visitors .count').text(calcTotal);
-
-			if (calcTotal > 0) {
-				$('.analytics-widget-realtime .progress').removeClass('hidden');
-				$('.analytics-widget-realtime .legend').removeClass('hidden');
-			} else {
-				$('.analytics-widget-realtime .progress').addClass('hidden');
-				$('.analytics-widget-realtime .legend').addClass('hidden');
+			if(refreshInterval == null) {
+				refreshInterval = 10; // Default to 10 seconds
+			} else if(refreshInterval<2) { // mini 2 seconds
+				refreshInterval = 100;
 			}
 
-			if(calcTotal > 0)
-			{
-				var blue = Math.round(100 * newVisitor / calcTotal);
-			}
-			else
-			{
-				var blue = 100;
-			}
+			refreshInterval = refreshInterval * 1000; // to (ms)
 
-			var green = 100 - blue;
+			setInterval(analyticsRealtimeRequest, refreshInterval);
+		});
 
-			// blue
+		function analyticsRealtimeRequest()
+		{
+			$('.analytics-widget-realtime').parent().parent().addClass('loading');
 
-			$('.analytics-widget-realtime .progress-bar.blue').css('width', blue+'%');
-			$('.analytics-widget-realtime .progress-bar.blue span').text(blue+'%');
+			var data = {
 
-			if(blue > 0)
-			{
-				$('.analytics-widget-realtime .progress-bar.blue').removeClass('hidden');
-			}
-			else
-			{
-				$('.analytics-widget-realtime .progress-bar.blue').addClass('hidden');
-			}
+			};
 
-			// green
+			// console.log('send realtime request', data);
 
-			$('.analytics-widget-realtime .progress-bar.green').css('width', green+'%');
-			$('.analytics-widget-realtime .progress-bar.green span').text(green+'%');
+			Craft.postActionRequest('analytics/realtime', data, function(response) {
 
-			if(green > 0)
-			{
-				$('.analytics-widget-realtime .progress-bar.green').removeClass('hidden');
-			}
-			else
-			{
-				$('.analytics-widget-realtime .progress-bar.green').addClass('hidden');
-			}
+				// realtime
+				// console.log('get realtime response', response);
 
-			// realtime content
+				$('.analytics-widget-realtime .analytics-errors-inject').html('');
+
+				if(typeof(response.error) != 'undefined') {
+					$('.analytics-widget-realtime .analytics-errors').removeClass('hidden');
+					$('.analytics-widget-realtime .analytics-widget').addClass('hidden');
+
+					$('<p class="error">'+response.error.message+'</p>').appendTo('.analytics-widget-realtime .analytics-errors-inject');
+				} else {
+
+					$('.analytics-widget-realtime .analytics-errors').addClass('hidden');
+					$('.analytics-widget-realtime .analytics-widget').removeClass('hidden');
 
 
-			if (calcTotal > 0) {
-				$('.no-active-visitors').addClass('hidden');
+					var newVisitor = response.visitorType.newVisitor;
+					var returningVisitor = response.visitorType.returningVisitor;
 
-				// content
+					var calcTotal = ((returningVisitor * 1) + (newVisitor * 1));
 
-				$('.analytics-realtime-content table').removeClass('hidden');
-				$('.analytics-realtime-content tbody').html('');
+					$('.analytics-widget-realtime .active-visitors .count').text(calcTotal);
 
-				$.each(response.content, function(k,v) {
-					var row = $('<tr><td>'+k+'</td><td class="thin">'+v+'</td></td>');
+					if (calcTotal > 0) {
+						$('.analytics-widget-realtime .progress').removeClass('hidden');
+						$('.analytics-widget-realtime .legend').removeClass('hidden');
+					} else {
+						$('.analytics-widget-realtime .progress').addClass('hidden');
+						$('.analytics-widget-realtime .legend').addClass('hidden');
+					}
 
-					$('.analytics-realtime-content tbody').append(row);
-				});
+					if(calcTotal > 0)
+					{
+						var blue = Math.round(100 * newVisitor / calcTotal);
+					}
+					else
+					{
+						var blue = 100;
+					}
 
-				// sources
+					var green = 100 - blue;
 
-				$('.analytics-realtime-sources table').removeClass('hidden');
-				$('.analytics-realtime-sources tbody').html('');
+					// blue
 
-				$.each(response.sources, function(k,v) {
-					var row = $('<tr><td>'+k+'</td><td class="thin">'+v+'</td></td>');
+					$('.analytics-widget-realtime .progress-bar.blue').css('width', blue+'%');
+					$('.analytics-widget-realtime .progress-bar.blue span').text(blue+'%');
 
-					$('.analytics-realtime-sources tbody').append(row);
-				});
+					if(blue > 0)
+					{
+						$('.analytics-widget-realtime .progress-bar.blue').removeClass('hidden');
+					}
+					else
+					{
+						$('.analytics-widget-realtime .progress-bar.blue').addClass('hidden');
+					}
 
-				// countries
+					// green
 
-				$('.analytics-realtime-countries table').removeClass('hidden');
-				$('.analytics-realtime-countries tbody').html('');
+					$('.analytics-widget-realtime .progress-bar.green').css('width', green+'%');
+					$('.analytics-widget-realtime .progress-bar.green span').text(green+'%');
 
-				$.each(response.countries, function(k,v) {
-					var row = $('<tr><td>'+k+'</td><td class="thin">'+v+'</td></td>');
+					if(green > 0)
+					{
+						$('.analytics-widget-realtime .progress-bar.green').removeClass('hidden');
+					}
+					else
+					{
+						$('.analytics-widget-realtime .progress-bar.green').addClass('hidden');
+					}
 
-					$('.analytics-realtime-countries tbody').append(row);
-				});
+					// realtime content
 
-			} else {
-				$('.no-active-visitors').removeClass('hidden');
-				$('.analytics-realtime-content table').addClass('hidden');
-				$('.analytics-realtime-sources table').addClass('hidden');
-				$('.analytics-realtime-countries table').addClass('hidden');
-			}
+
+					if (calcTotal > 0) {
+						$('.no-active-visitors').addClass('hidden');
+
+						// content
+
+						$('.analytics-realtime-content table').removeClass('hidden');
+						$('.analytics-realtime-content tbody').html('');
+
+						$.each(response.content, function(k,v) {
+							var row = $('<tr><td>'+k+'</td><td class="thin">'+v+'</td></td>');
+
+							$('.analytics-realtime-content tbody').append(row);
+						});
+
+						// sources
+
+						$('.analytics-realtime-sources table').removeClass('hidden');
+						$('.analytics-realtime-sources tbody').html('');
+
+						$.each(response.sources, function(k,v) {
+							var row = $('<tr><td>'+k+'</td><td class="thin">'+v+'</td></td>');
+
+							$('.analytics-realtime-sources tbody').append(row);
+						});
+
+						// countries
+
+						$('.analytics-realtime-countries table').removeClass('hidden');
+						$('.analytics-realtime-countries tbody').html('');
+
+						$.each(response.countries, function(k,v) {
+							var row = $('<tr><td>'+k+'</td><td class="thin">'+v+'</td></td>');
+
+							$('.analytics-realtime-countries tbody').append(row);
+						});
+
+					} else {
+						$('.no-active-visitors').removeClass('hidden');
+						$('.analytics-realtime-content table').addClass('hidden');
+						$('.analytics-realtime-sources table').addClass('hidden');
+						$('.analytics-realtime-countries table').addClass('hidden');
+					}
+				}
+
+				$('.analytics-widget-realtime').parent().parent().removeClass('loading');
+			});
+
 		}
-
-		$('.analytics-widget-realtime').parent().parent().removeClass('loading');
-	});
-
-}
+	}
+});

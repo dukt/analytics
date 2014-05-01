@@ -39,7 +39,7 @@ AnalyticsReport = Garnish.Base.extend({
         this.$charts = [];
         this.$chartData = [];
 
-
+        // console.log('widget id', element, $id);
 
         // tabs
 
