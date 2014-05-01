@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * Craft Analytics by Dukt
+ *
+ * @package   Craft Analytics
+ * @author    Benjamin David
+ * @copyright Copyright (c) 2014, Dukt
+ * @license   https://dukt.net/craft/analytics/docs/license
+ * @link      https://dukt.net/craft/analytics/
+ */
+
 namespace Craft;
 
 class Analytics_ReportsWidget extends BaseWidget
@@ -20,6 +30,7 @@ class Analytics_ReportsWidget extends BaseWidget
     // {
     //     return false;
     // }
+
     protected function defineSettings()
     {
         return array(
