@@ -226,6 +226,16 @@ var AnalyticsUtils = {
         var rows = [];
         var columns = this.getColumns(response);
 
+        if(typeof(response.apiResponse) == 'undefined')
+        {
+            return rows;
+        }
+
+        if (typeof(response.apiResponse.rows) == 'undefined')
+        {
+            return rows;
+        };
+
         $.each(response.apiResponse.rows, function(k, row) {
 
             var cells = [];
