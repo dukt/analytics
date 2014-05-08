@@ -12,11 +12,10 @@
 
 namespace Craft;
 
-require_once(CRAFT_PLUGINS_PATH.'analytics/libraries/google-api-php-client/src/Google_Client.php');
-require_once(CRAFT_PLUGINS_PATH.'analytics/libraries/google-api-php-client/src/contrib/Google_AnalyticsService.php');
+require_once(CRAFT_PLUGINS_PATH.'analytics/vendor/autoload.php');
 
 use \Google_Client;
-use \Google_AnalyticsService;
+use \Google_Service_Analytics;
 
 class AnalyticsService extends BaseApplicationComponent
 {
@@ -95,7 +94,7 @@ class AnalyticsService extends BaseApplicationComponent
         $client->setClientSecret($provider->clientSecret);
         $client->setRedirectUri($provider->getRedirectUri());
 
-        $api = new Google_AnalyticsService($client);
+        $api = new Google_Service_Analytics($client);
 
         $realToken = $token->getRealToken();
         $realToken->created = 0;
