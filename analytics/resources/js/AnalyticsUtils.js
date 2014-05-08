@@ -175,7 +175,7 @@ var AnalyticsUtils = {
     {
         var columns = [];
 
-        $.each(response.apiResponse.columnHeaders, function(k, columnHeader) {
+        $.each(response.apiResponse.cols, function(k, columnHeader) {
 
             $type = 'string';
 

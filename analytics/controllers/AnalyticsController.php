@@ -81,7 +81,7 @@ class AnalyticsController extends BaseController
 
     private function getRows($response)
     {
-        $columns = $response['columnHeaders'];
+        $columns = $response['cols'];
 
         $newRows = array();
 
@@ -130,12 +130,14 @@ class AnalyticsController extends BaseController
 
             if(!$response)
             {
-                $response = craft()->analytics->api()->data_ga->get(
+                $response = craft()->analytics->apiGet(
                     'ga:'.$profile['id'],
                     $start,
                     $end,
                     'ga:visits, ga:entrances, ga:exits, ga:pageviews, ga:timeOnPage, ga:exitRate, ga:entranceRate, ga:pageviewsPerVisit, ga:avgTimeOnPage, ga:visitBounceRate'
                 );
+
+
 
                 craft()->fileCache->set($cacheKey, $response, $this->cacheExpiry());
             }
@@ -193,7 +195,7 @@ class AnalyticsController extends BaseController
 
                 // visitor type
 
-                $results = craft()->analytics->api()->data_realtime->get(
+                $results = craft()->analytics->apiRealtimeGet(
                     'ga:'.$profile['id'],
                     'ga:activeVisitors',
                     array('dimensions' => 'ga:visitorType')
@@ -236,7 +238,7 @@ class AnalyticsController extends BaseController
 
                 // content
 
-                $results = craft()->analytics->api()->data_realtime->get(
+                $results = craft()->analytics->apiRealtimeGet(
                     'ga:'.$profile['id'],
                     'ga:activeVisitors',
                     array('dimensions' => 'ga:pagePath')
@@ -253,7 +255,7 @@ class AnalyticsController extends BaseController
 
                 // sources
 
-                $results = craft()->analytics->api()->data_realtime->get(
+                $results = craft()->analytics->apiRealtimeGet(
                     'ga:'.$profile['id'],
                     'ga:activeVisitors',
                     array('dimensions' => 'ga:source')
@@ -269,7 +271,7 @@ class AnalyticsController extends BaseController
 
                 // countries
 
-                $results = craft()->analytics->api()->data_realtime->get(
+                $results = craft()->analytics->apiRealtimeGet(
                     'ga:'.$profile['id'],
                     'ga:activeVisitors',
                     array('dimensions' => 'ga:country')
@@ -365,7 +367,7 @@ class AnalyticsController extends BaseController
 
                     if(!$response)
                     {
-                        $response = craft()->analytics->api()->data_ga->get(
+                        $response = craft()->analytics->apiGet(
                             'ga:'.$profile['id'],
                             $start,
                             $end,
@@ -373,18 +375,22 @@ class AnalyticsController extends BaseController
                             $options
                         );
 
+
+
                         craft()->fileCache->set($cacheKey, $response, $this->cacheExpiry());
                     }
                 }
                 else
                 {
-                    $response = craft()->analytics->api()->data_ga->get(
+                    $response = craft()->analytics->apiGet(
                         'ga:'.$profile['id'],
                         $start,
                         $end,
                         $metrics,
                         $options
                     );
+
+
                 }
 
                 $this->returnJson(array('apiResponse' => $response));
@@ -558,7 +564,7 @@ class AnalyticsController extends BaseController
 
                 if(!$response)
                 {
-                    $response = craft()->analytics->api()->data_ga->get(
+                    $response = craft()->analytics->apiGet(
                         'ga:'.$profile['id'],
                         $start,
                         $end,
@@ -566,18 +572,22 @@ class AnalyticsController extends BaseController
                         $options
                     );
 
+
+
                     craft()->fileCache->set($cacheKey, $response, $this->cacheExpiry());
                 }
             }
             else
             {
-                $response = craft()->analytics->api()->data_ga->get(
+                $response = craft()->analytics->apiGet(
                     'ga:'.$profile['id'],
                     $start,
                     $end,
                     $metric,
                     $options
                 );
+
+
             }
 
             // response

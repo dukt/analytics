@@ -100,7 +100,7 @@ class Analytics_ReportController extends BaseController
         $reports = array(
             array(
                 //'options' => array('chartType' => 'PieChart'),
-                'apiResponse' => craft()->analytics->api()->data_ga->get(
+                'apiResponse' => craft()->analytics->apiGet(
                     'ga:'.$this->profile['id'],
                     $this->start,
                     $this->end,
@@ -115,7 +115,7 @@ class Analytics_ReportController extends BaseController
             ),
             array(
                 //'options' => array('chartType' => 'PieChart'),
-                'apiResponse' => craft()->analytics->api()->data_ga->get(
+                'apiResponse' => craft()->analytics->apiGet(
                     'ga:'.$this->profile['id'],
                     $this->start,
                     $this->end,
@@ -130,7 +130,7 @@ class Analytics_ReportController extends BaseController
             ),
             array(
                 //'options' => array('chartType' => 'PieChart'),
-                'apiResponse' => craft()->analytics->api()->data_ga->get(
+                'apiResponse' => craft()->analytics->apiGet(
                     'ga:'.$this->profile['id'],
                     $this->start,
                     $this->end,
@@ -153,7 +153,7 @@ class Analytics_ReportController extends BaseController
         $reports = array(
             array(
                 //'options' => array('chartType' => 'PieChart'),
-                'apiResponse' => craft()->analytics->api()->data_ga->get(
+                'apiResponse' => craft()->analytics->apiGet(
                     'ga:'.$this->profile['id'],
                     $this->start,
                     $this->end,
@@ -168,7 +168,7 @@ class Analytics_ReportController extends BaseController
             ),
             array(
                 //'options' => array('chartType' => 'PieChart'),
-                'apiResponse' => craft()->analytics->api()->data_ga->get(
+                'apiResponse' => craft()->analytics->apiGet(
                     'ga:'.$this->profile['id'],
                     $this->start,
                     $this->end,
@@ -191,7 +191,7 @@ class Analytics_ReportController extends BaseController
         $reports = array(
             array(
                 //'options' => array('chartType' => 'PieChart'),
-                'apiResponse' => craft()->analytics->api()->data_ga->get(
+                'apiResponse' => craft()->analytics->apiGet(
                     'ga:'.$this->profile['id'],
                     $this->start,
                     $this->end,
@@ -206,7 +206,7 @@ class Analytics_ReportController extends BaseController
             ),
             array(
                 //'options' => array('chartType' => 'PieChart'),
-                'apiResponse' => craft()->analytics->api()->data_ga->get(
+                'apiResponse' => craft()->analytics->apiGet(
                     'ga:'.$this->profile['id'],
                     $this->start,
                     $this->end,
@@ -221,7 +221,7 @@ class Analytics_ReportController extends BaseController
             ),
             array(
                 //'options' => array('chartType' => 'PieChart'),
-                'apiResponse' => craft()->analytics->api()->data_ga->get(
+                'apiResponse' => craft()->analytics->apiGet(
                     'ga:'.$this->profile['id'],
                     $this->start,
                     $this->end,
@@ -243,7 +243,7 @@ class Analytics_ReportController extends BaseController
         $reports = array(
             array(
                 //'options' => array('chartType' => 'PieChart'),
-                'apiResponse' => craft()->analytics->api()->data_ga->get(
+                'apiResponse' => craft()->analytics->apiGet(
                     'ga:'.$this->profile['id'],
                     $this->start,
                     $this->end,
@@ -258,7 +258,7 @@ class Analytics_ReportController extends BaseController
             ),
             array(
                 //'options' => array('chartType' => 'PieChart'),
-                'apiResponse' => craft()->analytics->api()->data_ga->get(
+                'apiResponse' => craft()->analytics->apiGet(
                     'ga:'.$this->profile['id'],
                     $this->start,
                     $this->end,
@@ -273,7 +273,7 @@ class Analytics_ReportController extends BaseController
             ),
             array(
                 //'options' => array('chartType' => 'PieChart'),
-                'apiResponse' => craft()->analytics->api()->data_ga->get(
+                'apiResponse' => craft()->analytics->apiGet(
                     'ga:'.$this->profile['id'],
                     $this->start,
                     $this->end,
@@ -296,7 +296,7 @@ class Analytics_ReportController extends BaseController
         $reports = array(
             array(
                 'options' => array('resolution' => 'countries', 'page' => 'enable'),
-                'apiResponse' => craft()->analytics->api()->data_ga->get(
+                'apiResponse' => craft()->analytics->apiGet(
                     'ga:'.$this->profile['id'],
                     $this->start,
                     $this->end,
@@ -309,7 +309,7 @@ class Analytics_ReportController extends BaseController
             ),
             array(
                 'options' => array('page' => 'enable'),
-                'apiResponse' => craft()->analytics->api()->data_ga->get(
+                'apiResponse' => craft()->analytics->apiGet(
                     'ga:'.$this->profile['id'],
                     $this->start,
                     $this->end,
@@ -323,7 +323,7 @@ class Analytics_ReportController extends BaseController
             ),
             array(
                 'options' => array('displayMode' => 'markers', 'page' => 'enable'),
-                'apiResponse' => craft()->analytics->api()->data_ga->get(
+                'apiResponse' => craft()->analytics->apiGet(
                     'ga:'.$this->profile['id'],
                     $this->start,
                     $this->end,
@@ -345,7 +345,7 @@ class Analytics_ReportController extends BaseController
         $reports = array(
             array(
                 //'options' => array('chartType' => 'PieChart'),
-                'apiResponse' => craft()->analytics->api()->data_ga->get(
+                'apiResponse' => craft()->analytics->apiGet(
                     'ga:'.$this->profile['id'],
                     $this->start,
                     $this->end,
@@ -365,7 +365,7 @@ class Analytics_ReportController extends BaseController
         $reports = array(
             array(
                 //'options' => array('chartType' => 'PieChart'),
-                'apiResponse' => craft()->analytics->api()->data_ga->get(
+                'apiResponse' => craft()->analytics->apiGet(
                     'ga:'.$this->profile['id'],
                     date('Y-m-d', strtotime('-1 week')),
                     date('Y-m-d'),
@@ -378,7 +378,7 @@ class Analytics_ReportController extends BaseController
             ),
             array(
                 //'options' => array('chartType' => 'PieChart'),
-                'apiResponse' => craft()->analytics->api()->data_ga->get(
+                'apiResponse' => craft()->analytics->apiGet(
                     'ga:'.$this->profile['id'],
                     date('Y-m-d', strtotime('-1 month')),
                     date('Y-m-d'),
@@ -391,7 +391,7 @@ class Analytics_ReportController extends BaseController
             ),
             array(
                 //'options' => array('chartType' => 'PieChart'),
-                'apiResponse' => craft()->analytics->api()->data_ga->get(
+                'apiResponse' => craft()->analytics->apiGet(
                     'ga:'.$this->profile['id'],
                     date('Y-m-d', strtotime('-1 year')),
                     date('Y-m-d'),
@@ -412,10 +412,10 @@ class Analytics_ReportController extends BaseController
             $newCols = array();
             $newRows = array();
 
-            if(count($report['apiResponse']['columnHeaders']) > 2)
+            if(count($report['apiResponse']['cols']) > 2)
             {
-                $one = $report['apiResponse']['columnHeaders'][0];
-                $two = end($report['apiResponse']['columnHeaders']);
+                $one = $report['apiResponse']['cols'][0];
+                $two = end($report['apiResponse']['cols']);
             }
 
             foreach($report['apiResponse']['rows'] as $v) {
@@ -428,7 +428,7 @@ class Analytics_ReportController extends BaseController
 
             $newCols = array($one, $two);
 
-            $reports[$k]['apiResponse']['columnHeaders'] = $newCols;
+            $reports[$k]['apiResponse']['cols'] = $newCols;
             $reports[$k]['apiResponse']['rows'] = $newRows;
         }
 

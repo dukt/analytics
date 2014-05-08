@@ -19,6 +19,33 @@ use \Google_Service_Analytics;
 
 class AnalyticsService extends BaseApplicationComponent
 {
+    public function parseApiResponse($apiResponse)
+    {
+        $cols = $apiResponse->columnHeaders;
+        $rows = $apiResponse->rows;
+
+        $response = array(
+            'cols' => $cols,
+            'rows' => $rows
+        );
+
+        return $response;
+    }
+
+    public function apiGet($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = array())
+    {
+        $response = craft()->analytics->api()->data_ga->get($p1, $p2, $p3, $p4, $p5);
+
+        return $this->parseApiResponse($response);
+    }
+
+    public function apiRealtimeGet($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = array())
+    {
+        $response = craft()->analytics->api()->data_realtime->get($p1, $p2, $p3, $p4, $p5);
+
+        return $this->parseApiResponse($response);
+    }
+
     public function getChartFromData($data)
     {
         $query = $data['query'];
