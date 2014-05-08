@@ -19,18 +19,6 @@ class Analytics_ReportController extends BaseController
     private $start;
     private $end;
 
-    private function cacheExpiry()
-    {
-        $cacheExpiry = craft()->config->get('analyticsCacheExpiry');
-
-        if(!$cacheExpiry)
-        {
-            $cacheExpiry = 30 * 60; // 30 min cache
-        }
-
-        return $cacheExpiry;
-    }
-
     public function init()
     {
         try {
@@ -71,14 +59,13 @@ class Analytics_ReportController extends BaseController
                         // call controller
                         $reports = $this->{$this->widget->settings['type']}();
 
-                        craft()->fileCache->set($cacheKey, $reports, $this->cacheExpiry());
+                        craft()->fileCache->set($cacheKey, $reports, craft()->analytics->cacheExpiry());
                     }
                 }
                 else
                 {
                     $reports = $this->{$this->widget->settings['type']}();
                 }
-
 
                 $this->returnJson(array(
                     'reports' => $reports
@@ -414,19 +401,22 @@ class Analytics_ReportController extends BaseController
 
             if(count($report['apiResponse']['cols']) > 2)
             {
-                $one = $report['apiResponse']['cols'][0];
-                $two = end($report['apiResponse']['cols']);
+                $col1 = $report['apiResponse']['cols'][0];
+                $col2 = end($report['apiResponse']['cols']);
             }
 
             foreach($report['apiResponse']['rows'] as $v) {
                 $itemMetric = (int) array_pop($v);
                 $itemDimension = implode('.', $v);
 
-                $item = array($itemDimension, $itemMetric);
+                $item = array(
+                    $col1['name'] => $itemDimension,
+                    $col2['name'] => $itemMetric,
+                );
                 array_push($newRows, $item);
             }
 
-            $newCols = array($one, $two);
+            $newCols = array($col1, $col2);
 
             $reports[$k]['apiResponse']['cols'] = $newCols;
             $reports[$k]['apiResponse']['rows'] = $newRows;

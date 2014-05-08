@@ -4,18 +4,6 @@ namespace Craft;
 
 class Analytics_CustomReportWidget extends BaseWidget
 {
-    private $types = array(
-        'acquisition' => "Acquisition",
-        'conversions' => "Conversions",
-        'counts'      => "Counts",
-        'geo'         => "Geo",
-        'mobile'      => "Mobile",
-        'pages'       => "Pages",
-        'realtime'    => "Real-Time",
-        'technology'  => "Technology",
-        'visits'      => "Visits"
-    );
-
     protected function defineSettings()
     {
         return array(
@@ -23,6 +11,20 @@ class Analytics_CustomReportWidget extends BaseWidget
            'colspan' => array(AttributeType::Number, 'default' => 2),
            'options' => array(AttributeType::Mixed),
         );
+    }
+
+    public function isSelectable()
+    {
+        $plugin = craft()->plugins->getPlugin('analytics');
+
+        $settings = $plugin->getSettings();
+
+        if($settings->enableCustomReportWidget)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     public function getName()
@@ -42,20 +44,8 @@ class Analytics_CustomReportWidget extends BaseWidget
 
     public function getSettingsHtml()
     {
-        $types = $this->getTypes();
-
-        foreach($types as $k => $type)
-        {
-            $types[$k] = Craft::t($type);
-        }
-
-        if(!empty($types['realtime'])) {
-            $types['realtime'] .= ' (beta)';
-        }
-
         return craft()->templates->render('analytics/widgets/customReport/settings', array(
-           'settings' => $this->getSettings(),
-           'types' => $types
+           'settings' => $this->getSettings()
         ));
     }
 
@@ -82,30 +72,15 @@ class Analytics_CustomReportWidget extends BaseWidget
     }
 
 
-    public function getType($k)
-    {
-        if(!empty($k)) {
-            return $this->types[$k];
-        }
-    }
-
-    public function getTypes()
-    {
-        return $this->types;
-    }
-
     public function getColspan()
     {
-        if(craft()->version > 1.3)
-        {
-            $settings = $this->getSettings();
+        $settings = $this->getSettings();
 
-            if(isset($settings->colspan))
+        if(isset($settings->colspan))
+        {
+            if($settings->colspan > 0)
             {
-                if($settings->colspan > 0)
-                {
-                    return $settings->colspan;
-                }
+                return $settings->colspan;
             }
         }
 

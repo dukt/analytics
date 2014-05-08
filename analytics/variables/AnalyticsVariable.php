@@ -26,79 +26,7 @@ class AnalyticsVariable
 
     public function getGeoRegionOpts($params)
     {
-        $opts = array();
-
-        if(!empty($params['world']))
-        {
-            $opts[]['optgroup'] = "World";
-            $opts[] = array(
-                "label" => "World",
-                "value" => "world"
-            );
-        }
-
-        if(!empty($params['continents']))
-        {
-            $opts[]['optgroup'] = "Continents";
-
-            $continents = craft()->analytics_geo->getContinents();
-
-            foreach($continents as $continent)
-            {
-                $opts[] = array(
-                    'label' => $continent['label'],
-                    'value' => $continent['code']
-                );
-            }
-        }
-
-        if(!empty($params['subContinents']))
-        {
-            $opts[]['optgroup'] = "Sub Continents";
-
-            $subContinents = craft()->analytics_geo->getSubContinents();
-
-            foreach($subContinents as $subContinent)
-            {
-                $opts[] = array(
-                    'label' => $subContinent->label,
-                    'value' => $subContinent->code
-                );
-            }
-        }
-
-        if(!empty($params['countries']))
-        {
-            $opts[]['optgroup'] = "Countries";
-
-            $countries = craft()->analytics_geo->getCountries();
-
-            foreach($countries as $country)
-            {
-                if(is_array($params['countries']))
-                {
-                    foreach($params['countries'] as $c)
-                    {
-                        if($c == $country->code)
-                        {
-                            $opts[] = array(
-                                'label' => $country->label,
-                                'value' => $country->code
-                            );
-                        }
-                    }
-                }
-                else
-                {
-                    $opts[] = array(
-                        'label' => $country->label,
-                        'value' => $country->code
-                    );
-                }
-            }
-        }
-
-        return $opts;
+        return craft()->analytics->getGeoRegionOpts($params);
     }
 
     public function getProfile()
@@ -120,6 +48,7 @@ class AnalyticsVariable
     {
         return craft()->analytics->properties();
     }
+
     public function getAccount()
     {
         return craft()->analytics->getAccount();

@@ -122,6 +122,7 @@ AnalyticsReport = Garnish.Base.extend({
                     }, this));
 
                     var rows = AnalyticsUtils.getRows(report);
+
                     this.$chartData[k].addRows(rows);
 
                     if(typeof(this.$charts[k]) == 'undefined')

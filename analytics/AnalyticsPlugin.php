@@ -38,7 +38,8 @@ class AnalyticsPlugin extends BasePlugin
     {
         return array(
             'profileId' => array(AttributeType::String),
-            'realtimeRefreshInterval' => array(AttributeType::Number)
+            'realtimeRefreshInterval' => array(AttributeType::Number),
+            'enableCustomReportWidget' => array(AttributeType::Bool, 'default' => true)
         );
     }
 

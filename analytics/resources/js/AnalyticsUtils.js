@@ -25,7 +25,8 @@ var AnalyticsUtils = {
                     baselineColor: '#ccc',
                     gridlines: {
                         color: '#eee'
-                    }
+                    },
+                    maxValue: 5
                 }
             };
 
@@ -236,13 +237,19 @@ var AnalyticsUtils = {
             return rows;
         };
 
+
         $.each(response.apiResponse.rows, function(k, row) {
 
             var cells = [];
 
             $.each(columns, function(k2, column) {
+                console.log(column, response.apiResponse.rows[k]);
+                var cell = response.apiResponse.rows[k][column.name];
+                //var cell = response.apiResponse.rows[k][column.name];
 
-                var cell = response.apiResponse.rows[k][k2];
+                //console.log(response.apiResponse.rows[k]);
+
+                //console.log(response.apiResponse.rows[k][column.name]);
 
                 if(column.type == 'date')
                 {
@@ -274,7 +281,7 @@ var AnalyticsUtils = {
                     {
                         cell = {
                             'f' : eval(cell)+" seconds",
-                            'v' : eval(cell),
+                            'v' : eval(cell)
                         };
                     }
                     else if(column.name == 'ga:continent' || column.name == 'ga:subContinent')

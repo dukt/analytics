@@ -50,6 +50,7 @@ AnalyticsField = Garnish.Base.extend({
 
                 var columns = AnalyticsUtils.getColumns(response);
                 $.each(columns, function(k, column) {
+                    console.log(column.type, column.name);
                     chartData.addColumn(column.type, column.name);
                 });
 
@@ -67,8 +68,12 @@ AnalyticsField = Garnish.Base.extend({
                         textStyle: { color: '#888' },
                         baselineColor: '#fdfdfd',
                         gridlines: {
-                            color: 'none'
+                            color: 'none',
+                            count:2
                         }
+                    },
+                    vAxis:{
+                        maxValue: 5,
                     },
                     series:{
                         0:{targetAxisIndex:0},

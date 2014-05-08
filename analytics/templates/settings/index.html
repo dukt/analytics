@@ -102,7 +102,16 @@
                 value: (settings.realtimeRefreshInterval ? settings.realtimeRefreshInterval : '10'),
                 size: 4
             }) }}
-
+			{# {{dump(settings)}} #}
+			{{ forms.lightswitchField({
+				value:1,
+				label: "Enable Custom Report Widget"|t,
+				id: 'enableCustomReportWidget',
+				name: 'enableCustomReportWidget',
+				on: settings.enableCustomReportWidget,
+				onLabel: "On"|t,
+				offLabel: "Off"|t
+			}) }}
 
 			<p>
 				<input type="submit" class="btn submit force" value="{{'Save'|t}}">

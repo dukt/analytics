@@ -52,7 +52,8 @@ AnalyticsCustomReport = Garnish.Base.extend({
                             baselineColor: '#ccc',
                             gridlines: {
                                 color: '#eee'
-                            }
+                            },
+                            maxValue: 5
                         }
                     };
 

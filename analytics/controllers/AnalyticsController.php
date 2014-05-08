@@ -14,98 +14,6 @@ namespace Craft;
 
 class AnalyticsController extends BaseController
 {
-    private function cacheExpiry()
-    {
-        $cacheExpiry = craft()->config->get('analyticsCacheExpiry');
-
-        if(!$cacheExpiry)
-        {
-            $cacheExpiry = 30 * 60; // 30 min cache
-        }
-
-        return $cacheExpiry;
-    }
-
-
-    private function secondMinute($seconds)
-    {
-        $minResult = floor($seconds/60);
-
-        if($minResult < 10)
-        {
-            $minResult = 0 . $minResult;
-        }
-
-        $secResult = ($seconds/60 - $minResult) * 60;
-
-        if(round($secResult) < 10){
-            $secResult = 0 . round($secResult);
-        }
-        else
-        {
-            $secResult = round($secResult);
-        }
-
-        return $minResult.":".$secResult;
-    }
-
-    private function formatCell($value, $column)
-    {
-        switch($column['name'])
-        {
-            case "ga:avgTimeOnPage":
-                $value = $this->secondMinute($value);
-                return $value;
-                break;
-
-            case 'ga:pageviewsPerVisit':
-
-                $value = round($value, 2);
-                return $value;
-
-                break;
-
-            case 'ga:entranceRate':
-            case 'ga:visitBounceRate':
-            case 'ga:exitRate':
-
-                $value = round($value, 2)."%";
-                return $value;
-
-                break;
-
-            default:
-                return $value;
-        }
-    }
-
-    private function getRows($response)
-    {
-        $columns = $response['cols'];
-
-        $newRows = array();
-
-        if(isset($response['rows']))
-        {
-            $rows = $response['rows'];
-
-            foreach($rows as $row)
-            {
-                $newRow = array();
-
-                foreach($row as $k => $v)
-                {
-                    $newRow[$columns[$k]['name']] = $this->formatCell($v, $columns[$k]);
-                }
-
-                array_push($newRows, $newRow);
-
-            }
-        }
-
-        return $newRows;
-    }
-
     public function actionGetCountReport()
     {
         try {
@@ -137,26 +45,22 @@ class AnalyticsController extends BaseController
                     'ga:visits, ga:entrances, ga:exits, ga:pageviews, ga:timeOnPage, ga:exitRate, ga:entranceRate, ga:pageviewsPerVisit, ga:avgTimeOnPage, ga:visitBounceRate'
                 );
 
-
-
-                craft()->fileCache->set($cacheKey, $response, $this->cacheExpiry());
+                craft()->fileCache->set($cacheKey, $response, craft()->analytics->cacheExpiry());
             }
 
-            $rows = $this->getRows($response);
-
-            $row = array_pop($rows);
+            $row = array_pop($response['rows']);
 
             $counts = array(
-                'visits'            => $row['ga:visits'],
-                'entrances'         => $row['ga:entrances'],
-                'exits'             => $row['ga:exits'],
-                'pageviews'         => $row['ga:pageviews'],
-                'timeOnPage'        => $row['ga:timeOnPage'],
-                'exitRate'          => $row['ga:exitRate'],
-                'entranceRate'      => $row['ga:entranceRate'],
-                'pageviewsPerVisit' => $row['ga:pageviewsPerVisit'],
-                'avgTimeOnPage'     => $row['ga:avgTimeOnPage'],
-                'visitBounceRate'   => $row['ga:visitBounceRate'],
+                'visits'            => (!empty($row['ga:visits']) ? $row['ga:visits'] : 0),
+                'entrances'         => (!empty($row['ga:entrances']) ? $row['ga:entrances'] : 0),
+                'exits'             => (!empty($row['ga:exits']) ? $row['ga:exits'] : 0),
+                'pageviews'         => (!empty($row['ga:pageviews']) ? $row['ga:pageviews'] : 0),
+                'timeOnPage'        => (!empty($row['ga:timeOnPage']) ? $row['ga:timeOnPage'] : 0),
+                'exitRate'          => (!empty($row['ga:exitRate']) ? round($row['ga:exitRate'], 2)."%" : '0%'),
+                'entranceRate'      => (!empty($row['ga:entranceRate']) ? $row['ga:entranceRate'] : 0),
+                'pageviewsPerVisit' => (!empty($row['ga:pageviewsPerVisit']) ? round($row['ga:pageviewsPerVisit'], 2) : '0.00'),
+                'avgTimeOnPage'     => (!empty($row['ga:avgTimeOnPage']) ? craft()->analytics->secondMinute($row['ga:avgTimeOnPage']) : '00:00'),
+                'visitBounceRate'   => (!empty($row['ga:visitBounceRate']) ? round($row['ga:visitBounceRate'], 2)."%" : '0%'),
             );
 
             $html = craft()->templates->render('analytics/widgets/report/_counts', array(
@@ -201,36 +105,37 @@ class AnalyticsController extends BaseController
                     array('dimensions' => 'ga:visitorType')
                 );
 
+                //var_dump($results->rows);
 
                 if(!empty($results['totalResults']))
                 {
                     $data['total'] = $results['totalResults'];
                 }
 
-                if(!empty($results['rows'][0][1]))
+                if(!empty($results->rows[0][1]))
                 {
-                    switch($results['rows'][0][0])
+                    switch($results->rows[0][0])
                     {
                         case "RETURNING":
-                        $data['visitorType']['returningVisitor'] = $results['rows'][0][1];
+                        $data['visitorType']['returningVisitor'] = $results->rows[0][1];
                         break;
 
                         case "NEW":
-                        $data['visitorType']['newVisitor'] = $results['rows'][0][1];
+                        $data['visitorType']['newVisitor'] = $results->rows[0][1];
                         break;
                     }
                 }
 
-                if(!empty($results['rows'][1][1]))
+                if(!empty($results->rows[1][1]))
                 {
-                    switch($results['rows'][1][0])
+                    switch($results->rows[1][0])
                     {
                         case "RETURNING":
-                        $data['visitorType']['returningVisitor'] = $results['rows'][1][1];
+                        $data['visitorType']['returningVisitor'] = $results->rows[1][1];
                         break;
 
                         case "NEW":
-                        $data['visitorType']['newVisitor'] = $results['rows'][1][1];
+                        $data['visitorType']['newVisitor'] = $results->rows[1][1];
                         break;
                     }
                 }
@@ -244,9 +149,9 @@ class AnalyticsController extends BaseController
                     array('dimensions' => 'ga:pagePath')
                 );
 
-                if(!empty($results['rows']))
+                if(!empty($results->rows))
                 {
-                    foreach($results['rows'] as $row)
+                    foreach($results->rows as $row)
                     {
                         $data['content'][$row[0]] = $row[1];
                     }
@@ -261,9 +166,9 @@ class AnalyticsController extends BaseController
                     array('dimensions' => 'ga:source')
                 );
 
-                if(!empty($results['rows']))
+                if(!empty($results->rows))
                 {
-                    foreach($results['rows'] as $row)
+                    foreach($results->rows as $row)
                     {
                         $data['sources'][$row[0]] = $row[1];
                     }
@@ -277,9 +182,9 @@ class AnalyticsController extends BaseController
                     array('dimensions' => 'ga:country')
                 );
 
-                if(!empty($results['rows']))
+                if(!empty($results->rows))
                 {
-                    foreach($results['rows'] as $row)
+                    foreach($results->rows as $row)
                     {
                         $data['countries'][$row[0]] = $row[1];
                     }
@@ -298,22 +203,6 @@ class AnalyticsController extends BaseController
 
         $this->returnJson($data);
 
-    }
-
-    private function catchError($e)
-    {
-        $errors = $e->getErrors();
-
-        if(is_array($errors))
-        {
-            $error = $errors[0];
-        }
-        else
-        {
-            $error = $e->getMessage();
-        }
-
-        return $error;
     }
 
     public function actionElementReport(array $variables = array())
@@ -375,9 +264,7 @@ class AnalyticsController extends BaseController
                             $options
                         );
 
-
-
-                        craft()->fileCache->set($cacheKey, $response, $this->cacheExpiry());
+                        craft()->fileCache->set($cacheKey, $response, craft()->analytics->cacheExpiry());
                     }
                 }
                 else
@@ -389,8 +276,6 @@ class AnalyticsController extends BaseController
                         $metrics,
                         $options
                     );
-
-
                 }
 
                 $this->returnJson(array('apiResponse' => $response));
@@ -443,8 +328,6 @@ class AnalyticsController extends BaseController
                 foreach($filters as $filter)
                 {
                     $visibility = $filter['visibility'];
-
-
 
                     switch($filter['operator'])
                     {
@@ -508,27 +391,28 @@ class AnalyticsController extends BaseController
 
                     $options['sort'] = '-'.$widget->settings['options']['metric'];
 
-                    $continent = $this->continents($widget->settings['options']['region']);
-                    $subContinent = $this->subContinents($widget->settings['options']['region']);
-                    $country = $this->countries($widget->settings['options']['region']);
+                    $continent = craft()->analytics->getContinentByCode($widget->settings['options']['region']);
+
+                    $subContinent = craft()->analytics->getSubContinentByCode($widget->settings['options']['region']);
+
+                    $country = craft()->analytics->getCountryByCode($widget->settings['options']['region']);
 
                     $options['filters'] = (!empty($options['filters']) ? $options['filters'].';' : '');
                     $options['filters'] = $widget->settings['options']['dimension'].'!=(not set)';
 
-
                     if($continent)
                     {
                         //$options['filters'] = (!empty($options['filters']) ? $options['filters'].';' : '');
-                        $options['filters'] .= ';ga:continent=='.$continent;
+                        $options['filters'] .= ';ga:continent=='.$continent['label'];
                     }
                     elseif ($subContinent)
                     {
                         //$options['filters'] = (!empty($options['filters']) ? $options['filters'].';' : '');
-                        $options['filters'] .= ';ga:subContinent=='.$subContinent;
+                        $options['filters'] .= ';ga:subContinent=='.$subContinent['label'];
                     }
                     elseif ($country)
                     {
-                        $options['filters'] .= ';ga:country=='.$country;
+                        $options['filters'] .= ';ga:country=='.$country['label'];
                     }
 
                     if($widget->settings['options']['chartType'] == 'GeoChart'
@@ -551,7 +435,6 @@ class AnalyticsController extends BaseController
 
             if($enableCache)
             {
-
                 $cacheKey = 'analytics/customReport/'.md5(serialize(array(
                     'ga:'.$profile['id'],
                     $start,
@@ -572,9 +455,7 @@ class AnalyticsController extends BaseController
                         $options
                     );
 
-
-
-                    craft()->fileCache->set($cacheKey, $response, $this->cacheExpiry());
+                    craft()->fileCache->set($cacheKey, $response, craft()->analytics->cacheExpiry());
                 }
             }
             else
@@ -586,8 +467,6 @@ class AnalyticsController extends BaseController
                     $metric,
                     $options
                 );
-
-
             }
 
             // response
@@ -600,16 +479,26 @@ class AnalyticsController extends BaseController
                 {
                     foreach($response['rows'] as $k => $row)
                     {
-                        $continent = $this->rcontinents($row[0]);
-                        $subContinent = $this->rsubContinents($row[0]);
+                        if(isset($row[0]))
+                        {
 
-                        if($continent)
-                        {
-                            $response['rows'][$k][0] = $continent;
-                        }
-                        elseif($subContinent)
-                        {
-                            $response['rows'][$k][0] = $subContinent;
+                            $continent = craft()->analytics->getContinentByLabel($row[0]);
+                            $subContinent = craft()->analytics->getSubContinentByLabel($row[0]);
+
+                            if($continent)
+                            {
+                                $response['rows'][$k][0] = array(
+                                    'v' => $continent['code'],
+                                    'f' => $continent['label']
+                                );
+                            }
+                            elseif($subContinent)
+                            {
+                                $response['rows'][$k][0] = array(
+                                    'v' => $subContinent['code'],
+                                    'f' => $subContinent['label']
+                                );
+                            }
                         }
                     }
                 }
@@ -630,378 +519,19 @@ class AnalyticsController extends BaseController
         }
     }
 
-    private function usstates($name)
+    private function catchError($e)
     {
-        $code = substr($name, (strlen($name) - 2));
-        $code = 'US-'.$code;
+        $errors = $e->getErrors();
 
-        return array(
-            'v' => $code,
-            'f' => $name
-        );
-    }
-
-    private function rcontinents($name, $returnArray = true)
-    {
-        $continents = $this->continents();
-
-        foreach($continents as $code => $continent)
+        if(is_array($errors))
         {
-            if($continent == $name)
-            {
-                return array(
-                    'v' => $code,
-                    'f' => $name
-                );
-            }
+            $error = $errors[0];
         }
-    }
-
-    private function rsubContinents($name, $returnArray = true)
-    {
-        $subContinents = $this->subContinents();
-
-        foreach($subContinents as $code => $subContinent)
+        else
         {
-            if($subContinent == $name)
-            {
-                return array(
-                    'v' => $code,
-                    'f' => $name
-                );
-            }
-        }
-    }
-
-    private function countries($code = null)
-    {
-        $countries = array(
-            "AD" => "Andorra",
-            "AE" => "United Arab Emirates",
-            "AF" => "Afghanistan",
-            "AG" => "Antigua and Barbuda",
-            "AI" => "Anguilla",
-            "AL" => "Albania",
-            "AM" => "Armenia",
-            "AN" => "Netherlands Antilles",
-            "AO" => "Angola",
-            "AR" => "Argentina",
-            "AS" => "American Samoa ",
-            "AT" => "Austria",
-            "AU" => "Australia",
-            "AW" => "Aruba",
-            "AX" => "Åland Islands",
-            "AZ" => "Azerbaijan",
-            "BA" => "Bosnia and Herzegovina",
-            "BB" => "Barbados",
-            "BD" => "Bangladesh",
-            "BE" => "Belgium",
-            "BF" => "Burkina Faso",
-            "BG" => "Bulgaria",
-            "BH" => "Bahrain",
-            "BI" => "Burundi",
-            "BJ" => "Benin",
-            "BL" => "Saint Barthélemy",
-            "BM" => "Bermuda",
-            "BN" => "Brunei Darussalam",
-            "BO" => "Bolivia",
-            "BR" => "Brazil",
-            "BS" => "Bahamas",
-            "BT" => "Bhutan",
-            "BU" => "Burma",
-            "BW" => "Botswana",
-            "BY" => "Belarus",
-            "BZ" => "Belize",
-            "CA" => "Canada",
-            "CD" => "Congo, the Democratic Republic of the",
-            "CF" => "Central African Republic",
-            "CG" => "Congo",
-            "CH" => "Switzerland",
-            "CI" => "Côte d'Ivoire",
-            "CK" => "Cook Islands",
-            "CL" => "Chile",
-            "CM" => "Cameroon",
-            "CN" => "China",
-            "CO" => "Colombia",
-            "CR" => "Costa Rica",
-            "CS" => "Serbia and Montenegro",
-            "CU" => "Cuba",
-            "CV" => "Cape Verde",
-            "CY" => "Cyprus",
-            "CZ" => "Czech Republic",
-            "DE" => "Germany",
-            "DJ" => "Djibouti",
-            "DK" => "Denmark",
-            "DM" => "Dominica",
-            "DO" => "Dominican Republic",
-            "DZ" => "Algeria",
-            "EC" => "Ecuador",
-            "EE" => "Estonia",
-            "EG" => "Egypt",
-            "EH" => "Western Sahara",
-            "ER" => "Eritrea",
-            "ES" => "Spain",
-            "ET" => "Ethiopia",
-            "FI" => "Finland",
-            "FJ" => "Fiji",
-            "FK" => "Falkland Islands (Malvinas)",
-            "FM" => "Micronesia, Federated States of",
-            "FO" => "Faroe Islands",
-            "FR" => "France",
-            "FX" => "France, Metropolitan",
-            "GA" => "Gabon",
-            "GB" => "United Kingdom",
-            "GD" => "Grenada",
-            "GE" => "Georgia",
-            "GF" => "French Guiana",
-            "GG" => "Guernsey",
-            "GH" => "Ghana",
-            "GI" => "Gibraltar",
-            "GL" => "Greenland",
-            "GM" => "Gambia",
-            "GN" => "Guinea",
-            "GP" => "Guadeloupe",
-            "GQ" => "Equatorial Guinea",
-            "GR" => "Greece",
-            "GT" => "Guatemala",
-            "GU" => "Guam",
-            "GW" => "Guinea-Bissau",
-            "GY" => "Guyana",
-            "HK" => "Hong Kong",
-            "HN" => "Honduras",
-            "HR" => "Croatia",
-            "HT" => "Haiti",
-            "HU" => "Hungary",
-            "ID" => "Indonesia",
-            "IE" => "Ireland",
-            "IL" => "Israel",
-            "IM" => "Isle of Man",
-            "IN" => "India",
-            "IQ" => "Iraq",
-            "IR" => "Iran, Islamic Republic of",
-            "IS" => "Iceland",
-            "IT" => "Italy",
-            "JE" => "Jersey",
-            "JM" => "Jamaica",
-            "JO" => "Jordan",
-            "JP" => "Japan",
-            "KE" => "Kenya",
-            "KG" => "Kyrgyzstan",
-            "KH" => "Cambodia",
-            "KI" => "Kiribati",
-            "KM" => "Comoros",
-            "KN" => "Saint Kitts and Nevis",
-            "KP" => "Korea, Democratic People's Republic of",
-            "KR" => "Korea, Republic of",
-            "KW" => "Kuwait",
-            "KY" => "Cayman Islands",
-            "KZ" => "Kazakhstan",
-            "LA" => "Lao People's Democratic Republic",
-            "LB" => "Lebanon",
-            "LC" => "Saint Lucia",
-            "LI" => "Liechtenstein",
-            "LK" => "Sri Lanka",
-            "LR" => "Liberia",
-            "LS" => "Lesotho",
-            "LT" => "Lithuania",
-            "LU" => "Luxembourg",
-            "LV" => "Latvia",
-            "LY" => "Libya",
-            "MA" => "Morocco",
-            "MC" => "Monaco",
-            "MD" => "Moldova, Republic of",
-            "ME" => "Montenegro",
-            "MF" => "Saint Martin (French part)",
-            "MG" => "Madagascar",
-            "MH" => "Marshall Islands",
-            "MK" => "Macedonia, the former Yugoslav Republic of",
-            "ML" => "Mali",
-            "MM" => "Myanmar",
-            "MN" => "Mongolia",
-            "MO" => "Macao",
-            "MP" => "Northern Mariana Islands",
-            "MQ" => "Martinique",
-            "MR" => "Mauritania",
-            "MS" => "Montserrat",
-            "MT" => "Malta",
-            "MU" => "Mauritius",
-            "MV" => "Maldives",
-            "MW" => "Malawi",
-            "MX" => "Mexico",
-            "MY" => "Malaysia",
-            "MZ" => "Mozambique",
-            "NA" => "Namibia",
-            "NC" => "New Caledonia",
-            "NE" => "Niger",
-            "NF" => "Norfolk Island",
-            "NG" => "Nigeria",
-            "NI" => "Nicaragua",
-            "NL" => "Netherlands",
-            "NO" => "Norway",
-            "NP" => "Nepal",
-            "NR" => "Nauru",
-            "NT" => "Neutral Zone",
-            "NU" => "Niue",
-            "NZ" => "New Zealand",
-            "OM" => "Oman",
-            "PA" => "Panama",
-            "PE" => "Peru",
-            "PF" => "French Polynesia",
-            "PG" => "Papua New Guinea",
-            "PH" => "Philippines",
-            "PK" => "Pakistan",
-            "PL" => "Poland",
-            "PM" => "Saint Pierre and Miquelon",
-            "PN" => "Pitcairn",
-            "PR" => "Puerto Rico",
-            "PS" => "Palestine, State of",
-            "PT" => "Portugal",
-            "PW" => "Palau",
-            "PY" => "Paraguay",
-            "QA" => "Qatar",
-            "RE" => "Réunion",
-            "RO" => "Romania",
-            "RS" => "Serbia",
-            "RU" => "Russian Federation",
-            "RW" => "Rwanda",
-            "SA" => "Saudi Arabia",
-            "SB" => "Solomon Islands",
-            "SC" => "Seychelles",
-            "SD" => "Sudan",
-            "SE" => "Sweden",
-            "SG" => "Singapore",
-            "SH" => "Saint Helena, Ascension and Tristan da Cunha",
-            "SI" => "Slovenia",
-            "SJ" => "Svalbard and Jan Mayen",
-            "SK" => "Slovakia",
-            "SL" => "Sierra Leone",
-            "SM" => "San Marino",
-            "SN" => "Senegal",
-            "SO" => "Somalia",
-            "SR" => "Suriname",
-            "ST" => "Sao Tome and Principe",
-            "SU" => "USSR",
-            "SV" => "El Salvador",
-            "SY" => "Syrian Arab Republic",
-            "SZ" => "Swaziland",
-            "TC" => "Turks and Caicos Islands",
-            "TD" => "Chad",
-            "TG" => "Togo",
-            "TH" => "Thailand",
-            "TJ" => "Tajikistan",
-            "TK" => "Tokelau",
-            "TL" => "Timor-Leste",
-            "TM" => "Turkmenistan",
-            "TN" => "Tunisia",
-            "TO" => "Tonga",
-            "TP" => "East Timor",
-            "TR" => "Turkey",
-            "TT" => "Trinidad and Tobago",
-            "TV" => "Tuvalu",
-            "TW" => "Taiwan, Province of China",
-            "TZ" => "Tanzania, United Republic of",
-            "UA" => "Uganda",
-            "UG" => "United States Minor Outlying Islands",
-            "US" => "United States",
-            "UY" => "Uruguay",
-            "UZ" => "Uzbekistan",
-            "VA" => "Holy See (Vatican City State)",
-            "VC" => "Saint Vincent and the Grenadines",
-            "VE" => "Venezuela, Bolivarian Republic of",
-            "VG" => "Virgin Islands, British",
-            "VI" => "Virgin Islands, U.S.",
-            "VN" => "Viet Nam",
-            "VU" => "Vanuatu",
-            "WF" => "Wallis and Futuna",
-            "WS" => "Samoa",
-            "YE" => "Yemen",
-            "YT" => "Mayotte",
-            "YU" => "Yugoslavia",
-            "ZA" => "South Africa",
-            "ZM" => "Zambia",
-            "ZR" => "Zaire",
-            "ZW" => "Zimbabwe"
-        );
-
-        if($code)
-        {
-            if(isset($countries[$code]))
-            {
-
-                    return $countries[$code];
-            }
-            else
-            {
-                return null;
-            }
+            $error = $e->getMessage();
         }
 
-        return $countries;
-    }
-
-    private function continents($code = null)
-    {
-        $continents = array(
-            '002' => "Africa",
-            '019' => "Americas",
-            '142' => "Asia",
-            '150' => "Europe",
-            '009' => "Oceania",
-        );
-
-        if($code)
-        {
-            if(isset($continents[$code]))
-            {
-
-                    return $continents[$code];
-            }
-            else
-            {
-                return null;
-            }
-        }
-        return $continents;
-    }
-
-    private function subContinents($code = null)
-    {
-        $subContinents = array(
-            '053' => "Australia and New Zeland",
-            '029' => "Caribbean",
-            '013' => "Central America",
-            '143' => "Central Asia",
-            '014' => "Eastern Africa",
-            '030' => "Eastern Asia",
-            '151' => "Eastern Europe",
-            '054' => "Melanesia",
-            '057' => "Micronesia",
-            '017' => "Middle Africa",
-            '015' => "Northern Africa",
-            '021' => "Northern America",
-            '154' => "Northern Europe",
-            '061' => "Polynesia",
-            '005' => "South America",
-            '035' => "South-Eastern Asia",
-            '018' => "Southern Africa",
-            '034' => "Southern Asia",
-            '039' => "Southern Europe",
-            '011' => "Western Africa",
-            '145' => "Western Asia",
-            '155' => "Western Europe",
-        );
-
-        if($code)
-        {
-            if(isset($subContinents[$code]))
-            {
-                return $subContinents[$code];
-            }
-            else
-            {
-                return null;
-            }
-        }
-        return $subContinents;
+        return $error;
     }
 }

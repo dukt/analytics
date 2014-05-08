@@ -16,7 +16,6 @@ class Analytics_ReportsWidget extends BaseWidget
 {
 	private $types = array(
         'acquisition' => "Acquisition",
-        'conversions' => "Conversions",
         'counts'      => "Counts",
         'geo'         => "Geo",
         'mobile'      => "Mobile",
@@ -116,8 +115,15 @@ class Analytics_ReportsWidget extends BaseWidget
             craft()->templates->includeJs('new AnalyticsReport("analytics-widget-'.$this->model->id.'");');
         }
 
+        if(craft()->templates->doesTemplateExist('analytics/widgets/report/'.$settings->type))
+        {
+            return craft()->templates->render('analytics/widgets/report/'.$settings->type, $variables);
+        }
+        else
+        {
+            return '<span class="error">'.Craft::t("This report doesn’t exists").'</span>';
+        }
 
-        return craft()->templates->render('analytics/widgets/report/'.$settings->type, $variables);
     }
 
 
@@ -135,16 +141,13 @@ class Analytics_ReportsWidget extends BaseWidget
 
     public function getColspan()
     {
-        if(craft()->version > 1.3)
-        {
-            $settings = $this->getSettings();
+        $settings = $this->getSettings();
 
-            if(isset($settings->colspan))
+        if(isset($settings->colspan))
+        {
+            if($settings->colspan > 0)
             {
-                if($settings->colspan > 0)
-                {
-                    return $settings->colspan;
-                }
+                return $settings->colspan;
             }
         }
 
