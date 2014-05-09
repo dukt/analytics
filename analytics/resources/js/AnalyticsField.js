@@ -57,7 +57,7 @@ AnalyticsField = Garnish.Base.extend({
 
                 var columns = AnalyticsUtils.getColumns(response);
                 $.each(columns, function(k, column) {
-                    console.log(column.type, column.name);
+                    // console.log(column.type, column.name);
                     chartData.addColumn(column.type, column.name);
                 });
 
