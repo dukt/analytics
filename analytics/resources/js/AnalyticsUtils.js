@@ -243,7 +243,7 @@ var AnalyticsUtils = {
             var cells = [];
 
             $.each(columns, function(k2, column) {
-                console.log(column, response.apiResponse.rows[k]);
+                //console.log(column, response.apiResponse.rows[k]);
                 var cell = response.apiResponse.rows[k][column.name];
                 //var cell = response.apiResponse.rows[k][column.name];
 

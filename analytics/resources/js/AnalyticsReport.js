@@ -42,6 +42,8 @@ AnalyticsCountReport = Garnish.Base.extend({
 AnalyticsReport = Garnish.Base.extend({
     init: function(element)
     {
+        this.$resizeTimer = false;
+
         this.$element = $("#"+element);
         this.$errorElement = $('.error', this.$element);
         $id = this.$element.data('widget-id');
@@ -171,11 +173,18 @@ AnalyticsReport = Garnish.Base.extend({
                     }
 
                     this.$element.bind('redraw', $.proxy(function () {
-                        this.redraw();
+                        clearTimeout(this.$resizeTimer);
+                        this.$resizeTimer = setTimeout($.proxy(function () {
+                            this.redraw();
+                        }, this), 1);
+
                     }, this));
 
                     $(window).resize($.proxy(function () {
-                        this.redraw();
+                        clearTimeout(this.$resizeTimer);
+                        this.$resizeTimer = setTimeout($.proxy(function () {
+                            this.redraw();
+                        }, this), 1);
                     }, this));
 
                 }, this));
