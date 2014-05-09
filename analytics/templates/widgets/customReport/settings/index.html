@@ -1,99 +1,108 @@
-{% import "_includes/forms" as forms %}
-{% includeJsResource 'analytics/js/AnalyticsCustomReportSettings.js' %}
-
-{{ forms.textField({
-    first: true,
-    label: "Name"|t,
-    name: 'name',
-    placeholder: 'My Widget',
-    value: settings.name
-}) }}
+<div id="type-custom" class="{% if settings.type != 'custom' %} hidden{% endif %}">
+    <hr>
+    <input type="hidden" name="options[reportType]" value="standard" />
 
 
-{% set colspanOptions = { 1:1, 2:2, 3:3, 4:4 } %}
+    {% set chartType = (settings.options.chartType is defined ? settings.options.chartType : 'AreaChart') %}
 
-{{ forms.selectField({
-    first: true,
-    label: "Columns"|t,
-    options: colspanOptions,
-    name: 'colspan',
-    value: (settings.colspan is not null ? settings.colspan : 2)
-}) }}
-
-
-<hr>
-{#
-{{ forms.selectField({
-    label: "Report Type"|t,
-    options: {standard:"Standard", realtime:"Real-Time"},
-    name: 'options[reportType]',
-    value: (settings.options.reportType is defined ? settings.options.reportType : '')
-}) }} #}
-
-<input type="hidden" name="options[reportType]" value="standard" />
-
-
-{% set chartType = (settings.options.chartType is defined ? settings.options.chartType : 'AreaChart') %}
-
-{{ forms.selectField({
-    label: "Chart Type"|t,
-    options: {
-        "AreaChart":"Area Chart",
-        "ColumnChart":"Column Chart",
-        "GeoChart":"Geo Chart",
-        "PieChart":"Pie Chart",
-        "Table":"Table",
-    },
-    class: 'analytics-chart-type-2',
-    name: 'options[chartType]',
-    value: chartType,
-    toggle: true,
-    targetPrefix: 'type-',
-}) }}
+    {{ forms.selectField({
+        label: "Chart Type"|t,
+        options: {
+            "AreaChart":"Area Chart",
+            "ColumnChart":"Column Chart",
+            "GeoChart":"Geo Chart",
+            "PieChart":"Pie Chart",
+            "Table":"Table",
+        },
+        class: 'analytics-chart-type-2',
+        name: 'options[chartType]',
+        value: chartType,
+        toggle: true,
+        targetPrefix: 'charttype-',
+    }) }}
 
 
 
-{{ forms.selectField({
-    label: "Metric"|t,
-    options: craft.analytics.metricOpts,
-    name: 'options[metric]',
-    value: (settings.options.metric is defined ? settings.options.metric : '')
-}) }}
+    {{ forms.selectField({
+        label: "Metric"|t,
+        options: craft.analytics.metricOpts,
+        name: 'options[metric]',
+        value: (settings.options.metric is defined ? settings.options.metric : '')
+    }) }}
 
-{% include 'analytics/widgets/customReport/settings/area' %}
-{% include 'analytics/widgets/customReport/settings/bar' %}
-{% include 'analytics/widgets/customReport/settings/column' %}
-{% include 'analytics/widgets/customReport/settings/geo' %}
-{% include 'analytics/widgets/customReport/settings/pie' %}
-{% include 'analytics/widgets/customReport/settings/table' %}
+    {% include 'analytics/widgets/customReport/settings/area' %}
+    {% include 'analytics/widgets/customReport/settings/bar' %}
+    {% include 'analytics/widgets/customReport/settings/column' %}
+    {% include 'analytics/widgets/customReport/settings/geo' %}
+    {% include 'analytics/widgets/customReport/settings/pie' %}
+    {% include 'analytics/widgets/customReport/settings/table' %}
 
-<hr>
+    <hr>
 
 
 
-{% set dataFilters = (settings.options.filters is defined ? settings.options.filters : false) %}
+    {% set dataFilters = (settings.options.filters is defined ? settings.options.filters : false) %}
 
-<table class="data analytics-filters">
-    <tbody>
-        {% for dataFilter in dataFilters %}
-            {% set k = loop.index0 %}
-            <tr>
+    <table class="data analytics-filters">
+        <tbody>
+            {% for dataFilter in dataFilters %}
+                {% set k = loop.index0 %}
+                <tr>
+                    <td>
+                        {{ forms.selectField({
+                            options: {
+                                show:"Show",
+                                hide:"Don't Show"
+                            },
+                            name: 'options[filters]['~k~'][visibility]',
+                            value: (dataFilter.visibility is defined ? dataFilter.visibility : '')
+                        }) }}
+                    </td>
+                    <td>
+
+                        {{ forms.selectField({
+                            options: craft.analytics.dimensionOpts,
+                            name: 'options[filters]['~k~'][dimension]',
+                            value: (dataFilter.dimension is defined ? dataFilter.dimension : '')
+                        }) }}
+                    </td>
+                    <td>
+                        {{ forms.selectField({
+                            options: {
+                                exactMatch:"Exact Match",
+                                regularExpression:"Regular Expression",
+                                contains:"Contains",
+                            },
+                            name: 'options[filters]['~k~'][operator]',
+                            value: (dataFilter.operator is defined ? dataFilter.operator : 'contains')
+                        }) }}
+                    </td>
+                    <td>
+                        {{ forms.textField({
+                            name: 'options[filters]['~k~'][value]',
+                            value: (dataFilter.value is defined ? dataFilter.value : '')
+                        }) }}
+                    </td>
+                    <td>
+                        <span class="btn small analytics-remove-filter">Remove</span>
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr class="prototype hidden">
                 <td>
                     {{ forms.selectField({
                         options: {
                             show:"Show",
                             hide:"Don't Show"
                         },
-                        name: 'options[filters]['~k~'][visibility]',
-                        value: (dataFilter.visibility is defined ? dataFilter.visibility : '')
+                        name: 'options[filters][{index}][visibility]'
                     }) }}
                 </td>
                 <td>
 
                     {{ forms.selectField({
                         options: craft.analytics.dimensionOpts,
-                        name: 'options[filters]['~k~'][dimension]',
-                        value: (dataFilter.dimension is defined ? dataFilter.dimension : '')
+                        name: 'options[filters][{index}][dimension]'
                     }) }}
                 </td>
                 <td>
@@ -103,63 +112,25 @@
                             regularExpression:"Regular Expression",
                             contains:"Contains",
                         },
-                        name: 'options[filters]['~k~'][operator]',
-                        value: (dataFilter.operator is defined ? dataFilter.operator : 'contains')
+                        name: 'options[filters][{index}][operator]',
+                        value: 'contains'
                     }) }}
                 </td>
                 <td>
                     {{ forms.textField({
-                        name: 'options[filters]['~k~'][value]',
-                        value: (dataFilter.value is defined ? dataFilter.value : '')
+                        name: 'options[filters][{index}][value]'
                     }) }}
                 </td>
                 <td>
                     <span class="btn small analytics-remove-filter">Remove</span>
                 </td>
             </tr>
-        {% endfor %}
-        <tr class="prototype hidden">
-            <td>
-                {{ forms.selectField({
-                    options: {
-                        show:"Show",
-                        hide:"Don't Show"
-                    },
-                    name: 'options[filters][{index}][visibility]'
-                }) }}
-            </td>
-            <td>
+        </tbody>
+    </table>
 
-                {{ forms.selectField({
-                    options: craft.analytics.dimensionOpts,
-                    name: 'options[filters][{index}][dimension]'
-                }) }}
-            </td>
-            <td>
-                {{ forms.selectField({
-                    options: {
-                        exactMatch:"Exact Match",
-                        regularExpression:"Regular Expression",
-                        contains:"Contains",
-                    },
-                    name: 'options[filters][{index}][operator]',
-                    value: 'contains'
-                }) }}
-            </td>
-            <td>
-                {{ forms.textField({
-                    name: 'options[filters][{index}][value]'
-                }) }}
-            </td>
-            <td>
-                <span class="btn small analytics-remove-filter">Remove</span>
-            </td>
-        </tr>
-    </tbody>
-</table>
+    <p>
+        <span class="btn small analytics-add-filter">Add Filter</span>
+    </p>
 
-<p>
-    <span class="btn small analytics-add-filter">Add Filter</span>
-</p>
-
-<hr>
+    <hr>
+</div>

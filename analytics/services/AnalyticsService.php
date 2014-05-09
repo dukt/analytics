@@ -410,29 +410,26 @@ class AnalyticsService extends BaseApplicationComponent
     {
         $r = array();
 
-        try {
-            $webProperty = $this->getWebProperty();
+        $webProperty = $this->getWebProperty();
 
-            $profile = craft()->fileCache->get('analytics.profile');
+        $profile = craft()->fileCache->get('analytics.profile');
 
-            if(!$profile && !empty($webProperty['accountId'])) {
-                $profiles = $this->api()->management_profiles->listManagementProfiles($webProperty['accountId'], $webProperty['id']);
+        if(!$profile && !empty($webProperty['accountId']))
+        {
+            $profiles = $this->api()->management_profiles->listManagementProfiles($webProperty['accountId'], $webProperty['id']);
 
-                $profile = $profiles['items'][0];
+            $profile = $profiles['items'][0];
 
-                craft()->fileCache->set('analytics.profile', $profile);
-            }
+            craft()->fileCache->set('analytics.profile', $profile);
+        }
 
-            if($profile) {
-                $r = $profile;
-            } else {
-                $r['error'] = "Couldn't get profile";
-            }
-
-
-
-        } catch(\Exception $e) {
-            $r['error'] = $e->getMessage();
+        if($profile)
+        {
+            return $profile;
+        }
+        else
+        {
+            throw new Exception("Couldn't get profile");
         }
 
         return $r;

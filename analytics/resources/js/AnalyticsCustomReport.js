@@ -3,6 +3,7 @@ google.load("visualization", "1", {packages:['corechart', 'table', 'geochart']})
 AnalyticsCustomReport = Garnish.Base.extend({
     init: function(element)
     {
+
         this.$element = $("#"+element);
         this.$chartElement = $('.chart', this.$element);
         this.$errorElement = $('.error', this.$element);
@@ -11,6 +12,13 @@ AnalyticsCustomReport = Garnish.Base.extend({
 
         $id = this.$element.data('widget-id');
 
+
+        if(typeof(google.visualization) == 'undefined')
+        {
+            this.$errorElement.html("No internet connection");
+            this.$element.addClass('error');
+            return false;
+        }
 
         Craft.queueActionRequest('analytics/customReport', {id: $id}, $.proxy(function(response) {
 

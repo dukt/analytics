@@ -14,6 +14,13 @@ AnalyticsField = Garnish.Base.extend({
         this.$elementId = $('.analytics-field', this.$element).data('element-id');
         this.$chart = false;
 
+        if(typeof(google.visualization) == 'undefined')
+        {
+            this.$errorElement.html("No internet connection");
+            this.$field.addClass('analytics-error');
+            return false;
+        }
+
         // $('#'+fieldId+' .heading').addClass('hidden');
 
         var $this = this;
@@ -69,7 +76,6 @@ AnalyticsField = Garnish.Base.extend({
                         baselineColor: '#fdfdfd',
                         gridlines: {
                             color: 'none',
-                            count:2
                         }
                     },
                     vAxis:{

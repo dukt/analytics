@@ -6,6 +6,7 @@ AnalyticsCountReport = Garnish.Base.extend({
         this.$element = $('#'+element);
         this.$inject = $('.analytics-inject', this.$element);
         this.$error = $('.analytics-error', this.$element);
+        this.$errorElement = $('.error', this.$element);
 
         var data = {
             start: this.$element.data('start'),
@@ -14,12 +15,21 @@ AnalyticsCountReport = Garnish.Base.extend({
 
         this.$element.addClass('analytics-loading');
 
+        if(typeof(google.visualization) == 'undefined')
+        {
+            this.$errorElement.html("No internet connection");
+            this.$element.addClass('error');
+            return false;
+        }
+
         Craft.queueActionRequest('analytics/getCountReport', data, $.proxy(function(response) {
 
             if(typeof(response.error) != 'undefined') {
-                $('.inject', this.$error).html(response.error);
-                this.$error.removeClass('hidden');
-                $(this.$element).addClass('error');
+                // $('.inject', this.$error).html(response.error);
+                // this.$error.removeClass('hidden');
+                // $(this.$element).addClass('error');
+                this.$errorElement.html(response.error);
+                this.$element.addClass('error');
             } else {
                 this.$inject.html(response.html);
             }
@@ -38,6 +48,13 @@ AnalyticsReport = Garnish.Base.extend({
         this.$reportElements = $('.analyticsTab', this.$element);
         this.$charts = [];
         this.$chartData = [];
+
+        if(typeof(google.visualization) == 'undefined')
+        {
+            this.$errorElement.html("No internet connection");
+            this.$element.addClass('error');
+            return false;
+        }
 
         // console.log('widget id', element, $id);
 
@@ -101,7 +118,7 @@ AnalyticsReport = Garnish.Base.extend({
             {
                 // handle error
                 this.$errorElement.html(response.error);
-                this.$element.addClass('analytics-error');
+                this.$element.addClass('error');
             }
             else
             {

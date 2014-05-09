@@ -17,6 +17,7 @@ class Analytics_ReportsWidget extends BaseWidget
 	private $types = array(
         'acquisition' => "Acquisition",
         'counts'      => "Counts",
+        'custom'      => "Custom",
         'geo'         => "Geo",
         'mobile'      => "Mobile",
         'pages'       => "Pages",
@@ -25,17 +26,13 @@ class Analytics_ReportsWidget extends BaseWidget
         'visits'      => "Visits"
 	);
 
-    // public function isSelectable()
-    // {
-    //     return false;
-    // }
-
     protected function defineSettings()
     {
         return array(
            'name' => array(AttributeType::String),
            'type' => array(AttributeType::String),
            'colspan' => array(AttributeType::Number, 'default' => 2),
+           'options' => array(AttributeType::Mixed),
         );
     }
 
@@ -93,7 +90,8 @@ class Analytics_ReportsWidget extends BaseWidget
         $settings = $this->getSettings();
 
         $variables = array(
-            'settings' => $plugin->getSettings(),
+            'pluginSettings' => $plugin->getSettings(),
+            'settings' => $this->getSettings(),
             'colspan' => $this->getColspan(),
             'type' => $settings['type'],
             'widget' => $this,
@@ -109,6 +107,11 @@ class Analytics_ReportsWidget extends BaseWidget
 
             case 'realtime':
             craft()->templates->includeJs('new AnalyticsRealtimeReport("analytics-widget-'.$this->model->id.'");');
+            break;
+
+            case 'custom':
+            craft()->templates->includeJs('new AnalyticsCustomReport("analytics-widget-'.$this->model->id.'");');
+            return craft()->templates->render('analytics/widgets/customReport', $variables);
             break;
 
             default:

@@ -1,25 +1,32 @@
 @import url("AnalyticsCommon.less");
 @import url("AnalyticsTabs.less");
 @import url("AnalyticsCharts.less");
+@import url("AnalyticsCustomReport.less");
 
 .analytics-report {
     // .chart {
     //     min-height: 200px;
     // }
 
-    &.analytics-error {
-        .analytics-tabs {
-            display: none;
-        }
-        .error {
-            background: url("../images/error.png") no-repeat center 20px;
-            padding-top: 90px;
-            text-align: center;
+    &.error {
+        background: url("../images/error.png") no-repeat center 20px;
+        padding-top: 80px;
+        padding-bottom: 10px;
+        text-align: center;
 
+        .error {
             color: #aaa !important;
         }
 
         .chart {
+            display: none;
+        }
+
+        .analytics-nav {
+            display: none;
+        }
+
+        .more {
             display: none;
         }
     }

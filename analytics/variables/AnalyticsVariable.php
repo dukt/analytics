@@ -31,7 +31,14 @@ class AnalyticsVariable
 
     public function getProfile()
     {
-        return craft()->analytics->getProfile();
+        try
+        {
+            return craft()->analytics->getProfile();
+        }
+        catch(\Exception $e)
+        {
+            $r['error'] = $e->getMessage();
+        }
     }
 
     public function getWebProperty()

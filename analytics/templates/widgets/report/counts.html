@@ -12,14 +12,11 @@
     <div
         id="analytics-widget-{{widget.model.id}}"
         data-widget-id="{{widget.model.id}}"
-        class="analytics-report-count {{'analytics-colspan-'~colspan}}">
+        class="analytics-report analytics-report-count {{'analytics-colspan-'~colspan}}">
 
        <div class="analytics-inject"></div>
 
-        <div class="analytics-error error center hidden">
-            <div class="inject"></div>
-            <p><a class="btn icon settings" href="{{url('settings/plugins/analytics')}}">{{"Analytics Settings"|t}}</a></p>
-        </div>
+        <div class="error"></div>
 
     </div>
 
