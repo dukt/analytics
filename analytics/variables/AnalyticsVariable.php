@@ -61,8 +61,8 @@ class AnalyticsVariable
         return craft()->analytics->getAccount();
     }
 
-    public function api()
+    public function api($options)
     {
-        return craft()->analytics->api();
+        return craft()->analytics->api($options);
     }
 }

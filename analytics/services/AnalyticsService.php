@@ -19,6 +19,258 @@ use \Google_Service_Analytics;
 
 class AnalyticsService extends BaseApplicationComponent
 {
+    public function api($options)
+    {
+        try
+        {
+            $profile = craft()->analytics->getProfile();
+
+            $response = array(
+                'cols' => array(),
+                'rows' => array(),
+                'success' => false,
+                'error' => false
+            );
+
+            $ids = 'ga:'.$profile['id'];
+            $start = null;
+            $end = null;
+            $metrics = null;
+
+            if(isset($options['start-date']))
+            {
+                $start = $options['start-date'];
+                unset($options['start-date']);
+            }
+
+            if(isset($options['start-date']))
+            {
+                $end = $options['end-date'];
+                unset($options['end-date']);
+            }
+
+            if(isset($options['start-date']))
+            {
+                $metrics = $options['metrics'];
+                unset($options['metrics']);
+            }
+
+            // request
+
+            $apiResponse = null;
+            $enableCache = true;
+
+            if(craft()->config->get('disableCache', 'analytics') == true)
+            {
+                $enableCache = false;
+            }
+
+            if($enableCache)
+            {
+                $cacheKey = 'analytics/template/'.md5(serialize(array(
+                    $ids,
+                    $start,
+                    $end,
+                    $metrics,
+                    $options
+                )));
+
+                $apiResponse = craft()->fileCache->get($cacheKey);
+            }
+
+            if(!$apiResponse)
+            {
+                // call controller
+                $apiResponse = craft()->analytics->apiGet($ids, $start, $end, $metrics, $options);
+
+                if($enableCache)
+                {
+                    craft()->fileCache->set($cacheKey, $apiResponse, craft()->analytics->cacheExpiry());
+                }
+            }
+
+            if($apiResponse)
+            {
+                $response['cols'] = $apiResponse['cols'];
+                $response['rows'] = $apiResponse['rows'];
+
+
+                // simplify cols
+
+                foreach($response['cols'] as $k => $col)
+                {
+                    $colName = $col->name;
+
+                    if(strpos($colName, 'ga:') === 0)
+                    {
+                        $colName = substr($colName, 3);
+                    }
+
+                    $response['cols'][$k]->name = $colName;
+                }
+
+
+                // simplify rows
+
+                foreach($response['rows'] as $k => $v)
+                {
+                    foreach($v as $k2 => $v2)
+                    {
+                        if(strpos($k2, 'ga:') === 0)
+                        {
+                            $newKey = substr($k2, 3);
+
+                            if($newKey != $k2)
+                            {
+                                $response['rows'][$k][$newKey] = $v2;
+                                unset($response['rows'][$k][$k2]);
+                            }
+                        }
+                    }
+                }
+
+                $response['success'] = true;
+            }
+            else
+            {
+                throw new Exception("Couldn't get API response");
+            }
+        }
+        catch(\Exception $e)
+        {
+            $response['error'] = true;
+            $response['errorMessage'] = $e->getMessage();
+        }
+
+        return $response;
+    }
+
+    public function api_deprecated($options)
+    {
+        $results = array(
+            'cols' => array(),
+            'rows' => array(),
+            'success' => false,
+            'error' => false
+        );
+
+        try {
+            $profile = craft()->analytics->getProfile();
+
+            // // start
+
+            $start = date('Y-m-d', strtotime(date('Y-m-d').' -1 months'));
+
+            if(!empty($options['start']))
+            {
+                $start = $options['start'];
+            }
+
+            // end
+
+            $end = date('Y-m-d');
+
+            if(!empty($options['end']))
+            {
+                $end = $options['end'];
+            }
+
+            // metrics
+            if(!empty($options['metrics']))
+            {
+                $metrics = $options['metrics'];
+            }
+            else
+            {
+                throw new Exception("Missing option: metrics");
+            }
+
+            // params
+
+            $params = array();
+
+            if(!empty($options['dimensions']))
+            {
+                $params['dimensions'] = $options['dimensions'];
+            }
+            else
+            {
+                throw new Exception("Missing option: dimensions");
+            }
+
+            if(isset($options['params']) && is_array($options['params']))
+            {
+                $params = array_merge($params, $options['params']);
+            }
+
+            // request
+
+            $r = craft()->analytics->apiGet(
+                'ga:'.$profile['id'],
+                $start,
+                $end,
+                $metrics,
+                $params
+            );
+
+            if($r)
+            {
+                    $results['cols'] = $r['cols'];
+                    $results['rows'] = $r['rows'];
+
+                // simplify cols
+
+                foreach($results['cols'] as $k => $col)
+                {
+                    $colName = $col->name;
+
+                    if(strpos($colName, 'ga:') === 0)
+                    {
+                        $colName = substr($colName, 3);
+                    }
+
+                    $results['cols'][$k]->name = $colName;
+                }
+
+
+                // simplify rows
+
+                foreach($results['rows'] as $k => $v)
+                {
+                    foreach($v as $k2 => $v2)
+                    {
+                        if(strpos($k2, 'ga:') === 0)
+                        {
+                            $newKey = substr($k2, 3);
+
+                            if($newKey != $k2)
+                            {
+                                $results['rows'][$k][$newKey] = $v2;
+                                unset($results['rows'][$k][$k2]);
+                            }
+                        }
+                    }
+                }
+
+                $results['success'] = true;
+            }
+            else
+            {
+                throw new Exception("Couldn't get results");
+
+            }
+
+        }
+        catch(\Exception $e)
+        {
+            $results['error'] = true;
+            $results['errorMessage'] = $e->getMessage();
+        }
+
+        // return
+
+        return $results;
+    }
 
     public function getGeoRegionOpts($params)
     {
@@ -296,14 +548,19 @@ class AnalyticsService extends BaseApplicationComponent
 
     public function apiGet($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = array())
     {
-        $response = craft()->analytics->api()->data_ga->get($p1, $p2, $p3, $p4, $p5);
+        $api = $this->getApiObject();
 
-        return $this->parseApiResponse($response);
+        if($api)
+        {
+            $response = $api->data_ga->get($p1, $p2, $p3, $p4, $p5);
+
+            return $this->parseApiResponse($response);
+        }
     }
 
     public function apiRealtimeGet($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = array())
     {
-        $response = craft()->analytics->api()->data_realtime->get($p1, $p2, $p3, $p4, $p5);
+        $response = craft()->analytics->getApiObject()->data_realtime->get($p1, $p2, $p3, $p4, $p5);
 
         return $response;
         // return $this->parseApiResponse($response);
@@ -313,7 +570,7 @@ class AnalyticsService extends BaseApplicationComponent
     {
         $query = $data['query'];
 
-        $result = craft()->analytics->api()->data_ga->get(
+        $result = craft()->analytics->getApiObject()->data_ga->get(
             $query['param1'],
             $query['param2'],
             $query['param3'],
@@ -344,7 +601,7 @@ class AnalyticsService extends BaseApplicationComponent
         return $data;
     }
 
-    public function api()
+    public function getApiObject()
     {
         Craft::log(__METHOD__, LogLevel::Info, true);
 
@@ -416,7 +673,7 @@ class AnalyticsService extends BaseApplicationComponent
 
         if(!$profile && !empty($webProperty['accountId']))
         {
-            $profiles = $this->api()->management_profiles->listManagementProfiles($webProperty['accountId'], $webProperty['id']);
+            $profiles = $this->getApiObject()->management_profiles->listManagementProfiles($webProperty['accountId'], $webProperty['id']);
 
             $profile = $profiles['items'][0];
 
@@ -446,7 +703,7 @@ class AnalyticsService extends BaseApplicationComponent
 
             if(!$webProperty) {
 
-                $webProperties = $this->api()->management_webproperties->listManagementWebproperties("~all");
+                $webProperties = $this->getApiObject()->management_webproperties->listManagementWebproperties("~all");
 
                 foreach($webProperties['items'] as $webPropertyItem) {
 
@@ -476,7 +733,7 @@ class AnalyticsService extends BaseApplicationComponent
 
         try {
 
-            $api = craft()->analytics->api();
+            $api = craft()->analytics->getApiObject();
 
             if(!$api) {
 
@@ -535,7 +792,7 @@ class AnalyticsService extends BaseApplicationComponent
 
         // check if api is available
 
-        $api = craft()->analytics->api();
+        $api = craft()->analytics->getApiObject();
 
         if(!$api) {
             Craft::log(__METHOD__.' : Analytics API not available', LogLevel::Info, true);
