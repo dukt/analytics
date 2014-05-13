@@ -21,7 +21,7 @@ class AnalyticsPlugin extends BasePlugin
 
     function getVersion()
     {
-        return '1.1.64';
+        return '2.0.65';
     }
 
     function getDeveloper()
