@@ -1,0 +1,33 @@
+
+<h3>Keywords</h3>
+
+{% set results = craft.analytics.api({
+    'start-date': date('-1 year')|date("Y-m-d"),
+    'end-date': date()|date("Y-m-d"),
+    'metrics': 'ga:sessions',
+    'dimensions': 'ga:keyword',
+    'sort': '-ga:sessions',
+    'max-results': 10,
+    'filters': 'ga:keyword!=(not set);ga:keyword!=(not provided)'
+}) %}
+
+{% if results.success %}
+    <table class="table">
+
+        <tr>
+            {% for col in results.cols %}
+                <th>{{ col.name }}</th>
+            {% endfor %}
+        </tr>
+
+        {% for row in results.rows %}
+            <tr>
+                {% for col in results.cols %}
+                    <td>{{ row[col.name] }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    Error: {{ results.errorMessage }}
+{% endif %}

@@ -1,0 +1,32 @@
+
+<h3>Pages</h3>
+
+{% set results = craft.analytics.api({
+    'start-date': date('-7 days')|date("Y-m-d"),
+    'end-date': date()|date("Y-m-d"),
+    'metrics': 'ga:sessions',
+    'dimensions': 'ga:pagePath',
+    'sort': '-ga:sessions',
+    'max-results': 8,
+}) %}
+
+{% if results.success %}
+    <table class="table">
+
+        <tr>
+            {% for col in results.cols %}
+                <th>{{ col.name }}</th>
+            {% endfor %}
+        </tr>
+
+        {% for row in results.rows %}
+            <tr>
+                {% for col in results.cols %}
+                    <td>{{ row[col.name] }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    Error: {{ results.errorMessage }}
+{% endif %}

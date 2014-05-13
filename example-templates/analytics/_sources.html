@@ -1,0 +1,32 @@
+<h3>Sources</h3>
+
+{% set results = craft.analytics.api({
+    'start-date': '7daysAgo',
+    'end-date': 'today',
+    'metrics': 'ga:sessions',
+    'dimensions': 'ga:source',
+    'sort': '-ga:sessions',
+    'max-results': 10,
+    'filters': 'ga:source!=(not set);ga:source!=(not provided)'
+}) %}
+
+{% if results.success %}
+    <table class="table">
+
+        <tr>
+            {% for col in results.cols %}
+                <th>{{ col.name }}</th>
+            {% endfor %}
+        </tr>
+
+        {% for row in results.rows %}
+            <tr>
+                {% for col in results.cols %}
+                    <td>{{ row[col.name] }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    {{ results.errorMessage }}
+{% endif %}
