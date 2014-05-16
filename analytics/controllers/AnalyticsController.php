@@ -208,15 +208,11 @@ class AnalyticsController extends BaseController
     public function actionElementReport(array $variables = array())
     {
         try {
-            $elementId = craft()->request->getParam('id');
+            $uri = craft()->request->getParam('uri');
             $metric = craft()->request->getParam('metric');
-            $element = craft()->elements->getElementById($elementId);
 
-
-            if($element->uri)
+            if($uri)
             {
-                $uri = $element->uri;
-
                 if($uri == '__home__')
                 {
                     $uri = '';
