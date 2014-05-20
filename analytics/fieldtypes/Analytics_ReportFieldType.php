@@ -42,15 +42,18 @@ class Analytics_ReportFieldType extends BaseFieldType
 
         if($this->element->uri)
         {
+            $uri = craft()->analytics->getElementUrlPath($this->element->id, $this->element->locale);
+
             craft()->templates->includeJs('new AnalyticsField("'.$namespacedId.'-field");');
 
             $variables = array(
-                'isNew' => false,
-                'hasUrl' => true,
-                'id'    => $id,
-                'name'  => $name,
-                'value' => $value,
-                'model' => $this->model,
+                'isNew'   => false,
+                'hasUrl'  => true,
+                'id'      => $id,
+                'uri'     => $uri,
+                'name'    => $name,
+                'value'   => $value,
+                'model'   => $this->model,
                 'element' => $this->element,
             );
         }

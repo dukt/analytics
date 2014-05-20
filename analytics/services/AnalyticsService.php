@@ -19,6 +19,23 @@ use \Google_Service_Analytics;
 
 class AnalyticsService extends BaseApplicationComponent
 {
+    public function getElementUrlPath($elementId, $locale)
+    {
+        $element = craft()->elements->getElementById($elementId, null, $locale);
+
+        $uri = $element->uri;
+        $url = $element->url;
+
+        $components = parse_url($url);
+
+        if($components['path'])
+        {
+            $uri = $components['path'];
+        }
+
+        return $uri;
+    }
+
     public function api($options)
     {
         try

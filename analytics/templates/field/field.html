@@ -10,10 +10,11 @@
 
     {% if hasUrl %}
         <div
-            data-element-uri="{{element.uri}}"
+            data-element-id="{{ element.id }}"
+            data-locale="{{ element.locale }}"
             class="analytics-field">
 
-            <span class="uri light right">&nbsp; URI: /{{element.uri}}</span>
+            <span class="uri light right">&nbsp; URI: {{ uri }}</span>
 
             {{ forms.select({
                 class:'analytics-metric',

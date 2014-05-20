@@ -11,7 +11,8 @@ AnalyticsField = Garnish.Base.extend({
 
         this.$metricElement = $('.analytics-metric select', this.$element);
         this.$chartElement = $('.chart', this.$element);
-        this.$elementUri = $('.analytics-field', this.$element).data('element-uri');
+        this.$elementId = $('.analytics-field', this.$element).data('element-id');
+        this.$locale = $('.analytics-field', this.$element).data('locale');
         this.$chart = false;
 
         if(typeof(google.visualization) == 'undefined')
@@ -42,7 +43,7 @@ AnalyticsField = Garnish.Base.extend({
 
         this.$spinner.removeClass('hidden');
 
-        Craft.postActionRequest('analytics/elementReport', { uri: this.$elementUri, metric: this.$metric }, $.proxy(function(response) {
+        Craft.postActionRequest('analytics/elementReport', { elementId: this.$elementId, locale: this.$locale, metric: this.$metric }, $.proxy(function(response) {
 
             this.$spinner.addClass('hidden');
 

@@ -208,8 +208,11 @@ class AnalyticsController extends BaseController
     public function actionElementReport(array $variables = array())
     {
         try {
-            $uri = craft()->request->getParam('uri');
-            $metric = craft()->request->getParam('metric');
+            $elementId = craft()->request->getRequiredParam('elementId');
+            $locale = craft()->request->getRequiredParam('locale');
+            $metric = craft()->request->getRequiredParam('metric');
+
+            $uri = craft()->analytics->getElementUrlPath($elementId, $locale);
 
             if($uri)
             {
@@ -221,12 +224,13 @@ class AnalyticsController extends BaseController
                 $profile = craft()->analytics->getProfile();
                 $start = date('Y-m-d', strtotime('-1 month'));
                 $end = date('Y-m-d');
+                $end = date('Y-m-d');
                 $metrics = $metric;
                 $dimensions = 'ga:date';
 
                 $options = array(
                         'dimensions' => $dimensions,
-                        'filters' => "ga:pagePath==/".$uri
+                        'filters' => "ga:pagePath==".$uri
                     );
 
                 $data = array(
@@ -272,6 +276,8 @@ class AnalyticsController extends BaseController
                         $metrics,
                         $options
                     );
+
+                    //var_dump($options);
                 }
 
                 $this->returnJson(array('apiResponse' => $response));
