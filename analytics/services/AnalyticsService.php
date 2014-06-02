@@ -620,52 +620,50 @@ class AnalyticsService extends BaseApplicationComponent
 
     public function getApiObject()
     {
-        Craft::log(__METHOD__, LogLevel::Info, true);
-
         $handle = 'google';
         $namespace = 'analytics.system';
-
-
-        // get token
-
-        $token = craft()->oauth->getSystemToken($handle, $namespace);
 
 
         // provider
 
         $provider = craft()->oauth->getProvider($handle);
 
-        if(!$provider) {
-
+        if(!$provider)
+        {
             Craft::log(__METHOD__.' : Could not get provider connected', LogLevel::Info, true);
-
             return false;
         }
 
-        if(!$token) {
 
+        // token
+
+        $token = craft()->oauth->getSystemToken($handle, $namespace);
+
+        if(!$token)
+        {
             Craft::log(__METHOD__.' : No token defined', LogLevel::Info, true);
-
             return false;
         }
 
-
-        // init api
-
+        // client
         $client = new Google_Client();
         $client->setApplicationName('Google+ PHP Starter Application');
         $client->setClientId($provider->clientId);
         $client->setClientSecret($provider->clientSecret);
         $client->setRedirectUri($provider->getRedirectUri());
 
-        $api = new Google_Service_Analytics($client);
-
+        // token
         $realToken = $token->getRealToken();
-        $realToken->created = 0;
-        $realToken->expires_in = $realToken->expires;
-        $realToken = json_encode($realToken);
 
-        $client->setAccessToken($realToken);
+        $arrayToken = array();
+        $arrayToken['created'] = 0;
+        $arrayToken['access_token'] = $realToken->getAccessToken();
+        $arrayToken['expires_in'] = $realToken->getEndOfLife();
+        $arrayToken = json_encode($arrayToken);
+
+        $client->setAccessToken($arrayToken);
+
+        $api = new Google_Service_Analytics($client);
 
         return $api;
     }
