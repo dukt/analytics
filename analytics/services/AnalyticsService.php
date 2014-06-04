@@ -12,13 +12,13 @@
 
 namespace Craft;
 
-require_once(CRAFT_PLUGINS_PATH.'analytics/vendor/autoload.php');
-
 use \Google_Client;
 use \Google_Service_Analytics;
 
 class AnalyticsService extends BaseApplicationComponent
 {
+    private $oauthHandle = 'google';
+
     public function getToken()
     {
         $plugin = craft()->plugins->getPlugin('analytics');
@@ -26,57 +26,24 @@ class AnalyticsService extends BaseApplicationComponent
 
         if(!empty($settings['token']))
         {
+            // get token from settings
             $token = unserialize(base64_decode($settings['token']));
 
-            $provider = craft()->oauth->getProvider('google');
-            $provider->setRealToken($token);
 
-            $token = $provider->source->storage->retrieveAccessToken('Google');
+            // will refresh token if needed
+            $token = craft()->oauth->refreshToken($this->oauthHandle, $token);
 
-            if(time() > $token->getEndOfLife())
+            if($token)
             {
-                // refresh token
-                $token = $provider->source->service->refreshAccessToken($token);
-
                 // save token
                 $plugin = craft()->plugins->getPlugin('analytics');
-                $settings = array('token' => base64_encode(serialize($token)));
+                $settings = $plugin->getSettings();
+                $settings['token'] = base64_encode(serialize($token));
                 craft()->plugins->savePluginSettings($plugin, $settings);
+
+                return $token;
             }
-
-            return $token;
         }
-    }
-
-    public function getEncodedToken()
-    {
-        $token = $this->getToken();
-
-        if($token)
-        {
-            return base64_encode(serialize($token));
-        }
-    }
-
-    public function connect($provider, $token)
-    {
-        // retrieve social user from uid
-
-        // $provider->source->setRealToken($token);
-        // $account = $provider->getAccount();
-
-        $plugin = craft()->plugins->getPlugin('analytics');
-
-        $settings = array('token' => base64_encode(serialize($token)));
-        craft()->plugins->savePluginSettings($plugin, $settings);
-    }
-
-    public function disconnect()
-    {
-        $plugin = craft()->plugins->getPlugin('analytics');
-
-        $settings = array('token' => null);
-        craft()->plugins->savePluginSettings($plugin, $settings);
     }
 
     public function getElementUrlPath($elementId, $locale)
@@ -680,9 +647,7 @@ class AnalyticsService extends BaseApplicationComponent
 
     public function getApiObject()
     {
-        $handle = 'google';
-        $namespace = 'analytics.system';
-
+        $handle = $this->oauthHandle;
 
         // provider
 
@@ -723,16 +688,6 @@ class AnalyticsService extends BaseApplicationComponent
         else
         {
             Craft::log(__METHOD__.' : No token defined', LogLevel::Info, true);
-            return false;
-        }
-    }
-
-    public function getAccount()
-    {
-
-        try {
-            return @craft()->oauth->getAccount('google', 'analytics.system');
-        } catch(\Exception $e) {
             return false;
         }
     }
@@ -904,18 +859,6 @@ class AnalyticsService extends BaseApplicationComponent
 
         if(!$oauth->isInstalled) {
             Craft::log(__METHOD__.' : OAuth plugin not installed', LogLevel::Info, true);
-            return false;
-        }
-
-
-        // try to get an account
-
-        $token = craft()->oauth->getSystemToken('google', 'analytics.system');
-
-        if(!$token)
-        {
-            Craft::log(__METHOD__." : Couldn't find a valid token", LogLevel::Info, true);
-
             return false;
         }
 

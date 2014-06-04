@@ -14,42 +14,70 @@ namespace Craft;
 
 class AnalyticsController extends BaseController
 {
+    private $handle = 'google';
+
+    private $scopes = array(
+        'userinfo_profile',
+        'userinfo_email',
+        'analytics'
+    );
+
+    private $params = array(
+        'access_type' => 'offline',
+        'approval_prompt' => 'force'
+    );
+
+    /**
+     * Connect
+     */
     public function actionConnect()
     {
-        $handle = 'google';
-
-        // request params
-        $redirect = craft()->request->getParam('redirect');
-        $errorRedirect = craft()->request->getParam('errorRedirect');
-
-        // provider scopes & params
-        $scopes = array(
-            'userinfo_profile',
-            'userinfo_email',
-            'analytics'
-
-        );
-        $params = array(
-            'access_type' => 'offline',
-            'approval_prompt' => 'force'
-        );
+        // redirect
+        $redirect = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null;
 
         // session vars
         craft()->oauth->sessionClean();
-        craft()->httpSession->add('oauth.referer', (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null));
-        craft()->httpSession->add('oauth.scopes', $scopes);
-        craft()->httpSession->add('oauth.params', $params);
+        craft()->httpSession->add('oauth.plugin', 'analytics');
+        craft()->httpSession->add('oauth.redirect', $redirect);
+        craft()->httpSession->add('oauth.scopes', $this->scopes);
+        craft()->httpSession->add('oauth.params', $this->params);
 
         // redirect
-        $redirect = UrlHelper::getActionUrl('oauth/public/connect/', array('provider' => $handle));
+
+        $this->redirect(UrlHelper::getActionUrl('oauth/public/connect/', array(
+            'provider' => $this->handle
+        )));
+    }
+
+    /**
+     * Disconnect
+     */
+    public function actionDisconnect()
+    {
+
+        // get plugin settings
+        $plugin = craft()->plugins->getPlugin('analytics');
+        $settings = $plugin->getSettings();
+
+        // remove token from plugin settings
+        $settings['token'] = null;
+
+        craft()->plugins->savePluginSettings($plugin, $settings);
+
+        // set notice
+        craft()->userSession->setNotice(Craft::t("Disconnected from Google Analytics."));
+
+        // redirect
+        $redirect = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null;
         $this->redirect($redirect);
     }
 
-    public function actionDisconnect()
-    {
-        craft()->analytics->disconnect();
-        $this->redirect($_SERVER['HTTP_REFERER']);
-    }
+
+
+
+
+
+
 
     public function actionGetCountReport()
     {

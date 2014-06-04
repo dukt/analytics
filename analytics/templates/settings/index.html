@@ -4,116 +4,12 @@
 
 {% if craft.oauth is not defined %}
 
-    <h2 class="first">{{'OAuth Not Installed'|t}}</h2>
-
-
-    {% set oauth = craft.plugins.getPlugin('oauth', false) %}
-
-    {% if oauth %}
-        {% if not oauth.isInstalled %}
-            <p>{{'OAuth plugin is present but not installed. Please install & enable it.'|t}}</p>
-        {% elseif not oauth.isEnabled %}
-            <p>{{'OAuth is installed but is disabled. Please enable it.'|t}}</p>
-        {% else %}
-            {{'OAuth is ready'|t}}
-        {% endif %}
-
-        <p>
-            <a class="btn" href="{{url('settings/plugins')}}">{{'Manage plugins'|t}}</a>
-        </p>
-    {% else %}
-        <p>{{'Analytics plugin requires OAuth plugin for Craft.'|t}}</p>
-
-        <p>
-            <a class="btn" href="{{actionUrl('analytics/plugin/download', {plugin:'oauth'})}}">{{'Download OAuth plugin'|t}}</a>
-        </p>
-    {% endif %}
+    {# OAuth plugin not installed, let's install it #}
+    {% include 'analytics/settings/_oauth' %}
 
 {% else %}
 
-    {% set provider = craft.oauth.getProvider('google') %}
-
-
-    {% if not provider.isConfigured %}
-        <h2 class="first">{{'Google provider not configured'|t}}</h2>
-        <p>{{'Please fill API client id & secret for Analytics provider.'|t}}</p>
-
-        <p>
-            <a class="btn" href="{{url('oauth/settings/google')}}">{{'Google OAuth settings'|t}}</a>
-        </p>
-    {% else %}
-
-        {% set token = craft.analytics.token %}
-
-        {% if token %}
-
-            {% set void = provider.setRealToken(token) %}
-            {% set account = provider.getAccount() %}
-
-            <input type="hidden" name="token" value="{{craft.analytics.encodedToken}}" />
-
-            <h2 class="first">{{'Google Analytics Account'|t}}</h2>
-
-            <p>{{'You are authenticated to Google Analytics with the following account'|t}} :</p>
-
-            <ul>
-                <li><strong>{{'UID'|t}} : </strong> {{account.uid}}</li>
-                <li><strong>{{'Name'|t}} : </strong> {{account.name}}</li>
-            </ul>
-
-            <p>
-                <a class="btn small" href="{{ actionUrl('analytics/disconnect') }}">{{'Disconnect'|t}}</a>
-            </p>
-
-            <hr />
-
-            <h2 class="first">{{'Plugin Settings'|t}}</h2>
-
-            {{ forms.selectField({
-                first: true,
-                label: "Web Profile"|t,
-                instructions: "Select an Analytics web profile to associate with your Craft website"|t,
-                options: craft.analytics.properties(),
-                name: 'profileId',
-                value: settings.profileId
-            }) }}
-
-            {{ forms.textField({
-                label: "Real-Time Refresh Interval"|t,
-                instructions: "Interval in seconds between request to real-time API"|t,
-                name: 'realtimeRefreshInterval',
-                value: (settings.realtimeRefreshInterval ? settings.realtimeRefreshInterval : '10'),
-                size: 4
-            }) }}
-
-            <p>
-                <input type="submit" class="btn submit force" value="{{'Save'|t}}">
-            </p>
-
-        {% else %}
-
-            <h2 class="first">{{'Google Analytics Account'|t}}</h2>
-
-            <p>{{'You need to connect Craft to a Google account in order to get started.'|t}}</p>
-
-            <p>{{"Getting errors trying to connect"|t}} ? <a href="{{url('oauth/settings/google')}}">{{"Check Google API key & secret in OAuth settings"|t}}</a>.</p>
-
-            {% set scopes = [
-                'userinfo_profile',
-                'userinfo_email',
-                'analytics'
-                ] %}
-
-            {% set params = {
-                access_type: 'offline',
-                approval_prompt: 'force'
-            } %}
-
-            <p>
-                <a class="btn submit" href="{{ actionUrl('analytics/connect') }}">{{"Connect to Google Analytics"|t}}</a>
-            </p>
-
-        {% endif %}
-    {% endif %}
+    {# Plugin Settings #}
+    {% include 'analytics/settings/_plugin' %}
 
 {% endif %}

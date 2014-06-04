@@ -12,12 +12,29 @@
 
 namespace Craft;
 
+require_once(CRAFT_PLUGINS_PATH.'analytics/vendor/autoload.php');
+
 class AnalyticsPlugin extends BasePlugin
 {
     public function init()
     {
         craft()->on('oauth.connect', function(Event $event) {
-            craft()->analytics->connect($event->params['provider'], $event->params['token']);
+            if(craft()->httpSession->get('oauth.plugin') == 'analytics')
+            {
+                // token
+                $token = $event->params['token'];
+
+                // get plugin settings
+                $plugin = craft()->plugins->getPlugin('analytics');
+                $settings = $plugin->getSettings();
+
+                // save token to plugin settings
+                $settings['token'] = base64_encode(serialize($token));
+                craft()->plugins->savePluginSettings($plugin, $settings);
+
+                // session notice
+                craft()->userSession->setNotice(Craft::t("Connected to Google Analytics."));
+            }
         });
     }
 
