@@ -14,6 +14,14 @@ namespace Craft;
 
 class AnalyticsVariable
 {
+    public function getToken()
+    {
+        return craft()->analytics->getToken();
+    }
+    public function getEncodedToken()
+    {
+        return craft()->analytics->getEncodedToken();
+    }
     public function getMetricOpts($params = array())
     {
         return craft()->analytics->getMetricOpts($params);

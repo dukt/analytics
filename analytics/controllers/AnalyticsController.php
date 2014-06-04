@@ -14,6 +14,43 @@ namespace Craft;
 
 class AnalyticsController extends BaseController
 {
+    public function actionConnect()
+    {
+        $handle = 'google';
+
+        // request params
+        $redirect = craft()->request->getParam('redirect');
+        $errorRedirect = craft()->request->getParam('errorRedirect');
+
+        // provider scopes & params
+        $scopes = array(
+            'userinfo_profile',
+            'userinfo_email',
+            'analytics'
+
+        );
+        $params = array(
+            'access_type' => 'offline',
+            'approval_prompt' => 'force'
+        );
+
+        // session vars
+        craft()->oauth->sessionClean();
+        craft()->httpSession->add('oauth.referer', (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null));
+        craft()->httpSession->add('oauth.scopes', $scopes);
+        craft()->httpSession->add('oauth.params', $params);
+
+        // redirect
+        $redirect = UrlHelper::getActionUrl('oauth/public/connect/', array('provider' => $handle));
+        $this->redirect($redirect);
+    }
+
+    public function actionDisconnect()
+    {
+        craft()->analytics->disconnect();
+        $this->redirect($_SERVER['HTTP_REFERER']);
+    }
+
     public function actionGetCountReport()
     {
         try {

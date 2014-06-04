@@ -43,15 +43,14 @@
         </p>
     {% else %}
 
-        {% set account = false %}
-        {% set token = craft.oauth.getSystemToken('google', 'analytics.system') %}
+        {% set token = craft.analytics.token %}
 
         {% if token %}
-            {% set void = provider.setToken(token) %}
-            {% set account = provider.getAccount() %}
-        {% endif %}
 
-        {% if account %}
+            {% set void = provider.setRealToken(token) %}
+            {% set account = provider.getAccount() %}
+
+            <input type="hidden" name="token" value="{{craft.analytics.encodedToken}}" />
 
             <h2 class="first">{{'Google Analytics Account'|t}}</h2>
 
@@ -63,7 +62,7 @@
             </ul>
 
             <p>
-                <a class="btn small" href="{{craft.oauth.disconnect('google', 'analytics.system')}}">{{'Disconnect'|t}}</a>
+                <a class="btn small" href="{{ actionUrl('analytics/disconnect') }}">{{'Disconnect'|t}}</a>
             </p>
 
             <hr />
@@ -111,7 +110,7 @@
             } %}
 
             <p>
-                <a class="btn submit" href="{{craft.oauth.connect('google', scopes, 'analytics.system', params)}}">{{"Connect to Google Analytics"|t}}</a>
+                <a class="btn submit" href="{{ actionUrl('analytics/connect') }}">{{"Connect to Google Analytics"|t}}</a>
             </p>
 
         {% endif %}

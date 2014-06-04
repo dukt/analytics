@@ -19,6 +19,66 @@ use \Google_Service_Analytics;
 
 class AnalyticsService extends BaseApplicationComponent
 {
+    public function getToken()
+    {
+        $plugin = craft()->plugins->getPlugin('analytics');
+        $settings = $plugin->getSettings();
+
+        if(!empty($settings['token']))
+        {
+            $token = unserialize(base64_decode($settings['token']));
+
+            $provider = craft()->oauth->getProvider('google');
+            $provider->setRealToken($token);
+
+            $token = $provider->source->storage->retrieveAccessToken('Google');
+
+            if(time() > $token->getEndOfLife())
+            {
+                // refresh token
+                $token = $provider->source->service->refreshAccessToken($token);
+
+                // save token
+                $plugin = craft()->plugins->getPlugin('analytics');
+                $settings = array('token' => base64_encode(serialize($token)));
+                craft()->plugins->savePluginSettings($plugin, $settings);
+            }
+
+            return $token;
+        }
+    }
+
+    public function getEncodedToken()
+    {
+        $token = $this->getToken();
+
+        if($token)
+        {
+            return base64_encode(serialize($token));
+        }
+    }
+
+    public function connect($provider, $token)
+    {
+        // retrieve social user from uid
+
+        // $provider->source->setRealToken($token);
+        // $account = $provider->getAccount();
+
+        $plugin = craft()->plugins->getPlugin('analytics');
+
+        $settings = array('token' => base64_encode(serialize($token)));
+        craft()->plugins->savePluginSettings($plugin, $settings);
+    }
+
+    public function disconnect()
+    {
+        $plugin = craft()->plugins->getPlugin('analytics');
+
+        $settings = array('token' => null);
+        craft()->plugins->savePluginSettings($plugin, $settings);
+    }
+
     public function getElementUrlPath($elementId, $locale)
     {
         $element = craft()->elements->getElementById($elementId, null, $locale);
@@ -636,36 +696,35 @@ class AnalyticsService extends BaseApplicationComponent
 
 
         // token
+        $realToken = craft()->analytics->getToken();
 
-        $token = craft()->oauth->getSystemToken($handle, $namespace);
+        if($realToken)
+        {
+            // make token compatible with Google library
+            $arrayToken = array();
+            $arrayToken['created'] = 0;
+            $arrayToken['access_token'] = $realToken->getAccessToken();
+            $arrayToken['expires_in'] = $realToken->getEndOfLife();
+            $arrayToken = json_encode($arrayToken);
 
-        if(!$token)
+
+            // client
+            $client = new Google_Client();
+            $client->setApplicationName('Google+ PHP Starter Application');
+            $client->setClientId($provider->clientId);
+            $client->setClientSecret($provider->clientSecret);
+            $client->setRedirectUri($provider->getRedirectUri());
+            $client->setAccessToken($arrayToken);
+
+            $api = new Google_Service_Analytics($client);
+
+            return $api;
+        }
+        else
         {
             Craft::log(__METHOD__.' : No token defined', LogLevel::Info, true);
             return false;
         }
-
-        // client
-        $client = new Google_Client();
-        $client->setApplicationName('Google+ PHP Starter Application');
-        $client->setClientId($provider->clientId);
-        $client->setClientSecret($provider->clientSecret);
-        $client->setRedirectUri($provider->getRedirectUri());
-
-        // token
-        $realToken = $token->getRealToken();
-
-        $arrayToken = array();
-        $arrayToken['created'] = 0;
-        $arrayToken['access_token'] = $realToken->getAccessToken();
-        $arrayToken['expires_in'] = $realToken->getEndOfLife();
-        $arrayToken = json_encode($arrayToken);
-
-        $client->setAccessToken($arrayToken);
-
-        $api = new Google_Service_Analytics($client);
-
-        return $api;
     }
 
     public function getAccount()

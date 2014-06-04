@@ -14,6 +14,13 @@ namespace Craft;
 
 class AnalyticsPlugin extends BasePlugin
 {
+    public function init()
+    {
+        craft()->on('oauth.connect', function(Event $event) {
+            craft()->analytics->connect($event->params['provider'], $event->params['token']);
+        });
+    }
+
     function getName()
     {
         return Craft::t('Analytics');
@@ -39,6 +46,7 @@ class AnalyticsPlugin extends BasePlugin
         return array(
             'profileId' => array(AttributeType::String),
             'realtimeRefreshInterval' => array(AttributeType::Number),
+            'token' => array(AttributeType::String),
         );
     }
 
