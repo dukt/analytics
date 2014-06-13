@@ -32,21 +32,12 @@ class AnalyticsController extends BaseController
      */
     public function actionConnect()
     {
-        // redirect
-        $redirect = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null;
-
-        // session vars
-        craft()->oauth->sessionClean();
-        craft()->httpSession->add('oauth.plugin', 'analytics');
-        craft()->httpSession->add('oauth.redirect', $redirect);
-        craft()->httpSession->add('oauth.scopes', $this->scopes);
-        craft()->httpSession->add('oauth.params', $this->params);
-
-        // redirect
-
-        $this->redirect(UrlHelper::getActionUrl('oauth/public/connect/', array(
-            'provider' => $this->handle
-        )));
+        craft()->oauth->connect(array(
+            'plugin' => 'analytics',
+            'provider' => $this->handle,
+            'scopes' => $this->scopes,
+            'params' => $this->params
+        ));
     }
 
     /**
@@ -54,29 +45,16 @@ class AnalyticsController extends BaseController
      */
     public function actionDisconnect()
     {
-
-        // get plugin settings
-        $plugin = craft()->plugins->getPlugin('analytics');
-        $settings = $plugin->getSettings();
-
-        // remove token from plugin settings
-        $settings['token'] = null;
-
-        craft()->plugins->savePluginSettings($plugin, $settings);
+        // reset token
+        craft()->analytics->saveToken(null);
 
         // set notice
         craft()->userSession->setNotice(Craft::t("Disconnected from Google Analytics."));
 
         // redirect
-        $redirect = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null;
+        $redirect = craft()->request->getUrlReferrer();
         $this->redirect($redirect);
     }
-
-
-
-
-
-
 
 
     public function actionGetCountReport()

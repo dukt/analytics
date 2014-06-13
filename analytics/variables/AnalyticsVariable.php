@@ -16,7 +16,14 @@ class AnalyticsVariable
 {
     public function getToken()
     {
-        return craft()->analytics->getToken();
+        try {
+            return craft()->analytics->getToken();
+        }
+        catch(\Exception $e)
+        {
+            // todo
+        }
+
     }
 
     public function getMetricOpts($params = array())
@@ -59,11 +66,6 @@ class AnalyticsVariable
     public function properties()
     {
         return craft()->analytics->properties();
-    }
-
-    public function getAccount()
-    {
-        return craft()->analytics->getAccount();
     }
 
     public function api($options)

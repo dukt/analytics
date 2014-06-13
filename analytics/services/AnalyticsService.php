@@ -19,6 +19,22 @@ class AnalyticsService extends BaseApplicationComponent
 {
     private $oauthHandle = 'google';
 
+    public function saveToken($token)
+    {
+        // get plugin settings
+        $plugin = craft()->plugins->getPlugin('analytics');
+        $settings = $plugin->getSettings();
+
+        // save token to plugin settings
+        if($token)
+        {
+            $token = base64_encode(serialize($token));
+        }
+
+        $settings['token'] = $token;
+        craft()->plugins->savePluginSettings($plugin, $settings);
+    }
+
     public function getToken()
     {
         $plugin = craft()->plugins->getPlugin('analytics');
@@ -29,17 +45,14 @@ class AnalyticsService extends BaseApplicationComponent
             // get token from settings
             $token = unserialize(base64_decode($settings['token']));
 
-
             // will refresh token if needed
             $token = craft()->oauth->refreshToken($this->oauthHandle, $token);
 
             if($token)
             {
                 // save token
-                $plugin = craft()->plugins->getPlugin('analytics');
-                $settings = $plugin->getSettings();
-                $settings['token'] = base64_encode(serialize($token));
-                craft()->plugins->savePluginSettings($plugin, $settings);
+
+                $this->saveToken($token);
 
                 return $token;
             }

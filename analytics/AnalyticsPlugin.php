@@ -16,28 +16,6 @@ require_once(CRAFT_PLUGINS_PATH.'analytics/vendor/autoload.php');
 
 class AnalyticsPlugin extends BasePlugin
 {
-    public function init()
-    {
-        craft()->on('oauth.connect', function(Event $event) {
-            if(craft()->httpSession->get('oauth.plugin') == 'analytics')
-            {
-                // token
-                $token = $event->params['token'];
-
-                // get plugin settings
-                $plugin = craft()->plugins->getPlugin('analytics');
-                $settings = $plugin->getSettings();
-
-                // save token to plugin settings
-                $settings['token'] = base64_encode(serialize($token));
-                craft()->plugins->savePluginSettings($plugin, $settings);
-
-                // session notice
-                craft()->userSession->setNotice(Craft::t("Connected to Google Analytics."));
-            }
-        });
-    }
-
     function getName()
     {
         return Craft::t('Analytics');
@@ -55,7 +33,7 @@ class AnalyticsPlugin extends BasePlugin
 
     function getDeveloperUrl()
     {
-        return 'http://dukt.net/';
+        return 'https://dukt.net/';
     }
 
     protected function defineSettings()
@@ -79,12 +57,25 @@ class AnalyticsPlugin extends BasePlugin
 
     public function getSettingsHtml()
     {
-        if(craft()->request->getPath() == 'settings/plugins') {
+        if(craft()->request->getPath() == 'settings/plugins')
+        {
             return true;
         }
 
         return craft()->templates->render('analytics/settings', array(
             'settings' => $this->getSettings()
         ));
+    }
+
+    public function registerOauthConnect($variables)
+    {
+        // get token from variables
+        $token = $variables['token'];
+
+        // save token
+        craft()->analytics->saveToken($token);
+
+        // session notice
+        craft()->userSession->setNotice(Craft::t("Connected to Google Analytics."));
     }
 }
