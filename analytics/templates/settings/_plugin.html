@@ -1,6 +1,6 @@
-{% set provider = craft.oauth.getProvider('google') %}
+{% set provider = craft.oauth.getProvider('google', false) %}
 
-{% if provider.isConfigured %}
+{% if provider and provider.isConfigured %}
 
     {% set token = craft.analytics.token %}
 
