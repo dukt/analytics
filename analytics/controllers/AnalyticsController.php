@@ -32,12 +32,32 @@ class AnalyticsController extends BaseController
      */
     public function actionConnect()
     {
-        craft()->oauth->connect(array(
-            'plugin' => 'analytics',
+        if($response = craft()->oauth->connect(array(
+            'plugin'   => 'analytics',
             'provider' => $this->handle,
-            'scopes' => $this->scopes,
-            'params' => $this->params
-        ));
+            'scopes'   => $this->scopes,
+            'params'   => $this->params
+        )))
+        {
+            if($response['success'])
+            {
+                // token
+                $token = $response['token'];
+
+                // save token
+                craft()->analytics->saveToken($token);
+
+                // session notice
+                craft()->userSession->setNotice(Craft::t("Connected to Google Analytics."));
+            }
+            else
+            {
+                // session notice
+                craft()->userSession->setError(Craft::t($response['errorMsg']));
+            }
+
+            $this->redirect($response['redirect']);
+        }
     }
 
     /**

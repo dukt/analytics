@@ -38,7 +38,7 @@ class Analytics_PluginController extends BaseController
             $this->redirect(
                 UrlHelper::getActionUrl(
                     $this->pluginHandle.'/plugin/install',
-                    array('plugin' => $pluginHandle, 'redirect' => $_SERVER['HTTP_REFERER'])
+                    array('plugin' => $pluginHandle, 'redirect' => craft()->request->getUrlReferrer())
                 )
             );
         }
@@ -59,7 +59,7 @@ class Analytics_PluginController extends BaseController
         }
 
         // redirect
-        $this->redirect($_SERVER['HTTP_REFERER']);
+        $this->redirect(craft()->request->getUrlReferrer());
     }
 
     public function actionEnable()
@@ -70,7 +70,7 @@ class Analytics_PluginController extends BaseController
 
         $this->pluginService->enable($pluginHandle);
 
-        $this->redirect($_SERVER['HTTP_REFERER']);
+        $this->redirect(craft()->request->getUrlReferrer());
     }
 
     public function actionInstall()
@@ -84,7 +84,7 @@ class Analytics_PluginController extends BaseController
 
         if (!$redirect)
         {
-            $redirect = $_SERVER['HTTP_REFERER'];
+            $redirect = craft()->request->getUrlReferrer();
         }
 
 
@@ -104,6 +104,6 @@ class Analytics_PluginController extends BaseController
         }
 
         // redirect
-        $this->redirect($_SERVER['HTTP_REFERER']);
+        $this->redirect(craft()->request->getUrlReferrer());
     }
 }

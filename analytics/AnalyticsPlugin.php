@@ -23,7 +23,7 @@ class AnalyticsPlugin extends BasePlugin
 
     function getVersion()
     {
-        return '2.0.67';
+        return '2.0.68';
     }
 
     function getDeveloper()
@@ -65,17 +65,5 @@ class AnalyticsPlugin extends BasePlugin
         return craft()->templates->render('analytics/settings', array(
             'settings' => $this->getSettings()
         ));
-    }
-
-    public function registerOauthConnect($variables)
-    {
-        // get token from variables
-        $token = $variables['token'];
-
-        // save token
-        craft()->analytics->saveToken($token);
-
-        // session notice
-        craft()->userSession->setNotice(Craft::t("Connected to Google Analytics."));
     }
 }

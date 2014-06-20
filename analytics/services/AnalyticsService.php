@@ -21,41 +21,47 @@ class AnalyticsService extends BaseApplicationComponent
 
     public function saveToken($token)
     {
-        // get plugin settings
+
+        // get plugin
         $plugin = craft()->plugins->getPlugin('analytics');
+
+        // get settings
         $settings = $plugin->getSettings();
+
 
         // save token to plugin settings
         if($token)
         {
-            $token = base64_encode(serialize($token));
+            $token = craft()->oauth->encodeToken($token);
         }
 
         $settings['token'] = $token;
+
         craft()->plugins->savePluginSettings($plugin, $settings);
     }
 
     public function getToken()
     {
+        // get plugin
         $plugin = craft()->plugins->getPlugin('analytics');
+
+        // get settings
         $settings = $plugin->getSettings();
 
         if(!empty($settings['token']))
         {
-            // get token from settings
-            $token = unserialize(base64_decode($settings['token']));
+
+            // get token
+            $token = craft()->oauth->decodeToken($settings['token']);
 
             // will refresh token if needed
-            $token = craft()->oauth->refreshToken($this->oauthHandle, $token);
-
-            if($token)
+            if(craft()->oauth->refreshToken($this->oauthHandle, $token))
             {
-                // save token
-
+                // save refreshed token
                 $this->saveToken($token);
-
-                return $token;
             }
+
+            return $token;
         }
     }
 
@@ -674,24 +680,24 @@ class AnalyticsService extends BaseApplicationComponent
 
 
         // token
-        $realToken = craft()->analytics->getToken();
+        $token = craft()->analytics->getToken();
 
-        if($realToken)
+        if($token)
         {
             // make token compatible with Google library
             $arrayToken = array();
             $arrayToken['created'] = 0;
-            $arrayToken['access_token'] = $realToken->getAccessToken();
-            $arrayToken['expires_in'] = $realToken->getEndOfLife();
+            $arrayToken['access_token'] = $token->getAccessToken();
+            $arrayToken['expires_in'] = $token->getEndOfLife();
             $arrayToken = json_encode($arrayToken);
 
 
             // client
             $client = new Google_Client();
             $client->setApplicationName('Google+ PHP Starter Application');
-            $client->setClientId($provider->clientId);
-            $client->setClientSecret($provider->clientSecret);
-            $client->setRedirectUri($provider->getRedirectUri());
+            $client->setClientId('clientId');
+            $client->setClientSecret('clientSecret');
+            $client->setRedirectUri('redirectUri');
             $client->setAccessToken($arrayToken);
 
             $api = new Google_Service_Analytics($client);
