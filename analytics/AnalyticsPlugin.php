@@ -66,4 +66,12 @@ class AnalyticsPlugin extends BasePlugin
             'settings' => $this->getSettings()
         ));
     }
+
+    /**
+     * On Before Uninstall
+     */
+    public function onBeforeUninstall()
+    {
+        craft()->oauth->deleteTokensByPlugin('analytics');
+    }
 }
