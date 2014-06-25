@@ -23,7 +23,7 @@ class AnalyticsPlugin extends BasePlugin
 
     function getVersion()
     {
-        return '2.0.68';
+        return '2.0.73';
     }
 
     function getDeveloper()
@@ -41,7 +41,7 @@ class AnalyticsPlugin extends BasePlugin
         return array(
             'profileId' => array(AttributeType::String),
             'realtimeRefreshInterval' => array(AttributeType::Number),
-            'token' => array(AttributeType::String),
+            'tokenId' => array(AttributeType::Number),
         );
     }
 

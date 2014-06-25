@@ -18,50 +18,72 @@ use \Google_Service_Analytics;
 class AnalyticsService extends BaseApplicationComponent
 {
     private $oauthHandle = 'google';
+    private $token;
 
     public function saveToken($token)
     {
-
         // get plugin
         $plugin = craft()->plugins->getPlugin('analytics');
 
         // get settings
         $settings = $plugin->getSettings();
 
+        // get tokenId
+        $tokenId = $settings->tokenId;
 
-        // save token to plugin settings
-        if($token)
+        // get token
+        $model = craft()->oauth->getTokenById($tokenId);
+
+
+        // populate token model
+
+        if(!$model)
         {
-            $token = craft()->oauth->encodeToken($token);
+            $model = new Oauth_TokenModel;
         }
 
-        $settings['token'] = $token;
+        $model->providerHandle = 'google';
+        $model->pluginHandle = 'analytics';
+        $model->encodedToken = craft()->oauth->encodeToken($token);
 
+        // save token
+        craft()->oauth->saveToken($model);
+
+        // set token ID
+        $settings->tokenId = $model->id;
+
+        // save plugin settings
         craft()->plugins->savePluginSettings($plugin, $settings);
     }
 
+    /**
+     * Get OAuth Token
+     */
     public function getToken()
     {
-        // get plugin
-        $plugin = craft()->plugins->getPlugin('analytics');
-
-        // get settings
-        $settings = $plugin->getSettings();
-
-        if(!empty($settings['token']))
+        if($this->token)
         {
+            return $this->token;
+        }
+        else
+        {
+            // get plugin
+            $plugin = craft()->plugins->getPlugin('analytics');
+
+            // get settings
+            $settings = $plugin->getSettings();
+
+            // get tokenId
+            $tokenId = $settings->tokenId;
 
             // get token
-            $token = craft()->oauth->decodeToken($settings['token']);
+            $token = craft()->oauth->getTokenById($tokenId);
 
-            // will refresh token if needed
-            if(craft()->oauth->refreshToken($this->oauthHandle, $token))
+            if($token && $token->token)
             {
-                // save refreshed token
-                $this->saveToken($token);
+                $this->token = $token->token;
+                return $this->token;
             }
-
-            return $token;
         }
     }
 
