@@ -81,7 +81,7 @@ class AnalyticsService extends BaseApplicationComponent
 
             if($token && $token->token)
             {
-                $this->token = $token->token;
+                $this->token = $token;
                 return $this->token;
             }
         }
@@ -702,7 +702,8 @@ class AnalyticsService extends BaseApplicationComponent
 
 
         // token
-        $token = craft()->analytics->getToken();
+        $tokenModel = craft()->analytics->getToken();
+        $token = $tokenModel->token;
 
         if($token)
         {
