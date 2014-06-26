@@ -3,13 +3,15 @@
 {% if provider and provider.isConfigured %}
 
     {% set token = craft.analytics.token %}
+    {% set account = false %}
 
     {% if token %}
+        {% set void = provider.setToken(token) %}
+        {% set account = provider.account %}
+    {% endif %}
 
-        {# Not Connected #}
+    {% if account %}
 
-        {% set void = provider.source.setToken(token) %}
-        {% set account = provider.source.account %}
 
         <input type="hidden" name="token" value="{{ craft.oauth.encodeToken(token) }}" />
 
