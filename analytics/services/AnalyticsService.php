@@ -703,29 +703,38 @@ class AnalyticsService extends BaseApplicationComponent
 
         // token
         $tokenModel = craft()->analytics->getToken();
-        $token = $tokenModel->token;
 
-        if($token)
+        if ($tokenModel)
         {
-            // make token compatible with Google library
-            $arrayToken = array();
-            $arrayToken['created'] = 0;
-            $arrayToken['access_token'] = $token->getAccessToken();
-            $arrayToken['expires_in'] = $token->getEndOfLife();
-            $arrayToken = json_encode($arrayToken);
+            $token = $tokenModel->token;
+
+            if($token)
+            {
+                // make token compatible with Google library
+                $arrayToken = array();
+                $arrayToken['created'] = 0;
+                $arrayToken['access_token'] = $token->getAccessToken();
+                $arrayToken['expires_in'] = $token->getEndOfLife();
+                $arrayToken = json_encode($arrayToken);
 
 
-            // client
-            $client = new Google_Client();
-            $client->setApplicationName('Google+ PHP Starter Application');
-            $client->setClientId('clientId');
-            $client->setClientSecret('clientSecret');
-            $client->setRedirectUri('redirectUri');
-            $client->setAccessToken($arrayToken);
+                // client
+                $client = new Google_Client();
+                $client->setApplicationName('Google+ PHP Starter Application');
+                $client->setClientId('clientId');
+                $client->setClientSecret('clientSecret');
+                $client->setRedirectUri('redirectUri');
+                $client->setAccessToken($arrayToken);
 
-            $api = new Google_Service_Analytics($client);
+                $api = new Google_Service_Analytics($client);
 
-            return $api;
+                return $api;
+            }
+            else
+            {
+                Craft::log(__METHOD__.' : No token defined', LogLevel::Info, true);
+                return false;
+            }
         }
         else
         {
