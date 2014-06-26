@@ -72,6 +72,9 @@ class AnalyticsPlugin extends BasePlugin
      */
     public function onBeforeUninstall()
     {
-        craft()->oauth->deleteTokensByPlugin('analytics');
+        if(isset(craft()->oauth))
+        {
+            craft()->oauth->deleteTokensByPlugin('analytics');
+        }
     }
 }
