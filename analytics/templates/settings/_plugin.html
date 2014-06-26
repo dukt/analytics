@@ -3,53 +3,62 @@
 {% if provider and provider.isConfigured %}
 
     {% set token = craft.analytics.token %}
-    {% set account = false %}
-
     {% if token %}
+
         {% set void = provider.setToken(token) %}
         {% set account = provider.account %}
-    {% endif %}
 
-    {% if account %}
+        {% if account %}
 
 
-        <input type="hidden" name="token" value="{{ craft.oauth.encodeToken(token) }}" />
 
-        <h2 class="first">{{'Google Analytics Account'|t}}</h2>
-        <p>{{'You are authenticated to Google Analytics with the following account'|t}} :</p>
+            <input type="hidden" name="token" value="{{ craft.oauth.encodeToken(token) }}" />
 
-        <ul>
-            <li><strong>{{'UID'|t}} : </strong> {{account.uid}}</li>
-            <li><strong>{{'Name'|t}} : </strong> {{account.name}}</li>
-        </ul>
+            <h2 class="first">{{'Google Analytics Account'|t}}</h2>
+            <p>{{'You are authenticated to Google Analytics with the following account'|t}} :</p>
 
-        <p><a class="btn small" href="{{ actionUrl('analytics/disconnect') }}">{{'Disconnect'|t}}</a></p>
+            <ul>
+                <li><strong>{{'UID'|t}} : </strong> {{account.uid}}</li>
+                <li><strong>{{'Name'|t}} : </strong> {{account.name}}</li>
+            </ul>
 
-        <hr />
+            <p><a class="btn small" href="{{ actionUrl('analytics/disconnect') }}">{{'Disconnect'|t}}</a></p>
 
-        <h2 class="first">{{'Plugin Settings'|t}}</h2>
+            <hr />
 
-        {{ forms.selectField({
-            first: true,
-            label: "Web Profile"|t,
-            instructions: "Select an Analytics web profile to associate with your Craft website"|t,
-            options: craft.analytics.properties(),
-            name: 'profileId',
-            value: settings.profileId
-        }) }}
+            <h2 class="first">{{'Plugin Settings'|t}}</h2>
 
-        {{ forms.textField({
-            label: "Real-Time Refresh Interval"|t,
-            instructions: "Interval in seconds between request to real-time API"|t,
-            name: 'realtimeRefreshInterval',
-            value: (settings.realtimeRefreshInterval ? settings.realtimeRefreshInterval : '10'),
-            size: 4
-        }) }}
+            {{ forms.selectField({
+                first: true,
+                label: "Web Profile"|t,
+                instructions: "Select an Analytics web profile to associate with your Craft website"|t,
+                options: craft.analytics.properties(),
+                name: 'profileId',
+                value: settings.profileId
+            }) }}
 
-        <p>
-            <input type="submit" class="btn submit force" value="{{'Save'|t}}">
-        </p>
+            {{ forms.textField({
+                label: "Real-Time Refresh Interval"|t,
+                instructions: "Interval in seconds between request to real-time API"|t,
+                name: 'realtimeRefreshInterval',
+                value: (settings.realtimeRefreshInterval ? settings.realtimeRefreshInterval : '10'),
+                size: 4
+            }) }}
 
+            <p>
+                <input type="submit" class="btn submit force" value="{{'Save'|t}}">
+            </p>
+
+        {% else %}
+
+            {# Not Connected #}
+
+            <h2 class="first">{{'Google Analytics Account'|t}}</h2>
+            <p>{{'You need to connect Craft to a Google account in order to get started.'|t}}</p>
+            <p>{{"Getting errors trying to connect"|t}} ? <a href="{{url('oauth/google')}}">{{"Check Google API key & secret in OAuth settings"|t}}</a>.</p>
+            <p><a class="btn submit" href="{{ actionUrl('analytics/connect') }}">{{"Connect to Google Analytics"|t}}</a></p>
+
+        {% endif %}
     {% else %}
 
         {# Not Connected #}
