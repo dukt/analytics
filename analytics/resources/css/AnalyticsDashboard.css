@@ -1,0 +1,34 @@
+.analytics-dashboard {
+  margin-left: -24px;
+  margin-right: -25px;
+}
+.analytics-dashboard .analytics-sections {
+  float: left;
+  width: 100%;
+  margin-bottom: -24px;
+}
+.analytics-dashboard .analytics-sections .analytics-section {
+  border-top: 1px solid #eee;
+  text-align: center;
+}
+.analytics-dashboard .analytics-sections .analytics-section:hover {
+  background: #fefefe;
+  cursor: pointer;
+}
+.analytics-dashboard .analytics-sections .analytics-section.analytics-half {
+  width: 50%;
+  float: left;
+  text-align: left;
+}
+.analytics-dashboard .analytics-sections .analytics-section .analytics-section-in {
+  padding: 16px 24px;
+  border-right: 1px solid #eee;
+}
+.analytics-dashboard .analytics-sections .analytics-section .analytics-section-metric {
+  color: #bbb;
+}
+.analytics-dashboard .analytics-sections .analytics-section .analytics-section-total {
+  font-size: 1.8em;
+  line-height: 1.4em;
+  color: #555;
+}

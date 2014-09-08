@@ -1,0 +1,18 @@
+.analytics_explorer h2 {
+  display: none;
+}
+.analytics-nav {
+  float: left;
+}
+.analytics-nav {
+  color: #777 !important;
+  box-shadow: none !important;
+  background: #fff !important;
+  border: 1px solid #eee;
+}
+.analytics-nav:after {
+  opacity: .4;
+}
+.analytics-nav.active:after {
+  opacity: 1;
+}

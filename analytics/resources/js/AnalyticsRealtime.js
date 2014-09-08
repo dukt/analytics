@@ -1,156 +1,199 @@
 AnalyticsRealtimeReport = Garnish.Base.extend({
     init: function(element)
     {
-    	$(document).ready(function() {
-			var refreshInterval = eval(Analytics.realtimeRefreshInterval);
+        this._refresh = false;
 
-			// console.log('realtime');
+        this.$element = $('#'+element);
+        this.$realtime = $('.analytics-realtime:first', this.$element);
+        this.$progress = $('.analytics-progress:first', this.$realtime);
+        this.$legend = $('.analytics-legend:first', this.$realtime);
+        this.$errors = $('.analytics-errors:first', this.$realtime);
+        this.$errorsInject = $('.analytics-errors-inject:first', this.$realtime);
+        this.$body = $('.analytics-body:first', this.$realtime);
+        this.$progressBlue = $('.progress-bar.blue:first', this.$realtime);
+        this.$progressGreen = $('.progress-bar.green:first', this.$realtime);
+        this.$content = $('.analytics-realtime-content:first', this.$realtime);
+        this.$sources = $('.analytics-realtime-sources:first', this.$realtime);
+        this.$countries = $('.analytics-realtime-countries:first', this.$realtime);
+        this.$noVisitors = $('.no-active-visitors:first', this.$realtime);
+        this.$count = $('.active-visitors .count:first', this.$realtime);
+        this.$spinner = $('.spinner:first', this.$realtime);
 
-			analyticsRealtimeRequest();
+        this.$spinner.removeClass('body-loading');
 
-			if(refreshInterval == null) {
-				refreshInterval = 10; // Default to 10 seconds
-			} else if(refreshInterval<2) { // mini 2 seconds
-				refreshInterval = 100;
-			}
+        this.start();
+    },
 
-			refreshInterval = refreshInterval * 1000; // to (ms)
+    start: function()
+    {
+        this.request();
 
-			setInterval(analyticsRealtimeRequest, refreshInterval);
-		});
+        var refreshInterval = eval(Analytics.realtimeRefreshInterval);
 
-		function analyticsRealtimeRequest()
-		{
-			$('.analytics-widget-realtime').parent().parent().addClass('loading');
+        if(refreshInterval == null)
+        {
+            // Default to 10 seconds
+            refreshInterval = 10;
+        }
+        else if(refreshInterval<2)
+        {
+            // mini 2 seconds
+            refreshInterval = 100;
+        }
 
-			var data = {
+        // to (ms)
+        refreshInterval = refreshInterval * 1000;
 
-			};
+        this._refresh = setInterval($.proxy(function() {
+            this.request();
+        }, this), refreshInterval);
+    },
 
-			// console.log('send realtime request', data);
+    stop: function()
+    {
+        clearInterval(this._refresh);
+    },
 
-			Craft.postActionRequest('analytics/realtime', data, function(response) {
+    request: function()
+    {
+        console.log('request');
+        this.$spinner.removeClass('hidden');
 
-				// realtime
-				// console.log('get realtime response', response);
+        Craft.postActionRequest('analytics/realtime', {}, $.proxy(function(response) {
 
-				$('.analytics-widget-realtime .analytics-errors-inject').html('');
+            // realtime
 
-				if(typeof(response.error) != 'undefined') {
-					$('.analytics-widget-realtime .analytics-errors').removeClass('hidden');
-					$('.analytics-widget-realtime .analytics-widget').addClass('hidden');
+            this.$errorsInject.html('');
 
-					$('<p class="error">'+response.error.message+'</p>').appendTo('.analytics-widget-realtime .analytics-errors-inject');
-				} else {
+            if(typeof(response.error) != 'undefined') {
+                this.$errors.removeClass('hidden');
 
-					$('.analytics-widget-realtime .analytics-errors').addClass('hidden');
-					$('.analytics-widget-realtime .analytics-widget').removeClass('hidden');
+                this.$body.addClass('hidden');
 
+                $('<p class="error">'+response.error.message+'</p>').appendTo(this.$errorsInject);
+            } else {
 
-					var newVisitor = response.visitorType.newVisitor;
-					var returningVisitor = response.visitorType.returningVisitor;
+                this.$errors.addClass('hidden');
+                this.$body.removeClass('hidden');
 
-					var calcTotal = ((returningVisitor * 1) + (newVisitor * 1));
+                this.updateProgress(response);
+                this.updateTables(response);
+            }
 
-					$('.analytics-widget-realtime .active-visitors .count').text(calcTotal);
+            this.$spinner.addClass('hidden');
 
-					if (calcTotal > 0) {
-						$('.analytics-widget-realtime .progress').removeClass('hidden');
-						$('.analytics-widget-realtime .legend').removeClass('hidden');
-					} else {
-						$('.analytics-widget-realtime .progress').addClass('hidden');
-						$('.analytics-widget-realtime .legend').addClass('hidden');
-					}
+        }, this));
+    },
 
-					if(calcTotal > 0)
-					{
-						var blue = Math.round(100 * newVisitor / calcTotal);
-					}
-					else
-					{
-						var blue = 100;
-					}
+    updateProgress: function(response)
+    {
+        var newVisitor = response.visitorType.newVisitor;
+        var returningVisitor = response.visitorType.returningVisitor;
+        var calcTotal = ((returningVisitor * 1) + (newVisitor * 1));
 
-					var green = 100 - blue;
+        this.$count.text(calcTotal);
 
-					// blue
+        if (calcTotal > 0)
+        {
+            this.$progress.removeClass('hidden');
+            this.$legend.removeClass('hidden');
+        }
+        else
+        {
+            this.$progress.addClass('hidden');
+            this.$legend.addClass('hidden');
+        }
 
-					$('.analytics-widget-realtime .progress-bar.blue').css('width', blue+'%');
-					$('.analytics-widget-realtime .progress-bar.blue span').text(blue+'%');
+        if(calcTotal > 0)
+        {
+            var blue = Math.round(100 * newVisitor / calcTotal);
+        }
+        else
+        {
+            var blue = 100;
+        }
 
-					if(blue > 0)
-					{
-						$('.analytics-widget-realtime .progress-bar.blue').removeClass('hidden');
-					}
-					else
-					{
-						$('.analytics-widget-realtime .progress-bar.blue').addClass('hidden');
-					}
-
-					// green
-
-					$('.analytics-widget-realtime .progress-bar.green').css('width', green+'%');
-					$('.analytics-widget-realtime .progress-bar.green span').text(green+'%');
-
-					if(green > 0)
-					{
-						$('.analytics-widget-realtime .progress-bar.green').removeClass('hidden');
-					}
-					else
-					{
-						$('.analytics-widget-realtime .progress-bar.green').addClass('hidden');
-					}
-
-					// realtime content
+        var green = 100 - blue;
 
 
-					if (calcTotal > 0) {
-						$('.no-active-visitors').addClass('hidden');
+        // blue
 
-						// content
+        this.$progressBlue.css('width', blue+'%');
+        $('span', this.$progressBlue).text(blue+'%');
 
-						$('.analytics-realtime-content table').removeClass('hidden');
-						$('.analytics-realtime-content tbody').html('');
+        if(blue > 0)
+        {
+            this.$progressBlue.removeClass('hidden');
+        }
+        else
+        {
+            this.$progressBlue.addClass('hidden');
+        }
 
-						$.each(response.content, function(k,v) {
-							var row = $('<tr><td>'+k+'</td><td class="thin">'+v+'</td></td>');
+        // green
 
-							$('.analytics-realtime-content tbody').append(row);
-						});
+        this.$progressGreen.css('width', green+'%');
+        $('span', this.$progressGreen).text(green+'%');
 
-						// sources
+        if(green > 0)
+        {
+            this.$progressGreen.removeClass('hidden');
+        }
+        else
+        {
+            this.$progressGreen.addClass('hidden');
+        }
+    },
 
-						$('.analytics-realtime-sources table').removeClass('hidden');
-						$('.analytics-realtime-sources tbody').html('');
+    updateTables: function(response)
+    {
+        var newVisitor = response.visitorType.newVisitor;
+        var returningVisitor = response.visitorType.returningVisitor;
+        var calcTotal = ((returningVisitor * 1) + (newVisitor * 1));
 
-						$.each(response.sources, function(k,v) {
-							var row = $('<tr><td>'+k+'</td><td class="thin">'+v+'</td></td>');
+        if (calcTotal > 0)
+        {
+            this.$noVisitors.addClass('hidden');
 
-							$('.analytics-realtime-sources tbody').append(row);
-						});
+            // content
 
-						// countries
+            $('table', this.$content).removeClass('hidden');
+            $('tbody', this.$content).html('');
 
-						$('.analytics-realtime-countries table').removeClass('hidden');
-						$('.analytics-realtime-countries tbody').html('');
+            $.each(response.content, function(k,v) {
+                var row = $('<tr><td>'+k+'</td><td class="thin">'+v+'</td></td>');
 
-						$.each(response.countries, function(k,v) {
-							var row = $('<tr><td>'+k+'</td><td class="thin">'+v+'</td></td>');
+                $('tbody', this.$content).append(row);
+            });
 
-							$('.analytics-realtime-countries tbody').append(row);
-						});
+            // sources
 
-					} else {
-						$('.no-active-visitors').removeClass('hidden');
-						$('.analytics-realtime-content table').addClass('hidden');
-						$('.analytics-realtime-sources table').addClass('hidden');
-						$('.analytics-realtime-countries table').addClass('hidden');
-					}
-				}
+            $('table', this.$sources).removeClass('hidden');
+            $('tbody', this.$sources).html('');
 
-				$('.analytics-widget-realtime').parent().parent().removeClass('loading');
-			});
+            $.each(response.sources, function(k,v) {
+                var row = $('<tr><td>'+k+'</td><td class="thin">'+v+'</td></td>');
 
-		}
-	}
+                $('tbody', this.$sources).append(row);
+            });
+
+            // countries
+
+            $('table', this.$countries).removeClass('hidden');
+            $('tbody', this.$countries).html('');
+
+            $.each(response.countries, function(k,v) {
+                var row = $('<tr><td>'+k+'</td><td class="thin">'+v+'</td></td>');
+
+                $('tbody', this.$countries).append(row);
+            });
+        }
+        else
+        {
+            this.$noVisitors.removeClass('hidden');
+            $('table', this.$content).addClass('hidden');
+            $('table', this.$sources).addClass('hidden');
+            $('table', this.$countries).addClass('hidden');
+        }
+    }
 });

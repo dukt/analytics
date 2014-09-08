@@ -1,0 +1,98 @@
+{% import "_includes/forms" as forms %}
+
+<div class="analytics-browser">
+
+    {%- includeJsResource 'analytics/js/jsapi.js' first %}
+    {% includeJsResource 'analytics/js/AnalyticsUtils.js' %}
+    {% includeJsResource 'analytics/js/AnalyticsBrowser.js' %}
+    {% includeCssResource "analytics/css/AnalyticsBrowser.css" %}
+
+
+    <div class="analytics-browser">
+
+        <div class="spinner hidden"></div>
+
+        <div class="analytics-header">
+
+            <div class="right">
+
+                <div class="analytics-period btngroup">
+                    <div data-period="week" role="button" class="btn" title="Week">Week</div>
+                    <div data-period="month" role="button" class="btn active" title="Month">Month</div>
+                    <div data-period="year" role="button" class="btn" title="Year">Year</div>
+                </div>
+
+            </div>
+
+            <div class="clear"></div>
+        </div>
+
+
+        <div class="analytics-black">
+            <div class="analytics-block">
+
+                <div class="left">
+                    {{ forms.selectField({
+                        first: true,
+                        class:"analytics-metric fullwidth small",
+                        name: 'metric',
+                    }) }}
+                </div>
+
+                <div class="right analytics-total">
+                    <strong class="analytics-count"></strong> <em class="analytics-label"></em>
+                </div>
+
+                <div class="clear"></div>
+
+            </div>
+
+            <div class="clear"></div>
+
+            <div class="analytics-chart"></div>
+        </div>
+
+
+
+
+        <div class="analytics-section-nav-wrap">
+            <div class="analytics-section-nav">
+                <div class="analytics-section-nav-item">
+                </div>
+                <div class="analytics-section-nav-item">
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+
+        <div class="analytics-block">
+            <div class="left">
+                {{ forms.selectField({
+                    first: true,
+                    class:"analytics-dimension small",
+                    name: 'dimension',
+                }) }}
+            </div>
+            <div class="right">
+
+                <div class="analytics-tabletype btngroup">
+                    <div data-tabletype="table" role="button" class="btn active" title="Display in a table" data-icon="list"></div>
+                    <div data-tabletype="pie" role="button" class="btn" title="Display in a pie" data-icon="grid"></div>
+                </div>
+
+            </div>
+            <div class="clear"></div>
+        </div>
+
+        <div class="clear"></div>
+
+        <div class="analytics-table analytics-chart-table"></div>
+
+        <div class="analytics-piechart hidden"></div>
+
+        <div class="analytics-inject">
+
+        </div>
+
+    </div>
+</div>

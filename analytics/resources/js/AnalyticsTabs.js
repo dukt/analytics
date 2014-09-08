@@ -1,11 +1,11 @@
 $(document).ready(function() {
 	$('.analytics-tabs').each(function(k, v) {
 
-		$('.analytics-nav a', v).each(function(k2, v2) {
+		$('.analytics-tabs-nav a', v).each(function(k2, v2) {
 
 			$(v2).click(function() {
 
-				$('.analytics-nav a', v).removeClass('active');
+				$('.analytics-tabs-nav a', v).removeClass('active');
 
 				$(this).addClass('active');
 
@@ -23,7 +23,7 @@ $(document).ready(function() {
 			});
 		});
 
-		$('.analytics-nav li:first-child a', v).trigger('click');
+		$('.analytics-tabs-nav li:first-child a', v).trigger('click');
 	});
 
 });

@@ -1,0 +1,34 @@
+{% includeJsResource 'analytics/js/AnalyticsExplorer.js' %}
+{% includeCssResource "analytics/css/AnalyticsExplorer.css" %}
+
+<div class="analytics-widget" data-widget-id="{{widget.id}}">
+
+    <div class="analytics-explorer">
+
+        {# Nav #}
+
+        <div class="btn menubtn analytics-nav">{{ browserSections|first.title }}</div>
+        <div class="menu analytics-menu">
+            <ul class="padded">
+                {% for sectionKey, section in browserSections %}
+                    <li><a data-item="{{ sectionKey }}">{{ section.title }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+
+
+        {# Real-Time #}
+
+        <div class="analytics-view hidden" data-view="realtime">
+            {% include 'analytics/widgets/explorer/_realtime' %}
+        </div>
+
+
+        {# Browser #}
+
+        <div class="analytics-view" data-view="browser">
+            {% include 'analytics/widgets/explorer/_browser' %}
+        </div>
+
+    </div>
+</div>

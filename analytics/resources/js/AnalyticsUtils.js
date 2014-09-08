@@ -243,13 +243,8 @@ var AnalyticsUtils = {
             var cells = [];
 
             $.each(columns, function(k2, column) {
-                //console.log(column, response.apiResponse.rows[k]);
+
                 var cell = response.apiResponse.rows[k][column.name];
-                //var cell = response.apiResponse.rows[k][column.name];
-
-                //console.log(response.apiResponse.rows[k]);
-
-                //console.log(response.apiResponse.rows[k][column.name]);
 
                 if(column.type == 'date')
                 {
@@ -274,6 +269,93 @@ var AnalyticsUtils = {
                     {
                         cell = {
                             'f': (Math.round(eval(cell) * 100) / 100)+" %",
+                            'v': eval(cell)
+                        };
+                    }
+                    else if(column.dataType == 'TIME')
+                    {
+                        cell = {
+                            'f' : eval(cell)+" seconds",
+                            'v' : eval(cell)
+                        };
+                    }
+                    else if(column.name == 'ga:continent' || column.name == 'ga:subContinent')
+                    {
+                        cell.v = ""+cell.v;
+                    }
+                }
+
+                cells[k2] = cell;
+            });
+
+            rows[k] = cells;
+        });
+
+        return rows;
+    },
+
+
+    parseColumn: function(apiColumn)
+    {
+        $type = 'string';
+
+        if(apiColumn.dataType == 'INTEGER'
+            || apiColumn.dataType == 'FLOAT'
+            || apiColumn.dataType == 'PERCENT'
+            || apiColumn.dataType == 'TIME')
+        {
+            $type = 'number';
+        }
+
+        var column = {
+            'type': $type,
+            'dataType': apiColumn.dataType,
+            'name': apiColumn.name,
+            'label': apiColumn.label
+        };
+
+        return column;
+    },
+
+    parseRows: function(apiColumns, apiRows)
+    {
+        var rows = [];
+
+        if (typeof(apiRows) == 'undefined')
+        {
+            return rows;
+        };
+
+        $.each(apiRows, function(k, row) {
+
+            var cells = [];
+
+            $.each(apiColumns, function(k2, column) {
+
+                var cell = apiRows[k][column.name];
+
+                if(column.dataType == 'date')
+                {
+                    $date = cell;
+
+                    $year = eval($date.substr(0, 4));
+                    $month = eval($date.substr(4, 2)) - 1;
+                    $day = eval($date.substr(6, 2));
+
+                    newDate = new Date($year, $month, $day);
+
+                    cell = newDate;
+                }
+                else
+                {
+                    if(column.dataType == 'INTEGER' || column.dataType == 'FLOAT')
+                    {
+                        cell = eval(cell);
+                    }
+                    else if(column.dataType == 'PERCENT')
+                    {
+                        cell = {
+                            'f': (Math.round(eval(cell) * 100) / 100)+"%",
                             'v': eval(cell)
                         };
                     }

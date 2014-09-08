@@ -15,6 +15,7 @@ namespace Craft;
 class Analytics_ReportsWidget extends BaseWidget
 {
 	private $types = array(
+        'audience' => "Audience",
         'acquisition' => "Acquisition",
         'counts'      => "Counts",
         'custom'      => "Custom",
@@ -49,6 +50,10 @@ class Analytics_ReportsWidget extends BaseWidget
             if($settings->type == 'counts' && craft()->request->getSegment(2) != 'settings')
             {
                 return null;
+            }
+            elseif(craft()->request->getSegment(2) != 'settings')
+            {
+                return '';
             }
             else
             {
@@ -101,6 +106,22 @@ class Analytics_ReportsWidget extends BaseWidget
 
         switch($settings->type)
         {
+            case 'audience':
+
+            $json = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/browser.json');
+            $browserSections = json_decode($json);
+
+            foreach($browserSections as $sectionKey => $section)
+            {
+                $variables['browserSections'][$sectionKey] = $section->title;
+            }
+
+
+            craft()->templates->includeJs('var AnalyticsBrowserSections = '.$json.';');
+            craft()->templates->includeJs('new AnalyticsBrowser("analytics-widget-'.$this->model->id.'");');
+
+            break;
+
             case 'counts':
             craft()->templates->includeJs('new AnalyticsCountReport("analytics-widget-'.$this->model->id.'");');
             break;
