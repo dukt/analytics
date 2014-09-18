@@ -47,6 +47,6 @@ class Analytics_ExplorerWidget extends BaseWidget
 
     public function getColspan()
     {
-        return 1;
+        return 2;
     }
 }

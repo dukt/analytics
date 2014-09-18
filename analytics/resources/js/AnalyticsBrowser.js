@@ -27,6 +27,7 @@ AnalyticsBrowser = Garnish.Base.extend({
         this.$period = $('.analytics-period:first', this.$browser);
         this.$periodBtns = $('.analytics-period .btn', this.$browser);
         this.$spinner = $('.spinner', this.$browser);
+        this.$pinBtn = $('.analytics-pin', this.$browser);
 
         this.$spinner.removeClass('body-loading');
 
@@ -39,6 +40,19 @@ AnalyticsBrowser = Garnish.Base.extend({
         this.addListener(this.$periodBtns, 'click', { }, function(ev) {
             this.onPeriodChange($(ev.currentTarget).data('period'));
             this.browse();
+        });
+
+        // pin
+        this.addListener(this.$pinBtn, 'click', { }, function(ev) {
+
+            if(!this.$pinBtn.hasClass('active'))
+            {
+                this.pin();
+            }
+            else
+            {
+                this.unpin();
+            }
         });
 
         // menu
@@ -57,6 +71,18 @@ AnalyticsBrowser = Garnish.Base.extend({
         $(window).resize($.proxy(function() {
             this.resize();
         }, this));
+    },
+
+    pin: function()
+    {
+        this.$pinBtn.addClass('active');
+        $('.analytics-browser-settings', this.$browser).addClass('hidden');
+    },
+
+    unpin: function()
+    {
+        this.$pinBtn.removeClass('active');
+        $('.analytics-browser-settings', this.$browser).removeClass('hidden');
     },
 
     resize: function()
@@ -131,12 +157,29 @@ AnalyticsBrowser = Garnish.Base.extend({
         {
             $('.analytics-table', this.$browser).removeClass('hidden');
             $('.analytics-piechart', this.$browser).addClass('hidden');
+            $('.analytics-chart', this.$browser).addClass('hidden');
+
+            $('.analytics-dimension-field', this.$browser).removeClass('hidden');
+        }
+        else if(tableType == 'area')
+        {
+            $('.analytics-chart', this.$browser).removeClass('hidden');
+            $('.analytics-table', this.$browser).addClass('hidden');
+            $('.analytics-piechart', this.$browser).addClass('hidden');
+
+            $('.analytics-dimension-field', this.$browser).addClass('hidden');
         }
         else
         {
-            $('.analytics-table', this.$browser).addClass('hidden');
             $('.analytics-piechart', this.$browser).removeClass('hidden');
+            $('.analytics-chart', this.$browser).addClass('hidden');
+            $('.analytics-table', this.$browser).addClass('hidden');
+
+
+            $('.analytics-dimension-field', this.$browser).removeClass('hidden');
         }
+
+        this.resize();
     },
 
     onPeriodChange: function(period) {

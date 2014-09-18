@@ -67,6 +67,30 @@
   color: #11549A;
   background: #E3F0FD;
 }
+.analytics-browser .analytics-fields {
+  text-align: left;
+  margin-bottom: 24px;
+}
+.analytics-browser .analytics-fields .analytics-field {
+  display: inline-block;
+  text-align: left;
+}
+.analytics-browser .analytics-dimension {
+  box-shadow: none;
+  background: #F2F6EB;
+  border: 1px solid #AEC683;
+}
+.analytics-browser .analytics-dimension select {
+  color: #6CAB34;
+}
+.analytics-browser .analytics-metric {
+  box-shadow: none;
+  background: #E7F3F8;
+  border: 1px solid #89BAD9;
+}
+.analytics-browser .analytics-metric select {
+  color: #318EC4;
+}
 .analytics-browser .analytics-block {
   margin: 0 -24px;
   padding: 20px 24px;
@@ -75,6 +99,7 @@
   padding-top: 0;
 }
 .analytics-browser .analytics-total {
+  display: none;
   font-size: 1.1em;
   text-align: center;
   line-height: 1.8em;
@@ -90,9 +115,9 @@
 .analytics-browser .analytics-chart {
   background: #fafafa;
   height: 140px;
-  margin: 0 -24px;
-  margin-top: 0;
-  margin-bottom: 0;
+}
+.analytics-browser .analytics-piechart {
+  height: 282px;
 }
 .analytics-browser .analytics-section-nav-wrap {
   margin: 0 -24px;

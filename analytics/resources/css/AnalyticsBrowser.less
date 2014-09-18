@@ -119,27 +119,41 @@
     //     padding: 0 24px;
     // }
 
-    // .analytics-dimension {
 
-    //     box-shadow: none;
-    //     background: #fff;
-    //     border: 1px solid #6CAB34;
+    .analytics-fields {
+        text-align: left;
+        margin-bottom: 24px;
 
-    //     select {
-    //         color: #6CAB34;
-    //     }
-    // }
+        .analytics-field {
+            display: inline-block;
+            text-align: left;
+        }
 
-    // .analytics-metric {
 
-    //     box-shadow: none;
-    //     background: #fff;
-    //     border: 1px solid #318EC4;
+    }
 
-    //     select {
-    //         color: #318EC4;
-    //     }
-    // }
+    .analytics-dimension {
+
+        box-shadow: none;
+        background: #F2F6EB;
+        border: 1px solid #AEC683;
+
+        select {
+            color: #6CAB34;
+        }
+    }
+
+    .analytics-metric {
+
+        box-shadow: none;
+        background: #E7F3F8;
+        border: 1px solid #89BAD9;
+
+        select {
+            color: #318EC4;
+        }
+    }
+
 
     .analytics-block {
 
@@ -152,7 +166,7 @@
     }
 
     .analytics-total {
-
+        display: none;
         font-size: 1.1em;
         text-align: center;
         line-height: 1.8em;
@@ -171,13 +185,14 @@
     .analytics-chart {
         background: #fafafa;
         height: 140px;
-        margin: 0 -24px;
-        margin-top: -0;
-        margin-bottom: 0;
+        // margin: 0 -24px;
+        // margin-top: -0;
+        // margin-bottom: 0;
     }
 
     .analytics-piechart {
         //display: none;
+        height: 282px;
     }
 
     .analytics-section-nav-wrap {
