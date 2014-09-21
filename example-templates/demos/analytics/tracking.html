@@ -1,0 +1,66 @@
+{% extends "demos/analytics/_layout" %}
+
+{% block main %}
+
+    <div class="col-md-8 col-md-offset-2">
+
+        <h1>Tracking</h1>
+
+        {% if accountId is defined %}
+
+            <p>
+                Account ID: {{ accountId }}
+            </p>
+
+            {% set track = craft.request.param('track') %}
+
+            {% if track %}
+                <div class="alert alert-success" role="alert">
+                    <strong>{{ track }} tracking data sent!</strong>
+                </div>
+
+                {% include 'demos/analytics/_sendTracking' with { track: track, accountId: accountId } %}
+
+            {% endif %}
+        {% else %}
+            <div class="alert alert-warning" role="alert">
+                <strong>Warning:</strong> Can't track data because accountId is not set
+            </div>
+        {% endif %}
+
+
+        <div class="row">
+
+            <div class="col-sm-4">
+                <h3>Web</h3>
+                <p><a class="btn btn-primary btn-block" href="?track=campaign">campaign</a></p>
+                <p><a class="btn btn-primary btn-block" href="?track=page">page</a></p>
+                <p><a class="btn btn-primary btn-block" href="?track=event">event</a></p>
+                <p><a class="btn btn-primary btn-block" href="?track=social">social</a></p>
+            </div>
+
+            <div class="col-sm-4">
+                <h3>App</h3>
+                <p><a class="btn btn-primary btn-block" href="?track=appEvent">appEvent</a></p>
+                <p><a class="btn btn-primary btn-block" href="?track=appScreen">appScreen</a></p>
+                <p><a class="btn btn-primary btn-block" href="?track=exception">exception</a></p>
+            </div>
+
+            <div class="col-sm-4">
+                <h3>Ecommerce</h3>
+                <p><a class="btn btn-primary btn-block" href="?track=ecommerceTransaction">ecommerceTransaction</a></p>
+                <p><a class="btn btn-primary btn-block" href="?track=ecommerceItem">ecommerceItem</a></p>
+            </div>
+
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            setTimeout(function() {
+                $('.alert-success').fadeOut('300');
+            }, 3000);
+        });
+    </script>
+
+{% endblock main %}

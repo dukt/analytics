@@ -1,14 +1,11 @@
-{% extends "analytics/_layout" %}
+{% extends "demos/analytics/_layout" %}
 
 
 {% block main %}
 
     <div class="col-md-12">
-        <h1>Hello !</h1>
+        <h1>Front-end statistics</h1>
 
-        <p>Welcome in the Analytics example application. These template will show you how to use Analytics templating features on your Craft website.</p>
-
-        <hr>
 
         {% if craft.analytics is defined %}
             {% if craft.analytics.isConfigured %}
@@ -16,13 +13,13 @@
 
                 <div class="row">
                     <div class="col-md-6">
-                        {% include 'analytics/_visits' %}
-                        {% include 'analytics/_keywords' %}
+                        {% include 'demos/analytics/front-end-stats/_visits' %}
+                        {% include 'demos/analytics/front-end-stats/_keywords' %}
                     </div>
 
                     <div class="col-md-6">
-                        {% include 'analytics/_pages' %}
-                        {% include 'analytics/_sources' %}
+                        {% include 'demos/analytics/front-end-stats/_pages' %}
+                        {% include 'demos/analytics/front-end-stats/_sources' %}
                     </div>
                 </div>
 
