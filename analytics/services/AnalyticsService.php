@@ -783,16 +783,23 @@ class AnalyticsService extends BaseApplicationComponent
 
             if(!$webProperty) {
 
-                $webProperties = $this->getApiObject()->management_webproperties->listManagementWebproperties("~all");
+                $api = $this->getApiObject();
 
-                foreach($webProperties['items'] as $webPropertyItem) {
+                if($api)
+                {
+                    $webProperties = $api->management_webproperties->listManagementWebproperties("~all");
+                    if($webProperties)
+                    {
+                        foreach($webProperties['items'] as $webPropertyItem) {
 
-                    if($webPropertyItem['id'] == $this->getSetting('profileId')) {
-                        $webProperty = $webPropertyItem;
+                            if($webPropertyItem['id'] == $this->getSetting('profileId')) {
+                                $webProperty = $webPropertyItem;
+                            }
+                        }
+
+                        craft()->fileCache->set('analytics.webProperty', $webProperty);
                     }
                 }
-
-                craft()->fileCache->set('analytics.webProperty', $webProperty);
             }
 
             $r = $webProperty;

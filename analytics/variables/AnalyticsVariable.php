@@ -14,6 +14,11 @@ namespace Craft;
 
 class AnalyticsVariable
 {
+    public function track($options = null)
+    {
+        return new AnalyticsTracking($options);
+    }
+
     public function getToken()
     {
         try {
@@ -23,7 +28,6 @@ class AnalyticsVariable
         {
             // todo
         }
-
     }
 
     public function getMetricOpts($params = array())
