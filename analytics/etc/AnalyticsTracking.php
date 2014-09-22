@@ -6,6 +6,11 @@ class AnalyticsTracking
 {
     private $tracking;
 
+    public function __toString()
+    {
+        return '';
+    }
+
     public function __construct($options = null)
     {
         $this->tracking = new \Racecore\GATracking\GATracking();

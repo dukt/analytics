@@ -16,7 +16,7 @@ class AnalyticsVariable
 {
     public function track($options = null)
     {
-        return new AnalyticsTracking($options);
+        return craft()->analytics->track($options);
     }
 
     public function getToken()

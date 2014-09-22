@@ -1,15 +1,31 @@
-# craft.analytics.track
+## craft.analytics.track
 
 craft.analytics.track returns an AnalyticsTracking object.
 
-## Usage
+### Syntax
+
+#### Basic
 
     {{ craft.analytics.track.page({
         documentPath: '/test/pageview/green.jpg',
         documentTitle: 'Test Image Green',
     }).send() }}
 
-## Chaining
+#### Deconstructed
+
+    {{ craft.analytics.track.page({
+        documentPath: '/test/pageview/blue.jpg',
+        documentTitle: 'Test Image Blue',
+    }) }}
+
+    {{ craft.analytics.track.page({
+        documentPath: '/test/pageview/red.jpg',
+        documentTitle: 'Test Image Red',
+    }) }}
+
+    {{ craft.analytics.track.send() }}
+
+#### Chained
 
     {{ craft.analytics.track.page({
         documentPath: '/test/pageview/green.jpg',
@@ -19,7 +35,7 @@ craft.analytics.track returns an AnalyticsTracking object.
         documentTitle: 'Test Image Yellow',
     }).send() }}
 
-## Tracking Options
+#### Tracking Options
 
 These options can be applied for any kind of tracking.
 
@@ -34,7 +50,7 @@ If the `accountId` is not set, the account ID selected in the plugin's settings 
         ...
     }).send() }}
 
-## Campaign Tracking
+### Campaign Tracking
 
     {{ craft.analytics.track.campaign({
         documentPath: '/test/path2',
@@ -46,7 +62,7 @@ If the `accountId` is not set, the account ID selected in the plugin's settings 
         campaignKeywords: ['keyword 1', 'keyword 2'],
     }).send() }}
 
-## Ecommerce Transaction Tracking
+### Ecommerce Transaction Tracking
 
     {{ craft.analytics.track.ecommerceTransaction({
         id: '1234',
@@ -58,7 +74,7 @@ If the `accountId` is not set, the account ID selected in the plugin's settings 
         transactionHost: 'www.domain.tld',
     }).send() }}
 
-## Ecommerce Item Tracking
+### Ecommerce Item Tracking
 
     {{ craft.analytics.track.ecommerceItem({
         transactionID: '1234',
@@ -71,14 +87,14 @@ If the `accountId` is not set, the account ID selected in the plugin's settings 
         transactionHost: 'www.domain.tld',
     }).send() }}
 
-## Page Tracking
+### Page Tracking
 
     {{ craft.analytics.track.page({
         documentPath: '/test/pageview/blub.jpg',
         documentTitle: 'Test Image Title',
     }).send() }}
 
-## Event Tracking
+### Event Tracking
 
     {{ craft.analytics.track.event({
         eventCategory: 'Test Category',
@@ -87,7 +103,7 @@ If the `accountId` is not set, the account ID selected in the plugin's settings 
         eventAction: 'Test Action',
     }).send() }}
 
-## Social Tracking
+### Social Tracking
 
     {{ craft.analytics.track.social({
         socialAction: 'like',
@@ -95,7 +111,7 @@ If the `accountId` is not set, the account ID selected in the plugin's settings 
         socialTarget: '/home',
     }).send() }}
 
-## App Event Tracking
+### App Event Tracking
 
     {{ craft.analytics.track.appEvent({
         eventCategory: 'App Category',
@@ -103,7 +119,7 @@ If the `accountId` is not set, the account ID selected in the plugin's settings 
         appName: 'Application Name',
     }).send() }}
 
-## App Screen Tracking
+### App Screen Tracking
 
     {{ craft.analytics.track.appScreen({
         appName: 'Application Name',
@@ -111,7 +127,7 @@ If the `accountId` is not set, the account ID selected in the plugin's settings 
         contentDescription: 'Description',
     }).send() }}
 
-## Exception
+### Exception
 
     {{ craft.analytics.track.exception({
         exceptionDescription: 'Test Description',
