@@ -1,0 +1,522 @@
+{
+    "realtime": {
+        "title":"Real-Time",
+        "view":"realtime"
+    },
+
+    "realtimeVisitors": {
+        "title":"realtimeVisitors",
+        "view":"browser",
+        "chart":"counter",
+        "enabledCharts":["counter", "table", "pie"],
+        "realtime": true,
+        "metrics": [
+            "rt:activeUsers"
+        ],
+        "dimensions": [
+            "rt:userType"
+        ]
+    },
+    "realtimeLocations": {
+        "title":"realtimeLocations",
+        "view":"browser",
+        "chart":"table",
+        "enabledCharts":["table", "pie"],
+        "realtime": true,
+        "metrics": [
+            "rt:activeUsers"
+        ],
+
+        "dimensions": [
+            "rt:country",
+            "rt:region",
+            "rt:city",
+            "rt:latitude",
+            "rt:longitude",
+        ]
+    },
+    "realtimeSources": {
+        "title":"realtimeSources",
+        "view":"browser",
+        "chart":"table",
+        "enabledCharts":["table", "pie"],
+        "realtime": true,
+        "metrics": [
+            "rt:activeUsers"
+        ],
+
+        "dimensions": [
+            "rt:referralPath",
+            "rt:campaign",
+            "rt:source",
+            "rt:medium",
+            "rt:trafficType",
+            "rt:keyword"
+        ]
+    },
+    "realtimeContent": {
+        "title":"realtimeContent",
+        "view":"browser",
+        "chart":"table",
+        "enabledCharts":["table", "pie"],
+        "realtime": true,
+        "metrics": [
+            "rt:activeUsers",
+            "rt:pageviews",
+        ],
+
+        "dimensions": [
+            "rt:pagePath",
+            "rt:pageTitle"
+        ]
+    },
+    "realtimeEvents": {
+        "title":"realtimeEvents",
+        "view":"browser",
+        "chart":"table",
+        "enabledCharts":["table", "pie"],
+        "realtime": true,
+        "metrics": [
+            "rt:activeUsers",
+            "rt:totalEvents",
+        ],
+
+        "dimensions": [
+            "rt:eventAction",
+            "rt:eventCategory",
+            "rt:eventLabel",
+        ]
+    },
+    "realtimeConversions": {
+        "title":"realtimeConversions",
+        "view":"browser",
+        "chart":"table",
+        "enabledCharts":["table", "pie"],
+        "realtime": true,
+        "metrics": [
+            "rt:goalCompletionsAll",
+            "rt:goalValueAll"
+        ],
+
+        "dimensions": [
+            "rt:goalId",
+        ]
+    },
+    "audienceOverview": {
+        "title":"audienceOverview",
+        "view":"browser",
+        "chart":"area",
+        "enabledCharts":["counter", "area"],
+        "metrics": [
+            "ga:sessions",
+            "ga:pageviews",
+            "ga:pageviewsPerVisit",
+            "ga:avgSessionDuration",
+            "ga:bounceRate",
+            "ga:percentNewSessions"
+        ],
+    },
+
+    "language": {
+        "title":"Language",
+        "view":"browser",
+        "chart":"pie",
+        "metrics": [
+            "ga:sessions",
+            "ga:pageviews",
+            "ga:pageviewsPerVisit",
+            "ga:avgSessionDuration",
+            "ga:bounceRate",
+            "ga:percentNewSessions"
+        ],
+
+        "dimensions": [
+            "ga:language"
+        ]
+    },
+
+    "location": {
+        "title":"location",
+        "view":"browser",
+        "chart":"table",
+        "metrics": [
+            "ga:sessions",
+            "ga:pageviews",
+            "ga:pageviewsPerVisit",
+            "ga:avgSessionDuration",
+            "ga:bounceRate",
+            "ga:percentNewSessions"
+        ],
+
+        "dimensions": [
+            "ga:country",
+            "ga:city",
+            "ga:continent",
+            "ga:subContinent"
+        ]
+    },
+
+    "newVsReturning": {
+        "title":"newVsReturning",
+        "view":"browser",
+        "chart":"pie",
+        "metrics": [
+            "ga:sessions",
+            "ga:pageviews",
+            "ga:pageviewsPerVisit",
+            "ga:avgSessionDuration",
+            "ga:bounceRate",
+            "ga:percentNewSessions"
+        ],
+
+        "dimensions": [
+            "ga:userType"
+        ]
+    },
+
+    "browserOs": {
+        "title":"Browser & OS",
+        "view":"browser",
+        "chart":"pie",
+        "metrics": [
+            "ga:sessions",
+            "ga:pageviews",
+            "ga:pageviewsPerVisit",
+            "ga:avgSessionDuration",
+            "ga:bounceRate",
+            "ga:percentNewSessions"
+        ],
+
+        "dimensions": [
+            "ga:browser",
+            "ga:operatingSystem",
+            "ga:screenResolution",
+            "ga:screenColors",
+            "ga:flashVersion",
+            "ga:javaEnabled",
+        ]
+    },
+
+    "network": {
+        "title":"network",
+        "view":"browser",
+        "chart":"table",
+        "metrics": [
+            "ga:sessions",
+            "ga:pageviews",
+            "ga:pageviewsPerVisit",
+            "ga:avgSessionDuration",
+            "ga:bounceRate",
+            "ga:percentNewSessions"
+        ],
+
+        "dimensions": [
+            "ga:networkLocation",
+            "ga:hostname"
+        ]
+    },
+
+    "mobile": {
+        "title":"Mobile",
+        "view":"browser",
+        "chart":"pie",
+        "metrics": [
+            "ga:sessions",
+            "ga:pageviews",
+            "ga:pageviewsPerVisit",
+            "ga:avgSessionDuration",
+            "ga:bounceRate",
+            "ga:percentNewSessions"
+        ],
+
+        "dimensions": [
+            "ga:deviceCategory",
+            "ga:mobileDeviceBranding",
+            "ga:mobileDeviceModel",
+            "ga:mobileInputSelector",
+            "ga:mobileDeviceInfo",
+            "ga:mobileDeviceMarketingName",
+        ]
+    },
+
+    "allChannels": {
+        "title":"allChannels",
+        "view":"browser",
+        "metrics": [
+            "ga:sessions",
+            "ga:pageviews",
+            "ga:pageviewsPerVisit",
+            "ga:avgSessionDuration",
+            "ga:bounceRate",
+            "ga:percentNewSessions"
+        ],
+
+        "dimensions": [
+            "ga:channelGrouping",
+            "ga:source",
+            "ga:sourceMedium",
+            "ga:medium",
+        ]
+    },
+
+    "allTraffic": {
+        "title":"allTraffic",
+        "view":"browser",
+        "metrics": [
+            "ga:sessions",
+            "ga:pageviews",
+            "ga:pageviewsPerVisit",
+            "ga:avgSessionDuration",
+            "ga:bounceRate",
+            "ga:percentNewSessions"
+        ],
+
+        "dimensions": [
+            "ga:source",
+            "ga:sourceMedium",
+            "ga:medium",
+            "ga:keyword",
+        ]
+    },
+
+    "allReferrals": {
+        "title":"allReferrals",
+        "view":"browser",
+        "metrics": [
+            "ga:sessions",
+            "ga:pageviews",
+            "ga:pageviewsPerVisit",
+            "ga:avgSessionDuration",
+            "ga:bounceRate",
+            "ga:percentNewSessions"
+        ],
+
+        "dimensions": [
+            "ga:referralPath",
+            "ga:fullReferrer",
+            "ga:landingPagePath",
+        ]
+    },
+
+    "campaigns": {
+        "title":"campaigns",
+        "view":"browser",
+        "metrics": [
+            "ga:sessions",
+            "ga:pageviews",
+            "ga:pageviewsPerVisit",
+            "ga:avgSessionDuration",
+            "ga:bounceRate",
+            "ga:percentNewSessions"
+        ],
+
+        "dimensions": [
+            "ga:campaign",
+            "ga:campaignCode"
+        ]
+    },
+
+    "keywords": {
+        "title":"keywords",
+        "view":"browser",
+        "metrics": [
+            "ga:sessions",
+            "ga:pageviews",
+            "ga:pageviewsPerVisit",
+            "ga:avgSessionDuration",
+            "ga:bounceRate",
+            "ga:percentNewSessions"
+        ],
+
+        "dimensions": [
+            "ga:keyword",
+            "ga:source",
+            "ga:landingPagePath"
+        ]
+    },
+
+    "socialNetworks": {
+        "title":"socialNetworks",
+        "view":"browser",
+        "metrics": [
+            "ga:sessions",
+            "ga:pageviews",
+            "ga:pageviewsPerVisit",
+            "ga:avgSessionDuration",
+            "ga:bounceRate",
+            "ga:percentNewSessions"
+        ],
+
+        "dimensions": [
+            "ga:socialNetwork",
+            "ga:hasSocialSourceReferral"
+        ]
+    },
+
+    "allPages": {
+        "title":"allPages",
+        "view":"browser",
+        "metrics": [
+            "ga:pageviews",
+            "ga:avgTimeOnPage",
+            "ga:bounceRate",
+            "ga:exitRate",
+        ],
+
+        "dimensions": [
+            "ga:pagePath",
+            "ga:pagePathLevel1",
+            "ga:pagePathLevel2",
+            "ga:pagePathLevel3",
+            "ga:pagePathLevel4",
+            "ga:pageTitle",
+            "ga:landingPagePath",
+            "ga:secondPagePath",
+            "ga:exitPagePath",
+            "ga:previousPagePath",
+            "ga:nextPagePath",
+            "ga:pageDepth",
+        ]
+    },
+
+    "landingPages": {
+        "title":"landingPages",
+        "view":"browser",
+        "metrics": [
+            "ga:sessions",
+            "ga:pageviews",
+            "ga:pageviewsPerVisit",
+            "ga:avgSessionDuration",
+            "ga:bounceRate",
+            "ga:percentNewSessions"
+        ],
+
+        "dimensions": [
+            "ga:landingPagePath"
+        ]
+    },
+
+    "exitPages": {
+        "title":"exitPages",
+        "view":"browser",
+        "metrics": [
+            "ga:exits",
+            "ga:exitRate",
+            "ga:pageviews"
+        ],
+
+        "dimensions": [
+            "ga:landingPagePath"
+        ]
+    },
+
+    "siteSpeed": {
+        "title":"siteSpeed",
+        "view":"browser",
+        "metrics": [
+            "ga:pageLoadTime",
+            "ga:pageLoadSample",
+            "ga:domainLookupTime",
+            "ga:pageDownloadTime",
+            "ga:redirectionTime",
+            "ga:serverConnectionTime",
+            "ga:serverResponseTime",
+            "ga:speedMetricsSample",
+            "ga:domInteractiveTime",
+            "ga:domContentLoadedTime",
+            "ga:domLatencyMetricsSample",
+            "ga:avgPageLoadTime",
+            "ga:avgDomainLookupTime",
+            "ga:avgPageDownloadTime",
+            "ga:avgRedirectionTime",
+            "ga:avgServerConnectionTime",
+            "ga:avgServerResponseTime",
+            "ga:avgDomInteractiveTime",
+            "ga:avgDomContentLoadedTime",
+        ]
+    },
+
+    "siteSearch": {
+        "title":"siteSearch",
+        "view":"browser",
+        "metrics": [
+            "ga:searchResultViews",
+            "ga:searchUniques",
+            "ga:avgSearchResultViews",
+            "ga:searchSessions",
+            "ga:percentSessionsWithSearch",
+            "ga:searchDepth",
+            "ga:avgSearchDepth",
+            "ga:searchRefinements",
+            "ga:percentSearchRefinements",
+            "ga:searchDuration",
+            "ga:avgSearchDuration",
+            "ga:searchExits",
+            "ga:searchExitRate",
+            "ga:searchGoalXXConversionRate",
+            "ga:searchGoalConversionRateAll",
+            "ga:goalValueAllPerSearch",
+        ],
+
+        "dimensions": [
+            "ga:searchUsed",
+            "ga:searchKeyword",
+            "ga:searchKeywordRefinement",
+            "ga:searchCategory",
+            "ga:searchStartPage",
+            "ga:searchDestinationPage",
+        ]
+    },
+
+    "events": {
+        "title":"events",
+        "view":"browser",
+        "metrics": [
+            "ga:totalEvents",
+            "ga:uniqueEvents",
+            "ga:eventValue",
+            "ga:avgEventValue",
+            "ga:sessionsWithEvent",
+            "ga:visitsWithEvent",
+            "ga:eventsPerSessionWithEvent",
+
+        ],
+
+        "dimensions": [
+            "ga:eventCategory",
+            "ga:eventAction",
+            "ga:eventLabel",
+        ]
+    },
+    "goals": {
+        "title":"goals",
+        "view":"browser",
+        "chart": "area",
+        "enabledCharts":["area"],
+        "metrics": [
+            "ga:goalCompletionsAll",
+            "ga:goalValueAll",
+            "ga:goalConversionRateAll",
+            "ga:goalAbandonRateAll"
+        ],
+
+        "dimensions": [
+            "ga:goalCompletionLocation",
+            "ga:sourceMedium",
+        ]
+    },
+    "ecommerce": {
+        "title":"ecommerce",
+        "view":"browser",
+        "metrics": [
+            "ga:itemQuantity",
+            "ga:uniquePurchases",
+            "ga:revenuePerItem",
+            "ga:revenuePerItem",
+
+        ],
+
+        "dimensions": [
+        ]
+    },
+}

@@ -1,6 +1,99 @@
+.analytics-toolbox {
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  top: 0;
+}
+/* Icons */
+.icon-chart {
+  width: 17px;
+  height: 17px;
+  position: relative;
+  bottom: -2px;
+  display: block;
+  background: center center no-repeat;
+}
+.icon-chart-counter {
+  background-image: url("../images/chart-counter.png");
+}
+.icon-chart-area {
+  background-image: url("../images/chart-area.png");
+}
+.icon-chart-table {
+  background-image: url("../images/chart-table.png");
+}
+.icon-chart-pie {
+  background-image: url("../images/chart-pie.png");
+}
+.analytics-counter {
+  padding: 12px 0;
+  text-align: center;
+}
+.analytics-counter .analytics-counter-value {
+  font-size: 5em;
+  line-height: 1em;
+  margin-bottom: 0.1em;
+}
+.analytics-counter .analytics-counter-label,
+.analytics-counter .analytics-counter-period {
+  display: inline;
+  font-size: 1.2em;
+  opacity: .7;
+}
+.analytics-counter .analytics-counter-label {
+  color: #318EC4;
+}
+.analytics-counter .analytics-counter-period {
+  color: #666;
+}
+/* Browser Header */
+.analytics-browser-header .analytics-period {
+  display: inline-block;
+}
+.analytics-browser-header .analytics-period .select {
+  box-shadow: none;
+  border: 1px solid #ddd;
+}
+.analytics-browser-header .analytics-dimension {
+  box-shadow: none;
+  background: #F2F6EB;
+  border: 1px solid #AEC683;
+}
+.analytics-browser-header .analytics-dimension select {
+  color: #6CAB34;
+}
+.analytics-browser-header .analytics-metric {
+  box-shadow: none;
+  background: #E7F3F8;
+  border: 1px solid #89BAD9;
+}
+.analytics-browser-header .analytics-metric select {
+  color: #318EC4;
+}
+.analytics-browser-header .analytics-browser-settings {
+  margin: 24px -24px;
+  clear: both;
+}
+.analytics-browser-header .analytics-browser-settings .analytics-browser-settings-in {
+  border-top: 1px solid #fafafa;
+  border-bottom: 1px solid #fafafa;
+}
+.analytics-browser-header .analytics-browser-settings .analytics-browser-settings-in .analytics-browser-settings-in-in {
+  padding: 24px 24px;
+}
+.analytics-browser-header .analytics-fields {
+  text-align: left;
+}
+.analytics-browser-header .analytics-fields .analytics-field {
+  display: inline-block;
+  text-align: left;
+}
+.analytics-browser {
+  /* charts */
+}
 .analytics-browser .spinner {
   position: absolute;
-  top: 0;
+  top: -5px;
   right: -24px;
 }
 .analytics-browser .btngroup .btn {
@@ -25,78 +118,29 @@
   background: #fcfcfc;
   color: #aaa;
 }
-.analytics-browser .analytics-header {
-  margin: 0 -24px;
-  padding: 18px 24px;
-  padding-top: 0;
-  border-bottom: 1px solid #fafafa;
-  margin-bottom: 20px;
+.analytics-browser .analytics-infos {
+  margin-bottom: 12px;
 }
-.analytics-browser .analytics-header h2 {
-  float: left;
-  margin-right: 1em;
-}
-.analytics-browser .analytics-header .field {
-  float: left;
-  margin-bottom: 0 !important;
-  margin-right: 12px;
-}
-.analytics-browser .analytics-header .field .select {
-  box-shadow: none;
-  background: #fff;
-  border: 1px solid #eee;
-  overflow: hidden;
-}
-.analytics-browser .analytics-header .field:last-child {
-  margin-right: 0;
-}
-.analytics-browser .analytics-header ul.analytics-date li {
-  display: inline-block;
-}
-.analytics-browser .analytics-header ul.analytics-date li a {
-  color: #666;
-  padding: 5px 8px;
+.analytics-browser .analytics-infos .analytics-infos-count {
+  font-size: 1.5em;
   display: block;
-  border-radius: 4px;
+  margin-bottom: 4px;
 }
-.analytics-browser .analytics-header ul.analytics-date li a:hover {
-  background: #fafafa;
-  text-decoration: none;
+.analytics-browser .analytics-infos .analytics-infos-dimension {
+  font-weight: bold;
+  font-size: 15px;
+  display: block;
+  margin-bottom: 4px;
 }
-.analytics-browser .analytics-header ul.analytics-date li a.sel {
-  color: #11549A;
-  background: #E3F0FD;
-}
-.analytics-browser .analytics-fields {
-  text-align: left;
-  margin-bottom: 24px;
-}
-.analytics-browser .analytics-fields .analytics-field {
-  display: inline-block;
-  text-align: left;
-}
-.analytics-browser .analytics-dimension {
-  box-shadow: none;
-  background: #F2F6EB;
-  border: 1px solid #AEC683;
-}
-.analytics-browser .analytics-dimension select {
-  color: #6CAB34;
-}
-.analytics-browser .analytics-metric {
-  box-shadow: none;
-  background: #E7F3F8;
-  border: 1px solid #89BAD9;
-}
-.analytics-browser .analytics-metric select {
+.analytics-browser .analytics-infos .analytics-infos-metric {
   color: #318EC4;
+  opacity: .7;
+  font-size: 0.9em;
 }
-.analytics-browser .analytics-block {
-  margin: 0 -24px;
-  padding: 20px 24px;
-}
-.analytics-browser .analytics-block:first-child {
-  padding-top: 0;
+.analytics-browser .analytics-infos .analytics-infos-period {
+  font-size: 0.9em;
+  color: #666;
+  opacity: .7;
 }
 .analytics-browser .analytics-total {
   display: none;
@@ -119,19 +163,7 @@
 .analytics-browser .analytics-piechart {
   height: 282px;
 }
-.analytics-browser .analytics-section-nav-wrap {
-  margin: 0 -24px;
-  padding: 0px 24px;
-  margin-bottom: 0;
-}
-.analytics-browser .analytics-section-nav-wrap .analytics-section-nav div.analytics-section-nav-item {
-  float: left;
-  width: 48%;
-  margin-right: 4%;
-}
-.analytics-browser .analytics-section-nav-wrap .analytics-section-nav div.analytics-section-nav-item:last-child {
-  margin-right: 0;
-}
+/* Analytics Table Chart */
 .analytics-chart-table {
   margin: 0;
   margin-bottom: 20px;

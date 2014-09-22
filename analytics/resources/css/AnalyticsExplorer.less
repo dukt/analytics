@@ -4,10 +4,76 @@
     }
 }
 
+// .analytics-menu {
+//     float: left;
+// }
+
 .analytics-nav {
     float: left;
 }
 
+
+.analytics-disabled-tabletype {
+    display: none;
+}
+
+.analytics-pin {
+    width: 18px;
+    height: 18px;
+    border-radius: 100%;
+    text-indent: -3000px;
+    display: inline-block;
+    margin-left: 12px;
+    background: #aaa;
+    border: 1px solid #aaa;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+
+    .analytics-pin-in {
+        width: 18px;
+        height: 18px;
+        background: #fff;
+        border-radius: 100%;
+        position: absolute;
+
+        -webkit-border-radius:100%;
+        -moz-border-radius:100%;
+        transform:scale(0.7);
+        transition-property:background-color,transform,-moz-transform,-webkit-transform,background,background-image;
+        transition-duration:200ms;
+        transition-timing-function:ease-out;
+        -webkit-transform:scale(0.7);
+        -webkit-transition-property:background-color,transform,-moz-transform,-webkit-transform,background,background-image;
+        -webkit-transition-duration:200ms;
+        -webkit-transition-timing-function:ease-out;
+        -moz-transform:scale(0.7);
+        -moz-transition-property:background-color,transform,-moz-transform,-webkit-transform,background,background-image;
+        -moz-transition-duration:200ms;
+        -moz-transition-timing-function:ease-out;
+    }
+
+    &.active .analytics-pin-in {
+        width: 18px;
+        height: 18px;
+        background: #fff;
+        -webkit-border-radius:100%;
+        -moz-border-radius:100%;
+        transform:scale(1);
+        transition-property:background-color,transform,-moz-transform,-webkit-transform,background,background-image;
+        transition-duration:200ms;
+        transition-timing-function:ease-out;
+        -webkit-transform:scale(1);
+        -webkit-transition-property:background-color,transform,-moz-transform,-webkit-transform,background,background-image;
+        -webkit-transition-duration:200ms;
+        -webkit-transition-timing-function:ease-out;
+        -moz-transform:scale(1);
+        -moz-transition-property:background-color,transform,-moz-transform,-webkit-transform,background,background-image;
+        -moz-transition-duration:200ms;
+        -moz-transition-timing-function:ease-out;
+    }
+
+}
 
 .analytics-nav {
     // margin-left: -12px;

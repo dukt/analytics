@@ -3,33 +3,28 @@ AnalyticsExplorer = Garnish.Base.extend({
     init: function(element)
     {
         this.$element = $('#'+element);
-        this.$currentNav = 'audience';
+        this.$currentMenu = 'mobile';
 
 
         // nav
-        this.$navBtn = $('.analytics-nav:first', this.$element);
-        this.$nav = this.$navBtn.menubtn().data('menubtn').menu;
-        this.$nav.on('optionselect', $.proxy(this, 'onNavChange'));
+        this.$menu = $('.analytics-menu:first select:first', this.$element);
+        this.$menu.on('change', $.proxy(this, 'onMenuChange'));
 
         // browser
         this.$browser = new AnalyticsBrowser(element);
 
         // realtime
-        this.$realtime = new AnalyticsRealtimeReport(element);
+        //this.$realtime = new AnalyticsRealtimeReport(element);
     },
 
-    onNavChange: function(ev)
+    onMenuChange: function(ev)
     {
-        // option
-        this.$nav.$options.removeClass('sel');
-        var $option = $(ev.selectedOption).addClass('sel');
-        this.$navBtn.html($option.html());
+        $value = $(ev.currentTarget).val();
+        this.$currentMenu = $value;
 
-        // value
-        $value = $option.data('item');
-
-        // display view
-        $view = AnalyticsBrowserSections[$value].view;
+        // view
+        console.log('value', $value);
+        $view = AnalyticsBrowserData[$value].view;
         $('.analytics-view', this.$element).addClass('hidden');
         $('.analytics-view[data-view="'+$view+'"]', this.$element).removeClass('hidden');
 
@@ -38,12 +33,12 @@ AnalyticsExplorer = Garnish.Base.extend({
 
         if($view == 'browser')
         {
-            this.$realtime.stop();
+            // this.$realtime.stop();
             this.$browser.changeCurrentNav($value);
         }
         else if($view == 'realtime')
         {
-            this.$realtime.start();
+            // this.$realtime.start();
         }
     }
 });

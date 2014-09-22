@@ -33,12 +33,23 @@ class Analytics_ExplorerWidget extends BaseWidget
         $browserSectionsJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/browser.json');
         $browserSections = json_decode($browserSectionsJson, true);
 
+        // browser data
+        $browserDataJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/browserData.json');
+        // $browserData = json_decode($browserDataJson, true);
+
+        // browserSelect
+
+        $browserSelectJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/browserSelect.json');
+        $browserSelect = json_decode($browserSelectJson, true);
+
         // js
         craft()->templates->includeJs('var AnalyticsBrowserSections = '.$browserSectionsJson.';');
+        craft()->templates->includeJs('var AnalyticsBrowserData = '.$browserDataJson.';');
         craft()->templates->includeJs('new AnalyticsExplorer("widget'.$widget->id.'");');
 
         // render
         $variables['browserSections'] = $browserSections;
+        $variables['browserSelect'] = $browserSelect;
         $variables['widget'] = $widget;
         $variables['pluginSettings'] = $pluginSettings;
 

@@ -1,34 +1,49 @@
+{% import "_includes/forms" as forms %}
+
 {% includeJsResource 'analytics/js/AnalyticsExplorer.js' %}
 {% includeCssResource "analytics/css/AnalyticsExplorer.css" %}
 
 <div class="analytics-widget" data-widget-id="{{widget.id}}">
 
-    <div class="analytics-explorer">
 
-        {# Nav #}
+    {# Toolbox #}
 
-        <div class="btn menubtn analytics-nav">{{ browserSections|first.title }}</div>
-        <div class="menu analytics-menu">
-            <ul class="padded">
-                {% for sectionKey, section in browserSections %}
-                    <li><a data-item="{{ sectionKey }}">{{ section.title }}</a></li>
-                {% endfor %}
-            </ul>
-        </div>
+    <div class="analytics-toolbox">
 
+{#         <div class="btngroup">
+            <div class="btn">Open</div>
+        </div> #}
 
-        {# Real-Time #}
-
-        <div class="analytics-view hidden" data-view="realtime">
-            {% include 'analytics/widgets/explorer/_realtime' %}
-        </div>
-
-
-        {# Browser #}
-
-        <div class="analytics-view" data-view="browser">
-            {% include 'analytics/widgets/explorer/_browser' %}
-        </div>
+        <div class="analytics-pin"><div class="analytics-pin-in"></div></div>
 
     </div>
+
+    <div class="analytics-collapsible">
+
+        <div class="analytics-menu">
+            {{ forms.selectField({
+                options: browserSelect
+            }) }}
+        </div>
+
+
+        {% include 'analytics/widgets/explorer/_browserHeader' %}
+
+        <div class="clear"></div>
+
+    </div>
+
+    {# Real-Time #}
+
+    <div class="analytics-view hidden" data-view="realtime">
+        {% include 'analytics/widgets/explorer/_realtime' %}
+    </div>
+
+
+    {# Browser #}
+
+    <div class="analytics-view" data-view="browser">
+        {% include 'analytics/widgets/explorer/_browser' %}
+    </div>
+
 </div>

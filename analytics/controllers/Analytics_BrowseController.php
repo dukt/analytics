@@ -19,11 +19,11 @@ class Analytics_BrowseController extends BaseController
         try {
 
             // parameter
-
             $id = craft()->request->getParam('id');
             $dimension = craft()->request->getParam('dimension');
             $metric = craft()->request->getParam('metric');
             $period = craft()->request->getParam('period');
+            $realtime = craft()->request->getParam('realtime');
 
             // widget
             $widget = craft()->dashboard->getUserWidgetById($id);
@@ -36,20 +36,54 @@ class Analytics_BrowseController extends BaseController
             $end = date('Y-m-d');
 
 
-
             // chart
+            $chart = $this->chart($realtime, $profile, $start, $end, $metric, $dimension, $period);
+
+            // total
+            $total = $this->total($realtime, $profile, $start, $end, $metric, $dimension);
+
+            // table
+            $table = $this->table($realtime, $profile, $start, $end, $metric, $dimension);
+
+            // return json
+            $this->returnJson(array(
+                'chart' => $chart,
+                'table' => $table,
+                'total' => $total
+            ));
+        }
+        catch(\Exception $e)
+        {
+            $this->returnErrorJson($e->getMessage());
+        }
+    }
+
+    private function chart($realtime, $profile, $start, $end, $metric, $dimension, $period)
+    {
+        switch($period)
+        {
+            case 'year':
+            $chartDimension = 'ga:yearMonth';
+            break;
+
+            default:
+            $chartDimension = 'ga:date';
+        }
 
 
-            switch($period)
-            {
-                case 'year':
-                $chartDimension = 'ga:yearMonth';
-                break;
+        if($realtime)
+        {
+            $chartResponse = craft()->analytics->apiRealtimeGet(
+                'ga:'.$profile['id'],
+                $metric,
+                array('dimensions' => 'rt:userType')
+            );
 
-                default:
-                $chartDimension = 'ga:date';
-            }
-
+            $cols = $chartResponse['columnHeaders'];
+            $rows = $chartResponse->rows;
+        }
+        else
+        {
             $chartResponse = craft()->analytics->apiGet(
                 'ga:'.$profile['id'],
                 $start,
@@ -61,16 +95,42 @@ class Analytics_BrowseController extends BaseController
                 )
             );
 
-            $chartResponse = $this->localizeApiResponse($chartResponse);
-            $chartRows = $this->parseRows($chartResponse);
-            $chart = array(
-                'columns' => $chartResponse['cols'],
-                'rows' => $chartRows,
+            $cols = $chartResponse['cols'];
+            $rows = $chartResponse['rows'];
+        }
+
+
+        $cols = $this->localizeApiResponse($cols);
+        $rows = $this->parseRows($cols, $rows);
+
+        $chart = array(
+            'columns' => $cols,
+            'rows' => $rows,
+        );
+
+        return $chart;
+    }
+
+    private function total($realtime, $profile, $start, $end, $metric)
+    {
+        if($realtime)
+        {
+            $chartResponse = craft()->analytics->apiRealtimeGet(
+                'ga:'.$profile['id'],
+                $metric,
+                array()
             );
 
+            $cols = $this->localizeApiResponse($chartResponse['columnHeaders']);
+            $rows = $chartResponse->rows;
 
-            // total
-
+            $total = array(
+                'count' => $this->formatValue($cols[0]->dataType, $rows[0][0]),
+                'label' => strtolower(Craft::t($metric))
+            );
+        }
+        else
+        {
             $totalApiResponse = craft()->analytics->apiGet(
                 'ga:'.$profile['id'],
                 $start,
@@ -82,42 +142,95 @@ class Analytics_BrowseController extends BaseController
                 'count' => $this->formatValue($totalApiResponse['cols'][0]->dataType, $totalApiResponse['rows'][0][$metric]),
                 'label' => strtolower(Craft::t($metric))
             );
+        }
 
+        return $total;
+    }
 
-            // table
-
-            $tableResponse = craft()->analytics->apiGet(
-                'ga:'.$profile['id'],
-                $start,
-                $end,
-                $metric,
-                array(
-                    'dimensions' => $dimension,
+    private function table($realtime, $profile, $start, $end, $metric, $dimension)
+    {
+        if($realtime)
+        {
+            $table = $this->_realtimeRequest($profile, $metric, $dimension);
+        }
+        else
+        {
+            $table = $this->_request($profile, $start, $end, $metric, $dimension, array(
                     'sort' => '-'.$metric,
                     'max-results' => 20,
-                )
-            );
-
-            $tableResponse = $this->localizeApiResponse($tableResponse);
-
-            $table = array(
-                'columns' => $tableResponse['cols'],
-                'rows' => $this->parseRows($tableResponse)
-            );
-
-
-            // return json
-
-            $this->returnJson(array(
-                'chart' => $chart,
-                'table' => $table,
-                'total' => $total
-            ));
+                ));
         }
-        catch(\Exception $e)
+
+        return $table;
+    }
+
+    private function _request($profile, $start, $end, $metrics, $dimensions = null, $params = array())
+    {
+        if($dimensions)
         {
-            $this->returnErrorJson($e->getMessage());
+            $params['dimensions'] = $dimensions;
         }
+
+        $tableResponse = craft()->analytics->apiGet(
+            'ga:'.$profile['id'],
+            $start,
+            $end,
+            $metrics,
+            $params
+        );
+
+        $cols = $tableResponse['cols'];
+        $rows = $tableResponse['rows'];
+
+        $cols = $this->localizeApiResponse($cols);
+        $rows = $this->parseRows($cols, $rows);
+
+        return array(
+            'columns' => $cols,
+            'rows' => $rows
+        );
+    }
+
+    private function _realtimeRequest($profile, $metric, $dimensions)
+    {
+        $chartResponse = craft()->analytics->apiRealtimeGet(
+            'ga:'.$profile['id'],
+            $metric,
+            array('dimensions' => $dimensions)
+        );
+
+        $cols = $chartResponse['columnHeaders'];
+        $rows = $chartResponse->rows;
+        $newRows = array();
+
+        if($rows)
+        {
+            foreach($rows as $row)
+            {
+                $newRow = array();
+
+                $i = 0;
+                foreach($cols as $k => $col)
+                {
+                    $rowItem = $row[$i];
+                    $newRow[$k] = $rowItem;
+                    $i++;
+                }
+
+                array_push($newRows, $newRow);
+            }
+        }
+
+        $rows = $newRows;
+
+        $cols = $this->localizeApiResponse($cols);
+
+        $rows = $this->parseRows($cols, $rows);
+
+        return array(
+                'columns' => $cols,
+                'rows' => $rows
+            );
     }
 
     public function actionTable()
@@ -158,12 +271,12 @@ class Analytics_BrowseController extends BaseController
 
                 $response = $this->localizeApiResponse($response);
 
-                //$rows = $response['rows'];
-                $rows = $this->parseRows($response);
+                $cols = $response['cols'];
+                $rows = $this->parseRows($cols, $response['rows']);
 
                 // return
                 $this->returnJson(array(
-                    'columns' => $response['cols'],
+                    'columns' => $cols,
                     'rows' => $rows
                 ));
             }
@@ -224,9 +337,8 @@ class Analytics_BrowseController extends BaseController
                     )
                 );
 
-                $response = $this->localizeApiResponse($response);
-
-                $rows = $this->parseRows($response);
+                $cols = $this->localizeApiResponse($response['cols']);
+                $rows = $this->parseRows($cols, $response['rows']);
 
                 // total
                 $totalApiResponse = craft()->analytics->apiGet(
@@ -302,69 +414,71 @@ class Analytics_BrowseController extends BaseController
         return $value;
     }
 
-    public function localizeApiResponse($response)
+    public function localizeApiResponse($cols)
     {
         // cols
-        foreach($response['cols'] as $key => $col)
+        foreach($cols as $key => $col)
         {
-            $response['cols'][$key]->label = Craft::t($col->name);
+            $cols[$key]->label = Craft::t($col->name);
         }
 
-        return $response;
+        return $cols;
     }
 
-    public function parseRows($apiResponse)
+    public function parseRows($cols, $apiRows = null)
     {
-        $cols = $apiResponse['cols'];
-
         $rows = array();
-
-        foreach($apiResponse['rows'] as $apiRow)
+        if($apiRows)
         {
-            $row = array();
 
-            $colNumber = 0;
-
-            foreach($apiRow as $key => $value)
+            foreach($apiRows as $apiRow)
             {
-                $col = $cols[$colNumber];
+                $row = array();
 
-                $value = $this->formatRawValue($col->dataType, $value);
+                $colNumber = 0;
 
-                $cell = array(
-                    'v' => $value,
-                    'f' => (string) $this->formatValue($col->dataType, $value)
-                );
-
-                switch($key)
+                foreach($apiRow as $key => $value)
                 {
-                    case 'ga:date':
+                    $col = $cols[$colNumber];
+                    $value = $this->formatRawValue($col->dataType, $value);
+
+
 
                     $cell = array(
                         'v' => $value,
-                        'f' => strftime("%Y.%m.%d", strtotime($value))
+                        'f' => (string) $this->formatValue($col->dataType, $value)
                     );
 
-                    break;
+                    switch($col->name)
+                    {
+                        case 'ga:date':
 
-                    case 'ga:yearMonth':
+                        $cell = array(
+                            'v' => $value,
+                            'f' => strftime("%Y.%m.%d", strtotime($value))
+                        );
 
-                    $cell = array(
-                        'v' => $value,
-                        'f' => strftime("%Y.%m", strtotime($value.'01'))
-                    );
+                        break;
 
-                    break;
+                        case 'ga:yearMonth':
+
+                        $cell = array(
+                            'v' => $value,
+                            'f' => strftime("%Y.%m", strtotime($value.'01'))
+                        );
+
+                        break;
+                    }
+
+                    array_push($row, $cell);
+
+                    $colNumber++;
                 }
 
-                array_push($row, $cell);
-
-                $colNumber++;
+                array_push($rows, $row);
             }
 
-            array_push($rows, $row);
         }
-
         return $rows;
     }
 }

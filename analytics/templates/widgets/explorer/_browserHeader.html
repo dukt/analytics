@@ -1,0 +1,84 @@
+<div class="analytics-browser-header">
+
+    {# Browser Settings #}
+
+    <div class="analytics-browser-settings">
+        <div class="analytics-browser-settings-in">
+            <div class="analytics-browser-settings-in-in">
+
+                <div class="analytics-fields left">
+
+                    <div class="analytics-dimension-field analytics-field hidden">
+
+                        {{ forms.selectField({
+                            first: true,
+                            class:"analytics-dimension small",
+                            name: 'dimension',
+                        }) }}
+
+                    </div>
+
+                    <div class="analytics-metric-field analytics-field">
+
+                        {{ forms.selectField({
+                            first: true,
+                            class:"analytics-metric small",
+                            name: 'metric',
+                        }) }}
+                    </div>
+
+                </div>
+
+
+                <div class="right">
+
+
+                    {# Chart type #}
+
+                    <div class="analytics-tabletype btngroup">
+                        <div data-tabletype="counter" role="button" class="btn active" title="Display in an counter chart">
+                            <span class="icon-chart icon-chart-counter"></span>
+                        </div>
+
+                        <div data-tabletype="area" role="button" class="btn active" title="Display in an area chart">
+                            <span class="icon-chart icon-chart-area"></span>
+                        </div>
+
+                        <div data-tabletype="table" role="button" class="btn" title="Display in a table">
+                            <span class="icon-chart icon-chart-table"></span>
+                        </div>
+
+                        <div data-tabletype="pie" role="button" class="btn" title="Display in a pie">
+                            <span class="icon-chart icon-chart-pie"></span>
+                        </div>
+                    </div>
+
+
+                    <div class="analytics-disabled-tabletype btngroup">
+                    </div>
+
+                    &nbsp;
+
+                    {# Period #}
+
+                    <div class="analytics-period">
+
+                        {{ forms.selectField({
+                            name: 'period',
+                            options: [
+                                { "label": "Week", "value": "week"},
+                                { "label": "Month", "value": "month"},
+                                { "label": "Year", "value": "year"},
+                            ]
+                        }) }}
+
+                    </div>
+
+                </div>
+
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
