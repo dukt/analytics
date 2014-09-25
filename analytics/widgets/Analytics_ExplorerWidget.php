@@ -19,6 +19,19 @@ class Analytics_ExplorerWidget extends BaseWidget
         return Craft::t('Analytics Explorer');
     }
 
+    protected function defineSettings()
+    {
+        return array(
+           'menu' => array(AttributeType::String),
+           'dimension' => array(AttributeType::String),
+           'metric' => array(AttributeType::String),
+           'chart' => array(AttributeType::String),
+           'chart' => array(AttributeType::String),
+           'period' => array(AttributeType::String),
+           'pinned' => array(AttributeType::Bool)
+        );
+    }
+
     public function getBodyHtml()
     {
         $plugin = craft()->plugins->getPlugin('analytics');
@@ -35,7 +48,6 @@ class Analytics_ExplorerWidget extends BaseWidget
 
         // browser data
         $browserDataJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/browserData.json');
-        // $browserData = json_decode($browserDataJson, true);
 
         // browserSelect
 
@@ -45,7 +57,7 @@ class Analytics_ExplorerWidget extends BaseWidget
         // js
         craft()->templates->includeJs('var AnalyticsBrowserSections = '.$browserSectionsJson.';');
         craft()->templates->includeJs('var AnalyticsBrowserData = '.$browserDataJson.';');
-        craft()->templates->includeJs('new AnalyticsExplorer("widget'.$widget->id.'");');
+        craft()->templates->includeJs('new AnalyticsExplorer("widget'.$widget->id.'", '.json_encode($widget->settings).');');
 
         // render
         $variables['browserSections'] = $browserSections;
