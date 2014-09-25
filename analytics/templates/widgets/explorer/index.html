@@ -1,24 +1,25 @@
 {% import "_includes/forms" as forms %}
 
+{%- includeJsResource 'analytics/js/jsapi.js' first %}
 {% includeJsResource 'analytics/js/AnalyticsExplorer.js' %}
 {% includeCssResource "analytics/css/AnalyticsExplorer.css" %}
+{% includeJsResource 'analytics/js/AnalyticsUtils.js' %}
 
 <div class="analytics-widget" data-widget-id="{{widget.id}}">
 
 
-    {# Toolbox #}
+    {# actions #}
 
-    <div class="analytics-toolbox">
-
-{#         <div class="btngroup">
-            <div class="btn">Open</div>
-        </div> #}
-
-        <div class="analytics-pin"><div class="analytics-pin-in"></div></div>
-
+    <div class="analytics-actions">
+        <div class="analytics-pin">
+            <div class="analytics-pin-in"></div>
+        </div>
     </div>
 
     <div class="analytics-collapsible">
+
+
+        {# Menu #}
 
         <div class="analytics-menu">
             {{ forms.selectField({
@@ -27,23 +28,121 @@
         </div>
 
 
-        {% include 'analytics/widgets/explorer/_browserHeader' %}
+        {# Toolbar #}
 
+        <div class="analytics-toolbar">
+
+            {# Browser Settings #}
+
+            <div class="analytics-settings">
+                <div class="analytics-settings-in">
+                    <div class="analytics-settings-in-in">
+                        <div class="analytics-fields left">
+
+                            <div class="analytics-dimension-field analytics-field hidden">
+
+                                {{ forms.selectField({
+                                    first: true,
+                                    class:"analytics-dimension small",
+                                    name: 'dimension',
+                                }) }}
+
+                            </div>
+
+                            <div class="analytics-metric-field analytics-field">
+
+                                {{ forms.selectField({
+                                    first: true,
+                                    class:"analytics-metric small",
+                                    name: 'metric',
+                                }) }}
+                            </div>
+                        </div>
+
+
+                        <div class="right">
+
+                            {# Chart type #}
+
+                            <div class="analytics-tabletype btngroup">
+
+                                <div data-tabletype="area" role="button" class="btn active" title="Display in an area chart">
+                                    <span class="icon-chart icon-chart-area"></span>
+                                </div>
+
+                                <div data-tabletype="counter" role="button" class="btn active" title="Display in an counter chart">
+                                    <span class="icon-chart icon-chart-counter"></span>
+                                </div>
+
+                                <div data-tabletype="table" role="button" class="btn" title="Display in a table">
+                                    <span class="icon-chart icon-chart-table"></span>
+                                </div>
+
+                                <div data-tabletype="pie" role="button" class="btn" title="Display in a pie">
+                                    <span class="icon-chart icon-chart-pie"></span>
+                                </div>
+                            </div>
+
+
+                            <div class="analytics-disabled-tabletype btngroup">
+                            </div>
+
+                            &nbsp;
+
+                            {# Period #}
+
+                            <div class="analytics-period">
+
+                                {{ forms.selectField({
+                                    name: 'period',
+                                    options: [
+                                        { "label": "Week", "value": "week"},
+                                        { "label": "Month", "value": "month"},
+                                        { "label": "Year", "value": "year"},
+                                    ]
+                                }) }}
+
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="clear"></div>
-
-    </div>
-
-    {# Real-Time #}
-
-    <div class="analytics-view hidden" data-view="realtime">
-        {% include 'analytics/widgets/explorer/_realtime' %}
     </div>
 
 
     {# Browser #}
 
-    <div class="analytics-view" data-view="browser">
-        {% include 'analytics/widgets/explorer/_browser' %}
+    <div class="analytics-browser">
+
+        {# Infos #}
+
+        <div class="analytics-infos">
+            <span class="analytics-infos-dimension">Browsers</span>
+            <span class="analytics-infos-count">1543</span>
+            <span class="analytics-infos-metric">Visits</span>
+            <span class="analytics-infos-period">last month</span>
+        </div>
+
+        <div class="right analytics-total">
+            <strong class="analytics-count"></strong> <em class="analytics-label"></em>
+        </div>
+
+
+        {# Charts #}
+
+        <div class="analytics-counter hidden">
+            <div class="analytics-counter-value">1423</div>
+            <div class="analytics-counter-label"></div>
+            <div class="analytics-counter-period">last month</div>
+        </div>
+
+        <div class="analytics-chart"></div>
+        <div class="analytics-table analytics-chart-table hidden"></div>
+        <div class="analytics-piechart hidden"></div>
+        <div class="analytics-inject"></div>
     </div>
 
 </div>
