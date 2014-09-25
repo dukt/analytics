@@ -1,13 +1,40 @@
+/* general */
 .analytics_explorer h2 {
   display: none;
 }
-.analytics-nav {
-  float: left;
+.analytics_explorer .spinner {
+  position: absolute;
+  top: 19px;
+  right: 1px;
 }
-.analytics-disabled-tabletype {
-  display: none;
+.analytics_explorer .icon-chart {
+  width: 17px;
+  height: 17px;
+  position: relative;
+  bottom: -2px;
+  display: block;
+  background: center center no-repeat;
 }
-.analytics-pin {
+.analytics_explorer .icon-chart-counter {
+  background-image: url("../images/chart-counter.png");
+}
+.analytics_explorer .icon-chart-area {
+  background-image: url("../images/chart-area.png");
+}
+.analytics_explorer .icon-chart-table {
+  background-image: url("../images/chart-table.png");
+}
+.analytics_explorer .icon-chart-pie {
+  background-image: url("../images/chart-pie.png");
+}
+/* actions */
+.analytics-actions {
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  top: 0;
+}
+.analytics-actions .analytics-pin {
   width: 18px;
   height: 18px;
   border-radius: 100%;
@@ -20,7 +47,7 @@
   top: 0px;
   right: 0px;
 }
-.analytics-pin .analytics-pin-in {
+.analytics-actions .analytics-pin .analytics-pin-in {
   width: 18px;
   height: 18px;
   background: #fff;
@@ -41,7 +68,7 @@
   -moz-transition-duration: 200ms;
   -moz-transition-timing-function: ease-out;
 }
-.analytics-pin.active .analytics-pin-in {
+.analytics-actions .analytics-pin.active .analytics-pin-in {
   width: 18px;
   height: 18px;
   background: #fff;
@@ -60,15 +87,250 @@
   -moz-transition-duration: 200ms;
   -moz-transition-timing-function: ease-out;
 }
-.analytics-nav {
-  color: #777 !important;
-  box-shadow: none !important;
-  background: #fff !important;
+/* toolbar */
+.analytics-toolbar .analytics-settings {
+  margin: 24px -24px;
+  clear: both;
+}
+.analytics-toolbar .analytics-settings .analytics-settings-in {
+  border-top: 1px solid #fafafa;
+  border-bottom: 1px solid #fafafa;
+}
+.analytics-toolbar .analytics-settings .analytics-settings-in .analytics-settings-in-in {
+  padding: 24px 24px;
+}
+.analytics-toolbar .analytics-settings .analytics-settings-in .analytics-settings-in-in .analytics-fields {
+  text-align: left;
+}
+.analytics-toolbar .analytics-settings .analytics-settings-in .analytics-settings-in-in .analytics-fields .analytics-field {
+  display: inline-block;
+  text-align: left;
+}
+.analytics-toolbar .analytics-settings .analytics-settings-in .analytics-settings-in-in .analytics-fields .analytics-metric {
+  box-shadow: none;
+  background: #E7F3F8;
+  border: 1px solid #89BAD9;
+}
+.analytics-toolbar .analytics-settings .analytics-settings-in .analytics-settings-in-in .analytics-fields .analytics-metric select {
+  color: #318EC4;
+}
+.analytics-toolbar .analytics-settings .analytics-settings-in .analytics-settings-in-in .analytics-fields .analytics-dimension {
+  box-shadow: none;
+  background: #F2F6EB;
+  border: 1px solid #AEC683;
+}
+.analytics-toolbar .analytics-settings .analytics-settings-in .analytics-settings-in-in .analytics-fields .analytics-dimension select {
+  color: #6CAB34;
+}
+.analytics-toolbar .analytics-disabled-tabletype {
+  display: none;
+}
+.analytics-toolbar .analytics-period {
+  display: inline-block;
+}
+.analytics-toolbar .analytics-period .select {
+  box-shadow: none;
+  border: 1px solid #ddd;
+}
+/* browser */
+.analytics-browser {
+  /* charts */
+  /* counter */
+}
+.analytics-browser .btngroup .btn {
+  padding: 4px 10px;
+  height: 28px;
+  font-size: 11px;
+}
+.analytics-browser .select {
+  box-shadow: none;
+  border: 1px solid #ddd;
+}
+.analytics-browser .btngroup.btngroup {
+  box-shadow: none;
   border: 1px solid #eee;
 }
-.analytics-nav:after {
-  opacity: .4;
+.analytics-browser .btngroup .btn {
+  background: #fff;
+  box-shadow: none;
+  color: #555;
 }
-.analytics-nav.active:after {
-  opacity: 1;
+.analytics-browser .btngroup .btn.active {
+  background: #fcfcfc;
+  color: #aaa;
+}
+.analytics-browser .analytics-infos {
+  margin-bottom: 12px;
+}
+.analytics-browser .analytics-infos .analytics-infos-count {
+  font-size: 1.5em;
+  display: block;
+  margin-bottom: 4px;
+}
+.analytics-browser .analytics-infos .analytics-infos-dimension {
+  font-weight: bold;
+  font-size: 15px;
+  display: block;
+  margin-bottom: 4px;
+}
+.analytics-browser .analytics-infos .analytics-infos-metric {
+  color: #318EC4;
+  opacity: .7;
+  font-size: 0.9em;
+}
+.analytics-browser .analytics-infos .analytics-infos-period {
+  font-size: 0.9em;
+  color: #666;
+  opacity: .7;
+}
+.analytics-browser .analytics-total {
+  display: none;
+  font-size: 1.1em;
+  text-align: center;
+  line-height: 1.8em;
+}
+.analytics-browser .analytics-total strong {
+  font-weight: normal;
+}
+.analytics-browser .analytics-total em {
+  font-size: 0.9em;
+  font-style: normal;
+  color: #ccc;
+}
+.analytics-browser .analytics-chart {
+  background: #fafafa;
+  height: 140px;
+}
+.analytics-browser .analytics-piechart {
+  height: 282px;
+}
+.analytics-browser .analytics-counter {
+  padding: 12px 0;
+  text-align: center;
+}
+.analytics-browser .analytics-counter .analytics-counter-value {
+  font-size: 5em;
+  line-height: 1em;
+  margin-bottom: 0.1em;
+}
+.analytics-browser .analytics-counter .analytics-counter-label,
+.analytics-browser .analytics-counter .analytics-counter-period {
+  display: inline;
+  font-size: 1.2em;
+  opacity: .7;
+}
+.analytics-browser .analytics-counter .analytics-counter-label {
+  color: #318EC4;
+}
+.analytics-browser .analytics-counter .analytics-counter-period {
+  color: #666;
+}
+/* table chart */
+.analytics-chart-table {
+  margin: 0;
+  margin-bottom: 20px;
+  position: relative;
+  min-height: 30px;
+  border-top: 1px dotted #e3e5e8;
+  min-height: 60px;
+}
+.analytics-chart-table > div {
+  position: inherit;
+}
+.analytics-chart-table .google-visualization-table-th {
+  background: none !important;
+  padding-left: 0;
+  padding-right: 0;
+  border: 0;
+  border-bottom: 1px dotted #e3e5e8;
+  color: rgba(0, 0, 0, 0.298039);
+  font-size: 0.8em;
+  white-space: nowrap;
+}
+.analytics-chart-table .google-visualization-table-th:first-child {
+  text-align: left;
+}
+.analytics-chart-table .google-visualization-table-th:last-child {
+  text-align: right;
+}
+.analytics-chart-table .google-visualization-table-th span {
+  display: none;
+}
+.analytics-chart-table td.google-visualization-table-td {
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: #fff;
+  border-left: 0;
+  border-right: 0;
+  border-top: 0;
+  border-bottom: 1px dotted #e3e5e8;
+}
+.analytics-chart-table td.google-visualization-table-td:hover {
+  background: #fff;
+}
+.analytics-chart-table td.google-visualization-table-td.google-visualization-table-td-number {
+  text-align: right;
+}
+.analytics-chart-table td {
+  width: 100px;
+}
+.analytics-chart-table td strong {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 200px;
+  display: block;
+  overflow: hidden;
+  font-weight: normal;
+}
+.analytics-chart-table .google-visualization-table-tr-sel td,
+.analytics-chart-table .google-visualization-table-tr-over td {
+  background-color: #fff;
+}
+.analytics-chart-table .google-visualization-table-tr-sel.google-visualization-table-tr-odd td,
+.analytics-chart-table .google-visualization-table-tr-over.google-visualization-table-tr-odd td {
+  background-color: #fff;
+}
+.analytics-chart-table .google-visualization-table-div-page {
+  margin-top: 10px;
+  text-align: center;
+  position: absolute;
+  bottom: -35px;
+  left: 0;
+  width: 100%;
+}
+.analytics-chart-table .google-visualization-table-div-page .charts-custom-button-inner-box {
+  padding: 2px 10px;
+}
+.analytics-chart-table .google-visualization-table-div-page .charts-custom-button {
+  background: #fff;
+  margin: 0 3px;
+}
+.analytics-chart-table .google-visualization-table-div-page .charts-custom-button .charts-custom-button-outer-box {
+  border-color: #ccc;
+}
+.analytics-chart-table .google-visualization-table-div-page .charts-custom-button .charts-custom-button-outer-box .charts-custom-button-inner-box {
+  border-color: #ccc;
+}
+.analytics-chart-table .google-visualization-table-div-page .charts-custom-button:hover,
+.analytics-chart-table .google-visualization-table-div-page .charts-custom-button-hover {
+  background: #fff;
+}
+.analytics-chart-table .google-visualization-table-div-page .charts-custom-button:hover .charts-custom-button-outer-box,
+.analytics-chart-table .google-visualization-table-div-page .charts-custom-button-hover .charts-custom-button-outer-box {
+  border-color: #bbb !important;
+}
+.analytics-chart-table .google-visualization-table-div-page .charts-custom-button:hover .charts-custom-button-outer-box .charts-custom-button-inner-box,
+.analytics-chart-table .google-visualization-table-div-page .charts-custom-button-hover .charts-custom-button-outer-box .charts-custom-button-inner-box {
+  border-color: #bbb !important;
+}
+.analytics-chart-table .google-visualization-table-div-page .charts-custom-button-disabled {
+  opacity: .1;
+}
+.analytics-chart-table .google-visualization-table-div-page .page-number {
+  padding: 10px;
+}
+.analytics-chart-table .google-visualization-table-page-numbers {
+  display: none;
 }
