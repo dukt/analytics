@@ -14,6 +14,34 @@ namespace Craft;
 
 class Analytics_BrowseController extends BaseController
 {
+    public function actionSaveState()
+    {
+        $widgetSettings = array();
+        $widgetSettings['menu'] = craft()->request->getPost('menu');
+        $widgetSettings['dimension'] = craft()->request->getPost('dimension');
+        $widgetSettings['metric'] = craft()->request->getPost('metric');
+        $widgetSettings['chart'] = craft()->request->getPost('chart');
+        $widgetSettings['period'] = craft()->request->getPost('period');
+        $widgetSettings['pinned'] = (bool) craft()->request->getPost('pinned');
+
+        $widget = new WidgetModel();
+        $widget->id = craft()->request->getPost('id');
+        $widget->type = 'Analytics_Explorer';
+        $widget->settings = $widgetSettings;
+
+        if (craft()->dashboard->saveUserWidget($widget))
+        {
+            $this->returnJson(true);
+        }
+        else
+        {
+            $this->returnErrorJson('Couldn’t save widget');
+        }
+
+
+        // $this->returnErrorJson('Widget not found');
+    }
+
     public function actionCombined()
     {
         try {
