@@ -14,6 +14,9 @@ namespace Craft;
 
 class Analytics_BrowseController extends BaseController
 {
+    // // widget
+    // $widget = craft()->dashboard->getUserWidgetById($id);
+
     public function actionSaveState()
     {
         $widgetSettings = array();
@@ -37,47 +40,34 @@ class Analytics_BrowseController extends BaseController
         {
             $this->returnErrorJson('Couldn’t save widget');
         }
-
-
-        // $this->returnErrorJson('Widget not found');
     }
 
-    public function actionCombined()
+    public function actionTable()
     {
-        try {
-
-            // parameter
-            $id = craft()->request->getParam('id');
+        try
+        {
+            $realtime = craft()->request->getParam('realtime');
+            $profile = craft()->analytics->getProfile();
             $dimension = craft()->request->getParam('dimension');
             $metric = craft()->request->getParam('metric');
             $period = craft()->request->getParam('period');
-            $realtime = craft()->request->getParam('realtime');
-
-            // widget
-            $widget = craft()->dashboard->getUserWidgetById($id);
-
-            // profile
-            $profile = craft()->analytics->getProfile();
-
-            // start / end dates
             $start = date('Y-m-d', strtotime('-1 '.$period));
             $end = date('Y-m-d');
 
+            if($realtime)
+            {
+                $table = $this->_realtimeRequest($profile, $metric, $dimension);
+            }
+            else
+            {
+                $table = $this->_request($profile, $start, $end, $metric, $dimension, array(
+                        'sort' => '-'.$metric,
+                        'max-results' => 20,
+                    ));
+            }
 
-            // chart
-            $chart = $this->chart($realtime, $profile, $start, $end, $metric, $dimension, $period);
-
-            // total
-            $total = $this->total($realtime, $profile, $start, $end, $metric, $dimension);
-
-            // table
-            $table = $this->table($realtime, $profile, $start, $end, $metric, $dimension);
-
-            // return json
             $this->returnJson(array(
-                'chart' => $chart,
                 'table' => $table,
-                'total' => $total
             ));
         }
         catch(\Exception $e)
@@ -86,110 +76,138 @@ class Analytics_BrowseController extends BaseController
         }
     }
 
-    private function chart($realtime, $profile, $start, $end, $metric, $dimension, $period)
+    public function actionPie()
     {
-        switch($period)
-        {
-            case 'year':
-            $chartDimension = 'ga:yearMonth';
-            break;
-
-            default:
-            $chartDimension = 'ga:date';
-        }
-
-
-        if($realtime)
-        {
-            $chartResponse = craft()->analytics->apiRealtimeGet(
-                'ga:'.$profile['id'],
-                $metric,
-                array('dimensions' => 'rt:userType')
-            );
-
-            $cols = $chartResponse['columnHeaders'];
-            $rows = $chartResponse->rows;
-        }
-        else
-        {
-            $chartResponse = craft()->analytics->apiGet(
-                'ga:'.$profile['id'],
-                $start,
-                $end,
-                $metric,
-                array(
-                    'dimensions' => $chartDimension,
-                    'sort' => $chartDimension,
-                )
-            );
-
-            $cols = $chartResponse['cols'];
-            $rows = $chartResponse['rows'];
-        }
-
-
-        $cols = $this->localizeApiResponse($cols);
-        $rows = $this->parseRows($cols, $rows);
-
-        $chart = array(
-            'columns' => $cols,
-            'rows' => $rows,
-        );
-
-        return $chart;
+        $this->actionTable();
     }
 
-    private function total($realtime, $profile, $start, $end, $metric)
+    public function actionArea()
     {
-        if($realtime)
+        try
         {
-            $chartResponse = craft()->analytics->apiRealtimeGet(
-                'ga:'.$profile['id'],
-                $metric,
-                array()
+            $realtime = craft()->request->getParam('realtime');
+            $profile = craft()->analytics->getProfile();
+            $dimension = craft()->request->getParam('dimension');
+            $metric = craft()->request->getParam('metric');
+            $period = craft()->request->getParam('period');
+            $start = date('Y-m-d', strtotime('-1 '.$period));
+            $end = date('Y-m-d');
+
+            switch($period)
+            {
+                case 'year':
+                $chartDimension = 'ga:yearMonth';
+                break;
+
+                default:
+                $chartDimension = 'ga:date';
+            }
+
+            if($realtime)
+            {
+                $chartResponse = craft()->analytics->apiRealtimeGet(
+                    'ga:'.$profile['id'],
+                    $metric,
+                    array('dimensions' => 'rt:userType')
+                );
+
+                $cols = $chartResponse['columnHeaders'];
+                $rows = $chartResponse->rows;
+            }
+            else
+            {
+                $chartResponse = craft()->analytics->apiGet(
+                    'ga:'.$profile['id'],
+                    $start,
+                    $end,
+                    $metric,
+                    array(
+                        'dimensions' => $chartDimension,
+                        'sort' => $chartDimension,
+                    )
+                );
+
+                $cols = $chartResponse['cols'];
+                $rows = $chartResponse['rows'];
+            }
+
+            $cols = $this->localizeApiResponse($cols);
+            $rows = $this->parseRows($cols, $rows);
+
+            $total = 0;
+
+            foreach($rows as $row)
+            {
+                $total += $row[1]['v'];
+            }
+
+            $area = array(
+                'columns' => $cols,
+                'rows' => $rows,
             );
 
-            $cols = $this->localizeApiResponse($chartResponse['columnHeaders']);
-            $rows = $chartResponse->rows;
-
-            $total = array(
-                'count' => $this->formatValue($cols[0]->dataType, $rows[0][0]),
-                'label' => strtolower(Craft::t($metric))
-            );
+            $this->returnJson(array(
+                'area' => $area,
+                'total' => $total,
+                'metric' => $metric
+            ));
         }
-        else
+        catch(\Exception $e)
         {
-            $totalApiResponse = craft()->analytics->apiGet(
-                'ga:'.$profile['id'],
-                $start,
-                $end,
-                $metric
-            );
-
-            $total = array(
-                'count' => $this->formatValue($totalApiResponse['cols'][0]->dataType, $totalApiResponse['rows'][0][$metric]),
-                'label' => strtolower(Craft::t($metric))
-            );
+            $this->returnErrorJson($e->getMessage());
         }
-
-        return $total;
     }
 
-    private function table($realtime, $profile, $start, $end, $metric, $dimension)
+    public function actionCounter()
     {
-        if($realtime)
+        try
         {
-            $table = $this->_realtimeRequest($profile, $metric, $dimension);
-        }
-        else
-        {
-            $table = $this->_request($profile, $start, $end, $metric, $dimension, array(
-                    'sort' => '-'.$metric,
-                    'max-results' => 20,
-                ));
-        }
+            $realtime = craft()->request->getParam('realtime');
+            $profile = craft()->analytics->getProfile();
+            $metric = craft()->request->getParam('metric');
+            $period = craft()->request->getParam('period');
+            $start = date('Y-m-d', strtotime('-1 '.$period));
+            $end = date('Y-m-d');
 
-        return $table;
+            if($realtime)
+            {
+                $chartResponse = craft()->analytics->apiRealtimeGet(
+                    'ga:'.$profile['id'],
+                    $metric,
+                    array()
+                );
+
+                $cols = $this->localizeApiResponse($chartResponse['columnHeaders']);
+                $rows = $chartResponse->rows;
+
+                $counter = array(
+                    'count' => $this->formatValue($cols[0]->dataType, $rows[0][0]),
+                    'label' => strtolower(Craft::t($metric))
+                );
+            }
+            else
+            {
+                $totalApiResponse = craft()->analytics->apiGet(
+                    'ga:'.$profile['id'],
+                    $start,
+                    $end,
+                    $metric
+                );
+
+                $counter = array(
+                    'count' => $this->formatValue($totalApiResponse['cols'][0]->dataType, $totalApiResponse['rows'][0][$metric]),
+                    'label' => strtolower(Craft::t($metric))
+                );
+            }
+
+            $this->returnJson(array(
+                'counter' => $counter,
+            ));
+        }
+        catch(\Exception $e)
+        {
+            $this->returnErrorJson($e->getMessage());
+        }
     }
 
     private function _request($profile, $start, $end, $metrics, $dimensions = null, $params = array())
@@ -261,145 +279,7 @@ class Analytics_BrowseController extends BaseController
             );
     }
 
-    public function actionTable()
-    {
-        try {
-
-            // widget
-
-            $id = craft()->request->getParam('id');
-            $dimension = craft()->request->getParam('dimension');
-            $metric = craft()->request->getParam('metric');
-            $period = craft()->request->getParam('period');
-
-            $widget = craft()->dashboard->getUserWidgetById($id);
-
-            if($widget)
-            {
-                // profile
-                $profile = craft()->analytics->getProfile();
-
-                // start / end dates
-                $start = date('Y-m-d', strtotime('-1 '.$period));
-                $end = date('Y-m-d');
-
-                // api response
-
-                $response = craft()->analytics->apiGet(
-                    'ga:'.$profile['id'],
-                    $start,
-                    $end,
-                    $metric,
-                    array(
-                        'dimensions' => $dimension,
-                        'sort' => '-'.$metric,
-                        'max-results' => 20,
-                    )
-                );
-
-                $response = $this->localizeApiResponse($response);
-
-                $cols = $response['cols'];
-                $rows = $this->parseRows($cols, $response['rows']);
-
-                // return
-                $this->returnJson(array(
-                    'columns' => $cols,
-                    'rows' => $rows
-                ));
-            }
-            else
-            {
-                $this->returnErrorJson('Widget not found');
-            }
-        }
-        catch(\Exception $e)
-        {
-            $this->returnErrorJson($e->getMessage());
-        }
-    }
-
-    public function actionChart()
-    {
-        try {
-
-            // widget
-
-            $id = craft()->request->getParam('id');
-            $dimension = craft()->request->getParam('dimension');
-            $metric = craft()->request->getParam('metric');
-            $period = craft()->request->getParam('period');
-
-            $widget = craft()->dashboard->getUserWidgetById($id);
-
-            if($widget)
-            {
-                // profile
-                $profile = craft()->analytics->getProfile();
-
-                // start / end dates
-                $start = date('Y-m-d', strtotime('-1 '.$period));
-                $end = date('Y-m-d');
-
-                // response
-
-                switch($period)
-                {
-                    case 'year':
-                    $dimension = 'ga:yearMonth';
-                    break;
-
-                    default:
-                    $dimension = 'ga:date';
-                }
-
-                // response
-                $response = craft()->analytics->apiGet(
-                    'ga:'.$profile['id'],
-                    $start,
-                    $end,
-                    $metric,
-                    array(
-                        'dimensions' => $dimension,
-                        'sort' => $dimension,
-                    )
-                );
-
-                $cols = $this->localizeApiResponse($response['cols']);
-                $rows = $this->parseRows($cols, $response['rows']);
-
-                // total
-                $totalApiResponse = craft()->analytics->apiGet(
-                    'ga:'.$profile['id'],
-                    $start,
-                    $end,
-                    $metric
-                );
-
-                $total = array(
-                    'count' => $this->formatValue($totalApiResponse['cols'][0]->dataType, $totalApiResponse['rows'][0][$metric]),
-                    'label' => strtolower(Craft::t($metric))
-                );
-
-                // return
-                $this->returnJson(array(
-                    'columns' => $response['cols'],
-                    'rows' => $rows,
-                    'total' => $total
-                ));
-            }
-            else
-            {
-                $this->returnErrorJson('Widget not found');
-            }
-        }
-        catch(\Exception $e)
-        {
-            $this->returnErrorJson($e->getMessage());
-        }
-    }
-
-    public function formatRawValue($type, $value)
+    private function formatRawValue($type, $value)
     {
         switch($type)
         {
@@ -417,7 +297,7 @@ class Analytics_BrowseController extends BaseController
         return $value;
     }
 
-    public function formatValue($type, $value)
+    private function formatValue($type, $value)
     {
         switch($type)
         {
@@ -442,9 +322,8 @@ class Analytics_BrowseController extends BaseController
         return $value;
     }
 
-    public function localizeApiResponse($cols)
+    private function localizeApiResponse($cols)
     {
-        // cols
         foreach($cols as $key => $col)
         {
             $cols[$key]->label = Craft::t($col->name);
@@ -453,12 +332,12 @@ class Analytics_BrowseController extends BaseController
         return $cols;
     }
 
-    public function parseRows($cols, $apiRows = null)
+    private function parseRows($cols, $apiRows = null)
     {
         $rows = array();
+
         if($apiRows)
         {
-
             foreach($apiRows as $apiRow)
             {
                 $row = array();

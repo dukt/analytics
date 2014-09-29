@@ -1,6 +1,12 @@
 /* general */
+.analytics_explorer {
+  padding: 0;
+}
 .analytics_explorer h2 {
   display: none;
+}
+.analytics_explorer .analytics-widget {
+  border-top: 1px solid #fff;
 }
 .analytics_explorer .spinner {
   position: absolute;
@@ -31,8 +37,8 @@
 .analytics-actions {
   position: absolute;
   z-index: 1;
-  right: 0;
-  top: 0;
+  right: 24px;
+  top: 24px;
 }
 .analytics-actions .analytics-pin {
   width: 18px;
@@ -87,9 +93,13 @@
   -moz-transition-duration: 200ms;
   -moz-transition-timing-function: ease-out;
 }
+/* menu */
+.analytics-menu {
+  padding: 24px;
+}
 /* toolbar */
 .analytics-toolbar .analytics-settings {
-  margin: 24px -24px;
+  margin: 0;
   clear: both;
 }
 .analytics-toolbar .analytics-settings .analytics-settings-in {
@@ -134,6 +144,7 @@
 }
 /* browser */
 .analytics-browser {
+  padding: 24px;
   /* charts */
   /* counter */
 }

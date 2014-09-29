@@ -1,8 +1,14 @@
 /* general */
 
 .analytics_explorer {
+    padding: 0;
+
     h2 {
         display: none;
+    }
+
+    .analytics-widget {
+        border-top: 1px solid #fff;
     }
 
     .spinner { position: absolute; top: 19px; right: 1px; }
@@ -28,8 +34,8 @@
 .analytics-actions {
     position: absolute;
     z-index: 1;
-    right: 0;
-    top: 0;
+    right: 24px;
+    top: 24px;
 
     .analytics-pin {
         width: 18px;
@@ -90,12 +96,18 @@
 }
 
 
+/* menu */
+
+.analytics-menu {
+    padding: 24px;
+}
+
 /* toolbar */
 
 .analytics-toolbar {
 
     .analytics-settings {
-        margin: 24px -24px;
+        margin: 0;
         clear: both;
 
         .analytics-settings-in {
@@ -163,6 +175,8 @@
 /* browser */
 
 .analytics-browser {
+
+    padding: 24px;
 
     .btngroup {
         .btn { padding:4px 10px; height: 28px; font-size: 11px; }
