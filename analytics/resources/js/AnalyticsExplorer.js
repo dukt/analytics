@@ -22,8 +22,10 @@ AnalyticsExplorer = Garnish.Base.extend({
         this.chartAreaData = false;
 
         this.$element = $('#'+element);
+        this.$error = $('.analytics-error', this.$element);
         this.$menu = $('.analytics-menu:first select:first', this.$element);
         this.$widget = $('.analytics-widget:first', this.$element);
+        this.$browser = $('.analytics-browser:first', this.$element);
         this.$chart = $('.analytics-chart', this.$element);
         this.$pie = $('.analytics-piechart', this.$element);
         this.$table = $('.analytics-table', this.$element);
@@ -232,6 +234,9 @@ AnalyticsExplorer = Garnish.Base.extend({
         {
             if(typeof(response.error) == 'undefined')
             {
+                this.$browser.removeClass('hidden');
+                this.$error.addClass('hidden');
+
                 switch(chart)
                 {
                     case "area":
@@ -250,24 +255,28 @@ AnalyticsExplorer = Garnish.Base.extend({
                     this.updateCounter(response);
                     break;
                 }
-            }
 
-            if(typeof(response.dimension) != 'undefined')
-            {
-                console.log('yes');
-                this.$infosDimension.removeClass('hidden');
-                this.$infosDimension.html(response.dimension);
+                if(typeof(response.dimension) != 'undefined')
+                {
+                    this.$infosDimension.removeClass('hidden');
+                    this.$infosDimension.html(response.dimension);
+                }
+                else
+                {
+                    this.$infosDimension.addClass('hidden');
+                }
+
+                this.$infosMetric.html(response.metric);
+                this.$infosPeriod.html(response.period);
+
+                this.changeTableType(chart);
             }
             else
             {
-                console.log('no');
-                this.$infosDimension.addClass('hidden');
+                this.$browser.addClass('hidden');
+                this.$error.html(response.error);
+                this.$error.removeClass('hidden');
             }
-
-            this.$infosMetric.html(response.metric);
-            this.$infosPeriod.html(response.period);
-
-            this.changeTableType(chart);
 
             this.$spinner.addClass('hidden');
         }, this));
