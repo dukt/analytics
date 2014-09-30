@@ -313,11 +313,11 @@ var AnalyticsUtils = {
             apiColumn.dataType = 'DATE';
         }
 
-        // if(apiColumn.name == 'ga:yearMonth')
-        // {
-        //     $type = 'date';
-        //     apiColumn.dataType = 'DATE';
-        // }
+        if(apiColumn.name == 'ga:yearMonth')
+        {
+            $type = 'date';
+            apiColumn.dataType = 'DATE';
+        }
 
         var column = {
             'type': $type,

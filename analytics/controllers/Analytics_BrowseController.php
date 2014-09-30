@@ -380,13 +380,14 @@ class Analytics_BrowseController extends BaseController
                         break;
 
                         case 'ga:yearMonth':
+                        $cell = strftime("%Y.%m.%d", strtotime($value.'01'));
                         //$cell = strftime("%Y.%m.%d", strtotime($value.'01'));
-                        $datetime = new DateTime('@'.strtotime($value.'01'));
+                        // $datetime = new DateTime('@'.strtotime($value.'01'));
 
-                        $cell = array(
-                            'v' => strftime("%Y.%m.%d", strtotime($value.'01')),
-                            'f' => $datetime->format("F y"),
-                        );
+                        // $cell = array(
+                        //     'v' => strftime("%Y.%m.%d", strtotime($value.'01')),
+                        //     'f' => $datetime->format("F y"),
+                        // );
                         break;
                     }
 

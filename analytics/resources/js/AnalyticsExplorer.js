@@ -1,6 +1,6 @@
 (function($) {
 
-google.load("visualization", "1", {packages:['corechart', 'table', 'geochart']});
+google.load("visualization", "1", {packages:['corechart', 'table', 'geochart'], 'language': 'en'});
 
 AnalyticsExplorer = Garnish.Base.extend({
     init: function(element, settings)
@@ -318,8 +318,15 @@ AnalyticsExplorer = Garnish.Base.extend({
         }
         else if(this.$periodSelect.val() == 'year')
         {
-            this.areaChartOptions.hAxis.showTextEvery = 3;
+            this.areaChartOptions.hAxis.showTextEvery = 1;
+            this.areaChartOptions.hAxis.format = 'MMM yy';
         }
+
+        var dateFormatter = new google.visualization.DateFormat({
+            pattern: "MMMM yyyy"
+        });
+
+        dateFormatter.format(this.chartAreaData, 0);
 
         this.chartArea.draw(this.chartAreaData, this.areaChartOptions);
 
