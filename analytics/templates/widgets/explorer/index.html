@@ -66,19 +66,19 @@
 
                             <div class="analytics-tabletype btngroup">
 
-                                <div data-tabletype="area" role="button" class="btn active" title="Display in an area chart">
+                                <div data-tabletype="area" role="button" class="btn active" title="{{ "Area"|t }}">
                                     <span class="icon-chart icon-chart-area"></span>
                                 </div>
 
-                                <div data-tabletype="counter" role="button" class="btn active" title="Display in an counter chart">
+                                <div data-tabletype="counter" role="button" class="btn active" title="{{ "Counter"|t }}">
                                     <span class="icon-chart icon-chart-counter"></span>
                                 </div>
 
-                                <div data-tabletype="table" role="button" class="btn" title="Display in a table">
+                                <div data-tabletype="table" role="button" class="btn" title="{{ "Table"|t }}">
                                     <span class="icon-chart icon-chart-table"></span>
                                 </div>
 
-                                <div data-tabletype="pie" role="button" class="btn" title="Display in a pie">
+                                <div data-tabletype="pie" role="button" class="btn" title="{{ "Pie"|t }}">
                                     <span class="icon-chart icon-chart-pie"></span>
                                 </div>
                             </div>
@@ -96,9 +96,9 @@
                                 {{ forms.selectField({
                                     name: 'period',
                                     options: [
-                                        { "label": "Week", "value": "week"},
-                                        { "label": "Month", "value": "month"},
-                                        { "label": "Year", "value": "year"},
+                                        { "label": "Week"|t, "value": "week"},
+                                        { "label": "Month"|t, "value": "month"},
+                                        { "label": "Year"|t, "value": "year"},
                                     ]
                                 }) }}
 

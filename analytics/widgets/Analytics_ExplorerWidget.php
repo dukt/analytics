@@ -45,14 +45,65 @@ class Analytics_ExplorerWidget extends BaseWidget
         // browser sections
         $browserSectionsJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/browser.json');
         $browserSections = json_decode($browserSectionsJson, true);
+        foreach($browserSections as $k => $browserSection)
+        {
+            $browserSections[$k]['title'] = Craft::t($browserSections[$k]['title']);
+        }
+
+        $browserSectionsJson = json_encode($browserSections);
 
         // browser data
         $browserDataJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/browserData.json');
+        $browserData = json_decode($browserDataJson, true);
+
+        foreach($browserData as $k => $row)
+        {
+            $browserData[$k]['title'] = Craft::t($browserData[$k]['title']);
+
+            if(!empty($browserData[$k]['metrics']))
+            {
+                foreach($browserData[$k]['metrics'] as $k2 => $metric)
+                {
+                    $browserData[$k]['metrics'][$k2] = array(
+                        'label' => Craft::t($metric),
+                        'value' => $metric
+                    );
+                }
+            }
+
+            if(!empty($browserData[$k]['dimensions']))
+            {
+                foreach($browserData[$k]['dimensions'] as $k2 => $dimension)
+                {
+                    $browserData[$k]['dimensions'][$k2] = array(
+                        'label' => Craft::t($dimension),
+                        'value' => $dimension
+                    );
+                }
+            }
+        }
+
+        $browserDataJson = json_encode($browserData);
 
         // browserSelect
 
         $browserSelectJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/browserSelect.json');
         $browserSelect = json_decode($browserSelectJson, true);
+
+        foreach($browserSelect as $k => $row)
+        {
+            if(!empty($browserSelect[$k]['optgroup']))
+            {
+                $browserSelect[$k]['optgroup'] = Craft::t($browserSelect[$k]['optgroup']);
+            }
+
+            if(!empty($browserSelect[$k]['label']))
+            {
+                $browserSelect[$k]['label'] = Craft::t($browserSelect[$k]['label']);
+            }
+        }
+
+        $browserSelectJson = json_encode($browserSelect);
 
         // js
         craft()->templates->includeJs('var AnalyticsBrowserSections = '.$browserSectionsJson.';');

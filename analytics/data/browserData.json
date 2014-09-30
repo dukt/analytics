@@ -32,7 +32,7 @@
             "rt:region",
             "rt:city",
             "rt:latitude",
-            "rt:longitude",
+            "rt:longitude"
         ]
     },
     "realtimeSources": {
@@ -62,7 +62,7 @@
         "realtime": true,
         "metrics": [
             "rt:activeUsers",
-            "rt:pageviews",
+            "rt:pageviews"
         ],
 
         "dimensions": [
@@ -78,13 +78,13 @@
         "realtime": true,
         "metrics": [
             "rt:activeUsers",
-            "rt:totalEvents",
+            "rt:totalEvents"
         ],
 
         "dimensions": [
             "rt:eventAction",
             "rt:eventCategory",
-            "rt:eventLabel",
+            "rt:eventLabel"
         ]
     },
     "realtimeConversions": {
@@ -99,7 +99,7 @@
         ],
 
         "dimensions": [
-            "rt:goalId",
+            "rt:goalId"
         ]
     },
     "audienceOverview": {
@@ -114,7 +114,7 @@
             "ga:avgSessionDuration",
             "ga:bounceRate",
             "ga:percentNewSessions"
-        ],
+        ]
     },
 
     "language": {
@@ -193,7 +193,7 @@
             "ga:screenResolution",
             "ga:screenColors",
             "ga:flashVersion",
-            "ga:javaEnabled",
+            "ga:javaEnabled"
         ]
     },
 
@@ -235,7 +235,7 @@
             "ga:mobileDeviceModel",
             "ga:mobileInputSelector",
             "ga:mobileDeviceInfo",
-            "ga:mobileDeviceMarketingName",
+            "ga:mobileDeviceMarketingName"
         ]
     },
 
@@ -255,7 +255,7 @@
             "ga:channelGrouping",
             "ga:source",
             "ga:sourceMedium",
-            "ga:medium",
+            "ga:medium"
         ]
     },
 
@@ -275,7 +275,7 @@
             "ga:source",
             "ga:sourceMedium",
             "ga:medium",
-            "ga:keyword",
+            "ga:keyword"
         ]
     },
 
@@ -294,7 +294,7 @@
         "dimensions": [
             "ga:referralPath",
             "ga:fullReferrer",
-            "ga:landingPagePath",
+            "ga:landingPagePath"
         ]
     },
 
@@ -360,7 +360,7 @@
             "ga:pageviews",
             "ga:avgTimeOnPage",
             "ga:bounceRate",
-            "ga:exitRate",
+            "ga:exitRate"
         ],
 
         "dimensions": [
@@ -375,7 +375,7 @@
             "ga:exitPagePath",
             "ga:previousPagePath",
             "ga:nextPagePath",
-            "ga:pageDepth",
+            "ga:pageDepth"
         ]
     },
 
@@ -432,7 +432,7 @@
             "ga:avgServerConnectionTime",
             "ga:avgServerResponseTime",
             "ga:avgDomInteractiveTime",
-            "ga:avgDomContentLoadedTime",
+            "ga:avgDomContentLoadedTime"
         ]
     },
 
@@ -455,7 +455,7 @@
             "ga:searchExitRate",
             "ga:searchGoalXXConversionRate",
             "ga:searchGoalConversionRateAll",
-            "ga:goalValueAllPerSearch",
+            "ga:goalValueAllPerSearch"
         ],
 
         "dimensions": [
@@ -464,7 +464,7 @@
             "ga:searchKeywordRefinement",
             "ga:searchCategory",
             "ga:searchStartPage",
-            "ga:searchDestinationPage",
+            "ga:searchDestinationPage"
         ]
     },
 
@@ -478,16 +478,16 @@
             "ga:avgEventValue",
             "ga:sessionsWithEvent",
             "ga:visitsWithEvent",
-            "ga:eventsPerSessionWithEvent",
-
+            "ga:eventsPerSessionWithEvent"
         ],
 
         "dimensions": [
             "ga:eventCategory",
             "ga:eventAction",
-            "ga:eventLabel",
+            "ga:eventLabel"
         ]
     },
+
     "goals": {
         "title":"goals",
         "view":"browser",
@@ -502,9 +502,10 @@
 
         "dimensions": [
             "ga:goalCompletionLocation",
-            "ga:sourceMedium",
+            "ga:sourceMedium"
         ]
     },
+
     "ecommerce": {
         "title":"ecommerce",
         "view":"browser",
@@ -512,11 +513,7 @@
             "ga:itemQuantity",
             "ga:uniquePurchases",
             "ga:revenuePerItem",
-            "ga:revenuePerItem",
-
-        ],
-
-        "dimensions": [
+            "ga:revenuePerItem"
         ]
-    },
+    }
 }

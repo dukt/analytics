@@ -66,8 +66,16 @@ class Analytics_BrowseController extends BaseController
                     ));
             }
 
+            foreach($table['rows'] as $k => $row)
+            {
+                $table['rows'][$k][0]['f'] = Craft::t($table['rows'][$k][0]['f']);
+            }
+
             $this->returnJson(array(
                 'table' => $table,
+                'dimension' => Craft::t($dimension),
+                'metric' => Craft::t($metric),
+                'period' => Craft::t('this '.$period)
             ));
         }
         catch(\Exception $e)
@@ -149,7 +157,8 @@ class Analytics_BrowseController extends BaseController
             $this->returnJson(array(
                 'area' => $area,
                 'total' => $total,
-                'metric' => $metric
+                'metric' => Craft::t($metric),
+                'period' => Craft::t('this '.$period)
             ));
         }
         catch(\Exception $e)
@@ -195,13 +204,14 @@ class Analytics_BrowseController extends BaseController
                 );
 
                 $counter = array(
-                    'count' => $this->formatValue($totalApiResponse['cols'][0]->dataType, $totalApiResponse['rows'][0][$metric]),
-                    'label' => strtolower(Craft::t($metric))
+                    'count' => $this->formatValue($totalApiResponse['cols'][0]->dataType, $totalApiResponse['rows'][0][$metric])
                 );
             }
 
             $this->returnJson(array(
                 'counter' => $counter,
+                'metric' => Craft::t($metric),
+                'period' => Craft::t('this '.$period)
             ));
         }
         catch(\Exception $e)
@@ -348,8 +358,6 @@ class Analytics_BrowseController extends BaseController
                 {
                     $col = $cols[$colNumber];
                     $value = $this->formatRawValue($col->dataType, $value);
-
-
 
                     $cell = array(
                         'v' => $value,

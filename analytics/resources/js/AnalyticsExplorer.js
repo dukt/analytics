@@ -42,10 +42,12 @@ AnalyticsExplorer = Garnish.Base.extend({
         this.$pin = $('.analytics-pin', this.$element);
         this.$infosDimension = $('.analytics-infos-dimension', this.$element);
         this.$infosMetric = $('.analytics-infos-metric', this.$element);
+        this.$infosPeriod = $('.analytics-infos-period', this.$element);
         this.$infosCount = $('.analytics-infos-count', this.$element);
         this.$counter = $('.analytics-counter', this.$element);
         this.$counterValue = $('.analytics-counter-value', this.$element);
         this.$counterLabel = $('.analytics-counter-label', this.$element);
+        this.$counterPeriod = $('.analytics-counter-period', this.$element);
         this.$collapsible = $('.analytics-collapsible', this.$element);
 
         this.addListener(this.$menu, 'change', 'onMenuChange');
@@ -250,8 +252,20 @@ AnalyticsExplorer = Garnish.Base.extend({
                 }
             }
 
-            this.$infosDimension.html(this.$dimension.val());
-            this.$infosMetric.html(this.$metric.val());
+            if(typeof(response.dimension) != 'undefined')
+            {
+                console.log('yes');
+                this.$infosDimension.removeClass('hidden');
+                this.$infosDimension.html(response.dimension);
+            }
+            else
+            {
+                console.log('no');
+                this.$infosDimension.addClass('hidden');
+            }
+
+            this.$infosMetric.html(response.metric);
+            this.$infosPeriod.html(response.period);
 
             this.changeTableType(chart);
 
@@ -289,10 +303,11 @@ AnalyticsExplorer = Garnish.Base.extend({
     updateCounter: function(response)
     {
         this.$counterValue.html(response.counter.count);
-        this.$counterLabel.html(response.counter.label);
+        this.$counterLabel.html(response.metric);
+        this.$counterPeriod.html(response.period);
         this.$infosCount.html(response.counter.count);
         this.$totalCount.html(response.counter.count);
-        this.$totalLabel.html(response.counter.label);
+        this.$totalLabel.html(response.metric);
     },
 
     updatePieAndTableChart: function(response)
@@ -414,7 +429,7 @@ AnalyticsExplorer = Garnish.Base.extend({
 
             $.each(this.sectionDimensions, $.proxy(function(key, dimension)
             {
-                $('<option value="'+dimension+'">'+dimension+'</option>').appendTo(this.$dimension);
+                $('<option value="'+dimension.value+'">'+dimension.label+'</option>').appendTo(this.$dimension);
 
             }, this));
 
@@ -449,7 +464,7 @@ AnalyticsExplorer = Garnish.Base.extend({
             $.each(this.sectionMetrics, $.proxy(function(key, metric)
             {
 
-                $('<option value="'+metric+'">'+metric+'</option>').appendTo(this.$metric);
+                $('<option value="'+metric.value+'">'+metric.label+'</option>').appendTo(this.$metric);
             }, this));
 
             // if(!this.currentMetric)
@@ -599,7 +614,7 @@ AnalyticsExplorer = Garnish.Base.extend({
         }
         else if(tableType == 'area')
         {
-            this.$infosDimension.removeClass('hidden');
+            // this.$infosDimension.removeClass('hidden');
             this.$infosCount.removeClass('hidden');
             this.$chart.removeClass('hidden');
             this.$table.addClass('hidden');
