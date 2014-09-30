@@ -295,11 +295,30 @@ AnalyticsExplorer = Garnish.Base.extend({
             this.chartAreaData.addColumn(column.type, column.label);
         }, this));
 
-        this.chartAreaData.addRows(response.area.rows);
+        rows = response.area.rows;
+        rows = AnalyticsUtils.parseRows(response.area.columns, response.area.rows);
+
+        console.log('rows', rows);
+        this.chartAreaData.addRows(rows);
 
         if(!this.chartArea)
         {
             this.chartArea = new google.visualization.AreaChart(this.$chart.get(0));
+        }
+
+        if(this.$periodSelect.val() == 'week')
+        {
+            this.areaChartOptions.hAxis.format = 'E';
+            this.areaChartOptions.hAxis.showTextEvery = 1;
+        }
+        else if(this.$periodSelect.val() == 'month')
+        {
+            this.areaChartOptions.hAxis.format = 'MMM d';
+            this.areaChartOptions.hAxis.showTextEvery = 1;
+        }
+        else if(this.$periodSelect.val() == 'year')
+        {
+            this.areaChartOptions.hAxis.showTextEvery = 3;
         }
 
         this.chartArea.draw(this.chartAreaData, this.areaChartOptions);
@@ -715,11 +734,14 @@ AnalyticsExplorer = Garnish.Base.extend({
         chartArea: {
         },
         hAxis: {
+            //format:'MMM yy',
+            // format: 'MMM d',
+            format: 'E',
             textPosition: 'in',
             textStyle: {
                 color: '#058DC7'
             },
-            showTextEvery: 5,
+            showTextEvery: 1,
             baselineColor: '#fff',
             gridlines: {
                 color: 'none'

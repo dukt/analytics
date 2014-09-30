@@ -98,17 +98,19 @@ class Analytics_BrowseController extends BaseController
             $dimension = craft()->request->getParam('dimension');
             $metric = craft()->request->getParam('metric');
             $period = craft()->request->getParam('period');
-            $start = date('Y-m-d', strtotime('-1 '.$period));
-            $end = date('Y-m-d');
 
             switch($period)
             {
                 case 'year':
                 $chartDimension = 'ga:yearMonth';
+                $start = date('Y-m-01', strtotime('-1 '.$period));
+                $end = date('Y-m-d');
                 break;
 
                 default:
                 $chartDimension = 'ga:date';
+                $start = date('Y-m-d', strtotime('-1 '.$period));
+                $end = date('Y-m-d');
             }
 
             if($realtime)
@@ -368,20 +370,23 @@ class Analytics_BrowseController extends BaseController
                     {
                         case 'ga:date':
 
-                        $cell = array(
-                            'v' => $value,
-                            'f' => strftime("%Y.%m.%d", strtotime($value))
-                        );
+                        $cell = strftime("%Y.%m.%d", strtotime($value));
+
+                        // $cell = array(
+                        //     'v' => $value,
+                        //     'f' => strftime("%Y.%m.%d", strtotime($value))
+                        // );
 
                         break;
 
                         case 'ga:yearMonth':
+                        //$cell = strftime("%Y.%m.%d", strtotime($value.'01'));
+                        $datetime = new DateTime('@'.strtotime($value.'01'));
 
                         $cell = array(
-                            'v' => $value,
-                            'f' => strftime("%Y.%m", strtotime($value.'01'))
+                            'v' => strftime("%Y.%m.%d", strtotime($value.'01')),
+                            'f' => $datetime->format("F y"),
                         );
-
                         break;
                     }
 

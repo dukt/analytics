@@ -307,6 +307,18 @@ var AnalyticsUtils = {
             $type = 'number';
         }
 
+        if(apiColumn.name == 'ga:date')
+        {
+            $type = 'date';
+            apiColumn.dataType = 'DATE';
+        }
+
+        // if(apiColumn.name == 'ga:yearMonth')
+        // {
+        //     $type = 'date';
+        //     apiColumn.dataType = 'DATE';
+        // }
+
         var column = {
             'type': $type,
             'dataType': apiColumn.dataType,
@@ -319,6 +331,8 @@ var AnalyticsUtils = {
 
     parseRows: function(apiColumns, apiRows)
     {
+        console.log('rows before', apiRows);
+
         var rows = [];
 
         if (typeof(apiRows) == 'undefined')
@@ -332,45 +346,69 @@ var AnalyticsUtils = {
 
             $.each(apiColumns, function(k2, column) {
 
-                var cell = apiRows[k][column.name];
+                column = AnalyticsUtils.parseColumn(column);
 
-                if(column.dataType == 'date')
+                console.log('column', column);
+
+                var cell = apiRows[k][k2];
+
+                if(column.dataType == 'DATE')
                 {
-                    $date = cell;
+                    if(typeof(cell) == 'object')
+                    {
+                        $date = cell.v;
+                    }
+                    else
+                    {
+                        $date = cell;
+                    }
 
+                    console.log('date', $date);
                     $year = eval($date.substr(0, 4));
-                    $month = eval($date.substr(4, 2)) - 1;
-                    $day = eval($date.substr(6, 2));
+                    $month = eval($date.substr(5, 2)) - 1;
+                    $day = eval($date.substr(8, 2));
+
+                    console.log($year, $month, $day);
 
                     newDate = new Date($year, $month, $day);
 
-                    cell = newDate;
-                }
-                else
-                {
-                    if(column.dataType == 'INTEGER' || column.dataType == 'FLOAT')
+                    console.log(newDate);
+
+                    if(typeof($date) == 'object')
                     {
-                        cell = eval(cell);
+                        cell.v = newDate;
+                        cell.f = 'x';
                     }
-                    else if(column.dataType == 'PERCENT')
+                    else
                     {
-                        cell = {
-                            'f': (Math.round(eval(cell) * 100) / 100)+"%",
-                            'v': eval(cell)
-                        };
-                    }
-                    else if(column.dataType == 'TIME')
-                    {
-                        cell = {
-                            'f' : eval(cell)+" seconds",
-                            'v' : eval(cell)
-                        };
-                    }
-                    else if(column.name == 'ga:continent' || column.name == 'ga:subContinent')
-                    {
-                        cell.v = ""+cell.v;
+                        cell = newDate;
                     }
                 }
+                // else
+                // {
+                //     if(column.dataType == 'INTEGER' || column.dataType == 'FLOAT')
+                //     {
+                //         cell = eval(cell);
+                //     }
+                //     else if(column.dataType == 'PERCENT')
+                //     {
+                //         cell = {
+                //             'f': (Math.round(eval(cell) * 100) / 100)+"%",
+                //             'v': eval(cell)
+                //         };
+                //     }
+                //     else if(column.dataType == 'TIME')
+                //     {
+                //         cell = {
+                //             'f' : eval(cell)+" seconds",
+                //             'v' : eval(cell)
+                //         };
+                //     }
+                //     else if(column.name == 'ga:continent' || column.name == 'ga:subContinent')
+                //     {
+                //         cell.v = ""+cell.v;
+                //     }
+                // }
 
                 cells[k2] = cell;
             });
