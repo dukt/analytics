@@ -512,7 +512,6 @@
         "metrics": [
             "ga:itemQuantity",
             "ga:uniquePurchases",
-            "ga:revenuePerItem",
             "ga:revenuePerItem"
         ]
     }
