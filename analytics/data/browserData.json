@@ -50,7 +50,6 @@
             "rt:campaign",
             "rt:source",
             "rt:medium",
-            "rt:trafficType",
             "rt:keyword"
         ]
     },

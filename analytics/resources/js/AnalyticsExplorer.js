@@ -5,7 +5,7 @@ google.load("visualization", "1", {packages:['corechart', 'table', 'geochart'], 
 AnalyticsExplorer = Garnish.Base.extend({
     init: function(element, settings)
     {
-        console.log('settings', settings);
+        // console.log('settings', settings);
         this.timer = false;
         this.requestData = false;
 
@@ -226,7 +226,7 @@ AnalyticsExplorer = Garnish.Base.extend({
     */
     request: function(data)
     {
-        console.log('request', data);
+        // console.log('request', data);
         this.$spinner.removeClass('hidden');
         var chart = $('.btn.active', this.$tableType).data('tabletype');
 
@@ -298,7 +298,7 @@ AnalyticsExplorer = Garnish.Base.extend({
         rows = response.area.rows;
         rows = AnalyticsUtils.parseRows(response.area.columns, response.area.rows);
 
-        console.log('rows', rows);
+        // console.log('rows', rows);
         this.chartAreaData.addRows(rows);
 
         if(!this.chartArea)
@@ -320,13 +320,13 @@ AnalyticsExplorer = Garnish.Base.extend({
         {
             this.areaChartOptions.hAxis.showTextEvery = 1;
             this.areaChartOptions.hAxis.format = 'MMM yy';
+
+            var dateFormatter = new google.visualization.DateFormat({
+                pattern: "MMMM yyyy"
+            });
+
+            dateFormatter.format(this.chartAreaData, 0);
         }
-
-        var dateFormatter = new google.visualization.DateFormat({
-            pattern: "MMMM yyyy"
-        });
-
-        dateFormatter.format(this.chartAreaData, 0);
 
         this.chartArea.draw(this.chartAreaData, this.areaChartOptions);
 
@@ -391,6 +391,26 @@ AnalyticsExplorer = Garnish.Base.extend({
         {
             this.chartPie.draw(this.tableData, this.pieChartOptions);
         }
+
+        // console.log('--------------start------------');
+        // console.log('widget width', this.$widget.width());
+
+        var total = 0;
+        $.each($('.analytics-toolbar select, .analytics-toolbar .btngroup', this.$element), function() {
+            total += $(this).width() + 20;
+        });
+
+        // console.log('total vs widget width', total, this.$widget.width());
+
+
+        if(total < this.$widget.width())
+        {
+            this.$widget.removeClass('analytics-small');
+        }
+        else
+        {
+            this.$widget.addClass('analytics-small');
+        }
     },
 
 
@@ -420,11 +440,11 @@ AnalyticsExplorer = Garnish.Base.extend({
             pinned: this.pinned
         };
 
-        console.log('saveState', data);
+        // console.log('saveState', data);
 
         Craft.postActionRequest('analytics/browse/saveState', data, $.proxy(function(response)
         {
-            console.log('response', response);
+            // console.log('response', response);
         }, this));
     },
 
@@ -472,7 +492,7 @@ AnalyticsExplorer = Garnish.Base.extend({
 
             this.$dimension.val(optionValue);
 
-            console.log('val', this.$dimension.val());
+            // console.log('val', this.$dimension.val());
             // if(!this.currentDimension)
             // {
             //     var optionValue = $('option:first', this.$dimension).attr('value');
@@ -545,7 +565,7 @@ AnalyticsExplorer = Garnish.Base.extend({
 
 
         // realtime
-        console.log('this.sectionRealtime', this.sectionRealtime);
+        // console.log('this.sectionRealtime', this.sectionRealtime);
         if(this.sectionRealtime)
         {
             this.$period.addClass('hidden');
@@ -565,7 +585,7 @@ AnalyticsExplorer = Garnish.Base.extend({
 
     startRealtime: function()
     {
-        console.log('start realtime');
+        // console.log('start realtime');
 
         if(this.timer)
         {
@@ -586,7 +606,7 @@ AnalyticsExplorer = Garnish.Base.extend({
 
     stopRealtime: function()
     {
-        console.log('stop realtime', this.timer);
+        // console.log('stop realtime', this.timer);
         clearInterval(this.timer);
     },
 
@@ -627,7 +647,7 @@ AnalyticsExplorer = Garnish.Base.extend({
 
     changeTableType: function(tableType)
     {
-        console.log('changeTableType', tableType);
+        // console.log('changeTableType', tableType);
         this.currentChart = tableType;
 
         this.$tableTypeBtns.removeClass('active');

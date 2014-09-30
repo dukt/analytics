@@ -5,7 +5,7 @@
 {% includeCssResource "analytics/css/AnalyticsExplorer.css" %}
 {% includeJsResource 'analytics/js/AnalyticsUtils.js' %}
 
-<div class="analytics-widget" data-widget-id="{{widget.id}}">
+<div class="analytics-widget analytics-small" data-widget-id="{{widget.id}}">
 
 
     {# actions #}
@@ -43,6 +43,7 @@
 
                                 {{ forms.selectField({
                                     first: true,
+                                    label: "Dimension"|t,
                                     class:"analytics-dimension small",
                                     name: 'dimension',
                                 }) }}
@@ -53,6 +54,7 @@
 
                                 {{ forms.selectField({
                                     first: true,
+                                    label: "Metric"|t,
                                     class:"analytics-metric small",
                                     name: 'metric',
                                 }) }}
@@ -64,30 +66,37 @@
 
                             {# Chart type #}
 
-                            <div class="analytics-tabletype btngroup">
-
-                                <div data-tabletype="area" role="button" class="btn active" title="{{ "Area"|t }}">
-                                    <span class="icon-chart icon-chart-area"></span>
+                            <div class="field analytics-chart-picker">
+                                <div class="heading">
+                                    <label>Chart</label>
                                 </div>
+                                <div class="input">
+                                    <div class="analytics-tabletype btngroup">
 
-                                <div data-tabletype="counter" role="button" class="btn active" title="{{ "Counter"|t }}">
-                                    <span class="icon-chart icon-chart-counter"></span>
-                                </div>
+                                        <div data-tabletype="area" role="button" class="btn active" title="{{ "Area"|t }}">
+                                            <span class="icon-chart icon-chart-area"></span>
+                                        </div>
 
-                                <div data-tabletype="table" role="button" class="btn" title="{{ "Table"|t }}">
-                                    <span class="icon-chart icon-chart-table"></span>
-                                </div>
+                                        <div data-tabletype="counter" role="button" class="btn active" title="{{ "Counter"|t }}">
+                                            <span class="icon-chart icon-chart-counter"></span>
+                                        </div>
 
-                                <div data-tabletype="pie" role="button" class="btn" title="{{ "Pie"|t }}">
-                                    <span class="icon-chart icon-chart-pie"></span>
+                                        <div data-tabletype="table" role="button" class="btn" title="{{ "Table"|t }}">
+                                            <span class="icon-chart icon-chart-table"></span>
+                                        </div>
+
+                                        <div data-tabletype="pie" role="button" class="btn" title="{{ "Pie"|t }}">
+                                            <span class="icon-chart icon-chart-pie"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="analytics-disabled-tabletype btngroup">
+                                    </div>
+
+                                    &nbsp;
                                 </div>
                             </div>
 
-
-                            <div class="analytics-disabled-tabletype btngroup">
-                            </div>
-
-                            &nbsp;
 
                             {# Period #}
 
@@ -95,6 +104,7 @@
 
                                 {{ forms.selectField({
                                     name: 'period',
+                                    label: "Period"|t,
                                     options: [
                                         { "label": "Week"|t, "value": "week"},
                                         { "label": "Month"|t, "value": "month"},

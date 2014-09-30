@@ -138,6 +138,10 @@
 .analytics-toolbar .analytics-settings .analytics-settings-in .analytics-settings-in-in .analytics-fields .analytics-dimension select {
   color: #6CAB34;
 }
+.analytics-toolbar .analytics-settings .analytics-settings-in .analytics-settings-in-in .analytics-chart-picker {
+  display: inline-block;
+  margin-bottom: 0;
+}
 .analytics-toolbar .analytics-disabled-tabletype {
   display: none;
 }
@@ -147,6 +151,34 @@
 .analytics-toolbar .analytics-period .select {
   box-shadow: none;
   border: 1px solid #ddd;
+}
+.analytics-small .analytics-toolbar .analytics-settings .analytics-settings-in .analytics-settings-in-in .analytics-fields {
+  float: none;
+}
+.analytics-small .analytics-toolbar .analytics-settings .analytics-settings-in .analytics-settings-in-in .analytics-fields .analytics-field {
+  display: block;
+}
+.analytics-small .analytics-toolbar .analytics-settings .analytics-settings-in .analytics-settings-in-in .right {
+  float: none;
+}
+.analytics-small .analytics-toolbar .analytics-settings .analytics-settings-in .analytics-settings-in-in .right .analytics-chart-picker {
+  display: block;
+}
+.analytics-small .analytics-toolbar .analytics-settings .analytics-settings-in .analytics-settings-in-in .right .analytics-period {
+  display: block;
+}
+.analytics-small .analytics-toolbar .field {
+  position: relative;
+  margin-bottom: 14px !important;
+  padding-left: 95px;
+}
+.analytics-small .analytics-toolbar .field label {
+  position: absolute;
+  top: 6px;
+  left: 0;
+  width: 80px;
+  text-align: right;
+  color: #555;
 }
 /* browser */
 .analytics-browser {
