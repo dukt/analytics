@@ -113,7 +113,16 @@ class Analytics_ExplorerWidget extends BaseWidget
 
         $browserSelectJson = json_encode($browserSelect);
 
-        $settings = $widget->settings;
+        $settings = array();
+
+        foreach($widget->settings as $k => $v)
+        {
+            if(!empty($v))
+            {
+                $settings[$k] = $v;
+            }
+        }
+
         $settings = json_encode($settings);
 
         // js

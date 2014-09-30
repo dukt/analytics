@@ -21,7 +21,8 @@ AnalyticsExplorer = Garnish.Base.extend({
         this.requestData = false;
 
         this.currentMenu = 'audienceOverview';
-        this.currentChart = 'table';
+        this.currentChart = 'area';
+        this.currentMetric = 'ga:sessions';
         this.currentPeriod = 'month';
         this.pinned = 0;
 
@@ -130,22 +131,27 @@ AnalyticsExplorer = Garnish.Base.extend({
         {
             this.currentMenu = settings.menu;
         }
+
         if(typeof(settings.dimension) !== 'undefined')
         {
             this.currentDimension = settings.dimension;
         }
+
         if(typeof(settings.metric) !== 'undefined')
         {
             this.currentMetric = settings.metric;
         }
+
         if(typeof(settings.chart) !== 'undefined')
         {
             this.currentChart = settings.chart;
         }
+
         if(typeof(settings.period) !== 'undefined')
         {
             this.currentPeriod = settings.period;
         }
+
         if(typeof(settings.pinned) !== 'undefined')
         {
             this.pinned = eval(settings.pinned);
