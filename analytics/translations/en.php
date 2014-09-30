@@ -11,6 +11,7 @@
  */
 
 return array(
+    'analyticsChartLanguage' => 'en',
     'ga:avgDomainLookupTime' => "Avg. Domain Lookup Time (sec)",
     'ga:avgDomContentLoadedTime' => "Avg. Document Content Loaded Time (sec)",
     'ga:avgDomInteractiveTime' => "Avg. Document Interactive Time (sec)",

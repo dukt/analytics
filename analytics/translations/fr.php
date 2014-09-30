@@ -11,6 +11,8 @@
  */
 
 return array(
+    'analyticsChartLanguage' => 'fr',
+
     'All' => "Toutes",
     'Analytics Acquisition' => "Analytics Acquisition",
     'Analytics Counts' => "Analytics Compteurs",

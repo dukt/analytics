@@ -113,10 +113,14 @@ class Analytics_ExplorerWidget extends BaseWidget
 
         $browserSelectJson = json_encode($browserSelect);
 
+        $settings = $widget->settings;
+        $settings = json_encode($settings);
+
         // js
+        craft()->templates->includeJs('var AnalyticsChartLanguage = "'.Craft::t('analyticsChartLanguage').'";');
         craft()->templates->includeJs('var AnalyticsBrowserSections = '.$browserSectionsJson.';');
         craft()->templates->includeJs('var AnalyticsBrowserData = '.$browserDataJson.';');
-        craft()->templates->includeJs('new AnalyticsExplorer("widget'.$widget->id.'", '.json_encode($widget->settings).');');
+        craft()->templates->includeJs('new AnalyticsExplorer("widget'.$widget->id.'", '.$settings.');');
 
         // render
         $variables['browserSections'] = $browserSections;

@@ -1,10 +1,21 @@
 (function($) {
 
-google.load("visualization", "1", {packages:['corechart', 'table', 'geochart'], 'language': 'en'});
 
 AnalyticsExplorer = Garnish.Base.extend({
     init: function(element, settings)
     {
+        if(typeof(google.visualization) == 'undefined')
+        {
+            if(typeof(AnalyticsChartLanguage) == 'undefined')
+            {
+                AnalyticsChartLanguage = 'en';
+            }
+
+            console.log('chartLanguage', AnalyticsChartLanguage);
+
+            google.load("visualization", "1", {packages:['corechart', 'table', 'geochart'], 'language': AnalyticsChartLanguage});
+        }
+
         // console.log('settings', settings);
         this.timer = false;
         this.requestData = false;
