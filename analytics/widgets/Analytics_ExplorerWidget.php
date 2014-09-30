@@ -28,8 +28,16 @@ class Analytics_ExplorerWidget extends BaseWidget
            'chart' => array(AttributeType::String),
            'chart' => array(AttributeType::String),
            'period' => array(AttributeType::String),
-           'pinned' => array(AttributeType::Bool)
+           'pinned' => array(AttributeType::Bool),
+           'colspan' => array(AttributeType::Number, 'default' => 2)
         );
+    }
+
+    public function getSettingsHtml()
+    {
+        return craft()->templates->render('analytics/widgets/explorer/settings', array(
+           'settings' => $this->getSettings()
+        ));
     }
 
     public function getBodyHtml()
@@ -121,6 +129,16 @@ class Analytics_ExplorerWidget extends BaseWidget
 
     public function getColspan()
     {
-        return 2;
+        $settings = $this->getSettings();
+
+        if(isset($settings->colspan))
+        {
+            if($settings->colspan > 0)
+            {
+                return $settings->colspan;
+            }
+        }
+
+        return 1;
     }
 }

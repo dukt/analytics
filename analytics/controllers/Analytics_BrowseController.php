@@ -19,6 +19,8 @@ class Analytics_BrowseController extends BaseController
 
     public function actionSaveState()
     {
+        $widgetId = craft()->request->getPost('id');
+
         $widgetSettings = array();
         $widgetSettings['menu'] = craft()->request->getPost('menu');
         $widgetSettings['dimension'] = craft()->request->getPost('dimension');
@@ -27,8 +29,15 @@ class Analytics_BrowseController extends BaseController
         $widgetSettings['period'] = craft()->request->getPost('period');
         $widgetSettings['pinned'] = (bool) craft()->request->getPost('pinned');
 
+        $formerWidget = craft()->dashboard->getUserWidgetById($widgetId);
+
+        if($formerWidget)
+        {
+            $widgetSettings['colspan'] = $formerWidget->settings['colspan'];
+        }
+
         $widget = new WidgetModel();
-        $widget->id = craft()->request->getPost('id');
+        $widget->id = $widgetId;
         $widget->type = 'Analytics_Explorer';
         $widget->settings = $widgetSettings;
 

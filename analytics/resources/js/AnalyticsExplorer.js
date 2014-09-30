@@ -137,7 +137,7 @@ AnalyticsExplorer = Garnish.Base.extend({
         }
         if(typeof(settings.pinned) !== 'undefined')
         {
-            this.pinned = settings.pinned;
+            this.pinned = eval(settings.pinned);
         }
     },
 

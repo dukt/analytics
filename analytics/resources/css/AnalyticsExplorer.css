@@ -59,6 +59,9 @@
   top: 0px;
   right: 0px;
 }
+.analytics-actions .analytics-pin:hover {
+  cursor: pointer;
+}
 .analytics-actions .analytics-pin .analytics-pin-in {
   width: 18px;
   height: 18px;
