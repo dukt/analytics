@@ -6,6 +6,7 @@
 
     "realtimeVisitors": {
         "title":"realtimeVisitors",
+        "uri": "realtime/rt-overview",
         "view":"browser",
         "chart":"counter",
         "enabledCharts":["counter", "table", "pie"],
@@ -19,6 +20,7 @@
     },
     "realtimeLocations": {
         "title":"realtimeLocations",
+        "uri": "realtime/rt-location",
         "view":"browser",
         "chart":"table",
         "enabledCharts":["table", "pie"],
@@ -37,6 +39,7 @@
     },
     "realtimeSources": {
         "title":"realtimeSources",
+        "uri": "realtime/rt-traffic",
         "view":"browser",
         "chart":"table",
         "enabledCharts":["table", "pie"],
@@ -55,6 +58,7 @@
     },
     "realtimeContent": {
         "title":"realtimeContent",
+        "uri": "realtime/rt-content",
         "view":"browser",
         "chart":"table",
         "enabledCharts":["table", "pie"],
@@ -71,6 +75,7 @@
     },
     "realtimeEvents": {
         "title":"realtimeEvents",
+        "uri": "realtime/rt-event",
         "view":"browser",
         "chart":"table",
         "enabledCharts":["table", "pie"],
@@ -88,6 +93,7 @@
     },
     "realtimeConversions": {
         "title":"realtimeConversions",
+        "uri": "realtime/rt-goal",
         "view":"browser",
         "chart":"table",
         "enabledCharts":["table", "pie"],
@@ -103,6 +109,7 @@
     },
     "audienceOverview": {
         "title":"audienceOverview",
+        "uri": "report/visitors-overview",
         "view":"browser",
         "chart":"area",
         "enabledCharts":["counter", "area"],
@@ -118,6 +125,7 @@
 
     "language": {
         "title":"Language",
+        "uri": "report/visitors-language",
         "view":"browser",
         "chart":"pie",
         "metrics": [
@@ -136,6 +144,7 @@
 
     "location": {
         "title":"location",
+        "uri": "report/visitors-geo",
         "view":"browser",
         "chart":"geo",
         "enabledCharts":["table", "pie", "geo"],
@@ -158,6 +167,7 @@
 
     "newVsReturning": {
         "title":"newVsReturning",
+        "uri": "report/visitors-type",
         "view":"browser",
         "chart":"pie",
         "metrics": [
@@ -176,6 +186,7 @@
 
     "browserOs": {
         "title":"Browser & OS",
+        "uri": "report/visitors-browser",
         "view":"browser",
         "chart":"pie",
         "metrics": [
@@ -199,6 +210,7 @@
 
     "network": {
         "title":"network",
+        "uri": "report/visitors-network",
         "view":"browser",
         "chart":"table",
         "metrics": [
@@ -218,6 +230,7 @@
 
     "mobile": {
         "title":"Mobile",
+        "uri": "report/visitors-mobile-overview",
         "view":"browser",
         "chart":"pie",
         "metrics": [
@@ -241,6 +254,7 @@
 
     "allChannels": {
         "title":"allChannels",
+        "uri": "report/acquisition-channels",
         "view":"browser",
         "metrics": [
             "ga:sessions",
@@ -261,6 +275,7 @@
 
     "allTraffic": {
         "title":"allTraffic",
+        "uri": "report/trafficsources-all-traffic",
         "view":"browser",
         "metrics": [
             "ga:sessions",
@@ -281,6 +296,7 @@
 
     "allReferrals": {
         "title":"allReferrals",
+        "uri": "report/trafficsources-referrals",
         "view":"browser",
         "metrics": [
             "ga:sessions",
@@ -300,6 +316,7 @@
 
     "campaigns": {
         "title":"campaigns",
+        "uri": "report/trafficsources-campaigns",
         "view":"browser",
         "metrics": [
             "ga:sessions",
@@ -318,6 +335,7 @@
 
     "keywords": {
         "title":"keywords",
+        "uri": "report/trafficsources-organic",
         "view":"browser",
         "metrics": [
             "ga:sessions",
@@ -337,6 +355,7 @@
 
     "socialNetworks": {
         "title":"socialNetworks",
+        "uri": "report/social-overview",
         "view":"browser",
         "metrics": [
             "ga:sessions",
@@ -355,6 +374,7 @@
 
     "allPages": {
         "title":"allPages",
+        "uri": "report/content-pages",
         "view":"browser",
         "metrics": [
             "ga:pageviews",
@@ -381,6 +401,7 @@
 
     "landingPages": {
         "title":"landingPages",
+        "uri": "report/content-landing-pages",
         "view":"browser",
         "metrics": [
             "ga:sessions",
@@ -398,6 +419,7 @@
 
     "exitPages": {
         "title":"exitPages",
+        "uri": "report/content-exit-pages",
         "view":"browser",
         "metrics": [
             "ga:exits",
@@ -412,6 +434,7 @@
 
     "siteSpeed": {
         "title":"siteSpeed",
+        "uri": "report/content-site-speed-overview",
         "view":"browser",
         "metrics": [
             "ga:pageLoadTime",
@@ -438,6 +461,7 @@
 
     "siteSearch": {
         "title":"siteSearch",
+        "uri": "report/content-site-search-overview",
         "view":"browser",
         "metrics": [
             "ga:searchResultViews",
@@ -470,6 +494,7 @@
 
     "events": {
         "title":"events",
+        "uri": "report/content-event-overview",
         "view":"browser",
         "metrics": [
             "ga:totalEvents",
@@ -490,6 +515,7 @@
 
     "goals": {
         "title":"goals",
+        "uri": "report/conversions-goals-overview",
         "view":"browser",
         "chart": "area",
         "enabledCharts":["area"],
@@ -508,6 +534,7 @@
 
     "ecommerce": {
         "title":"ecommerce",
+        "uri": "report/conversions-ecommerce-overview",
         "view":"browser",
         "metrics": [
             "ga:itemQuantity",

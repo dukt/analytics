@@ -65,9 +65,11 @@ AnalyticsExplorer = Garnish.Base.extend({
         this.$counterLabel = $('.analytics-counter-label', this.$element);
         this.$counterPeriod = $('.analytics-counter-period', this.$element);
         this.$collapsible = $('.analytics-collapsible', this.$element);
+        this.$open = $('.analytics-open', this.$element);
 
         this.addListener(this.$menu, 'change', 'onMenuChange');
         this.addListener(this.$tableTypeBtns, 'click', 'onTableTypeChange');
+        this.addListener(this.$open, 'click', 'onOpen');
         this.addListener(this.$periodSelect, 'change', 'onPeriodChange');
         this.addListener(this.$pin, 'click', 'onPin');
         this.addListener(this.$dimension, 'change', 'onChangeDimension');
@@ -175,6 +177,7 @@ AnalyticsExplorer = Garnish.Base.extend({
             }
         }, this));
 
+        this.sectionUri = false;
         this.sectionDimensions = false;
         this.sectionMetrics = false;
         this.sectionEnabledCharts = false;
@@ -206,6 +209,11 @@ AnalyticsExplorer = Garnish.Base.extend({
             if(typeof(section.chart) !== 'undefined')
             {
                 this.sectionChart = section.chart;
+            }
+
+            if(typeof(section.uri) !== 'undefined')
+            {
+                this.sectionUri = section.uri;
             }
         }
     },
@@ -675,6 +683,19 @@ AnalyticsExplorer = Garnish.Base.extend({
     hideTableType: function(chart)
     {
         $('[data-tabletype="'+chart+'"]', this.$element).appendTo(this.$disabledTableType);
+    },
+
+    onOpen: function(ev)
+    {
+        var link = $(ev.currentTarget);
+        var accountId = link.data('account-id');
+        var propertyId = link.data('property-id');
+        var profileId = link.data('profile-id');
+        var uri = this.sectionUri;
+
+        var url = 'https://www.google.com/analytics/web/?hl=fr&pli=1#'+uri+'/a'+accountId+'w'+propertyId+'p'+profileId+'/';
+
+        window.open(url, '_blank');
     },
 
     onTableTypeChange: function(ev)

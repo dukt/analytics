@@ -7,10 +7,15 @@
 
 <div class="analytics-widget analytics-small" data-widget-id="{{widget.id}}">
 
-
     {# actions #}
 
     <div class="analytics-actions">
+        {% set webProperty = craft.analytics.webProperty %}
+
+        <div class="analytics-open"
+            data-account-id="{{ webProperty.accountId }}"
+            data-property-id="{{ webProperty.internalWebPropertyId }}"
+            data-profile-id="{{ webProperty.defaultProfileId }}"></div>
         <div class="analytics-pin">
             <div class="analytics-pin-in"></div>
         </div>
