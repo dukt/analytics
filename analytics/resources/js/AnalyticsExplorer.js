@@ -27,6 +27,7 @@ AnalyticsExplorer = Garnish.Base.extend({
         this.pinned = 0;
 
         this.chartArea = false;
+        this.chartGeo = false;
         this.chartTable = false;
         this.chartPie = false;
 
@@ -39,6 +40,7 @@ AnalyticsExplorer = Garnish.Base.extend({
         this.$widget = $('.analytics-widget:first', this.$element);
         this.$browser = $('.analytics-browser:first', this.$element);
         this.$chart = $('.analytics-chart', this.$element);
+        this.$geo = $('.analytics-geo', this.$element);
         this.$pie = $('.analytics-piechart', this.$element);
         this.$table = $('.analytics-table', this.$element);
         this.$dimensionField = $('.analytics-dimension-field', this.$element);
@@ -260,6 +262,10 @@ AnalyticsExplorer = Garnish.Base.extend({
                     this.updateAreaChart(response);
                     break;
 
+                    case "geo":
+                    this.updateGeoChart(response);
+                    break;
+
                     case "pie":
                     this.updatePieAndTableChart(response);
                     break;
@@ -360,6 +366,26 @@ AnalyticsExplorer = Garnish.Base.extend({
         this.$infosCount.html(response.counter.count);
         this.$totalCount.html(response.counter.count);
         this.$totalLabel.html(response.metric);
+    },
+
+    updateGeoChart: function(response)
+    {
+        this.tableData = new google.visualization.DataTable();
+
+        $.each(response.table.columns, $.proxy(function(k, apiColumn)
+        {
+            var column = AnalyticsUtils.parseColumn(apiColumn);
+            this.tableData.addColumn(column.type, column.label);
+        }, this));
+
+        this.tableData.addRows(response.table.rows);
+
+        if(!this.chartGeo)
+        {
+            this.chartGeo = new google.visualization.GeoChart(this.$geo.get(0));
+        }
+
+        this.chartGeo.draw(this.tableData, this.pieChartOptions);
     },
 
     updatePieAndTableChart: function(response)
@@ -558,6 +584,7 @@ AnalyticsExplorer = Garnish.Base.extend({
         else
         {
             this.showTableTypes();
+            this.hideTableType('geo');
             this.hideTableType('counter');
             this.hideTableType('area');
         }
@@ -677,6 +704,7 @@ AnalyticsExplorer = Garnish.Base.extend({
             this.$counter.addClass('hidden');
             this.$pie.addClass('hidden');
             this.$chart.addClass('hidden');
+            this.$geo.addClass('hidden');
 
             if(this.sectionDimensions)
             {
@@ -693,6 +721,16 @@ AnalyticsExplorer = Garnish.Base.extend({
             this.$pie.addClass('hidden');
             this.$counter.addClass('hidden');
             this.$dimensionField.addClass('hidden');
+            this.$geo.addClass('hidden');
+        }
+        else if(tableType == 'geo')
+        {
+            this.$infosCount.addClass('hidden');
+            this.$pie.addClass('hidden');
+            this.$chart.addClass('hidden');
+            this.$table.addClass('hidden');
+            this.$counter.addClass('hidden');
+            this.$geo.removeClass('hidden');
         }
         else if(tableType == 'counter')
         {
@@ -704,6 +742,7 @@ AnalyticsExplorer = Garnish.Base.extend({
             this.$counter.removeClass('hidden');
             this.$dimensionField.addClass('hidden');
             this.$infosDimension.addClass('hidden');
+            this.$geo.addClass('hidden');
         }
         else
         {
@@ -712,6 +751,7 @@ AnalyticsExplorer = Garnish.Base.extend({
             this.$chart.addClass('hidden');
             this.$table.addClass('hidden');
             this.$counter.addClass('hidden');
+            this.$geo.addClass('hidden');
 
             if(this.sectionDimensions)
             {

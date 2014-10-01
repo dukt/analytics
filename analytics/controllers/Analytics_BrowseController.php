@@ -98,6 +98,11 @@ class Analytics_BrowseController extends BaseController
         $this->actionTable();
     }
 
+    public function actionGeo()
+    {
+        $this->actionTable();
+    }
+
     public function actionArea()
     {
         try

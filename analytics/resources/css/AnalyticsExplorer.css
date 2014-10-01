@@ -27,6 +27,9 @@
   display: block;
   background: center center no-repeat;
 }
+.analytics_explorer .icon-chart-geo {
+  background-image: url("../images/chart-geo.png");
+}
 .analytics_explorer .icon-chart-counter {
   background-image: url("../images/chart-counter.png");
 }

@@ -137,7 +137,8 @@
     "location": {
         "title":"location",
         "view":"browser",
-        "chart":"table",
+        "chart":"geo",
+        "enabledCharts":["table", "pie", "geo"],
         "metrics": [
             "ga:sessions",
             "ga:pageviews",
