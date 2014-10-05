@@ -11,42 +11,49 @@
 
         {% if account %}
 
-            <input type="hidden" name="token" value="{{ craft.oauth.encodeToken(token) }}" />
+            <form method="post" accept-charset="UTF-8" data-saveshortcut>
+                <input type="hidden" name="action" value="plugins/savePluginSettings">
+                <input type="hidden" name="pluginClass" value="Analytics">
+                <input type="hidden" name="redirect" value="analytics/settings">
 
-            <h2 class="first">{{'Google Analytics Account'|t}}</h2>
-            <p>{{'You are authenticated to Google Analytics with the following account'|t}} :</p>
+                {# <input type="hidden" name="token" value="{{ craft.oauth.encodeToken(token) }}" /> #}
 
-            <ul>
-                <li><strong>{{'UID'|t}} : </strong> {{account.uid}}</li>
-                <li><strong>{{'Name'|t}} : </strong> {{account.name}}</li>
-            </ul>
+                <h2 class="first">{{'Google Analytics Account'|t}}</h2>
+                <p>{{'You are authenticated to Google Analytics with the following account'|t}} :</p>
 
-            <p><a class="btn small" href="{{ actionUrl('analytics/disconnect') }}">{{'Disconnect'|t}}</a></p>
+                <ul>
+                    <li><strong>{{'UID'|t}} : </strong> {{account.uid}}</li>
+                    <li><strong>{{'Name'|t}} : </strong> {{account.name}}</li>
+                </ul>
 
-            <hr />
+                <p><a class="btn small" href="{{ actionUrl('analytics/disconnect') }}">{{'Disconnect'|t}}</a></p>
 
-            <h2 class="first">{{'Plugin Settings'|t}}</h2>
+                <hr />
 
-            {{ forms.selectField({
-                first: true,
-                label: "Web Profile"|t,
-                instructions: "Select an Analytics web profile to associate with your Craft website"|t,
-                options: craft.analytics.properties(),
-                name: 'profileId',
-                value: settings.profileId
-            }) }}
+                <h2 class="first">{{'Plugin Settings'|t}}</h2>
 
-            {{ forms.textField({
-                label: "Real-Time Refresh Interval"|t,
-                instructions: "Interval in seconds between request to real-time API"|t,
-                name: 'realtimeRefreshInterval',
-                value: (settings.realtimeRefreshInterval ? settings.realtimeRefreshInterval : '10'),
-                size: 4
-            }) }}
+                {{ forms.selectField({
+                    first: true,
+                    label: "Web Profile"|t,
+                    instructions: "Select an Analytics web profile to associate with your Craft website"|t,
+                    options: propertiesOpts,
+                    name: 'settings[profileId]',
+                    value: settings.profileId
+                }) }}
 
-            <p>
-                <input type="submit" class="btn submit force" value="{{'Save'|t}}">
-            </p>
+                {{ forms.textField({
+                    label: "Real-Time Refresh Interval"|t,
+                    instructions: "Interval in seconds between request to real-time API"|t,
+                    name: 'settings[realtimeRefreshInterval]',
+                    value: (settings.realtimeRefreshInterval ? settings.realtimeRefreshInterval : '10'),
+                    size: 4
+                }) }}
+
+                <p>
+                    <input type="submit" class="btn submit force" value="{{'Save'|t}}">
+                </p>
+
+            </form>
 
         {% else %}
 

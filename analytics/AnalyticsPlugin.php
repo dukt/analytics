@@ -62,9 +62,19 @@ class AnalyticsPlugin extends BasePlugin
             return true;
         }
 
-        return craft()->templates->render('analytics/settings', array(
+        return craft()->templates->render('analytics/settings/_redirect', array(
             'settings' => $this->getSettings()
         ));
+    }
+
+    /**
+     * Hook Register CP Routes
+     */
+    public function registerCpRoutes()
+    {
+        return array(
+            'analytics\/settings' => array('action' => "analytics/settings"),
+        );
     }
 
     /**

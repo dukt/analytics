@@ -46,6 +46,14 @@ class Analytics_ReportFieldType extends BaseFieldType
 
             craft()->templates->includeJs('new AnalyticsField("'.$namespacedId.'-field");');
 
+            $metricOpts = craft()->analytics->getMetricOpts(array(
+                'ga:exitRate',
+                'ga:avgTimeOnPage',
+                'ga:bounceRate',
+                'ga:pageviews',
+                'ga:uniquePageviews',
+            ));
+
             $variables = array(
                 'isNew'   => false,
                 'hasUrl'  => true,
@@ -55,6 +63,7 @@ class Analytics_ReportFieldType extends BaseFieldType
                 'value'   => $value,
                 'model'   => $this->model,
                 'element' => $this->element,
+                'metricOpts' => $metricOpts
             );
         }
         elseif(!$this->element->id)

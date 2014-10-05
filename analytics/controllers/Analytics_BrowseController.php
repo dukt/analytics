@@ -14,9 +14,6 @@ namespace Craft;
 
 class Analytics_BrowseController extends BaseController
 {
-    // // widget
-    // $widget = craft()->dashboard->getUserWidgetById($id);
-
     public function actionSaveState()
     {
         $widgetId = craft()->request->getPost('id');

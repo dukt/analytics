@@ -19,35 +19,29 @@
             {{ forms.select({
                 class:'analytics-metric',
                 value:'ga:pageviews',
-                options: craft.analytics.metricOpts([
-                    'ga:exitRate',
-                    'ga:avgTimeOnPage',
-                    'ga:bounceRate',
-                    'ga:pageviews',
-                    'ga:uniquePageviews',
-                ])
+                options: metricOpts
             }) }}
 
             <div class="spinner hidden"></div>
-
             <div class="chart"></div>
             <div class="error"></div>
 
         </div>
+
     {% elseif isNew %}
+
         <div
             class="analytics-field analytics-error disable-icon">
-
             <div class="error">Report will appear when the element is saved.</div>
-
         </div>
+
     {% else %}
+
         <div
             class="analytics-field analytics-error">
-
             <div class="error">This element doesn't support urls.</div>
-
         </div>
+
     {% endif %}
 
 {% else %}
@@ -58,4 +52,5 @@
             <p><a href="{{url('settings/plugins/analytics')}}">{{'Configure Analytics plugin in order to get started'|t}}</a></p>
 
     </div>
+
 {% endif %}

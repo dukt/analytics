@@ -14,42 +14,20 @@ namespace Craft;
 
 class AnalyticsVariable
 {
+    public function api($options)
+    {
+        return craft()->analytics->api($options);
+    }
+
     public function getToken()
     {
-        try {
+        try
+        {
             return craft()->analytics->getToken();
         }
         catch(\Exception $e)
         {
             // todo
-        }
-
-    }
-
-    public function getMetricOpts($params = array())
-    {
-        return craft()->analytics->getMetricOpts($params);
-    }
-
-    public function getDimensionOpts($params = array())
-    {
-        return craft()->analytics->getDimensionOpts($params);
-    }
-
-    public function getGeoRegionOpts($params)
-    {
-        return craft()->analytics->getGeoRegionOpts($params);
-    }
-
-    public function getProfile()
-    {
-        try
-        {
-            return craft()->analytics->getProfile();
-        }
-        catch(\Exception $e)
-        {
-            $r['error'] = $e->getMessage();
         }
     }
 
@@ -61,15 +39,5 @@ class AnalyticsVariable
     public function isConfigured()
     {
         return craft()->analytics->isConfigured();
-    }
-
-    public function properties()
-    {
-        return craft()->analytics->properties();
-    }
-
-    public function api($options)
-    {
-        return craft()->analytics->api($options);
     }
 }
