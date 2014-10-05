@@ -22,7 +22,7 @@
 
     { "label": "Channels", "value": "allChannels"},
     { "label": "All Traffic", "value": "allTraffic"},
-    { "label": "All Referrals", "value": "referrals"},
+    { "label": "All Referrals", "value": "allReferrals"},
     { "label": "Campaigns", "value": "campaigns"},
     { "label": "Keywords", "value": "keywords"},
     { "label": "Social Networks", "value": "socialNetworks"},
