@@ -11,12 +11,9 @@ AnalyticsExplorer = Garnish.Base.extend({
                 AnalyticsChartLanguage = 'en';
             }
 
-            console.log('chartLanguage', AnalyticsChartLanguage);
-
             google.load("visualization", "1", {packages:['corechart', 'table', 'geochart'], 'language': AnalyticsChartLanguage});
         }
 
-        // console.log('settings', settings);
         this.timer = false;
         this.requestData = false;
 
@@ -253,7 +250,6 @@ AnalyticsExplorer = Garnish.Base.extend({
     */
     request: function(data)
     {
-        // console.log('request', data);
         this.$spinner.removeClass('hidden');
         var chart = $('.btn.active', this.$tableType).data('tabletype');
 
@@ -361,8 +357,6 @@ AnalyticsExplorer = Garnish.Base.extend({
         this.chartArea.draw(this.chartAreaData, this.areaChartOptions);
 
         this.$infosCount.html(response.total);
-        /// this.$infosMetric.html(response.metric);
-        // this.$totalLabel.html(response.counter.label);
     },
 
     updateCounter: function(response)
@@ -422,9 +416,6 @@ AnalyticsExplorer = Garnish.Base.extend({
         this.chartPie.draw(this.tableData, this.pieChartOptions);
     },
 
-
-    // resize
-
     resize: function()
     {
         if(this.chartArea)
@@ -442,16 +433,10 @@ AnalyticsExplorer = Garnish.Base.extend({
             this.chartPie.draw(this.tableData, this.pieChartOptions);
         }
 
-        // console.log('--------------start------------');
-        // console.log('widget width', this.$widget.width());
-
         var total = 0;
         $.each($('.analytics-toolbar select, .analytics-toolbar .btngroup', this.$element), function() {
             total += $(this).width() + 20;
         });
-
-        // console.log('total vs widget width', total, this.$widget.width());
-
 
         if(total < this.$widget.width())
         {
@@ -463,18 +448,12 @@ AnalyticsExplorer = Garnish.Base.extend({
         }
     },
 
-
-    // period
-
     onPeriodChange: function(ev)
     {
         this.currentPeriod = $(ev.currentTarget).val();
         this.saveState();
         this.browse();
     },
-
-
-    // saveState
 
     saveState: function()
     {
@@ -490,16 +469,13 @@ AnalyticsExplorer = Garnish.Base.extend({
             pinned: this.pinned
         };
 
-        // console.log('saveState', data);
-
         Craft.postActionRequest('analytics/explorer/saveWidgetState', data, $.proxy(function(response)
         {
-            // console.log('response', response);
+
+            // state saved
+
         }, this));
     },
-
-
-    // menu
 
     onMenuChange: function(ev)
     {
@@ -509,8 +485,6 @@ AnalyticsExplorer = Garnish.Base.extend({
         this.changeMenu($value);
 
         this.browse();
-
-        // save state
         this.saveState();
     },
 
@@ -541,29 +515,15 @@ AnalyticsExplorer = Garnish.Base.extend({
             var optionValue = $('option:first', this.$dimension).attr('value');
 
             this.$dimension.val(optionValue);
-
-            // console.log('val', this.$dimension.val());
-            // if(!this.currentDimension)
-            // {
-            //     var optionValue = $('option:first', this.$dimension).attr('value');
-            //     this.currentDimension = optionValue;
-            // }
-            // else
-            // {
-            //     if($('option[value="'+this.currentDimension+'"]').length == 0)
-            //     {
-            //         var optionValue = $('option:first', this.$dimension).attr('value');
-            //         this.currentDimension = optionValue;
-            //     }
-            // }
         }
         else
         {
             this.$dimensionField.addClass('hidden');
-            // this.currentDimension = false;
         }
 
+
         // metrics
+
         if(this.sectionMetrics)
         {
             $.each(this.sectionMetrics, $.proxy(function(key, metric)
@@ -571,14 +531,11 @@ AnalyticsExplorer = Garnish.Base.extend({
 
                 $('<option value="'+metric.value+'">'+metric.label+'</option>').appendTo(this.$metric);
             }, this));
-
-            // if(!this.currentMetric)
-            // {
-            //     this.currentMetric = this.$metric.val();
-            // }
         }
 
+
         // table type
+
         if(this.sectionEnabledCharts)
         {
             this.hideTableTypes();
@@ -603,20 +560,16 @@ AnalyticsExplorer = Garnish.Base.extend({
         {
             this.$tableTypeBtns.removeClass('active');
             $('[data-tabletype="'+this.sectionChart+'"]', this.$tableType).addClass('active');
-
-            // this.currentChart = this.sectionChart;
         }
         else
         {
             this.$tableTypeBtns.removeClass('active');
             $('.btn:first', this.$tableType).addClass('active');
-
-            // this.currentChart = $('.btn:first', this.$tableType).data('tabletype');
         }
 
 
         // realtime
-        // console.log('this.sectionRealtime', this.sectionRealtime);
+
         if(this.sectionRealtime)
         {
             this.$period.addClass('hidden');
@@ -627,8 +580,6 @@ AnalyticsExplorer = Garnish.Base.extend({
             this.$period.removeClass('hidden');
             this.stopRealtime();
         }
-
-        // this.browse();
     },
 
 
@@ -636,8 +587,6 @@ AnalyticsExplorer = Garnish.Base.extend({
 
     startRealtime: function()
     {
-        // console.log('start realtime');
-
         if(this.timer)
         {
             this.stopRealtime();
@@ -657,7 +606,6 @@ AnalyticsExplorer = Garnish.Base.extend({
 
     stopRealtime: function()
     {
-        // console.log('stop realtime', this.timer);
         clearInterval(this.timer);
     },
 
@@ -692,7 +640,7 @@ AnalyticsExplorer = Garnish.Base.extend({
         var profileId = link.data('profile-id');
         var uri = this.sectionUri;
 
-        var url = 'https://www.google.com/analytics/web/?hl=fr&pli=1#'+uri+'/a'+accountId+'w'+propertyId+'p'+profileId+'/';
+        var url = 'https://www.google.com/analytics/web/?pli=1#'+uri+'/a'+accountId+'w'+propertyId+'p'+profileId+'/';
 
         window.open(url, '_blank');
     },
@@ -711,7 +659,6 @@ AnalyticsExplorer = Garnish.Base.extend({
 
     changeTableType: function(tableType)
     {
-        // console.log('changeTableType', tableType);
         this.currentChart = tableType;
 
         this.$tableTypeBtns.removeClass('active');
