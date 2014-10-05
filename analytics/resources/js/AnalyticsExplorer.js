@@ -257,7 +257,7 @@ AnalyticsExplorer = Garnish.Base.extend({
         this.$spinner.removeClass('hidden');
         var chart = $('.btn.active', this.$tableType).data('tabletype');
 
-        Craft.postActionRequest('analytics/browse/'+chart, data, $.proxy(function(response)
+        Craft.postActionRequest('analytics/explorer/'+chart, data, $.proxy(function(response)
         {
             if(typeof(response.error) == 'undefined')
             {
@@ -329,7 +329,6 @@ AnalyticsExplorer = Garnish.Base.extend({
         rows = response.area.rows;
         rows = AnalyticsUtils.parseRows(response.area.columns, response.area.rows);
 
-        // console.log('rows', rows);
         this.chartAreaData.addRows(rows);
 
         if(!this.chartArea)
@@ -493,7 +492,7 @@ AnalyticsExplorer = Garnish.Base.extend({
 
         // console.log('saveState', data);
 
-        Craft.postActionRequest('analytics/browse/saveState', data, $.proxy(function(response)
+        Craft.postActionRequest('analytics/explorer/saveWidgetState', data, $.proxy(function(response)
         {
             // console.log('response', response);
         }, this));

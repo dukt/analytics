@@ -3,17 +3,23 @@ google.load("visualization", "1", {packages:['corechart', 'table', 'geochart']})
 AnalyticsField = Garnish.Base.extend({
     init: function(fieldId)
     {
+        // elements
         this.$element = $("#"+fieldId);
         this.$field = $(".analytics-field", this.$element);
         this.$spinner = $('.spinner', this.$element);
-
         this.$errorElement = $('.error', this.$element);
-
         this.$metricElement = $('.analytics-metric select', this.$element);
         this.$chartElement = $('.chart', this.$element);
-        this.$elementId = $('.analytics-field', this.$element).data('element-id');
-        this.$locale = $('.analytics-field', this.$element).data('locale');
-        this.$chart = false;
+
+        // variables
+        this.elementId = $('.analytics-field', this.$element).data('element-id');
+        this.locale = $('.analytics-field', this.$element).data('locale');
+        this.chart = false;
+        this.chartData = false;
+
+        // listeners
+        this.addListener(Garnish.$win, 'resize', 'resize');
+        this.addListener(this.$metricElement, 'change', 'onMetricChange');
 
         if(typeof(google.visualization) == 'undefined')
         {
@@ -22,28 +28,22 @@ AnalyticsField = Garnish.Base.extend({
             return false;
         }
 
-        // $('#'+fieldId+' .heading').addClass('hidden');
-
-        var $this = this;
-
-        this.$metricElement.change(function() {
-
-            $this.$metric = $(this).val();
-
-            $this.request();
-        });
-
         this.$metricElement.trigger('change');
+    },
+
+    onMetricChange: function(ev)
+    {
+        this.$metric = $(ev.currentTarget).val();
+        this.request();
     },
 
     request: function()
     {
-        var chartData = new google.visualization.DataTable();
-        var options = {};
+        this.chartData = new google.visualization.DataTable();
 
         this.$spinner.removeClass('hidden');
 
-        Craft.postActionRequest('analytics/elementReport', { elementId: this.$elementId, locale: this.$locale, metric: this.$metric }, $.proxy(function(response) {
+        Craft.postActionRequest('analytics/explorer/elementReport', { elementId: this.elementId, locale: this.locale, metric: this.$metric }, $.proxy(function(response) {
 
             this.$spinner.addClass('hidden');
 
@@ -54,81 +54,86 @@ AnalyticsField = Garnish.Base.extend({
             }
             else
             {
+                var apiData = response.data;
+
                 this.$field.removeClass('analytics-error');
 
-                var columns = AnalyticsUtils.getColumns(response);
-                $.each(columns, function(k, column) {
-                    // console.log(column.type, column.name);
-                    chartData.addColumn(column.type, column.name);
-                });
-
-                var rows = AnalyticsUtils.getRows(response);
-                chartData.addRows(rows);
-
-                options = {
-                    colors: ['#058DC7'],
-                    backgroundColor: '#fdfdfd',
-                    areaOpacity: 0.1,
-                    pointSize: 8,
-                    lineWidth: 4,
-                    legend: false,
-                    hAxis: {
-                        textStyle: { color: '#888' },
-                        baselineColor: '#fdfdfd',
-                        gridlines: {
-                            color: 'none',
-                        }
-                    },
-                    vAxis:{
-                        maxValue: 5,
-                    },
-                    series:{
-                        0:{targetAxisIndex:0},
-                        1:{targetAxisIndex:1}
-                    },
-                    vAxes: [
-                        {
-                            textStyle: { color: '#888' },
-                            format: '#',
-                            textPosition: 'in',
-                            baselineColor: '#eee',
-                            gridlines: {
-                                color: '#eee'
-                            }
-                        },
-                        {
-                            textStyle: { color: '#888' },
-                            format: '#',
-                            textPosition: 'in',
-                            baselineColor: '#eee',
-                            gridlines: {
-                                color: '#eee'
-                            }
-                        }
-                    ],
-                    chartArea:{
-                        top:10,
-                        bottom:10,
-                        width:"100%",
-                        height:"80%"
-                    }
-                };
-
-                this.$chart = new google.visualization.AreaChart(this.$chartElement.get(0));
-
-                if(typeof(this.$chart) != 'undefined')
+                $.each(apiData.columns, $.proxy(function(k, apiColumn)
                 {
-                    this.$chart.draw(chartData, options);
+                    var column = AnalyticsUtils.parseColumn(apiColumn);
+                    this.chartData.addColumn(column.type, column.label);
+                }, this));
+
+                rows = AnalyticsUtils.parseRows(apiData.columns, apiData.rows);
+
+                this.chartData.addRows(rows);
+
+                this.chart = new google.visualization.AreaChart(this.$chartElement.get(0));
+
+                if(typeof(this.chart) != 'undefined')
+                {
+                    this.chart.draw(this.chartData, this.chartOptions);
                 }
-
-                var $this = this;
-
-                $(window).resize(function() {
-                    $this.$chart.draw(chartData, options);
-                });
             }
 
         }, this));
+    },
+
+    resize: function()
+    {
+        if(this.chart)
+        {
+            this.chart.draw(this.chartData, this.chartOptions);
+        }
+    },
+
+    chartOptions: {
+        colors: ['#058DC7'],
+        backgroundColor: '#fdfdfd',
+        areaOpacity: 0.1,
+        pointSize: 8,
+        lineWidth: 4,
+        legend: false,
+        hAxis: {
+            textStyle: { color: '#888' },
+            baselineColor: '#fdfdfd',
+            gridlines: {
+                color: 'none',
+            }
+        },
+        vAxis:{
+            maxValue: 5,
+        },
+        series:{
+            0:{targetAxisIndex:0},
+            1:{targetAxisIndex:1}
+        },
+        vAxes: [
+            {
+                textStyle: { color: '#888' },
+                format: '#',
+                textPosition: 'in',
+                baselineColor: '#eee',
+                gridlines: {
+                    color: '#eee'
+                }
+            },
+            {
+                textStyle: { color: '#888' },
+                format: '#',
+                textPosition: 'in',
+                baselineColor: '#eee',
+                gridlines: {
+                    color: '#eee'
+                }
+            }
+        ],
+        chartArea:{
+            top:10,
+            bottom:10,
+            width:"100%",
+            height:"80%"
+        }
     }
 });
 

@@ -282,35 +282,6 @@ class AnalyticsService extends BaseApplicationComponent
         }
     }
 
-    public function getRows($response)
-    {
-        $columns = $response['cols'];
-
-        $newRows = array();
-
-        if(isset($response['rows']))
-        {
-
-            $rows = $response['rows'];
-
-            foreach($rows as $row)
-            {
-                $newRow = array();
-
-                foreach($row as $k => $v)
-                {
-                    $newRow[$columns[$k]['name']] = $v;
-                    //$this->formatCell($v, $columns[$k]);
-                }
-
-                array_push($newRows, $newRow);
-
-            }
-        }
-
-        return $newRows;
-    }
-
     public function cacheExpiry()
     {
         $cacheExpiry = craft()->config->get('analyticsCacheExpiry');
@@ -321,16 +292,6 @@ class AnalyticsService extends BaseApplicationComponent
         }
 
         return $cacheExpiry;
-    }
-
-    public function parseApiResponse($apiResponse)
-    {
-        $response = array();
-        $response['cols'] = $apiResponse->columnHeaders;
-        $response['rows'] = $apiResponse->rows;
-        $response['rows'] = $this->getRows($response);
-
-        return $response;
     }
 
     public function apiGet($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = array())
@@ -345,11 +306,139 @@ class AnalyticsService extends BaseApplicationComponent
         }
     }
 
+    public function parseApiResponse($apiResponse)
+    {
+        $response = array();
+
+        $cols = $apiResponse->columnHeaders;
+        $rows = $apiResponse->rows;
+
+        $cols = $this->localizeColumns($cols);
+        $rows = $this->parseRows($cols, $rows);
+
+        return array(
+            'columns' => $cols,
+            'rows' => $rows
+        );
+    }
+
     public function apiRealtimeGet($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = array())
     {
         $response = craft()->analytics->getApiObject()->data_realtime->get($p1, $p2, $p3, $p4, $p5);
 
-        return $response;
+        return $this->parseRealTimeApiResponse($response);
+    }
+
+    public function parseRealTimeApiResponse($response)
+    {
+        $cols = $response['columnHeaders'];
+        $rows = $response->rows;
+
+        $cols = $this->localizeColumns($cols);
+        $rows = $this->parseRows($cols, $rows);
+
+        return array(
+            'columns' => $cols,
+            'rows' => $rows
+        );
+    }
+
+    private function localizeColumns($cols)
+    {
+        foreach($cols as $key => $col)
+        {
+            $cols[$key]->label = Craft::t($col->name);
+        }
+
+        return $cols;
+    }
+
+    private function parseRows($cols, $apiRows = null)
+    {
+        $rows = array();
+
+        if($apiRows)
+        {
+            foreach($apiRows as $apiRow)
+            {
+                $row = array();
+
+                $colNumber = 0;
+
+                foreach($apiRow as $key => $value)
+                {
+                    $col = $cols[$colNumber];
+                    $value = $this->formatRawValue($col->dataType, $value);
+
+                    $cell = array(
+                        'v' => $value,
+                        'f' => (string) $this->formatValue($col->dataType, $value)
+                    );
+
+                    switch($col->name)
+                    {
+                        case 'ga:date':
+                        $cell = strftime("%Y.%m.%d", strtotime($value));
+                        break;
+
+                        case 'ga:yearMonth':
+                        $cell = strftime("%Y.%m.%d", strtotime($value.'01'));
+                        break;
+                    }
+
+                    array_push($row, $cell);
+
+                    $colNumber++;
+                }
+
+                array_push($rows, $row);
+            }
+        }
+        return $rows;
+    }
+
+
+    private function formatRawValue($type, $value)
+    {
+        switch($type)
+        {
+            case 'INTEGER':
+            case 'FLOAT':
+            case 'TIME':
+            case 'PERCENT':
+            $value = (float) $value;
+            break;
+
+            default:
+            $value = (string) $value;
+        }
+
+        return $value;
+    }
+
+    private function formatValue($type, $value)
+    {
+        switch($type)
+        {
+            case 'INTEGER':
+            case 'FLOAT':
+            case 'TIME':
+            $value = (float) $value;
+            $value = round($value, 2);
+            break;
+
+            case 'PERCENT':
+            $value = (float) $value;
+            $value = round($value, 2);
+            $value = $value.'%';
+
+            break;
+
+            default:
+            $value = (string) $value;
+        }
+
+        return $value;
     }
 
     public function getApiObject()
