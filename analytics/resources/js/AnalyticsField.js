@@ -1,4 +1,13 @@
-google.load("visualization", "1", {packages:['corechart', 'table', 'geochart']});
+// google visualisation
+if(typeof(google.visualization) == 'undefined')
+{
+    if(typeof(AnalyticsChartLanguage) == 'undefined')
+    {
+        AnalyticsChartLanguage = 'en';
+    }
+
+    google.load("visualization", "1", {packages:['corechart'], 'language': AnalyticsChartLanguage});
+}
 
 AnalyticsField = Garnish.Base.extend({
     init: function(fieldId)
@@ -20,13 +29,6 @@ AnalyticsField = Garnish.Base.extend({
         // listeners
         this.addListener(Garnish.$win, 'resize', 'resize');
         this.addListener(this.$metricElement, 'change', 'onMetricChange');
-
-        if(typeof(google.visualization) == 'undefined')
-        {
-            this.$errorElement.html("No internet connection");
-            this.$field.addClass('analytics-error');
-            return false;
-        }
 
         this.$metricElement.trigger('change');
     },

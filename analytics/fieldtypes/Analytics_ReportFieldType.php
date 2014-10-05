@@ -44,6 +44,7 @@ class Analytics_ReportFieldType extends BaseFieldType
         {
             $uri = craft()->analytics->getElementUrlPath($this->element->id, $this->element->locale);
 
+            craft()->templates->includeJs('var AnalyticsChartLanguage = "'.Craft::t('analyticsChartLanguage').'";');
             craft()->templates->includeJs('new AnalyticsField("'.$namespacedId.'-field");');
 
             $variables = array(
