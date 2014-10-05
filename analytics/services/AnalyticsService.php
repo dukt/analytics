@@ -230,26 +230,9 @@ class AnalyticsService extends BaseApplicationComponent
         return $response;
     }
 
-    public function secondMinute($seconds)
+    public function formatTime($seconds)
     {
-        $minResult = floor($seconds/60);
-
-        if($minResult < 10)
-        {
-            $minResult = 0 . $minResult;
-        }
-
-        $secResult = ($seconds/60 - $minResult) * 60;
-
-        if(round($secResult) < 10){
-            $secResult = 0 . round($secResult);
-        }
-        else
-        {
-            $secResult = round($secResult);
-        }
-
-        return $minResult.":".$secResult;
+        return gmdate("H:i:s", $seconds);
     }
 
     private function formatCell($value, $column)
@@ -257,24 +240,20 @@ class AnalyticsService extends BaseApplicationComponent
         switch($column['name'])
         {
             case "ga:avgTimeOnPage":
-                $value = $this->secondMinute($value);
+                $value = $this->formatTime($value);
                 return $value;
                 break;
 
             case 'ga:pageviewsPerVisit':
-
                 $value = round($value, 2);
                 return $value;
-
                 break;
 
             case 'ga:entranceRate':
             case 'ga:visitBounceRate':
             case 'ga:exitRate':
-
                 $value = round($value, 2)."%";
                 return $value;
-
                 break;
 
             default:
@@ -422,9 +401,13 @@ class AnalyticsService extends BaseApplicationComponent
         {
             case 'INTEGER':
             case 'FLOAT':
-            case 'TIME':
             $value = (float) $value;
             $value = round($value, 2);
+            break;
+
+            case 'TIME':
+            $value = (float) $value;
+            $value = $this->formatTime($value);
             break;
 
             case 'PERCENT':
