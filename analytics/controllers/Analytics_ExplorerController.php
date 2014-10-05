@@ -88,8 +88,6 @@ class Analytics_ExplorerController extends BaseController
                         $metrics,
                         $options
                     );
-
-                    //var_dump($options);
                 }
 
                 $this->returnJson(array('data' => $response));

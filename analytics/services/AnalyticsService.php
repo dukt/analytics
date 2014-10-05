@@ -669,58 +669,5 @@ class AnalyticsService extends BaseApplicationComponent
 
         return true;
     }
-
-
-    public function getMetricOpts($params = array())
-    {
-        // metrics
-
-        $json = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/metrics.json');
-        $metrics = json_decode($json);
-
-        $newMetrics = array();
-
-        foreach($metrics as $group => $groupMetrics)
-        {
-            $newMetrics[] = array('optgroup' => $group);
-
-            foreach($groupMetrics as $metric)
-            {
-                $newMetrics[] = array(
-                    'label' => $metric,
-                    'value' => $metric,
-                );
-            }
-        }
-
-        $metrics = $newMetrics;
-
-
-        // params
-
-        if(count($params) > 0)
-        {
-            $newMetrics = array();
-
-            foreach($metrics as $metric)
-            {
-                foreach($params as $param)
-                {
-
-                    if(isset($metric['value']))
-                    {
-                        if($metric['value'] == $param)
-                        {
-                            $newMetrics[] = $metric;
-                        }
-                    }
-                }
-            }
-
-            return $newMetrics;
-        }
-
-        return $metrics;
-    }
 }
 
