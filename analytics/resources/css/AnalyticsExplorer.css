@@ -47,7 +47,7 @@
   position: absolute;
   z-index: 1;
   right: 24px;
-  top: 24px;
+  top: 23px;
 }
 .analytics-actions .analytics-open {
   width: 16px;
@@ -65,7 +65,7 @@
   text-indent: -3000px;
   display: inline-block;
   margin-left: 12px;
-  background: #979797;
+  background: #fff;
   border: 1px solid #aaa;
   position: relative;
   top: 1px;
@@ -79,17 +79,20 @@
   background: #fff;
   border-radius: 100%;
   position: absolute;
+  top: -1px;
+  left: -1px;
+  border: 1px solid #666;
   -webkit-border-radius: 100%;
   -moz-border-radius: 100%;
-  transform: scale(0.7);
+  transform: scale(0.5);
   transition-property: background-color, transform, -moz-transform, -webkit-transform, background, background-image;
   transition-duration: 200ms;
   transition-timing-function: ease-out;
-  -webkit-transform: scale(0.7);
+  -webkit-transform: scale(0.5);
   -webkit-transition-property: background-color, transform, -moz-transform, -webkit-transform, background, background-image;
   -webkit-transition-duration: 200ms;
   -webkit-transition-timing-function: ease-out;
-  -moz-transform: scale(0.7);
+  -moz-transform: scale(0.5);
   -moz-transition-property: background-color, transform, -moz-transform, -webkit-transform, background, background-image;
   -moz-transition-duration: 200ms;
   -moz-transition-timing-function: ease-out;
@@ -98,6 +101,7 @@
   width: 16px;
   height: 16px;
   background: #fff;
+  border-color: #aaa;
   -webkit-border-radius: 100%;
   -moz-border-radius: 100%;
   transform: scale(1);
@@ -115,7 +119,11 @@
 }
 /* menu */
 .analytics-menu {
-  padding: 24px;
+  padding: 20px 24px;
+}
+.analytics-menu .select {
+  box-shadow: none;
+  border: 1px solid #ddd;
 }
 /* toolbar */
 .analytics-toolbar .analytics-settings {
@@ -123,11 +131,16 @@
   clear: both;
 }
 .analytics-toolbar .analytics-settings .analytics-settings-in {
-  border-top: 1px solid #fafafa;
-  border-bottom: 1px solid #fafafa;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  background: #fefefe;
 }
 .analytics-toolbar .analytics-settings .analytics-settings-in .analytics-settings-in-in {
-  padding: 24px 24px;
+  padding: 16px 24px 18px 24px;
+}
+.analytics-toolbar .analytics-settings .analytics-settings-in .analytics-settings-in-in label {
+  color: #aaa;
+  font-size: 0.8em;
 }
 .analytics-toolbar .analytics-settings .analytics-settings-in .analytics-settings-in-in .analytics-fields {
   text-align: left;
