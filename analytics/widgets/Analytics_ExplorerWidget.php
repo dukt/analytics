@@ -100,8 +100,16 @@ class Analytics_ExplorerWidget extends BaseWidget
 
         // browserSelect
 
+        $browserSelect = array();
+
+        if($pluginSettings->enableRealtime)
+        {
+            $browserSelectRealtimeJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/browserSelectRealtime.json');
+            $browserSelect = array_merge($browserSelect, json_decode($browserSelectRealtimeJson, true));
+        }
+
         $browserSelectJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/browserSelect.json');
-        $browserSelect = json_decode($browserSelectJson, true);
+        $browserSelect = array_merge($browserSelect, json_decode($browserSelectJson, true));
 
         foreach($browserSelect as $k => $row)
         {
@@ -132,6 +140,7 @@ class Analytics_ExplorerWidget extends BaseWidget
 
         // js
         craft()->templates->includeJs('var AnalyticsChartLanguage = "'.Craft::t('analyticsChartLanguage').'";');
+        craft()->templates->includeJs('var AnalyticsRealtimeInterval = "'.$pluginSettings->realtimeRefreshInterval.'";');
         craft()->templates->includeJs('var AnalyticsBrowserSections = '.$browserSectionsJson.';');
         craft()->templates->includeJs('var AnalyticsBrowserData = '.$browserDataJson.';');
         craft()->templates->includeJs('new AnalyticsExplorer("widget'.$widget->id.'", '.$settings.');');

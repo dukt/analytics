@@ -275,12 +275,42 @@ class AnalyticsService extends BaseApplicationComponent
 
     public function apiGet($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = array())
     {
-        $api = $this->getApiObject();
+        $response = $this->getApiObject()->data_ga->get($p1, $p2, $p3, $p4, $p5);
 
-        if($api)
+        $enableCache = true;
+
+        if(craft()->config->get('disableAnalyticsCache') === true)
         {
-            $response = $api->data_ga->get($p1, $p2, $p3, $p4, $p5);
+            $enableCache = false;
+        }
 
+        if($enableCache)
+        {
+            $cacheKey = 'analytics/explorer/'.md5(serialize(array($p1, $p2, $p3, $p4, $p5)));
+
+            $return = craft()->fileCache->get($cacheKey);
+
+            if(!$return)
+            {
+                $return = $this->parseApiResponse($response);
+
+                $cacheDuration = craft()->config->get('analyticsCacheDuration');
+
+                if(!$cacheDuration)
+                {
+                    $cacheDuration = 'PT10S';
+                }
+
+                $cacheDuration = new DateInterval($cacheDuration);
+                $cacheDurationSeconds = $cacheDuration->format('%s');
+
+                craft()->fileCache->set($cacheKey, $return, $cacheDurationSeconds);
+            }
+
+            return $return;
+        }
+        else
+        {
             return $this->parseApiResponse($response);
         }
     }
@@ -305,7 +335,33 @@ class AnalyticsService extends BaseApplicationComponent
     {
         $response = craft()->analytics->getApiObject()->data_realtime->get($p1, $p2, $p3, $p4, $p5);
 
-        return $this->parseRealTimeApiResponse($response);
+
+        $enableCache = true;
+
+        if(craft()->config->get('disableAnalyticsCache') === true)
+        {
+            $enableCache = false;
+        }
+
+        if($enableCache)
+        {
+            $cacheKey = 'analytics/realtime/'.md5(serialize(array($p1, $p2, $p3, $p4, $p5)));
+
+            $return = craft()->fileCache->get($cacheKey);
+
+            if(!$return)
+            {
+                $return = $this->parseRealTimeApiResponse($response);
+
+                craft()->fileCache->set($cacheKey, $return, $this->getSetting('realtimeRefreshInterval'));
+            }
+
+            return $return;
+        }
+        else
+        {
+            return $this->parseRealTimeApiResponse($response);
+        }
     }
 
     public function parseRealTimeApiResponse($response)

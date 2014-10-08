@@ -220,10 +220,30 @@ AnalyticsExplorer = Garnish.Base.extend({
 
     requestRealtimeVisitors: function(data)
     {
-        Craft.postActionRequest('analytics/explorer/realtimeVisitors', {}, $.proxy(function(response)
+        Craft.postActionRequest('analytics/explorer/realtimeVisitors', {}, $.proxy(function(response, textStatus)
         {
-            this.handleRealtimeVisitorsResponse(response);
+            if(textStatus == 'success')
+            {
+                this.$realtimeVisitors.removeClass('hidden');
+                this.$error.addClass('hidden');
+                this.handleRealtimeVisitorsResponse(response);
+            }
+            else
+            {
+                msg = 'An unknown error occured.';
+
+                if(typeof(response) != 'undefined' && response && typeof(response.error) != 'undefined')
+                {
+                    msg = response.error;
+                }
+
+                this.$realtimeVisitors.addClass('hidden');
+                this.$error.html(msg);
+                this.$error.removeClass('hidden');
+            }
+
             this.$spinner.addClass('hidden');
+
         }, this));
     },
 
@@ -288,104 +308,104 @@ AnalyticsExplorer = Garnish.Base.extend({
     {
         var chart = $('.btn.active', this.$tableType).data('tabletype');
 
-        Craft.postActionRequest('analytics/explorer/'+chart, data, $.proxy(function(response)
+        Craft.postActionRequest('analytics/explorer/'+chart, data, $.proxy(function(response, textStatus)
         {
-            this.handleBrowserResponse(response, chart);
+            if(textStatus == 'success')
+            {
+                this.$browser.removeClass('hidden');
+                this.$error.addClass('hidden');
+                this.handleBrowserResponse(response, chart);
+            }
+            else
+            {
+                this.$browser.addClass('hidden');
+                this.$error.html(response.error);
+                this.$error.removeClass('hidden');
+            }
 
             this.$spinner.addClass('hidden');
+
         }, this));
     },
 
     handleBrowserResponse: function(response, chart)
     {
-        if(typeof(response.error) == 'undefined')
+        switch(chart)
         {
-            this.$browser.removeClass('hidden');
-            this.$error.addClass('hidden');
+            case "area":
+            this.handleAreaChartResponse(response);
+            break;
 
-            switch(chart)
+            case "geo":
+            this.handleGeoChartResponse(response);
+            break;
+
+            case "pie":
+            this.handlePieChartResponse(response);
+            break;
+
+            case "table":
+            this.handleTableChartResponse(response);
+            break;
+
+            case "counter":
+            this.handleCounterResponse(response);
+            break;
+        }
+
+        if(typeof(response.dimension) != 'undefined')
+        {
+            this.$infosDimension.removeClass('hidden');
+            this.$infosDimension.html(response.dimension);
+        }
+        else
+        {
+            this.$infosDimension.addClass('hidden');
+        }
+
+        this.$infosMetric.html(response.metric);
+        this.$infosPeriod.html(response.period);
+
+        this.changeTableType(chart);
+
+
+        // realtime no visitors
+
+        var noVisitors = false;
+
+        if(this.sectionRealtime)
+        {
+            if(typeof(response.table) != 'undefined' && typeof(response.table.rows) != 'undefined')
             {
-                case "area":
-                this.handleAreaChartResponse(response);
-                break;
-
-                case "geo":
-                this.handleGeoChartResponse(response);
-                break;
-
-                case "pie":
-                this.handlePieChartResponse(response);
-                break;
-
-                case "table":
-                this.handleTableChartResponse(response);
-                break;
-
-                case "counter":
-                this.handleCounterResponse(response);
-                break;
-            }
-
-            if(typeof(response.dimension) != 'undefined')
-            {
-                this.$infosDimension.removeClass('hidden');
-                this.$infosDimension.html(response.dimension);
-            }
-            else
-            {
-                this.$infosDimension.addClass('hidden');
-            }
-
-            this.$infosMetric.html(response.metric);
-            this.$infosPeriod.html(response.period);
-
-            this.changeTableType(chart);
-
-
-            // realtime no visitors
-
-            var noVisitors = false;
-
-            if(this.sectionRealtime)
-            {
-                if(typeof(response.table) != 'undefined' && typeof(response.table.rows) != 'undefined')
-                {
-                    if(response.table.rows.length == 0)
-                    {
-                        noVisitors = true;
-                    }
-                }
-                else
+                if(response.table.rows.length == 0)
                 {
                     noVisitors = true;
                 }
             }
-
-            if(noVisitors)
-            {
-                this.$infosDimension.addClass('hidden');
-                this.$infosMetric.addClass('hidden');
-                this.$infosPeriod.addClass('hidden');
-
-                this.$table.addClass('hidden');
-                this.$pie.addClass('hidden');
-
-                $('.analytics-no-visitors').removeClass('hidden');
-            }
             else
             {
-                this.$infosDimension.removeClass('hidden');
-                this.$infosMetric.removeClass('hidden');
-                this.$infosPeriod.removeClass('hidden');
-
-                $('.analytics-no-visitors').addClass('hidden');
+                noVisitors = true;
             }
+        }
+
+        if(noVisitors)
+        {
+            this.$infosDimension.addClass('hidden');
+            this.$infosMetric.addClass('hidden');
+            this.$infosPeriod.addClass('hidden');
+
+            this.$table.addClass('hidden');
+            this.$pie.addClass('hidden');
+
+            $('.analytics-no-visitors').removeClass('hidden');
         }
         else
         {
-            this.$browser.addClass('hidden');
-            this.$error.html(response.error);
-            this.$error.removeClass('hidden');
+            this.$infosDimension.removeClass('hidden');
+            this.$infosMetric.removeClass('hidden');
+            this.$infosPeriod.removeClass('hidden');
+
+            $('.analytics-no-visitors').addClass('hidden');
         }
     },
 
@@ -735,7 +755,7 @@ AnalyticsExplorer = Garnish.Base.extend({
                 this.request(data);
             }
 
-        }, this), 60000);
+        }, this), AnalyticsRealtimeInterval * 1000);
     },
 
     stopRealtime: function()

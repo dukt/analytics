@@ -40,7 +40,8 @@ class AnalyticsPlugin extends BasePlugin
     {
         return array(
             'profileId' => array(AttributeType::String),
-            'realtimeRefreshInterval' => array(AttributeType::Number),
+            'realtimeRefreshInterval' => array(AttributeType::Number, 'default' => 60),
+            'enableRealtime' => array(AttributeType::Bool),
             'tokenId' => array(AttributeType::Number),
         );
     }

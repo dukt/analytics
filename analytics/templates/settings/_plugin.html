@@ -41,13 +41,24 @@
                     value: settings.profileId
                 }) }}
 
-                {{ forms.textField({
-                    label: "Real-Time Refresh Interval"|t,
-                    instructions: "Interval in seconds between request to real-time API"|t,
-                    name: 'settings[realtimeRefreshInterval]',
-                    value: (settings.realtimeRefreshInterval ? settings.realtimeRefreshInterval : '10'),
-                    size: 4
+                {{ forms.checkboxField({
+                    label: "Enable real-time"|t,
+                    name: 'settings[enableRealtime]',
+                    checked: (settings.enableRealtime ? settings.enableRealtime : false),
+                    toggle: 'enableRealtime'
                 }) }}
+
+
+                <div id="enableRealtime"{% if not settings.enableRealtime %} class="hidden"{% endif %}>
+
+                    {{ forms.textField({
+                        label: "Real-Time Refresh Interval"|t,
+                        instructions: "Interval in seconds between request to real-time API"|t,
+                        name: 'settings[realtimeRefreshInterval]',
+                        value: (settings.realtimeRefreshInterval ? settings.realtimeRefreshInterval : '10'),
+                        size: 4
+                    }) }}
+                </div>
 
                 <p>
                     <input type="submit" class="btn submit force" value="{{'Save'|t}}">
