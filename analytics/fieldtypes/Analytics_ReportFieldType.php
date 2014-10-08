@@ -32,6 +32,11 @@ class Analytics_ReportFieldType extends BaseFieldType
      */
     public function getInputHtml($name, $value)
     {
+        if(craft()->config->get('disableAnalytics') === true)
+        {
+            return craft()->templates->render('analytics/widgets/explorer/disabled', array());
+        }
+
         // Reformat the input name into something that looks more like an ID
         $id = craft()->templates->formatInputId($name);
 
