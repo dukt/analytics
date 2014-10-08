@@ -15,6 +15,73 @@ namespace Craft;
 class Analytics_ExplorerController extends BaseController
 {
     /**
+     * Real-Time Visitors
+     */
+    public function actionRealtimeVisitors()
+    {
+        try
+        {
+            $data = array(
+                'newVisitor' => 0,
+                'returningVisitor' => 0
+            );
+
+            $profile = craft()->analytics->getProfile();
+
+            // visitor type
+
+            $results = craft()->analytics->apiRealtimeGet(
+                'ga:'.$profile['id'],
+                'ga:activeVisitors',
+                array('dimensions' => 'ga:visitorType')
+            );
+
+            //var_dump($results);
+
+            //var_dump($results['rows']);
+
+            if(!empty($results['totalResults']))
+            {
+                $data['total'] = $results['totalResults'];
+            }
+
+            if(!empty($results['rows'][0][1]['v']))
+            {
+                switch($results['rows'][0][0]['v'])
+                {
+                    case "RETURNING":
+                    $data['returningVisitor'] = $results['rows'][0][1]['v'];
+                    break;
+
+                    case "NEW":
+                    $data['newVisitor'] = $results['rows'][0][1]['v'];
+                    break;
+                }
+            }
+
+            if(!empty($results['rows'][1][1]['v']))
+            {
+                switch($results['rows'][1][0]['v'])
+                {
+                    case "RETURNING":
+                    $data['returningVisitor'] = $results['rows'][1][1]['v'];
+                    break;
+
+                    case "NEW":
+                    $data['newVisitor'] = $results['rows'][1][1]['v'];
+                    break;
+                }
+            }
+
+            $this->returnJson($data);
+        }
+        catch(\Exception $e)
+        {
+            $this->returnErrorJson($error);
+        }
+    }
+
+    /**
      * Element Report
      */
     public function actionElementReport(array $variables = array())
@@ -55,7 +122,7 @@ class Analytics_ExplorerController extends BaseController
 
                 $enableCache = true;
 
-                if(craft()->config->get('disableCache', 'analytics') == true)
+                if(craft()->config->get('disableAnalyticsCache') === true)
                 {
                     $enableCache = false;
                 }
@@ -116,15 +183,15 @@ class Analytics_ExplorerController extends BaseController
 
             if($realtime)
             {
-                $chartResponse = craft()->analytics->apiRealtimeGet(
+                $response = craft()->analytics->apiRealtimeGet(
                     'ga:'.$profile['id'],
                     $metric,
                     array()
                 );
 
-                if(!empty($chartResponse['rows'][0][0]['v']))
+                if(!empty($response['rows'][0][0]['v']))
                 {
-                    $count = $chartResponse['rows'][0][0]['v'];
+                    $count = $response['rows'][0][0]['v'];
                 }
                 else
                 {
@@ -138,7 +205,7 @@ class Analytics_ExplorerController extends BaseController
             }
             else
             {
-                $totalApiResponse = craft()->analytics->apiGet(
+                $response = craft()->analytics->apiGet(
                     'ga:'.$profile['id'],
                     $start,
                     $end,
@@ -146,9 +213,9 @@ class Analytics_ExplorerController extends BaseController
                 );
 
 
-                if(!empty($chartResponse['rows'][0][0]['v']))
+                if(!empty($response['rows'][0][0]['v']))
                 {
-                    $count = $chartResponse['rows'][0][0]['v'];
+                    $count = $response['rows'][0][0]['v'];
                 }
                 else
                 {

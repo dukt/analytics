@@ -1,9 +1,10 @@
 (function($) {
 
-
 AnalyticsExplorer = Garnish.Base.extend({
     init: function(element, settings)
     {
+        // google visualization
+
         if(typeof(google.visualization) == 'undefined')
         {
             if(typeof(AnalyticsChartLanguage) == 'undefined')
@@ -13,6 +14,9 @@ AnalyticsExplorer = Garnish.Base.extend({
 
             google.load("visualization", "1", {packages:['corechart', 'table', 'geochart'], 'language': AnalyticsChartLanguage});
         }
+
+
+        // variables
 
         this.timer = false;
         this.requestData = false;
@@ -28,24 +32,25 @@ AnalyticsExplorer = Garnish.Base.extend({
         this.chartTable = false;
         this.chartPie = false;
 
-        this.tableData = false;
-        this.chartAreaData = false;
+        this.chartData = {
+            'table': false,
+            'area': false
+        };
 
+
+        // elements
         this.$element = $('#'+element);
         this.$error = $('.analytics-error', this.$element);
         this.$menu = $('.analytics-menu:first select:first', this.$element);
         this.$widget = $('.analytics-widget:first', this.$element);
         this.$browser = $('.analytics-browser:first', this.$element);
-        this.$chart = $('.analytics-chart', this.$element);
+        this.$area = $('.analytics-area', this.$element);
         this.$geo = $('.analytics-geo', this.$element);
-        this.$pie = $('.analytics-piechart', this.$element);
+        this.$pie = $('.analytics-pie', this.$element);
         this.$table = $('.analytics-table', this.$element);
         this.$dimensionField = $('.analytics-dimension-field', this.$element);
         this.$dimension = $('.analytics-dimension select', this.$element);
         this.$metric = $('.analytics-metric select', this.$element);
-        this.$total = $('.analytics-total', this.$element);
-        this.$totalCount = $('.analytics-count', this.$total);
-        this.$totalLabel = $('.analytics-label', this.$total);
         this.$tableType = $('.analytics-tabletype:first', this.$element);
         this.$disabledTableType = $('.analytics-disabled-tabletype:first', this.$element);
         this.$tableTypeBtns = $('.analytics-tabletype .btn', this.$element);
@@ -63,7 +68,10 @@ AnalyticsExplorer = Garnish.Base.extend({
         this.$counterPeriod = $('.analytics-counter-period', this.$element);
         this.$collapsible = $('.analytics-collapsible', this.$element);
         this.$open = $('.analytics-open', this.$element);
+        this.$realtimeVisitors = $('.analytics-realtime-visitors', this.$element);
 
+
+        // listeners
         this.addListener(this.$menu, 'change', 'onMenuChange');
         this.addListener(this.$tableTypeBtns, 'click', 'onTableTypeChange');
         this.addListener(this.$open, 'click', 'onOpen');
@@ -160,62 +168,6 @@ AnalyticsExplorer = Garnish.Base.extend({
     },
 
 
-    // set section
-
-    setSection: function(nav)
-    {
-        var section = false;
-
-        $.each(AnalyticsBrowserData, $.proxy(function(sectionKey, sectionObject)
-        {
-            if(sectionKey == nav)
-            {
-                section = sectionObject;
-            }
-        }, this));
-
-        this.sectionUri = false;
-        this.sectionDimensions = false;
-        this.sectionMetrics = false;
-        this.sectionEnabledCharts = false;
-        this.sectionRealtime = false;
-        this.sectionChart = false;
-
-        if(section)
-        {
-            if(typeof(section.dimensions) !== 'undefined')
-            {
-                this.sectionDimensions = section.dimensions;
-            }
-
-            if(typeof(section.metrics) !== 'undefined')
-            {
-                this.sectionMetrics = section.metrics;
-            }
-
-            if(typeof(section.enabledCharts) !== 'undefined')
-            {
-                this.sectionEnabledCharts = section.enabledCharts;
-            }
-
-            if(typeof(section.realtime) !== 'undefined')
-            {
-                this.sectionRealtime = section.realtime;
-            }
-
-            if(typeof(section.chart) !== 'undefined')
-            {
-                this.sectionChart = section.chart;
-            }
-
-            if(typeof(section.uri) !== 'undefined')
-            {
-                this.sectionUri = section.uri;
-            }
-        }
-    },
-
-
     // browse
 
     browse: function()
@@ -242,94 +194,228 @@ AnalyticsExplorer = Garnish.Base.extend({
         this.request(data);
     },
 
-    /*
-    - area
-    - counter
-    - pie
-    - table
-    */
+
+    // request
+
     request: function(data)
     {
         this.$spinner.removeClass('hidden');
+
+        $('[data-view]', this.$element).addClass('hidden');
+        $('[data-view="'+this.sectionView+'"]', this.$element).removeClass('hidden');
+
+        switch(this.sectionView)
+        {
+            case 'realtimeVisitors':
+            $('.analytics-toolbar').addClass('hidden');
+            this.requestRealtimeVisitors(data);
+            break;
+
+            case 'browser':
+            $('.analytics-toolbar').removeClass('hidden');
+            this.requestBrowser(data);
+            break;
+        }
+    },
+
+    requestRealtimeVisitors: function(data)
+    {
+        Craft.postActionRequest('analytics/explorer/realtimeVisitors', {}, $.proxy(function(response)
+        {
+            this.handleRealtimeVisitorsResponse(response);
+            this.$spinner.addClass('hidden');
+        }, this));
+    },
+
+    handleRealtimeVisitorsResponse: function(response)
+    {
+        var newVisitor = response.newVisitor;
+        var returningVisitor = response.returningVisitor;
+
+        var calcTotal = ((returningVisitor * 1) + (newVisitor * 1));
+
+        $('.active-visitors .count', this.$realtimeVisitors).text(calcTotal);
+
+        if (calcTotal > 0) {
+            $('.progress', this.$realtimeVisitors).removeClass('hidden');
+            $('.legend', this.$realtimeVisitors).removeClass('hidden');
+        } else {
+            $('.progress', this.$realtimeVisitors).addClass('hidden');
+            $('.legend', this.$realtimeVisitors).addClass('hidden');
+        }
+
+        if(calcTotal > 0)
+        {
+            var blue = Math.round(100 * newVisitor / calcTotal);
+        }
+        else
+        {
+            var blue = 100;
+        }
+
+        var green = 100 - blue;
+
+        // blue
+
+        $('.progress-bar.blue', this.$realtimeVisitors).css('width', blue+'%');
+        $('.progress-bar.blue span', this.$realtimeVisitors).text(blue+'%');
+
+        if(blue > 0)
+        {
+            $('.progress-bar.blue', this.$realtimeVisitors).removeClass('hidden');
+        }
+        else
+        {
+            $('.progress-bar.blue', this.$realtimeVisitors).addClass('hidden');
+        }
+
+        // green
+
+        $('.progress-bar.green', this.$realtimeVisitors).css('width', green+'%');
+        $('.progress-bar.green span', this.$realtimeVisitors).text(green+'%');
+
+        if(green > 0)
+        {
+            $('.progress-bar.green', this.$realtimeVisitors).removeClass('hidden');
+        }
+        else
+        {
+            $('.progress-bar.green', this.$realtimeVisitors).addClass('hidden');
+        }
+    },
+
+    requestBrowser: function(data)
+    {
         var chart = $('.btn.active', this.$tableType).data('tabletype');
 
         Craft.postActionRequest('analytics/explorer/'+chart, data, $.proxy(function(response)
         {
-            if(typeof(response.error) == 'undefined')
-            {
-                this.$browser.removeClass('hidden');
-                this.$error.addClass('hidden');
-
-                switch(chart)
-                {
-                    case "area":
-                    this.updateAreaChart(response);
-                    break;
-
-                    case "geo":
-                    this.updateGeoChart(response);
-                    break;
-
-                    case "pie":
-                    this.updatePieAndTableChart(response);
-                    break;
-
-                    case "table":
-                    this.updatePieAndTableChart(response);
-                    break;
-
-                    case "counter":
-                    this.updateCounter(response);
-                    break;
-                }
-
-                if(typeof(response.dimension) != 'undefined')
-                {
-                    this.$infosDimension.removeClass('hidden');
-                    this.$infosDimension.html(response.dimension);
-                }
-                else
-                {
-                    this.$infosDimension.addClass('hidden');
-                }
-
-                this.$infosMetric.html(response.metric);
-                this.$infosPeriod.html(response.period);
-
-                this.changeTableType(chart);
-            }
-            else
-            {
-                this.$browser.addClass('hidden');
-                this.$error.html(response.error);
-                this.$error.removeClass('hidden');
-            }
+            this.handleBrowserResponse(response, chart);
 
             this.$spinner.addClass('hidden');
         }, this));
     },
 
+    handleBrowserResponse: function(response, chart)
+    {
+        if(typeof(response.error) == 'undefined')
+        {
+            this.$browser.removeClass('hidden');
+            this.$error.addClass('hidden');
+
+            switch(chart)
+            {
+                case "area":
+                this.handleAreaChartResponse(response);
+                break;
+
+                case "geo":
+                this.handleGeoChartResponse(response);
+                break;
+
+                case "pie":
+                this.handlePieChartResponse(response);
+                break;
+
+                case "table":
+                this.handleTableChartResponse(response);
+                break;
+
+                case "counter":
+                this.handleCounterResponse(response);
+                break;
+            }
+
+            if(typeof(response.dimension) != 'undefined')
+            {
+                this.$infosDimension.removeClass('hidden');
+                this.$infosDimension.html(response.dimension);
+            }
+            else
+            {
+                this.$infosDimension.addClass('hidden');
+            }
+
+            this.$infosMetric.html(response.metric);
+            this.$infosPeriod.html(response.period);
+
+            this.changeTableType(chart);
+
+
+            // realtime no visitors
+
+            var noVisitors = false;
+
+            if(this.sectionRealtime)
+            {
+                if(typeof(response.table) != 'undefined' && typeof(response.table.rows) != 'undefined')
+                {
+                    if(response.table.rows.length == 0)
+                    {
+                        noVisitors = true;
+                    }
+                }
+                else
+                {
+                    noVisitors = true;
+                }
+            }
+
+            if(noVisitors)
+            {
+                this.$infosDimension.addClass('hidden');
+                this.$infosMetric.addClass('hidden');
+                this.$infosPeriod.addClass('hidden');
+
+                this.$table.addClass('hidden');
+                this.$pie.addClass('hidden');
+
+                $('.analytics-no-visitors').removeClass('hidden');
+            }
+            else
+            {
+                this.$infosDimension.removeClass('hidden');
+                this.$infosMetric.removeClass('hidden');
+                this.$infosPeriod.removeClass('hidden');
+
+                $('.analytics-no-visitors').addClass('hidden');
+            }
+        }
+        else
+        {
+            this.$browser.addClass('hidden');
+            this.$error.html(response.error);
+            this.$error.removeClass('hidden');
+        }
+    },
+
+    // fill chart data
+
+    fillChartData: function(chart, chartResponse)
+    {
+        this.chartData[chart] = new google.visualization.DataTable();
+
+        $.each(chartResponse.columns, $.proxy(function(k, apiColumn)
+        {
+            var column = AnalyticsUtils.parseColumn(apiColumn);
+            this.chartData[chart].addColumn(column.type, column.label);
+        }, this));
+
+        rows = chartResponse.rows;
+        rows = AnalyticsUtils.parseRows(chartResponse.columns, chartResponse.rows);
+
+        this.chartData[chart].addRows(rows);
+    },
 
     // update charts
 
-    updateAreaChart: function(response)
+    handleAreaChartResponse: function(response)
     {
-        this.chartAreaData = new google.visualization.DataTable();
-
-        $.each(response.area.columns, $.proxy(function(k, apiColumn)
-        {
-            var column = AnalyticsUtils.parseColumn(apiColumn);
-            this.chartAreaData.addColumn(column.type, column.label);
-        }, this));
-
-        rows = response.area.rows;
-        rows = AnalyticsUtils.parseRows(response.area.columns, response.area.rows);
-
-        this.chartAreaData.addRows(rows);
+        this.fillChartData('area', response.area);
 
         if(!this.chartArea)
         {
-            this.chartArea = new google.visualization.AreaChart(this.$chart.get(0));
+            this.chartArea = new google.visualization.AreaChart($('.analytics-chart', this.$area).get(0));
         }
 
         if(this.$periodSelect.val() == 'week')
@@ -351,86 +437,72 @@ AnalyticsExplorer = Garnish.Base.extend({
                 pattern: "MMMM yyyy"
             });
 
-            dateFormatter.format(this.chartAreaData, 0);
+            dateFormatter.format(this.chartData['area'], 0);
         }
 
-        this.chartArea.draw(this.chartAreaData, this.areaChartOptions);
+        this.chartArea.draw(this.chartData['area'], this.areaChartOptions);
 
         this.$infosCount.html(response.total);
     },
 
-    updateCounter: function(response)
+    handleCounterResponse: function(response)
     {
         this.$counterValue.html(response.counter.count);
         this.$counterLabel.html(response.metric);
         this.$counterPeriod.html(response.period);
-        this.$infosCount.html(response.counter.count);
-        this.$totalCount.html(response.counter.count);
-        this.$totalLabel.html(response.metric);
     },
 
-    updateGeoChart: function(response)
+    handleGeoChartResponse: function(response)
     {
-        this.tableData = new google.visualization.DataTable();
-
-        $.each(response.table.columns, $.proxy(function(k, apiColumn)
-        {
-            var column = AnalyticsUtils.parseColumn(apiColumn);
-            this.tableData.addColumn(column.type, column.label);
-        }, this));
-
-        this.tableData.addRows(response.table.rows);
+        this.fillChartData('table', response.table);
 
         if(!this.chartGeo)
         {
-            this.chartGeo = new google.visualization.GeoChart(this.$geo.get(0));
+            this.chartGeo = new google.visualization.GeoChart($('.analytics-chart', this.$geo).get(0));
         }
 
-        this.chartGeo.draw(this.tableData, this.pieChartOptions);
+        this.chartGeo.draw(this.chartData['table'], this.pieChartOptions);
     },
 
-    updatePieAndTableChart: function(response)
+    handleTableChartResponse: function(response)
     {
-        this.tableData = new google.visualization.DataTable();
-
-        $.each(response.table.columns, $.proxy(function(k, apiColumn)
-        {
-            var column = AnalyticsUtils.parseColumn(apiColumn);
-            this.tableData.addColumn(column.type, column.label);
-        }, this));
-
-        this.tableData.addRows(response.table.rows);
+        this.fillChartData('table', response.table);
 
         if(!this.chartTable)
         {
-            this.chartTable = new google.visualization.Table(this.$table.get(0));
+            this.chartTable = new google.visualization.Table($('.analytics-chart', this.$table).get(0));
         }
 
-        this.chartTable.draw(this.tableData, this.tableChartOptions);
+        this.chartTable.draw(this.chartData['table'], this.tableChartOptions);
+    },
+
+    handlePieChartResponse: function(response)
+    {
+        this.fillChartData('table', response.table);
 
         if(!this.chartPie)
         {
-            this.chartPie = new google.visualization.PieChart(this.$pie.get(0));
+            this.chartPie = new google.visualization.PieChart($('.analytics-chart', this.$pie).get(0));
         }
 
-        this.chartPie.draw(this.tableData, this.pieChartOptions);
+        this.chartPie.draw(this.chartData['table'], this.pieChartOptions);
     },
 
     resize: function()
     {
         if(this.chartArea)
         {
-            this.chartArea.draw(this.chartAreaData, this.areaChartOptions);
+            this.chartArea.draw(this.chartData['area'], this.areaChartOptions);
         }
 
         if(this.chartTable)
         {
-            this.chartTable.draw(this.tableData, this.tableChartOptions);
+            this.chartTable.draw(this.chartData['table'], this.tableChartOptions);
         }
 
         if(this.chartPie)
         {
-            this.chartPie.draw(this.tableData, this.pieChartOptions);
+            this.chartPie.draw(this.chartData['table'], this.pieChartOptions);
         }
 
         var total = 0;
@@ -583,6 +655,68 @@ AnalyticsExplorer = Garnish.Base.extend({
     },
 
 
+    // set section
+
+    setSection: function(nav)
+    {
+        var section = false;
+
+        $.each(AnalyticsBrowserData, $.proxy(function(sectionKey, sectionObject)
+        {
+            if(sectionKey == nav)
+            {
+                section = sectionObject;
+            }
+        }, this));
+
+        this.sectionUri = false;
+        this.sectionView = false;
+        this.sectionDimensions = false;
+        this.sectionMetrics = false;
+        this.sectionEnabledCharts = false;
+        this.sectionRealtime = false;
+        this.sectionChart = false;
+
+        if(section)
+        {
+            if(typeof(section.dimensions) !== 'undefined')
+            {
+                this.sectionDimensions = section.dimensions;
+            }
+
+            if(typeof(section.metrics) !== 'undefined')
+            {
+                this.sectionMetrics = section.metrics;
+            }
+
+            if(typeof(section.enabledCharts) !== 'undefined')
+            {
+                this.sectionEnabledCharts = section.enabledCharts;
+            }
+
+            if(typeof(section.realtime) !== 'undefined')
+            {
+                this.sectionRealtime = section.realtime;
+            }
+
+            if(typeof(section.chart) !== 'undefined')
+            {
+                this.sectionChart = section.chart;
+            }
+
+            if(typeof(section.uri) !== 'undefined')
+            {
+                this.sectionUri = section.uri;
+            }
+
+            if(typeof(section.view) !== 'undefined')
+            {
+                this.sectionView = section.view;
+            }
+        }
+    },
+
+
     // real-time
 
     startRealtime: function()
@@ -601,7 +735,7 @@ AnalyticsExplorer = Garnish.Base.extend({
                 this.request(data);
             }
 
-        }, this), 4000);
+        }, this), 60000);
     },
 
     stopRealtime: function()
@@ -648,7 +782,6 @@ AnalyticsExplorer = Garnish.Base.extend({
     onTableTypeChange: function(ev)
     {
         var tableType = $(ev.currentTarget).data('tabletype');
-        // this.changeTableType(tableType);
 
         this.$tableTypeBtns.removeClass('active');
         $('[data-tabletype="'+tableType+'"]', this.$tableType).addClass('active');
@@ -666,11 +799,10 @@ AnalyticsExplorer = Garnish.Base.extend({
 
         if(tableType == 'table')
         {
-            this.$infosCount.addClass('hidden');
             this.$table.removeClass('hidden');
             this.$counter.addClass('hidden');
             this.$pie.addClass('hidden');
-            this.$chart.addClass('hidden');
+            this.$area.addClass('hidden');
             this.$geo.addClass('hidden');
 
             if(this.sectionDimensions)
@@ -681,9 +813,7 @@ AnalyticsExplorer = Garnish.Base.extend({
         }
         else if(tableType == 'area')
         {
-            // this.$infosDimension.removeClass('hidden');
-            this.$infosCount.removeClass('hidden');
-            this.$chart.removeClass('hidden');
+            this.$area.removeClass('hidden');
             this.$table.addClass('hidden');
             this.$pie.addClass('hidden');
             this.$counter.addClass('hidden');
@@ -692,30 +822,25 @@ AnalyticsExplorer = Garnish.Base.extend({
         }
         else if(tableType == 'geo')
         {
-            this.$infosCount.addClass('hidden');
             this.$pie.addClass('hidden');
-            this.$chart.addClass('hidden');
+            this.$area.addClass('hidden');
             this.$table.addClass('hidden');
             this.$counter.addClass('hidden');
             this.$geo.removeClass('hidden');
         }
         else if(tableType == 'counter')
         {
-            this.$infosDimension.addClass('hidden');
-            this.$infosCount.addClass('hidden');
-            this.$chart.addClass('hidden');
+            this.$area.addClass('hidden');
             this.$table.addClass('hidden');
             this.$pie.addClass('hidden');
             this.$counter.removeClass('hidden');
             this.$dimensionField.addClass('hidden');
-            this.$infosDimension.addClass('hidden');
             this.$geo.addClass('hidden');
         }
         else
         {
-            this.$infosCount.addClass('hidden');
             this.$pie.removeClass('hidden');
-            this.$chart.addClass('hidden');
+            this.$area.addClass('hidden');
             this.$table.addClass('hidden');
             this.$counter.addClass('hidden');
             this.$geo.addClass('hidden');

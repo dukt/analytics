@@ -42,6 +42,12 @@ class Analytics_ExplorerWidget extends BaseWidget
 
     public function getBodyHtml()
     {
+
+        if(craft()->config->get('disableAnalyticsWidget') === true)
+        {
+            return craft()->templates->render('analytics/widgets/explorer/disabled', array());
+        }
+
         $plugin = craft()->plugins->getPlugin('analytics');
 
         // settings

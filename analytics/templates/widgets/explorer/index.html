@@ -135,38 +135,83 @@
         Error
     </div>
 
+    {# Realtime visitors #}
+
+    <div class="analytics-realtime-visitors" data-view="realtimeVisitors">
+
+        <div class="active-visitors">
+            <span class="currently">{{'Currently'|t}}</span>
+            <strong class="count">•••</strong>
+            <span class="txt">{{'Active visitors on your website'|t}}</span>
+        </div>
+
+        <div class="progress hidden">
+            <div class="progress-bar blue" style="width: 35%">
+                <span>35%</span>
+            </div>
+            <div class="progress-bar green" style="width: 65%">
+                <span>65%</span>
+            </div>
+
+            <div class="clear"></div>
+        </div>
+
+        <ul class="legend hidden">
+            <li class="blue"><strong>50% </strong><span>{{'New'|t}}</span></li>
+            <li class="green"><strong>50% </strong><span>{{'Returning'|t}}</span></li>
+        </ul>
+
+    </div>
 
     {# Browser #}
 
-    <div class="analytics-browser">
-
-        {# Infos #}
-
-        <div class="analytics-infos">
-            <span class="analytics-infos-dimension">Browsers</span>
-            <span class="analytics-infos-count">1543</span>
-            <span class="analytics-infos-metric">Visits</span>
-            <span class="analytics-infos-period">last month</span>
-        </div>
-
-        <div class="right analytics-total">
-            <strong class="analytics-count"></strong> <em class="analytics-label"></em>
-        </div>
-
+    <div class="analytics-browser" data-view="browser">
 
         {# Charts #}
 
         <div class="analytics-counter hidden">
-            <div class="analytics-counter-value">1423</div>
+            <div class="analytics-counter-value">•••</div>
             <div class="analytics-counter-label"></div>
             <div class="analytics-counter-period">last month</div>
         </div>
 
-        <div class="analytics-chart"></div>
-        <div class="analytics-geo"></div>
-        <div class="analytics-table analytics-chart-table hidden"></div>
-        <div class="analytics-piechart hidden"></div>
+        <div class="analytics-area">
+            <div class="analytics-infos">
+                <span class="analytics-infos-count">•••</span>
+                <span class="analytics-infos-metric">Visits</span>
+                <span class="analytics-infos-period">last month</span>
+            </div>
+            <div class="analytics-chart"></div>
+        </div>
+
+        <div class="analytics-geo">
+            <div class="analytics-infos">
+                <span class="analytics-infos-dimension">Browsers</span>
+                <span class="analytics-infos-metric">Visits</span>
+                <span class="analytics-infos-period">last month</span>
+            </div>
+            <div class="analytics-chart"></div>
+        </div>
+        <div class="analytics-table hidden">
+            <div class="analytics-infos">
+                <span class="analytics-infos-dimension">Browsers</span>
+                <span class="analytics-infos-metric">Visits</span>
+                <span class="analytics-infos-period">last month</span>
+            </div>
+            <div class="analytics-chart"></div>
+        </div>
+        <div class="analytics-pie hidden">
+            <div class="analytics-infos">
+                <span class="analytics-infos-dimension">Browsers</span>
+                <span class="analytics-infos-metric">Visits</span>
+                <span class="analytics-infos-period">last month</span>
+            </div>
+            <div class="analytics-chart"></div>
+        </div>
+
+        {# Messages #}
         <div class="analytics-inject"></div>
+        <div class="analytics-no-visitors hidden">No active visitors.</div>
     </div>
 
 </div>

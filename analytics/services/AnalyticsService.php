@@ -145,7 +145,7 @@ class AnalyticsService extends BaseApplicationComponent
             $apiResponse = null;
             $enableCache = true;
 
-            if(craft()->config->get('disableCache', 'analytics') == true)
+            if(craft()->config->get('disableAnalyticsCache') === true)
             {
                 $enableCache = false;
             }

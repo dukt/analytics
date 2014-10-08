@@ -7,7 +7,7 @@
     "realtimeVisitors": {
         "title":"realtimeVisitors",
         "uri": "realtime/rt-overview",
-        "view":"browser",
+        "view":"realtimeVisitors",
         "chart":"counter",
         "enabledCharts":["counter", "table", "pie"],
         "realtime": true,
