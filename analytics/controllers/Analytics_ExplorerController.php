@@ -143,7 +143,7 @@ class Analytics_ExplorerController extends BaseController
                             $options
                         );
 
-                        craft()->fileCache->set($cacheKey, $response, craft()->analytics->cacheExpiry());
+                        craft()->fileCache->set($cacheKey, $response, craft()->analytics->cacheDuration());
                     }
                 }
                 else
