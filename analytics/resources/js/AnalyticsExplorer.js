@@ -1,21 +1,48 @@
 (function($) {
 
+var googleVisualisationCalled = false;
+
 AnalyticsExplorer = Garnish.Base.extend({
     init: function(element, settings)
     {
+        this.$element = $('#'+element);
+        this.$error = $('.analytics-error', this.$element);
+        this.$widget = $('.analytics-widget:first', this.$element);
+
         // google visualization
 
-        if(typeof(google.visualization) == 'undefined')
+        if(googleVisualisationCalled == false)
         {
             if(typeof(AnalyticsChartLanguage) == 'undefined')
             {
                 AnalyticsChartLanguage = 'en';
             }
 
+            console.log('load visualization');
             google.load("visualization", "1", {packages:['corechart', 'table', 'geochart'], 'language': AnalyticsChartLanguage});
+
+            googleVisualisationCalled = true;
+
         }
 
+        google.setOnLoadCallback($.proxy(function() {
 
+            if(typeof(google.visualization) == 'undefined')
+            {
+                this.$widget.addClass('hidden');
+                this.$error.html('An unknown error occured');
+                this.$error.removeClass('hidden');
+                return;
+            }
+            else
+            {
+                this.initWidget(element, settings);
+            }
+        }, this));
+    },
+
+    initWidget: function(element, settings)
+    {
         // variables
 
         this.timer = false;
@@ -39,10 +66,8 @@ AnalyticsExplorer = Garnish.Base.extend({
 
 
         // elements
-        this.$element = $('#'+element);
-        this.$error = $('.analytics-error', this.$element);
+
         this.$menu = $('.analytics-menu:first select:first', this.$element);
-        this.$widget = $('.analytics-widget:first', this.$element);
         this.$browser = $('.analytics-browser:first', this.$element);
         this.$area = $('.analytics-area', this.$element);
         this.$geo = $('.analytics-geo', this.$element);
@@ -222,7 +247,7 @@ AnalyticsExplorer = Garnish.Base.extend({
     {
         Craft.postActionRequest('analytics/explorer/realtimeVisitors', {}, $.proxy(function(response, textStatus)
         {
-            if(textStatus == 'success')
+            if(textStatus == 'success' && typeof(response.error) == 'undefined')
             {
                 this.$realtimeVisitors.removeClass('hidden');
                 this.$error.addClass('hidden');
@@ -310,7 +335,9 @@ AnalyticsExplorer = Garnish.Base.extend({
 
         Craft.postActionRequest('analytics/explorer/'+chart, data, $.proxy(function(response, textStatus)
         {
-            if(textStatus == 'success')
+            console.log(response, textStatus);
+
+            if(textStatus == 'success' && typeof(response.error) == 'undefined')
             {
                 this.$browser.removeClass('hidden');
                 this.$error.addClass('hidden');
@@ -467,6 +494,7 @@ AnalyticsExplorer = Garnish.Base.extend({
 
     handleCounterResponse: function(response)
     {
+
         this.$counterValue.html(response.counter.count);
         this.$counterLabel.html(response.metric);
         this.$counterPeriod.html(response.period);
