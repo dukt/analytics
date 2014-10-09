@@ -12,21 +12,23 @@
 
 {% if results.success %}
     <table class="table">
-
-        <tr>
-            {% for col in results.cols %}
-                <th>{{ col.name }}</th>
-            {% endfor %}
-        </tr>
-
-        {% for row in results.rows %}
+        <thead>
             <tr>
-                {% for col in results.cols %}
-                    <td>{{ row[col.name] }}</td>
-                {% endfor %}
+                <th>Page Path</th>
+                <th>Sessions</th>
             </tr>
-        {% endfor %}
+        </thead>
+
+        <tbody>
+            {% for row in results.rows %}
+                <tr>
+                    <td>{{row[0]}}</td>
+                    <td>{{row[1]}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
     </table>
+
 {% else %}
-    {{ results.errorMessage }}
+    Error: {{ results.errorMessage }}
 {% endif %}
