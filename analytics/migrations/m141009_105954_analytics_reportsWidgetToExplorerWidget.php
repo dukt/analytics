@@ -60,7 +60,7 @@ class m141009_105954_analytics_reportsWidgetToExplorerWidget extends BaseMigrati
                                 "metric" => "ga:sessions",
                                 "chart" => "pie",
                                 "period" => "week",
-                                "pinned" => 0,
+                                "pinned" => 1,
                                 "colspan" => "1"
                             );
                             break;
@@ -72,8 +72,8 @@ class m141009_105954_analytics_reportsWidgetToExplorerWidget extends BaseMigrati
                                 "metric" => "ga:pageviews",
                                 "chart" => "table",
                                 "period" => "week",
-                                "pinned" => 0,
-                                "colspan" => "1"
+                                "pinned" => 1,
+                                "colspan" => "2"
                             );
                             break;
 
@@ -84,7 +84,7 @@ class m141009_105954_analytics_reportsWidgetToExplorerWidget extends BaseMigrati
                                 "metric" => "ga:sessions",
                                 "chart" => "table",
                                 "period" => "week",
-                                "pinned" => 0,
+                                "pinned" => 1,
                                 "colspan" => "1"
                             );
                             break;
@@ -96,7 +96,7 @@ class m141009_105954_analytics_reportsWidgetToExplorerWidget extends BaseMigrati
                                 "metric" => "ga:sessions",
                                 "chart" => "pie",
                                 "period" => "week",
-                                "pinned" => 0,
+                                "pinned" => 1,
                                 "colspan" => "1"
                             );
                             break;
@@ -108,8 +108,8 @@ class m141009_105954_analytics_reportsWidgetToExplorerWidget extends BaseMigrati
                                 "metric" => "ga:goalCompletionsAll",
                                 "chart" => "area",
                                 "period" => "week",
-                                "pinned" => 0,
-                                "colspan" => "1"
+                                "pinned" => 1,
+                                "colspan" => "2"
                             );
                             break;
 
