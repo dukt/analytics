@@ -18,7 +18,6 @@ AnalyticsExplorer = Garnish.Base.extend({
                 AnalyticsChartLanguage = 'en';
             }
 
-            console.log('load visualization');
             google.load("visualization", "1", {packages:['corechart', 'table', 'geochart'], 'language': AnalyticsChartLanguage});
 
             googleVisualisationCalled = true;
@@ -335,8 +334,6 @@ AnalyticsExplorer = Garnish.Base.extend({
 
         Craft.postActionRequest('analytics/explorer/'+chart, data, $.proxy(function(response, textStatus)
         {
-            console.log(response, textStatus);
-
             if(textStatus == 'success' && typeof(response.error) == 'undefined')
             {
                 this.$browser.removeClass('hidden');
