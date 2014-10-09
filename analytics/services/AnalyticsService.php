@@ -165,55 +165,18 @@ class AnalyticsService extends BaseApplicationComponent
 
             if(!$apiResponse)
             {
-                // call controller
-                $apiResponse = craft()->analytics->apiGet($ids, $start, $end, $metrics, $options);
+                $apiResponse = $this->getApiObject()->data_ga->get($ids, $start, $end, $metrics, $options);
 
                 if($enableCache)
                 {
-                    craft()->fileCache->set($cacheKey, $apiResponse, craft()->analytics->cacheExpiry());
+                    craft()->fileCache->set($cacheKey, $apiResponse, $this->cacheDuration());
                 }
             }
 
             if($apiResponse)
             {
-                $response['cols'] = $apiResponse['cols'];
+                $response['cols'] = $apiResponse['columnHeaders'];
                 $response['rows'] = $apiResponse['rows'];
-
-
-                // simplify cols
-
-                foreach($response['cols'] as $k => $col)
-                {
-                    $colName = $col->name;
-
-                    if(strpos($colName, 'ga:') === 0)
-                    {
-                        $colName = substr($colName, 3);
-                    }
-
-                    $response['cols'][$k]->name = $colName;
-                }
-
-
-                // simplify rows
-
-                foreach($response['rows'] as $k => $v)
-                {
-                    foreach($v as $k2 => $v2)
-                    {
-                        if(strpos($k2, 'ga:') === 0)
-                        {
-                            $newKey = substr($k2, 3);
-
-                            if($newKey != $k2)
-                            {
-                                $response['rows'][$k][$newKey] = $v2;
-                                unset($response['rows'][$k][$k2]);
-                            }
-                        }
-                    }
-                }
-
                 $response['success'] = true;
             }
             else
@@ -261,18 +224,6 @@ class AnalyticsService extends BaseApplicationComponent
         }
     }
 
-    public function cacheExpiry()
-    {
-        $cacheExpiry = craft()->config->get('analyticsCacheExpiry');
-
-        if(!$cacheExpiry)
-        {
-            $cacheExpiry = 30 * 60; // 30 min cache
-        }
-
-        return $cacheExpiry;
-    }
-
     public function apiGet($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = array())
     {
         $response = $this->getApiObject()->data_ga->get($p1, $p2, $p3, $p4, $p5);
@@ -294,17 +245,7 @@ class AnalyticsService extends BaseApplicationComponent
             {
                 $return = $this->parseApiResponse($response);
 
-                $cacheDuration = craft()->config->get('analyticsCacheDuration');
-
-                if(!$cacheDuration)
-                {
-                    $cacheDuration = 'PT10S';
-                }
-
-                $cacheDuration = new DateInterval($cacheDuration);
-                $cacheDurationSeconds = $cacheDuration->format('%s');
-
-                craft()->fileCache->set($cacheKey, $return, $cacheDurationSeconds);
+                craft()->fileCache->set($cacheKey, $return, $this->cacheDuration());
             }
 
             return $return;
@@ -313,6 +254,21 @@ class AnalyticsService extends BaseApplicationComponent
         {
             return $this->parseApiResponse($response);
         }
+    }
+
+    public function cacheDuration()
+    {
+        $cacheDuration = craft()->config->get('analyticsCacheDuration');
+
+        if(!$cacheDuration)
+        {
+            $cacheDuration = 'PT10S';
+        }
+
+        $cacheDuration = new DateInterval($cacheDuration);
+        $cacheDurationSeconds = $cacheDuration->format('%s');
+
+        return $cacheDurationSeconds;
     }
 
     public function parseApiResponse($apiResponse)
