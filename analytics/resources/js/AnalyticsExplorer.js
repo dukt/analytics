@@ -244,7 +244,7 @@ AnalyticsExplorer = Garnish.Base.extend({
 
     requestRealtimeVisitors: function(data)
     {
-        Craft.postActionRequest('analytics/explorer/realtimeVisitors', {}, $.proxy(function(response, textStatus)
+        Craft.queueActionRequest('analytics/explorer/realtimeVisitors', {}, $.proxy(function(response, textStatus)
         {
             if(textStatus == 'success' && typeof(response.error) == 'undefined')
             {
@@ -332,7 +332,7 @@ AnalyticsExplorer = Garnish.Base.extend({
     {
         var chart = $('.btn.active', this.$tableType).data('tabletype');
 
-        Craft.postActionRequest('analytics/explorer/'+chart, data, $.proxy(function(response, textStatus)
+        Craft.queueActionRequest('analytics/explorer/'+chart, data, $.proxy(function(response, textStatus)
         {
             if(textStatus == 'success' && typeof(response.error) == 'undefined')
             {
@@ -354,6 +354,8 @@ AnalyticsExplorer = Garnish.Base.extend({
 
     handleBrowserResponse: function(response, chart)
     {
+        console.log('chart', chart);
+
         switch(chart)
         {
             case "area":
@@ -431,6 +433,8 @@ AnalyticsExplorer = Garnish.Base.extend({
 
             $('.analytics-no-visitors').addClass('hidden');
         }
+
+        this.resize();
     },
 
     // fill chart data
@@ -506,7 +510,7 @@ AnalyticsExplorer = Garnish.Base.extend({
             this.chartGeo = new google.visualization.GeoChart($('.analytics-chart', this.$geo).get(0));
         }
 
-        this.chartGeo.draw(this.chartData['table'], this.pieChartOptions);
+        this.chartGeo.draw(this.chartData['table']);
     },
 
     handleTableChartResponse: function(response)
@@ -535,6 +539,8 @@ AnalyticsExplorer = Garnish.Base.extend({
 
     resize: function()
     {
+        console.log('resize');
+
         if(this.chartArea)
         {
             this.chartArea.draw(this.chartData['area'], this.areaChartOptions);
@@ -548,6 +554,11 @@ AnalyticsExplorer = Garnish.Base.extend({
         if(this.chartPie)
         {
             this.chartPie.draw(this.chartData['table'], this.pieChartOptions);
+        }
+
+        if(this.chartGeo)
+        {
+            this.chartGeo.draw(this.chartData['table'], this.geoChartOptions);
         }
 
         var total = 0;
@@ -586,7 +597,7 @@ AnalyticsExplorer = Garnish.Base.extend({
             pinned: this.pinned
         };
 
-        Craft.postActionRequest('analytics/explorer/saveWidgetState', data, $.proxy(function(response)
+        Craft.queueActionRequest('analytics/explorer/saveWidgetState', data, $.proxy(function(response)
         {
 
             // state saved
