@@ -262,8 +262,11 @@ class AnalyticsService extends BaseApplicationComponent
 
         if(!$cacheDuration)
         {
-            $cacheDuration = 'PT10S';
+            // default value
+            $cacheDuration = craft()->config->get('analyticsCacheDuration', 'analytics');
         }
+
+        die($cacheDuration);
 
         $cacheDuration = new DateInterval($cacheDuration);
         $cacheDurationSeconds = $cacheDuration->format('%s');
