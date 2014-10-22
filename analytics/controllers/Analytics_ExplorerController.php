@@ -176,7 +176,7 @@ class Analytics_ExplorerController extends BaseController
         {
             $realtime = craft()->request->getParam('realtime');
             $profile = craft()->analytics->getProfile();
-            $metric = craft()->request->getParam('metric');
+            $metric = craft()->request->getParam('metrics');
             $period = craft()->request->getParam('period');
             $start = date('Y-m-d', strtotime('-1 '.$period));
             $end = date('Y-m-d');
@@ -245,8 +245,8 @@ class Analytics_ExplorerController extends BaseController
         {
             $realtime = craft()->request->getParam('realtime');
             $profile = craft()->analytics->getProfile();
-            $dimension = craft()->request->getParam('dimension');
-            $metric = craft()->request->getParam('metric');
+            $dimension = craft()->request->getParam('dimensions');
+            $metric = craft()->request->getParam('metrics');
             $period = craft()->request->getParam('period');
             $start = date('Y-m-d', strtotime('-1 '.$period));
             $end = date('Y-m-d');
@@ -298,8 +298,8 @@ class Analytics_ExplorerController extends BaseController
         {
             $realtime = craft()->request->getParam('realtime');
             $profile = craft()->analytics->getProfile();
-            $dimension = craft()->request->getParam('dimension');
-            $metric = craft()->request->getParam('metric');
+            $dimension = craft()->request->getParam('dimensions');
+            $metric = craft()->request->getParam('metrics');
             $period = craft()->request->getParam('period');
 
             switch($period)

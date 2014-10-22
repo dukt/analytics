@@ -14,7 +14,6 @@
 
         <div class="analytics-actions">
 
-
             <div class="analytics-open"
                 data-account-id="{{ webProperty.accountId }}"
                 data-property-id="{{ webProperty.internalWebPropertyId }}"
@@ -38,7 +37,7 @@
 
             {# Toolbar #}
 
-            <div class="analytics-toolbar">
+            <div class="analytics-toolbar analytics-view" data-view="browser">
 
                 {# Browser Settings #}
 
@@ -79,33 +78,34 @@
                                         <label>Chart</label>
                                     </div>
                                     <div class="input">
-                                        <div class="analytics-tabletype btngroup">
+                                        <div class="analytics-tabletypes">
+                                            <div class="analytics-enabled-tabletypes btngroup">
 
-                                            <div data-tabletype="area" role="button" class="btn active" title="{{ "Area"|t }}">
-                                                <span class="icon-chart icon-chart-area"></span>
+                                                <div data-tabletype="area" role="button" class="btn active" title="{{ "Area"|t }}">
+                                                    <span class="icon-chart icon-chart-area"></span>
+                                                </div>
+
+                                                <div data-tabletype="counter" role="button" class="btn active" title="{{ "Counter"|t }}">
+                                                    <span class="icon-chart icon-chart-counter"></span>
+                                                </div>
+
+                                                <div data-tabletype="table" role="button" class="btn" title="{{ "Table"|t }}">
+                                                    <span class="icon-chart icon-chart-table"></span>
+                                                </div>
+
+                                                <div data-tabletype="pie" role="button" class="btn" title="{{ "Pie"|t }}">
+                                                    <span class="icon-chart icon-chart-pie"></span>
+                                                </div>
+
+                                                <div data-tabletype="geo" role="button" class="btn" title="{{ "Geo"|t }}">
+                                                    <span class="icon-chart icon-chart-geo"></span>
+                                                </div>
                                             </div>
 
-                                            <div data-tabletype="counter" role="button" class="btn active" title="{{ "Counter"|t }}">
-                                                <span class="icon-chart icon-chart-counter"></span>
-                                            </div>
-
-                                            <div data-tabletype="table" role="button" class="btn" title="{{ "Table"|t }}">
-                                                <span class="icon-chart icon-chart-table"></span>
-                                            </div>
-
-                                            <div data-tabletype="pie" role="button" class="btn" title="{{ "Pie"|t }}">
-                                                <span class="icon-chart icon-chart-pie"></span>
-                                            </div>
-
-                                            <div data-tabletype="geo" role="button" class="btn" title="{{ "Geo"|t }}">
-                                                <span class="icon-chart icon-chart-geo"></span>
+                                            <div class="analytics-disabled-tabletypes btngroup hidden">
                                             </div>
                                         </div>
 
-                                        <div class="analytics-disabled-tabletype btngroup">
-                                        </div>
-
-                                        &nbsp;
                                     </div>
                                 </div>
 
@@ -136,7 +136,7 @@
 
         {# Realtime visitors #}
 
-        <div class="analytics-realtime-visitors" data-view="realtimeVisitors">
+        <div class="analytics-realtime-visitors analytics-view" data-view="realtimeVisitors">
 
             <div class="active-visitors">
                 <span class="currently">{{'Currently'|t}}</span>
@@ -164,53 +164,34 @@
 
         {# Browser #}
 
-        <div class="analytics-browser" data-view="browser">
+        <div class="analytics-browser analytics-view" data-view="browser">
 
-            {# Charts #}
-
-            <div class="analytics-counter hidden">
-                <div class="analytics-counter-value">•••</div>
-                <div class="analytics-counter-label"></div>
-                <div class="analytics-counter-period">last month</div>
-            </div>
-
-            <div class="analytics-area">
+            <div class="analytics-browser-content">
                 <div class="analytics-infos">
                     <span class="analytics-infos-count">•••</span>
+                    <span class="analytics-infos-dimension">Browsers</span>
                     <span class="analytics-infos-metric">Visits</span>
                     <span class="analytics-infos-period">last month</span>
                 </div>
-                <div class="analytics-chart"></div>
-            </div>
 
-            <div class="analytics-geo">
-                <div class="analytics-infos">
-                    <span class="analytics-infos-dimension">Browsers</span>
-                    <span class="analytics-infos-metric">Visits</span>
-                    <span class="analytics-infos-period">last month</span>
+                {# Charts #}
+
+                <div class="analytics-counter hidden">
+                    <div class="analytics-counter-value">•••</div>
+                    <div class="analytics-counter-label"></div>
+                    <div class="analytics-counter-period">last month</div>
                 </div>
-                <div class="analytics-chart"></div>
-            </div>
-            <div class="analytics-table hidden">
-                <div class="analytics-infos">
-                    <span class="analytics-infos-dimension">Browsers</span>
-                    <span class="analytics-infos-metric">Visits</span>
-                    <span class="analytics-infos-period">last month</span>
-                </div>
-                <div class="analytics-chart"></div>
-            </div>
-            <div class="analytics-pie hidden">
-                <div class="analytics-infos">
-                    <span class="analytics-infos-dimension">Browsers</span>
-                    <span class="analytics-infos-metric">Visits</span>
-                    <span class="analytics-infos-period">last month</span>
-                </div>
-                <div class="analytics-chart"></div>
+
+
+                {# Single Chart #}
+                <div class="analytics-single-chart"></div>
+
             </div>
 
             {# Messages #}
             <div class="analytics-inject"></div>
             <div class="analytics-no-visitors hidden">No active visitors.</div>
+
         </div>
 
     </div>
@@ -219,5 +200,7 @@
         Error
     </div>
 {% else %}
+
     <p>Analytics is not configured, please select a profile in <a href="{{ url('settings/plugins/analytics') }}">Analytics plugin settings</a>.</p>
+
 {% endif %}

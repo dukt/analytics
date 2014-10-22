@@ -143,7 +143,7 @@ class Analytics_ExplorerWidget extends BaseWidget
         craft()->templates->includeJs('var AnalyticsRealtimeInterval = "'.$pluginSettings->realtimeRefreshInterval.'";');
         craft()->templates->includeJs('var AnalyticsBrowserSections = '.$browserSectionsJson.';');
         craft()->templates->includeJs('var AnalyticsBrowserData = '.$browserDataJson.';');
-        craft()->templates->includeJs('new AnalyticsExplorer("widget'.$widget->id.'", '.$settings.');');
+        craft()->templates->includeJs('new Analytics.Explorer("widget'.$widget->id.'", '.$settings.');');
 
         // render
         $variables['browserSections'] = $browserSections;
