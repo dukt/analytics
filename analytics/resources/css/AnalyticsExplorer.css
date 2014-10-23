@@ -125,6 +125,9 @@
   box-shadow: none;
   border: 1px solid #ddd;
 }
+.analytics-collapsible {
+  overflow: hidden;
+}
 /* toolbar */
 .analytics-toolbar .analytics-settings {
   margin: 0;
@@ -167,7 +170,7 @@
 }
 .analytics-toolbar .analytics-settings .analytics-settings-in .analytics-settings-in-in .analytics-chart-picker {
   float: left;
-  margin-right: 12px;
+  margin-right: 6px;
   margin-bottom: 0;
 }
 .analytics-toolbar .analytics-settings .analytics-settings-in .analytics-settings-in-in .analytics-chart-picker .analytics-tabletypes {
@@ -369,9 +372,6 @@
 .analytics-browser-content .analytics-chart-area .analytics-chart {
   background: #fafafa;
   height: 140px;
-}
-.analytics-browser-content .analytics-chart-pie .analytics-chart {
-  height: 282px;
 }
 .analytics-browser-content .analytics-chart-table {
   margin: 0;

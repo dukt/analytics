@@ -282,7 +282,6 @@ class Analytics_ExplorerController extends BaseController
             $this->returnJson(array(
                 'table' => $tableResponse,
                 'dimension' => Craft::t($dimension),
-                'metric' => Craft::t($metric),
                 'period' => Craft::t('this '.$period)
             ));
         }
@@ -375,33 +374,36 @@ class Analytics_ExplorerController extends BaseController
     {
         $widgetId = craft()->request->getPost('id');
 
-        $widgetSettings = array();
-        $widgetSettings['menu'] = craft()->request->getPost('menu');
-        $widgetSettings['dimension'] = craft()->request->getPost('dimension');
-        $widgetSettings['metric'] = craft()->request->getPost('metric');
-        $widgetSettings['chart'] = craft()->request->getPost('chart');
-        $widgetSettings['period'] = craft()->request->getPost('period');
-        $widgetSettings['pinned'] = (bool) craft()->request->getPost('pinned');
-
         $formerWidget = craft()->dashboard->getUserWidgetById($widgetId);
 
         if($formerWidget)
         {
+            $widgetSettings = array();
+            $widgetSettings['menu'] = craft()->request->getPost('menu');
+            $widgetSettings['dimension'] = craft()->request->getPost('dimension');
+            $widgetSettings['metric'] = craft()->request->getPost('metric');
+            $widgetSettings['chart'] = craft()->request->getPost('chart');
+            $widgetSettings['period'] = craft()->request->getPost('period');
+            $widgetSettings['pinned'] = (bool) craft()->request->getPost('pinned');
             $widgetSettings['colspan'] = $formerWidget->settings['colspan'];
-        }
 
-        $widget = new WidgetModel();
-        $widget->id = $widgetId;
-        $widget->type = 'Analytics_Explorer';
-        $widget->settings = $widgetSettings;
+            $widget = new WidgetModel();
+            $widget->id = $widgetId;
+            $widget->type = 'Analytics_Explorer';
+            $widget->settings = $widgetSettings;
 
-        if (craft()->dashboard->saveUserWidget($widget))
-        {
-            $this->returnJson(true);
+            if (craft()->dashboard->saveUserWidget($widget))
+            {
+                $this->returnJson(true);
+            }
+            else
+            {
+                $this->returnErrorJson('Couldn’t save widget');
+            }
         }
         else
         {
-            $this->returnErrorJson('Couldn’t save widget');
+            $this->returnErrorJson('Couldn’t save widget2');
         }
     }
 

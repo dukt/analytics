@@ -4,6 +4,7 @@
 
 {% if webProperty %}
     {%- includeJsResource 'analytics/js/jsapi.js' first %}
+    {%- includeJsResource 'analytics/js/jquery.transit.js' %}
     {% includeJsResource 'analytics/js/AnalyticsExplorer.js' %}
     {% includeCssResource "analytics/css/AnalyticsExplorer.css" %}
     {% includeJsResource 'analytics/js/AnalyticsUtils.js' %}
@@ -136,7 +137,7 @@
 
         {# Realtime visitors #}
 
-        <div class="analytics-realtime-visitors analytics-view" data-view="realtimeVisitors">
+        <div class="analytics-realtime-visitors analytics-view hidden" data-view="realtimeVisitors">
 
             <div class="active-visitors">
                 <span class="currently">{{'Currently'|t}}</span>

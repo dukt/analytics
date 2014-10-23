@@ -448,7 +448,6 @@ Analytics.ExplorerDeprecated = Garnish.Base.extend({
     browse: function()
     {
         var data = {
-            id: this.$widget.data('widget-id'),
             metric: this.$metric.val(),
             period: this.$periodSelect.val(),
             realtime: 0
