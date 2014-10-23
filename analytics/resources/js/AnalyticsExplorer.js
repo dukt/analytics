@@ -346,14 +346,15 @@ Analytics.BrowserView = Garnish.Base.extend({
     {
         var stateData = {
             id: this.explorer.$widget.data('widget-id'),
-            menu: this.explorer.menu.val(),
-            pinned: this.explorer.pinBtn.val(),
 
-            metric: this.metrics.val(),
-            dimension: this.dimensions.val(),
-            chart: this.tableTypes.val(),
-            period: this.period.val(),
-
+            settings: {
+                menu: this.explorer.menu.val(),
+                pinned: this.explorer.pinBtn.val(),
+                metric: this.metrics.val(),
+                dimension: this.dimensions.val(),
+                chart: this.tableTypes.val(),
+                period: this.period.val(),
+            }
         };
 
         console.log('save state', stateData);
@@ -982,8 +983,11 @@ Analytics.RealtimeVisitorsView = Garnish.Base.extend({
     {
         var stateData = {
             id: this.explorer.$widget.data('widget-id'),
-            menu: this.explorer.menu.val(),
-            pinned: this.explorer.pinBtn.val(),
+
+            settings: {
+                menu: this.explorer.menu.val(),
+                pinned: this.explorer.pinBtn.val(),
+            }
         };
 
         console.log('save state', stateData);

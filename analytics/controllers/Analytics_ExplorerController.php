@@ -378,14 +378,17 @@ class Analytics_ExplorerController extends BaseController
 
         if($formerWidget)
         {
-            $widgetSettings = array();
-            $widgetSettings['menu'] = craft()->request->getPost('menu');
-            $widgetSettings['dimension'] = craft()->request->getPost('dimension');
-            $widgetSettings['metric'] = craft()->request->getPost('metric');
-            $widgetSettings['chart'] = craft()->request->getPost('chart');
-            $widgetSettings['period'] = craft()->request->getPost('period');
-            $widgetSettings['pinned'] = (bool) craft()->request->getPost('pinned');
-            $widgetSettings['colspan'] = $formerWidget->settings['colspan'];
+            $widgetSettings = craft()->request->getPost('settings');
+
+            if(!empty($formerWidget->settings['colspan']))
+            {
+                $widgetSettings['colspan'] = $formerWidget->settings['colspan'];
+            }
+
+            if(empty($widgetSettings['colspan']))
+            {
+                $widgetSettings['colspan'] = 1;
+            }
 
             $widget = new WidgetModel();
             $widget->id = $widgetId;
@@ -403,7 +406,7 @@ class Analytics_ExplorerController extends BaseController
         }
         else
         {
-            $this->returnErrorJson('Couldn’t save widget2');
+            $this->returnErrorJson('Couldn’t save widget');
         }
     }
 
