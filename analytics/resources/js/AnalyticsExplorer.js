@@ -13,6 +13,8 @@ var googleVisualisationCalled = false;
 Analytics.Explorer = Garnish.Base.extend({
     init: function(element, settings)
     {
+        console.log('explorer', settings);
+
         this.$element = $('#'+element);
         this.$widget = $('.analytics-widget:first', this.$element);
         this.$views = $('.analytics-view', this.$element);
@@ -21,6 +23,8 @@ Analytics.Explorer = Garnish.Base.extend({
         this.section = false;
         this.settings = settings;
         this.loaded = false;
+
+        this.addListener(Garnish.$win, 'resize', 'resize');
 
         this.visualizationLoad();
     },
@@ -64,16 +68,27 @@ Analytics.Explorer = Garnish.Base.extend({
         this.menu.onMenuChange(false, false);
 
         // set default values
-        this.views.browser.metrics.val(defaults.metric);
-        this.views.browser.dimensions.val(defaults.dimension);
-        this.views.browser.period.val(defaults.period);
-
-        if(defaults.chart)
+        switch(this.section.view)
         {
-            this.views.browser.tableTypes.val(defaults.chart);
-        }
+            case 'browser':
 
-        this.views.browser.browse();
+            this.views.browser.metrics.val(defaults.metric);
+            this.views.browser.dimensions.val(defaults.dimension);
+            this.views.browser.period.val(defaults.period);
+
+            if(defaults.chart)
+            {
+                this.views.browser.tableTypes.val(defaults.chart);
+            }
+
+            this.views.browser.browse();
+
+            break;
+
+            case 'realtimeVisitors':
+
+            break;
+        }
     },
 
     onMenuChange: function(currentMenu, browse, saveState)
@@ -107,6 +122,11 @@ Analytics.Explorer = Garnish.Base.extend({
 
         // set current view
         this.view = this.views[this.section.view];
+
+        if(this.view.resize)
+        {
+            this.view.resize();
+        }
 
         // show view
         $('[data-view="'+this.section.view+'"]', this.$element).removeClass('hidden');
@@ -163,6 +183,14 @@ Analytics.Explorer = Garnish.Base.extend({
     saveState: function()
     {
         this.view.saveState();
+    },
+
+    resize: function()
+    {
+        if(this.view.resize)
+        {
+            this.view.resize();
+        }
     },
 
     getSection: function(menu)
@@ -307,6 +335,31 @@ Analytics.BrowserView = Garnish.Base.extend({
 
         this.browser = new Analytics.Browser(this.$element, data);
     },
+
+    resize: function()
+    {
+        console.log('BrowserView.resize();');
+
+        var total = 0;
+
+        $.each($('.analytics-toolbar select, .analytics-toolbar .btngroup', this.$element), function() {
+            total += $(this).width() + 20;
+        });
+
+        if(total < this.explorer.$widget.width())
+        {
+            this.explorer.$widget.removeClass('analytics-small');
+        }
+        else
+        {
+            this.explorer.$widget.addClass('analytics-small');
+        }
+
+        if(this.browser)
+        {
+            this.browser.resize();
+        }
+    }
 });
 
 
@@ -582,21 +635,6 @@ Analytics.Browser = Garnish.Base.extend({
         if(this.chart)
         {
             this.chart.draw(this.chartData, this.chartOptions);
-        }
-
-        var total = 0;
-
-        $.each($('.analytics-toolbar select, .analytics-toolbar .btngroup', this.$element), function() {
-            total += $(this).width() + 20;
-        });
-
-        if(total < this.$widget.width())
-        {
-            this.$widget.removeClass('analytics-small');
-        }
-        else
-        {
-            this.$widget.addClass('analytics-small');
         }
     },
 });
