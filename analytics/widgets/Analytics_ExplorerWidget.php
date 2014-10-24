@@ -144,10 +144,6 @@ class Analytics_ExplorerWidget extends BaseWidget
         craft()->templates->includeJs('var AnalyticsBrowserSections = '.$browserSectionsJson.';');
         craft()->templates->includeJs('var AnalyticsBrowserData = '.$browserDataJson.';');
         craft()->templates->includeJs('new Analytics.Explorer("widget'.$widget->id.'", '.$settings.');');
-        // craft()->templates->includeJs('ko.applyBindings(new ViewModel());');
-
-        // craft()->templates->includeJsResource('analytics/js/knockout-3.2.0.js', true);
-        // craft()->templates->includeJsResource('analytics/js/AnalyticsWidget.js');
 
         // render
         $variables['browserSections'] = $browserSections;
@@ -156,7 +152,6 @@ class Analytics_ExplorerWidget extends BaseWidget
         $variables['pluginSettings'] = $pluginSettings;
 
         return craft()->templates->render('analytics/widgets/explorer', $variables);
-        // return craft()->templates->render('analytics/widgets/explorer/knockout', $variables);
     }
 
     public function getColspan()

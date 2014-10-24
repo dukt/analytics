@@ -127,7 +127,7 @@
 }
 .analytics-collapsible {
   overflow: hidden;
-  display: none;
+  visibility: hidden;
 }
 /* toolbar */
 .analytics-toolbar .analytics-settings {
@@ -282,6 +282,12 @@
   background: #50b431;
 }
 /* browser */
+.analytics-no-data {
+  border-top: 1px dotted #eee;
+  text-align: center;
+  padding: 48px;
+  padding-bottom: 24px;
+}
 .analytics-browser-content {
   padding: 24px;
   /* counter */
@@ -308,10 +314,6 @@
 .analytics-browser-content .btngroup .btn.active {
   background: #fcfcfc;
   color: #aaa;
-}
-.analytics-browser-content .analytics-no-visitors {
-  text-align: center;
-  padding: 12px 0;
 }
 .analytics-browser-content .analytics-infos {
   margin-bottom: 12px;

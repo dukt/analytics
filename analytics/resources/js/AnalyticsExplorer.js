@@ -31,13 +31,6 @@ Analytics.Explorer = Garnish.Base.extend({
     loadInterface: function()
     {
         var defaults = this.settings;
-        // var defaults = {
-        //     menu: 'location',
-        //     metric: 'ga:pageviews',
-        //     dimension: 'ga:city',
-        //     chart: 'pie',
-        //     period: 'month'
-        // };
 
         // pin button
 
@@ -257,7 +250,6 @@ Analytics.BrowserView = Garnish.Base.extend({
 
     saveState: function(data)
     {
-
         var stateData = {
             id: this.explorer.$widget.data('widget-id'),
 
@@ -274,7 +266,6 @@ Analytics.BrowserView = Garnish.Base.extend({
         Craft.queueActionRequest('analytics/explorer/saveWidgetState', stateData, $.proxy(function(response)
         {
             // state saved
-
 
         }, this));
     },
@@ -380,6 +371,7 @@ Analytics.Browser = Garnish.Base.extend({
 
         this.$spinner = $('.spinner', this.$element);
         this.$error = $('.analytics-error', this.$element);
+        this.$nodata = $('.analytics-no-data', this.$element);
         this.$browser = $('.analytics-browser:first', this.$element);
         this.$browserContent = $('.analytics-browser-content:first', this.$element);
         this.$widget = $('.analytics-widget:first', this.$element);
@@ -434,7 +426,6 @@ Analytics.Browser = Garnish.Base.extend({
 
     request: function()
     {
-
         var chart = this.data.tableType;
 
         this.$spinner.removeClass('body-loading');
@@ -470,21 +461,29 @@ Analytics.Browser = Garnish.Base.extend({
 
     handleResponse: function(response, chart)
     {
+        console.log('response', response);
+
+        var totalRows = 0;
+
         switch(chart)
         {
             case "area":
+            totalRows = response.area.rows.length;
             this.handleAreaChartResponse(response);
             break;
 
             case "geo":
+            totalRows = response.table.rows.length;
             this.handleGeoChartResponse(response);
             break;
 
             case "pie":
+            totalRows = response.table.rows.length;
             this.handlePieChartResponse(response);
             break;
 
             case "table":
+            totalRows = response.table.rows.length;
             this.handleTableChartResponse(response);
             break;
 
@@ -536,6 +535,17 @@ Analytics.Browser = Garnish.Base.extend({
             this.$counter.addClass('hidden');
             this.$chart.removeClass('hidden');
             this.$infos.removeClass('hidden');
+        }
+
+        if(totalRows > 0)
+        {
+            this.$nodata.addClass('hidden');
+            this.$chart.removeClass('hidden');
+        }
+        else
+        {
+            this.$nodata.removeClass('hidden');
+            this.$chart.addClass('hidden');
         }
 
         this.resize();
@@ -656,7 +666,6 @@ Analytics.RealtimeVisitorsView = Garnish.Base.extend({
 
     saveState: function()
     {
-
         var stateData = {
             id: this.explorer.$widget.data('widget-id'),
 
@@ -668,6 +677,7 @@ Analytics.RealtimeVisitorsView = Garnish.Base.extend({
 
         Craft.queueActionRequest('analytics/explorer/saveWidgetState', stateData, $.proxy(function(response)
         {
+            // state saved
 
         }, this));
     },
@@ -731,7 +741,6 @@ Analytics.RealtimeVisitors = Garnish.Base.extend({
 
     request: function()
     {
-
         this.$spinner.removeClass('body-loading');
         this.$spinner.removeClass('hidden');
 
@@ -875,11 +884,15 @@ Analytics.PinBtn = Garnish.Base.extend({
         {
             this.$pinBtn.addClass('active');
             this.$collapsible.addClass('analytics-collapsed');
-            this.$collapsible.transition({height: '0px'}, 0, 'ease-out');
+
+            this.$collapsible.animate({
+                opacity: 0,
+                height: "toggle"
+            }, 0);
         }
         else
         {
-            this.$collapsible.css('display', 'block');
+            this.$collapsible.css('visibility', 'visible');
         }
 
         this.addListener(this.$pinBtn, 'click', 'onPin');
@@ -908,12 +921,10 @@ Analytics.PinBtn = Garnish.Base.extend({
         this.$collapsible.addClass('analytics-collapsed');
         this.pinned = 1;
 
-        // this.$collapsible.animate({
-        //     opacity: 0,
-        //     height: "toggle"
-        // }, 200);
-
-        this.$collapsible.transition({height: '0px'}, 200, 'ease-out');
+        this.$collapsible.animate({
+            opacity: 0,
+            height: "toggle"
+        }, 200);
 
         this.settings.onPinChange(saveState);
     },
@@ -921,16 +932,13 @@ Analytics.PinBtn = Garnish.Base.extend({
     unpin: function()
     {
         this.$pinBtn.removeClass('active');
-        this.$collapsible.css('display', 'block');
         this.$collapsible.removeClass('analytics-collapsed');
         this.pinned = 0;
-
-        // this.$collapsible.animate({
-        //     opacity: 1,
-        //     height: "toggle"
-        // }, 200);
-
-        this.$collapsible.transition({height: 'auto'}, 200, 'ease-out');
+        this.$collapsible.css('visibility', 'visible');
+        this.$collapsible.animate({
+            opacity: 1,
+            height: "toggle"
+        }, 200);
 
         this.settings.onPinChange();
     }

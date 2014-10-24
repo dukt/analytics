@@ -144,9 +144,7 @@
 .analytics-collapsible {
 
     overflow: hidden;
-
-    display: none;
-
+    visibility: hidden;
     // -webkit-transition: max-height 500ms ease-out;
     // -moz-transition: max-height 500ms ease-out;
     // -ms-transition: max-height 500ms ease-out;
@@ -382,6 +380,14 @@
 
 /* browser */
 
+
+    .analytics-no-data {
+        border-top: 1px dotted #eee;
+        text-align: center;
+        padding: 48px;
+        padding-bottom: 24px;
+    }
+
 .analytics-browser-content {
 
     padding: 24px;
@@ -405,10 +411,6 @@
         }
     }
 
-    .analytics-no-visitors {
-        text-align: center;
-        padding: 12px 0;
-    }
 
     .analytics-infos {
         margin-bottom: 12px;

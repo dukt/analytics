@@ -4,7 +4,6 @@
 
 {% if webProperty %}
     {%- includeJsResource 'analytics/js/jsapi.js' first %}
-    {%- includeJsResource 'analytics/js/jquery.transit.js' %}
     {% includeJsResource 'analytics/js/AnalyticsExplorer.js' %}
     {% includeCssResource "analytics/css/AnalyticsExplorer.css" %}
     {% includeJsResource 'analytics/js/AnalyticsUtils.js' %}
@@ -188,11 +187,11 @@
                 {# Single Chart #}
                 <div class="analytics-single-chart"></div>
 
+                <div class="analytics-no-data light hidden">No data.</div>
             </div>
 
             {# Messages #}
             <div class="analytics-inject"></div>
-            <div class="analytics-no-visitors hidden">No active visitors.</div>
 
         </div>
 
