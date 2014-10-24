@@ -201,9 +201,11 @@
   float: none;
 }
 .analytics-small .analytics-toolbar .analytics-settings .analytics-settings-in .analytics-settings-in-in .right .analytics-chart-picker {
+  float: none;
   display: block;
 }
 .analytics-small .analytics-toolbar .analytics-settings .analytics-settings-in .analytics-settings-in-in .right .analytics-period {
+  float: none;
   display: block;
 }
 .analytics-small .analytics-toolbar .field {

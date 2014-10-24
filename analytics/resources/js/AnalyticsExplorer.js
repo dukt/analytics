@@ -13,7 +13,6 @@ var googleVisualisationCalled = false;
 Analytics.Explorer = Garnish.Base.extend({
     init: function(element, settings)
     {
-        console.log('explorer', settings);
 
         this.$element = $('#'+element);
         this.$widget = $('.analytics-widget:first', this.$element);
@@ -258,7 +257,6 @@ Analytics.BrowserView = Garnish.Base.extend({
 
     saveState: function(data)
     {
-        console.log('Analytics.BrowserView.saveState');
 
         var stateData = {
             id: this.explorer.$widget.data('widget-id'),
@@ -277,7 +275,6 @@ Analytics.BrowserView = Garnish.Base.extend({
         {
             // state saved
 
-            console.log('State Saved', stateData);
 
         }, this));
     },
@@ -338,15 +335,25 @@ Analytics.BrowserView = Garnish.Base.extend({
 
     resize: function()
     {
-        console.log('BrowserView.resize();');
+        var widths = {
+            dimensionsWidth: $('select', this.$dimensionsField).width(),
+            metricsWidth: $('select', this.$metricsField).width(),
+            tableTypesWidth: $('.analytics-enabled-tabletypes', this.$tableTypes).width(),
+            periodWidth: $('select', this.$periodField).width(),
+        };
+
 
         var total = 0;
 
-        $.each($('.analytics-toolbar select, .analytics-toolbar .btngroup', this.$element), function() {
-            total += $(this).width() + 20;
+        $.each(widths, function(key, value) {
+            total += value + 30;
         });
 
-        if(total < this.explorer.$widget.width())
+        var widgetWidth = this.explorer.$widget.width() - 3*24;
+
+        // console.log('diff', total, widths, widgetWidth);
+
+        if(total < widgetWidth)
         {
             this.explorer.$widget.removeClass('analytics-small');
         }
@@ -393,8 +400,6 @@ Analytics.Browser = Garnish.Base.extend({
         this.timer = false;
         this.data = data;
 
-        this.addListener(Garnish.$win, 'resize', 'resize');
-
         this.request();
 
         if(this.data.realtime)
@@ -429,7 +434,6 @@ Analytics.Browser = Garnish.Base.extend({
 
     request: function()
     {
-        console.log('Analytics.Browser.request()');
 
         var chart = this.data.tableType;
 
@@ -652,7 +656,6 @@ Analytics.RealtimeVisitorsView = Garnish.Base.extend({
 
     saveState: function()
     {
-        console.log('Analytics.RealtimeVisitorsView.saveState');
 
         var stateData = {
             id: this.explorer.$widget.data('widget-id'),
@@ -665,7 +668,6 @@ Analytics.RealtimeVisitorsView = Garnish.Base.extend({
 
         Craft.queueActionRequest('analytics/explorer/saveWidgetState', stateData, $.proxy(function(response)
         {
-            console.log('state saved', stateData);
 
         }, this));
     },
@@ -729,7 +731,6 @@ Analytics.RealtimeVisitors = Garnish.Base.extend({
 
     request: function()
     {
-        console.log('Analytics.RealtimeVisitors.request()');
 
         this.$spinner.removeClass('body-loading');
         this.$spinner.removeClass('hidden');
