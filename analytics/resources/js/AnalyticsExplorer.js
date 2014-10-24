@@ -7,7 +7,6 @@ if (typeof Analytics == 'undefined')
 
 var googleVisualisationCalled = false;
 
-
 /**
  * Explorer
  */
@@ -28,13 +27,14 @@ Analytics.Explorer = Garnish.Base.extend({
 
     loadInterface: function()
     {
-        var defaults = {
-            menu: 'location',
-            metric: 'ga:pageviews',
-            dimension: 'ga:city',
-            chart: 'pie',
-            period: 'month'
-        };
+        var defaults = this.settings;
+        // var defaults = {
+        //     menu: 'location',
+        //     metric: 'ga:pageviews',
+        //     dimension: 'ga:city',
+        //     chart: 'pie',
+        //     period: 'month'
+        // };
 
         // pin button
 
@@ -54,52 +54,84 @@ Analytics.Explorer = Garnish.Base.extend({
         });
 
         // browserView
-        this.browserView = new Analytics.BrowserView(this);
+        this.views.browser = new Analytics.BrowserView(this);
 
-        // // realtimeVisitorsView
-        // this.realtimeVisitorsView = new Analytics.RealtimeVisitorsView();
+        // realtimeVisitorsView
+        this.views.realtimeVisitors = new Analytics.RealtimeVisitorsView(this);
 
 
         // trigger menu change
-        this.menu.onMenuChange();
+        this.menu.onMenuChange(false, false);
 
         // set default values
-        this.browserView.metrics.val(defaults.metric);
-        this.browserView.dimensions.val(defaults.dimension);
-        this.browserView.period.val(defaults.period);
+        this.views.browser.metrics.val(defaults.metric);
+        this.views.browser.dimensions.val(defaults.dimension);
+        this.views.browser.period.val(defaults.period);
 
         if(defaults.chart)
         {
-            this.browserView.tableTypes.val(defaults.chart);
+            this.views.browser.tableTypes.val(defaults.chart);
         }
+
+        this.views.browser.browse();
     },
 
-    onMenuChange: function(currentMenu)
+    onMenuChange: function(currentMenu, browse, saveState)
     {
         // hide all views
         this.$views.addClass('hidden');
 
         // section
-        section = this.getSection(currentMenu);
+        this.section = this.getSection(currentMenu);
 
-        this.browserView.dimensions.setOptions(section.dimensions);
-        this.browserView.metrics.setOptions(section.metrics);
-        this.browserView.tableTypes.setOptions(section.enabledCharts);
-        this.browserView.tableTypes.val(section.chart);
+        switch(this.section.view)
+        {
+            case 'browser':
+            this.views.realtimeVisitors.disable();
+
+            this.views.browser.dimensions.setOptions(this.section.dimensions);
+            this.views.browser.metrics.setOptions(this.section.metrics);
+            this.views.browser.tableTypes.setOptions(this.section.enabledCharts);
+            this.views.browser.tableTypes.val(this.section.chart);
+
+            if(browse)
+            {
+                this.views.browser.browse();
+            }
+            break;
+
+            case 'realtimeVisitors':
+            this.views.realtimeVisitors.enable();
+            break;
+        }
+
+        // set current view
+        this.view = this.views[this.section.view];
 
         // show view
-        $('[data-view="'+section.view+'"]', this.$element).removeClass('hidden');
+        $('[data-view="'+this.section.view+'"]', this.$element).removeClass('hidden');
+
+
+        // save state
+
+        if(typeof(saveState) == 'undefined')
+        {
+            saveState = true;
+        }
+
+        if(saveState)
+        {
+            this.saveState();
+        }
     },
 
     onPinChange: function()
     {
-        console.log('onPinChange');
+        this.saveState();
     },
 
     visualizationLoad: function()
     {
-        // google visualization
-
         if(googleVisualisationCalled == false)
         {
             if(typeof(AnalyticsChartLanguage) == 'undefined')
@@ -198,6 +230,8 @@ Analytics.BrowserView = Garnish.Base.extend({
 
     saveState: function(data)
     {
+        console.log('Analytics.BrowserView.saveState');
+
         var stateData = {
             id: this.explorer.$widget.data('widget-id'),
 
@@ -215,7 +249,7 @@ Analytics.BrowserView = Garnish.Base.extend({
         {
             // state saved
 
-            console.log('state saved', stateData);
+            console.log('State Saved', stateData);
 
         }, this));
     },
@@ -254,6 +288,7 @@ Analytics.BrowserView = Garnish.Base.extend({
     {
         if(this.browser)
         {
+            this.browser.disable();
             this.browser = false;
         }
 
@@ -315,6 +350,11 @@ Analytics.Browser = Garnish.Base.extend({
         }
     },
 
+    disable: function()
+    {
+        this.stopRealtime();
+    },
+
     startRealtime: function()
     {
         if(this.timer)
@@ -336,6 +376,8 @@ Analytics.Browser = Garnish.Base.extend({
 
     request: function()
     {
+        console.log('Analytics.Browser.request()');
+
         var chart = this.data.tableType;
 
         this.$spinner.removeClass('body-loading');
@@ -563,15 +605,17 @@ Analytics.Browser = Garnish.Base.extend({
  * RealtimeVisitors View
  */
 Analytics.RealtimeVisitorsView = Garnish.Base.extend({
-    init: function(explorer, element)
+    init: function(explorer)
     {
-        this.$element = element;
         this.explorer = explorer;
+        this.$element = this.explorer.$element;
         this.realtimeVisitors = new Analytics.RealtimeVisitors(this.$element);
     },
 
     saveState: function()
     {
+        console.log('Analytics.RealtimeVisitorsView.saveState');
+
         var stateData = {
             id: this.explorer.$widget.data('widget-id'),
 
@@ -647,6 +691,8 @@ Analytics.RealtimeVisitors = Garnish.Base.extend({
 
     request: function()
     {
+        console.log('Analytics.RealtimeVisitors.request()');
+
         this.$spinner.removeClass('body-loading');
         this.$spinner.removeClass('hidden');
 
@@ -759,11 +805,11 @@ Analytics.Menu = Garnish.Base.extend({
         return this.$menu.val();
     },
 
-    onMenuChange: function()
+    onMenuChange: function(browse, saveState)
     {
         value = this.$menu.val();
 
-        this.settings.onMenuChange(value);
+        this.settings.onMenuChange(value, browse, saveState);
     }
 });
 
@@ -791,6 +837,10 @@ Analytics.PinBtn = Garnish.Base.extend({
             this.$pinBtn.addClass('active');
             this.$collapsible.addClass('analytics-collapsed');
             this.$collapsible.transition({height: '0px'}, 0, 'ease-out');
+        }
+        else
+        {
+            this.$collapsible.css('display', 'block');
         }
 
         this.addListener(this.$pinBtn, 'click', 'onPin');
@@ -832,6 +882,7 @@ Analytics.PinBtn = Garnish.Base.extend({
     unpin: function()
     {
         this.$pinBtn.removeClass('active');
+        this.$collapsible.css('display', 'block');
         this.$collapsible.removeClass('analytics-collapsed');
         this.pinned = 0;
 
@@ -881,15 +932,16 @@ Analytics.TableTypes = Garnish.Base.extend({
             this.showTableType('pie');
         }
 
-        if(typeof(defaultValue) != 'undefined')
-        {
-            this.val(defaultValue);
-        }
+        this.$tableTypeBtns.removeClass('active');
+
+        var firstBtn = $('.btn:first', this.$enabledTableTypes);
+        this.value = firstBtn.data('tabletype');
+        firstBtn.addClass('active');
     },
 
     val: function(val)
     {
-        if(typeof(val) != 'undefined')
+        if(typeof(val) != 'undefined' && val)
         {
             this.value = val;
 

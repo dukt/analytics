@@ -127,6 +127,7 @@
 }
 .analytics-collapsible {
   overflow: hidden;
+  display: none;
 }
 /* toolbar */
 .analytics-toolbar .analytics-settings {
