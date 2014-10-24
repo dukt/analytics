@@ -14,15 +14,90 @@ var googleVisualisationCalled = false;
 Analytics.Explorer = Garnish.Base.extend({
     init: function(element, settings)
     {
-        console.log('Explorer');
-
         this.$element = $('#'+element);
         this.$widget = $('.analytics-widget:first', this.$element);
         this.$views = $('.analytics-view', this.$element);
         this.view = false;
+        this.views = {};
         this.section = false;
+        this.settings = settings;
+        this.loaded = false;
+
+        this.visualizationLoad();
+    },
+
+    loadInterface: function()
+    {
+        var defaults = {
+            menu: 'location',
+            metric: 'ga:pageviews',
+            dimension: 'ga:city',
+            chart: 'pie',
+            period: 'month'
+        };
+
+        // pin button
+
+        $pinBtn = $('.analytics-pin', this.$element);
+        $collapsible = $('.analytics-collapsible', this.$element);
+
+        this.pinBtn = new Analytics.PinBtn($pinBtn, $collapsible, {
+            pinned: this.settings.pinned,
+            onPinChange: $.proxy(this, 'onPinChange')
+        });
+
+        // menu
+        this.$menu = $('.analytics-menu:first select:first', this.$element);
+        this.menu = new Analytics.Menu(this.$menu, {
+            defaultMenu: defaults.menu,
+            onMenuChange: $.proxy(this, 'onMenuChange')
+        });
+
+        // browserView
+        this.browserView = new Analytics.BrowserView(this);
+
+        // // realtimeVisitorsView
+        // this.realtimeVisitorsView = new Analytics.RealtimeVisitorsView();
 
 
+        // trigger menu change
+        this.menu.onMenuChange();
+
+        // set default values
+        this.browserView.metrics.val(defaults.metric);
+        this.browserView.dimensions.val(defaults.dimension);
+        this.browserView.period.val(defaults.period);
+
+        if(defaults.chart)
+        {
+            this.browserView.tableTypes.val(defaults.chart);
+        }
+    },
+
+    onMenuChange: function(currentMenu)
+    {
+        // hide all views
+        this.$views.addClass('hidden');
+
+        // section
+        section = this.getSection(currentMenu);
+
+        this.browserView.dimensions.setOptions(section.dimensions);
+        this.browserView.metrics.setOptions(section.metrics);
+        this.browserView.tableTypes.setOptions(section.enabledCharts);
+        this.browserView.tableTypes.val(section.chart);
+
+        // show view
+        $('[data-view="'+section.view+'"]', this.$element).removeClass('hidden');
+    },
+
+    onPinChange: function()
+    {
+        console.log('onPinChange');
+    },
+
+    visualizationLoad: function()
+    {
         // google visualization
 
         if(googleVisualisationCalled == false)
@@ -35,7 +110,6 @@ Analytics.Explorer = Garnish.Base.extend({
             google.load("visualization", "1", {packages:['corechart', 'table', 'geochart'], 'language': AnalyticsChartLanguage});
 
             googleVisualisationCalled = true;
-
         }
 
         google.setOnLoadCallback($.proxy(function() {
@@ -49,81 +123,14 @@ Analytics.Explorer = Garnish.Base.extend({
             }
             else
             {
-                // let's get started (browse ?)
-
-                this.initActions();
-                this.initMenu();
+                this.loadInterface();
             }
         }, this));
-    },
-
-    initMenu: function()
-    {
-        console.log('initMenu');
-
-        this.$menu = $('.analytics-menu:first select:first', this.$element);
-
-        this.menu = new Analytics.Menu(this.$menu, {
-            onMenuChange: $.proxy(function(currentMenu, saveState) {
-
-                // change view
-
-                if(this.view)
-                {
-                    this.view.destroy();
-                }
-
-                this.$views.addClass('hidden');
-
-                section = this.getSection(currentMenu);
-
-                // explorerStateData = {
-                //     id: this.$widget.data('widget-id'),
-                //     menu: currentMenu,
-                //     pinned: this.pinBtn.val(),
-                // };
-
-                switch(section.view)
-                {
-                    case 'realtimeVisitors':
-                    this.view = new Analytics.RealtimeVisitorsView(this, this.$element);
-                    break;
-
-                    case 'browser':
-                    this.view = new Analytics.BrowserView(this, this.$element, section);
-                    break;
-                }
-
-                $('[data-view="'+section.view+'"]', this.$element).removeClass('hidden');
-
-                this.section = section;
-
-                if(saveState)
-                {
-                    this.saveState();
-                }
-            }, this)
-        });
-
     },
 
     saveState: function()
     {
         this.view.saveState();
-    },
-
-    initActions: function()
-    {
-        // pin button
-
-        $pinBtn = $('.analytics-pin', this.$element);
-        $collapsible = $('.analytics-collapsible', this.$element);
-
-        this.pinBtn = new Analytics.PinBtn($pinBtn, $collapsible, {
-            onPinChange: $.proxy(function() {
-                this.saveState();
-            }, this)
-        });
     },
 
     getSection: function(menu)
@@ -138,208 +145,55 @@ Analytics.Explorer = Garnish.Base.extend({
             chart: false,
         };
 
-        var foundSection = null;
-
-        $.each(AnalyticsBrowserData, $.proxy(function(sectionKey, sectionObject)
+        $.each(AnalyticsBrowserData, function(sectionKey, sectionObject)
         {
             if(sectionKey == menu)
             {
-                foundSection = sectionObject;
-            }
-        }, this));
+                $.each(sectionObject, function(foundSectionKey, foundSectionObject)
+                {
+                    section[foundSectionKey] = foundSectionObject;
+                });
 
-        if(foundSection)
-        {
-            if(typeof(foundSection.dimensions) !== 'undefined')
-            {
-                section.dimensions = foundSection.dimensions;
+                return false;
             }
-
-            if(typeof(foundSection.metrics) !== 'undefined')
-            {
-                section.metrics = foundSection.metrics;
-            }
-
-            if(typeof(foundSection.enabledCharts) !== 'undefined')
-            {
-                section.enabledCharts = foundSection.enabledCharts;
-            }
-
-            if(typeof(foundSection.realtime) !== 'undefined')
-            {
-                section.realtime = foundSection.realtime;
-            }
-
-            if(typeof(foundSection.chart) !== 'undefined')
-            {
-                section.chart = foundSection.chart;
-            }
-
-            if(typeof(foundSection.uri) !== 'undefined')
-            {
-                section.uri = foundSection.uri;
-            }
-
-            if(typeof(foundSection.view) !== 'undefined')
-            {
-                section.view = foundSection.view;
-            }
-        }
+        });
 
         return section;
     },
 });
 
-
-/**
- * Menu
- */
-Analytics.Menu = Garnish.Base.extend({
-    init: function(menuElement, settings)
-    {
-        this.$menu = menuElement;
-        this.settings = settings;
-        this.section = false;
-        this.defaultMenu = 'audienceOverview';
-        this.currentMenu = false;
-
-        this.addListener(this.$menu, 'change', 'onMenuChange');
-
-        this.changeMenu(this.defaultMenu, false);
-    },
-
-    val: function()
-    {
-        return this.currentMenu;
-    },
-
-    onMenuChange: function(ev)
-    {
-        value = $(ev.currentTarget).val();
-
-        this.currentMenu = value;
-
-        this.changeMenu(value);
-    },
-
-    changeMenu: function(currentMenu, saveState)
-    {
-        if(typeof(saveState) == 'undefined')
-        {
-            saveState = true;
-        }
-
-        this.currentMenu = currentMenu;
-
-        this.$menu.val(currentMenu);
-
-        this.settings.onMenuChange(this.currentMenu, saveState);
-    },
-});
-
-
-/**
- * Pin Button
- */
-Analytics.PinBtn = Garnish.Base.extend({
-    init: function(pinBtnElement, collapsibleElement, settings)
-    {
-        this.$pinBtn = pinBtnElement;
-        this.$collapsible = collapsibleElement;
-        this.settings = settings;
-        this.pinned = 0;
-        this.addListener(this.$pinBtn, 'click', 'onPin');
-    },
-
-    val: function()
-    {
-        return this.pinned;
-    },
-
-    onPin: function()
-    {
-        if(!this.$pinBtn.hasClass('active'))
-        {
-            this.pin();
-        }
-        else
-        {
-            this.unpin();
-        }
-    },
-
-    pin: function()
-    {
-        this.$pinBtn.addClass('active');
-        this.$collapsible.addClass('analytics-collapsed');
-        this.pinned = 1;
-
-        // this.$collapsible.animate({
-        //     opacity: 0,
-        //     height: "toggle"
-        // }, 200);
-
-        this.$collapsible.transition({height: '0px'}, 200, 'ease-out');
-
-        this.settings.onPinChange();
-    },
-
-    unpin: function()
-    {
-        this.$pinBtn.removeClass('active');
-        this.$collapsible.removeClass('analytics-collapsed');
-        this.pinned = 0;
-
-        // this.$collapsible.animate({
-        //     opacity: 1,
-        //     height: "toggle"
-        // }, 200);
-
-        this.$collapsible.transition({height: 'auto'}, 200, 'ease-out');
-
-        this.settings.onPinChange();
-    }
-});
-
-
 /**
  * Browser View
  */
 Analytics.BrowserView = Garnish.Base.extend({
-    init: function(explorer, element, section)
+
+    init: function(explorer)
     {
-        console.log('BrowserView');
-        this.$element = element;
-
-        this.$menu = $('.analytics-menu:first select:first', this.$element);
-        this.$metricsField = $('.analytics-metric-field', this.$element);
-        this.$dimensionsField = $('.analytics-dimension-field', this.$element);
-        this.$tableTypes = $('.analytics-tabletypes:first', this.$element);
-        this.$periodField = $('.analytics-period', this.$element);
-
         this.explorer = explorer;
+
+        this.$element = this.explorer.$element;
+
         this.browser = false;
-        this.section = section;
 
-        this.metrics = new Analytics.MetricsField(this.$metricsField, section.metrics, {
-            onChange: $.proxy(this, 'onMetricsChange')
-        });
+        // dimensions
+        this.$dimensionsField = $('.analytics-dimension-field', this.$element);
+        this.dimensions = new Analytics.SelectField(this.$dimensionsField, { onChange: $.proxy(this, 'onDimensionsChange') });
 
-        this.dimensions = new Analytics.DimensionsField(this.$dimensionsField, section.dimensions, {
-            onChange: $.proxy(this, 'onDimensionsChange')
-        });
+        // metrics
+        this.$metricsField = $('.analytics-metric-field', this.$element);
+        this.metrics = new Analytics.SelectField(this.$metricsField, { onChange: $.proxy(this, 'onMetricsChange') });
 
+        this.$tableTypes = $('.analytics-tabletypes:first', this.$element);
         this.tableTypes = new Analytics.TableTypes(this.$tableTypes, {
-            enabledCharts: section.enabledCharts,
-            defaultChart: section.chart,
             onChange: $.proxy(this, 'onTableTypesChange')
         });
 
-        this.period = new Analytics.PeriodField(this.$periodField, {
+        this.$periodField = $('.analytics-period', this.$element);
+        this.period = new Analytics.SelectField(this.$periodField, {
             onChange: $.proxy(this, 'onPeriodChange')
         });
 
-        this.browse();
+        // this.browse();
     },
 
     saveState: function(data)
@@ -357,27 +211,13 @@ Analytics.BrowserView = Garnish.Base.extend({
             }
         };
 
-        console.log('save state', stateData);
-
         Craft.queueActionRequest('analytics/explorer/saveWidgetState', stateData, $.proxy(function(response)
         {
             // state saved
 
+            console.log('state saved', stateData);
+
         }, this));
-    },
-
-    destroy: function()
-    {
-        this.metrics.destroy();
-        this.dimensions.destroy();
-        this.tableTypes.destroy();
-        this.period.destroy();
-
-        if(this.browser)
-        {
-            this.browser.destroy();
-            this.browser = false;
-        }
     },
 
     onMetricsChange: function(ev)
@@ -412,11 +252,8 @@ Analytics.BrowserView = Garnish.Base.extend({
 
     browse: function()
     {
-        console.log('browse');
-
         if(this.browser)
         {
-            this.browser.destroy();
             this.browser = false;
         }
 
@@ -428,7 +265,7 @@ Analytics.BrowserView = Garnish.Base.extend({
             realtime: 0,
         };
 
-        if(typeof(this.section.realtime) != 'undefined' && this.section.realtime)
+        if(typeof(this.explorer.section.realtime) != 'undefined' && this.explorer.section.realtime)
         {
             data.realtime = 1;
         }
@@ -444,8 +281,6 @@ Analytics.BrowserView = Garnish.Base.extend({
 Analytics.Browser = Garnish.Base.extend({
     init: function(element, data)
     {
-        console.log('init AnalyticsBrowser');
-
         this.$element = element;
 
         this.$spinner = $('.spinner', this.$element);
@@ -474,18 +309,10 @@ Analytics.Browser = Garnish.Base.extend({
 
         this.request();
 
-        // this.resize();
-
         if(this.data.realtime)
         {
             this.startRealtime();
         }
-    },
-
-    destroy: function()
-    {
-        this.removeListener(Garnish.$win, 'resize');
-        this.stopRealtime();
     },
 
     startRealtime: function()
@@ -509,8 +336,6 @@ Analytics.Browser = Garnish.Base.extend({
 
     request: function()
     {
-        console.log('request', this.data);
-
         var chart = this.data.tableType;
 
         this.$spinner.removeClass('body-loading');
@@ -543,7 +368,6 @@ Analytics.Browser = Garnish.Base.extend({
 
         }, this));
     },
-
 
     handleResponse: function(response, chart)
     {
@@ -639,8 +463,6 @@ Analytics.Browser = Garnish.Base.extend({
         this.fillChartData(response.area);
         this.chartOptions = Analytics.ChartOptions.area;
 
-        console.log('chartOptions', this.chartOptions);
-
         if(this.data.period == 'week')
         {
             this.chartOptions.hAxis.format = 'E';
@@ -662,7 +484,6 @@ Analytics.Browser = Garnish.Base.extend({
 
             dateFormatter.format(this.chartData, 0);
         }
-
 
         var realChart = $('<div>');
         this.chart = new google.visualization.AreaChart(realChart.get(0));
@@ -716,8 +537,6 @@ Analytics.Browser = Garnish.Base.extend({
 
     resize: function()
     {
-        console.log('Analytics.Browser.resize()');
-
         if(this.chart)
         {
             this.chart.draw(this.chartData, this.chartOptions);
@@ -741,241 +560,13 @@ Analytics.Browser = Garnish.Base.extend({
 });
 
 /**
- * PeriodField
- */
-Analytics.PeriodField = Garnish.Base.extend({
-    init: function(fieldElement, settings)
-    {
-        this.$field = fieldElement;
-        this.$select = $('select', this.$field);
-
-        this.settings = settings;
-
-        this.addListener(this.$select, 'change', 'onChange');
-    },
-
-    val: function()
-    {
-        return this.$select.val();
-    },
-
-    destroy: function()
-    {
-        this.removeListener(this.$select, 'change');
-    },
-
-    onChange: function(ev)
-    {
-        this.settings.onChange(ev);
-    }
-});
-
-
-/**
- * DimensionsField
- */
-Analytics.DimensionsField = Garnish.Base.extend({
-    init: function(fieldElement, dimensions, settings)
-    {
-        this.$field = fieldElement;
-        this.$dimension = $('select', this.$field);
-
-        this.settings = settings;
-
-        this.addListener(this.$dimension, 'change', 'onChange');
-
-        this.$dimension.html('');
-
-        if(dimensions)
-        {
-            this.$field.removeClass('hidden');
-
-            $.each(dimensions, $.proxy(function(key, dimension)
-            {
-                $('<option value="'+dimension.value+'">'+dimension.label+'</option>').appendTo(this.$dimension);
-
-            }, this));
-
-            var optionValue = $('option:first', this.$dimension).attr('value');
-
-            this.$dimension.val(optionValue);
-        }
-        else
-        {
-            this.$field.addClass('hidden');
-        }
-    },
-
-    val: function()
-    {
-        return this.$dimension.val();
-    },
-
-    destroy: function()
-    {
-        this.removeListener(this.$dimension, 'change');
-    },
-
-    onChange: function(ev)
-    {
-        this.settings.onChange(ev);
-    }
-});
-
-
-/**
- * MetricsField
- */
-Analytics.MetricsField = Garnish.Base.extend({
-    init: function(fieldElement, metrics, settings)
-    {
-        this.$field = fieldElement;
-        this.$metric = $('select', this.$field);
-
-        this.settings = settings;
-
-        this.addListener(this.$metric, 'change', 'onChange');
-
-        this.$metric.html('');
-
-        if(metrics)
-        {
-            this.$field.removeClass('hidden');
-
-            $.each(metrics, $.proxy(function(key, metric)
-            {
-                $('<option value="'+metric.value+'">'+metric.label+'</option>').appendTo(this.$metric);
-            }, this));
-        }
-        else
-        {
-            this.$field.addClass('hidden');
-        }
-    },
-
-    val: function()
-    {
-        return this.$metric.val();
-    },
-
-    destroy: function()
-    {
-        this.removeListener(this.$metric, 'change');
-    },
-
-    onChange: function(ev)
-    {
-        this.settings.onChange(ev);
-    }
-});
-
-
-/**
- * TableTypes
- */
-Analytics.TableTypes = Garnish.Base.extend({
-    init: function(tableTypesElement, settings)
-    {
-        this.$tableTypes = tableTypesElement;
-        this.$enabledTableTypes = $('.analytics-enabled-tabletypes:first', this.$tableTypes);
-        this.$disabledTableTypes = $('.analytics-disabled-tabletypes:first', this.$tableTypes);
-        this.$tableTypeBtns = $('.btn', this.$tableTypes);
-
-        this.settings = settings;
-        this.value = false;
-
-        this.addListener(this.$tableTypeBtns, 'click', 'onTableTypeChange');
-
-        this.$tableTypeBtns.removeClass('active');
-
-        if(settings.enabledCharts)
-        {
-            this.hideTableTypes();
-
-            $.each(settings.enabledCharts, $.proxy(function(key, enabledChart)
-            {
-                this.showTableType(enabledChart);
-            }, this));
-        }
-        else
-        {
-            this.showTableTypes();
-            this.hideTableType('geo');
-            this.hideTableType('counter');
-            this.hideTableType('area');
-        }
-
-        // select chart
-
-        if(settings.defaultChart)
-        {
-            $('[data-tabletype="'+settings.defaultChart+'"]', this.$enabledTableTypes).addClass('active');
-        }
-        else
-        {
-            $('.btn:first', this.$enabledTableTypes).addClass('active');
-        }
-
-        this.value = $('.btn.active:first', this.$tableTypes).data('tabletype');
-    },
-
-    val: function()
-    {
-        return this.value;
-    },
-
-    destroy: function()
-    {
-        this.removeListener(this.$tableTypeBtns, 'click');
-    },
-
-    showTableTypes: function()
-    {
-        $('.btn', this.$disabledTableTypes).appendTo(this.$enabledTableTypes);
-    },
-
-    hideTableTypes: function()
-    {
-        $('.btn', this.$enabledTableTypes).appendTo(this.$disabledTableTypes);
-    },
-
-    showTableType: function(chart)
-    {
-        $('[data-tabletype="'+chart+'"]', this.$tableTypes).appendTo(this.$enabledTableTypes);
-    },
-
-    hideTableType: function(chart)
-    {
-        $('[data-tabletype="'+chart+'"]', this.$tableTypes).appendTo(this.$disabledTableTypes);
-    },
-
-    onTableTypeChange: function(ev)
-    {
-        var tableType = $(ev.currentTarget).data('tabletype');
-
-        this.$tableTypeBtns.removeClass('active');
-
-        $('[data-tabletype="'+tableType+'"]', this.$enabledTableTypes).addClass('active');
-
-        this.value = tableType;
-
-        this.settings.onChange(this.value);
-    },
-});
-
-
-/**
  * RealtimeVisitors View
  */
 Analytics.RealtimeVisitorsView = Garnish.Base.extend({
     init: function(explorer, element)
     {
         this.$element = element;
-
         this.explorer = explorer;
-
-        console.log('hello real time visitors view');
-
         this.realtimeVisitors = new Analytics.RealtimeVisitors(this.$element);
     },
 
@@ -990,18 +581,21 @@ Analytics.RealtimeVisitorsView = Garnish.Base.extend({
             }
         };
 
-        console.log('save state', stateData);
-
         Craft.queueActionRequest('analytics/explorer/saveWidgetState', stateData, $.proxy(function(response)
         {
-            // state saved
+            console.log('state saved', stateData);
 
         }, this));
     },
 
-    destroy: function()
+    enable: function()
     {
-        this.realtimeVisitors.destroy();
+        this.realtimeVisitors.enable();
+    },
+
+    disable: function()
+    {
+        this.realtimeVisitors.disable();
     }
 });
 
@@ -1019,12 +613,15 @@ Analytics.RealtimeVisitors = Garnish.Base.extend({
         this.$spinner = $('.spinner', this.$element);
 
         this.timer = false;
+    },
 
+    enable: function()
+    {
         this.request();
         this.startRealtime();
     },
 
-    destroy: function()
+    disable: function()
     {
         this.stopRealtime();
     },
@@ -1138,6 +735,269 @@ Analytics.RealtimeVisitors = Garnish.Base.extend({
             $('.progress-bar.green', this.$realtimeVisitors).addClass('hidden');
         }
     },
+});
+
+/**
+ * Menu
+ */
+Analytics.Menu = Garnish.Base.extend({
+    init: function(menuElement, settings)
+    {
+        this.$menu = menuElement;
+        this.settings = settings;
+
+        if(typeof(settings.defaultMenu) != 'undefined')
+        {
+            this.$menu.val(settings.defaultMenu);
+        }
+
+        this.addListener(this.$menu, 'change', 'onMenuChange');
+    },
+
+    val: function()
+    {
+        return this.$menu.val();
+    },
+
+    onMenuChange: function()
+    {
+        value = this.$menu.val();
+
+        this.settings.onMenuChange(value);
+    }
+});
+
+/**
+ * Pin Button
+ */
+Analytics.PinBtn = Garnish.Base.extend({
+    init: function(pinBtnElement, collapsibleElement, settings)
+    {
+        this.$pinBtn = pinBtnElement;
+        this.$collapsible = collapsibleElement;
+        this.settings = settings;
+
+        if(typeof(settings.pinned) != 'undefined')
+        {
+            this.pinned = settings.pinned;
+        }
+        else
+        {
+            this.pinned = 0;
+        }
+
+        if(this.pinned)
+        {
+            this.$pinBtn.addClass('active');
+            this.$collapsible.addClass('analytics-collapsed');
+            this.$collapsible.transition({height: '0px'}, 0, 'ease-out');
+        }
+
+        this.addListener(this.$pinBtn, 'click', 'onPin');
+    },
+
+    val: function()
+    {
+        return this.pinned;
+    },
+
+    onPin: function()
+    {
+        if(!this.$pinBtn.hasClass('active'))
+        {
+            this.pin();
+        }
+        else
+        {
+            this.unpin();
+        }
+    },
+
+    pin: function(saveState)
+    {
+        this.$pinBtn.addClass('active');
+        this.$collapsible.addClass('analytics-collapsed');
+        this.pinned = 1;
+
+        // this.$collapsible.animate({
+        //     opacity: 0,
+        //     height: "toggle"
+        // }, 200);
+
+        this.$collapsible.transition({height: '0px'}, 200, 'ease-out');
+
+        this.settings.onPinChange(saveState);
+    },
+
+    unpin: function()
+    {
+        this.$pinBtn.removeClass('active');
+        this.$collapsible.removeClass('analytics-collapsed');
+        this.pinned = 0;
+
+        // this.$collapsible.animate({
+        //     opacity: 1,
+        //     height: "toggle"
+        // }, 200);
+
+        this.$collapsible.transition({height: 'auto'}, 200, 'ease-out');
+
+        this.settings.onPinChange();
+    }
+});
+
+/**
+ * TableTypes
+ */
+Analytics.TableTypes = Garnish.Base.extend({
+    init: function(tableTypesElement, settings)
+    {
+        this.$tableTypes = tableTypesElement;
+        this.$enabledTableTypes = $('.analytics-enabled-tabletypes:first', this.$tableTypes);
+        this.$disabledTableTypes = $('.analytics-disabled-tabletypes:first', this.$tableTypes);
+        this.$tableTypeBtns = $('.btn', this.$tableTypes);
+
+        this.settings = settings;
+
+        this.addListener(this.$tableTypeBtns, 'click', 'onTableTypeChange');
+
+        this.$tableTypeBtns.removeClass('active');
+    },
+
+    setOptions: function (options, defaultValue)
+    {
+        this.hideTableTypes();
+
+        if(typeof(options) != 'undefined' && options)
+        {
+            $.each(options, $.proxy(function(key, option)
+            {
+                this.showTableType(option)
+            }, this));
+        }
+        else
+        {
+            this.showTableType('table');
+            this.showTableType('pie');
+        }
+
+        if(typeof(defaultValue) != 'undefined')
+        {
+            this.val(defaultValue);
+        }
+    },
+
+    val: function(val)
+    {
+        if(typeof(val) != 'undefined')
+        {
+            this.value = val;
+
+            this.$tableTypeBtns.removeClass('active');
+            $('[data-tabletype="'+this.value+'"]', this.$enabledTableTypes).addClass('active');
+
+            return this.value;
+        }
+        else
+        {
+            return this.value;
+        }
+    },
+
+    showTableTypes: function()
+    {
+        $('.btn', this.$disabledTableTypes).appendTo(this.$enabledTableTypes);
+    },
+
+    hideTableTypes: function()
+    {
+        $('.btn', this.$enabledTableTypes).appendTo(this.$disabledTableTypes);
+    },
+
+    showTableType: function(chart)
+    {
+        $('[data-tabletype="'+chart+'"]', this.$tableTypes).appendTo(this.$enabledTableTypes);
+    },
+
+    hideTableType: function(chart)
+    {
+        $('[data-tabletype="'+chart+'"]', this.$tableTypes).appendTo(this.$disabledTableTypes);
+    },
+
+    onTableTypeChange: function(ev)
+    {
+        var tableType = $(ev.currentTarget).data('tabletype');
+
+        this.$tableTypeBtns.removeClass('active');
+
+        $('[data-tabletype="'+tableType+'"]', this.$enabledTableTypes).addClass('active');
+
+        this.value = tableType;
+
+        this.settings.onChange(this.value);
+    },
+});
+
+/**
+ * SelectField
+ */
+Analytics.SelectField = Garnish.Base.extend({
+    init: function(fieldElement, settings)
+    {
+        this.$field = fieldElement;
+        this.$select = $('select', this.$field);
+
+        this.settings = settings;
+
+        this.addListener(this.$select, 'change', 'onChange');
+    },
+
+    setOptions: function(options)
+    {
+        this.$select.html('');
+
+        if(options)
+        {
+            this.$field.removeClass('hidden');
+
+            $.each(options, $.proxy(function(key, option)
+            {
+                $('<option value="'+option.value+'">'+option.label+'</option>').appendTo(this.$select);
+            }, this));
+        }
+        else
+        {
+            this.$field.addClass('hidden');
+        }
+
+        if($('option[value="'+this.val()+'"]', this.$select).length > 0)
+        {
+            this.val(this.val());
+        }
+        else
+        {
+            this.val($('option:first', this.$select).val());
+        }
+    },
+
+    val: function(val)
+    {
+        if(typeof(val) != 'undefined' && val)
+        {
+            return this.$select.val(val);
+        }
+        else
+        {
+            return this.$select.val();
+        }
+    },
+
+    onChange: function(ev)
+    {
+        this.value = $(ev.currentTarget).val();
+
+        this.settings.onChange(ev);
+    }
 });
 
 
