@@ -23,7 +23,7 @@
         "uri": "realtime/rt-location",
         "view":"browser",
         "chart":"table",
-        "enabledCharts":["table", "pie"],
+        "enabledCharts":["pie", "table"],
         "realtime": true,
         "metrics": [
             "rt:activeUsers"
@@ -42,7 +42,7 @@
         "uri": "realtime/rt-traffic",
         "view":"browser",
         "chart":"table",
-        "enabledCharts":["table", "pie"],
+        "enabledCharts":["pie", "table"],
         "realtime": true,
         "metrics": [
             "rt:activeUsers"
@@ -61,7 +61,7 @@
         "uri": "realtime/rt-content",
         "view":"browser",
         "chart":"table",
-        "enabledCharts":["table", "pie"],
+        "enabledCharts":["pie", "table"],
         "realtime": true,
         "metrics": [
             "rt:activeUsers",
@@ -78,7 +78,7 @@
         "uri": "realtime/rt-event",
         "view":"browser",
         "chart":"table",
-        "enabledCharts":["table", "pie"],
+        "enabledCharts":["pie", "table"],
         "realtime": true,
         "metrics": [
             "rt:activeUsers",
@@ -96,7 +96,7 @@
         "uri": "realtime/rt-goal",
         "view":"browser",
         "chart":"table",
-        "enabledCharts":["table", "pie"],
+        "enabledCharts":["pie", "table"],
         "realtime": true,
         "metrics": [
             "rt:goalCompletionsAll",
@@ -112,7 +112,7 @@
         "uri": "report/visitors-overview",
         "view":"browser",
         "chart":"area",
-        "enabledCharts":["counter", "area"],
+        "enabledCharts":["area", "counter"],
         "metrics": [
             "ga:sessions",
             "ga:pageviews",
@@ -147,7 +147,7 @@
         "uri": "report/visitors-geo",
         "view":"browser",
         "chart":"geo",
-        "enabledCharts":["table", "pie", "geo"],
+        "enabledCharts":["geo", "pie", "table"],
         "metrics": [
             "ga:sessions",
             "ga:pageviews",
@@ -212,7 +212,7 @@
         "title":"network",
         "uri": "report/visitors-network",
         "view":"browser",
-        "chart":"table",
+        "chart":"pie",
         "metrics": [
             "ga:sessions",
             "ga:pageviews",
@@ -255,6 +255,7 @@
     "allChannels": {
         "title":"allChannels",
         "uri": "report/acquisition-channels",
+        "enabledCharts":["pie", "table", "area", "counter"],
         "view":"browser",
         "metrics": [
             "ga:sessions",
@@ -276,6 +277,7 @@
     "allTraffic": {
         "title":"allTraffic",
         "uri": "report/trafficsources-all-traffic",
+        "enabledCharts":["pie", "table", "area", "counter"],
         "view":"browser",
         "metrics": [
             "ga:sessions",
@@ -297,6 +299,7 @@
     "allReferrals": {
         "title":"allReferrals",
         "uri": "report/trafficsources-referrals",
+        "enabledCharts":["pie", "table", "area", "counter"],
         "view":"browser",
         "metrics": [
             "ga:sessions",
@@ -317,6 +320,7 @@
     "campaigns": {
         "title":"campaigns",
         "uri": "report/trafficsources-campaigns",
+        "enabledCharts":["pie", "table", "area", "counter"],
         "view":"browser",
         "metrics": [
             "ga:sessions",
@@ -336,6 +340,7 @@
     "keywords": {
         "title":"keywords",
         "uri": "report/trafficsources-organic",
+        "enabledCharts":["pie", "table", "area", "counter"],
         "view":"browser",
         "metrics": [
             "ga:sessions",
@@ -356,6 +361,8 @@
     "socialNetworks": {
         "title":"socialNetworks",
         "uri": "report/social-overview",
+        "enabledCharts":["pie", "table", "area", "counter"],
+        "chart":"pie",
         "view":"browser",
         "metrics": [
             "ga:sessions",
@@ -375,6 +382,7 @@
     "allPages": {
         "title":"allPages",
         "uri": "report/content-pages",
+        "enabledCharts":["pie", "table", "area", "counter"],
         "view":"browser",
         "metrics": [
             "ga:pageviews",
@@ -402,6 +410,7 @@
     "landingPages": {
         "title":"landingPages",
         "uri": "report/content-landing-pages",
+        "enabledCharts":["pie", "table", "area", "counter"],
         "view":"browser",
         "metrics": [
             "ga:sessions",
@@ -420,6 +429,7 @@
     "exitPages": {
         "title":"exitPages",
         "uri": "report/content-exit-pages",
+        "enabledCharts":["pie", "table", "area", "counter"],
         "view":"browser",
         "metrics": [
             "ga:exits",
@@ -432,60 +442,25 @@
         ]
     },
 
-    "siteSpeed": {
-        "title":"siteSpeed",
-        "uri": "report/content-site-speed-overview",
-        "view":"browser",
-        "metrics": [
-            "ga:pageLoadTime",
-            "ga:pageLoadSample",
-            "ga:domainLookupTime",
-            "ga:pageDownloadTime",
-            "ga:redirectionTime",
-            "ga:serverConnectionTime",
-            "ga:serverResponseTime",
-            "ga:speedMetricsSample",
-            "ga:domInteractiveTime",
-            "ga:domContentLoadedTime",
-            "ga:domLatencyMetricsSample",
-            "ga:avgPageLoadTime",
-            "ga:avgDomainLookupTime",
-            "ga:avgPageDownloadTime",
-            "ga:avgRedirectionTime",
-            "ga:avgServerConnectionTime",
-            "ga:avgServerResponseTime",
-            "ga:avgDomInteractiveTime",
-            "ga:avgDomContentLoadedTime"
-        ]
-    },
-
     "siteSearch": {
         "title":"siteSearch",
         "uri": "report/content-site-search-overview",
+        "enabledCharts":["pie", "table", "area", "counter"],
         "view":"browser",
         "metrics": [
-            "ga:searchResultViews",
             "ga:searchUniques",
+            "ga:searchResultViews",
             "ga:avgSearchResultViews",
-            "ga:searchSessions",
-            "ga:percentSessionsWithSearch",
-            "ga:searchDepth",
-            "ga:avgSearchDepth",
-            "ga:searchRefinements",
-            "ga:percentSearchRefinements",
             "ga:searchDuration",
             "ga:avgSearchDuration",
             "ga:searchExits",
             "ga:searchExitRate",
-            "ga:searchGoalXXConversionRate",
-            "ga:searchGoalConversionRateAll",
-            "ga:goalValueAllPerSearch"
+            "ga:searchGoalConversionRateAll"
         ],
 
         "dimensions": [
-            "ga:searchUsed",
             "ga:searchKeyword",
-            "ga:searchKeywordRefinement",
+            "ga:searchUsed",
             "ga:searchCategory",
             "ga:searchStartPage",
             "ga:searchDestinationPage"
@@ -496,13 +471,13 @@
         "title":"events",
         "uri": "report/content-event-overview",
         "view":"browser",
+        "enabledCharts":["pie", "table", "area", "counter"],
         "metrics": [
             "ga:totalEvents",
             "ga:uniqueEvents",
             "ga:eventValue",
             "ga:avgEventValue",
             "ga:sessionsWithEvent",
-            "ga:visitsWithEvent",
             "ga:eventsPerSessionWithEvent"
         ],
 
@@ -517,8 +492,8 @@
         "title":"goals",
         "uri": "report/conversions-goals-overview",
         "view":"browser",
-        "chart": "area",
-        "enabledCharts":["area"],
+        "chart": "pie",
+        "enabledCharts":["pie", "table", "area", "counter"],
         "metrics": [
             "ga:goalCompletionsAll",
             "ga:goalValueAll",
@@ -529,17 +504,6 @@
         "dimensions": [
             "ga:goalCompletionLocation",
             "ga:sourceMedium"
-        ]
-    },
-
-    "ecommerce": {
-        "title":"ecommerce",
-        "uri": "report/conversions-ecommerce-overview",
-        "view":"browser",
-        "metrics": [
-            "ga:itemQuantity",
-            "ga:uniquePurchases",
-            "ga:revenuePerItem"
         ]
     }
 }

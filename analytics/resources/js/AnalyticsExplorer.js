@@ -35,10 +35,10 @@ Analytics.Explorer = Garnish.Base.extend({
 
         // pin button
 
-        $pinBtn = $('.analytics-pin', this.$element);
-        $collapsible = $('.analytics-collapsible', this.$element);
+        this.$pinBtn = $('.analytics-pin', this.$element);
+        this.$collapsible = $('.analytics-collapsible', this.$element);
 
-        this.pinBtn = new Analytics.PinBtn($pinBtn, $collapsible, {
+        this.pinBtn = new Analytics.PinBtn(this.$pinBtn, this.$collapsible, {
             pinned: this.settings.pinned,
             onPinChange: $.proxy(this, 'onPinChange')
         });
@@ -358,7 +358,8 @@ Analytics.BrowserView = Garnish.Base.extend({
             total += value + 30;
         });
 
-        var widgetWidth = this.explorer.$widget.width() - 3*24;
+
+        var widgetWidth = this.explorer.$collapsible.width() - 3*24;
 
         // console.log('diff', total, widths, widgetWidth);
 
@@ -1024,8 +1025,8 @@ Analytics.TableTypes = Garnish.Base.extend({
         }
         else
         {
-            this.showTableType('table');
             this.showTableType('pie');
+            this.showTableType('table');
         }
 
         this.$tableTypeBtns.removeClass('active');

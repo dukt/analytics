@@ -7,6 +7,7 @@ var AnalyticsUtils = {
         if(apiColumn.dataType == 'INTEGER'
             || apiColumn.dataType == 'FLOAT'
             || apiColumn.dataType == 'PERCENT'
+            || apiColumn.dataType == 'CURRENCY'
             || apiColumn.dataType == 'TIME')
         {
             $type = 'number';

@@ -25,14 +25,12 @@
     { "label": "All Pages", "value": "allPages" },
     { "label": "Landing Pages", "value": "landingPages" },
     { "label": "Exit Pages", "value": "exitPages" },
-    { "label": "Site Speed", "value": "siteSpeed" },
     { "label": "Site Search", "value": "siteSearch" },
     { "label": "Events", "value": "events" },
 
 
     { "optgroup": "Conversions"},
 
-    { "label": "Goals", "value": "goals"},
-    { "label": "Ecommerce", "value": "ecommerce"}
+    { "label": "Goals", "value": "goals"}
 
 ]

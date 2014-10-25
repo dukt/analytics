@@ -444,6 +444,7 @@ class AnalyticsService extends BaseApplicationComponent
         switch($type)
         {
             case 'INTEGER':
+            case 'CURRENCY':
             case 'FLOAT':
             case 'TIME':
             case 'PERCENT':
@@ -462,6 +463,7 @@ class AnalyticsService extends BaseApplicationComponent
         switch($type)
         {
             case 'INTEGER':
+            case 'CURRENCY':
             case 'FLOAT':
             $value = (float) $value;
             $value = round($value, 2);

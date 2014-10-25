@@ -177,9 +177,17 @@ class Analytics_ExplorerController extends BaseController
             $realtime = craft()->request->getParam('realtime');
             $profile = craft()->analytics->getProfile();
             $metric = craft()->request->getParam('metrics');
+            $dimension = craft()->request->getParam('dimensions');
             $period = craft()->request->getParam('period');
             $start = date('Y-m-d', strtotime('-1 '.$period));
             $end = date('Y-m-d');
+
+            $filters = false;
+
+            if($dimension)
+            {
+                $filters = $dimension.'!=(not set);'.$dimension.'!=(not provided)';
+            }
 
             if($realtime)
             {
@@ -205,11 +213,19 @@ class Analytics_ExplorerController extends BaseController
             }
             else
             {
+                $options = array();
+
+                if($filters)
+                {
+                    $options['filters'] = $filters;
+                }
+
                 $response = craft()->analytics->apiGet(
                     'ga:'.$profile['id'],
                     $start,
                     $end,
-                    $metric
+                    $metric,
+                    $options
                 );
 
 
@@ -270,6 +286,7 @@ class Analytics_ExplorerController extends BaseController
                         'dimensions' => $dimension,
                         'sort' => '-'.$metric,
                         'max-results' => 20,
+                        'filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)'
                     )
                 );
             }
@@ -302,6 +319,13 @@ class Analytics_ExplorerController extends BaseController
             $metric = craft()->request->getParam('metrics');
             $period = craft()->request->getParam('period');
 
+            $filters = false;
+
+            if($dimension)
+            {
+                $filters = $dimension.'!=(not set);'.$dimension.'!=(not provided)';
+            }
+
             switch($period)
             {
                 case 'year':
@@ -326,25 +350,46 @@ class Analytics_ExplorerController extends BaseController
             }
             else
             {
+                $options = array(
+                    'dimensions' => $chartDimension,
+                    'sort' => $chartDimension
+                );
+
+                if($filters)
+                {
+                    $options['filters'] = $filters;
+                }
+
                 $chartResponse = craft()->analytics->apiGet(
                     'ga:'.$profile['id'],
                     $start,
                     $end,
                     $metric,
-                    array(
-                        'dimensions' => $chartDimension,
-                        'sort' => $chartDimension,
-                    )
+                    $options
                 );
             }
 
             $total = 0;
 
-            foreach($chartResponse['rows'] as $row)
+            $options = array();
+
+            if($filters)
             {
-                $total += $row[1]['v'];
+                $options['filters'] = $filters;
             }
 
+            $response = craft()->analytics->apiGet(
+                'ga:'.$profile['id'],
+                $start,
+                $end,
+                $metric,
+                $options
+            );
+
+            if(!empty($response['rows'][0][0]['v']))
+            {
+                $total = $response['rows'][0][0]['v'];
+            }
 
             // return json
 
