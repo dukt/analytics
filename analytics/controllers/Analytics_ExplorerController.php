@@ -282,6 +282,7 @@ class Analytics_ExplorerController extends BaseController
             $this->returnJson(array(
                 'table' => $tableResponse,
                 'dimension' => Craft::t($dimension),
+                'metric' => Craft::t($metric),
                 'period' => Craft::t('this '.$period)
             ));
         }
@@ -367,7 +368,79 @@ class Analytics_ExplorerController extends BaseController
 
     public function actionGeo()
     {
-        $this->actionTable();
+        try
+        {
+            $realtime = craft()->request->getParam('realtime');
+            $profile = craft()->analytics->getProfile();
+            $dimension = craft()->request->getParam('dimensions');
+            $metric = craft()->request->getParam('metrics');
+            $period = craft()->request->getParam('period');
+            $start = date('Y-m-d', strtotime('-1 '.$period));
+            $end = date('Y-m-d');
+            $cityMode = false;
+            $originDimension = $dimension;
+
+            if($dimension == 'ga:city')
+            {
+                $cityMode = true;
+                $dimension = 'ga:latitude, ga:longitude,'.$dimension;
+            }
+
+            if($realtime)
+            {
+                $tableResponse = craft()->analytics->apiRealtimeGet(
+                    'ga:'.$profile['id'],
+                    $metric,
+                    array('dimensions' => $dimension)
+                );
+            }
+            else
+            {
+                $tableResponse = craft()->analytics->apiGet(
+                    'ga:'.$profile['id'],
+                    $start,
+                    $end,
+                    $metric,
+                    array(
+                        'dimensions' => $dimension,
+                        'sort' => '-'.$metric,
+                        'max-results' => 20,
+                    )
+                );
+            }
+
+            foreach($tableResponse['rows'] as $k => $row)
+            {
+                $tableResponse['rows'][$k][0]['f'] = Craft::t($tableResponse['rows'][$k][0]['f']);
+
+                if($dimension == 'ga:continent')
+                {
+                    $tableResponse['rows'][$k][0]['v'] = craft()->analytics->getContinentCode($tableResponse['rows'][$k][0]['v']);
+                }
+
+                if($dimension == 'ga:subContinent')
+                {
+                    $tableResponse['rows'][$k][0]['v'] = craft()->analytics->getSubContinentCode($tableResponse['rows'][$k][0]['v']);
+                }
+            }
+
+            // if($cityMode)
+            // {
+            //     $tableResponse['columns'][1]['dataType'] = 'NUMBER';
+            //     $tableResponse['columns'][]['dataType'] = 'NUMBER';
+            // }
+
+            $this->returnJson(array(
+                'table' => $tableResponse,
+                'dimension' => Craft::t($originDimension),
+                'metric' => Craft::t($metric),
+                'period' => Craft::t('this '.$period)
+            ));
+        }
+        catch(\Exception $e)
+        {
+            $this->returnErrorJson($e->getMessage());
+        }
     }
 
     public function actionSaveWidgetState()

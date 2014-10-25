@@ -17,6 +17,14 @@ var AnalyticsUtils = {
             $type = 'date';
             apiColumn.dataType = 'DATE';
         }
+        if(apiColumn.name == 'ga:latitude')
+        {
+            $type = 'number';
+        }
+        if(apiColumn.name == 'ga:longitude')
+        {
+            $type = 'number';
+        }
 
         if(apiColumn.name == 'ga:yearMonth')
         {

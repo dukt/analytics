@@ -20,6 +20,34 @@ class AnalyticsService extends BaseApplicationComponent
     private $oauthHandle = 'google';
     private $token;
 
+    public function getContinentCode($label)
+    {
+        $continentsJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/continents.json');
+        $continents = json_decode($continentsJson, true);
+
+        foreach($continents as $continent)
+        {
+            if($continent['label'] == $label)
+            {
+                return $continent['code'];
+            }
+        }
+    }
+
+    public function getSubContinentCode($label)
+    {
+        $subContinentsJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/subContinents.json');
+        $subContinents = json_decode($subContinentsJson, true);
+
+        foreach($subContinents as $subContinent)
+        {
+            if($subContinent['label'] == $label)
+            {
+                return $subContinent['code'];
+            }
+        }
+    }
+
     public function saveToken($token)
     {
         // get plugin
@@ -340,6 +368,22 @@ class AnalyticsService extends BaseApplicationComponent
         foreach($cols as $key => $col)
         {
             $cols[$key]->label = Craft::t($col->name);
+
+            switch($col->name)
+            {
+                case 'ga:latitude':
+                $cols[$key]['columnType'] = 'LATITUDE';
+                $cols[$key]['dataType'] = 'FLOAT';
+                $cols[$key]['name'] = 'Latitude';
+                $cols[$key]['label'] = 'Latitude';
+                break;
+                case 'ga:longitude':
+                $cols[$key]['columnType'] = 'LONGITUDE';
+                $cols[$key]['dataType'] = 'FLOAT';
+                $cols[$key]['name'] = 'Longitude';
+                $cols[$key]['label'] = 'Longitude';
+                break;
+            }
         }
 
         return $cols;
@@ -371,6 +415,11 @@ class AnalyticsService extends BaseApplicationComponent
                     {
                         case 'ga:date':
                         $cell = strftime("%Y.%m.%d", strtotime($value));
+                        break;
+
+                        case 'ga:latitude':
+                        case 'ga:longitude':
+                        $cell = (float) $value;
                         break;
 
                         case 'ga:yearMonth':

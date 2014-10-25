@@ -13,7 +13,6 @@ var googleVisualisationCalled = false;
 Analytics.Explorer = Garnish.Base.extend({
     init: function(element, settings)
     {
-
         this.$element = $('#'+element);
         this.$widget = $('.analytics-widget:first', this.$element);
         this.$views = $('.analytics-view', this.$element);
@@ -642,6 +641,27 @@ Analytics.Browser = Garnish.Base.extend({
         this.fillChartData(response.table);
         this.chartOptions = Analytics.ChartOptions.geo;
 
+        this.chartOptions.displayMode = 'auto';
+
+        switch(this.data.dimensions)
+        {
+            case 'ga:city':
+            this.chartOptions.displayMode = 'markers';
+            break;
+
+            case 'ga:country':
+            this.chartOptions.resolution = 'countries';
+            break;
+
+            case 'ga:continent':
+            this.chartOptions.resolution = 'continents';
+            break;
+
+            case 'ga:subContinent':
+            this.chartOptions.resolution = 'subcontinents';
+            break;
+        }
+
         var realChart = $('<div>');
         this.chart = new google.visualization.GeoChart(realChart.get(0));
         this.$chart.html('');
@@ -1172,7 +1192,7 @@ Analytics.ChartOptions = Garnish.Base.extend({}, {
     },
 
     geo: {
-        height: 282,
+        height: 282
     },
 
     pie: {
