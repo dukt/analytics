@@ -32,7 +32,24 @@ class Analytics_ReportFieldType extends BaseFieldType
      */
     public function getInputHtml($name, $value)
     {
-        if(craft()->config->get('disableAnalytics') === true)
+        $disableAnalytics = false;
+
+        if(craft()->config->get('disableAnalytics') === null)
+        {
+            if(craft()->config->get('disableAnalytics', 'analytics') === true)
+            {
+                $disableAnalytics = true;
+            }
+        }
+        else
+        {
+            if(craft()->config->get('disableAnalytics') === true)
+            {
+                $disableAnalytics = true;
+            }
+        }
+
+        if($disableAnalytics)
         {
             return craft()->templates->render('analytics/widgets/explorer/disabled', array());
         }

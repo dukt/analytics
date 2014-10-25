@@ -122,9 +122,19 @@ class Analytics_ExplorerController extends BaseController
 
                 $enableCache = true;
 
-                if(craft()->config->get('disableAnalyticsCache') === true)
+                if(craft()->config->get('disableAnalyticsCache') === null)
                 {
-                    $enableCache = false;
+                    if(craft()->config->get('disableAnalyticsCache', 'analytics') === true)
+                    {
+                        $enableCache = false;
+                    }
+                }
+                else
+                {
+                    if(craft()->config->get('disableAnalyticsCache') === true)
+                    {
+                        $enableCache = false;
+                    }
                 }
 
                 if($enableCache)

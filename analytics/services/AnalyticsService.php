@@ -173,9 +173,19 @@ class AnalyticsService extends BaseApplicationComponent
             $apiResponse = null;
             $enableCache = true;
 
-            if(craft()->config->get('disableAnalyticsCache') === true)
+            if(craft()->config->get('disableAnalyticsCache') === null)
             {
-                $enableCache = false;
+                if(craft()->config->get('disableAnalyticsCache', 'analytics') === true)
+                {
+                    $enableCache = false;
+                }
+            }
+            else
+            {
+                if(craft()->config->get('disableAnalyticsCache') === true)
+                {
+                    $enableCache = false;
+                }
             }
 
             if($enableCache)
@@ -254,13 +264,21 @@ class AnalyticsService extends BaseApplicationComponent
 
     public function apiGet($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = array())
     {
-        $response = $this->getApiObject()->data_ga->get($p1, $p2, $p3, $p4, $p5);
-
         $enableCache = true;
 
-        if(craft()->config->get('disableAnalyticsCache') === true)
+        if(craft()->config->get('disableAnalyticsCache') === null)
         {
-            $enableCache = false;
+            if(craft()->config->get('disableAnalyticsCache', 'analytics') === true)
+            {
+                $enableCache = false;
+            }
+        }
+        else
+        {
+            if(craft()->config->get('disableAnalyticsCache') === true)
+            {
+                $enableCache = false;
+            }
         }
 
         if($enableCache)
@@ -271,15 +289,19 @@ class AnalyticsService extends BaseApplicationComponent
 
             if(!$return)
             {
+                $response = $this->getApiObject()->data_ga->get($p1, $p2, $p3, $p4, $p5);
+
                 $return = $this->parseApiResponse($response);
 
-                craft()->fileCache->set($cacheKey, $return, $this->cacheDuration());
-            }
+                $cacheDuration = $this->cacheDuration();
 
+                craft()->fileCache->set($cacheKey, $return, $cacheDuration);
+            }
             return $return;
         }
         else
         {
+            $response = $this->getApiObject()->data_ga->get($p1, $p2, $p3, $p4, $p5);
             return $this->parseApiResponse($response);
         }
     }
@@ -293,6 +315,7 @@ class AnalyticsService extends BaseApplicationComponent
             // default value
             $cacheDuration = craft()->config->get('analyticsCacheDuration', 'analytics');
         }
+
 
         $cacheDuration = new DateInterval($cacheDuration);
         $cacheDurationSeconds = $cacheDuration->format('%s');
@@ -323,9 +346,19 @@ class AnalyticsService extends BaseApplicationComponent
 
         $enableCache = true;
 
-        if(craft()->config->get('disableAnalyticsCache') === true)
+        if(craft()->config->get('disableAnalyticsCache') === null)
         {
-            $enableCache = false;
+            if(craft()->config->get('disableAnalyticsCache', 'analytics') === true)
+            {
+                $enableCache = false;
+            }
+        }
+        else
+        {
+            if(craft()->config->get('disableAnalyticsCache') === true)
+            {
+                $enableCache = false;
+            }
         }
 
         if($enableCache)

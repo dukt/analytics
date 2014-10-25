@@ -16,7 +16,7 @@ class Analytics_ExplorerWidget extends BaseWidget
 {
     public function getName()
     {
-        return Craft::t('Analytics Explorer');
+        return Craft::t('Analytics');
     }
 
     protected function defineSettings()
@@ -42,7 +42,24 @@ class Analytics_ExplorerWidget extends BaseWidget
 
     public function getBodyHtml()
     {
-        if(craft()->config->get('disableAnalytics') === true)
+        $disableAnalytics = false;
+
+        if(craft()->config->get('disableAnalytics') === null)
+        {
+            if(craft()->config->get('disableAnalytics', 'analytics') === true)
+            {
+                $disableAnalytics = true;
+            }
+        }
+        else
+        {
+            if(craft()->config->get('disableAnalytics') === true)
+            {
+                $disableAnalytics = true;
+            }
+        }
+
+        if($disableAnalytics)
         {
             return craft()->templates->render('analytics/widgets/explorer/disabled', array());
         }

@@ -33,6 +33,11 @@ Analytics.Explorer = Garnish.Base.extend({
     {
         var defaults = this.settings;
 
+        if(!defaults.menu)
+        {
+            defaults.menu = 'audienceOverview';
+        }
+
         // pin button
 
         this.$pinBtn = $('.analytics-pin', this.$element);
@@ -632,6 +637,7 @@ Analytics.Browser = Garnish.Base.extend({
 
     handleCounterResponse: function(response)
     {
+        console.log('response', response);
         this.$counterValue.html(response.counter.count);
         this.$counterLabel.html(response.metric);
         this.$counterPeriod.html(response.period);
