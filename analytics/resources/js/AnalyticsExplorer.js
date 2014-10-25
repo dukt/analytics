@@ -541,7 +541,15 @@ Analytics.Browser = Garnish.Base.extend({
             this.$infosCount.addClass('hidden');
         }
 
-        this.$infosPeriod.html(response.period);
+        if(typeof(response.period) != 'undefined')
+        {
+            this.$infosPeriod.html(response.period);
+            this.$infosPeriod.removeClass('hidden');
+        }
+        else
+        {
+            this.$infosPeriod.addClass('hidden');
+        }
 
         if(chart == 'counter')
         {
