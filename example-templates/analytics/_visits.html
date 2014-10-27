@@ -1,7 +1,7 @@
 
 <h3>Last 7 days</h3>
 
-{% set results = craft.analytics.api({
+{% set response = craft.analytics.api({
     'start-date': '6daysAgo',
     'end-date': 'today',
     'metrics': 'ga:sessions',
@@ -9,7 +9,7 @@
     'sort': '-ga:date',
 }) %}
 
-{% if results.success %}
+{% if response.success %}
     <table class="table">
         <thead>
             <tr>
@@ -19,7 +19,7 @@
         </thead>
 
         <tbody>
-            {% for row in results.rows %}
+            {% for row in response.rows %}
                 <tr>
                     <td>{{(row[0]~"-"~row[1]~"-"~row[2])|date('Y-m-d')}}</td>
                     <td>{{row[4]}}</td>
@@ -28,5 +28,5 @@
         </tbody>
     </table>
 {% else %}
-    Error: {{ results.errorMessage }}
+    Error: {{ response.errorMessage }}
 {% endif %}

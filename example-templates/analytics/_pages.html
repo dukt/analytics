@@ -1,7 +1,7 @@
 
 <h3>Pages</h3>
 
-{% set results = craft.analytics.api({
+{% set response = craft.analytics.api({
     'start-date': date('-7 days')|date("Y-m-d"),
     'end-date': date()|date("Y-m-d"),
     'metrics': 'ga:sessions',
@@ -11,7 +11,7 @@
 }) %}
 
 
-{% if results.success %}
+{% if response.success %}
     <table class="table">
         <thead>
             <tr>
@@ -21,7 +21,7 @@
         </thead>
 
         <tbody>
-            {% for row in results.rows %}
+            {% for row in response.rows %}
                 <tr>
                     <td>{{row[0]}}</td>
                     <td>{{row[1]}}</td>
@@ -31,5 +31,5 @@
     </table>
 
 {% else %}
-    Error: {{ results.errorMessage }}
+    Error: {{ response.errorMessage }}
 {% endif %}
