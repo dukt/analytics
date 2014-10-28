@@ -38,19 +38,20 @@ class m141009_105954_analytics_reportsWidgetToExplorerWidget extends BaseMigrati
                                 'chart' => "area",
                                 'period' => "month",
                                 'pinned' => 1,
-                                'colspan' => "2"
+                                'colspan' => $settings['colspan']
                             );
                             break;
 
                         case 'geo':
                             $newSettings = array(
                                 "menu" => "location",
-                            "dimension" => "ga:country",
-                            "metric" => "ga:pageviewsPerVisit",
-                            "chart" => "geo",
-                            "period" => "month",
-                            "pinned" => 1,
-                            "colspan" => "2");
+                                "dimension" => "ga:country",
+                                "metric" => "ga:pageviewsPerVisit",
+                                "chart" => "geo",
+                                "period" => "month",
+                                "pinned" => 1,
+                                'colspan' => $settings['colspan']
+                            );
                             break;
 
                         case 'mobile':
@@ -61,7 +62,7 @@ class m141009_105954_analytics_reportsWidgetToExplorerWidget extends BaseMigrati
                                 "chart" => "pie",
                                 "period" => "week",
                                 "pinned" => 1,
-                                "colspan" => "1"
+                                'colspan' => $settings['colspan']
                             );
                             break;
 
@@ -73,7 +74,7 @@ class m141009_105954_analytics_reportsWidgetToExplorerWidget extends BaseMigrati
                                 "chart" => "table",
                                 "period" => "week",
                                 "pinned" => 1,
-                                "colspan" => "2"
+                                'colspan' => $settings['colspan']
                             );
                             break;
 
@@ -85,7 +86,7 @@ class m141009_105954_analytics_reportsWidgetToExplorerWidget extends BaseMigrati
                                 "chart" => "table",
                                 "period" => "week",
                                 "pinned" => 1,
-                                "colspan" => "1"
+                                'colspan' => $settings['colspan']
                             );
                             break;
 
@@ -97,7 +98,7 @@ class m141009_105954_analytics_reportsWidgetToExplorerWidget extends BaseMigrati
                                 "chart" => "pie",
                                 "period" => "week",
                                 "pinned" => 1,
-                                "colspan" => "1"
+                                'colspan' => $settings['colspan']
                             );
                             break;
 
@@ -109,7 +110,7 @@ class m141009_105954_analytics_reportsWidgetToExplorerWidget extends BaseMigrati
                                 "chart" => "area",
                                 "period" => "week",
                                 "pinned" => 1,
-                                "colspan" => "2"
+                                'colspan' => $settings['colspan']
                             );
                             break;
 
@@ -123,7 +124,7 @@ class m141009_105954_analytics_reportsWidgetToExplorerWidget extends BaseMigrati
                                 'chart' => "area",
                                 'period' => "month",
                                 'pinned' => 0,
-                                'colspan' => "2"
+                                'colspan' => $settings['colspan']
                             );
                             break;
                     }
