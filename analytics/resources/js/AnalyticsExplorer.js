@@ -104,8 +104,8 @@ Analytics.Explorer = Garnish.Base.extend({
         switch(this.section.view)
         {
             case 'browser':
-            this.views.realtimeVisitors.disable();
 
+            this.views.realtimeVisitors.disable();
             this.views.browser.dimensions.setOptions(this.section.dimensions);
             this.views.browser.metrics.setOptions(this.section.metrics);
             this.views.browser.tableTypes.setOptions(this.section.enabledCharts);
@@ -125,11 +125,6 @@ Analytics.Explorer = Garnish.Base.extend({
         // set current view
         this.view = this.views[this.section.view];
 
-        if(this.view.resize)
-        {
-            this.view.resize();
-        }
-
         // show view
         $('[data-view="'+this.section.view+'"]', this.$element).removeClass('hidden');
 
@@ -144,6 +139,14 @@ Analytics.Explorer = Garnish.Base.extend({
         if(saveState)
         {
             this.saveState();
+        }
+
+
+        // resize
+
+        if(this.view.resize)
+        {
+            this.view.resize();
         }
     },
 
@@ -485,8 +488,6 @@ Analytics.Browser = Garnish.Base.extend({
 
     handleResponse: function(response, chart)
     {
-        console.log('response', response);
-
         var totalRows = 0;
 
         switch(chart)
@@ -637,7 +638,6 @@ Analytics.Browser = Garnish.Base.extend({
 
     handleCounterResponse: function(response)
     {
-        console.log('response', response);
         this.$counterValue.html(response.counter.count);
         this.$counterLabel.html(response.metric);
         this.$counterPeriod.html(response.period);
