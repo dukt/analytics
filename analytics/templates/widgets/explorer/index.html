@@ -14,12 +14,12 @@
 
         <div class="analytics-actions">
 
-            <div class="analytics-open"
+            <div title="{{ "Open in Google Analytics"|t }}" class="analytics-open"
                 data-account-id="{{ webProperty.accountId }}"
                 data-property-id="{{ webProperty.internalWebPropertyId }}"
                 data-profile-id="{{ webProperty.defaultProfileId }}"></div>
 
-            <div class="analytics-pin{{ widget.settings.pinned is defined ? widget.settings.pinned ? ' active' : '' : '' }}">
+            <div title="{{ "Pin/Unpin Widget"|t }}" class="analytics-pin{{ widget.settings.pinned is defined ? widget.settings.pinned ? ' active' : '' : '' }}">
                 <div class="analytics-pin-in"></div>
             </div>
         </div>
@@ -76,7 +76,7 @@
 
                                 <div class="field analytics-chart-picker">
                                     <div class="heading">
-                                        <label>Chart</label>
+                                        <label>{{ "Chart"|t }}</label>
                                     </div>
                                     <div class="input">
                                         <div class="analytics-tabletypes">
@@ -187,7 +187,7 @@
                 {# Single Chart #}
                 <div class="analytics-single-chart"></div>
 
-                <div class="analytics-no-data light hidden">No data.</div>
+                <div class="analytics-no-data light hidden">{{ "No data" }}</div>
             </div>
 
             {# Messages #}
@@ -198,10 +198,12 @@
     </div>
 
     <div class="analytics-error error hidden">
-        Error
+        {{ "Error"|t }}
     </div>
 {% else %}
 
-    <p>Analytics is not configured, please select a profile in <a href="{{ url('settings/plugins/analytics') }}">Analytics plugin settings</a>.</p>
+    <p>
+        {{ 'Analytics is not configured, please select a profile in <a href="{url}">Analytics plugin settings</a>.'|t({ url: url('settings/plugins/analytics') })|raw }}
+    </p>
 
 {% endif %}

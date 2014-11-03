@@ -173,7 +173,7 @@
         "ga:entranceRate",
         "ga:pageviews",
         "ga:pageviewsPerSession",
-        "ga:pageviewsPerVisit",
+        "ga:pageviewsPerSession",
         "ga:uniquePageviews",
         "ga:timeOnPage",
         "ga:avgTimeOnPage",

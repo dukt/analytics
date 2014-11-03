@@ -250,7 +250,7 @@ class AnalyticsService extends BaseApplicationComponent
                 return $value;
                 break;
 
-            case 'ga:pageviewsPerVisit':
+            case 'ga:pageviewsPerSession':
                 $value = round($value, 2);
                 return $value;
                 break;
@@ -651,7 +651,7 @@ class AnalyticsService extends BaseApplicationComponent
     public function getPropertiesOpts()
     {
 
-        $properties = array("" => "Select");
+        $properties = array("" => Craft::t("Select"));
 
         Craft::log(__METHOD__, LogLevel::Info, true);
 

@@ -116,7 +116,7 @@
         "metrics": [
             "ga:sessions",
             "ga:pageviews",
-            "ga:pageviewsPerVisit",
+            "ga:pageviewsPerSession",
             "ga:avgSessionDuration",
             "ga:bounceRate",
             "ga:percentNewSessions"
@@ -131,7 +131,7 @@
         "metrics": [
             "ga:sessions",
             "ga:pageviews",
-            "ga:pageviewsPerVisit",
+            "ga:pageviewsPerSession",
             "ga:avgSessionDuration",
             "ga:bounceRate",
             "ga:percentNewSessions"
@@ -151,7 +151,7 @@
         "metrics": [
             "ga:sessions",
             "ga:pageviews",
-            "ga:pageviewsPerVisit",
+            "ga:pageviewsPerSession",
             "ga:avgSessionDuration",
             "ga:bounceRate",
             "ga:percentNewSessions"
@@ -173,7 +173,7 @@
         "metrics": [
             "ga:sessions",
             "ga:pageviews",
-            "ga:pageviewsPerVisit",
+            "ga:pageviewsPerSession",
             "ga:avgSessionDuration",
             "ga:bounceRate",
             "ga:percentNewSessions"
@@ -192,7 +192,7 @@
         "metrics": [
             "ga:sessions",
             "ga:pageviews",
-            "ga:pageviewsPerVisit",
+            "ga:pageviewsPerSession",
             "ga:avgSessionDuration",
             "ga:bounceRate",
             "ga:percentNewSessions"
@@ -216,7 +216,7 @@
         "metrics": [
             "ga:sessions",
             "ga:pageviews",
-            "ga:pageviewsPerVisit",
+            "ga:pageviewsPerSession",
             "ga:avgSessionDuration",
             "ga:bounceRate",
             "ga:percentNewSessions"
@@ -236,7 +236,7 @@
         "metrics": [
             "ga:sessions",
             "ga:pageviews",
-            "ga:pageviewsPerVisit",
+            "ga:pageviewsPerSession",
             "ga:avgSessionDuration",
             "ga:bounceRate",
             "ga:percentNewSessions"
@@ -260,7 +260,7 @@
         "metrics": [
             "ga:sessions",
             "ga:pageviews",
-            "ga:pageviewsPerVisit",
+            "ga:pageviewsPerSession",
             "ga:avgSessionDuration",
             "ga:bounceRate",
             "ga:percentNewSessions"
@@ -282,7 +282,7 @@
         "metrics": [
             "ga:sessions",
             "ga:pageviews",
-            "ga:pageviewsPerVisit",
+            "ga:pageviewsPerSession",
             "ga:avgSessionDuration",
             "ga:bounceRate",
             "ga:percentNewSessions"
@@ -304,7 +304,7 @@
         "metrics": [
             "ga:sessions",
             "ga:pageviews",
-            "ga:pageviewsPerVisit",
+            "ga:pageviewsPerSession",
             "ga:avgSessionDuration",
             "ga:bounceRate",
             "ga:percentNewSessions"
@@ -325,7 +325,7 @@
         "metrics": [
             "ga:sessions",
             "ga:pageviews",
-            "ga:pageviewsPerVisit",
+            "ga:pageviewsPerSession",
             "ga:avgSessionDuration",
             "ga:bounceRate",
             "ga:percentNewSessions"
@@ -345,7 +345,7 @@
         "metrics": [
             "ga:sessions",
             "ga:pageviews",
-            "ga:pageviewsPerVisit",
+            "ga:pageviewsPerSession",
             "ga:avgSessionDuration",
             "ga:bounceRate",
             "ga:percentNewSessions"
@@ -367,7 +367,7 @@
         "metrics": [
             "ga:sessions",
             "ga:pageviews",
-            "ga:pageviewsPerVisit",
+            "ga:pageviewsPerSession",
             "ga:avgSessionDuration",
             "ga:bounceRate",
             "ga:percentNewSessions"
@@ -415,7 +415,7 @@
         "metrics": [
             "ga:sessions",
             "ga:pageviews",
-            "ga:pageviewsPerVisit",
+            "ga:pageviewsPerSession",
             "ga:avgSessionDuration",
             "ga:bounceRate",
             "ga:percentNewSessions"

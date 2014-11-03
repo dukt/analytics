@@ -46,7 +46,7 @@ class m141009_105954_analytics_reportsWidgetToExplorerWidget extends BaseMigrati
                             $newSettings = array(
                                 "menu" => "location",
                                 "dimension" => "ga:country",
-                                "metric" => "ga:pageviewsPerVisit",
+                                "metric" => "ga:pageviewsPerSession",
                                 "chart" => "geo",
                                 "period" => "month",
                                 "pinned" => 1,

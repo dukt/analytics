@@ -15,7 +15,7 @@
         "metrics": {
             "ga:sessions":"Visits",
             "ga:pageviews":"Pageviews",
-            "ga:pageviewsPerVisit":"Pages/visit",
+            "ga:pageviewsPerSession":"Pages/visit",
             "ga:avgSessionDuration":"Avg. time/visit",
             "ga:bounceRate":"Bounce Rate",
             "ga:percentNewSessions":"New visits (%)"
@@ -36,7 +36,7 @@
         "metrics": {
             "ga:sessions":"Visits",
             "ga:pageviews":"Pageviews",
-            "ga:pageviewsPerVisit":"Pages/visit",
+            "ga:pageviewsPerSession":"Pages/visit",
             "ga:avgSessionDuration":"Avg. time/visit",
             "ga:bounceRate":"Bounce Rate",
             "ga:percentNewSessions":"New visits (%)"
