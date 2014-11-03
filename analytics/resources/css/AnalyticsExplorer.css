@@ -211,6 +211,7 @@
 .analytics-small .analytics-toolbar .analytics-settings .analytics-settings-in .analytics-settings-in-in .right .analytics-chart-picker {
   float: none;
   display: block;
+  margin-right: 0;
 }
 .analytics-small .analytics-toolbar .analytics-settings .analytics-settings-in .analytics-settings-in-in .right .analytics-period {
   float: none;
@@ -227,6 +228,21 @@
   left: 0;
   width: 80px;
   text-align: right;
+  color: #555;
+}
+.rtl .analytics-small .analytics-toolbar .field {
+  position: relative;
+  margin-bottom: 14px !important;
+  padding-left: inherit;
+  padding-right: 95px;
+}
+.rtl .analytics-small .analytics-toolbar .field label {
+  position: absolute;
+  top: 6px;
+  left: auto;
+  right: 0;
+  width: 80px;
+  text-align: left;
   color: #555;
 }
 /* realtime visitors */
