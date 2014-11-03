@@ -20,6 +20,11 @@ class AnalyticsService extends BaseApplicationComponent
     private $oauthHandle = 'google';
     private $token;
 
+    public function getLanguage()
+    {
+        return craft()->language;
+    }
+
     public function getContinentCode($label)
     {
         $continentsJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/continents.json');
