@@ -2,7 +2,8 @@
 
 {% set webProperty = craft.analytics.webProperty %}
 
-{% if webProperty %}
+{% if webProperty and webProperty.error is not defined %}
+
     {%- includeJsResource 'analytics/js/jsapi.js' first %}
     {% includeJsResource 'analytics/js/AnalyticsExplorer.js' %}
     {% includeCssResource "analytics/css/AnalyticsExplorer.css" %}
