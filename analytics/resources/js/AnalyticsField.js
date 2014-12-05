@@ -1,16 +1,27 @@
-// google visualisation
-if(typeof(google.visualization) == 'undefined')
-{
-    if(typeof(AnalyticsChartLanguage) == 'undefined')
-    {
-        AnalyticsChartLanguage = 'en';
-    }
-
-    google.load("visualization", "1", {packages:['corechart'], 'language': AnalyticsChartLanguage});
-}
-
 AnalyticsField = Garnish.Base.extend({
+
     init: function(fieldId)
+    {
+        if(typeof(google.visualization) == 'undefined')
+        {
+            if(typeof(AnalyticsChartLanguage) == 'undefined')
+            {
+                AnalyticsChartLanguage = 'en';
+            }
+
+            google.load("visualization", "1", {
+                packages:['corechart'],
+                language: AnalyticsChartLanguage,
+                callback: $.proxy(this, 'initField', fieldId)
+            });
+        }
+        else
+        {
+            this.initField(fieldId);
+        }
+    },
+
+    initField: function(fieldId)
     {
         // elements
         this.$element = $("#"+fieldId);
