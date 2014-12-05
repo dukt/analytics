@@ -245,6 +245,9 @@
   text-align: left;
   color: #555;
 }
+.rtl .google-visualization-table-div-page {
+  direction: ltr;
+}
 /* realtime visitors */
 .analytics-realtime-visitors {
   padding: 48px 24px;
