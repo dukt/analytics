@@ -301,6 +301,16 @@ class Analytics_ExplorerController extends BaseController
                 );
             }
 
+            // localize table columns
+
+            foreach($tableResponse['columns'] as $k => $column)
+            {
+                $tableResponse['columns'][$k]['label'] = Craft::t(craft()->analytics->getDimMet($tableResponse['columns'][$k]['label']));
+            }
+
+
+            // localize table rows
+
             foreach($tableResponse['rows'] as $k => $row)
             {
                 $tableResponse['rows'][$k][0]['f'] = Craft::t($tableResponse['rows'][$k][0]['f']);
