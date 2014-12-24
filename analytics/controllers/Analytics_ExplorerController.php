@@ -301,6 +301,7 @@ class Analytics_ExplorerController extends BaseController
                 );
             }
 
+
             // localize table columns
 
             foreach($tableResponse['columns'] as $k => $column)
