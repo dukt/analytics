@@ -18,11 +18,11 @@
             <span class="uri light right">&nbsp; URI: {{ uri }}</span>
 
             {% set metricOpts = {
-                'ga:pageviews':'ga:pageviews'|t,
-                'ga:sessions':'ga:sessions'|t,
-                'ga:bounceRate':'ga:bounceRate'|t,
-                'ga:avgTimeOnPage':'ga:avgTimeOnPage'|t,
-                'ga:exitRate':'ga:exitRate'|t,
+                'ga:pageviews':'Pageviews'|t,
+                'ga:sessions':'Sessions'|t,
+                'ga:bounceRate':'Bounce Rate'|t,
+                'ga:avgTimeOnPage':'Avg. time on page'|t,
+                'ga:exitRate':'% Exit'|t,
             } %}
 
             {{ forms.select({
