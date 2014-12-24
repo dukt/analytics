@@ -72,76 +72,17 @@ class Analytics_ExplorerWidget extends BaseWidget
         // widget
         $widget = $this->model;
 
-        // browser sections
-        $browserSectionsJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/browser.json');
-        $browserSections = json_decode($browserSectionsJson, true);
-        foreach($browserSections as $k => $browserSection)
-        {
-            $browserSections[$k]['title'] = Craft::t($browserSections[$k]['title']);
-        }
 
-        $browserSectionsJson = json_encode($browserSections);
+        // get data
 
-        // browser data
-        $browserDataJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/browserData.json');
-        $browserData = json_decode($browserDataJson, true);
+        $browserSections = craft()->analytics->getBrowserSections();
+        $browserSectionsJson = craft()->analytics->getBrowserSections(true);
+        $browserData = craft()->analytics->getBrowserData();
+        $browserDataJson = craft()->analytics->getBrowserData(true);
+        $browserSelect = craft()->analytics->getBrowserSelect();
 
-        foreach($browserData as $k => $row)
-        {
-            $browserData[$k]['title'] = Craft::t($browserData[$k]['title']);
 
-            if(!empty($browserData[$k]['metrics']))
-            {
-                foreach($browserData[$k]['metrics'] as $k2 => $metric)
-                {
-                    $browserData[$k]['metrics'][$k2] = array(
-                        'label' => Craft::t($metric),
-                        'value' => $metric
-                    );
-                }
-            }
-
-            if(!empty($browserData[$k]['dimensions']))
-            {
-                foreach($browserData[$k]['dimensions'] as $k2 => $dimension)
-                {
-                    $browserData[$k]['dimensions'][$k2] = array(
-                        'label' => Craft::t($dimension),
-                        'value' => $dimension
-                    );
-                }
-            }
-        }
-
-        $browserDataJson = json_encode($browserData);
-
-        // browserSelect
-
-        $browserSelect = array();
-
-        if($pluginSettings->enableRealtime)
-        {
-            $browserSelectRealtimeJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/browserSelectRealtime.json');
-            $browserSelect = array_merge($browserSelect, json_decode($browserSelectRealtimeJson, true));
-        }
-
-        $browserSelectJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/browserSelect.json');
-        $browserSelect = array_merge($browserSelect, json_decode($browserSelectJson, true));
-
-        foreach($browserSelect as $k => $row)
-        {
-            if(!empty($browserSelect[$k]['optgroup']))
-            {
-                $browserSelect[$k]['optgroup'] = Craft::t($browserSelect[$k]['optgroup']);
-            }
-
-            if(!empty($browserSelect[$k]['label']))
-            {
-                $browserSelect[$k]['label'] = Craft::t($browserSelect[$k]['label']);
-            }
-        }
-
-        $browserSelectJson = json_encode($browserSelect);
+        // settings
 
         $settings = array();
 
@@ -154,6 +95,7 @@ class Analytics_ExplorerWidget extends BaseWidget
         }
 
         $settings = json_encode($settings);
+
 
         // js
         craft()->templates->includeJs('var AnalyticsChartLanguage = "'.craft()->analytics->getLanguage().'";', true);

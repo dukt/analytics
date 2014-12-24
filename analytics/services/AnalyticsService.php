@@ -20,6 +20,117 @@ class AnalyticsService extends BaseApplicationComponent
     private $oauthHandle = 'google';
     private $token;
 
+    public function getDimMet($key)
+    {
+        $dimsmetsJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/dimsmets.json');
+        $dimsmets = json_decode($dimsmetsJson, true);
+
+        if(!empty($dimsmets[$key]))
+        {
+            return $dimsmets[$key];
+        }
+    }
+
+    public function getBrowserSections($json = false)
+    {
+        $browserSectionsJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/browserSections.json');
+        $browserSections = json_decode($browserSectionsJson, true);
+
+        foreach($browserSections as $k => $browserSection)
+        {
+            $browserSections[$k]['title'] = Craft::t($browserSections[$k]['title']);
+        }
+
+        if($json)
+        {
+            return json_encode($browserSections);
+        }
+        else
+        {
+            return $browserSections;
+        }
+    }
+
+    public function getBrowserData($json = false)
+    {
+        $browserDataJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/browserData.json');
+        $browserData = json_decode($browserDataJson, true);
+
+        foreach($browserData as $k => $row)
+        {
+            $browserData[$k]['title'] = Craft::t($browserData[$k]['title']);
+
+            if(!empty($browserData[$k]['metrics']))
+            {
+                foreach($browserData[$k]['metrics'] as $k2 => $metric)
+                {
+                    $label = $this->getDimMet($metric);
+                    $label = Craft::t($label);
+
+                    $browserData[$k]['metrics'][$k2] = array(
+                        'label' => $label,
+                        'value' => $metric
+                    );
+                }
+            }
+
+            if(!empty($browserData[$k]['dimensions']))
+            {
+                foreach($browserData[$k]['dimensions'] as $k2 => $dimension)
+                {
+                    $label = $this->getDimMet($dimension);
+                    $label = Craft::t($label);
+
+                    $browserData[$k]['dimensions'][$k2] = array(
+                        'label' => $label,
+                        'value' => $dimension
+                    );
+                }
+            }
+        }
+
+        if($json)
+        {
+            return json_encode($browserData);
+        }
+        else
+        {
+            return $browserData;
+        }
+    }
+
+    public function getBrowserSelect()
+    {
+        $plugin = craft()->plugins->getPlugin('analytics');
+        $pluginSettings = $plugin->getSettings();
+
+        $browserSelect = array();
+
+        if($pluginSettings->enableRealtime)
+        {
+            $browserSelectRealtimeJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/browserSelectRealtime.json');
+            $browserSelect = array_merge($browserSelect, json_decode($browserSelectRealtimeJson, true));
+        }
+
+        $browserSelectJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/browserSelect.json');
+        $browserSelect = array_merge($browserSelect, json_decode($browserSelectJson, true));
+
+        foreach($browserSelect as $k => $row)
+        {
+            if(!empty($browserSelect[$k]['optgroup']))
+            {
+                $browserSelect[$k]['optgroup'] = Craft::t($browserSelect[$k]['optgroup']);
+            }
+
+            if(!empty($browserSelect[$k]['label']))
+            {
+                $browserSelect[$k]['label'] = Craft::t($browserSelect[$k]['label']);
+            }
+        }
+
+        return $browserSelect;
+    }
+
     public function getLanguage()
     {
         return craft()->language;

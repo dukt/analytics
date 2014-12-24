@@ -218,7 +218,7 @@ class Analytics_ExplorerController extends BaseController
 
                 $counter = array(
                     'count' => $count,
-                    'label' => strtolower(Craft::t($metric))
+                    'label' => strtolower(Craft::t(craft()->analytics->getDimMet($metric)))
                 );
             }
             else
@@ -255,7 +255,7 @@ class Analytics_ExplorerController extends BaseController
 
             $this->returnJson(array(
                 'counter' => $counter,
-                'metric' => Craft::t($metric),
+                'metric' => Craft::t(craft()->analytics->getDimMet($metric)),
                 'period' => Craft::t('this '.$period)
             ));
         }
@@ -308,8 +308,8 @@ class Analytics_ExplorerController extends BaseController
 
             $this->returnJson(array(
                 'table' => $tableResponse,
-                'dimension' => Craft::t($dimension),
-                'metric' => Craft::t($metric),
+                'dimension' => Craft::t(craft()->analytics->getDimMet($dimension)),
+                'metric' => Craft::t(craft()->analytics->getDimMet($metric)),
                 'period' => Craft::t('this '.$period)
             ));
         }
@@ -406,7 +406,7 @@ class Analytics_ExplorerController extends BaseController
             $this->returnJson(array(
                 'area' => $chartResponse,
                 'total' => $total,
-                'metric' => Craft::t($metric),
+                'metric' => Craft::t(craft()->analytics->getDimMet($metric)),
                 'period' => Craft::t('this '.$period)
             ));
         }
@@ -487,8 +487,8 @@ class Analytics_ExplorerController extends BaseController
 
             $this->returnJson(array(
                 'table' => $tableResponse,
-                'dimension' => Craft::t($originDimension),
-                'metric' => Craft::t($metric),
+                'dimension' => Craft::t(craft()->analytics->getDimMet($originDimension)),
+                'metric' => Craft::t(craft()->analytics->getDimMet($metric)),
                 'period' => Craft::t('this '.$period)
             ));
         }
