@@ -746,7 +746,10 @@ class AnalyticsService extends BaseApplicationComponent
                         }
                     }
 
-                    craft()->fileCache->set('analytics.webProperty', $webProperty);
+                    if($webProperty)
+                    {
+                        craft()->fileCache->set('analytics.webProperty', $webProperty);
+                    }
                 }
             }
 
