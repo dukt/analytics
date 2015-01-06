@@ -1,6 +1,7 @@
 {% import "_includes/forms" as forms %}
 
-{% set webProperty = craft.analytics.webProperty %}
+{% set webProperty = craft.analytics.getWebProperty() %}
+{% set profile = craft.analytics.getProfile() %}
 
 {% if webProperty and webProperty.error is not defined %}
 
@@ -15,10 +16,11 @@
 
         <div class="analytics-actions">
 
+            {# {{ dump(webProperty) }} #}
             <div title="{{ "Open in Google Analytics"|t }}" class="analytics-open"
                 data-account-id="{{ webProperty.accountId }}"
                 data-property-id="{{ webProperty.internalWebPropertyId }}"
-                data-profile-id="{{ webProperty.defaultProfileId }}"></div>
+                data-profile-id="{{ profile.id }}"></div>
 
             <div title="{{ "Pin/Unpin Widget"|t }}" class="analytics-pin{{ widget.settings.pinned is defined ? widget.settings.pinned ? ' active' : '' : '' }}">
                 <div class="analytics-pin-in"></div>

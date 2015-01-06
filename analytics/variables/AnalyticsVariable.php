@@ -36,6 +36,11 @@ class AnalyticsVariable
         return craft()->analytics->getWebProperty();
     }
 
+    public function getProfile()
+    {
+        return craft()->analytics->getProfile();
+    }
+
     public function isConfigured()
     {
         return craft()->analytics->isConfigured();
