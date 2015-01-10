@@ -14,9 +14,55 @@ namespace Craft;
 
 class Analytics_ExplorerWidget extends BaseWidget
 {
+    /**
+     * @inheritDoc IComponentType::getName()
+     *
+     * @return string
+     */
     public function getName()
     {
         return Craft::t('Analytics');
+    }
+
+    /**
+     * @inheritDoc IWidget::getTitle()
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        $widget = $this->model;
+        $settings = $widget->settings;
+
+        $browserSelect = craft()->analytics->getBrowserSelect();
+        $optgroup = false;
+
+        foreach($browserSelect as $option)
+        {
+            if(isset($option['optgroup']))
+            {
+                $optgroup = $option['optgroup'];
+            }
+
+            if(isset($option['value']))
+            {
+                if($option['value'] == $settings['menu'])
+                {
+                    $title = "";
+
+                    if($optgroup)
+                    {
+                        $title .= $optgroup.' / ';
+                    }
+
+                    $title .= $option['label'];
+
+                    return Craft::t($title);
+                }
+            }
+        }
+
+        return Craft::t("Audience / Overview");
     }
 
     protected function defineSettings()
