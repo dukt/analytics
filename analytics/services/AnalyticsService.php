@@ -647,27 +647,19 @@ class AnalyticsService extends BaseApplicationComponent
 
         if(!$provider)
         {
-            Craft::log(__METHOD__.' : Could not get provider connected', LogLevel::Info, true);
-            return false;
-        }
+            // token
+            $token = craft()->analytics->getToken();
 
-
-        // token
-        $tokenModel = craft()->analytics->getToken();
-
-        if ($tokenModel)
-        {
-            $token = $tokenModel->token;
-
-            if($token)
+            if ($token)
             {
                 // make token compatible with Google library
-                $arrayToken = array();
-                $arrayToken['created'] = 0;
-                $arrayToken['access_token'] = $token->getAccessToken();
-                $arrayToken['expires_in'] = $token->getEndOfLife();
-                $arrayToken = json_encode($arrayToken);
+                $arrayToken = array(
+                    'created' => 0,
+                    'access_token' => $token->getAccessToken(),
+                    'expires_in' => $token->getEndOfLife(),
+                );
 
+                $arrayToken = json_encode($arrayToken);
 
                 // client
                 $client = new Google_Client();
@@ -688,8 +680,8 @@ class AnalyticsService extends BaseApplicationComponent
             }
         }
         else
-        {
-            Craft::log(__METHOD__.' : No token defined', LogLevel::Info, true);
+        }
+            Craft::log(__METHOD__.' : Could not get provider connected', LogLevel::Info, true);
             return false;
         }
     }
@@ -767,47 +759,38 @@ class AnalyticsService extends BaseApplicationComponent
 
         $properties = array("" => Craft::t("Select"));
 
-        Craft::log(__METHOD__, LogLevel::Info, true);
 
-        try {
+        $api = craft()->analytics->getApiObject();
 
-            $api = craft()->analytics->getApiObject();
+        if(!$api) {
 
-            if(!$api) {
-
-                Craft::log(__METHOD__.' : Could not get API', LogLevel::Info, true);
-
-                return false;
-            }
-
-            $response = $api->management_webproperties->listManagementWebproperties("~all");
-
-            if(!$response) {
-                Craft::log(__METHOD__.' : Could not list management web properties', LogLevel::Info, true);
-                return false;
-            }
-            $items = $response['items'];
-
-
-            foreach($items as $item) {
-                $name = $item['id'];
-
-                if(!empty($item['websiteUrl'])) {
-                    $name .= ' - '.$item['websiteUrl'];
-                } elseif(!empty($item['name'])) {
-                    $name .= ' - '.$item['name'];
-                }
-
-                $properties[$item['id']] = $name;
-            }
-
-            return $properties;
-        } catch(\Exception $e) {
-
-            Craft::log(__METHOD__.' : Crashed with error : '.$e->getMessage(), LogLevel::Info, true);
+            Craft::log(__METHOD__.' : Could not get API', LogLevel::Info, true);
 
             return false;
         }
+
+        $response = $api->management_webproperties->listManagementWebproperties("~all");
+
+        if(!$response) {
+            Craft::log(__METHOD__.' : Could not list management web properties', LogLevel::Info, true);
+            return false;
+        }
+        $items = $response['items'];
+
+
+        foreach($items as $item) {
+            $name = $item['id'];
+
+            if(!empty($item['websiteUrl'])) {
+                $name .= ' - '.$item['websiteUrl'];
+            } elseif(!empty($item['name'])) {
+                $name .= ' - '.$item['name'];
+            }
+
+            $properties[$item['id']] = $name;
+        }
+
+        return $properties;
     }
 
     public function getSetting($k)
