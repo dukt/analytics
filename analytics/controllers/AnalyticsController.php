@@ -34,7 +34,13 @@ class AnalyticsController extends BaseController
     {
         $plugin = craft()->plugins->getPlugin('analytics');
         $settings = $plugin->getSettings();
-        $propertiesOpts = craft()->analytics->getPropertiesOpts();
+        try {
+            $propertiesOpts = craft()->analytics->getPropertiesOpts();
+        }
+        catch(\Exception $e)
+        {
+            $propertiesOpts = array();
+        }
 
         $this->renderTemplate('analytics/settings', array(
             'settings' => $settings,

@@ -175,26 +175,16 @@ class AnalyticsService extends BaseApplicationComponent
         // get tokenId
         $tokenId = $settings->tokenId;
 
-        // get token
-        $model = craft()->oauth->getTokenById($tokenId);
-
-
         // populate token model
-
-        if(!$model)
-        {
-            $model = new Oauth_TokenModel;
-        }
-
-        $model->providerHandle = 'google';
-        $model->pluginHandle = 'analytics';
-        $model->encodedToken = craft()->oauth->encodeToken($token);
+        $token->id = $settings->tokenId;
+        $token->providerHandle = 'google';
+        $token->pluginHandle = 'analytics';
 
         // save token
-        craft()->oauth->saveToken($model);
+        craft()->oauth->saveToken($token);
 
         // set token ID
-        $settings->tokenId = $model->id;
+        $settings->tokenId = $token->id;
 
         // save plugin settings
         craft()->plugins->savePluginSettings($plugin, $settings);
@@ -223,11 +213,7 @@ class AnalyticsService extends BaseApplicationComponent
             // get token
             $token = craft()->oauth->getTokenById($tokenId);
 
-            if($token && $token->token)
-            {
-                $this->token = $token;
-                return $this->token;
-            }
+            return $token;
         }
     }
 
@@ -645,8 +631,9 @@ class AnalyticsService extends BaseApplicationComponent
 
         $provider = craft()->oauth->getProvider($handle);
 
-        if(!$provider)
+        if($provider)
         {
+
             // token
             $token = craft()->analytics->getToken();
 
@@ -655,8 +642,8 @@ class AnalyticsService extends BaseApplicationComponent
                 // make token compatible with Google library
                 $arrayToken = array(
                     'created' => 0,
-                    'access_token' => $token->getAccessToken(),
-                    'expires_in' => $token->getEndOfLife(),
+                    'access_token' => $token->accessToken,
+                    'expires_in' => $token->endOfLife,
                 );
 
                 $arrayToken = json_encode($arrayToken);
@@ -680,7 +667,7 @@ class AnalyticsService extends BaseApplicationComponent
             }
         }
         else
-        }
+        {
             Craft::log(__METHOD__.' : Could not get provider connected', LogLevel::Info, true);
             return false;
         }

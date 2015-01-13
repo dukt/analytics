@@ -7,7 +7,7 @@
     {% if token %}
 
         {% set void = provider.setToken(token) %}
-        {% set account = provider.account %}
+        {% set account = provider.getUserDetails() %}
 
         {% if account %}
 
