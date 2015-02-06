@@ -34,6 +34,7 @@ class AnalyticsController extends BaseController
     {
         $plugin = craft()->plugins->getPlugin('analytics');
         $settings = $plugin->getSettings();
+
         try {
             $propertiesOpts = craft()->analytics->getPropertiesOpts();
         }
@@ -73,7 +74,6 @@ class AnalyticsController extends BaseController
             }
             else
             {
-                // session notice
                 craft()->userSession->setError(Craft::t($response['errorMsg']));
             }
 
@@ -86,15 +86,17 @@ class AnalyticsController extends BaseController
      */
     public function actionDisconnect()
     {
-        // reset token
-        craft()->analytics->saveToken(null);
-
-        // set notice
-        craft()->userSession->setNotice(Craft::t("Disconnected from Google Analytics."));
+        if(craft()->analytics->deleteToken())
+        {
+            craft()->userSession->setNotice(Craft::t("Disconnected from Google Analytics."));
+        }
+        else
+        {
+            craft()->userSession->setError(Craft::t("Couldn’t disconnect from Google Analytics"));
+        }
 
         // redirect
         $redirect = craft()->request->getUrlReferrer();
         $this->redirect($redirect);
     }
-
 }
