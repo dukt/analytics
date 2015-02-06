@@ -20,6 +20,17 @@ class AnalyticsService extends BaseApplicationComponent
     private $oauthHandle = 'google';
     private $token;
 
+    /**
+     * Require OAuth
+     */
+    public function requireOAuth()
+    {
+        if(!isset(craft()->oauth))
+        {
+            throw new Exception(Craft::t('OAuth plugin is required to perform this action.'));
+        }
+    }
+
     public function getDimMet($key)
     {
         $dimsmetsJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/dimsmets.json');
