@@ -12,18 +12,17 @@
         {% if account %}
 
             <form method="post" accept-charset="UTF-8" data-saveshortcut>
+
                 <input type="hidden" name="action" value="plugins/savePluginSettings">
                 <input type="hidden" name="pluginClass" value="Analytics">
                 <input type="hidden" name="redirect" value="analytics/settings">
-
-                {# <input type="hidden" name="token" value="{{ craft.oauth.encodeToken(token) }}" /> #}
 
                 <h2 class="first">{{'Google Analytics Account'|t}}</h2>
                 <p>{{'You are authenticated to Google Analytics with the following account'|t}} :</p>
 
                 <ul>
-                    <li><strong>{{'UID'|t}} : </strong> {{account.uid}}</li>
-                    <li><strong>{{'Name'|t}} : </strong> {{account.name}}</li>
+                    <li><strong>{{ 'UID'|t }} : </strong> {{ account.uid }}</li>
+                    <li><strong>{{ 'Name'|t }} : </strong> {{ account.name }}</li>
                 </ul>
 
                 <p><a class="btn small" href="{{ actionUrl('analytics/disconnect') }}">{{'Disconnect'|t}}</a></p>
@@ -47,7 +46,6 @@
                     checked: (settings.enableRealtime ? settings.enableRealtime : false),
                     toggle: 'enableRealtime'
                 }) }}
-
 
                 <div id="enableRealtime"{% if not settings.enableRealtime %} class="hidden"{% endif %}>
 
