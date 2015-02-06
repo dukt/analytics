@@ -38,7 +38,15 @@ class AnalyticsVariable
 
     public function getProfile()
     {
-        return craft()->analytics->getProfile();
+        try
+        {
+            return craft()->analytics->getProfile();
+        }
+        catch(\Exception $e)
+        {
+            Craft::log('Couldn’t get profile: '.$e->getMessage(), LogLevel::Info, true);
+        }
+
     }
 
     public function isConfigured()
