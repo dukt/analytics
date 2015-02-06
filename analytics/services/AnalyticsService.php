@@ -31,6 +31,9 @@ class AnalyticsService extends BaseApplicationComponent
         }
     }
 
+    /**
+     * Get a dimension or a metric from its key
+     */
     public function getDimMet($key)
     {
         $dimsmetsJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/dimsmets.json');
@@ -175,7 +178,7 @@ class AnalyticsService extends BaseApplicationComponent
         }
     }
 
-    public function saveToken($token)
+    public function deleteToken()
     {
         // get plugin
         $plugin = craft()->plugins->getPlugin('analytics');
@@ -183,13 +186,51 @@ class AnalyticsService extends BaseApplicationComponent
         // get settings
         $settings = $plugin->getSettings();
 
-        // get tokenId
-        $tokenId = $settings->tokenId;
+        if($settings->tokenId)
+        {
+            $token = craft()->oauth->getTokenById($settings->tokenId);
+
+            if($token)
+            {
+                if(craft()->oauth->deleteToken($token))
+                {
+                    $settings->tokenId = null;
+
+                    craft()->plugins->savePluginSettings($plugin, $settings);
+
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public function saveToken(Oauth_TokenModel $token)
+    {
+        // get plugin
+        $plugin = craft()->plugins->getPlugin('analytics');
+
+        // get settings
+        $settings = $plugin->getSettings();
+
+
+        // do we have an existing token ?
+
+        $existingToken = craft()->oauth->getTokenById($settings->tokenId);
+
+        if($existingToken)
+        {
+            $token->id = $existingToken->id;
+        }
+
 
         // populate token model
-        $token->id = $settings->tokenId;
+        // todo: token should already be populated with providerHandle and pluginHandle
+
         $token->providerHandle = 'google';
         $token->pluginHandle = 'analytics';
+
 
         // save token
         craft()->oauth->saveToken($token);
