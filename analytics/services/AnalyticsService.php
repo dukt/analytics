@@ -21,17 +21,6 @@ class AnalyticsService extends BaseApplicationComponent
     private $token;
 
     /**
-     * Require OAuth
-     */
-    public function requireOAuth()
-    {
-        if(!isset(craft()->oauth))
-        {
-            throw new Exception(Craft::t('OAuth plugin is required to perform this action.'));
-        }
-    }
-
-    /**
      * Get a dimension or a metric from its key
      */
     public function getDimMet($key)
@@ -894,6 +883,93 @@ class AnalyticsService extends BaseApplicationComponent
         }
 
         return true;
+    }
+
+    /* ------------------------------------------------------------------------- */
+
+    /**
+     * Require OAuth
+     */
+    public function requireOAuth()
+    {
+        if(!isset(craft()->oauth))
+        {
+            throw new Exception(Craft::t('OAuth plugin is required to perform this action.'));
+        }
+    }
+
+    /**
+     * Get Missing Dependencies
+     */
+    public function getMissingDependencies()
+    {
+        $missingDependencies = array();
+        $dependencies = $this->getDependencies();
+
+        foreach($dependencies as $dependency)
+        {
+            if(!$dependency['check'])
+            {
+                array_push($missingDependencies, $dependency);
+            }
+        }
+
+        return $missingDependencies;
+    }
+
+    /**
+     * Get Dependencies
+     */
+    private function getDependencies()
+    {
+        $analytics = craft()->plugins->getPlugin('analytics');
+
+        $dependencies = $analytics->getDependencies();
+
+        foreach($dependencies as $key => $dependency)
+        {
+            $dependencies[$key] = $this->getDependency($dependency);
+        }
+
+        return $dependencies;
+    }
+
+    /**
+     * Get Dependency
+     */
+    private function getDependency($dependency)
+    {
+        $check = false;
+        $plugin = craft()->plugins->getPlugin($dependency['handle']);
+
+        if($plugin)
+        {
+            $currentVersion = $plugin->version;
+
+
+            // requires update ?
+
+            if(version_compare($currentVersion, $dependency['version']) >= 0)
+            {
+                // no (requirements OK)
+
+                $check = true;
+
+            }
+            else
+            {
+                // yes (requirement not OK)
+            }
+        }
+        else
+        {
+            // not installed
+        }
+
+        $dependency['check'] = $check;
+        $dependency['plugin'] = $plugin;
+
+        return $dependency;
     }
 }
 

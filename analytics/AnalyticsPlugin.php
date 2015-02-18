@@ -36,6 +36,17 @@ class AnalyticsPlugin extends BasePlugin
         return 'https://dukt.net/';
     }
 
+    function getDependencies()
+    {
+        return array(
+            array(
+                'name' => "OAuth",
+                'handle' => 'oauth',
+                'version' => '0.9.61'
+            )
+        );
+    }
+
     protected function defineSettings()
     {
         return array(

@@ -35,6 +35,8 @@ class AnalyticsController extends BaseController
         $plugin = craft()->plugins->getPlugin('analytics');
         $settings = $plugin->getSettings();
 
+        $missingDependencies = craft()->analytics->getMissingDependencies();
+
         try {
             $propertiesOpts = craft()->analytics->getPropertiesOpts();
         }
@@ -45,6 +47,7 @@ class AnalyticsController extends BaseController
 
         $this->renderTemplate('analytics/settings', array(
             'settings' => $settings,
+            'missingDependencies' => $missingDependencies,
             'propertiesOpts' => $propertiesOpts
         ));
     }

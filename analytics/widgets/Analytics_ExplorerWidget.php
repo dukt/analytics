@@ -155,6 +155,9 @@ class Analytics_ExplorerWidget extends BaseWidget
         $variables['browserSelect'] = $browserSelect;
         $variables['widget'] = $widget;
         $variables['pluginSettings'] = $pluginSettings;
+        $variables['missingDependencies'] = craft()->analytics->getMissingDependencies();
+
+        // render template
 
         return craft()->templates->render('analytics/widgets/explorer', $variables);
     }
