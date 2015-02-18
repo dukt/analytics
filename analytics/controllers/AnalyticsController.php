@@ -54,6 +54,20 @@ class AnalyticsController extends BaseController
      */
     public function actionConnect()
     {
+        // referer
+
+        $referer = craft()->httpSession->get('analytics.referer');
+
+        if(!$referer)
+        {
+            $referer = craft()->request->getUrlReferrer();
+
+            craft()->httpSession->add('analytics.referer', $referer);
+        }
+
+
+        // connect
+
         if($response = craft()->oauth->connect(array(
             'plugin'   => 'analytics',
             'provider' => $this->handle,
@@ -74,11 +88,22 @@ class AnalyticsController extends BaseController
             }
             else
             {
+                // session error
                 craft()->userSession->setError(Craft::t($response['errorMsg']));
             }
-
-            $this->redirect($response['redirect']);
         }
+        else
+        {
+            // session error
+            craft()->userSession->setError(Craft::t("Couldn’t connect"));
+        }
+
+
+        // redirect
+
+        craft()->httpSession->remove('analytics.referer');
+
+        $this->redirect($referer);
     }
 
     /**
