@@ -23,7 +23,7 @@ class AnalyticsPlugin extends BasePlugin
 
     function getVersion()
     {
-        return '3.0.90';
+        return '3.0.91';
     }
 
     function getDeveloper()
@@ -42,7 +42,7 @@ class AnalyticsPlugin extends BasePlugin
             array(
                 'name' => "OAuth",
                 'handle' => 'oauth',
-                'version' => '0.9.61'
+                'version' => '0.9.62'
             )
         );
     }
