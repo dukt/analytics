@@ -36,17 +36,6 @@ class AnalyticsPlugin extends BasePlugin
         return 'https://dukt.net/';
     }
 
-    function getDependencies()
-    {
-        return array(
-            array(
-                'name' => "OAuth",
-                'handle' => 'oauth',
-                'version' => '0.9.62'
-            )
-        );
-    }
-
     protected function defineSettings()
     {
         return array(
@@ -99,5 +88,97 @@ class AnalyticsPlugin extends BasePlugin
         {
             craft()->oauth->deleteTokensByPlugin('analytics');
         }
+    }
+
+    /* ------------------------------------------------------------------------- */
+
+    /**
+     * Get Required Plugins
+     */
+    function getRequiredPlugins()
+    {
+        return array(
+            array(
+                'name' => "OAuth",
+                'handle' => 'oauth',
+                'version' => '0.9.63'
+            )
+        );
+    }
+
+    /**
+     * Get Required Edtion
+     */
+    function getRequiredEdition()
+    {
+        return Craft::Pro;
+    }
+
+    /**
+     * Get Plugin Dependencies
+     */
+    public function getPluginDependencies($missingOnly = true)
+    {
+        $dependencies = array();
+
+        $plugins = $this->getRequiredPlugins();
+
+        foreach($plugins as $key => $plugin)
+        {
+            $dependency = $this->getPluginDependency($plugin);
+
+            if($missingOnly)
+            {
+                if($dependency['isMissing'])
+                {
+                    $dependencies[] = $dependency;
+                }
+            }
+            else
+            {
+                $dependencies[] = $dependency;
+            }
+        }
+
+        return $dependencies;
+    }
+
+    /**
+     * Get Plugin Dependency
+     */
+    private function getPluginDependency($dependency)
+    {
+        $isMissing = true;
+
+        $plugin = craft()->plugins->getPlugin($dependency['handle']);
+
+        if($plugin)
+        {
+            $currentVersion = $plugin->version;
+
+
+            // requires update ?
+
+            if(version_compare($currentVersion, $dependency['version']) >= 0)
+            {
+                // no (requirements OK)
+
+                $isMissing = false;
+
+            }
+            else
+            {
+                // yes (requirement not OK)
+            }
+        }
+        else
+        {
+            // not installed
+        }
+
+        $dependency['isMissing'] = $isMissing;
+        $dependency['plugin'] = $plugin;
+
+        return $dependency;
     }
 }

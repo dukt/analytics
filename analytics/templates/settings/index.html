@@ -11,12 +11,18 @@
 
 {% set content %}
 
-    {% if missingDependencies|length > 0 %}
+    {% if CraftEdition == requiredEdition %}
+        {{ requiredEdition }}: Ok
+    {% else %}
+        {{ requiredEdition }}: Not ok
+    {% endif %}
+
+    {% if pluginDependencies|length > 0 %}
 
         <p>To continue, please install or update the following plugin(s):</p>
 
         <ul>
-            {% for dependency in missingDependencies %}
+            {% for dependency in pluginDependencies %}
                 <li>
                     {{ dependency.name }}
 

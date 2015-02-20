@@ -3,7 +3,7 @@
 {% set webProperty = craft.analytics.getWebProperty() %}
 {% set profile = craft.analytics.getProfile() %}
 
-{% if profile and webProperty and webProperty.error is not defined and missingDependencies|length == 0 %}
+{% if profile and webProperty and webProperty.error is not defined and CraftEdition == requiredEdition and pluginDependencies|length == 0 %}
 
     {%- includeJsResource 'analytics/js/jsapi.js' first %}
     {% includeJsResource 'analytics/js/AnalyticsExplorer.js' %}
