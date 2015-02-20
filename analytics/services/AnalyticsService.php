@@ -213,14 +213,6 @@ class AnalyticsService extends BaseApplicationComponent
             $token->id = $existingToken->id;
         }
 
-
-        // populate token model
-        // todo: token should already be populated with providerHandle and pluginHandle
-
-        $token->providerHandle = 'google';
-        $token->pluginHandle = 'analytics';
-
-
         // save token
         craft()->oauth->saveToken($token);
 
