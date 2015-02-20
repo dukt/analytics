@@ -11,12 +11,6 @@
 
 {% set content %}
 
-    {% if CraftEdition == requiredEdition %}
-        {{ requiredEdition }}: Ok
-    {% else %}
-        {{ requiredEdition }}: Not ok
-    {% endif %}
-
     {% if pluginDependencies|length > 0 %}
 
         <p>To continue, please install or update the following plugin(s):</p>
@@ -24,10 +18,15 @@
         <ul>
             {% for dependency in pluginDependencies %}
                 <li>
-                    {{ dependency.name }}
+                    <strong>
+                        {{ dependency.name }}
+                        {{ dependency.version }}
+                    </strong>
+
+                    or above required
 
                     {% if dependency.plugin %}
-                        <span class="light">{{ dependency.plugin.version }} → {{ dependency.version }} or above</span>
+                        <span class="light">— Version currently installed: {{ dependency.name }} {{ dependency.plugin.version }}</span>
                     {% endif %}
                 </li>
             {% endfor %}
