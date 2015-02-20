@@ -101,17 +101,9 @@ class AnalyticsPlugin extends BasePlugin
             array(
                 'name' => "OAuth",
                 'handle' => 'oauth',
-                'version' => '0.9.63'
+                'version' => '0.9.62'
             )
         );
-    }
-
-    /**
-     * Get Required Edtion
-     */
-    function getRequiredEdition()
-    {
-        return Craft::Pro;
     }
 
     /**
