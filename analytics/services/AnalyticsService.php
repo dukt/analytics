@@ -876,19 +876,4 @@ class AnalyticsService extends BaseApplicationComponent
 
         return true;
     }
-
-    /* ------------------------------------------------------------------------- */
-
-    /**
-     * Require OAuth
-     */
-    public function requireOAuth()
-    {
-        if(!isset(craft()->oauth))
-        {
-            throw new Exception(Craft::t('OAuth plugin is required to perform this action.'));
-        }
-    }
-
 }
-
