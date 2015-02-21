@@ -26,6 +26,18 @@ class AnalyticsPlugin extends BasePlugin
         return '3.0.91';
     }
 
+    function getRequiredPlugins()
+    {
+        return array(
+            array(
+                'name' => "OAuth",
+                'handle' => 'oauth',
+                'url' => 'https://dukt.net/craft/oauth',
+                'version' => '0.9.62'
+            )
+        );
+    }
+
     function getDeveloper()
     {
         return 'Dukt';
@@ -93,20 +105,6 @@ class AnalyticsPlugin extends BasePlugin
     /* ------------------------------------------------------------------------- */
 
     /**
-     * Get Required Plugins
-     */
-    function getRequiredPlugins()
-    {
-        return array(
-            array(
-                'name' => "OAuth",
-                'handle' => 'oauth',
-                'version' => '0.9.62'
-            )
-        );
-    }
-
-    /**
      * Get Plugin Dependencies
      */
     public function getPluginDependencies($missingOnly = true)
@@ -141,8 +139,9 @@ class AnalyticsPlugin extends BasePlugin
     private function getPluginDependency($dependency)
     {
         $isMissing = true;
+        $isInstalled = true;
 
-        $plugin = craft()->plugins->getPlugin($dependency['handle']);
+        $plugin = craft()->plugins->getPlugin($dependency['handle'], false);
 
         if($plugin)
         {
@@ -155,8 +154,10 @@ class AnalyticsPlugin extends BasePlugin
             {
                 // no (requirements OK)
 
-                $isMissing = false;
-
+                if($plugin->isInstalled && $plugin->isEnabled)
+                {
+                    $isMissing = false;
+                }
             }
             else
             {

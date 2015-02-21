@@ -12,39 +12,9 @@
 {% set content %}
 
     {% if pluginDependencies|length > 0 %}
-
-        <p>To continue, please install or update the following plugin(s):</p>
-
-        <ul>
-            {% for dependency in pluginDependencies %}
-                <li>
-                    <strong>
-                        {{ dependency.name }}
-                        {{ dependency.version }}
-                    </strong>
-
-                    or above required
-
-                    {% if dependency.plugin %}
-                        <span class="light">— Currently installed: {{ dependency.name }} {{ dependency.plugin.version }}</span>
-                    {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
-
+        {% include 'analytics/settings/_dependencies' %}
     {% else %}
         {% include 'analytics/settings/_plugin' %}
     {% endif %}
-
-{#
-    {% if craft.oauth is not defined %}
-
-        {% include 'analytics/settings/_oauth' %}
-
-    {% else %}
-
-        {% include 'analytics/settings/_plugin' %}
-
-    {% endif %} #}
 
 {% endset %}
