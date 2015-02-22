@@ -29,6 +29,8 @@ class AnalyticsController extends BaseController
 
     /**
      * Settings
+     *
+     * @return null
      */
     public function actionSettings()
     {
@@ -54,6 +56,8 @@ class AnalyticsController extends BaseController
 
     /**
      * Connect
+     *
+     * @return null
      */
     public function actionConnect()
     {
@@ -111,6 +115,8 @@ class AnalyticsController extends BaseController
 
     /**
      * Disconnect
+     *
+     * @return null
      */
     public function actionDisconnect()
     {

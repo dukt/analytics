@@ -16,6 +16,8 @@ class Analytics_ExplorerController extends BaseController
 {
     /**
      * Real-Time Visitors
+     *
+     * @return null
      */
     public function actionRealtimeVisitors()
     {
@@ -83,6 +85,8 @@ class Analytics_ExplorerController extends BaseController
 
     /**
      * Element Report
+     *
+     * @return null
      */
     public function actionElementReport(array $variables = array())
     {
@@ -180,6 +184,11 @@ class Analytics_ExplorerController extends BaseController
         }
     }
 
+    /**
+     * Counter
+     *
+     * @return null
+     */
     public function actionCounter()
     {
         try
@@ -265,6 +274,11 @@ class Analytics_ExplorerController extends BaseController
         }
     }
 
+    /**
+     * Table
+     *
+     * @return null
+     */
     public function actionTable()
     {
         try
@@ -330,6 +344,11 @@ class Analytics_ExplorerController extends BaseController
         }
     }
 
+    /**
+     * Area
+     *
+     * @return null
+     */
     public function actionArea()
     {
         try
@@ -427,11 +446,21 @@ class Analytics_ExplorerController extends BaseController
         }
     }
 
+    /**
+     * Pie
+     *
+     * @return null
+     */
     public function actionPie()
     {
         $this->actionTable();
     }
 
+    /**
+     * Geo
+     *
+     * @return null
+     */
     public function actionGeo()
     {
         try
@@ -509,6 +538,11 @@ class Analytics_ExplorerController extends BaseController
         }
     }
 
+    /**
+     * Save Widget State
+     *
+     * @return null
+     */
     public function actionSaveWidgetState()
     {
         $widgetId = craft()->request->getPost('id');
@@ -549,6 +583,11 @@ class Analytics_ExplorerController extends BaseController
         }
     }
 
+    /**
+     * Console
+     *
+     * @return null
+     */
     public function actionConsole(array $variables = array())
     {
         if(empty($variables['profileId']))
@@ -560,6 +599,11 @@ class Analytics_ExplorerController extends BaseController
         $this->renderTemplate('analytics/console', $variables);
     }
 
+    /**
+     * Console Send
+     *
+     * @return null
+     */
     public function actionConsoleSend()
     {
         // params
