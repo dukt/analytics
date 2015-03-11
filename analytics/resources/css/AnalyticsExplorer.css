@@ -417,6 +417,9 @@
 .analytics-browser-content .analytics-chart-table > div {
   position: inherit;
 }
+.analytics-browser-content .analytics-chart-table .google-visualization-table-table {
+  width: 100%;
+}
 .analytics-browser-content .analytics-chart-table .google-visualization-table-th {
   background: none !important;
   padding-left: 0;
