@@ -23,7 +23,7 @@ class AnalyticsPlugin extends BasePlugin
 
     function getVersion()
     {
-        return '3.0.91';
+        return '3.0.92';
     }
 
     function getRequiredPlugins()
@@ -33,7 +33,7 @@ class AnalyticsPlugin extends BasePlugin
                 'name' => "OAuth",
                 'handle' => 'oauth',
                 'url' => 'https://dukt.net/craft/oauth',
-                'version' => '0.9.62'
+                'version' => '0.9.63'
             )
         );
     }
