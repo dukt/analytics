@@ -1,8 +1,0 @@
-{% if craft.analytics.isConfigured %}
-
-    {% block body %}
-    {% endblock %}
-
-{% else %}
-    <p><a href="{{url('settings/plugins/analytics')}}">{{'Configure Analytics plugin in order to get started'|t}}</a></p>
-{% endif %}

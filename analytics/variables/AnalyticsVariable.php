@@ -5,7 +5,7 @@
  *
  * @package   Craft Analytics
  * @author    Benjamin David
- * @copyright Copyright (c) 2014, Dukt
+ * @copyright Copyright (c) 2015, Dukt
  * @license   https://dukt.net/craft/analytics/docs/license
  * @link      https://dukt.net/craft/analytics/
  */
@@ -14,35 +14,26 @@ namespace Craft;
 
 class AnalyticsVariable
 {
-    public function track($options = null)
+    public function api($options)
     {
-        return craft()->analytics->track($options);
+        return craft()->analytics->api($options);
     }
 
     public function getToken()
     {
-        try {
+        try
+        {
             return craft()->analytics->getToken();
         }
         catch(\Exception $e)
         {
-            // todo
+            Craft::log('Couldn’t get token: '.$e->getMessage(), LogLevel::Info, true);
         }
     }
 
-    public function getMetricOpts($params = array())
+    public function getWebProperty()
     {
-        return craft()->analytics->getMetricOpts($params);
-    }
-
-    public function getDimensionOpts($params = array())
-    {
-        return craft()->analytics->getDimensionOpts($params);
-    }
-
-    public function getGeoRegionOpts($params)
-    {
-        return craft()->analytics->getGeoRegionOpts($params);
+        return craft()->analytics->getWebProperty();
     }
 
     public function getProfile()
@@ -53,27 +44,13 @@ class AnalyticsVariable
         }
         catch(\Exception $e)
         {
-            $r['error'] = $e->getMessage();
+            Craft::log('Couldn’t get profile: '.$e->getMessage(), LogLevel::Info, true);
         }
-    }
 
-    public function getWebProperty()
-    {
-        return craft()->analytics->getWebProperty();
     }
 
     public function isConfigured()
     {
         return craft()->analytics->isConfigured();
-    }
-
-    public function properties()
-    {
-        return craft()->analytics->properties();
-    }
-
-    public function api($options)
-    {
-        return craft()->analytics->api($options);
     }
 }

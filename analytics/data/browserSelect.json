@@ -1,0 +1,36 @@
+[
+    { "optgroup": "Audience"},
+
+    { "label": "Overview", "value": "audienceOverview"},
+    { "label": "Language", "value": "language"},
+    { "label": "Location", "value": "location"},
+    { "label": "New vs Returning", "value": "newVsReturning"},
+    { "label": "Browser & OS", "value": "browserOs"},
+    { "label": "Network", "value": "network"},
+    { "label": "Mobile", "value": "mobile"},
+
+
+    { "optgroup": "Acquisition"},
+
+    { "label": "Channels", "value": "allChannels"},
+    { "label": "All Traffic", "value": "allTraffic"},
+    { "label": "All Referrals", "value": "allReferrals"},
+    { "label": "Campaigns", "value": "campaigns"},
+    { "label": "Keywords", "value": "keywords"},
+    { "label": "Social Networks", "value": "socialNetworks"},
+
+
+    { "optgroup": "Behavior"},
+
+    { "label": "All Pages", "value": "allPages" },
+    { "label": "Landing Pages", "value": "landingPages" },
+    { "label": "Exit Pages", "value": "exitPages" },
+    { "label": "Site Search", "value": "siteSearch" },
+    { "label": "Events", "value": "events" },
+
+
+    { "optgroup": "Conversions"},
+
+    { "label": "Goals", "value": "goals"}
+
+]

@@ -1,6 +1,6 @@
 <h3>Sources</h3>
 
-{% set results = craft.analytics.api({
+{% set response = craft.analytics.api({
     'start-date': '7daysAgo',
     'end-date': 'today',
     'metrics': 'ga:sessions',
@@ -10,23 +10,25 @@
     'filters': 'ga:source!=(not set);ga:source!=(not provided)'
 }) %}
 
-{% if results.success %}
+{% if response.success %}
     <table class="table">
-
-        <tr>
-            {% for col in results.cols %}
-                <th>{{ col.name }}</th>
-            {% endfor %}
-        </tr>
-
-        {% for row in results.rows %}
+        <thead>
             <tr>
-                {% for col in results.cols %}
-                    <td>{{ row[col.name] }}</td>
-                {% endfor %}
+                <th>Page Path</th>
+                <th>Sessions</th>
             </tr>
-        {% endfor %}
+        </thead>
+
+        <tbody>
+            {% for row in response.rows %}
+                <tr>
+                    <td>{{row[0]}}</td>
+                    <td>{{row[1]}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
     </table>
+
 {% else %}
-    {{ results.errorMessage }}
+    Error: {{ response.errorMessage }}
 {% endif %}

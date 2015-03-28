@@ -1,0 +1,209 @@
+{% import "_includes/forms" as forms %}
+
+{% set webProperty = craft.analytics.getWebProperty() %}
+{% set profile = craft.analytics.getProfile() %}
+
+{% if profile and webProperty and webProperty.error is not defined and pluginDependencies|length == 0 %}
+
+    {%- includeJsResource 'analytics/js/jsapi.js' first %}
+    {% includeJsResource 'analytics/js/AnalyticsExplorer.js' %}
+    {% includeCssResource "analytics/css/AnalyticsExplorer.css" %}
+    {% includeJsResource 'analytics/js/AnalyticsUtils.js' %}
+
+    <div class="analytics-widget analytics-small" data-widget-id="{{widget.id}}">
+
+        {# actions #}
+
+        <div class="analytics-actions">
+
+            <div title="{{ "Open in Google Analytics"|t }}" class="analytics-open"
+                data-account-id="{{ webProperty.accountId }}"
+                data-property-id="{{ webProperty.internalWebPropertyId }}"
+                data-profile-id="{{ profile.id }}"></div>
+
+            <div title="{{ "Pin/Unpin Widget"|t }}" class="analytics-pin{{ widget.settings.pinned is defined ? widget.settings.pinned ? ' active' : '' : '' }}">
+                <div class="analytics-pin-in"></div>
+            </div>
+        </div>
+
+        <div class="analytics-collapsible analytics-collapsed">
+
+
+            {# Menu #}
+
+            <div class="analytics-menu">
+                {{ forms.selectField({
+                    options: browserSelect
+                }) }}
+            </div>
+
+
+            {# Toolbar #}
+
+            <div class="analytics-toolbar analytics-view hidden" data-view="browser">
+
+                {# Browser Settings #}
+
+                <div class="analytics-settings">
+                    <div class="analytics-settings-in">
+                        <div class="analytics-settings-in-in">
+                            <div class="analytics-fields left">
+
+                                <div class="analytics-dimension-field analytics-field hidden">
+
+                                    {{ forms.selectField({
+                                        label: "Dimension"|t,
+                                        class:"analytics-dimension small",
+                                        name: 'dimension',
+                                    }) }}
+
+                                </div>
+
+                                <div class="analytics-metric-field analytics-field">
+
+                                    {{ forms.selectField({
+                                        label: "Metric"|t,
+                                        class:"analytics-metric small",
+                                        name: 'metric',
+                                    }) }}
+                                </div>
+                            </div>
+
+
+                            <div class="right">
+
+                                {# Chart type #}
+
+                                <div class="field analytics-chart-picker">
+                                    <div class="heading">
+                                        <label>{{ "Chart"|t }}</label>
+                                    </div>
+                                    <div class="input">
+                                        <div class="analytics-tabletypes">
+                                            <div class="analytics-enabled-tabletypes btngroup">
+
+                                                <div data-tabletype="area" role="button" class="btn active" title="{{ "Area"|t }}">
+                                                    <span class="icon-chart icon-chart-area"></span>
+                                                </div>
+
+                                                <div data-tabletype="counter" role="button" class="btn active" title="{{ "Counter"|t }}">
+                                                    <span class="icon-chart icon-chart-counter"></span>
+                                                </div>
+
+                                                <div data-tabletype="table" role="button" class="btn" title="{{ "Table"|t }}">
+                                                    <span class="icon-chart icon-chart-table"></span>
+                                                </div>
+
+                                                <div data-tabletype="pie" role="button" class="btn" title="{{ "Pie"|t }}">
+                                                    <span class="icon-chart icon-chart-pie"></span>
+                                                </div>
+
+                                                <div data-tabletype="geo" role="button" class="btn" title="{{ "Geo"|t }}">
+                                                    <span class="icon-chart icon-chart-geo"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="analytics-disabled-tabletypes btngroup hidden">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                                {# Period #}
+
+                                <div class="analytics-period">
+
+                                    {{ forms.selectField({
+                                        name: 'period',
+                                        label: "Period"|t,
+                                        options: [
+                                            { "label": "Week"|t, "value": "week"},
+                                            { "label": "Month"|t, "value": "month"},
+                                            { "label": "Year"|t, "value": "year"},
+                                        ]
+                                    }) }}
+
+                                </div>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+
+        {# Realtime visitors #}
+
+        <div class="analytics-realtime-visitors analytics-view hidden" data-view="realtimeVisitors">
+
+            <div class="active-visitors">
+                <span class="currently">{{'Currently'|t}}</span>
+                <strong class="count">•••</strong>
+                <span class="txt">{{'Active visitors on your website'|t}}</span>
+            </div>
+
+            <div class="progress hidden">
+                <div class="progress-bar blue" style="width: 35%">
+                    <span>35%</span>
+                </div>
+                <div class="progress-bar green" style="width: 65%">
+                    <span>65%</span>
+                </div>
+
+                <div class="clear"></div>
+            </div>
+
+            <ul class="legend hidden">
+                <li class="blue"><strong>50% </strong><span>{{'New'|t}}</span></li>
+                <li class="green"><strong>50% </strong><span>{{'Returning'|t}}</span></li>
+            </ul>
+
+        </div>
+
+        {# Browser #}
+
+        <div class="analytics-browser analytics-view hidden" data-view="browser">
+
+            <div class="analytics-browser-content">
+                <div class="analytics-infos">
+                    <span class="hidden analytics-infos-count">•••</span>
+                    <span class="hidden analytics-infos-dimension">Browsers</span>
+                    <span class="hidden analytics-infos-metric">Visits</span>
+                    <span class="hidden analytics-infos-period">last month</span>
+                </div>
+
+                {# Charts #}
+
+                <div class="analytics-counter hidden">
+                    <div class="analytics-counter-value">•••</div>
+                    <div class="analytics-counter-label"></div>
+                    <div class="analytics-counter-period">last month</div>
+                </div>
+
+
+                {# Single Chart #}
+                <div class="analytics-single-chart"></div>
+
+                <div class="analytics-no-data light hidden">{{ "No data."|t }}</div>
+            </div>
+
+            {# Messages #}
+            <div class="analytics-inject"></div>
+
+        </div>
+
+    </div>
+
+    <div class="analytics-error error hidden">
+        {{ "Error"|t }}
+    </div>
+{% else %}
+
+    <p>
+        {{ 'Analytics is not configured, please select a profile in <a href="{url}">Analytics plugin settings</a>.'|t({ url: url('settings/plugins/analytics') })|raw }}
+    </p>
+
+{% endif %}

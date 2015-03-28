@@ -1,0 +1,39 @@
+{
+    "siteSpeed": {
+        "title":"siteSpeed",
+        "uri": "report/content-site-speed-overview",
+        "view":"browser",
+        "metrics": [
+            "ga:pageLoadTime",
+            "ga:pageLoadSample",
+            "ga:domainLookupTime",
+            "ga:pageDownloadTime",
+            "ga:redirectionTime",
+            "ga:serverConnectionTime",
+            "ga:serverResponseTime",
+            "ga:speedMetricsSample",
+            "ga:domInteractiveTime",
+            "ga:domContentLoadedTime",
+            "ga:domLatencyMetricsSample",
+            "ga:avgPageLoadTime",
+            "ga:avgDomainLookupTime",
+            "ga:avgPageDownloadTime",
+            "ga:avgRedirectionTime",
+            "ga:avgServerConnectionTime",
+            "ga:avgServerResponseTime",
+            "ga:avgDomInteractiveTime",
+            "ga:avgDomContentLoadedTime"
+        ]
+    },
+
+    "ecommerce": {
+        "title":"ecommerce",
+        "uri": "report/conversions-ecommerce-overview",
+        "view":"browser",
+        "metrics": [
+            "ga:itemQuantity",
+            "ga:uniquePurchases",
+            "ga:revenuePerItem"
+        ]
+    }
+}

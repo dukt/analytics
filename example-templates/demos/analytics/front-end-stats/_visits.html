@@ -1,31 +1,32 @@
 
 <h3>Last 7 days</h3>
 
-{% set results = craft.analytics.api({
-    'start-date': '7daysAgo',
+{% set response = craft.analytics.api({
+    'start-date': '6daysAgo',
     'end-date': 'today',
     'metrics': 'ga:sessions',
     'dimensions': 'ga:year,ga:month,ga:day,ga:date',
     'sort': '-ga:date',
 }) %}
 
-{% if results.success %}
+{% if response.success %}
     <table class="table">
-
-        <tr>
-            <th>Date</th>
-            <th>Sessions</th>
-        </tr>
-
-        {% for row in results.rows %}
+        <thead>
             <tr>
-                {% set date = row.year~"-"~row.month~"-"~row.day %}
-
-                <td>{{date|date('Y-m-d')}}</td>
-                <td>{{row.sessions}}</td>
+                <th>Date</th>
+                <th>Sessions</th>
             </tr>
-        {% endfor %}
+        </thead>
+
+        <tbody>
+            {% for row in response.rows %}
+                <tr>
+                    <td>{{(row[0]~"-"~row[1]~"-"~row[2])|date('Y-m-d')}}</td>
+                    <td>{{row[4]}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
     </table>
 {% else %}
-    Error: {{ results.errorMessage }}
+    Error: {{ response.errorMessage }}
 {% endif %}

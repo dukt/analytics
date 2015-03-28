@@ -5,7 +5,7 @@
  *
  * @package   Craft Analytics
  * @author    Benjamin David
- * @copyright Copyright (c) 2014, Dukt
+ * @copyright Copyright (c) 2015, Dukt
  * @license   https://dukt.net/craft/analytics/docs/license
  * @link      https://dukt.net/craft/analytics/
  */
@@ -24,7 +24,19 @@ class AnalyticsPlugin extends BasePlugin
 
     function getVersion()
     {
-        return '2.1.78';
+        return '3.0.92';
+    }
+
+    function getRequiredPlugins()
+    {
+        return array(
+            array(
+                'name' => "OAuth",
+                'handle' => 'oauth',
+                'url' => 'https://dukt.net/craft/oauth',
+                'version' => '0.9.63'
+            )
+        );
     }
 
     function getDeveloper()
@@ -41,7 +53,8 @@ class AnalyticsPlugin extends BasePlugin
     {
         return array(
             'profileId' => array(AttributeType::String),
-            'realtimeRefreshInterval' => array(AttributeType::Number),
+            'realtimeRefreshInterval' => array(AttributeType::Number, 'default' => 60),
+            'enableRealtime' => array(AttributeType::Bool),
             'tokenId' => array(AttributeType::Number),
         );
     }
@@ -63,9 +76,20 @@ class AnalyticsPlugin extends BasePlugin
             return true;
         }
 
-        return craft()->templates->render('analytics/settings', array(
+        return craft()->templates->render('analytics/settings/_redirect', array(
             'settings' => $this->getSettings()
         ));
+    }
+
+    /**
+     * Hook Register CP Routes
+     */
+    public function registerCpRoutes()
+    {
+        return array(
+            'analytics\/console' => array('action' => "analytics/explorer/console"),
+            'analytics\/settings' => array('action' => "analytics/settings"),
+        );
     }
 
     /**
@@ -77,5 +101,78 @@ class AnalyticsPlugin extends BasePlugin
         {
             craft()->oauth->deleteTokensByPlugin('analytics');
         }
+    }
+
+    /* ------------------------------------------------------------------------- */
+
+    /**
+     * Get Plugin Dependencies
+     */
+    public function getPluginDependencies($missingOnly = true)
+    {
+        $dependencies = array();
+
+        $plugins = $this->getRequiredPlugins();
+
+        foreach($plugins as $key => $plugin)
+        {
+            $dependency = $this->getPluginDependency($plugin);
+
+            if($missingOnly)
+            {
+                if($dependency['isMissing'])
+                {
+                    $dependencies[] = $dependency;
+                }
+            }
+            else
+            {
+                $dependencies[] = $dependency;
+            }
+        }
+
+        return $dependencies;
+    }
+
+    /**
+     * Get Plugin Dependency
+     */
+    private function getPluginDependency($dependency)
+    {
+        $isMissing = true;
+        $isInstalled = true;
+
+        $plugin = craft()->plugins->getPlugin($dependency['handle'], false);
+
+        if($plugin)
+        {
+            $currentVersion = $plugin->version;
+
+
+            // requires update ?
+
+            if(version_compare($currentVersion, $dependency['version']) >= 0)
+            {
+                // no (requirements OK)
+
+                if($plugin->isInstalled && $plugin->isEnabled)
+                {
+                    $isMissing = false;
+                }
+            }
+            else
+            {
+                // yes (requirement not OK)
+            }
+        }
+        else
+        {
+            // not installed
+        }
+
+        $dependency['isMissing'] = $isMissing;
+        $dependency['plugin'] = $plugin;
+
+        return $dependency;
     }
 }

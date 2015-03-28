@@ -1,5 +1,7 @@
 <?php
 
 return array(
-    'disableCache' => false
+    'analyticsCacheDuration' => 'PT15M',
+    'disableAnalyticsCache' => false,
+    'disableAnalytics' => false
 );

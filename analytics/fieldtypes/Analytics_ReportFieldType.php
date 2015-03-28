@@ -5,7 +5,7 @@
  *
  * @package   Craft Analytics
  * @author    Benjamin David
- * @copyright Copyright (c) 2014, Dukt
+ * @copyright Copyright (c) 2015, Dukt
  * @license   https://dukt.net/craft/analytics/docs/license
  * @link      https://dukt.net/craft/analytics/
  */
@@ -32,6 +32,28 @@ class Analytics_ReportFieldType extends BaseFieldType
      */
     public function getInputHtml($name, $value)
     {
+        $disableAnalytics = false;
+
+        if(craft()->config->get('disableAnalytics') === null)
+        {
+            if(craft()->config->get('disableAnalytics', 'analytics') === true)
+            {
+                $disableAnalytics = true;
+            }
+        }
+        else
+        {
+            if(craft()->config->get('disableAnalytics') === true)
+            {
+                $disableAnalytics = true;
+            }
+        }
+
+        if($disableAnalytics)
+        {
+            return craft()->templates->render('analytics/widgets/explorer/disabled', array());
+        }
+
         // Reformat the input name into something that looks more like an ID
         $id = craft()->templates->formatInputId($name);
 
@@ -44,6 +66,7 @@ class Analytics_ReportFieldType extends BaseFieldType
         {
             $uri = craft()->analytics->getElementUrlPath($this->element->id, $this->element->locale);
 
+            craft()->templates->includeJs('var AnalyticsChartLanguage = "'.Craft::t('analyticsChartLanguage').'";');
             craft()->templates->includeJs('new AnalyticsField("'.$namespacedId.'-field");');
 
             $variables = array(
@@ -54,7 +77,7 @@ class Analytics_ReportFieldType extends BaseFieldType
                 'name'    => $name,
                 'value'   => $value,
                 'model'   => $this->model,
-                'element' => $this->element,
+                'element' => $this->element
             );
         }
         elseif(!$this->element->id)

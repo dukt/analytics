@@ -1,0 +1,96 @@
+{
+    "audience": {
+        "title":"Audience",
+        "view":"browser",
+        "dimensions": {
+            "ga:language":"Language",
+            "ga:country":"Country",
+            "ga:city":"City",
+            "ga:browser":"Browser",
+            "ga:operatingSystem":"Operating System",
+            "ga:userType":"Type de visiteur",
+            "ga:deviceCategory":"Catégorie d’appareil",
+            "ga:mobileDeviceInfo":"Informations sur le mobile"
+        },
+        "metrics": {
+            "ga:sessions":"Visits",
+            "ga:pageviews":"Pageviews",
+            "ga:pageviewsPerSession":"Pages/visit",
+            "ga:avgSessionDuration":"Avg. time/visit",
+            "ga:bounceRate":"Bounce Rate",
+            "ga:percentNewSessions":"New visits (%)"
+        }
+    },
+
+    "acquisition": {
+        "title":"Acquisition",
+        "view":"browser",
+        "dimensions": {
+            "ga:source":"Source",
+            "ga:medium":"Support",
+            "ga:sourceMedium":"Source/Support",
+            "ga:keyword":"Mot clé",
+            "ga:landingPagePath":"Page de destination",
+            "ga:socialNetwork":"Social Network"
+        },
+        "metrics": {
+            "ga:sessions":"Visits",
+            "ga:pageviews":"Pageviews",
+            "ga:pageviewsPerSession":"Pages/visit",
+            "ga:avgSessionDuration":"Avg. time/visit",
+            "ga:bounceRate":"Bounce Rate",
+            "ga:percentNewSessions":"New visits (%)"
+        }
+    },
+
+    "behavior": {
+        "title":"Behavior",
+        "view":"browser",
+        "dimensions": {
+            "ga:pagePath":"Page",
+            "ga:pageTitle":"Page Title",
+            "ga:searchKeyword":"Search Keyword",
+            "ga:browser":"Browser",
+            "ga:country":"Country",
+            "ga:eventCategory":"Event Category",
+            "ga:eventAction":"Event Action",
+            "ga:eventLabel":"Event Label"
+        },
+        "metrics": {
+            "ga:pageviews":"Pages vues",
+            "ga:avgTimeOnPage":"Temps moy./page",
+            "ga:bounceRate":"Taux de rebond",
+            "ga:exitRate":"Sortie (en %)"
+        }
+    },
+
+    "conversions": {
+        "title":"Conversions",
+        "view":"browser",
+        "dimensions": {
+            "ga:source":"Source",
+            "ga:medium":"Support",
+            "ga:sourceMedium":"Source/Support",
+            "ga:goalCompletionLocation":"URL de réalisation de l'objectif",
+            "ga:productName":"Produit",
+            "ga:productSku":"Code produit",
+            "ga:productCategory":"Catégorie du produit",
+            "ga:transactionId":"Transaction"
+        },
+        "metrics": {
+            "ga:goalCompletionsAll":"Objectifs réalisés",
+            "ga:goalValueAll":"Valeur de l'objectif",
+            "ga:goalConversionRateAll":"Taux de conversion par objectif",
+            "ga:goalAbandonRateAll":"Taux d'abandon global",
+            "ga:itemQuantity":"Quantité",
+            "ga:uniquePurchases":"Achats uniques",
+            "ga:revenuePerItem":"Chiffre d'affaires par produit",
+            "ga:revenuePerItem":"Prix moyen"
+        }
+    },
+
+    "realtime": {
+        "title":"Real-Time",
+        "view":"realtime"
+    }
+}

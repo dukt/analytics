@@ -1,0 +1,9 @@
+[
+    { "optgroup": "Real-Time"},
+    { "label": "Visitors", "value": "realtimeVisitors"},
+    { "label": "Locations", "value": "realtimeLocations"},
+    { "label": "Sources", "value": "realtimeSources"},
+    { "label": "Content", "value": "realtimeContent"},
+    { "label": "Events", "value": "realtimeEvents"},
+    { "label": "Conversions", "value": "realtimeConversions"}
+]
