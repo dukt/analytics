@@ -8,8 +8,10 @@
 
     <form method="post">
 
+        {{ getCsrfInput() }}
+
         <input type="hidden" name="action" value="analytics/explorer/consoleSend">
-        <input type="hidden" name="redirect" value="analytics/x">
+        <input type="hidden" name="redirect" value="analytics/console">
 
         {{ forms.textField({
             first:true,
@@ -21,13 +23,13 @@
         {{ forms.textField({
             label: "Start"|t,
             name: 'start',
-            value: (start is defined ? start : '2014-01-24')
+            value: (start is defined ? start : now|date_modify("-1 month")|date('Y-m-d'))
         }) }}
 
         {{ forms.textField({
             label: "End"|t,
             name: 'end',
-            value: (end is defined ? end : '2014-05-24')
+            value: (end is defined ? end : now|date('Y-m-d'))
         }) }}
 
         {{ forms.textField({

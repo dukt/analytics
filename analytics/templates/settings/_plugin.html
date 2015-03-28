@@ -13,6 +13,8 @@
 
             <form method="post" accept-charset="UTF-8" data-saveshortcut>
 
+                {{ getCsrfInput() }}
+
                 <input type="hidden" name="action" value="plugins/savePluginSettings">
                 <input type="hidden" name="pluginClass" value="Analytics">
                 <input type="hidden" name="redirect" value="analytics/settings">
