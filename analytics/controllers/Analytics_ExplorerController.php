@@ -86,6 +86,8 @@ class Analytics_ExplorerController extends BaseController
     /**
      * Element Report
      *
+     * @param array $variables
+     *
      * @return null
      */
     public function actionElementReport(array $variables = array())
@@ -585,6 +587,8 @@ class Analytics_ExplorerController extends BaseController
 
     /**
      * Console
+     *
+     * @param array $variables
      *
      * @return null
      */
