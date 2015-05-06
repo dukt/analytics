@@ -34,59 +34,45 @@ class AnalyticsController extends BaseController
      */
     public function actionSettings()
     {
-        $propertiesError = false;
         $plugin = craft()->plugins->getPlugin('analytics');
-        $settings = $plugin->getSettings();
         $pluginDependencies = $plugin->getPluginDependencies();
 
-        try
-        {
-            $propertiesOpts = craft()->analytics->getPropertiesOpts();
-        }
-        catch(\Exception $e)
-        {
-            $propertiesOpts = array();
-            $propertiesError = $e->getMessage();
-        }
+        try {
 
-        // $this->renderTemplate('analytics/settings', array(
-        //     'pluginDependencies' => $pluginDependencies,
-        //     'settings' => $settings,
-        //     'propertiesOpts' => $propertiesOpts,
-        //     'propertiesError' => $propertiesError
-        // ));
-
-        // try {
-
-        if (count($pluginDependencies) > 0)
-        {
-            $this->renderTemplate('analytics/settings/_dependencies', ['pluginDependencies' => $pluginDependencies]);
-        }
-        else
-        {
-            if (isset(craft()->oauth))
+            if (count($pluginDependencies) > 0)
             {
-                $provider = craft()->oauth->getProvider('google');
-
-                if ($provider && $provider->isConfigured())
+                $this->renderTemplate('analytics/settings/_dependencies', ['pluginDependencies' => $pluginDependencies]);
+            }
+            else
+            {
+                if (isset(craft()->oauth))
                 {
-                    $token = craft()->analytics->getToken();
+                    $provider = craft()->oauth->getProvider('google');
 
-                    if ($token)
+                    if ($provider && $provider->isConfigured())
                     {
-                        $provider->setToken($token);
+                        $token = craft()->analytics->getToken();
 
-                        $account = $provider->getAccount();
-
-                        if ($account)
+                        if ($token)
                         {
+                            $provider->setToken($token);
 
-                            $this->renderTemplate('analytics/settings/_connectForm', [
-                                'account' => $account,
-                                'propertiesOpts' => $propertiesOpts,
-                                'propertiesError' => $propertiesError,
-                                'settings' => $settings,
-                            ]);
+                            $account = $provider->getAccount();
+
+                            $propertiesOpts = craft()->analytics->getPropertiesOpts();
+
+                            if ($account)
+                            {
+                                $this->renderTemplate('analytics/settings/_connectForm', [
+                                    'account' => $account,
+                                    'propertiesOpts' => $propertiesOpts,
+                                    'settings' => $plugin->getSettings(),
+                                ]);
+                            }
+                            else
+                            {
+                                $this->renderTemplate('analytics/settings/_connect');
+                            }
                         }
                         else
                         {
@@ -95,26 +81,19 @@ class AnalyticsController extends BaseController
                     }
                     else
                     {
-                        $this->renderTemplate('analytics/settings/_connect');
+                        $this->renderTemplate('analytics/settings/_notConfigured');
                     }
                 }
                 else
                 {
-                    $this->renderTemplate('analytics/settings/_notConfigured');
+                    $this->renderTemplate('analytics/settings/_oauth');
                 }
             }
-            else
-            {
-                $this->renderTemplate('analytics/settings/_oauth');
-            }
         }
-
-
-        // }
-        // catch(\Exception $e)
-        // {
-        //     $this->renderTemplate('analytics/settings/_error', ['errorMsg' => $e->getMessage()]);
-        // }
+        catch(\Exception $e)
+        {
+            $this->renderTemplate('analytics/settings/_error', ['errorMsg' => $e->getMessage()]);
+        }
     }
 
     /**
