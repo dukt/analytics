@@ -1,0 +1,15 @@
+{% extends "analytics/settings/_layout" %}
+
+{% import "_includes/forms" as forms %}
+
+{% set content %}
+
+    {# OAuth provider not configured #}
+
+    <h2 class="first">{{'Google provider not configured'|t}}</h2>
+    <p>{{'Please fill API client id & secret for Analytics provider.'|t}}</p>
+    <p><a class="btn" href="{{url('oauth/google')}}">{{'Google OAuth settings'|t}}</a></p>
+
+{% endset %}
+
+

@@ -49,12 +49,72 @@ class AnalyticsController extends BaseController
             $propertiesError = $e->getMessage();
         }
 
-        $this->renderTemplate('analytics/settings', array(
-            'pluginDependencies' => $pluginDependencies,
-            'settings' => $settings,
-            'propertiesOpts' => $propertiesOpts,
-            'propertiesError' => $propertiesError
-        ));
+        // $this->renderTemplate('analytics/settings', array(
+        //     'pluginDependencies' => $pluginDependencies,
+        //     'settings' => $settings,
+        //     'propertiesOpts' => $propertiesOpts,
+        //     'propertiesError' => $propertiesError
+        // ));
+
+        // try {
+
+        if (count($pluginDependencies) > 0)
+        {
+            $this->renderTemplate('analytics/settings/_dependencies', ['pluginDependencies' => $pluginDependencies]);
+        }
+        else
+        {
+            if (isset(craft()->oauth))
+            {
+                $provider = craft()->oauth->getProvider('google');
+
+                if ($provider && $provider->isConfigured())
+                {
+                    $token = craft()->analytics->getToken();
+
+                    if ($token)
+                    {
+                        $provider->setToken($token);
+
+                        $account = $provider->getAccount();
+
+                        if ($account)
+                        {
+
+                            $this->renderTemplate('analytics/settings/_connectForm', [
+                                'account' => $account,
+                                'propertiesOpts' => $propertiesOpts,
+                                'propertiesError' => $propertiesError,
+                                'settings' => $settings,
+                            ]);
+                        }
+                        else
+                        {
+                            $this->renderTemplate('analytics/settings/_connect');
+                        }
+                    }
+                    else
+                    {
+                        $this->renderTemplate('analytics/settings/_connect');
+                    }
+                }
+                else
+                {
+                    $this->renderTemplate('analytics/settings/_notConfigured');
+                }
+            }
+            else
+            {
+                $this->renderTemplate('analytics/settings/_oauth');
+            }
+        }
+
+
+        // }
+        // catch(\Exception $e)
+        // {
+        //     $this->renderTemplate('analytics/settings/_error', ['errorMsg' => $e->getMessage()]);
+        // }
     }
 
     /**
@@ -68,7 +128,7 @@ class AnalyticsController extends BaseController
 
         $referer = craft()->httpSession->get('analytics.referer');
 
-        if(!$referer)
+        if (!$referer)
         {
             $referer = craft()->request->getUrlReferrer();
 
@@ -78,14 +138,14 @@ class AnalyticsController extends BaseController
 
         // connect
 
-        if($response = craft()->oauth->connect(array(
+        if ($response = craft()->oauth->connect(array(
             'plugin'   => 'analytics',
             'provider' => $this->handle,
             'scopes'   => $this->scopes,
             'params'   => $this->params
         )))
         {
-            if($response['success'])
+            if ($response['success'])
             {
                 // token
                 $token = $response['token'];
@@ -123,7 +183,7 @@ class AnalyticsController extends BaseController
      */
     public function actionDisconnect()
     {
-        if(craft()->analytics->deleteToken())
+        if (craft()->analytics->deleteToken())
         {
             craft()->userSession->setNotice(Craft::t("Disconnected from Google Analytics."));
         }
