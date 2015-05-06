@@ -63,7 +63,7 @@ class AnalyticsController extends BaseController
 
                             if ($account)
                             {
-                                $this->renderTemplate('analytics/settings/_connectForm', [
+                                $this->renderTemplate('analytics/settings/_pluginSettings', [
                                     'account' => $account,
                                     'propertiesOpts' => $propertiesOpts,
                                     'settings' => $plugin->getSettings(),
@@ -81,12 +81,12 @@ class AnalyticsController extends BaseController
                     }
                     else
                     {
-                        $this->renderTemplate('analytics/settings/_notConfigured');
+                        $this->renderTemplate('analytics/settings/_providerNotConfigured');
                     }
                 }
                 else
                 {
-                    $this->renderTemplate('analytics/settings/_oauth');
+                    $this->renderTemplate('analytics/settings/_oauthNotInstalled');
                 }
             }
         }
