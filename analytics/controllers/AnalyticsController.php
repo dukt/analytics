@@ -17,9 +17,9 @@ class AnalyticsController extends BaseController
     private $handle = 'google';
 
     private $scopes = array(
-        'userinfo_profile',
-        'userinfo_email',
-        'analytics'
+        'https://www.googleapis.com/auth/userinfo.profile',
+        'https://www.googleapis.com/auth/userinfo.email',
+        'https://www.googleapis.com/auth/analytics'
     );
 
     private $params = array(
