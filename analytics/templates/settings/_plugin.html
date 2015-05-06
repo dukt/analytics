@@ -15,6 +15,7 @@
 
                 {{ getCsrfInput() }}
 
+
                 <input type="hidden" name="action" value="plugins/savePluginSettings">
                 <input type="hidden" name="pluginClass" value="Analytics">
                 <input type="hidden" name="redirect" value="analytics/settings">
@@ -31,6 +32,12 @@
 
                 <hr />
 
+
+                {% if propertiesError %}
+                    <p class="error">{{ propertiesError }}</p>
+                    <hr>
+                {% endif %}
+
                 <h2 class="first">{{'Plugin Settings'|t}}</h2>
 
                 {{ forms.selectField({
@@ -41,6 +48,7 @@
                     name: 'settings[profileId]',
                     value: settings.profileId
                 }) }}
+
 
                 {{ forms.checkboxField({
                     label: "Enable real-time"|t,

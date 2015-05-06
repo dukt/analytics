@@ -34,6 +34,7 @@ class AnalyticsController extends BaseController
      */
     public function actionSettings()
     {
+        $propertiesError = false;
         $plugin = craft()->plugins->getPlugin('analytics');
         $settings = $plugin->getSettings();
         $pluginDependencies = $plugin->getPluginDependencies();
@@ -45,12 +46,14 @@ class AnalyticsController extends BaseController
         catch(\Exception $e)
         {
             $propertiesOpts = array();
+            $propertiesError = $e->getMessage();
         }
 
         $this->renderTemplate('analytics/settings', array(
             'pluginDependencies' => $pluginDependencies,
             'settings' => $settings,
-            'propertiesOpts' => $propertiesOpts
+            'propertiesOpts' => $propertiesOpts,
+            'propertiesError' => $propertiesError
         ));
     }
 
