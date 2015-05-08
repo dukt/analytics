@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cat > Source/videos/Info.php << EOF
+cat > Source/analytics/Info.php << EOF
 <?php
 
 namespace Craft;
