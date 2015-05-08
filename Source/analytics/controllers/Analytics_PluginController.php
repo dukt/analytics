@@ -17,6 +17,9 @@ class Analytics_PluginController extends BaseController
     private $pluginHandle = 'analytics';
     private $pluginService;
 
+    // Public Methods
+    // =========================================================================
+
     public function __construct()
     {
         $this->pluginService = craft()->{$this->pluginHandle.'_plugin'};
