@@ -7,6 +7,7 @@
 
 namespace Craft;
 
+require_once(CRAFT_PLUGINS_PATH.'analytics/Info.php');
 require_once(CRAFT_PLUGINS_PATH.'analytics/vendor/autoload.php');
 require_once(CRAFT_PLUGINS_PATH.'analytics/etc/AnalyticsTracking.php');
 
@@ -19,7 +20,7 @@ class AnalyticsPlugin extends BasePlugin
 
     function getVersion()
     {
-        return '3.0.94';
+        return ANALYTICS_VERSION;
     }
 
     function getRequiredPlugins()
