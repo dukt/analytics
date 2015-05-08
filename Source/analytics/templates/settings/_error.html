@@ -13,4 +13,10 @@
 
     <p class="error">{{ errorMsg }}</p>
 
+    {% if token %}
+
+        <p><a class="btn small" href="{{ actionUrl('analytics/disconnect') }}">{{'Disconnect'|t}}</a></p>
+
+    {% endif %}
+
 {% endset %}

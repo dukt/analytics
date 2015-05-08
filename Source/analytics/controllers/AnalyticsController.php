@@ -95,7 +95,9 @@ class AnalyticsController extends BaseController
         }
         catch(\Exception $e)
         {
-            $this->renderTemplate('analytics/settings/_error', ['errorMsg' => $e->getMessage()]);
+            $token = craft()->analytics->getToken();
+
+            $this->renderTemplate('analytics/settings/_error', ['errorMsg' => $e->getMessage(), 'token' => $token]);
         }
     }
 
