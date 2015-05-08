@@ -2,5 +2,5 @@
 
 namespace Craft;
 
-define('ANALYTICS_VERSION', '3.0.97');
+define('ANALYTICS_VERSION', '3.0.121');
 
