@@ -14,6 +14,9 @@ namespace Craft;
 
 class Analytics_ReportFieldType extends BaseFieldType
 {
+    /**
+     * Get Name
+     */
     public function getName()
     {
         return Craft::t('Analytics Report');
