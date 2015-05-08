@@ -1,16 +1,10 @@
 #!/bin/bash
 
-
-for BUILD_NUMBER in "$@"
-
-do
-cat > Source/analytics/Info.php << EOF
+cat > Source/videos/Info.php << EOF
 <?php
 
 namespace Craft;
 
-define('ANALYTICS_VERSION', '3.0.$BUILD_NUMBER');
+define('ANALYTICS_VERSION', '$PLUGIN_VERSION.$BUILD_NUMBER');
 
 EOF
-
-done
