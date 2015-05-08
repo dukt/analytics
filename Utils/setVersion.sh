@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-for PLUGIN_VERSION in "$@"
+for BUILD_NUMBER in "$@"
 
 do
 cat > Source/analytics/Info.php << EOF
@@ -9,7 +9,7 @@ cat > Source/analytics/Info.php << EOF
 
 namespace Craft;
 
-define('ANALYTICS_VERSION', '$PLUGIN_VERSION');
+define('ANALYTICS_VERSION', '3.0.$BUILD_NUMBER');
 
 EOF
 
