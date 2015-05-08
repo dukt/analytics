@@ -27,6 +27,9 @@ class AnalyticsController extends BaseController
         'approval_prompt' => 'force'
     );
 
+    // Public Methods
+    // =========================================================================
+
     /**
      * Settings
      *
