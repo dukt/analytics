@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export PLUGIN_NAME="duktci"
+export PLUGIN_NAME="analytics"
 export SOURCE_FOLDER="Source/"
 export BUILD_FOLDER="Build/"
 export BUILD_PLUGIN_FOLDER="${BUILD_FOLDER}/${PLUGIN_NAME}/"
