@@ -1,6 +1,4 @@
 *.log
 .DS_Store
-/analytics/vendor
-composer.lock
-composer.phar
-phpunit.xml
+Source/analytics/vendor
+Source/composer.lock
