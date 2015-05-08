@@ -1,10 +1,10 @@
 #!/bin/bash
 
-cat > Source/analytics/Info.php << EOF
+cat > Source/$PLUGIN_NAME/Info.php << EOF
 <?php
 
 namespace Craft;
 
-define('ANALYTICS_VERSION', '$PLUGIN_VERSION.$BUILD_NUMBER');
+define('$PLUGIN_CONSTANT_PREFIX_VERSION', '$PLUGIN_VERSION.$BUILD_NUMBER');
 
 EOF
