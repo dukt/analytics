@@ -40,64 +40,66 @@ class AnalyticsController extends BaseController
         $plugin = craft()->plugins->getPlugin('analytics');
         $pluginDependencies = $plugin->getPluginDependencies();
 
-        try {
+        if (count($pluginDependencies) > 0)
+        {
+            $this->renderTemplate('analytics/settings/_dependencies', ['pluginDependencies' => $pluginDependencies]);
+        }
+        else
+        {
+            if (isset(craft()->oauth))
+            {
+                // ----------------------------------------------------------
 
-            if (count($pluginDependencies) > 0)
-            {
-                $this->renderTemplate('analytics/settings/_dependencies', ['pluginDependencies' => $pluginDependencies]);
-            }
-            else
-            {
-                if (isset(craft()->oauth))
+                $variables = array(
+                    'provider' => false,
+                    'account' => false,
+                    'token' => false,
+                    'error' => false
+                );
+
+                $provider = craft()->oauth->getProvider('google');
+
+                if ($provider && $provider->isConfigured())
                 {
-                    $provider = craft()->oauth->getProvider('google');
+                    $token = craft()->analytics->getToken();
 
-                    if ($provider && $provider->isConfigured())
+                    if ($token)
                     {
-                        $token = craft()->analytics->getToken();
+                        $provider->setToken($token);
 
-                        if ($token)
+                        try
                         {
-                            $provider->setToken($token);
-
                             $account = $provider->getAccount();
 
                             $propertiesOpts = craft()->analytics->getPropertiesOpts();
 
                             if ($account)
                             {
-                                $this->renderTemplate('analytics/settings/_pluginSettings', [
-                                    'account' => $account,
-                                    'propertiesOpts' => $propertiesOpts,
-                                    'settings' => $plugin->getSettings(),
-                                ]);
-                            }
-                            else
-                            {
-                                $this->renderTemplate('analytics/settings/_connect');
-                            }
-                        }
-                        else
-                        {
-                            $this->renderTemplate('analytics/settings/_connect');
-                        }
-                    }
-                    else
-                    {
-                        $this->renderTemplate('analytics/settings/_providerNotConfigured');
-                    }
-                }
-                else
-                {
-                    $this->renderTemplate('analytics/settings/_oauthNotInstalled');
-                }
-            }
-        }
-        catch(\Exception $e)
-        {
-            $token = craft()->analytics->getToken();
 
-            $this->renderTemplate('analytics/settings/_error', ['errorMsg' => $e->getMessage(), 'token' => $token]);
+                                $variables['account'] = $account;
+                                $variables['propertiesOpts'] =$propertiesOpts;
+                                $variables['settings'] = $plugin->getSettings();
+                            }
+                        }
+                        catch(\Exception $e)
+                        {
+                            $variables['error'] = $e->getMessage();
+                        }
+                    }
+
+                    $variables['token'] = $token;
+                }
+
+                $variables['provider'] = $provider;
+
+                $this->renderTemplate('analytics/settings', $variables);
+
+                // ----------------------------------------------------------
+            }
+            else
+            {
+                $this->renderTemplate('analytics/settings/_oauthNotInstalled');
+            }
         }
     }
 
