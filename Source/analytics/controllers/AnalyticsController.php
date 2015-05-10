@@ -83,6 +83,8 @@ class AnalyticsController extends BaseController
                         }
                         catch(\Exception $e)
                         {
+                            Craft::log('Couldn’t get account. '.$e->getMessage(), LogLevel::Error);
+
                             $variables['error'] = $e->getMessage();
                         }
                     }
