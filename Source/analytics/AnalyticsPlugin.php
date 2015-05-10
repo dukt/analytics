@@ -13,17 +13,20 @@ require_once(CRAFT_PLUGINS_PATH.'analytics/etc/AnalyticsTracking.php');
 
 class AnalyticsPlugin extends BasePlugin
 {
-    function getName()
+    // Public Methods
+    // =========================================================================
+
+    public function getName()
     {
         return Craft::t('Analytics');
     }
 
-    function getVersion()
+    public function getVersion()
     {
         return ANALYTICS_VERSION;
     }
 
-    function getRequiredPlugins()
+    public function getRequiredPlugins()
     {
         return array(
             array(
@@ -35,24 +38,14 @@ class AnalyticsPlugin extends BasePlugin
         );
     }
 
-    function getDeveloper()
+    public function getDeveloper()
     {
         return 'Dukt';
     }
 
-    function getDeveloperUrl()
+    public function getDeveloperUrl()
     {
         return 'https://dukt.net/';
-    }
-
-    protected function defineSettings()
-    {
-        return array(
-            'profileId' => array(AttributeType::String),
-            'realtimeRefreshInterval' => array(AttributeType::Number, 'default' => 60),
-            'enableRealtime' => array(AttributeType::Bool),
-            'tokenId' => array(AttributeType::Number),
-        );
     }
 
     public function prepSettings($settings)
@@ -99,8 +92,6 @@ class AnalyticsPlugin extends BasePlugin
         }
     }
 
-    /* ------------------------------------------------------------------------- */
-
     /**
      * Get Plugin Dependencies
      */
@@ -129,6 +120,22 @@ class AnalyticsPlugin extends BasePlugin
 
         return $dependencies;
     }
+
+    // Protected Methods
+    // =========================================================================
+
+    protected function defineSettings()
+    {
+        return array(
+            'profileId' => array(AttributeType::String),
+            'realtimeRefreshInterval' => array(AttributeType::Number, 'default' => 60),
+            'enableRealtime' => array(AttributeType::Bool),
+            'tokenId' => array(AttributeType::Number),
+        );
+    }
+
+    // Private Methods
+    // =========================================================================
 
     /**
      * Get Plugin Dependency

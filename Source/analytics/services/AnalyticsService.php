@@ -1,13 +1,8 @@
 <?php
-
 /**
- * Craft Analytics by Dukt
- *
- * @package   Craft Analytics
- * @author    Benjamin David
+ * @link      https://dukt.net/craft/analytics/
  * @copyright Copyright (c) 2015, Dukt
  * @license   https://dukt.net/craft/analytics/docs/license
- * @link      https://dukt.net/craft/analytics/
  */
 
 namespace Craft;
@@ -17,8 +12,14 @@ use \Google_Service_Analytics;
 
 class AnalyticsService extends BaseApplicationComponent
 {
+    // Properties
+    // =========================================================================
+
     private $oauthHandle = 'google';
     private $token;
+
+    // Public Methods
+    // =========================================================================
 
     /**
      * Get a dimension or a metric from its key
@@ -371,31 +372,6 @@ class AnalyticsService extends BaseApplicationComponent
         return gmdate("H:i:s", $seconds);
     }
 
-    private function formatCell($value, $column)
-    {
-        switch($column['name'])
-        {
-            case "ga:avgTimeOnPage":
-                $value = $this->formatTime($value);
-                return $value;
-                break;
-
-            case 'ga:pageviewsPerSession':
-                $value = round($value, 2);
-                return $value;
-                break;
-
-            case 'ga:entranceRate':
-            case 'ga:visitBounceRate':
-            case 'ga:exitRate':
-                $value = round($value, 2)."%";
-                return $value;
-                break;
-
-            default:
-                return $value;
-        }
-    }
 
     public function apiGet($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = array())
     {
@@ -529,131 +505,6 @@ class AnalyticsService extends BaseApplicationComponent
             'columns' => $cols,
             'rows' => $rows
         );
-    }
-
-    private function localizeColumns($cols)
-    {
-        foreach($cols as $key => $col)
-        {
-            $cols[$key]->label = Craft::t($col->name);
-
-            switch($col->name)
-            {
-                case 'ga:latitude':
-                $cols[$key]['columnType'] = 'LATITUDE';
-                $cols[$key]['dataType'] = 'FLOAT';
-                $cols[$key]['name'] = 'Latitude';
-                $cols[$key]['label'] = 'Latitude';
-                break;
-                case 'ga:longitude':
-                $cols[$key]['columnType'] = 'LONGITUDE';
-                $cols[$key]['dataType'] = 'FLOAT';
-                $cols[$key]['name'] = 'Longitude';
-                $cols[$key]['label'] = 'Longitude';
-                break;
-            }
-        }
-
-        return $cols;
-    }
-
-    private function parseRows($cols, $apiRows = null)
-    {
-        $rows = array();
-
-        if($apiRows)
-        {
-            foreach($apiRows as $apiRow)
-            {
-                $row = array();
-
-                $colNumber = 0;
-
-                foreach($apiRow as $key => $value)
-                {
-                    $col = $cols[$colNumber];
-                    $value = $this->formatRawValue($col->dataType, $value);
-
-                    $cell = array(
-                        'v' => $value,
-                        'f' => (string) $this->formatValue($col->dataType, $value)
-                    );
-
-                    switch($col->name)
-                    {
-                        case 'ga:date':
-                        $cell = strftime("%Y.%m.%d", strtotime($value));
-                        break;
-
-                        case 'ga:latitude':
-                        case 'ga:longitude':
-                        $cell = (float) $value;
-                        break;
-
-                        case 'ga:yearMonth':
-                        $cell = strftime("%Y.%m.%d", strtotime($value.'01'));
-                        break;
-                    }
-
-                    array_push($row, $cell);
-
-                    $colNumber++;
-                }
-
-                array_push($rows, $row);
-            }
-        }
-        return $rows;
-    }
-
-
-    private function formatRawValue($type, $value)
-    {
-        switch($type)
-        {
-            case 'INTEGER':
-            case 'CURRENCY':
-            case 'FLOAT':
-            case 'TIME':
-            case 'PERCENT':
-            $value = (float) $value;
-            break;
-
-            default:
-            $value = (string) $value;
-        }
-
-        return $value;
-    }
-
-    private function formatValue($type, $value)
-    {
-        switch($type)
-        {
-            case 'INTEGER':
-            case 'CURRENCY':
-            case 'FLOAT':
-            $value = (float) $value;
-            $value = round($value, 2);
-            break;
-
-            case 'TIME':
-            $value = (float) $value;
-            $value = $this->formatTime($value);
-            break;
-
-            case 'PERCENT':
-            $value = (float) $value;
-            $value = round($value, 2);
-            $value = $value.'%';
-
-            break;
-
-            default:
-            $value = (string) $value;
-        }
-
-        return $value;
     }
 
     public function getApiObject()
@@ -875,5 +726,158 @@ class AnalyticsService extends BaseApplicationComponent
         }
 
         return true;
+    }
+
+    // Private Methods
+    // =========================================================================
+
+    private function formatCell($value, $column)
+    {
+        switch($column['name'])
+        {
+            case "ga:avgTimeOnPage":
+                $value = $this->formatTime($value);
+                return $value;
+                break;
+
+            case 'ga:pageviewsPerSession':
+                $value = round($value, 2);
+                return $value;
+                break;
+
+            case 'ga:entranceRate':
+            case 'ga:visitBounceRate':
+            case 'ga:exitRate':
+                $value = round($value, 2)."%";
+                return $value;
+                break;
+
+            default:
+                return $value;
+        }
+    }
+
+    private function localizeColumns($cols)
+    {
+        foreach($cols as $key => $col)
+        {
+            $cols[$key]->label = Craft::t($col->name);
+
+            switch($col->name)
+            {
+                case 'ga:latitude':
+                $cols[$key]['columnType'] = 'LATITUDE';
+                $cols[$key]['dataType'] = 'FLOAT';
+                $cols[$key]['name'] = 'Latitude';
+                $cols[$key]['label'] = 'Latitude';
+                break;
+                case 'ga:longitude':
+                $cols[$key]['columnType'] = 'LONGITUDE';
+                $cols[$key]['dataType'] = 'FLOAT';
+                $cols[$key]['name'] = 'Longitude';
+                $cols[$key]['label'] = 'Longitude';
+                break;
+            }
+        }
+
+        return $cols;
+    }
+
+    private function parseRows($cols, $apiRows = null)
+    {
+        $rows = array();
+
+        if($apiRows)
+        {
+            foreach($apiRows as $apiRow)
+            {
+                $row = array();
+
+                $colNumber = 0;
+
+                foreach($apiRow as $key => $value)
+                {
+                    $col = $cols[$colNumber];
+                    $value = $this->formatRawValue($col->dataType, $value);
+
+                    $cell = array(
+                        'v' => $value,
+                        'f' => (string) $this->formatValue($col->dataType, $value)
+                    );
+
+                    switch($col->name)
+                    {
+                        case 'ga:date':
+                        $cell = strftime("%Y.%m.%d", strtotime($value));
+                        break;
+
+                        case 'ga:latitude':
+                        case 'ga:longitude':
+                        $cell = (float) $value;
+                        break;
+
+                        case 'ga:yearMonth':
+                        $cell = strftime("%Y.%m.%d", strtotime($value.'01'));
+                        break;
+                    }
+
+                    array_push($row, $cell);
+
+                    $colNumber++;
+                }
+
+                array_push($rows, $row);
+            }
+        }
+        return $rows;
+    }
+
+    private function formatRawValue($type, $value)
+    {
+        switch($type)
+        {
+            case 'INTEGER':
+            case 'CURRENCY':
+            case 'FLOAT':
+            case 'TIME':
+            case 'PERCENT':
+            $value = (float) $value;
+            break;
+
+            default:
+            $value = (string) $value;
+        }
+
+        return $value;
+    }
+
+    private function formatValue($type, $value)
+    {
+        switch($type)
+        {
+            case 'INTEGER':
+            case 'CURRENCY':
+            case 'FLOAT':
+            $value = (float) $value;
+            $value = round($value, 2);
+            break;
+
+            case 'TIME':
+            $value = (float) $value;
+            $value = $this->formatTime($value);
+            break;
+
+            case 'PERCENT':
+            $value = (float) $value;
+            $value = round($value, 2);
+            $value = $value.'%';
+
+            break;
+
+            default:
+            $value = (string) $value;
+        }
+
+        return $value;
     }
 }

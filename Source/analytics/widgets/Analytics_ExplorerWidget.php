@@ -1,19 +1,17 @@
 <?php
-
 /**
- * Craft Analytics by Dukt
- *
- * @package   Craft Analytics
- * @author    Benjamin David
+ * @link      https://dukt.net/craft/analytics/
  * @copyright Copyright (c) 2015, Dukt
  * @license   https://dukt.net/craft/analytics/docs/license
- * @link      https://dukt.net/craft/analytics/
  */
 
 namespace Craft;
 
 class Analytics_ExplorerWidget extends BaseWidget
 {
+    // Public Methods
+    // =========================================================================
+
     /**
      * @inheritDoc IComponentType::getName()
      *
@@ -63,20 +61,6 @@ class Analytics_ExplorerWidget extends BaseWidget
         }
 
         return Craft::t("Audience / Overview");
-    }
-
-    protected function defineSettings()
-    {
-        return array(
-           'menu' => array(AttributeType::String),
-           'dimension' => array(AttributeType::String),
-           'metric' => array(AttributeType::String),
-           'chart' => array(AttributeType::String),
-           'chart' => array(AttributeType::String),
-           'period' => array(AttributeType::String),
-           'pinned' => array(AttributeType::Bool),
-           'colspan' => array(AttributeType::Number, 'default' => 2)
-        );
     }
 
     public function getSettingsHtml()
@@ -176,5 +160,22 @@ class Analytics_ExplorerWidget extends BaseWidget
         }
 
         return 1;
+    }
+
+    // Protected Methods
+    // =========================================================================
+
+    protected function defineSettings()
+    {
+        return array(
+           'menu' => array(AttributeType::String),
+           'dimension' => array(AttributeType::String),
+           'metric' => array(AttributeType::String),
+           'chart' => array(AttributeType::String),
+           'chart' => array(AttributeType::String),
+           'period' => array(AttributeType::String),
+           'pinned' => array(AttributeType::Bool),
+           'colspan' => array(AttributeType::Number, 'default' => 2)
+        );
     }
 }

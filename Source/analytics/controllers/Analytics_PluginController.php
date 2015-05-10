@@ -1,19 +1,17 @@
 <?php
-
 /**
- * Craft Analytics by Dukt
- *
- * @package   Craft Analytics
- * @author    Benjamin David
+ * @link      https://dukt.net/craft/analytics/
  * @copyright Copyright (c) 2015, Dukt
  * @license   https://dukt.net/craft/analytics/docs/license
- * @link      https://dukt.net/craft/analytics/
  */
 
 namespace Craft;
 
 class Analytics_PluginController extends BaseController
 {
+    // Properties
+    // =========================================================================
+
     private $pluginHandle = 'analytics';
     private $pluginService;
 

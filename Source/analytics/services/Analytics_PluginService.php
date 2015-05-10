@@ -1,12 +1,7 @@
 <?php
-
 /**
- * Analytics for Craft
- *
- * @package   Analytics
- * @author    Benjamin David
- * @copyright Copyright (c) 2015, Dukt
  * @link      https://dukt.net/craft/analytics/
+ * @copyright Copyright (c) 2015, Dukt
  * @license   https://dukt.net/craft/analytics/docs/license
  */
 
@@ -16,6 +11,9 @@ use Guzzle\Http\Client;
 
 class Analytics_PluginService extends BaseApplicationComponent
 {
+    // Public Methods
+    // =========================================================================
+
     public function download($pluginHandle)
     {
         Craft::log(__METHOD__, LogLevel::Info, true);
@@ -202,6 +200,9 @@ class Analytics_PluginService extends BaseApplicationComponent
             return false;
         }
     }
+
+    // Private Methods
+    // =========================================================================
 
     private function _getRemotePlugin($pluginHandle)
     {

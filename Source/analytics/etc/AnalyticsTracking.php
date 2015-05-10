@@ -1,20 +1,21 @@
 <?php
-
 /**
- * Craft Analytics by Dukt
- *
- * @package   Craft Analytics
- * @author    Benjamin David
- * @copyright Copyright (c) 2014, Dukt
- * @license   https://dukt.net/craft/analytics/docs/license
  * @link      https://dukt.net/craft/analytics/
+ * @copyright Copyright (c) 2015, Dukt
+ * @license   https://dukt.net/craft/analytics/docs/license
  */
 
 namespace Craft;
 
 class AnalyticsTracking
 {
+    // Properties
+    // =========================================================================
+
     private $tracking;
+
+    // Public Methods
+    // =========================================================================
 
     public function __toString()
     {
@@ -66,31 +67,6 @@ class AnalyticsTracking
             $this->tracking->setUserID($userId);
             unset($options['userId']);
         }
-    }
-
-    private function _fillItem($item, $options)
-    {
-        if(isset($item))
-        {
-            $aliases = array(
-                'id' => 'ID',
-                'transactionId' => 'transactionID',
-            );
-
-            foreach($options as $k => $v)
-            {
-                if(!empty($aliases[$k]))
-                {
-                    $item->{'set'.ucfirst($aliases[$k])}($v);
-                }
-                else
-                {
-                    $item->{'set'.ucfirst($k)}($v);
-                }
-            }
-        }
-
-        return $item;
     }
 
     public function campaign($options)
@@ -182,5 +158,33 @@ class AnalyticsTracking
         {
             Craft::log('Couldn’t send tracking: '.$e->getMessage(), LogLevel::Error);
         }
+    }
+
+    // Private Methods
+    // =========================================================================
+
+    private function _fillItem($item, $options)
+    {
+        if(isset($item))
+        {
+            $aliases = array(
+                'id' => 'ID',
+                'transactionId' => 'transactionID',
+            );
+
+            foreach($options as $k => $v)
+            {
+                if(!empty($aliases[$k]))
+                {
+                    $item->{'set'.ucfirst($aliases[$k])}($v);
+                }
+                else
+                {
+                    $item->{'set'.ucfirst($k)}($v);
+                }
+            }
+        }
+
+        return $item;
     }
 }
