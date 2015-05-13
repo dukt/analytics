@@ -45,10 +45,16 @@
 }
 /* actions */
 .analytics-actions {
+  opacity: 0;
   position: absolute;
   z-index: 1;
   right: 24px;
   top: 23px;
+  -webkit-transition: all 100ms ease;
+  -moz-transition: all 100ms ease;
+  -ms-transition: all 100ms ease;
+  -o-transition: all 100ms ease;
+  transition: all 100ms ease;
 }
 .analytics-actions .analytics-open {
   width: 16px;
@@ -118,6 +124,9 @@
   -moz-transition-property: background-color, transform, -moz-transform, -webkit-transform, background, background-image;
   -moz-transition-duration: 200ms;
   -moz-transition-timing-function: ease-out;
+}
+.analytics-widget:hover .analytics-actions {
+  opacity: 1;
 }
 .rtl .analytics-actions {
   left: 18px;

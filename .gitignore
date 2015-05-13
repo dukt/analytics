@@ -6,3 +6,4 @@ Docs/sami.phar
 Source/analytics/Info.php
 Source/analytics/vendor
 Source/composer.lock
+Source/node_modules/
