@@ -88,9 +88,9 @@ class AnalyticsController extends BaseController
                     }
 
                     $variables['token'] = $token;
-                }
 
-                $variables['provider'] = $provider;
+                    $variables['provider'] = $provider;
+                }
 
                 $this->renderTemplate('analytics/settings', $variables);
 
