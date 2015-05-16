@@ -77,18 +77,11 @@ class AnalyticsPlugin extends BasePlugin
     }
 
     /**
-     * Get Settings HTML
+     * Get Settings URL
      */
-    public function getSettingsHtml()
+    public function getSettingsUrl()
     {
-        if(craft()->request->getPath() == 'settings/plugins')
-        {
-            return true;
-        }
-
-        return craft()->templates->render('analytics/settings/_redirect', array(
-            'settings' => $this->getSettings()
-        ));
+        return 'analytics/settings';
     }
 
     /**
