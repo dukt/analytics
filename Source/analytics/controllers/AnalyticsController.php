@@ -12,14 +12,23 @@ class AnalyticsController extends BaseController
     // Properties
     // =========================================================================
 
+    /**
+     * @var string
+     */
     private $handle = 'google';
 
+    /**
+     * @var array
+     */
     private $scopes = array(
         'https://www.googleapis.com/auth/userinfo.profile',
         'https://www.googleapis.com/auth/userinfo.email',
         'https://www.googleapis.com/auth/analytics'
     );
 
+    /**
+     * @var array
+     */
     private $params = array(
         'access_type' => 'offline',
         'approval_prompt' => 'force'
@@ -46,8 +55,6 @@ class AnalyticsController extends BaseController
         {
             if (isset(craft()->oauth))
             {
-                // ----------------------------------------------------------
-
                 $variables = array(
                     'provider' => false,
                     'account' => false,
@@ -93,8 +100,6 @@ class AnalyticsController extends BaseController
                 }
 
                 $this->renderTemplate('analytics/settings', $variables);
-
-                // ----------------------------------------------------------
             }
             else
             {

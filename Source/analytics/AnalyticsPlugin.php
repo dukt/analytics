@@ -16,16 +16,25 @@ class AnalyticsPlugin extends BasePlugin
     // Public Methods
     // =========================================================================
 
+    /**
+     * Get Name
+     */
     public function getName()
     {
         return Craft::t('Analytics');
     }
 
+    /**
+     * Get Version
+     */
     public function getVersion()
     {
         return ANALYTICS_VERSION;
     }
 
+    /**
+     * Get Required Plugins
+     */
     public function getRequiredPlugins()
     {
         return array(
@@ -38,16 +47,25 @@ class AnalyticsPlugin extends BasePlugin
         );
     }
 
+    /**
+     * Get Developer
+     */
     public function getDeveloper()
     {
         return 'Dukt';
     }
 
+    /**
+     * Get Developer URL
+     */
     public function getDeveloperUrl()
     {
         return 'https://dukt.net/';
     }
 
+    /**
+     * Prep Settings
+     */
     public function prepSettings($settings)
     {
         // refresh profileId and webProperty cache when settings saved
@@ -58,6 +76,9 @@ class AnalyticsPlugin extends BasePlugin
         return $settings;
     }
 
+    /**
+     * Get Settings HTML
+     */
     public function getSettingsHtml()
     {
         if(craft()->request->getPath() == 'settings/plugins')
@@ -124,6 +145,9 @@ class AnalyticsPlugin extends BasePlugin
     // Protected Methods
     // =========================================================================
 
+    /**
+     * Defined Settings
+     */
     protected function defineSettings()
     {
         return array(

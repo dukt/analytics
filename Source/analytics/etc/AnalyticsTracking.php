@@ -12,16 +12,29 @@ class AnalyticsTracking
     // Properties
     // =========================================================================
 
+    /**
+     * @var GATracking
+     */
     private $tracking;
 
     // Public Methods
     // =========================================================================
 
+    /**
+     * Returns the string representation of the element.
+     *
+     * @return string
+     */
     public function __toString()
     {
         return '';
     }
 
+    /**
+     * Constructor
+     *
+     * @param array|null $options
+     */
     public function __construct($options = null)
     {
         $this->tracking = new \Racecore\GATracking\GATracking();
@@ -69,6 +82,9 @@ class AnalyticsTracking
         }
     }
 
+    /**
+     * Campaign
+     */
     public function campaign($options)
     {
         $item = new \Racecore\GATracking\Tracking\Page();
@@ -77,6 +93,9 @@ class AnalyticsTracking
         return $this;
     }
 
+    /**
+     * Ecommerce Transaction
+     */
     public function ecommerceTransaction($options)
     {
         $item = new \Racecore\GATracking\Tracking\Ecommerce\Transaction();
@@ -85,6 +104,9 @@ class AnalyticsTracking
         return $this;
     }
 
+    /**
+     * Ecommerce Item
+     */
     public function ecommerceItem($options)
     {
         $item = new \Racecore\GATracking\Tracking\Ecommerce\Item();
@@ -93,6 +115,9 @@ class AnalyticsTracking
         return $this;
     }
 
+    /**
+     * Page
+     */
     public function page($options)
     {
         $item = new \Racecore\GATracking\Tracking\Page();
@@ -101,6 +126,9 @@ class AnalyticsTracking
         return $this;
     }
 
+    /**
+     * Event
+     */
     public function event($options)
     {
         $item = new \Racecore\GATracking\Tracking\Event();
@@ -109,6 +137,9 @@ class AnalyticsTracking
         return $this;
     }
 
+    /**
+     * Social
+     */
     public function social($options)
     {
         $item = new \Racecore\GATracking\Tracking\Social();
@@ -117,6 +148,9 @@ class AnalyticsTracking
         return $this;
     }
 
+    /**
+     * App Event
+     */
     public function appEvent($options)
     {
         $item = new \Racecore\GATracking\Tracking\App\Event();
@@ -125,6 +159,9 @@ class AnalyticsTracking
         return $this;
     }
 
+    /**
+     * App Screen
+     */
     public function appScreen($options)
     {
         $item = new \Racecore\GATracking\Tracking\App\Screen();
@@ -133,6 +170,9 @@ class AnalyticsTracking
         return $this;
     }
 
+    /**
+     * User Timing
+     */
     public function userTiming($options)
     {
         $item = new \Racecore\GATracking\Tracking\User\Timing();
@@ -141,6 +181,9 @@ class AnalyticsTracking
         return $this;
     }
 
+    /**
+     * Exception
+     */
     public function exception($options)
     {
         $item = new \Racecore\GATracking\Tracking\Exception();
@@ -149,6 +192,9 @@ class AnalyticsTracking
         return $this;
     }
 
+    /**
+     * Send
+     */
     public function send()
     {
         try {
@@ -163,6 +209,9 @@ class AnalyticsTracking
     // Private Methods
     // =========================================================================
 
+    /**
+     * Fill Item
+     */
     private function _fillItem($item, $options)
     {
         if(isset($item))

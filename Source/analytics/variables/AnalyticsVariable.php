@@ -12,11 +12,17 @@ class AnalyticsVariable
     // Public Methods
     // =========================================================================
 
+    /**
+     * API
+     */
     public function api($options)
     {
         return craft()->analytics->api($options);
     }
 
+    /**
+     * Get Token
+     */
     public function getToken()
     {
         try
@@ -29,11 +35,17 @@ class AnalyticsVariable
         }
     }
 
+    /**
+     * Get Web Property
+     */
     public function getWebProperty()
     {
         return craft()->analytics->getWebProperty();
     }
 
+    /**
+     * Get Profile
+     */
     public function getProfile()
     {
         try
@@ -44,9 +56,11 @@ class AnalyticsVariable
         {
             Craft::log('Couldn’t get profile: '.$e->getMessage(), LogLevel::Info, true);
         }
-
     }
 
+    /**
+     * Is Configured
+     */
     public function isConfigured()
     {
         return craft()->analytics->isConfigured();

@@ -23,6 +23,8 @@ class AnalyticsService extends BaseApplicationComponent
 
     /**
      * Get a dimension or a metric from its key
+     *
+     * @param string $key
      */
     public function getDimMet($key)
     {
@@ -35,6 +37,11 @@ class AnalyticsService extends BaseApplicationComponent
         }
     }
 
+    /**
+     * Get Browser Sections
+     *
+     * @param bool $json
+     */
     public function getBrowserSections($json = false)
     {
         $browserSectionsJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/browserSections.json');
@@ -55,6 +62,11 @@ class AnalyticsService extends BaseApplicationComponent
         }
     }
 
+    /**
+     * Get Browser Data
+     *
+     * @param bool $json
+     */
     public function getBrowserData($json = false)
     {
         $browserDataJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/browserData.json');
@@ -103,6 +115,9 @@ class AnalyticsService extends BaseApplicationComponent
         }
     }
 
+    /**
+     * Get Browser Select
+     */
     public function getBrowserSelect()
     {
         $plugin = craft()->plugins->getPlugin('analytics');
@@ -135,11 +150,19 @@ class AnalyticsService extends BaseApplicationComponent
         return $browserSelect;
     }
 
+    /**
+     * Get Language
+     */
     public function getLanguage()
     {
         return craft()->language;
     }
 
+    /**
+     * Get Continent Code
+     *
+     * @param string $label
+     */
     public function getContinentCode($label)
     {
         $continentsJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/continents.json');
@@ -154,6 +177,11 @@ class AnalyticsService extends BaseApplicationComponent
         }
     }
 
+    /**
+     * Get Sub-Continent Code
+     *
+     * @param string $label
+     */
     public function getSubContinentCode($label)
     {
         $subContinentsJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/subContinents.json');
@@ -168,6 +196,9 @@ class AnalyticsService extends BaseApplicationComponent
         }
     }
 
+    /**
+     * Delete Token
+     */
     public function deleteToken()
     {
         // get plugin
@@ -196,6 +227,11 @@ class AnalyticsService extends BaseApplicationComponent
         return false;
     }
 
+    /**
+     * Save Token
+     *
+     * @param Oauth_TokenModel $token
+     */
     public function saveToken(Oauth_TokenModel $token)
     {
         // get plugin
@@ -251,9 +287,15 @@ class AnalyticsService extends BaseApplicationComponent
         }
     }
 
-    public function getElementUrlPath($elementId, $locale)
+    /**
+     * Get Element URL Path
+     *
+     * @param int           $elementId
+     * @param string|null   $localeId
+     */
+    public function getElementUrlPath($elementId, $localeId)
     {
-        $element = craft()->elements->getElementById($elementId, null, $locale);
+        $element = craft()->elements->getElementById($elementId, null, $localeId);
 
         $uri = $element->uri;
         $url = $element->url;
@@ -268,6 +310,11 @@ class AnalyticsService extends BaseApplicationComponent
         return $uri;
     }
 
+    /**
+     * API
+     *
+     * @param array $options
+     */
     public function api($options)
     {
         try
@@ -367,12 +414,26 @@ class AnalyticsService extends BaseApplicationComponent
         return $response;
     }
 
+    /**
+     * Format Time in HH:MM:SS from seconds
+     *
+     * @param int $seconds
+     */
     public function formatTime($seconds)
     {
         return gmdate("H:i:s", $seconds);
     }
 
 
+    /**
+     * API Get
+     *
+     * @param string|null   $p1
+     * @param string|null   $p2
+     * @param string|null   $p3
+     * @param string|null   $p4
+     * @param array         $p5
+     */
     public function apiGet($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = array())
     {
         $enableCache = true;
@@ -417,6 +478,9 @@ class AnalyticsService extends BaseApplicationComponent
         }
     }
 
+    /**
+     * Cache Duration
+     */
     public function cacheDuration()
     {
         $cacheDuration = craft()->config->get('analyticsCacheDuration');
@@ -434,6 +498,9 @@ class AnalyticsService extends BaseApplicationComponent
         return $cacheDurationSeconds;
     }
 
+    /**
+     * Parse API Response
+     */
     public function parseApiResponse($apiResponse)
     {
         $response = array();
@@ -450,6 +517,15 @@ class AnalyticsService extends BaseApplicationComponent
         );
     }
 
+    /**
+     * Realtime API Get
+     *
+     * @param string|null   $p1
+     * @param string|null   $p2
+     * @param string|null   $p3
+     * @param string|null   $p4
+     * @param array         $p5
+     */
     public function apiRealtimeGet($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = array())
     {
         $response = craft()->analytics->getApiObject()->data_realtime->get($p1, $p2, $p3, $p4, $p5);
@@ -493,6 +569,9 @@ class AnalyticsService extends BaseApplicationComponent
         }
     }
 
+    /**
+     * Parse Realtime API Response
+     */
     public function parseRealTimeApiResponse($response)
     {
         $cols = $response['columnHeaders'];
@@ -507,6 +586,9 @@ class AnalyticsService extends BaseApplicationComponent
         );
     }
 
+    /**
+     * Get API Object
+     */
     public function getApiObject()
     {
         $handle = $this->oauthHandle;
@@ -557,6 +639,9 @@ class AnalyticsService extends BaseApplicationComponent
         }
     }
 
+    /**
+     * Get Profile
+     */
     public function getProfile()
     {
         $r = array();
@@ -586,6 +671,9 @@ class AnalyticsService extends BaseApplicationComponent
         return $r;
     }
 
+    /**
+     * Get Web Property
+     */
     public function getWebProperty()
     {
         $r = array();
@@ -625,6 +713,9 @@ class AnalyticsService extends BaseApplicationComponent
         return $r;
     }
 
+    /**
+     * Get Properties Opts
+     */
     public function getPropertiesOpts()
     {
 
@@ -664,15 +755,23 @@ class AnalyticsService extends BaseApplicationComponent
         return $properties;
     }
 
-    public function getSetting($k)
+    /**
+     * Get Setting
+     *
+     * @param string $key
+     */
+    public function getSetting($key)
     {
         $plugin = craft()->plugins->getPlugin('analytics');
 
         $settings = $plugin->getSettings();
 
-        return $settings[$k];
+        return $settings[$key];
     }
 
+    /**
+     * Is Configured
+     */
     public function isConfigured()
     {
         // check if plugin has finished installation process
@@ -705,6 +804,9 @@ class AnalyticsService extends BaseApplicationComponent
         return true;
     }
 
+    /**
+     * Is Installed
+     */
     public function isInstalled()
     {
         Craft::log(__METHOD__, LogLevel::Info, true);
@@ -731,6 +833,9 @@ class AnalyticsService extends BaseApplicationComponent
     // Private Methods
     // =========================================================================
 
+    /**
+     * Format Cell
+     */
     private function formatCell($value, $column)
     {
         switch($column['name'])
@@ -757,6 +862,11 @@ class AnalyticsService extends BaseApplicationComponent
         }
     }
 
+    /**
+     * Localize Columns
+     *
+     * @param array $cols
+     */
     private function localizeColumns($cols)
     {
         foreach($cols as $key => $col)
@@ -783,6 +893,12 @@ class AnalyticsService extends BaseApplicationComponent
         return $cols;
     }
 
+    /**
+     * Parse Rows
+     *
+     * @param array         $cols
+     * @param array|null    $apiRows
+     */
     private function parseRows($cols, $apiRows = null)
     {
         $rows = array();
@@ -832,6 +948,12 @@ class AnalyticsService extends BaseApplicationComponent
         return $rows;
     }
 
+    /**
+     * Format RAW value
+     *
+     * @param string $type
+     * @param string $value
+     */
     private function formatRawValue($type, $value)
     {
         switch($type)
@@ -851,6 +973,12 @@ class AnalyticsService extends BaseApplicationComponent
         return $value;
     }
 
+    /**
+     * Format Value
+     *
+     * @param string $type
+     * @param string $value
+     */
     private function formatValue($type, $value)
     {
         switch($type)
