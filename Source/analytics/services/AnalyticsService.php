@@ -774,9 +774,12 @@ class AnalyticsService extends BaseApplicationComponent
      */
     public function isConfigured()
     {
-        // check if plugin has finished installation process
+        // check dependencies
+        $plugin = craft()->plugins->getPlugin('analytics');
+        $pluginDependencies = $plugin->getPluginDependencies();
 
-        if(!$this->isInstalled()) {
+        if(count($pluginDependencies) > 0)
+        {
             return false;
         }
 
@@ -785,7 +788,8 @@ class AnalyticsService extends BaseApplicationComponent
 
         $api = craft()->analytics->getApiObject();
 
-        if(!$api) {
+        if(!$api)
+        {
             Craft::log(__METHOD__.' : Analytics API not available', LogLevel::Info, true);
             return false;
         }
@@ -796,7 +800,8 @@ class AnalyticsService extends BaseApplicationComponent
         $profileId = $this->getSetting('profileId');
 
 
-        if(!$profileId) {
+        if(!$profileId)
+        {
             Craft::log(__METHOD__.' : Analytics profileId not found', LogLevel::Info, true);
             return false;
         }

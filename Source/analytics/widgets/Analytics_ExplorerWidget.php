@@ -140,7 +140,6 @@ class Analytics_ExplorerWidget extends BaseWidget
         $variables['widget'] = $widget;
         $variables['pluginSettings'] = $pluginSettings;
 
-        $variables['pluginDependencies'] = $plugin->getPluginDependencies();
 
         // render template
 
