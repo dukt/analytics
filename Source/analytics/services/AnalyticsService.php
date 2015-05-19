@@ -809,32 +809,6 @@ class AnalyticsService extends BaseApplicationComponent
         return true;
     }
 
-    /**
-     * Is Installed
-     */
-    public function isInstalled()
-    {
-        Craft::log(__METHOD__, LogLevel::Info, true);
-
-        // is oauth present in craft
-
-        $oauth = craft()->plugins->getPlugin('OAuth', false);
-
-        if(!$oauth) {
-            Craft::log(__METHOD__.' : OAuth plugin files not present', LogLevel::Info, true);
-            return false;
-        }
-
-        // if present, is it installed
-
-        if(!$oauth->isInstalled) {
-            Craft::log(__METHOD__.' : OAuth plugin not installed', LogLevel::Info, true);
-            return false;
-        }
-
-        return true;
-    }
-
     // Private Methods
     // =========================================================================
 
