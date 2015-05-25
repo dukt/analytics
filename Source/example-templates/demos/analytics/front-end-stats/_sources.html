@@ -1,14 +1,16 @@
 <h3>Sources</h3>
 
-{% set response = craft.analytics.api({
-    'start-date': '7daysAgo',
-    'end-date': 'today',
-    'metrics': 'ga:sessions',
-    'dimensions': 'ga:source',
-    'sort': '-ga:sessions',
-    'max-results': 10,
-    'filters': 'ga:source!=(not set);ga:source!=(not provided)'
-}) %}
+{% set response = craft.analytics.request({
+    startDate: date('-7 days')|date("Y-m-d"),
+    endDate: 'today',
+    metrics: 'ga:sessions',
+    options:{
+        'dimensions': 'ga:source',
+        'sort': '-ga:sessions',
+        'max-results': 10,
+        'filters': 'ga:source!=(not set);ga:source!=(not provided)'
+    }
+}).send() %}
 
 {% if response.success %}
     <table class="table">
@@ -22,8 +24,8 @@
         <tbody>
             {% for row in response.rows %}
                 <tr>
-                    <td>{{row[0]}}</td>
-                    <td>{{row[1]}}</td>
+                    <td>{{row[0].v}}</td>
+                    <td>{{row[1].v}}</td>
                 </tr>
             {% endfor %}
         </tbody>

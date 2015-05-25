@@ -1,15 +1,16 @@
 
 <h3>Pages</h3>
 
-{% set response = craft.analytics.api({
-    'start-date': date('-7 days')|date("Y-m-d"),
-    'end-date': date()|date("Y-m-d"),
-    'metrics': 'ga:sessions',
-    'dimensions': 'ga:pagePath',
-    'sort': '-ga:sessions',
-    'max-results': 8,
-}) %}
-
+{% set response = craft.analytics.request({
+    startDate: date('-7 days')|date("Y-m-d"),
+    endDate: 'today',
+    metrics: 'ga:sessions',
+    options:{
+        'dimensions': 'ga:pagePath',
+        'sort': '-ga:sessions',
+        'max-results': 8,
+    }
+}).send() %}
 
 {% if response.success %}
     <table class="table">
@@ -23,8 +24,8 @@
         <tbody>
             {% for row in response.rows %}
                 <tr>
-                    <td>{{row[0]}}</td>
-                    <td>{{row[1]}}</td>
+                    <td>{{row[0].v}}</td>
+                    <td>{{row[1].v}}</td>
                 </tr>
             {% endfor %}
         </tbody>

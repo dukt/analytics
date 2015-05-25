@@ -1,15 +1,17 @@
 
 <h3>Keywords</h3>
 
-{% set response = craft.analytics.api({
-    'start-date': date('-1 year')|date("Y-m-d"),
-    'end-date': date()|date("Y-m-d"),
-    'metrics': 'ga:sessions',
-    'dimensions': 'ga:keyword',
-    'sort': '-ga:sessions',
-    'max-results': 10,
-    'filters': 'ga:keyword!=(not set);ga:keyword!=(not provided)'
-}) %}
+{% set response = craft.analytics.request({
+    startDate: date('-1 year')|date("Y-m-d"),
+    endDate: 'today',
+    metrics: 'ga:sessions',
+    options:{
+        'dimensions': 'ga:keyword',
+        'sort': '-ga:sessions',
+        'max-results': 10,
+        'filters': 'ga:keyword!=(not set);ga:keyword!=(not provided)'
+    }
+}).send() %}
 
 {% if response.success %}
     <table class="table">
@@ -23,8 +25,8 @@
         <tbody>
             {% for row in response.rows %}
                 <tr>
-                    <td>{{row[0]}}</td>
-                    <td>{{row[1]}}</td>
+                    <td>{{row[0].v}}</td>
+                    <td>{{row[1].v}}</td>
                 </tr>
             {% endfor %}
         </tbody>
