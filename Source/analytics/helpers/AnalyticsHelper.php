@@ -62,7 +62,7 @@ class AnalyticsHelper
                 'type' => $type,
                 'dataType' => $dataType,
                 'id' => $id,
-                'label' => $label,
+                'label' => Craft::t($label),
             );
         }
 
@@ -96,6 +96,24 @@ class AnalyticsHelper
                         $cell['v'] = craft()->analytics->getSubContinentCode($cell['v']);
                     }
 
+                    // translate values
+                    switch($col['id'])
+                    {
+                        case 'ga:country':
+                        case 'ga:city':
+                        case 'ga:continent':
+                        case 'ga:subContinent':
+                        case 'ga:userType':
+                        case 'ga:javaEnabled':
+                        case 'ga:deviceCategory':
+                        case 'ga:mobileInputSelector':
+                        case 'ga:channelGrouping':
+                        case 'ga:medium':
+                            $cell['f'] = Craft::t($cell['f']);
+                            break;
+                    }
+
+                    // update cell
                     $rows[$kRow][$kCell] = $cell;
                 }
             }
