@@ -26,19 +26,12 @@ class Analytics_ExplorerController extends BaseController
                 'returningVisitor' => 0
             );
 
-            $profile = craft()->analytics->getProfile();
+            $criteria = new Analytics_RequestCriteriaModel;
+            $criteria->realtime = true;
+            $criteria->metrics = 'ga:activeVisitors';
+            $criteria->options = array('dimensions' => 'ga:visitorType');
 
-            // visitor type
-
-            $results = craft()->analytics->apiRealtimeGet(
-                'ga:'.$profile['id'],
-                'ga:activeVisitors',
-                array('dimensions' => 'ga:visitorType')
-            );
-
-            //var_dump($results);
-
-            //var_dump($results['rows']);
+            $results = craft()->analytics->sendRequest($criteria);
 
             if(!empty($results['totalResults']))
             {
@@ -77,7 +70,7 @@ class Analytics_ExplorerController extends BaseController
         }
         catch(\Exception $e)
         {
-            $this->returnErrorJson($error);
+            $this->returnErrorJson($e->getMessage());
         }
     }
 
@@ -104,11 +97,8 @@ class Analytics_ExplorerController extends BaseController
                     $uri = '';
                 }
 
-                $profile = craft()->analytics->getProfile();
                 $start = date('Y-m-d', strtotime('-1 month'));
                 $end = date('Y-m-d');
-                $end = date('Y-m-d');
-                $metrics = $metric;
                 $dimensions = 'ga:date';
 
                 $options = array(
@@ -116,60 +106,13 @@ class Analytics_ExplorerController extends BaseController
                         'filters' => "ga:pagePath==".$uri
                     );
 
-                $data = array(
-                    $profile['id'],
-                    $start,
-                    $end,
-                    $metrics,
-                    $options
-                );
+                $criteria = new Analytics_RequestCriteriaModel;
+                $criteria->startDate = $start;
+                $criteria->endDate = $end;
+                $criteria->metrics = $metric;
+                $criteria->options = $options;
 
-                $enableCache = true;
-
-                if(craft()->config->get('disableAnalyticsCache') === null)
-                {
-                    if(craft()->config->get('disableAnalyticsCache', 'analytics') === true)
-                    {
-                        $enableCache = false;
-                    }
-                }
-                else
-                {
-                    if(craft()->config->get('disableAnalyticsCache') === true)
-                    {
-                        $enableCache = false;
-                    }
-                }
-
-                if($enableCache)
-                {
-                    $cacheKey = 'analytics/elementReport/'.md5(serialize($data));
-
-                    $response = craft()->fileCache->get($cacheKey);
-
-                    if(!$response)
-                    {
-                        $response = craft()->analytics->apiGet(
-                            'ga:'.$profile['id'],
-                            $start,
-                            $end,
-                            $metrics,
-                            $options
-                        );
-
-                        craft()->fileCache->set($cacheKey, $response, craft()->analytics->cacheDuration());
-                    }
-                }
-                else
-                {
-                    $response = craft()->analytics->apiGet(
-                        'ga:'.$profile['id'],
-                        $start,
-                        $end,
-                        $metrics,
-                        $options
-                    );
-                }
+                $response = craft()->analytics->sendRequest($criteria);
 
                 $this->returnJson(array('data' => $response));
             }
@@ -201,66 +144,44 @@ class Analytics_ExplorerController extends BaseController
             $start = date('Y-m-d', strtotime('-1 '.$period));
             $end = date('Y-m-d');
 
-            $filters = false;
 
-            if($dimension)
-            {
-                $filters = $dimension.'!=(not set);'.$dimension.'!=(not provided)';
-            }
+            // Counter
+
+            $criteria = new Analytics_RequestCriteriaModel;
+            $criteria->startDate = $start;
+            $criteria->endDate = $end;
+            $criteria->metrics = $metric;
 
             if($realtime)
             {
-                $response = craft()->analytics->apiRealtimeGet(
-                    'ga:'.$profile['id'],
-                    $metric,
-                    array()
-                );
-
-                if(!empty($response['rows'][0][0]['v']))
-                {
-                    $count = $response['rows'][0][0]['v'];
-                }
-                else
-                {
-                    $count = 0;
-                }
-
-                $counter = array(
-                    'count' => $count,
-                    'label' => strtolower(Craft::t(craft()->analytics->getDimMet($metric)))
-                );
+                $criteria->realtime = true;
             }
             else
             {
-                $options = array();
-
-                if($filters)
+                if($dimension)
                 {
-                    $options['filters'] = $filters;
+                    $criteria->options['filters'] = $dimension.'!=(not set);'.$dimension.'!=(not provided)';
                 }
-
-                $response = craft()->analytics->apiGet(
-                    'ga:'.$profile['id'],
-                    $start,
-                    $end,
-                    $metric,
-                    $options
-                );
-
-
-                if(!empty($response['rows'][0][0]['v']))
-                {
-                    $count = $response['rows'][0][0]['v'];
-                }
-                else
-                {
-                    $count = 0;
-                }
-
-                $counter = array(
-                    'count' => $count
-                );
             }
+
+            $response = craft()->analytics->sendRequest($criteria);
+
+            if(!empty($response['rows'][0][0]['v']))
+            {
+                $count = $response['rows'][0][0]['v'];
+            }
+            else
+            {
+                $count = 0;
+            }
+
+            $counter = array(
+                'count' => $count,
+                'label' => strtolower(Craft::t(craft()->analytics->getDimMet($metric)))
+            );
+
+
+            // Return JSON
 
             $this->returnJson(array(
                 'counter' => $counter,
@@ -291,45 +212,28 @@ class Analytics_ExplorerController extends BaseController
             $start = date('Y-m-d', strtotime('-1 '.$period));
             $end = date('Y-m-d');
 
+
+            $criteria = new Analytics_RequestCriteriaModel;
+            $criteria->startDate = $start;
+            $criteria->endDate = $end;
+            $criteria->metrics = $metric;
+
             if($realtime)
             {
-                $tableResponse = craft()->analytics->apiRealtimeGet(
-                    'ga:'.$profile['id'],
-                    $metric,
-                    array('dimensions' => $dimension)
-                );
+                $criteria->options = array('dimensions' => $dimension);
+                $criteria->realtime = true;
             }
             else
             {
-                $tableResponse = craft()->analytics->apiGet(
-                    'ga:'.$profile['id'],
-                    $start,
-                    $end,
-                    $metric,
-                    array(
-                        'dimensions' => $dimension,
-                        'sort' => '-'.$metric,
-                        'max-results' => 20,
-                        'filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)'
-                    )
+                $criteria->options = array(
+                    'dimensions' => $dimension,
+                    'sort' => '-'.$metric,
+                    'max-results' => 20,
+                    'filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)'
                 );
             }
 
-
-            // localize table columns
-
-            foreach($tableResponse['columns'] as $k => $column)
-            {
-                $tableResponse['columns'][$k]['label'] = Craft::t(craft()->analytics->getDimMet($tableResponse['columns'][$k]['label']));
-            }
-
-
-            // localize table rows
-
-            foreach($tableResponse['rows'] as $k => $row)
-            {
-                $tableResponse['rows'][$k][0]['f'] = Craft::t($tableResponse['rows'][$k][0]['f']);
-            }
+            $tableResponse = craft()->analytics->sendRequest($criteria);
 
             $this->returnJson(array(
                 'table' => $tableResponse,
@@ -359,79 +263,73 @@ class Analytics_ExplorerController extends BaseController
             $metric = craft()->request->getParam('metrics');
             $period = craft()->request->getParam('period');
 
-            $filters = false;
-
-            if($dimension)
-            {
-                $filters = $dimension.'!=(not set);'.$dimension.'!=(not provided)';
-            }
-
             switch($period)
             {
                 case 'year':
-                $chartDimension = 'ga:yearMonth';
-                $start = date('Y-m-01', strtotime('-1 '.$period));
-                $end = date('Y-m-d');
-                break;
+                    $chartDimension = 'ga:yearMonth';
+                    $start = date('Y-m-01', strtotime('-1 '.$period));
+                    $end = date('Y-m-d');
+                    break;
 
                 default:
-                $chartDimension = 'ga:date';
-                $start = date('Y-m-d', strtotime('-1 '.$period));
-                $end = date('Y-m-d');
+                    $chartDimension = 'ga:date';
+                    $start = date('Y-m-d', strtotime('-1 '.$period));
+                    $end = date('Y-m-d');
             }
+
+
+            // Chart
+
+            $criteria = new Analytics_RequestCriteriaModel;
+            $criteria->startDate = $start;
+            $criteria->endDate = $end;
+            $criteria->metrics = $metric;
 
             if($realtime)
             {
-                $chartResponse = craft()->analytics->apiRealtimeGet(
-                    'ga:'.$profile['id'],
-                    $metric,
-                    array('dimensions' => 'rt:userType')
-                );
+                $criteria->options = array('dimensions' => 'rt:userType');
+                $criteria->realtime = true;
             }
             else
             {
-                $options = array(
+                $criteria->options = array(
                     'dimensions' => $chartDimension,
                     'sort' => $chartDimension
                 );
 
-                if($filters)
+                if($dimension)
                 {
-                    $options['filters'] = $filters;
+                    $criteria->options['filters'] = $dimension.'!=(not set);'.$dimension.'!=(not provided)';
                 }
-
-                $chartResponse = craft()->analytics->apiGet(
-                    'ga:'.$profile['id'],
-                    $start,
-                    $end,
-                    $metric,
-                    $options
-                );
             }
+
+            $chartResponse = craft()->analytics->sendRequest($criteria);
+
+
+            // Total
 
             $total = 0;
 
-            $options = array();
+            $totalCriteria = new Analytics_RequestCriteriaModel;
+            $totalCriteria->startDate = $start;
+            $totalCriteria->endDate = $end;
+            $totalCriteria->metrics = $metric;
+            $totalCriteria->format = 'gaData';
 
-            if($filters)
+            if(isset($criteria->options['filters']))
             {
-                $options['filters'] = $filters;
+                $totalCriteria->options['filters'] = $criteria->options['filters'];
             }
 
-            $response = craft()->analytics->apiGet(
-                'ga:'.$profile['id'],
-                $start,
-                $end,
-                $metric,
-                $options
-            );
+            $response = craft()->analytics->sendRequest($totalCriteria);
 
-            if(!empty($response['rows'][0][0]['v']))
+            if(!empty($response['rows'][0][0]))
             {
-                $total = $response['rows'][0][0]['v'];
+                $total = $response['rows'][0][0];
             }
 
-            // return json
+
+            // Return JSON
 
             $this->returnJson(array(
                 'area' => $chartResponse,
@@ -472,58 +370,35 @@ class Analytics_ExplorerController extends BaseController
             $period = craft()->request->getParam('period');
             $start = date('Y-m-d', strtotime('-1 '.$period));
             $end = date('Y-m-d');
-            $cityMode = false;
             $originDimension = $dimension;
 
             if($dimension == 'ga:city')
             {
-                $cityMode = true;
                 $dimension = 'ga:latitude, ga:longitude,'.$dimension;
             }
 
+
+            $criteria = new Analytics_RequestCriteriaModel;
+            $criteria->metrics = $metric;
+
+
             if($realtime)
             {
-                $tableResponse = craft()->analytics->apiRealtimeGet(
-                    'ga:'.$profile['id'],
-                    $metric,
-                    array('dimensions' => $dimension)
-                );
+                $criteria->options = array('dimensions' => $dimension);
+                $criteria->realtime = true;
             }
             else
             {
-                $tableResponse = craft()->analytics->apiGet(
-                    'ga:'.$profile['id'],
-                    $start,
-                    $end,
-                    $metric,
-                    array(
-                        'dimensions' => $dimension,
-                        'sort' => '-'.$metric,
-                        'max-results' => 20,
-                    )
+                $criteria->startDate = $start;
+                $criteria->endDate = $end;
+                $criteria->options = array(
+                    'dimensions' => $dimension,
+                    'sort' => '-'.$metric,
+                    'max-results' => 20,
                 );
             }
 
-            foreach($tableResponse['rows'] as $k => $row)
-            {
-                $tableResponse['rows'][$k][0]['f'] = Craft::t($tableResponse['rows'][$k][0]['f']);
-
-                if($dimension == 'ga:continent')
-                {
-                    $tableResponse['rows'][$k][0]['v'] = craft()->analytics->getContinentCode($tableResponse['rows'][$k][0]['v']);
-                }
-
-                if($dimension == 'ga:subContinent')
-                {
-                    $tableResponse['rows'][$k][0]['v'] = craft()->analytics->getSubContinentCode($tableResponse['rows'][$k][0]['v']);
-                }
-            }
-
-            // if($cityMode)
-            // {
-            //     $tableResponse['columns'][1]['dataType'] = 'NUMBER';
-            //     $tableResponse['columns'][]['dataType'] = 'NUMBER';
-            // }
+            $tableResponse = craft()->analytics->sendRequest($criteria);
 
             $this->returnJson(array(
                 'table' => $tableResponse,
@@ -536,102 +411,5 @@ class Analytics_ExplorerController extends BaseController
         {
             $this->returnErrorJson($e->getMessage());
         }
-    }
-
-    /**
-     * Save Widget State
-     *
-     * @return null
-     */
-    public function actionSaveWidgetState()
-    {
-        $widgetId = craft()->request->getPost('id');
-
-        $formerWidget = craft()->dashboard->getUserWidgetById($widgetId);
-
-        if($formerWidget)
-        {
-            $widgetSettings = craft()->request->getPost('settings');
-
-            if(!empty($formerWidget->settings['colspan']))
-            {
-                $widgetSettings['colspan'] = $formerWidget->settings['colspan'];
-            }
-
-            if(empty($widgetSettings['colspan']))
-            {
-                $widgetSettings['colspan'] = 1;
-            }
-
-            $widget = new WidgetModel();
-            $widget->id = $widgetId;
-            $widget->type = 'Analytics_Explorer';
-            $widget->settings = $widgetSettings;
-
-            if (craft()->dashboard->saveUserWidget($widget))
-            {
-                $this->returnJson(true);
-            }
-            else
-            {
-                $this->returnErrorJson('Couldn’t save widget');
-            }
-        }
-        else
-        {
-            $this->returnErrorJson('Couldn’t save widget');
-        }
-    }
-
-    /**
-     * Console
-     *
-     * @param array $variables
-     *
-     * @return null
-     */
-    public function actionConsole(array $variables = array())
-    {
-        if(empty($variables['profileId']))
-        {
-            $profile = craft()->analytics->getProfile();
-            $variables['profileId'] = $profile['id'];
-        }
-
-        $this->renderTemplate('analytics/console', $variables);
-    }
-
-    /**
-     * Console Send
-     *
-     * @return null
-     */
-    public function actionConsoleSend()
-    {
-        // params
-        $profileId = craft()->request->getParam('profileId');
-        $start = craft()->request->getParam('start');
-        $end = craft()->request->getParam('end');
-        $metrics = craft()->request->getParam('metrics');
-        $options = craft()->request->getParam('options');
-
-        // send request
-        $response = craft()->analytics->apiGet(
-            'ga:'.$profileId,
-            $start,
-            $end,
-            $metrics,
-            $options
-        );
-
-        // set route variables
-        craft()->urlManager->setRouteVariables(array(
-            'profileId' => $profileId,
-            'start' => $start,
-            'end' => $end,
-            'metrics' => $metrics,
-            'options' => $options,
-            'response' => $response
-        ));
     }
 }
