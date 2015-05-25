@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Embed API Demo</title>
+</head>
+<body>
+
+<!-- Step 1: Create the containing elements. -->
+
+<section id="auth-button"></section>
+<section id="view-selector"></section>
+<section id="timeline"></section>
+
+<!-- Step 2: Load the library. -->
+
+<script>
+(function(w,d,s,g,js,fjs){
+  g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(cb){this.q.push(cb)}};
+  js=d.createElement(s);fjs=d.getElementsByTagName(s)[0];
+  js.src='https://apis.google.com/js/platform.js';
+  fjs.parentNode.insertBefore(js,fjs);js.onload=function(){g.load('analytics')};
+}(window,document,'script'));
+</script>
+
+<script>
+
+var viewSelector;
+
+gapi.analytics.ready(function() {
+
+    // Authorize the user.
+
+    var CLIENT_ID = '{{ craft.config.oauth.google.clientId }}';
+
+    gapi.analytics.auth.authorize({
+        container: 'auth-button',
+        clientid: CLIENT_ID,
+    });
+
+    // Create the view selector.
+
+    viewSelector = new gapi.analytics.ViewSelector({
+        container: 'view-selector'
+    });
+
+    // Create the timeline chart.
+
+    var timeline = new gapi.analytics.googleCharts.DataChart({
+        reportType: 'ga',
+        query: {
+            'ids':'ga:90701358',
+            'dimensions': 'ga:date',
+            'metrics': 'ga:sessions',
+            'start-date': '30daysAgo',
+            'end-date': 'yesterday',
+        },
+        chart: {
+            type: 'LINE',
+            container: 'timeline'
+        }
+    });
+
+    // Execute
+
+    timeline.execute();
+
+});
+
+
+
+</script>
+</body>
+</html>

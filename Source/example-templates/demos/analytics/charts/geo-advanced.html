@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["geochart"]});
+      google.setOnLoadCallback(drawRegionsMap);
+
+      function drawRegionsMap() {
+
+        // var data = new google.visualization.DataTable();
+
+        // data.addColumn('number', 'Latitude');
+        // data.addColumn('number', 'Longitude');
+        // data.addColumn('string', 'HoverText');
+        // data.addColumn('number', 'ga:sessions');
+
+        // data.addRow([45.1841656, 5.7155425, "Grenoble", 70]);
+
+        var data = google.visualization.arrayToDataTable([
+            [
+                {label: 'Latitude', type: 'number'},
+                {label: 'Longitude', type: 'number'},
+                {label: 'City', type: 'string'},
+                {label: 'ga:sessions', type: 'number'},
+            ],
+            [45.1841656, 5.7155425, "Grenoble", 70],
+        ]);
+
+        var options = {};
+
+        var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+
+        chart.draw(data, options);
+      }
+    </script>
+  </head>
+  <body>
+    <div id="regions_div" style="width: 900px; height: 500px;"></div>
+  </body>
+</html>
