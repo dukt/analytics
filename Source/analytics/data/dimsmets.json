@@ -98,6 +98,8 @@
     "ga:uniquePageviews" : "Unique Pageviews",
     "ga:uniquePurchases" : "Unique Purchases",
     "ga:userType" : "User Type",
+    "ga:users" : "Users",
+    "ga:yearMonth" : "Month",
     "rt:activeUsers" : "Active Users",
     "rt:campaign" : "Campaign",
     "rt:city" : "City",
