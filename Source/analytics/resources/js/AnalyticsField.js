@@ -67,19 +67,19 @@ AnalyticsField = Garnish.Base.extend({
             }
             else
             {
-                var apiData = response.data;
-
                 this.$field.removeClass('analytics-error');
 
-                $.each(apiData.columns, $.proxy(function(k, apiColumn)
-                {
-                    var column = AnalyticsUtils.parseColumn(apiColumn);
-                    this.chartData.addColumn(column.type, column.label);
-                }, this));
+                this.chartData = AnalyticsUtils.responseToDataTable(response.data);
 
-                rows = AnalyticsUtils.parseRows(apiData.columns, apiData.rows);
+                // $.each(apiData.columns, $.proxy(function(k, apiColumn)
+                // {
+                //     var column = AnalyticsUtils.parseColumn(apiColumn);
+                //     this.chartData.addColumn(column.type, column.label);
+                // }, this));
 
-                this.chartData.addRows(rows);
+                // rows = AnalyticsUtils.parseRows(apiData.columns, apiData.rows);
+
+                // this.chartData.addRows(rows);
 
                 this.chart = new google.visualization.AreaChart(this.$chartElement.get(0));
 
@@ -100,53 +100,6 @@ AnalyticsField = Garnish.Base.extend({
         }
     },
 
-    chartOptions: {
-        colors: ['#058DC7'],
-        backgroundColor: '#fdfdfd',
-        areaOpacity: 0.1,
-        pointSize: 8,
-        lineWidth: 4,
-        legend: false,
-        hAxis: {
-            textStyle: { color: '#888' },
-            baselineColor: '#fdfdfd',
-            gridlines: {
-                color: 'none',
-            }
-        },
-        vAxis:{
-            maxValue: 5,
-        },
-        series:{
-            0:{targetAxisIndex:0},
-            1:{targetAxisIndex:1}
-        },
-        vAxes: [
-            {
-                textStyle: { color: '#888' },
-                format: '#',
-                textPosition: 'in',
-                baselineColor: '#eee',
-                gridlines: {
-                    color: '#eee'
-                }
-            },
-            {
-                textStyle: { color: '#888' },
-                format: '#',
-                textPosition: 'in',
-                baselineColor: '#eee',
-                gridlines: {
-                    color: '#eee'
-                }
-            }
-        ],
-        chartArea:{
-            top:10,
-            bottom:10,
-            width:"100%",
-            height:"80%"
-        }
-    }
+    chartOptions: AnalyticsChartOptions.field()
 });
 

@@ -289,7 +289,7 @@ Analytics.BrowserView = Garnish.Base.extend({
             }
         };
 
-        Craft.queueActionRequest('analytics/explorer/saveWidgetState', stateData, $.proxy(function(response)
+        Craft.queueActionRequest('analytics/saveWidgetState', stateData, $.proxy(function(response)
         {
             // state saved
 
@@ -494,28 +494,23 @@ Analytics.Browser = Garnish.Base.extend({
         {
             case "area":
             totalRows = response.area.rows.length;
-            this.handleAreaChartResponse(response);
+            this.handleChartResponse(chart, response);
             break;
 
             case "geo":
-            totalRows = response.table.rows.length;
-            this.handleGeoChartResponse(response);
-            break;
-
             case "pie":
-            totalRows = response.table.rows.length;
-            this.handlePieChartResponse(response);
-            break;
-
             case "table":
             totalRows = response.table.rows.length;
-            this.handleTableChartResponse(response);
+            this.handleChartResponse(chart, response);
             break;
 
             case "counter":
             this.handleCounterResponse(response);
             break;
         }
+
+
+        // dimension
 
         if(typeof(response.dimension) != 'undefined')
         {
@@ -527,6 +522,9 @@ Analytics.Browser = Garnish.Base.extend({
             this.$infosDimension.addClass('hidden');
         }
 
+
+        // metric
+
         if(typeof(response.metric) != 'undefined')
         {
             this.$infosMetric.removeClass('hidden');
@@ -536,6 +534,8 @@ Analytics.Browser = Garnish.Base.extend({
         {
             this.$infosMetric.addClass('hidden');
         }
+
+        // infos count
 
         if(typeof(response.total) != 'undefined')
         {
@@ -547,6 +547,9 @@ Analytics.Browser = Garnish.Base.extend({
             this.$infosCount.addClass('hidden');
         }
 
+
+        // period
+
         if(typeof(response.period) != 'undefined')
         {
             this.$infosPeriod.html(response.period);
@@ -556,6 +559,9 @@ Analytics.Browser = Garnish.Base.extend({
         {
             this.$infosPeriod.addClass('hidden');
         }
+
+
+        // show/hide elements
 
         if(chart == 'counter')
         {
@@ -582,59 +588,9 @@ Analytics.Browser = Garnish.Base.extend({
             }
         }
 
-
         this.resize();
     },
 
-    fillChartData: function(chartResponse)
-    {
-        this.chartData = new google.visualization.DataTable();
-
-        $.each(chartResponse.columns, $.proxy(function(k, apiColumn)
-        {
-            var column = AnalyticsUtils.parseColumn(apiColumn);
-            this.chartData.addColumn(column.type, column.label);
-        }, this));
-
-        rows = chartResponse.rows;
-        rows = AnalyticsUtils.parseRows(chartResponse.columns, chartResponse.rows);
-
-        this.chartData.addRows(rows);
-    },
-
-    handleAreaChartResponse: function(response)
-    {
-        this.fillChartData(response.area);
-        this.chartOptions = Analytics.ChartOptions.area;
-
-        if(this.data.period == 'week')
-        {
-            this.chartOptions.hAxis.format = 'E';
-            this.chartOptions.hAxis.showTextEvery = 1;
-        }
-        else if(this.data.period == 'month')
-        {
-            this.chartOptions.hAxis.format = 'MMM d';
-            this.chartOptions.hAxis.showTextEvery = 1;
-        }
-        else if(this.data.period == 'year')
-        {
-            this.chartOptions.hAxis.showTextEvery = 1;
-            this.chartOptions.hAxis.format = 'MMM yy';
-
-            var dateFormatter = new google.visualization.DateFormat({
-                pattern: "MMMM yyyy"
-            });
-
-            dateFormatter.format(this.chartData, 0);
-        }
-
-        var realChart = $('<div>');
-        this.chart = new google.visualization.AreaChart(realChart.get(0));
-        this.$chart.html('');
-        this.$chart.append(realChart);
-        this.chart.draw(this.chartData, this.chartOptions);
-    },
 
     handleCounterResponse: function(response)
     {
@@ -643,58 +599,47 @@ Analytics.Browser = Garnish.Base.extend({
         this.$counterPeriod.html(response.period);
     },
 
-    handleGeoChartResponse: function(response)
+    handleChartResponse: function(chart, response)
     {
-        this.fillChartData(response.table);
-        this.chartOptions = Analytics.ChartOptions.geo;
+        var realChart = $('<div>');
 
-        this.chartOptions.displayMode = 'auto';
-
-        switch(this.data.dimensions)
+        switch(chart)
         {
-            case 'ga:city':
-            this.chartOptions.displayMode = 'markers';
+            case 'area':
+            this.chartData = AnalyticsUtils.responseToDataTable(response.area);
+            this.chartOptions = AnalyticsChartOptions.area(this.data.period);
+
+            if(this.data.period == 'year')
+            {
+                var dateFormatter = new google.visualization.DateFormat({
+                    pattern: "MMMM yyyy"
+                });
+
+                dateFormatter.format(this.chartData, 0);
+            }
+
+            this.chart = new google.visualization.AreaChart(realChart.get(0));
             break;
 
-            case 'ga:country':
-            this.chartOptions.resolution = 'countries';
+            case 'geo':
+            this.chartData = AnalyticsUtils.responseToDataTable(response.table);
+            this.chartOptions = AnalyticsChartOptions.geo(this.data.dimensions);
+            this.chart = new google.visualization.GeoChart(realChart.get(0));
             break;
 
-            case 'ga:continent':
-            this.chartOptions.resolution = 'continents';
+            case 'table':
+            this.chartData = AnalyticsUtils.responseToDataTable(response.table);
+            this.chartOptions = AnalyticsChartOptions.table();
+            this.chart = new google.visualization.Table(realChart.get(0));
             break;
 
-            case 'ga:subContinent':
-            this.chartOptions.resolution = 'subcontinents';
+            case 'pie':
+            this.chartData = AnalyticsUtils.responseToDataTable(response.table);
+            this.chartOptions = AnalyticsChartOptions.pie();
+            this.chart = new google.visualization.PieChart(realChart.get(0));
             break;
         }
 
-        var realChart = $('<div>');
-        this.chart = new google.visualization.GeoChart(realChart.get(0));
-        this.$chart.html('');
-        this.$chart.append(realChart);
-        this.chart.draw(this.chartData, this.chartOptions);
-    },
-
-    handleTableChartResponse: function(response)
-    {
-        this.fillChartData(response.table);
-        this.chartOptions = Analytics.ChartOptions.table;
-
-        var realChart = $('<div>');
-        this.chart = new google.visualization.Table(realChart.get(0));
-        this.$chart.html('');
-        this.$chart.append(realChart);
-        this.chart.draw(this.chartData, this.chartOptions);
-    },
-
-    handlePieChartResponse: function(response)
-    {
-        this.fillChartData(response.table);
-        this.chartOptions = Analytics.ChartOptions.pie;
-
-        var realChart = $('<div>');
-        this.chart = new google.visualization.PieChart(realChart.get(0));
         this.$chart.html('');
         this.$chart.append(realChart);
         this.chart.draw(this.chartData, this.chartOptions);
@@ -731,7 +676,7 @@ Analytics.RealtimeVisitorsView = Garnish.Base.extend({
             }
         };
 
-        Craft.queueActionRequest('analytics/explorer/saveWidgetState', stateData, $.proxy(function(response)
+        Craft.queueActionRequest('analytics/saveWidgetState', stateData, $.proxy(function(response)
         {
             // state saved
 
@@ -1154,73 +1099,5 @@ Analytics.SelectField = Garnish.Base.extend({
         this.settings.onChange(ev);
     }
 });
-
-
-/**
- * ChartOptions
- */
-Analytics.ChartOptions = Garnish.Base.extend({}, {
-    area: {
-        height: 150,
-        theme: 'maximized',
-        legend: 'none',
-        backgroundColor: '#FFF',
-        colors: ['#058DC7'],
-        areaOpacity: 0.1,
-        pointSize: 8,
-        lineWidth: 4,
-        chartArea: {
-        },
-        hAxis: {
-            //format:'MMM yy',
-            // format: 'MMM d',
-            format: 'E',
-            textPosition: 'in',
-            textStyle: {
-                color: '#058DC7'
-            },
-            showTextEvery: 1,
-            baselineColor: '#fff',
-            gridlines: {
-                color: 'none'
-            }
-        },
-        vAxis: {
-            textPosition: 'in',
-            textStyle: {
-                color: '#058DC7'
-            },
-            baselineColor: '#ccc',
-            gridlines: {
-                color: '#fafafa'
-            },
-            maxValue: 0
-        }
-    },
-
-    geo: {
-        height: 282
-    },
-
-    pie: {
-        theme: 'maximized',
-        height: 282,
-        pieHole: 0.5,
-        legend: {
-            alignment: 'center',
-            position:'top'
-        },
-        chartArea:{
-            top:40,
-            height:'82%'
-        },
-        sliceVisibilityThreshold: 1/120
-    },
-
-    table: {
-        page: 'enable'
-    }
-});
-
 
 })(jQuery);
