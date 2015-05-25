@@ -190,7 +190,7 @@ class AnalyticsService extends BaseApplicationComponent
 
         $webProperty = $this->getWebProperty();
 
-        $profile = craft()->fileCache->get('analytics.profile');
+        $profile = craft()->cache->get('analytics.profile');
 
         if(!$profile && !empty($webProperty['accountId']))
         {
@@ -198,7 +198,7 @@ class AnalyticsService extends BaseApplicationComponent
 
             $profile = $profiles['items'][0];
 
-            craft()->fileCache->set('analytics.profile', $profile);
+            craft()->cache->set('analytics.profile', $profile);
         }
 
         if($profile)
@@ -222,7 +222,7 @@ class AnalyticsService extends BaseApplicationComponent
 
         try {
 
-            $webProperty = craft()->fileCache->get('analytics.webProperty');
+            $webProperty = craft()->cache->get('analytics.webProperty');
 
             if(!$webProperty) {
 
@@ -241,7 +241,7 @@ class AnalyticsService extends BaseApplicationComponent
 
                     if($webProperty)
                     {
-                        craft()->fileCache->set('analytics.webProperty', $webProperty);
+                        craft()->cache->set('analytics.webProperty', $webProperty);
                     }
                 }
             }
@@ -576,7 +576,7 @@ class AnalyticsService extends BaseApplicationComponent
         if($enableCache)
         {
             $cacheKey = 'analytics/explorer/'.md5(serialize(array($p1, $p2, $p3, $p4, $p5)));
-            $response = craft()->fileCache->get($cacheKey);
+            $response = craft()->cache->get($cacheKey);
 
             if(!$response)
             {
@@ -590,7 +590,7 @@ class AnalyticsService extends BaseApplicationComponent
                 }
 
 
-                craft()->fileCache->set($cacheKey, $response, $cacheDuration);
+                craft()->cache->set($cacheKey, $response, $cacheDuration);
             }
         }
         else
@@ -632,12 +632,12 @@ class AnalyticsService extends BaseApplicationComponent
         if($enableCache)
         {
             $cacheKey = 'analytics/explorer/'.md5(serialize(array($p1, $p2, $p3, $p4, $p5)));
-            $response = craft()->fileCache->get($cacheKey);
+            $response = craft()->cache->get($cacheKey);
 
             if(!$response)
             {
                 $response = $api->get($p1, $p2, $p3);
-                craft()->fileCache->set($cacheKey, $response, $cacheDuration);
+                craft()->cache->set($cacheKey, $response, $cacheDuration);
             }
         }
         else
