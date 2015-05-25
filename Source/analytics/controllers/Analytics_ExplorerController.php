@@ -160,7 +160,8 @@ class Analytics_ExplorerController extends BaseController
             {
                 if($dimension)
                 {
-                    $criteria->options['filters'] = $dimension.'!=(not set);'.$dimension.'!=(not provided)';
+                    $options = array('filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)');
+                    $criteria->options = $options;
                 }
             }
 
@@ -292,15 +293,17 @@ class Analytics_ExplorerController extends BaseController
             }
             else
             {
-                $criteria->options = array(
+                $options = array(
                     'dimensions' => $chartDimension,
                     'sort' => $chartDimension
                 );
 
                 if($dimension)
                 {
-                    $criteria->options['filters'] = $dimension.'!=(not set);'.$dimension.'!=(not provided)';
+                    $options['filters'] = $dimension.'!=(not set);'.$dimension.'!=(not provided)';
                 }
+
+                $criteria->options = $options;
             }
 
             $chartResponse = craft()->analytics->sendRequest($criteria);
@@ -318,7 +321,7 @@ class Analytics_ExplorerController extends BaseController
 
             if(isset($criteria->options['filters']))
             {
-                $totalCriteria->options['filters'] = $criteria->options['filters'];
+                $totalCriteria->options = array('filters' => $criteria->options['filters']);
             }
 
             $response = craft()->analytics->sendRequest($totalCriteria);
