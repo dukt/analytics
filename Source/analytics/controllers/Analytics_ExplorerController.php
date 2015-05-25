@@ -167,9 +167,9 @@ class Analytics_ExplorerController extends BaseController
 
             $response = craft()->analytics->sendRequest($criteria);
 
-            if(!empty($response['rows'][0][0]['v']))
+            if(!empty($response['rows'][0][0]['f']))
             {
-                $count = $response['rows'][0][0]['v'];
+                $count = $response['rows'][0][0]['f'];
             }
             else
             {
@@ -186,6 +186,7 @@ class Analytics_ExplorerController extends BaseController
 
             $this->returnJson(array(
                 'counter' => $counter,
+                'response' => $response,
                 'metric' => Craft::t(craft()->analytics->getDimMet($metric)),
                 'period' => Craft::t('this '.$period)
             ));
@@ -317,7 +318,7 @@ class Analytics_ExplorerController extends BaseController
             $totalCriteria->startDate = $start;
             $totalCriteria->endDate = $end;
             $totalCriteria->metrics = $metric;
-            $totalCriteria->format = 'gaData';
+            // $totalCriteria->format = 'gaData';
 
             if(isset($criteria->options['filters']))
             {
@@ -326,9 +327,12 @@ class Analytics_ExplorerController extends BaseController
 
             $response = craft()->analytics->sendRequest($totalCriteria);
 
-            if(!empty($response['rows'][0][0]))
+            if(!empty($response['rows'][0][0]['f']))
             {
-                $total = $response['rows'][0][0];
+                $total = $response['rows'][0][0]['f'];
+                // $total = (float) $response['rows'][0][0];
+                // $total = round($total, 2);
+                // $total = craft()->numberFormatter->formatDecimal($total);
             }
 
 

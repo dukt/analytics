@@ -194,6 +194,7 @@ class AnalyticsHelper
             case 'FLOAT':
             $value = (float) $value;
             $value = round($value, 2);
+            $value = craft()->numberFormatter->formatDecimal($value);
             break;
 
             case 'TIME':
