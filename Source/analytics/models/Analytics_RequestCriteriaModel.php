@@ -19,6 +19,7 @@ class Analytics_RequestCriteriaModel extends BaseModel
             'options' => array(AttributeType::Mixed, 'default' => array()),
             'format' => AttributeType::String,
             'realtime' => array(AttributeType::Bool, 'default' => false),
+            'enableCache' => array(AttributeType::Bool, 'default' => true),
         );
     }
 

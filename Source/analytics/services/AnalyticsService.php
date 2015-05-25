@@ -43,7 +43,8 @@ class AnalyticsService extends BaseApplicationComponent
             $response = $this->apiGetGADataRealtime(
                 $criteria->ids,
                 $criteria->metrics,
-                $criteria->options
+                $criteria->options,
+                $criteria->enableCache
             );
         }
         else
@@ -53,7 +54,8 @@ class AnalyticsService extends BaseApplicationComponent
                 $criteria->startDate,
                 $criteria->endDate,
                 $criteria->metrics,
-                $criteria->options
+                $criteria->options,
+                $criteria->enableCache
             );
         }
 
@@ -546,17 +548,10 @@ class AnalyticsService extends BaseApplicationComponent
      * @param string|null   $p4
      * @param array         $p5
      */
-    private function apiGetGAData($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = array(), $realtime = false)
+    private function apiGetGAData($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = array(), $enableCache = true)
     {
-        $enableCache = true;
         $cacheDuration = $this->cacheDuration();
         $api = $this->getApiObject()->data_ga;
-
-        if($realtime)
-        {
-            $cacheDuration = $this->getSetting('realtimeRefreshInterval');
-            $api = $this->getApiObject()->data_realtime;
-        }
 
         if(craft()->config->get('disableAnalyticsCache') === null)
         {
@@ -580,16 +575,7 @@ class AnalyticsService extends BaseApplicationComponent
 
             if(!$response)
             {
-                if($realtime)
-                {
-                    $response = $api->get($p1, $p2, $p3, $p4, $p5);
-                }
-                else
-                {
-                    $response = $api->get($p1, $p2, $p3, $p4, $p5);
-                }
-
-
+                $response = $api->get($p1, $p2, $p3, $p4, $p5);
                 craft()->cache->set($cacheKey, $response, $cacheDuration);
             }
         }
@@ -608,9 +594,8 @@ class AnalyticsService extends BaseApplicationComponent
      * @param string|null   $p2 metrics
      * @param string|null   $p3 optParams
      */
-    private function apiGetGADataRealtime($p1 = null, $p2 = null, $p3 = array())
+    private function apiGetGADataRealtime($p1 = null, $p2 = null, $p3 = array(), $enableCache = true)
     {
-        $enableCache = true;
         $cacheDuration = $this->getSetting('realtimeRefreshInterval');
         $api = $this->getApiObject()->data_realtime;
 
