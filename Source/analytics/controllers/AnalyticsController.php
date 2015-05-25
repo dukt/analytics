@@ -187,4 +187,49 @@ class AnalyticsController extends BaseController
         $redirect = craft()->request->getUrlReferrer();
         $this->redirect($redirect);
     }
+
+    /**
+     * Save Widget State
+     *
+     * @return null
+     */
+    public function actionSaveWidgetState()
+    {
+        $widgetId = craft()->request->getPost('id');
+
+        $formerWidget = craft()->dashboard->getUserWidgetById($widgetId);
+
+        if($formerWidget)
+        {
+            $widgetSettings = craft()->request->getPost('settings');
+
+            if(!empty($formerWidget->settings['colspan']))
+            {
+                $widgetSettings['colspan'] = $formerWidget->settings['colspan'];
+            }
+
+            if(empty($widgetSettings['colspan']))
+            {
+                $widgetSettings['colspan'] = 1;
+            }
+
+            $widget = new WidgetModel();
+            $widget->id = $widgetId;
+            $widget->type = 'Analytics_Explorer';
+            $widget->settings = $widgetSettings;
+
+            if (craft()->dashboard->saveUserWidget($widget))
+            {
+                $this->returnJson(true);
+            }
+            else
+            {
+                $this->returnErrorJson('Couldn’t save widget');
+            }
+        }
+        else
+        {
+            $this->returnErrorJson('Couldn’t save widget');
+        }
+    }
 }
