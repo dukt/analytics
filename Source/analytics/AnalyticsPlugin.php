@@ -135,6 +135,54 @@ class AnalyticsPlugin extends BasePlugin
         return $dependencies;
     }
 
+    /**
+     * Is Configured
+     */
+    public function isConfigured()
+    {
+        // check dependencies
+        $pluginDependencies = $this->getPluginDependencies();
+
+        if(count($pluginDependencies) > 0)
+        {
+            return false;
+        }
+
+
+        // check provider and token
+
+        $provider = craft()->oauth->getProvider('google');
+
+        if($provider)
+        {
+            // token
+            $token = craft()->analytics->getToken();
+
+            if (!$token)
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+
+
+        // check if profile id is set up
+
+        $profileId = craft()->analytics->getSetting('profileId');
+
+
+        if(!$profileId)
+        {
+            Craft::log(__METHOD__.' : Analytics profileId not found', LogLevel::Info, true);
+            return false;
+        }
+
+        return true;
+    }
+
     // Protected Methods
     // =========================================================================
 
