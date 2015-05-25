@@ -22,209 +22,49 @@ class AnalyticsService extends BaseApplicationComponent
     // =========================================================================
 
     /**
-     * Get a dimension or a metric from its key
-     *
-     * @param string $key
+     * Request
      */
-    public function getDimMet($key)
+    public function request($attributes)
     {
-        $dimsmetsJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/dimsmets.json');
-        $dimsmets = json_decode($dimsmetsJson, true);
-
-        if(!empty($dimsmets[$key]))
-        {
-            return $dimsmets[$key];
-        }
+        return new Analytics_RequestCriteriaModel($attributes);
     }
 
     /**
-     * Get Browser Sections
-     *
-     * @param bool $json
+     * Send Request
      */
-    public function getBrowserSections($json = false)
+    public function sendRequest(Analytics_RequestCriteriaModel $criteria)
     {
-        $browserSectionsJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/browserSections.json');
-        $browserSections = json_decode($browserSectionsJson, true);
+        $profile = craft()->analytics->getProfile();
 
-        foreach($browserSections as $k => $browserSection)
-        {
-            $browserSections[$k]['title'] = Craft::t($browserSections[$k]['title']);
-        }
+        $criteria->ids = 'ga:'.$profile['id'];
 
-        if($json)
+        if($criteria->realtime)
         {
-            return json_encode($browserSections);
+            $response = $this->apiGetGADataRealtime(
+                $criteria->ids,
+                $criteria->metrics,
+                $criteria->options
+            );
         }
         else
         {
-            return $browserSections;
-        }
-    }
-
-    /**
-     * Get Browser Data
-     *
-     * @param bool $json
-     */
-    public function getBrowserData($json = false)
-    {
-        $browserDataJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/browserData.json');
-        $browserData = json_decode($browserDataJson, true);
-
-        foreach($browserData as $k => $row)
-        {
-            $browserData[$k]['title'] = Craft::t($browserData[$k]['title']);
-
-            if(!empty($browserData[$k]['metrics']))
-            {
-                foreach($browserData[$k]['metrics'] as $k2 => $metric)
-                {
-                    $label = $this->getDimMet($metric);
-                    $label = Craft::t($label);
-
-                    $browserData[$k]['metrics'][$k2] = array(
-                        'label' => $label,
-                        'value' => $metric
-                    );
-                }
-            }
-
-            if(!empty($browserData[$k]['dimensions']))
-            {
-                foreach($browserData[$k]['dimensions'] as $k2 => $dimension)
-                {
-                    $label = $this->getDimMet($dimension);
-                    $label = Craft::t($label);
-
-                    $browserData[$k]['dimensions'][$k2] = array(
-                        'label' => $label,
-                        'value' => $dimension
-                    );
-                }
-            }
+            $response = $this->apiGetGAData(
+                $criteria->ids,
+                $criteria->startDate,
+                $criteria->endDate,
+                $criteria->metrics,
+                $criteria->options
+            );
         }
 
-        if($json)
+        if($criteria->format == 'gaData')
         {
-            return json_encode($browserData);
+            return $response;
         }
         else
         {
-            return $browserData;
+            return AnalyticsHelper::gaDataToArray($response);
         }
-    }
-
-    /**
-     * Get Browser Select
-     */
-    public function getBrowserSelect()
-    {
-        $plugin = craft()->plugins->getPlugin('analytics');
-        $pluginSettings = $plugin->getSettings();
-
-        $browserSelect = array();
-
-        if($pluginSettings->enableRealtime)
-        {
-            $browserSelectRealtimeJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/browserSelectRealtime.json');
-            $browserSelect = array_merge($browserSelect, json_decode($browserSelectRealtimeJson, true));
-        }
-
-        $browserSelectJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/browserSelect.json');
-        $browserSelect = array_merge($browserSelect, json_decode($browserSelectJson, true));
-
-        foreach($browserSelect as $k => $row)
-        {
-            if(!empty($browserSelect[$k]['optgroup']))
-            {
-                $browserSelect[$k]['optgroup'] = Craft::t($browserSelect[$k]['optgroup']);
-            }
-
-            if(!empty($browserSelect[$k]['label']))
-            {
-                $browserSelect[$k]['label'] = Craft::t($browserSelect[$k]['label']);
-            }
-        }
-
-        return $browserSelect;
-    }
-
-    /**
-     * Get Language
-     */
-    public function getLanguage()
-    {
-        return craft()->language;
-    }
-
-    /**
-     * Get Continent Code
-     *
-     * @param string $label
-     */
-    public function getContinentCode($label)
-    {
-        $continentsJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/continents.json');
-        $continents = json_decode($continentsJson, true);
-
-        foreach($continents as $continent)
-        {
-            if($continent['label'] == $label)
-            {
-                return $continent['code'];
-            }
-        }
-    }
-
-    /**
-     * Get Sub-Continent Code
-     *
-     * @param string $label
-     */
-    public function getSubContinentCode($label)
-    {
-        $subContinentsJson = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/subContinents.json');
-        $subContinents = json_decode($subContinentsJson, true);
-
-        foreach($subContinents as $subContinent)
-        {
-            if($subContinent['label'] == $label)
-            {
-                return $subContinent['code'];
-            }
-        }
-    }
-
-    /**
-     * Delete Token
-     */
-    public function deleteToken()
-    {
-        // get plugin
-        $plugin = craft()->plugins->getPlugin('analytics');
-
-        // get settings
-        $settings = $plugin->getSettings();
-
-        if($settings->tokenId)
-        {
-            $token = craft()->oauth->getTokenById($settings->tokenId);
-
-            if($token)
-            {
-                if(craft()->oauth->deleteToken($token))
-                {
-                    $settings->tokenId = null;
-
-                    craft()->plugins->savePluginSettings($plugin, $settings);
-
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -288,6 +128,37 @@ class AnalyticsService extends BaseApplicationComponent
     }
 
     /**
+     * Delete Token
+     */
+    public function deleteToken()
+    {
+        // get plugin
+        $plugin = craft()->plugins->getPlugin('analytics');
+
+        // get settings
+        $settings = $plugin->getSettings();
+
+        if($settings->tokenId)
+        {
+            $token = craft()->oauth->getTokenById($settings->tokenId);
+
+            if($token)
+            {
+                if(craft()->oauth->deleteToken($token))
+                {
+                    $settings->tokenId = null;
+
+                    craft()->plugins->savePluginSettings($plugin, $settings);
+
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Get Element URL Path
      *
      * @param int           $elementId
@@ -308,335 +179,6 @@ class AnalyticsService extends BaseApplicationComponent
         }
 
         return $uri;
-    }
-
-    /**
-     * API
-     *
-     * @param array $options
-     */
-    public function api($options)
-    {
-        try
-        {
-            $profile = craft()->analytics->getProfile();
-
-            $response = array(
-                'cols' => array(),
-                'rows' => array(),
-                'success' => false,
-                'error' => false
-            );
-
-            $ids = 'ga:'.$profile['id'];
-            $start = null;
-            $end = null;
-            $metrics = null;
-
-            if(isset($options['start-date']))
-            {
-                $start = $options['start-date'];
-                unset($options['start-date']);
-            }
-
-            if(isset($options['start-date']))
-            {
-                $end = $options['end-date'];
-                unset($options['end-date']);
-            }
-
-            if(isset($options['start-date']))
-            {
-                $metrics = $options['metrics'];
-                unset($options['metrics']);
-            }
-
-            // request
-
-            $apiResponse = null;
-            $enableCache = true;
-
-            if(craft()->config->get('disableAnalyticsCache') === null)
-            {
-                if(craft()->config->get('disableAnalyticsCache', 'analytics') === true)
-                {
-                    $enableCache = false;
-                }
-            }
-            else
-            {
-                if(craft()->config->get('disableAnalyticsCache') === true)
-                {
-                    $enableCache = false;
-                }
-            }
-
-            if($enableCache)
-            {
-                $cacheKey = 'analytics/template/'.md5(serialize(array(
-                    $ids,
-                    $start,
-                    $end,
-                    $metrics,
-                    $options
-                )));
-
-                $apiResponse = craft()->fileCache->get($cacheKey);
-            }
-
-            if(!$apiResponse)
-            {
-                $apiResponse = $this->getApiObject()->data_ga->get($ids, $start, $end, $metrics, $options);
-
-                if($enableCache)
-                {
-                    craft()->fileCache->set($cacheKey, $apiResponse, $this->cacheDuration());
-                }
-            }
-
-            if($apiResponse)
-            {
-                $response['cols'] = $apiResponse['columnHeaders'];
-                $response['rows'] = $apiResponse['rows'];
-                $response['success'] = true;
-            }
-            else
-            {
-                throw new Exception("Couldn't get API response");
-            }
-        }
-        catch(\Exception $e)
-        {
-            $response['error'] = true;
-            $response['errorMessage'] = $e->getMessage();
-        }
-
-        return $response;
-    }
-
-    /**
-     * Format Time in HH:MM:SS from seconds
-     *
-     * @param int $seconds
-     */
-    public function formatTime($seconds)
-    {
-        return gmdate("H:i:s", $seconds);
-    }
-
-
-    /**
-     * API Get
-     *
-     * @param string|null   $p1
-     * @param string|null   $p2
-     * @param string|null   $p3
-     * @param string|null   $p4
-     * @param array         $p5
-     */
-    public function apiGet($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = array())
-    {
-        $enableCache = true;
-
-        if(craft()->config->get('disableAnalyticsCache') === null)
-        {
-            if(craft()->config->get('disableAnalyticsCache', 'analytics') === true)
-            {
-                $enableCache = false;
-            }
-        }
-        else
-        {
-            if(craft()->config->get('disableAnalyticsCache') === true)
-            {
-                $enableCache = false;
-            }
-        }
-
-        if($enableCache)
-        {
-            $cacheKey = 'analytics/explorer/'.md5(serialize(array($p1, $p2, $p3, $p4, $p5)));
-
-            $return = craft()->fileCache->get($cacheKey);
-
-            if(!$return)
-            {
-                $response = $this->getApiObject()->data_ga->get($p1, $p2, $p3, $p4, $p5);
-
-                $return = $this->parseApiResponse($response);
-
-                $cacheDuration = $this->cacheDuration();
-
-                craft()->fileCache->set($cacheKey, $return, $cacheDuration);
-            }
-            return $return;
-        }
-        else
-        {
-            $response = $this->getApiObject()->data_ga->get($p1, $p2, $p3, $p4, $p5);
-            return $this->parseApiResponse($response);
-        }
-    }
-
-    /**
-     * Cache Duration
-     */
-    public function cacheDuration()
-    {
-        $cacheDuration = craft()->config->get('analyticsCacheDuration');
-
-        if(!$cacheDuration)
-        {
-            // default value
-            $cacheDuration = craft()->config->get('analyticsCacheDuration', 'analytics');
-        }
-
-
-        $cacheDuration = new DateInterval($cacheDuration);
-        $cacheDurationSeconds = $cacheDuration->format('%s');
-
-        return $cacheDurationSeconds;
-    }
-
-    /**
-     * Parse API Response
-     */
-    public function parseApiResponse($apiResponse)
-    {
-        $response = array();
-
-        $cols = $apiResponse->columnHeaders;
-        $rows = $apiResponse->rows;
-
-        $cols = $this->localizeColumns($cols);
-        $rows = $this->parseRows($cols, $rows);
-
-        return array(
-            'columns' => $cols,
-            'rows' => $rows
-        );
-    }
-
-    /**
-     * Realtime API Get
-     *
-     * @param string|null   $p1
-     * @param string|null   $p2
-     * @param string|null   $p3
-     * @param string|null   $p4
-     * @param array         $p5
-     */
-    public function apiRealtimeGet($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = array())
-    {
-        $response = craft()->analytics->getApiObject()->data_realtime->get($p1, $p2, $p3, $p4, $p5);
-
-
-        $enableCache = true;
-
-        if(craft()->config->get('disableAnalyticsCache') === null)
-        {
-            if(craft()->config->get('disableAnalyticsCache', 'analytics') === true)
-            {
-                $enableCache = false;
-            }
-        }
-        else
-        {
-            if(craft()->config->get('disableAnalyticsCache') === true)
-            {
-                $enableCache = false;
-            }
-        }
-
-        if($enableCache)
-        {
-            $cacheKey = 'analytics/realtime/'.md5(serialize(array($p1, $p2, $p3, $p4, $p5)));
-
-            $return = craft()->fileCache->get($cacheKey);
-
-            if(!$return)
-            {
-                $return = $this->parseRealTimeApiResponse($response);
-
-                craft()->fileCache->set($cacheKey, $return, $this->getSetting('realtimeRefreshInterval'));
-            }
-
-            return $return;
-        }
-        else
-        {
-            return $this->parseRealTimeApiResponse($response);
-        }
-    }
-
-    /**
-     * Parse Realtime API Response
-     */
-    public function parseRealTimeApiResponse($response)
-    {
-        $cols = $response['columnHeaders'];
-        $rows = $response->rows;
-
-        $cols = $this->localizeColumns($cols);
-        $rows = $this->parseRows($cols, $rows);
-
-        return array(
-            'columns' => $cols,
-            'rows' => $rows
-        );
-    }
-
-    /**
-     * Get API Object
-     */
-    public function getApiObject()
-    {
-        $handle = $this->oauthHandle;
-
-        // provider
-
-        $provider = craft()->oauth->getProvider($handle);
-
-        if($provider)
-        {
-
-            // token
-            $token = craft()->analytics->getToken();
-
-            if ($token)
-            {
-                // make token compatible with Google library
-                $arrayToken = array(
-                    'created' => 0,
-                    'access_token' => $token->accessToken,
-                    'expires_in' => $token->endOfLife,
-                );
-
-                $arrayToken = json_encode($arrayToken);
-
-                // client
-                $client = new Google_Client();
-                $client->setApplicationName('Google+ PHP Starter Application');
-                $client->setClientId('clientId');
-                $client->setClientSecret('clientSecret');
-                $client->setRedirectUri('redirectUri');
-                $client->setAccessToken($arrayToken);
-
-                $api = new Google_Service_Analytics($client);
-
-                return $api;
-            }
-            else
-            {
-                Craft::log(__METHOD__.' : No token defined', LogLevel::Info, true);
-                return false;
-            }
-        }
-        else
-        {
-            Craft::log(__METHOD__.' : Could not get provider connected', LogLevel::Info, true);
-            return false;
-        }
     }
 
     /**
@@ -718,34 +260,36 @@ class AnalyticsService extends BaseApplicationComponent
      */
     public function getPropertiesOpts()
     {
-
         $properties = array("" => Craft::t("Select"));
-
 
         $api = craft()->analytics->getApiObject();
 
-        if(!$api) {
-
+        if(!$api)
+        {
             Craft::log(__METHOD__.' : Could not get API', LogLevel::Info, true);
-
             return false;
         }
 
         $response = $api->management_webproperties->listManagementWebproperties("~all");
 
-        if(!$response) {
+        if(!$response)
+        {
             Craft::log(__METHOD__.' : Could not list management web properties', LogLevel::Info, true);
             return false;
         }
+
         $items = $response['items'];
 
-
-        foreach($items as $item) {
+        foreach($items as $item)
+        {
             $name = $item['id'];
 
-            if(!empty($item['websiteUrl'])) {
+            if(!empty($item['websiteUrl']))
+            {
                 $name .= ' - '.$item['websiteUrl'];
-            } elseif(!empty($item['name'])) {
+            }
+            elseif(!empty($item['name']))
+            {
                 $name .= ' - '.$item['name'];
             }
 
@@ -770,221 +314,369 @@ class AnalyticsService extends BaseApplicationComponent
     }
 
     /**
-     * Is Configured
+     * Get a dimension or a metric from its key
+     *
+     * @param string $key
      */
-    public function isConfigured()
+    public function getDimMet($key)
     {
-        // check dependencies
+        $dimsmets = $this->getData('dimsmets');
+
+        if(!empty($dimsmets[$key]))
+        {
+            return $dimsmets[$key];
+        }
+    }
+
+    /**
+     * Get Browser Sections
+     *
+     * @param bool $json
+     */
+    public function getBrowserSections($json = false)
+    {
+        $browserSections = $this->getData('browserSections');
+
+        foreach($browserSections as $k => $browserSection)
+        {
+            $browserSections[$k]['title'] = Craft::t($browserSections[$k]['title']);
+        }
+
+        if($json)
+        {
+            return json_encode($browserSections);
+        }
+        else
+        {
+            return $browserSections;
+        }
+    }
+
+    /**
+     * Get Browser Data
+     *
+     * @param bool $json
+     */
+    public function getBrowserData($json = false)
+    {
+        $browserData = $this->getData('browserData');
+
+        foreach($browserData as $k => $row)
+        {
+            $browserData[$k]['title'] = Craft::t($browserData[$k]['title']);
+
+            if(!empty($browserData[$k]['metrics']))
+            {
+                foreach($browserData[$k]['metrics'] as $k2 => $metric)
+                {
+                    $label = $this->getDimMet($metric);
+                    $label = Craft::t($label);
+
+                    $browserData[$k]['metrics'][$k2] = array(
+                        'label' => $label,
+                        'value' => $metric
+                    );
+                }
+            }
+
+            if(!empty($browserData[$k]['dimensions']))
+            {
+                foreach($browserData[$k]['dimensions'] as $k2 => $dimension)
+                {
+                    $label = $this->getDimMet($dimension);
+                    $label = Craft::t($label);
+
+                    $browserData[$k]['dimensions'][$k2] = array(
+                        'label' => $label,
+                        'value' => $dimension
+                    );
+                }
+            }
+        }
+
+        if($json)
+        {
+            return json_encode($browserData);
+        }
+        else
+        {
+            return $browserData;
+        }
+    }
+
+    /**
+     * Get Browser Select
+     */
+    public function getBrowserSelect()
+    {
         $plugin = craft()->plugins->getPlugin('analytics');
-        $pluginDependencies = $plugin->getPluginDependencies();
+        $pluginSettings = $plugin->getSettings();
 
-        if(count($pluginDependencies) > 0)
+        $browserSelect = array();
+
+        if($pluginSettings->enableRealtime)
         {
-            return false;
+            $browserSelect = array_merge($browserSelect, $this->getData('browserSelectRealtime'));
         }
 
+        $browserSelect = array_merge($browserSelect, $this->getData('browserSelect'));
 
-        // check if api is available
-
-        $api = craft()->analytics->getApiObject();
-
-        if(!$api)
+        foreach($browserSelect as $k => $row)
         {
-            Craft::log(__METHOD__.' : Analytics API not available', LogLevel::Info, true);
-            return false;
+            if(!empty($browserSelect[$k]['optgroup']))
+            {
+                $browserSelect[$k]['optgroup'] = Craft::t($browserSelect[$k]['optgroup']);
+            }
+
+            if(!empty($browserSelect[$k]['label']))
+            {
+                $browserSelect[$k]['label'] = Craft::t($browserSelect[$k]['label']);
+            }
         }
 
+        return $browserSelect;
+    }
 
-        // check if profile id is set up
+    /**
+     * Get Language
+     */
+    public function getLanguage()
+    {
+        return craft()->language;
+    }
 
-        $profileId = $this->getSetting('profileId');
+    /**
+     * Get Continent Code
+     *
+     * @param string $label
+     */
+    public function getContinentCode($label)
+    {
+        $continents = $this->getData('continents');
 
-
-        if(!$profileId)
+        foreach($continents as $continent)
         {
-            Craft::log(__METHOD__.' : Analytics profileId not found', LogLevel::Info, true);
-            return false;
+            if($continent['label'] == $label)
+            {
+                return $continent['code'];
+            }
         }
+    }
 
-        return true;
+    /**
+     * Get Sub-Continent Code
+     *
+     * @param string $label
+     */
+    public function getSubContinentCode($label)
+    {
+        $subContinents = $this->getData('subContinents');
+
+        foreach($subContinents as $subContinent)
+        {
+            if($subContinent['label'] == $label)
+            {
+                return $subContinent['code'];
+            }
+        }
     }
 
     // Private Methods
     // =========================================================================
 
     /**
-     * Format Cell
+     * Get API Object
      */
-    private function formatCell($value, $column)
+    private function getApiObject()
     {
-        switch($column['name'])
+        $handle = $this->oauthHandle;
+
+        // provider
+
+        $provider = craft()->oauth->getProvider($handle);
+
+        if($provider)
         {
-            case "ga:avgTimeOnPage":
-                $value = $this->formatTime($value);
-                return $value;
-                break;
 
-            case 'ga:pageviewsPerSession':
-                $value = round($value, 2);
-                return $value;
-                break;
+            // token
+            $token = craft()->analytics->getToken();
 
-            case 'ga:entranceRate':
-            case 'ga:visitBounceRate':
-            case 'ga:exitRate':
-                $value = round($value, 2)."%";
-                return $value;
-                break;
+            if ($token)
+            {
+                // make token compatible with Google library
+                $arrayToken = array(
+                    'created' => 0,
+                    'access_token' => $token->accessToken,
+                    'expires_in' => $token->endOfLife,
+                );
 
-            default:
-                return $value;
+                $arrayToken = json_encode($arrayToken);
+
+                // client
+                $client = new Google_Client();
+                $client->setApplicationName('Google+ PHP Starter Application');
+                $client->setClientId('clientId');
+                $client->setClientSecret('clientSecret');
+                $client->setRedirectUri('redirectUri');
+                $client->setAccessToken($arrayToken);
+
+                $api = new Google_Service_Analytics($client);
+
+                return $api;
+            }
+            else
+            {
+                Craft::log(__METHOD__.' : No token defined', LogLevel::Info, true);
+                return false;
+            }
+        }
+        else
+        {
+            Craft::log(__METHOD__.' : Could not get provider connected', LogLevel::Info, true);
+            return false;
         }
     }
 
     /**
-     * Localize Columns
+     * API Get GA Data
      *
-     * @param array $cols
+     * @param string|null   $p1
+     * @param string|null   $p2
+     * @param string|null   $p3
+     * @param string|null   $p4
+     * @param array         $p5
      */
-    private function localizeColumns($cols)
+    private function apiGetGAData($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = array(), $realtime = false)
     {
-        foreach($cols as $key => $col)
-        {
-            $cols[$key]->label = Craft::t($col->name);
+        $enableCache = true;
+        $cacheDuration = $this->cacheDuration();
+        $api = $this->getApiObject()->data_ga;
 
-            switch($col->name)
+        if($realtime)
+        {
+            $cacheDuration = $this->getSetting('realtimeRefreshInterval');
+            $api = $this->getApiObject()->data_realtime;
+        }
+
+        if(craft()->config->get('disableAnalyticsCache') === null)
+        {
+            if(craft()->config->get('disableAnalyticsCache', 'analytics') === true)
             {
-                case 'ga:latitude':
-                $cols[$key]['columnType'] = 'LATITUDE';
-                $cols[$key]['dataType'] = 'FLOAT';
-                $cols[$key]['name'] = 'Latitude';
-                $cols[$key]['label'] = 'Latitude';
-                break;
-                case 'ga:longitude':
-                $cols[$key]['columnType'] = 'LONGITUDE';
-                $cols[$key]['dataType'] = 'FLOAT';
-                $cols[$key]['name'] = 'Longitude';
-                $cols[$key]['label'] = 'Longitude';
-                break;
+                $enableCache = false;
+            }
+        }
+        else
+        {
+            if(craft()->config->get('disableAnalyticsCache') === true)
+            {
+                $enableCache = false;
             }
         }
 
-        return $cols;
-    }
-
-    /**
-     * Parse Rows
-     *
-     * @param array         $cols
-     * @param array|null    $apiRows
-     */
-    private function parseRows($cols, $apiRows = null)
-    {
-        $rows = array();
-
-        if($apiRows)
+        if($enableCache)
         {
-            foreach($apiRows as $apiRow)
+            $cacheKey = 'analytics/explorer/'.md5(serialize(array($p1, $p2, $p3, $p4, $p5)));
+            $response = craft()->fileCache->get($cacheKey);
+
+            if(!$response)
             {
-                $row = array();
-
-                $colNumber = 0;
-
-                foreach($apiRow as $key => $value)
+                if($realtime)
                 {
-                    $col = $cols[$colNumber];
-                    $value = $this->formatRawValue($col->dataType, $value);
-
-                    $cell = array(
-                        'v' => $value,
-                        'f' => (string) $this->formatValue($col->dataType, $value)
-                    );
-
-                    switch($col->name)
-                    {
-                        case 'ga:date':
-                        $cell = strftime("%Y.%m.%d", strtotime($value));
-                        break;
-
-                        case 'ga:latitude':
-                        case 'ga:longitude':
-                        $cell = (float) $value;
-                        break;
-
-                        case 'ga:yearMonth':
-                        $cell = strftime("%Y.%m.%d", strtotime($value.'01'));
-                        break;
-                    }
-
-                    array_push($row, $cell);
-
-                    $colNumber++;
+                    $response = $api->get($p1, $p2, $p3, $p4, $p5);
+                }
+                else
+                {
+                    $response = $api->get($p1, $p2, $p3, $p4, $p5);
                 }
 
-                array_push($rows, $row);
+
+                craft()->fileCache->set($cacheKey, $response, $cacheDuration);
             }
         }
-        return $rows;
+        else
+        {
+            $response = $api->get($p1, $p2, $p3, $p4, $p5);
+        }
+
+        return $response;
     }
 
     /**
-     * Format RAW value
+     * API Get GA Data Realtime
      *
-     * @param string $type
-     * @param string $value
+     * @param string|null   $p1 ids
+     * @param string|null   $p2 metrics
+     * @param string|null   $p3 optParams
      */
-    private function formatRawValue($type, $value)
+    private function apiGetGADataRealtime($p1 = null, $p2 = null, $p3 = array())
     {
-        switch($type)
-        {
-            case 'INTEGER':
-            case 'CURRENCY':
-            case 'FLOAT':
-            case 'TIME':
-            case 'PERCENT':
-            $value = (float) $value;
-            break;
+        $enableCache = true;
+        $cacheDuration = $this->getSetting('realtimeRefreshInterval');
+        $api = $this->getApiObject()->data_realtime;
 
-            default:
-            $value = (string) $value;
+        if(craft()->config->get('disableAnalyticsCache') === null)
+        {
+            if(craft()->config->get('disableAnalyticsCache', 'analytics') === true)
+            {
+                $enableCache = false;
+            }
+        }
+        else
+        {
+            if(craft()->config->get('disableAnalyticsCache') === true)
+            {
+                $enableCache = false;
+            }
         }
 
-        return $value;
+        if($enableCache)
+        {
+            $cacheKey = 'analytics/explorer/'.md5(serialize(array($p1, $p2, $p3, $p4, $p5)));
+            $response = craft()->fileCache->get($cacheKey);
+
+            if(!$response)
+            {
+                $response = $api->get($p1, $p2, $p3);
+                craft()->fileCache->set($cacheKey, $response, $cacheDuration);
+            }
+        }
+        else
+        {
+            $response = $api->get($p1, $p2, $p3);
+        }
+
+        return $response;
     }
 
     /**
-     * Format Value
-     *
-     * @param string $type
-     * @param string $value
+     * Cache Duration
      */
-    private function formatValue($type, $value)
+    private function cacheDuration()
     {
-        switch($type)
+        $cacheDuration = craft()->config->get('analyticsCacheDuration');
+
+        if(!$cacheDuration)
         {
-            case 'INTEGER':
-            case 'CURRENCY':
-            case 'FLOAT':
-            $value = (float) $value;
-            $value = round($value, 2);
-            break;
-
-            case 'TIME':
-            $value = (float) $value;
-            $value = $this->formatTime($value);
-            break;
-
-            case 'PERCENT':
-            $value = (float) $value;
-            $value = round($value, 2);
-            $value = $value.'%';
-
-            break;
-
-            default:
-            $value = (string) $value;
+            // default value
+            $cacheDuration = craft()->config->get('analyticsCacheDuration', 'analytics');
         }
 
-        return $value;
+        $cacheDuration = new DateInterval($cacheDuration);
+        $cacheDurationSeconds = $cacheDuration->format('%s');
+
+        return $cacheDurationSeconds;
+    }
+
+    /**
+     * Get Data
+     *
+     * @param string $label
+     */
+    private function getData($name)
+    {
+        $jsonData = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/'.$name.'.json');
+        $data = json_decode($jsonData, true);
+
+        return $data;
     }
 }

@@ -13,11 +13,11 @@ class AnalyticsVariable
     // =========================================================================
 
     /**
-     * API
+     * Request
      */
-    public function api($options)
+    public function request($attributes = null)
     {
-        return craft()->analytics->api($options);
+        return craft()->analytics->request($attributes);
     }
 
     /**
@@ -63,6 +63,8 @@ class AnalyticsVariable
      */
     public function isConfigured()
     {
-        return craft()->analytics->isConfigured();
+        $plugin = craft()->plugins->getPlugin('analytics');
+
+        return $plugin->isConfigured();
     }
 }
