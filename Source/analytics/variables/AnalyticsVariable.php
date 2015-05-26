@@ -15,9 +15,9 @@ class AnalyticsVariable
     /**
      * Request
      */
-    public function request($attributes = null)
+    public function api($attributes = null)
     {
-        return craft()->analytics->request($attributes);
+        return new Analytics_RequestCriteriaModel($attributes);
     }
 
     /**

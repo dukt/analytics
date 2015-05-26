@@ -22,14 +22,6 @@ class AnalyticsService extends BaseApplicationComponent
     // =========================================================================
 
     /**
-     * Request
-     */
-    public function request($attributes)
-    {
-        return new Analytics_RequestCriteriaModel($attributes);
-    }
-
-    /**
      * Send Request
      */
     public function sendRequest(Analytics_RequestCriteriaModel $criteria)
