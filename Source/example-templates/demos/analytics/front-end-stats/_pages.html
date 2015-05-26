@@ -1,7 +1,7 @@
 
 <h3>Pages</h3>
 
-{% set response = craft.analytics.request({
+{% set response = craft.analytics.api({
     startDate: date('-7 days')|date("Y-m-d"),
     endDate: 'today',
     metrics: 'ga:sessions',

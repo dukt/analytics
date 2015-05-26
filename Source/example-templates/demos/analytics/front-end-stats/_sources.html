@@ -1,6 +1,6 @@
 <h3>Sources</h3>
 
-{% set response = craft.analytics.request({
+{% set response = craft.analytics.api({
     startDate: date('-7 days')|date("Y-m-d"),
     endDate: 'today',
     metrics: 'ga:sessions',

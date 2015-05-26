@@ -1,6 +1,6 @@
 {% extends "demos/analytics/charts/_layout" %}
 
-{% set response = craft.analytics.request({
+{% set response = craft.analytics.api({
     startDate: date("-1 year")|date("Y-m-d"),
     endDate: 'today',
     metrics: 'ga:users',

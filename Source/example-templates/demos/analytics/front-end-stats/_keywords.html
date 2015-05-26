@@ -1,7 +1,7 @@
 
 <h3>Keywords</h3>
 
-{% set response = craft.analytics.request({
+{% set response = craft.analytics.api({
     startDate: date('-1 year')|date("Y-m-d"),
     endDate: 'today',
     metrics: 'ga:sessions',
