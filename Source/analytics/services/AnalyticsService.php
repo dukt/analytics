@@ -532,15 +532,28 @@ class AnalyticsService extends BaseApplicationComponent
     }
 
     /**
-     * API Get GA Data
+     * Returns Analytics data for a view (profile). (ga.get)
      *
-     * @param string|null   $p1
-     * @param string|null   $p2
-     * @param string|null   $p3
-     * @param string|null   $p4
-     * @param array         $p5
+     * @param string $ids Unique table ID for retrieving Analytics data. Table ID is of the form ga:XXXX, where XXXX is the Analytics view (profile) ID.
+     * @param string $startDate Start date for fetching Analytics data. Requests can specify a start date formatted as YYYY-MM-DD, or as a relative date (e.g., today, yesterday, or 7daysAgo). The default value is 7daysAgo.
+     * @param string $endDate End date for fetching Analytics data. Request can should specify an end date formatted as YYYY-MM-DD, or as a relative date (e.g., today, yesterday, or 7daysAgo). The default value is yesterday.
+     * @param string $metrics A comma-separated list of Analytics metrics. E.g., 'ga:sessions,ga:pageviews'. At least one metric must be specified.
+     * @param array $optParams Optional parameters.
+     *
+     * @opt_param int max-results The maximum number of entries to include in this feed.
+     * @opt_param string sort A comma-separated list of dimensions or metrics that determine the sort order for Analytics data.
+     * @opt_param string dimensions A comma-separated list of Analytics dimensions. E.g., 'ga:browser,ga:city'.
+     * @opt_param int start-index An index of the first entity to retrieve. Use this parameter as a pagination mechanism along with the max-results parameter.
+     * @opt_param string segment An Analytics segment to be applied to data.
+     * @opt_param string samplingLevel The desired sampling level.
+     * @opt_param string filters A comma-separated list of dimension or metric filters to be applied to Analytics data.
+     * @opt_param string output The selected format for the response. Default format is JSON.
+     *
+     * @param bool $enableCache Caches the API response when set to 'true'. Default value is 'true'.
+     *
+     * @return Google_Service_Analytics_GaData
      */
-    private function apiGetGAData($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = array(), $enableCache = true)
+    private function apiGetGAData($ids, $startDate, $endDate, $metrics, $optParams = array(), $enableCache = true)
     {
         $cacheDuration = $this->cacheDuration();
         $api = $this->getApiObject()->data_ga;
@@ -562,31 +575,40 @@ class AnalyticsService extends BaseApplicationComponent
 
         if($enableCache)
         {
-            $cacheKey = 'analytics/explorer/'.md5(serialize(array($p1, $p2, $p3, $p4, $p5)));
+            $cacheKey = 'analytics/explorer/'.md5(serialize(array($ids, $startDate, $endDate, $metrics, $optParams)));
             $response = craft()->cache->get($cacheKey);
 
             if(!$response)
             {
-                $response = $api->get($p1, $p2, $p3, $p4, $p5);
+                $response = $api->get($ids, $startDate, $endDate, $metrics, $optParams);
                 craft()->cache->set($cacheKey, $response, $cacheDuration);
             }
         }
         else
         {
-            $response = $api->get($p1, $p2, $p3, $p4, $p5);
+            $response = $api->get($ids, $startDate, $endDate, $metrics, $optParams);
         }
 
         return $response;
     }
 
     /**
-     * API Get GA Data Realtime
+     * Returns real time data for a view (profile).
      *
-     * @param string|null   $p1 ids
-     * @param string|null   $p2 metrics
-     * @param string|null   $p3 optParams
+     * @param string $ids Unique table ID for retrieving real time data. Table ID is of the form ga:XXXX, where XXXX is the Analytics view (profile) ID.
+     * @param string $p2 A comma-separated list of real time metrics. E.g., 'rt:activeUsers'. At least one metric must be specified.
+     * @param array $optParams Optional parameters.
+     *
+     * @opt_param int max-results The maximum number of entries to include in this feed.
+     * @opt_param string sort A comma-separated list of dimensions or metrics that determine the sort order for real time data.
+     * @opt_param string dimensions A comma-separated list of real time dimensions. E.g., 'rt:medium,rt:city'.
+     * @opt_param string filters A comma-separated list of dimension or metric filters to be applied to real time data.
+     *
+     * @param bool $enableCache Caches the API response when set to 'true'. Default value is 'true'.
+     *
+     * @return Google_Service_Analytics_RealtimeData
      */
-    private function apiGetGADataRealtime($p1 = null, $p2 = null, $p3 = array(), $enableCache = true)
+    private function apiGetGADataRealtime($ids, $metrics, $optParams = array(), $enableCache = true)
     {
         $cacheDuration = $this->getSetting('realtimeRefreshInterval');
         $api = $this->getApiObject()->data_realtime;
@@ -608,18 +630,18 @@ class AnalyticsService extends BaseApplicationComponent
 
         if($enableCache)
         {
-            $cacheKey = 'analytics/explorer/'.md5(serialize(array($p1, $p2, $p3, $p4, $p5)));
+            $cacheKey = 'analytics/explorer/'.md5(serialize(array($ids, $metrics, $optParams, $p4, $p5)));
             $response = craft()->cache->get($cacheKey);
 
             if(!$response)
             {
-                $response = $api->get($p1, $p2, $p3);
+                $response = $api->get($ids, $metrics, $optParams);
                 craft()->cache->set($cacheKey, $response, $cacheDuration);
             }
         }
         else
         {
-            $response = $api->get($p1, $p2, $p3);
+            $response = $api->get($ids, $metrics, $optParams);
         }
 
         return $response;
