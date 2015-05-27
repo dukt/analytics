@@ -17,6 +17,8 @@ cp -R $SOURCE_FOLDER $BUILD_PLUGIN_FOLDER
 find ./$BUILD_PLUGIN_FOLDER -name ".git" -exec rm -rf {} \;
 rm ./$BUILD_PLUGIN_FOLDER/composer.json
 rm ./$BUILD_PLUGIN_FOLDER/composer.lock
+rm ./$BUILD_PLUGIN_FOLDER/gulpfile.js
+rm ./$BUILD_PLUGIN_FOLDER/package.json
 
 # zip
 
