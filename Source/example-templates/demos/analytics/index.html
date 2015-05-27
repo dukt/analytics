@@ -2,28 +2,47 @@
 
 {% block main %}
 
-    <div class="col-md-8 col-md-offset-2">
+    <h1>Analytics Plugin Demos</h1>
 
-        <h1>Analytics Plugin Demos</h1>
+    <p>Welcome ! These examples will show you how to use Analytics features on your Craft website.</p>
 
-        <p>Welcome ! These examples will show you how to use Analytics features on your Craft website.</p>
+    <h3>Demos</h3>
 
-        <h3>Demos</h3>
+    <ul>
+        <li>
+            Request Analytics API
 
-        <ul>
-            <li><a href="{{url('demos/analytics/front-end-stats')}}">Front-end statitistics</a></li>
-            <li><a href="{{url('demos/analytics/graph')}}">Graph</a></li>
-            <li><a href="{{url('demos/analytics/tracking')}}">Tracking</a></li>
-        </ul>
+            <ul>
+                <li><a href="{{url('demos/analytics/api/keywords')}}">Keywords</a></li>
+                <li><a href="{{url('demos/analytics/api/pages')}}">Pages</a></li>
+                <li><a href="{{url('demos/analytics/api/sources')}}">Sources</a></li>
+                <li><a href="{{url('demos/analytics/api/visits')}}">Visits</a></li>
+            </ul>
+        </li>
+        <li>
+            Charts
 
-    </div>
+            <ul>
+                <li><a href="{{ url('demos/analytics/charts/area') }}">Area</a></li>
+                <li><a href="{{ url('demos/analytics/charts/area-month') }}">Area Month</a></li>
+                <li><a href="{{ url('demos/analytics/charts/area-week') }}">Area Week</a></li>
+                <li><a href="{{ url('demos/analytics/charts/area-year') }}">Area Year</a></li>
+                <li><a href="{{ url('demos/analytics/charts/geo-advanced') }}">Geo Advanced</a></li>
+                <li><a href="{{ url('demos/analytics/charts/geo-cities') }}">Geo Cities</a></li>
+                <li><a href="{{ url('demos/analytics/charts/geo-countries') }}">Geo Countries</a></li>
+                <li><a href="{{ url('demos/analytics/charts/geo') }}">Geo</a></li>
+                <li><a href="{{ url('demos/analytics/charts/line') }}">Line</a></li>
+            </ul>
+        </li>
+        <li><a href="{{url('demos/analytics/tracking')}}">Tracking</a></li>
+    </ul>
 
-    <div class="col-md-8 col-md-offset-2">
-        <h3>Analytics Plugin</h3>
-        <ul>
-            <li><a href="https://dukt.net/craft/analytics/">Analytics plugin for Craft CMS</a></li>
-            <li><a href="https://dukt.net/craft/analytics/docs/">Documentation</a></li>
-            <li><a href="https://dukt.net/craft/analytics/updates/">Updates</a></li>
-        </ul>
-    </div>
+
+    <h3>Analytics Plugin</h3>
+    <ul>
+        <li><a href="https://dukt.net/craft/analytics/">Analytics plugin for Craft CMS</a></li>
+        <li><a href="https://dukt.net/craft/analytics/docs/">Documentation</a></li>
+        <li><a href="https://dukt.net/craft/analytics/updates/">Updates</a></li>
+    </ul>
+
 {% endblock main %}

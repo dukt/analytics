@@ -1,0 +1,41 @@
+{% extends "demos/analytics/_layout" %}
+
+{% set title = "Pages"|t %}
+
+{% block main %}
+
+    {% set response = craft.analytics.api({
+        startDate: date('-7 days')|date("Y-m-d"),
+        endDate: 'today',
+        metrics: 'ga:sessions',
+        options:{
+            'dimensions': 'ga:pagePath',
+            'sort': '-ga:sessions',
+            'max-results': 8,
+        }
+    }).send() %}
+
+    {% if response.success %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Page Path</th>
+                    <th>Sessions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for row in response.rows %}
+                    <tr>
+                        <td>{{row[0].v}}</td>
+                        <td>{{row[1].v}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    {% else %}
+        Error: {{ response.errorMessage }}
+    {% endif %}
+
+{% endblock main %}

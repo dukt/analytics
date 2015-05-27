@@ -19,7 +19,7 @@
                     <strong>{{ track }} tracking data sent!</strong>
                 </div>
 
-                {% include 'demos/analytics/_sendTracking' with { track: track, accountId: accountId } %}
+                {% include 'demos/analytics/tracking/_send' with { track: track, accountId: accountId } %}
 
             {% endif %}
         {% else %}

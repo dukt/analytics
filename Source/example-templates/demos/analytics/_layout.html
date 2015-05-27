@@ -45,6 +45,7 @@
                 <p>
                     <em>This page is a demo of <a href="https://dukt.net/craft/analytics/">Analytics plugin for Craft CMS</a>.</em>
                 </p>
+
                 {% if title is defined and title %}
                     <h1>{{ title|raw }}</h1>
                 {% endif %}
@@ -56,36 +57,36 @@
                     </div>
                 {% endif %}
 
+
+                {% if tabs is defined and tabs %}
+
+                <ul class="nav nav-tabs">
+                    {% for tabId, tab in tabs %}
+                        {% if tab %}
+                            {% set tabIsSelected = ((selectedTab is not defined and loop.first) or (selectedTab is defined and selectedTab == tabId)) -%}
+
+                            {% if tabIsSelected and title != tab.label %}
+                                {% set title = title~' - '~tab.label %}
+                            {%endif -%}
+
+                            <li class="{% if tabIsSelected %}active{% endif %}"><a id="tab-{{ tabId }}" class="{% if tab.class is defined %} {{ tab.class }}{% endif %}" href="{{ tab.url }}">{{ tab.label }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+
+                {% endif %}
+
+                <header>
+                    {% block extraHead %}
+                    {% endblock %}
+                </header>
+
+                <main role="main">
+                    {% block main %}
+                    {% endblock %}
+                </main>
+
             </div>
-
-            {% if tabs is defined and tabs %}
-
-            <ul class="nav nav-tabs">
-                {% for tabId, tab in tabs %}
-                    {% if tab %}
-                        {% set tabIsSelected = ((selectedTab is not defined and loop.first) or (selectedTab is defined and selectedTab == tabId)) -%}
-
-                        {% if tabIsSelected and title != tab.label %}
-                            {% set title = title~' - '~tab.label %}
-                        {%endif -%}
-
-                        <li class="{% if tabIsSelected %}active{% endif %}"><a id="tab-{{ tabId }}" class="{% if tab.class is defined %} {{ tab.class }}{% endif %}" href="{{ tab.url }}">{{ tab.label }}</a></li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-
-            {% endif %}
-
-            <header>
-                {% block extraHead %}
-                {% endblock %}
-            </header>
-
-            <main role="main">
-                {% block main %}
-                {% endblock %}
-            </main>
-
         </div>
     </div>
 
