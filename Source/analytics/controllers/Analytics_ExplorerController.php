@@ -398,6 +398,7 @@ class Analytics_ExplorerController extends BaseController
                     'dimensions' => $dimension,
                     'sort' => '-'.$metric,
                     'max-results' => 20,
+                    'filters' => $originDimension.'!=(not set);'.$originDimension.'!=(not provided)',
                 );
             }
 
