@@ -13,7 +13,7 @@ class AnalyticsVariable
     // =========================================================================
 
     /**
-     * Request
+     * Request the API.
      */
     public function api($attributes = null)
     {
