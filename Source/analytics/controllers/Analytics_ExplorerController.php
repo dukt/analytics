@@ -29,7 +29,7 @@ class Analytics_ExplorerController extends BaseController
             $criteria = new Analytics_RequestCriteriaModel;
             $criteria->realtime = true;
             $criteria->metrics = 'ga:activeVisitors';
-            $criteria->options = array('dimensions' => 'ga:visitorType');
+            $criteria->optParams = array('dimensions' => 'ga:visitorType');
 
             $results = craft()->analytics->sendRequest($criteria);
 
@@ -101,7 +101,7 @@ class Analytics_ExplorerController extends BaseController
                 $end = date('Y-m-d');
                 $dimensions = 'ga:date';
 
-                $options = array(
+                $optParams = array(
                         'dimensions' => $dimensions,
                         'filters' => "ga:pagePath==".$uri
                     );
@@ -110,7 +110,7 @@ class Analytics_ExplorerController extends BaseController
                 $criteria->startDate = $start;
                 $criteria->endDate = $end;
                 $criteria->metrics = $metric;
-                $criteria->options = $options;
+                $criteria->optParams = $optParams;
 
                 $response = craft()->analytics->sendRequest($criteria);
 
@@ -160,8 +160,8 @@ class Analytics_ExplorerController extends BaseController
             {
                 if($dimension)
                 {
-                    $options = array('filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)');
-                    $criteria->options = $options;
+                    $optParams = array('filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)');
+                    $criteria->optParams = $optParams;
                 }
             }
 
@@ -222,12 +222,12 @@ class Analytics_ExplorerController extends BaseController
 
             if($realtime)
             {
-                $criteria->options = array('dimensions' => $dimension);
+                $criteria->optParams = array('dimensions' => $dimension);
                 $criteria->realtime = true;
             }
             else
             {
-                $criteria->options = array(
+                $criteria->optParams = array(
                     'dimensions' => $dimension,
                     'sort' => '-'.$metric,
                     'max-results' => 20,
@@ -289,22 +289,22 @@ class Analytics_ExplorerController extends BaseController
 
             if($realtime)
             {
-                $criteria->options = array('dimensions' => 'rt:userType');
+                $criteria->optParams = array('dimensions' => 'rt:userType');
                 $criteria->realtime = true;
             }
             else
             {
-                $options = array(
+                $optParams = array(
                     'dimensions' => $chartDimension,
                     'sort' => $chartDimension
                 );
 
                 if($dimension)
                 {
-                    $options['filters'] = $dimension.'!=(not set);'.$dimension.'!=(not provided)';
+                    $optParams['filters'] = $dimension.'!=(not set);'.$dimension.'!=(not provided)';
                 }
 
-                $criteria->options = $options;
+                $criteria->optParams = $optParams;
             }
 
             $chartResponse = craft()->analytics->sendRequest($criteria);
@@ -320,9 +320,9 @@ class Analytics_ExplorerController extends BaseController
             $totalCriteria->metrics = $metric;
             // $totalCriteria->format = 'gaData';
 
-            if(isset($criteria->options['filters']))
+            if(isset($criteria->optParams['filters']))
             {
-                $totalCriteria->options = array('filters' => $criteria->options['filters']);
+                $totalCriteria->optParams = array('filters' => $criteria->optParams['filters']);
             }
 
             $response = craft()->analytics->sendRequest($totalCriteria);
@@ -391,14 +391,14 @@ class Analytics_ExplorerController extends BaseController
 
             if($realtime)
             {
-                $criteria->options = array('dimensions' => $dimension);
+                $criteria->optParams = array('dimensions' => $dimension);
                 $criteria->realtime = true;
             }
             else
             {
                 $criteria->startDate = $start;
                 $criteria->endDate = $end;
-                $criteria->options = array(
+                $criteria->optParams = array(
                     'dimensions' => $dimension,
                     'sort' => '-'.$metric,
                     'max-results' => 20,

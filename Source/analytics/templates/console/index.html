@@ -40,8 +40,8 @@
 
         {{ forms.textField({
             label: "Dimensions"|t,
-            name: 'options[dimensions]',
-            value: (options['dimensions'] is defined ? options['dimensions'] : '')
+            name: 'optParams[dimensions]',
+            value: (optParams['dimensions'] is defined ? optParams['dimensions'] : '')
         }) }}
 
         <div class="btns">
@@ -56,11 +56,4 @@
         <pre>{{ dump(response) }}</pre>
 
     {% endif %}
-{#
-
-    'ga:'.$profile['id'],
-    $start,
-    $end,
-    $metrics,
-    $options #}
 {% endset %}

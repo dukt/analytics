@@ -42,7 +42,7 @@ class Analytics_ConsoleController extends BaseController
         $start = craft()->request->getParam('start');
         $end = craft()->request->getParam('end');
         $metrics = craft()->request->getParam('metrics');
-        $options = craft()->request->getParam('options');
+        $optParams = craft()->request->getParam('optParams');
 
         // send request
         $criteria = new Analytics_RequestCriteriaModel;
@@ -50,7 +50,7 @@ class Analytics_ConsoleController extends BaseController
         $criteria->startDate = $start;
         $criteria->endDate = $end;
         $criteria->metrics = $metrics;
-        $criteria->options = $options;
+        $criteria->optParams = $optParams;
 
         $response = craft()->analytics->sendRequest($criteria);
 
@@ -60,7 +60,7 @@ class Analytics_ConsoleController extends BaseController
             'start' => $start,
             'end' => $end,
             'metrics' => $metrics,
-            'options' => $options,
+            'optParams' => $optParams,
             'response' => $response
         ));
     }

@@ -16,7 +16,7 @@ class Analytics_RequestCriteriaModel extends BaseModel
             'startDate' => AttributeType::String,
             'endDate' => AttributeType::String,
             'metrics' => AttributeType::String,
-            'options' => array(AttributeType::Mixed, 'default' => array()),
+            'optParams' => array(AttributeType::Mixed, 'default' => array()),
             'format' => AttributeType::String,
             'realtime' => array(AttributeType::Bool, 'default' => false),
             'enableCache' => array(AttributeType::Bool, 'default' => true),

@@ -35,7 +35,7 @@ class AnalyticsService extends BaseApplicationComponent
             $response = $this->apiGetGADataRealtime(
                 $criteria->ids,
                 $criteria->metrics,
-                $criteria->options,
+                $criteria->optParams,
                 $criteria->enableCache
             );
         }
@@ -46,7 +46,7 @@ class AnalyticsService extends BaseApplicationComponent
                 $criteria->startDate,
                 $criteria->endDate,
                 $criteria->metrics,
-                $criteria->options,
+                $criteria->optParams,
                 $criteria->enableCache
             );
         }
@@ -630,7 +630,7 @@ class AnalyticsService extends BaseApplicationComponent
 
         if($enableCache)
         {
-            $cacheKey = 'analytics/explorer/'.md5(serialize(array($ids, $metrics, $optParams, $p4, $p5)));
+            $cacheKey = 'analytics/explorer/'.md5(serialize(array($ids, $metrics, $optParams)));
             $response = craft()->cache->get($cacheKey);
 
             if(!$response)
