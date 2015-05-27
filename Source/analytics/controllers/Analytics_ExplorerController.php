@@ -318,7 +318,6 @@ class Analytics_ExplorerController extends BaseController
             $totalCriteria->startDate = $start;
             $totalCriteria->endDate = $end;
             $totalCriteria->metrics = $metric;
-            // $totalCriteria->format = 'gaData';
 
             if(isset($criteria->optParams['filters']))
             {
