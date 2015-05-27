@@ -1,13 +1,3 @@
-{% if craft.request.serverName == 'dukt.net' %}
-
-    {% import 'demos/_analyticsVars' as vars %}
-
-    {% if vars.accountId %}
-        {% set accountId = vars.accountId.__toString() %}
-    {% endif %}
-
-{% endif %}
-
 {% if accountId is not defined %}
     {% if craft.analytics.webProperty %}
         {% set accountId = craft.analytics.webProperty.id %}

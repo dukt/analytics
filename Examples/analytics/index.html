@@ -1,4 +1,4 @@
-{% extends "demos/analytics/_layout" %}
+{% extends "analytics/_layout" %}
 
 {% block main %}
 
@@ -13,28 +13,27 @@
             Request Analytics API
 
             <ul>
-                <li><a href="{{url('demos/analytics/api/keywords')}}">Keywords</a></li>
-                <li><a href="{{url('demos/analytics/api/pages')}}">Pages</a></li>
-                <li><a href="{{url('demos/analytics/api/sources')}}">Sources</a></li>
-                <li><a href="{{url('demos/analytics/api/visits')}}">Visits</a></li>
+                <li><a href="{{url('analytics/api/keywords')}}">Keywords</a></li>
+                <li><a href="{{url('analytics/api/pages')}}">Pages</a></li>
+                <li><a href="{{url('analytics/api/sources')}}">Sources</a></li>
+                <li><a href="{{url('analytics/api/visits')}}">Visits</a></li>
             </ul>
         </li>
         <li>
             Charts
 
             <ul>
-                <li><a href="{{ url('demos/analytics/charts/area') }}">Area</a></li>
-                <li><a href="{{ url('demos/analytics/charts/area-month') }}">Area Month</a></li>
-                <li><a href="{{ url('demos/analytics/charts/area-week') }}">Area Week</a></li>
-                <li><a href="{{ url('demos/analytics/charts/area-year') }}">Area Year</a></li>
-                <li><a href="{{ url('demos/analytics/charts/geo-advanced') }}">Geo Advanced</a></li>
-                <li><a href="{{ url('demos/analytics/charts/geo-cities') }}">Geo Cities</a></li>
-                <li><a href="{{ url('demos/analytics/charts/geo-countries') }}">Geo Countries</a></li>
-                <li><a href="{{ url('demos/analytics/charts/geo') }}">Geo</a></li>
-                <li><a href="{{ url('demos/analytics/charts/line') }}">Line</a></li>
+                <li><a href="{{ url('analytics/charts/area') }}">Area</a></li>
+                <li><a href="{{ url('analytics/charts/area-month') }}">Area Month</a></li>
+                <li><a href="{{ url('analytics/charts/area-week') }}">Area Week</a></li>
+                <li><a href="{{ url('analytics/charts/area-year') }}">Area Year</a></li>
+                <li><a href="{{ url('analytics/charts/geo-advanced') }}">Geo Advanced</a></li>
+                <li><a href="{{ url('analytics/charts/geo-cities') }}">Geo Cities</a></li>
+                <li><a href="{{ url('analytics/charts/geo-countries') }}">Geo Countries</a></li>
+                <li><a href="{{ url('analytics/charts/geo') }}">Geo</a></li>
+                <li><a href="{{ url('analytics/charts/line') }}">Line</a></li>
             </ul>
         </li>
-        <li><a href="{{url('demos/analytics/tracking')}}">Tracking</a></li>
     </ul>
 
 
