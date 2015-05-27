@@ -330,9 +330,6 @@ class Analytics_ExplorerController extends BaseController
             if(!empty($response['rows'][0][0]['f']))
             {
                 $total = $response['rows'][0][0]['f'];
-                // $total = (float) $response['rows'][0][0];
-                // $total = round($total, 2);
-                // $total = craft()->numberFormatter->formatDecimal($total);
             }
 
 

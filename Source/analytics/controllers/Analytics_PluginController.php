@@ -120,13 +120,11 @@ class Analytics_PluginController extends BaseController
 
         if($this->pluginService->install($pluginHandle))
         {
-            // install success
             Craft::log(__METHOD__." : ".$pluginHandle.' plugin installed.', LogLevel::Info, true);
             craft()->userSession->setNotice(Craft::t('Plugin installed.'));
         }
         else
         {
-            // install failure
             Craft::log(__METHOD__." : Couldn't install ".$pluginHandle." plugin.", LogLevel::Info, true);
             craft()->userSession->setError(Craft::t("Couldn't install plugin."));
         }

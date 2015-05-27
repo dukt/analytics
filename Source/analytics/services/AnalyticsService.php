@@ -214,8 +214,8 @@ class AnalyticsService extends BaseApplicationComponent
     {
         $r = array();
 
-        try {
-
+        try
+        {
             $webProperty = craft()->cache->get('analytics.webProperty');
 
             if(!$webProperty) {
@@ -485,13 +485,13 @@ class AnalyticsService extends BaseApplicationComponent
     {
         $handle = $this->oauthHandle;
 
+
         // provider
 
         $provider = craft()->oauth->getProvider($handle);
 
         if($provider)
         {
-
             // token
             $token = craft()->analytics->getToken();
 
