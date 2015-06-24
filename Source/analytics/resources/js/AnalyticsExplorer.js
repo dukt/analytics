@@ -11,7 +11,7 @@ var googleVisualisationCalled = false;
  * Explorer
  */
 Analytics.Explorer = Garnish.Base.extend({
-    init: function(element, settings)
+    init: function(element, settings, chartData)
     {
         this.$element = $('#'+element);
         this.$widget = $('.analytics-widget:first', this.$element);
@@ -19,6 +19,7 @@ Analytics.Explorer = Garnish.Base.extend({
         this.$error = $('.analytics-error', this.$element);
         this.$openModal = $('.open-modal', this.$element);
 
+        this.chartData = chartData;
         this.view = false;
         this.views = {};
         this.section = false;
@@ -435,7 +436,7 @@ Analytics.BrowserView = Garnish.Base.extend({
  * Browser
  */
 Analytics.Browser = Garnish.Base.extend({
-    init: function(explorer, data)
+    init: function(explorer, data, chartData)
     {
         this.explorer = explorer;
         this.$element = this.explorer.$element;
@@ -459,14 +460,21 @@ Analytics.Browser = Garnish.Base.extend({
         this.$counterLabel = $('.analytics-counter-label', this.$element);
         this.$counterPeriod = $('.analytics-counter-period', this.$element);
 
-        this.timer = false;
-        this.data = data;
-
-        this.request();
-
-        if(this.data.realtime)
+        if(this.explorer.chartData)
         {
-            this.startRealtime();
+            this.handleResponse(this.explorer.chartData, this.explorer.settings.chart);
+        }
+        else
+        {
+            this.timer = false;
+            this.data = data;
+
+            this.request();
+
+            if(this.data.realtime)
+            {
+                this.startRealtime();
+            }
         }
     },
 

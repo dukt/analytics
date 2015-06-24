@@ -21,6 +21,65 @@ class AnalyticsService extends BaseApplicationComponent
     // Public Methods
     // =========================================================================
 
+    public function getChartData($options = array())
+    {
+        $profile = craft()->analytics->getProfile();
+
+        $realtime = (isset($options['realtime']) ? $options['realtime'] : null);
+        $metric = (isset($options['metric']) ? $options['metric'] : null);
+        $dimension = (isset($options['dimension']) ? $options['dimension'] : null);
+        $period = (isset($options['period']) ? $options['period'] : null);
+        $start = date('Y-m-d', strtotime('-1 '.$period));
+        $end = date('Y-m-d');
+
+
+        // Counter
+
+        $criteria = new Analytics_RequestCriteriaModel;
+        $criteria->startDate = $start;
+        $criteria->endDate = $end;
+        $criteria->metrics = $metric;
+
+        if($realtime)
+        {
+            $criteria->realtime = true;
+        }
+        else
+        {
+            if($dimension)
+            {
+                $optParams = array('filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)');
+                $criteria->optParams = $optParams;
+            }
+        }
+
+        $response = craft()->analytics->sendRequest($criteria);
+
+        if(!empty($response['rows'][0][0]['f']))
+        {
+            $count = $response['rows'][0][0]['f'];
+        }
+        else
+        {
+            $count = 0;
+        }
+
+        $counter = array(
+            'count' => $count,
+            'label' => strtolower(Craft::t(craft()->analytics->getDimMet($metric)))
+        );
+
+
+        // Return JSON
+
+        return array(
+            'counter' => $counter,
+            'response' => $response,
+            'metric' => Craft::t(craft()->analytics->getDimMet($metric)),
+            'period' => Craft::t('this '.$period)
+        );
+    }
+
     /**
      * Send Request
      */
