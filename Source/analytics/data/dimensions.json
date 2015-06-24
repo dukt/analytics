@@ -1,0 +1,5 @@
+{
+    "ga:browser" : "Browser",
+    "ga:operatingSystem" : "Operating System",
+    "ga:userType" : "User Type"
+}

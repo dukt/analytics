@@ -322,6 +322,16 @@ class AnalyticsService extends BaseApplicationComponent
         }
     }
 
+    public function getDimensions()
+    {
+        return $this->getData('dimensions');
+    }
+
+    public function getMetrics()
+    {
+        return $this->getData('metrics');
+    }
+
     /**
      * Get Browser Sections
      *

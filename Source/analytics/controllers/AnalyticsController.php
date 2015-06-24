@@ -232,4 +232,17 @@ class AnalyticsController extends BaseController
             $this->returnErrorJson('Couldn’t save widget');
         }
     }
+
+    public function actionSettingsModal()
+    {
+        $dimensions = craft()->analytics->getDimensions();
+        $metrics = craft()->analytics->getMetrics();
+
+        $response['html'] = craft()->templates->render('analytics/widgets/explorer/settingsModal', array(
+            'dimensionsOptions' => $dimensions,
+            'metricsOptions' => $metrics,
+        ));
+
+        $this->returnJson($response);
+    }
 }
