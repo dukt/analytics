@@ -1,0 +1,20 @@
+.settingsmodal {
+  width: 300px;
+  min-width: 300px;
+  min-height: auto;
+}
+.settingsmodal .footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+.analytics_stats .chart {
+  min-height: 200px;
+}
+.analytics_stats .actions {
+  float: none !important;
+  position: absolute;
+  top: -32px;
+  right: 0;
+}

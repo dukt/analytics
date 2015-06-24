@@ -238,7 +238,7 @@ class AnalyticsController extends BaseController
         $dimensions = craft()->analytics->getDimensions();
         $metrics = craft()->analytics->getMetrics();
 
-        $response['html'] = craft()->templates->render('analytics/widgets/explorer/settingsModal', array(
+        $response['html'] = craft()->templates->render('analytics/widgets/stats/settingsModal', array(
             'dimensionsOptions' => $dimensions,
             'metricsOptions' => $metrics,
         ));

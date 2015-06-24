@@ -31,79 +31,29 @@ class Analytics_StatsWidget extends BaseWidget
 
     public function getBodyHtml()
     {
-        $disableAnalytics = false;
+        craft()->templates->includeJsResource('analytics/js/jsapi.js', true);
+        craft()->templates->includeJsResource('analytics/js/AnalyticsStats.js');
+        craft()->templates->includeCssResource('analytics/css/AnalyticsStats.css');
 
-        if(craft()->config->get('disableAnalytics') === null)
-        {
-            if(craft()->config->get('disableAnalytics', 'analytics') === true)
-            {
-                $disableAnalytics = true;
-            }
-        }
-        else
-        {
-            if(craft()->config->get('disableAnalytics') === true)
-            {
-                $disableAnalytics = true;
-            }
-        }
+        $request = array(
+            'chart' => 'area',
+            'metric' => 'ga:pageviews',
+            'period' => 'week'
+        );
 
-        if($disableAnalytics)
-        {
-            return craft()->templates->render('analytics/widgets/stats/disabled', array());
-        }
+        $cachedResponse = craft()->analytics->getChartData($request);
+        $cachedResponse['request'] = $request;
 
-        $plugin = craft()->plugins->getPlugin('analytics');
+        $options = array(
+            'cachedResponse' => $cachedResponse,
+        );
 
-        // settings
-        $pluginSettings = $plugin->getSettings();
+        $widgetId = $this->model->id;
+        $jsonOptions = json_encode($options);
 
-        // widget
-        $widget = $this->model;
+        craft()->templates->includeJs('new Analytics.Stats("widget'.$widgetId.'", '.$jsonOptions.');');
 
-
-        // get data
-
-        $browserSections = craft()->analytics->getBrowserSections();
-        $browserSectionsJson = craft()->analytics->getBrowserSections(true);
-        $browserData = craft()->analytics->getBrowserData();
-        $browserDataJson = craft()->analytics->getBrowserData(true);
-        $browserSelect = craft()->analytics->getBrowserSelect();
-
-
-        // settings
-
-        $settings = array();
-
-        foreach($widget->settings as $k => $v)
-        {
-            if(!empty($v))
-            {
-                $settings[$k] = $v;
-            }
-        }
-
-        $jsonSettings = json_encode($settings);
-
-        $chartData = craft()->analytics->getChartData($settings);
-
-        // js
-        craft()->templates->includeJs('var AnalyticsChartLanguage = "'.craft()->analytics->getLanguage().'";', true);
-        craft()->templates->includeJs('var AnalyticsRealtimeInterval = "'.$pluginSettings->realtimeRefreshInterval.'";', true);
-        craft()->templates->includeJs('var AnalyticsBrowserSections = '.$browserSectionsJson.';');
-        craft()->templates->includeJs('var AnalyticsBrowserData = '.$browserDataJson.';');
-        craft()->templates->includeJs('new Analytics.Explorer("widget'.$widget->id.'", '.$jsonSettings.', '.json_encode($chartData).');');
-
-        // render
-        $variables['browserSections'] = $browserSections;
-        $variables['browserSelect'] = $browserSelect;
-        $variables['widget'] = $widget;
-        $variables['pluginSettings'] = $pluginSettings;
-
-
-        // render template
-
-        return craft()->templates->render('analytics/widgets/stats', $variables);
+        return craft()->templates->render('analytics/widgets/stats');
     }
 
     public function getColspan()
