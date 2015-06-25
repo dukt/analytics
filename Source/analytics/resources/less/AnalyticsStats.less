@@ -1,6 +1,6 @@
 .settingsmodal {
-    width: 300px;
-    min-width: 300px;
+    width: 330px;
+    min-width: 330px;
     min-height: auto;
 }
 
@@ -13,6 +13,37 @@
 
 .analytics_stats
 {
-    .chart { min-height: 200px; }
-    .actions { float: none !important; position: absolute; top: -32px; right: 0; }
+    .chart-wrapper { min-height: 150px; position: relative; }
+    .chart { min-height: 150px; }
+    .chart-wrapper .spinner { position: absolute; top: 50%; left: 50%; margin-left: -16px; margin-top: -12px; }
+
+    .actions { float: none !important; position: absolute; top: -36px; right: -8px; }
+    .actions a.dk-settings-btn { color: rgb(41, 50, 61); opacity: .5; padding: 6px 8px; }
+    .actions a.dk-settings-btn:hover { opacity: .8;  }
+
+
+    .counter {
+        padding: 12px 0;
+        text-align: center;
+
+        .value {
+            font-size: 5em;
+            line-height: 1em;
+            margin-bottom: 0.1em;
+        }
+
+        .label, .period {
+            display: inline;
+            font-size: 1.2em;
+            opacity: .7;
+        }
+
+        .label {
+            color: #318EC4;
+        }
+
+        .period {
+            color: #666;
+        }
+    }
 }

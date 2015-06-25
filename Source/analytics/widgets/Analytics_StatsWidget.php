@@ -51,6 +51,10 @@ class Analytics_StatsWidget extends BaseWidget
         $widgetId = $this->model->id;
         $jsonOptions = json_encode($options);
 
+        $jsTemplate = 'window.csrfTokenName = "{{ craft.config.csrfTokenName|e(\'js\') }}"; window.csrfTokenValue = "{{ craft.request.csrfToken|e(\'js\') }}";';
+        $js = craft()->templates->renderString($jsTemplate);
+        craft()->templates->includeJs($js);
+
         craft()->templates->includeJs('new Analytics.Stats("widget'.$widgetId.'", '.$jsonOptions.');');
 
         return craft()->templates->render('analytics/widgets/stats');

@@ -8,6 +8,7 @@ Analytics.Stats = Garnish.Base.extend({
         console.log('Initializing Stats for', element);
 
         this.$element = $('#'+element);
+        this.$spinner = $('.spinner', this.$element);
         this.$chart = $('.chart', this.$element);
         this.$settingsBtn = $('.dk-settings-btn', this.$element);
 
@@ -34,7 +35,7 @@ Analytics.Stats = Garnish.Base.extend({
                 AnalyticsChartLanguage = 'en';
             }
 
-            google.load("visualization", "1", {packages:['corechart', 'table', 'geochart'], 'language': AnalyticsChartLanguage});
+            google.load("visualization", "1", { packages:['corechart', 'table', 'geochart'], 'language': AnalyticsChartLanguage });
 
             googleVisualisationCalled = true;
         }
@@ -83,8 +84,11 @@ Analytics.Stats = Garnish.Base.extend({
                 ev.preventDefault();
 
                 var data = $('input, textarea, select', $form).filter(':visible').serialize();
+                var request = $.parseParams(data);
 
-                this.$chart.html(data);
+                this.chartResponse = this.sendRequest(request);
+
+                this.settingsModal.hide();
 
             }, this));
 
@@ -96,29 +100,42 @@ Analytics.Stats = Garnish.Base.extend({
         }
         else
         {
-            Craft.postActionRequest('analytics/settingsModal', {}, $.proxy(function(response, textStatus)
-            {
-                $('.body', this.settingsModal.$container).html(response.html);
-                Craft.initUiElements();
-            }, this));
-
             this.settingsModal.show();
         }
     },
 
-    handleChartResponse: function(chart, response)
+    sendRequest: function(data)
     {
-        console.log('chart, response', chart, response);
+        // data[csrfTokenName] = csrfTokenValue;
 
-        switch(chart)
+        this.$spinner.removeClass('hidden');
+        this.$chart.addClass('hidden');
+
+        Craft.postActionRequest('analytics/stats/getChart', data, $.proxy(function(response, textStatus)
+        {
+            this.$spinner.addClass('hidden');
+            this.$chart.removeClass('hidden');
+            this.handleChartResponse(data.chart, response);
+        }, this));
+    },
+
+    handleChartResponse: function(chartType, response)
+    {
+        console.log('chartType, response', chartType, response);
+
+        switch(chartType)
         {
             case "area":
                 totalRows = response.area.rows.length;
                 this.handleAreaChartResponse(response);
                 break;
 
+            case "counter":
+                this.handleCounterResponse(response);
+                break;
+
             default:
-                console.error('Chart type "'+chart+'" not supported.')
+                console.error('Chart type "'+chartType+'" not supported.')
         }
     },
 
@@ -128,9 +145,9 @@ Analytics.Stats = Garnish.Base.extend({
         this.chartDataTable = Analytics.Utils.responseToDataTable(response.area);
 
         // Options
-        this.chartOptions = Analytics.ChartOptions.area(response.request.period);
+        this.chartOptions = Analytics.ChartOptions.area(response.period);
 
-        if(response.request.period == 'year')
+        if(response.period == 'year')
         {
             var dateFormatter = new google.visualization.DateFormat({
                 pattern: "MMMM yyyy"
@@ -142,7 +159,22 @@ Analytics.Stats = Garnish.Base.extend({
         // Chart
         this.chart = new google.visualization.AreaChart(this.$chart.get(0));
         this.chart.draw(this.chartDataTable, this.chartOptions);
-    }
+    },
+
+    handleCounterResponse: function(response)
+    {
+        $counter = $('<div class="counter" />');
+        $value = $('<div class="value" />').appendTo($counter),
+        $label = $('<div class="label" />').appendTo($counter),
+        $period = $('<div class="period" />').appendTo($counter);
+
+        $value.html(response.counter.count);
+        $label.html(response.metric);
+        $period.html(response.period);
+
+        this.$chart.html($counter);
+    },
+
 });
 
 
@@ -485,3 +517,25 @@ Analytics.ChartOptions = Garnish.Base.extend({}, {
         }
     }
 });
+
+
+/**
+ * $.parseParams - parse query string paramaters into an object.
+ */
+(function($) {
+var re = /([^&=]+)=?([^&]*)/g;
+var decodeRE = /\+/g;  // Regex for replacing addition symbol with a space
+var decode = function (str) {return decodeURIComponent( str.replace(decodeRE, " ") );};
+$.parseParams = function(query) {
+    var params = {}, e;
+    while ( e = re.exec(query) ) {
+        var k = decode( e[1] ), v = decode( e[2] );
+        if (k.substring(k.length - 2) === '[]') {
+            k = k.substring(0, k.length - 2);
+            (params[k] || (params[k] = [])).push(v);
+        }
+        else params[k] = v;
+    }
+    return params;
+};
+})(jQuery);
