@@ -5,11 +5,9 @@ Analytics.Stats = Garnish.Base.extend({
     data:{period:'week'},
     init: function(element, options)
     {
-        console.log('Initializing Stats for', element);
-
         this.$element = $('#'+element);
+        this.$body = $('.body', this.$element);
         this.$spinner = $('.spinner', this.$element);
-        this.$chart = $('.chart', this.$element);
         this.$settingsBtn = $('.dk-settings-btn', this.$element);
 
         this.chartRequest = options['cachedRequest'];
@@ -109,24 +107,21 @@ Analytics.Stats = Garnish.Base.extend({
         // data[csrfTokenName] = csrfTokenValue;
 
         this.$spinner.removeClass('hidden');
-        this.$chart.addClass('hidden');
+
+        $('.chart', this.$body).remove();
 
         Craft.postActionRequest('analytics/stats/getChart', data, $.proxy(function(response, textStatus)
         {
             this.$spinner.addClass('hidden');
-            this.$chart.removeClass('hidden');
             this.handleChartResponse(data.chart, response);
         }, this));
     },
 
     handleChartResponse: function(chartType, response)
     {
-        console.log('chartType, response', chartType, response);
-
         switch(chartType)
         {
             case "area":
-                totalRows = response.area.rows.length;
                 this.handleAreaChartResponse(response);
                 break;
 
@@ -134,13 +129,61 @@ Analytics.Stats = Garnish.Base.extend({
                 this.handleCounterResponse(response);
                 break;
 
+            case "geo":
+                this.handleGeoResponse(response);
+                break;
+
+            case "pie":
+                this.handlePieResponse(response);
+                break;
+
+            case "table":
+                this.handleTableResponse(response);
+                break;
+
             default:
                 console.error('Chart type "'+chartType+'" not supported.')
         }
     },
 
+    handleGeoResponse: function(response)
+    {
+        $chart = $('<div class="chart geo" />');
+        $chart.appendTo(this.$body);
+
+        this.chartDataTable = Analytics.Utils.responseToDataTable(response.table);
+        this.chartOptions = AnalyticsChart.Options.geo(this.data.dimensions);
+        this.chart = new google.visualization.GeoChart($chart.get(0));
+        this.chart.draw(this.chartDataTable, this.chartOptions);
+    },
+
+    handleTableResponse: function(response)
+    {
+        $chart = $('<div class="chart table" />');
+        $chart.appendTo(this.$body);
+
+        this.chartDataTable = Analytics.Utils.responseToDataTable(response.table);
+        this.chartOptions = Analytics.ChartOptions.table();
+        this.chart = new google.visualization.Table($chart.get(0));
+        this.chart.draw(this.chartDataTable, this.chartOptions);
+    },
+
+    handlePieResponse: function(response)
+    {
+        $chart = $('<div class="chart pie" />');
+        $chart.appendTo(this.$body);
+
+        this.chartDataTable = Analytics.Utils.responseToDataTable(response.table);
+        this.chartOptions = Analytics.ChartOptions.pie();
+        this.chart = new google.visualization.PieChart($chart.get(0));
+        this.chart.draw(this.chartDataTable, this.chartOptions);
+    },
+
     handleAreaChartResponse: function(response)
     {
+        $chart = $('<div class="chart area" />');
+        $chart.appendTo(this.$body);
+
         // Data Table
         this.chartDataTable = Analytics.Utils.responseToDataTable(response.area);
 
@@ -157,25 +200,39 @@ Analytics.Stats = Garnish.Base.extend({
         }
 
         // Chart
-        this.chart = new google.visualization.AreaChart(this.$chart.get(0));
+        this.chart = new google.visualization.AreaChart($chart.get(0));
         this.chart.draw(this.chartDataTable, this.chartOptions);
     },
 
     handleCounterResponse: function(response)
     {
-        $counter = $('<div class="counter" />');
-        $value = $('<div class="value" />').appendTo($counter),
-        $label = $('<div class="label" />').appendTo($counter),
-        $period = $('<div class="period" />').appendTo($counter);
+        $chart = $('<div class="chart counter" />').appendTo(this.$body);
+        $value = $('<div class="value" />').appendTo($chart),
+        $label = $('<div class="label" />').appendTo($chart),
+        $period = $('<div class="period" />').appendTo($chart);
 
         $value.html(response.counter.count);
         $label.html(response.metric);
         $period.html(response.period);
-
-        this.$chart.html($counter);
     },
 
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -13,14 +13,27 @@
 
 .analytics_stats
 {
-    .chart-wrapper { min-height: 150px; position: relative; }
-    .chart { min-height: 150px; }
-    .chart-wrapper .spinner { position: absolute; top: 50%; left: 50%; margin-left: -16px; margin-top: -12px; }
+    .body { min-height: 100px; }
 
-    .actions { float: none !important; position: absolute; top: -36px; right: -8px; }
+    .spinner { position: absolute; top: 50%; left: 50%; margin-left: -12px; margin-top: -24px; }
+
+    .chart { min-height: 150px; }
+
+    .chart {
+        margin-top: 24px;
+        margin-left: -24px;
+        margin-right: -24px;
+        margin-bottom: -24px;
+    }
+
+    .actions { display:none; float: none !important; position: absolute; top: -46px; right: -8px; }
     .actions a.dk-settings-btn { color: rgb(41, 50, 61); opacity: .5; padding: 6px 8px; }
     .actions a.dk-settings-btn:hover { opacity: .8;  }
 
+
+    &:hover {
+        .actions { display: block; }
+    }
 
     .counter {
         padding: 12px 0;

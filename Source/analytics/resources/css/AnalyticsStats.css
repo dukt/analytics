@@ -9,24 +9,30 @@
   left: 0;
   width: 100%;
 }
-.analytics_stats .chart-wrapper {
-  min-height: 150px;
-  position: relative;
+.analytics_stats .body {
+  min-height: 100px;
+}
+.analytics_stats .spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -12px;
+  margin-top: -24px;
 }
 .analytics_stats .chart {
   min-height: 150px;
 }
-.analytics_stats .chart-wrapper .spinner {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-left: -16px;
-  margin-top: -12px;
+.analytics_stats .chart {
+  margin-top: 24px;
+  margin-left: -24px;
+  margin-right: -24px;
+  margin-bottom: -24px;
 }
 .analytics_stats .actions {
+  display: none;
   float: none !important;
   position: absolute;
-  top: -36px;
+  top: -46px;
   right: -8px;
 }
 .analytics_stats .actions a.dk-settings-btn {
@@ -36,6 +42,9 @@
 }
 .analytics_stats .actions a.dk-settings-btn:hover {
   opacity: .8;
+}
+.analytics_stats:hover .actions {
+  display: block;
 }
 .analytics_stats .counter {
   padding: 12px 0;

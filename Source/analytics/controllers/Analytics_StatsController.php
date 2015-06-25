@@ -202,4 +202,130 @@ class Analytics_StatsController extends BaseController
             $this->returnErrorJson($e->getMessage());
         }
     }
+
+
+    /**
+     * Pie
+     *
+     * @return null
+     */
+    public function pieChart()
+    {
+        $this->tableChart();
+    }
+
+    /**
+     * Table
+     *
+     * @return null
+     */
+    public function tableChart()
+    {
+        try
+        {
+            $profile = craft()->analytics->getProfile();
+
+            $realtime = craft()->request->getParam('realtime');
+            $dimension = craft()->request->getParam('dimension');
+            $metric = craft()->request->getParam('metric');
+            $period = craft()->request->getParam('period');
+            $start = date('Y-m-d', strtotime('-1 '.$period));
+            $end = date('Y-m-d');
+
+
+            $criteria = new Analytics_RequestCriteriaModel;
+            $criteria->startDate = $start;
+            $criteria->endDate = $end;
+            $criteria->metrics = $metric;
+
+            if($realtime)
+            {
+                $criteria->optParams = array('dimensions' => $dimension);
+                $criteria->realtime = true;
+            }
+            else
+            {
+                $criteria->optParams = array(
+                    'dimensions' => $dimension,
+                    'sort' => '-'.$metric,
+                    'max-results' => 20,
+                    'filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)'
+                );
+            }
+
+            $tableResponse = craft()->analytics->sendRequest($criteria);
+
+            $this->returnJson(array(
+                'table' => $tableResponse,
+                'dimension' => Craft::t(craft()->analytics->getDimMet($dimension)),
+                'metric' => Craft::t(craft()->analytics->getDimMet($metric)),
+                'period' => $period,
+                'periodLabel' => Craft::t('this '.$period)
+            ));
+        }
+        catch(\Exception $e)
+        {
+            $this->returnErrorJson($e->getMessage());
+        }
+    }
+
+    /**
+     * Geo
+     *
+     * @return null
+     */
+    public function geoChart()
+    {
+        try
+        {
+            $realtime = craft()->request->getParam('realtime');
+            $profile = craft()->analytics->getProfile();
+            $dimension = craft()->request->getParam('dimensions');
+            $metric = craft()->request->getParam('metrics');
+            $period = craft()->request->getParam('period');
+            $start = date('Y-m-d', strtotime('-1 '.$period));
+            $end = date('Y-m-d');
+            $originDimension = $dimension;
+
+            if($dimension == 'ga:city')
+            {
+                $dimension = 'ga:latitude, ga:longitude,'.$dimension;
+            }
+
+
+            $criteria = new Analytics_RequestCriteriaModel;
+            $criteria->metrics = $metric;
+
+
+            if($realtime)
+            {
+                $criteria->optParams = array('dimensions' => $dimension);
+                $criteria->realtime = true;
+            }
+            else
+            {
+                $criteria->startDate = $start;
+                $criteria->endDate = $end;
+                $criteria->optParams = array(
+                    'dimensions' => $dimension,
+                    'sort' => '-'.$metric,
+                    'max-results' => 20,
+                    'filters' => $originDimension.'!=(not set);'.$originDimension.'!=(not provided)',
+                );
+            }
+
+            $tableResponse = craft()->analytics->sendRequest($criteria);
+
+            $this->returnJson(array(
+                'table' => $tableResponse,
+                'dimension' => Craft::t(craft()->analytics->getDimMet($originDimension)),
+                'metric' => Craft::t(craft()->analytics->getDimMet($metric)),
+                'period' => Craft::t('this '.$period)
+            ));
+        }
+        catch(\Exception $e)
+        {
+            $this->returnErrorJson($e->getMessage());
+        }
+    }
 }

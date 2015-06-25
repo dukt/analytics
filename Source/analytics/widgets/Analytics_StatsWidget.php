@@ -31,6 +31,18 @@ class Analytics_StatsWidget extends BaseWidget
 
     public function getBodyHtml()
     {
+        $widgets = craft()->dashboard->getUserWidgets();
+        $requiredChartTypes = [];
+
+        foreach($widgets as $widget)
+        {
+            if($widget->type == 'Analytics_Stats')
+            {
+                $settings = $widget->settings;
+                $requiredChartTypes[] = $settings['chart'];
+            }
+        }
+
         craft()->templates->includeJsResource('analytics/js/jsapi.js', true);
         craft()->templates->includeJsResource('analytics/js/AnalyticsStats.js');
         craft()->templates->includeCssResource('analytics/css/AnalyticsStats.css');
