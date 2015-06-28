@@ -17,6 +17,19 @@ class Analytics_StatsController extends BaseController
     // Public Methods
     // =========================================================================
 
+    public function actionTest()
+    {
+        $criteria = craft()->elements->getCriteria(ElementType::Entry);
+        $elements = $criteria->find();
+
+        foreach($elements as $element)
+        {
+            echo '<h2>'.$element->title.'</h2>';
+        }
+
+        die();
+    }
+
     public function actionGetChart()
     {
         $chart = craft()->request->getRequiredParam('chart');
@@ -39,10 +52,118 @@ class Analytics_StatsController extends BaseController
      */
     private function areaChart()
     {
+        $source = craft()->request->getParam('source');
+
+        switch($source)
+        {
+            case 'craft':
+                $this->areaChartCraft();
+                break;
+
+            case 'googleanalytics':
+                $this->areaChartGoogleAnalytics();
+                break;
+        }
+    }
+
+    private function areaChartCraft()
+    {
+        try
+        {
+            $period = craft()->request->getParam('period');
+            $metric = craft()->request->getParam('metric');
+
+            switch($period)
+            {
+                case 'year':
+                    $chartDimension = 'ga:yearMonth';
+                    $start = date('Y-m-01', strtotime('-1 '.$period));
+                    $end = date('Y-m-d');
+                    break;
+
+                default:
+                    $chartDimension = 'ga:date';
+                    $start = date('Y-m-d', strtotime('-1 '.$period));
+                    $end = date('Y-m-d');
+            }
+
+
+            $criteria = craft()->elements->getCriteria(ElementType::Entry);
+            $elements = $criteria->find();
+
+            $chartResponse = array(
+                'cols' => array(
+                    array(
+                        'dataType' => "STRING",
+                        'id' => "ga:date",
+                        'label' => "",
+                        'type' => "date",
+                    ),
+                    array(
+                        'dataType' => "INTEGER",
+                        'id' => "ga:users",
+                        'label' => "Users",
+                        'type' => "number",
+                    ),
+                ),
+                'rows' => array(
+                    array(
+                        array(
+                            'f' => "20150621",
+                            'v' => "20150621"
+                        ),
+                        array(
+                            'f' => "15",
+                            'v' => 15
+                        ),
+                    ),
+                    array(
+                        array(
+                            'f' => "20150622",
+                            'v' => "20150622"
+                        ),
+                        array(
+                            'f' => "23",
+                            'v' => 23
+                        ),
+                    )
+                )
+            );
+
+
+            // Total
+
+            $total = 0;
+
+
+            // Return JSON
+
+            $this->returnJson(array(
+                'area' => $chartResponse,
+                'total' => $total,
+                'metric' => Craft::t(craft()->analytics->getDimMet($metric)),
+                'period' => $period,
+                'periodLabel' => Craft::t('this '.$period)
+            ));
+        }
+        catch(\Exception $e)
+        {
+            $this->returnErrorJson($e->getMessage());
+        }
+    }
+
+    /**
+     * Area
+     *
+     * @return null
+     */
+    private function areaChartGoogleAnalytics()
+    {
         try
         {
             $profile = craft()->analytics->getProfile();
 
+            $source = craft()->request->getParam('source');
             $realtime = craft()->request->getParam('realtime');
             $dimension = craft()->request->getParam('dimension');
             $metric = craft()->request->getParam('metric');

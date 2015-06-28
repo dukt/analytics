@@ -1,6 +1,6 @@
 {% import "_includes/forms" as forms %}
 
-{# {{ forms.selectField({
+{{ forms.selectField({
     label: "Source"|t,
     name: 'source',
     options: {
@@ -9,7 +9,7 @@
     },
     toggle: true,
     targetPrefix: 'source'
-}) }} #}
+}) }}
 
 <div id="sourcegoogleanalytics">
 
@@ -98,15 +98,31 @@
 
 </div>
 
-{#
 <div id="sourcecraft" class="hidden">
+
+        {{ forms.selectField({
+            label: "Chart"|t,
+            name: 'chart',
+            options: {
+                area: "Area"|t,
+                counter: "Counter"|t,
+                pie: "Pie"|t,
+                table: "Table"|t,
+                geo: "Geo"|t,
+            },
+            toggle: true,
+            targetPrefix: 'chart'
+        }) }}
+
        {{ forms.selectField({
         label: "Element"|t,
-        options: ["Entries", "Users"]
+        name: "element",
+        options: {
+            entries: "Entries"|t,
+            users: "Users"|t
+        }
     }) }}
 </div>
- #}
-
 
 {{ forms.selectField({
     label: "Period"|t,
