@@ -1,5 +1,6 @@
 {
     "ga:browser" : "Browser",
+    "ga:country" : "Country",
     "ga:operatingSystem" : "Operating System",
     "ga:userType" : "User Type"
 }
