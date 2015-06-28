@@ -16,7 +16,7 @@
   display: none;
   float: none !important;
   position: absolute;
-  top: -46px;
+  top: -38px;
   right: -8px;
 }
 .analytics_stats .actions a.dk-settings-btn {
@@ -39,7 +39,9 @@
 }
 .analytics_stats .chart {
   min-height: 150px;
-  margin: 24px -24px -24px -24px;
+}
+.analytics_stats .chart.area {
+  margin: 0 -24px -24px -24px;
 }
 .analytics_stats .chart.counter {
   padding: 12px 0;
