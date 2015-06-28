@@ -44,6 +44,7 @@
   margin: 0 -24px -24px -24px;
 }
 .analytics_stats .chart.counter {
+  min-height: inherit;
   padding: 12px 0;
   text-align: center;
 }
