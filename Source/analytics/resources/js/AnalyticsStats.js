@@ -152,7 +152,7 @@ Analytics.Stats = Garnish.Base.extend({
         $chart.appendTo(this.$body);
 
         this.chartDataTable = Analytics.Utils.responseToDataTable(response.table);
-        this.chartOptions = AnalyticsChart.Options.geo(this.data.dimensions);
+        this.chartOptions = Analytics.ChartOptions.geo(this.data.dimensions);
         this.chart = new google.visualization.GeoChart($chart.get(0));
         this.chart.draw(this.chartDataTable, this.chartOptions);
     },
@@ -215,7 +215,6 @@ Analytics.Stats = Garnish.Base.extend({
         $label.html(response.metric);
         $period.html(response.period);
     },
-
 });
 
 

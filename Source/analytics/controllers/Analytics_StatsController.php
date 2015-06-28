@@ -280,8 +280,8 @@ class Analytics_StatsController extends BaseController
         {
             $realtime = craft()->request->getParam('realtime');
             $profile = craft()->analytics->getProfile();
-            $dimension = craft()->request->getParam('dimensions');
-            $metric = craft()->request->getParam('metrics');
+            $dimension = craft()->request->getParam('dimension');
+            $metric = craft()->request->getParam('metric');
             $period = craft()->request->getParam('period');
             $start = date('Y-m-d', strtotime('-1 '.$period));
             $end = date('Y-m-d');
@@ -320,7 +320,8 @@ class Analytics_StatsController extends BaseController
                 'table' => $tableResponse,
                 'dimension' => Craft::t(craft()->analytics->getDimMet($originDimension)),
                 'metric' => Craft::t(craft()->analytics->getDimMet($metric)),
-                'period' => Craft::t('this '.$period)
+                'period' => $period,
+                'periodLabel' => Craft::t('this '.$period)
             ));
         }
         catch(\Exception $e)
