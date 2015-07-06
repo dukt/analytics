@@ -1,128 +1,19 @@
 {% import "_includes/forms" as forms %}
 
 {{ forms.selectField({
-    label: "Source"|t,
-    name: 'source',
+    label: "Chart"|t,
+    name: 'chart',
     options: {
-        googleanalytics: "Google Analytics"|t,
-        craft: "Craft"|t,
+        area: "Area"|t,
+        counter: "Counter"|t,
+        pie: "Pie"|t,
+        table: "Table"|t,
+        geo: "Geo"|t,
     },
     toggle: true,
-    targetPrefix: 'source'
+    targetPrefix: 'chart'
 }) }}
 
-<div id="sourcegoogleanalytics">
-
-    {{ forms.selectField({
-        label: "Chart"|t,
-        name: 'chart',
-        options: {
-            area: "Area"|t,
-            counter: "Counter"|t,
-            pie: "Pie"|t,
-            table: "Table"|t,
-            geo: "Geo"|t,
-        },
-        toggle: true,
-        targetPrefix: 'chart'
-    }) }}
-
-
-    <div id="chartarea">
-
-        {{ forms.selectField({
-            label: "Metric"|t,
-            name: 'metric',
-            options: metricsOptions
-        }) }}
-
-    </div>
-
-    <div id="chartcounter" class="hidden">
-
-        {{ forms.selectField({
-            label: "Metric"|t,
-            name: 'metric',
-            options: metricsOptions
-        }) }}
-
-    </div>
-
-    <div id="chartpie" class="hidden">
-
-        {{ forms.selectField({
-            label: "Dimension"|t,
-            name: 'dimension',
-            options: dimensionsOptions
-        }) }}
-
-        {{ forms.selectField({
-            label: "Metric"|t,
-            name: 'metric',
-            options: metricsOptions
-        }) }}
-
-    </div>
-
-    <div id="charttable" class="hidden">
-
-        {{ forms.selectField({
-            label: "Dimension"|t,
-            name: 'dimension',
-            options: dimensionsOptions
-        }) }}
-
-        {{ forms.selectField({
-            label: "Metric"|t,
-            name: 'metric',
-            options: metricsOptions
-        }) }}
-
-    </div>
-
-    <div id="chartgeo" class="hidden">
-
-        {{ forms.selectField({
-            label: "Dimension"|t,
-            name: 'dimension',
-            options: dimensionsOptions
-        }) }}
-
-        {{ forms.selectField({
-            label: "Metric"|t,
-            name: 'metric',
-            options: metricsOptions
-        }) }}
-
-    </div>
-
-</div>
-
-<div id="sourcecraft" class="hidden">
-
-        {{ forms.selectField({
-            label: "Chart"|t,
-            name: 'chart',
-            options: {
-                area: "Area"|t,
-                counter: "Counter"|t,
-                pie: "Pie"|t,
-                table: "Table"|t,
-                geo: "Geo"|t,
-            },
-            toggle: true,
-            targetPrefix: 'chart'
-        }) }}
-
-       {{ forms.selectField({
-        label: "Element"|t,
-        name: "element",
-        options: {
-            entries: "Entries"|t,
-            users: "Users"|t
-        }
-    }) }}
-</div>
 
 {{ forms.selectField({
     label: "Period"|t,
@@ -133,3 +24,98 @@
         year: "Year"|t,
     }
 }) }}
+
+<div id="chartarea">
+
+    {{ forms.selectField({
+        label: "Source"|t,
+        name: 'source',
+        options: {
+            googleanalytics: "Google Analytics"|t,
+            craft: "Craft"|t,
+        },
+        toggle: true,
+        targetPrefix: 'source'
+    }) }}
+
+
+    <div id="sourcegoogleanalytics">
+        {{ forms.selectField({
+            label: "Metric"|t,
+            name: 'metric',
+            options: metricsOptions
+        }) }}
+    </div>
+
+
+    <div id="sourcecraft" class="hidden">
+           {{ forms.selectField({
+            label: "Element"|t,
+            name: "element",
+            options: {
+                entries: "Entries"|t,
+                users: "Users"|t
+            }
+        }) }}
+    </div>
+
+</div>
+
+<div id="chartcounter" class="hidden">
+
+    {{ forms.selectField({
+        label: "Metric"|t,
+        name: 'metric',
+        options: metricsOptions
+    }) }}
+
+</div>
+
+<div id="chartpie" class="hidden">
+
+    {{ forms.selectField({
+        label: "Dimension"|t,
+        name: 'dimension',
+        options: dimensionsOptions
+    }) }}
+
+    {{ forms.selectField({
+        label: "Metric"|t,
+        name: 'metric',
+        options: metricsOptions
+    }) }}
+
+</div>
+
+<div id="charttable" class="hidden">
+
+    {{ forms.selectField({
+        label: "Dimension"|t,
+        name: 'dimension',
+        options: dimensionsOptions
+    }) }}
+
+    {{ forms.selectField({
+        label: "Metric"|t,
+        name: 'metric',
+        options: metricsOptions
+    }) }}
+
+</div>
+
+<div id="chartgeo" class="hidden">
+
+    {{ forms.selectField({
+        label: "Dimension"|t,
+        name: 'dimension',
+        options: dimensionsOptions
+    }) }}
+
+    {{ forms.selectField({
+        label: "Metric"|t,
+        name: 'metric',
+        options: metricsOptions
+    }) }}
+
+</div>
+

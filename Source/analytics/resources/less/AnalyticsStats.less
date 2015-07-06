@@ -2,13 +2,15 @@
     width: 330px;
     min-width: 330px;
     min-height: auto;
-}
 
-.settingsmodal .footer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
+    .body {
+        height: ~"calc(100% - 58px)";
+        overflow: auto;
+    }
+
+    .footer {
+        width: 100%;
+    }
 }
 
 .analytics_stats
@@ -34,6 +36,8 @@
     .chart.counter .label, .chart.counter .period { display: inline; font-size: 1.2em; opacity: .7; }
     .chart.counter .label { color: #318EC4; }
     .chart.counter .period { color: #666; }
+
+    .chart.geo { min-height: 300px; }
 
     .chart.table {
 

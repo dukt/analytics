@@ -61,7 +61,7 @@ Analytics.Stats = Garnish.Base.extend({
     {
         if(!this.settingsModal)
         {
-            $form = $('<form class="settingsmodal modal"></form>').appendTo(Garnish.$bod);
+            $form = $('<form class="settingsmodal modal fitted"></form>').appendTo(Garnish.$bod);
             $body = $('<div class="body"/>').appendTo($form),
             $footer = $('<div class="footer"/>').appendTo($form),
             $buttons = $('<div class="buttons right"/>').appendTo($footer),
