@@ -1,11 +1,11 @@
 {
-    "Users": {"optgroup" : "Users" },
+    "User": {"optgroup" : "Users" },
     "ga:users" : "ga:users",
     "ga:newUsers" : "ga:newUsers",
     "ga:percentNewSessions" : "ga:percentNewSessions",
     "ga:sessionsPerUser" : "ga:sessionsPerUser",
 
-    "Sessions": {"optgroup" : "Sessions" },
+    "Session": {"optgroup" : "Sessions" },
     "ga:sessions" : "ga:sessions",
     "ga:bounces" : "ga:bounces",
     "ga:bounceRate" : "ga:bounceRate",
@@ -202,6 +202,8 @@
     "Related Products": {"optgroup" : "Users" },
     "ga:correlationScore" : "ga:correlationScore",
     "ga:queryProductQuantity" : "ga:queryProductQuantity",
-    "ga:relatedProductQuantity" : "ga:relatedProductQuantity"
+    "ga:relatedProductQuantity" : "ga:relatedProductQuantity",
 
+    "Custom Variables or Columns": {"optgroup" : "Custom Variables or Columns"},
+    "ga:metricXX" : "ga:metricXX"
 }
