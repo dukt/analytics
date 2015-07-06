@@ -9,6 +9,53 @@ namespace Craft;
 
 class Analytics_StatsController extends BaseController
 {
+    public function actionTestMeta()
+    {
+        $dimensions = array();
+        $metrics = array();
+        $r = craft()->analytics->getApiDimensionsMetrics()->items;
+
+        foreach($r as $item)
+        {
+            $attr = $item->attributes;
+
+            if($attr['type'] == 'METRIC')
+            {
+                $metrics[] = $item;
+            }
+            elseif($attr['type'] == 'DIMENSION')
+            {
+                $dimensions[] = $item;
+            }
+
+            if($item->id == 'ga:goalXXCompletions')
+            {
+                echo '<pre>';
+                var_dump($item);
+                echo '</pre>';
+                die();
+            }
+        }
+
+        echo '<h1>Dimensions</h1>';
+        echo '<ul>';
+        foreach($dimensions as $item)
+        {
+            echo '<li>'.$item['id'].'</li>';
+        }
+
+        echo '</ul>';
+
+        echo '<h1>Metrics</h1>';
+        echo '<ul>';
+        foreach($metrics as $item)
+        {
+            echo '<li>'.$item['id'].'</li>';
+        }
+        echo '</ul>';
+
+        die();
+    }
     /**
      * Area
      *
@@ -19,15 +66,32 @@ class Analytics_StatsController extends BaseController
 
     public function actionTest()
     {
+        $start = date('Y-m-d', strtotime('-7 days'));
+        $end = date('Y-m-d', strtotime('+1 day'));
+
         $criteria = craft()->elements->getCriteria(ElementType::Entry);
+        $criteria->after = $start;
+        $criteria->before = $end;
+        $criteria->order = 'postDate DESC';
+
+
         $elements = $criteria->find();
+
+        $data = array();
 
         foreach($elements as $element)
         {
-            echo '<h2>'.$element->title.'</h2>';
-        }
+            $date = $element->postDate->format('Y-m-d');
 
-        die();
+            if(isset($data[$date]))
+            {
+                $data[$date]++;
+            }
+            else
+            {
+                $data[$date] = 1;
+            }
+        }
     }
 
     public function actionGetChart()
@@ -72,30 +136,42 @@ class Analytics_StatsController extends BaseController
         {
             $period = craft()->request->getParam('period');
             $metric = craft()->request->getParam('metric');
+            $element = craft()->request->getParam('element');
+
+            switch ($element)
+            {
+                case 'entries':
+                    $elementType = ElementType::Entry;
+                    break;
+
+                case 'users':
+                    $elementType = ElementType::User;
+                    break;
+
+                default:
+                    $elementType = null;
+                    break;
+            }
 
             switch($period)
             {
                 case 'year':
-                    $chartDimension = 'ga:yearMonth';
+                    $metric = 'ga:yearMonth';
                     $start = date('Y-m-01', strtotime('-1 '.$period));
                     $end = date('Y-m-d');
                     break;
 
                 default:
-                    $chartDimension = 'ga:date';
+                    $metric = 'ga:date';
                     $start = date('Y-m-d', strtotime('-1 '.$period));
                     $end = date('Y-m-d');
             }
-
-
-            $criteria = craft()->elements->getCriteria(ElementType::Entry);
-            $elements = $criteria->find();
 
             $chartResponse = array(
                 'cols' => array(
                     array(
                         'dataType' => "STRING",
-                        'id' => "ga:date",
+                        'id' => $metric,
                         'label' => "",
                         'type' => "date",
                     ),
@@ -106,30 +182,125 @@ class Analytics_StatsController extends BaseController
                         'type' => "number",
                     ),
                 ),
-                'rows' => array(
-                    array(
-                        array(
-                            'f' => "20150621",
-                            'v' => "20150621"
-                        ),
-                        array(
-                            'f' => "15",
-                            'v' => 15
-                        ),
-                    ),
-                    array(
-                        array(
-                            'f' => "20150622",
-                            'v' => "20150622"
-                        ),
-                        array(
-                            'f' => "23",
-                            'v' => 23
-                        ),
-                    )
-                )
+                'rows' => array()
             );
 
+            $criteria = craft()->elements->getCriteria($elementType);
+            $criteria->after = $start;
+            $criteria->before = $end;
+
+
+
+            switch ($elementType)
+            {
+                case ElementType::Entry:
+                    $criteria->order = 'postDate DESC';
+                    break;
+
+                case ElementType::User:
+                    $criteria->order = 'dateCreated DESC';
+                    break;
+            }
+
+            $elements = $criteria->find();
+
+            $data = array();
+
+            switch($period)
+            {
+                case 'year':
+
+                    $months = floor((strtotime($end) - strtotime($start)) / 60 / 60 / 24 / 30) + 1;
+
+                    for($month = 0; $month < $months; $month++)
+                    {
+                        $time = date('Ym', strtotime('-'.$month. ' month', strtotime($end)));
+
+                        foreach($elements as $element)
+                        {
+                            switch ($elementType)
+                            {
+                                case ElementType::Entry:
+                                    $date = $element->postDate->format('Ym');
+                                    break;
+
+                                case ElementType::User:
+                                    $date = $element->dateCreated->format('Ym');
+                                    break;
+                            }
+
+
+                            if($time == $date)
+                            {
+                                if(isset($data[$date]))
+                                {
+                                    $data[$date]++;
+                                }
+                                else
+                                {
+                                    $data[$date] = 1;
+                                }
+                            }
+                        }
+
+                        if(!isset($data[$time]))
+                        {
+                            $data[$time] = 0;
+                        }
+                    }
+
+                    break;
+
+                default:
+
+                    $days = floor((strtotime($end) - strtotime($start)) / 60 / 60 / 24);
+
+                    for($day = 0; $day < $days; $day++)
+                    {
+                        $time = date('Ymd', strtotime('-'.$day. ' day', strtotime($end)));
+
+                        foreach($elements as $element)
+                        {
+                            switch ($elementType)
+                            {
+                                case ElementType::Entry:
+                                    $date = $element->postDate->format('Ymd');
+                                    break;
+
+                                case ElementType::User:
+                                    $date = $element->dateCreated->format('Ymd');
+                                    break;
+                            }
+
+                            if($time == $date)
+                            {
+                                if(isset($data[$date]))
+                                {
+                                    $data[$date]++;
+                                }
+                                else
+                                {
+                                    $data[$date] = 1;
+                                }
+                            }
+                        }
+
+                        if(!isset($data[$time]))
+                        {
+                            $data[$time] = 0;
+                        }
+                    }
+            }
+
+            foreach($data as $date => $total)
+            {
+                $row = array(
+                    array('v' => (string) $date, 'f' => (string) $date),
+                    array('v' => $total, 'f' => (string) $total),
+                );
+
+                $chartResponse['rows'][] = $row;
+            }
 
             // Total
 
@@ -141,7 +312,7 @@ class Analytics_StatsController extends BaseController
             $this->returnJson(array(
                 'area' => $chartResponse,
                 'total' => $total,
-                'metric' => Craft::t(craft()->analytics->getDimMet($metric)),
+                'metric' => 'ga:users',
                 'period' => $period,
                 'periodLabel' => Craft::t('this '.$period)
             ));
