@@ -1,9 +1,5 @@
-.settingsmodal {
-  width: 330px;
-  min-width: 330px;
-  min-height: auto;
-}
 .settingsmodal .body {
+  min-width: 320px;
   height: calc(100% - 58px);
   overflow: auto;
 }
