@@ -1,26 +1,18 @@
 #!/bin/bash
 
-echo "CI"="{$CI}"
-echo "CI_BUILD_NUMBER"="{$CI_BUILD_NUMBER}"
-echo "CI_BUILD_URL"="{$CI_BUILD_URL}"
-echo "CI_PULL_REQUEST"="{$CI_PULL_REQUEST}"
-echo "CI_BRANCH"="{$CI_BRANCH}"
-echo "CI_COMMIT_ID"="{$CI_COMMIT_ID}"
-echo "CI_COMMITTER_NAME"="{$CI_COMMITTER_NAME}"
-echo "CI_COMMITTER_EMAIL"="{$CI_COMMITTER_EMAIL}"
-echo "CI_COMMITTER_USERNAME"="{$CI_COMMITTER_USERNAME}"
-echo "CI_MESSAGE"="{$CI_MESSAGE}"
-echo "CI_NAME"="{$CI_NAME}"
-
-export PLUGIN_VERSION_VAR="${CI_BRANCH}_VERSION"
-echo "Branch: ${PLUGIN_VERSION_VAR}"
-export PLUGIN_VERSION=${!PLUGIN_VERSION_VAR}
-echo "Branch: ${PLUGIN_VERSION}"
-export PLUGIN_VERSION_BUILD="${PLUGIN_VERSION}.${CI_BUILD_NUMBER}"
+echo $CI
+echo $CI_BUILD_NUMBER
+echo $CI_BUILD_URL
+echo $CI_PULL_REQUEST
+echo $CI_BRANCH
+echo $CI_COMMIT_ID
+echo $CI_COMMITTER_NAME
+echo $CI_COMMITTER_EMAIL
+echo $CI_COMMITTER_USERNAME
+echo $CI_MESSAGE
+echo $CI_NAME
 
 export SOURCE_FOLDER="Source/"
-
-echo "Preparing build ${PLUGIN_VERSION_BUILD}"
 
 # Build Source
 
@@ -29,5 +21,3 @@ cd $SOURCE_FOLDER
 composer update
 
 cd ../
-
-./Utils/applyVersion.sh ${PLUGIN_VERSION}.${CI_BUILD_NUMBER}
