@@ -16,4 +16,4 @@ composer update
 
 cd ../
 
-./applyVersion.sh ${PLUGIN_VERSION}.${CI_BUILD_NUMBER}
+./Utils/applyVersion.sh ${PLUGIN_VERSION}.${CI_BUILD_NUMBER}
