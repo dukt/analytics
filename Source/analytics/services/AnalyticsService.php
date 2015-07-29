@@ -26,6 +26,7 @@ class AnalyticsService extends BaseApplicationComponent
         $r = $this->getApiObject()->metadata_columns->listMetadataColumns('ga');
         return $r;
     }
+
     public function getChartData($options = array())
     {
         $profile = craft()->analytics->getProfile();
