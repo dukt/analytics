@@ -218,49 +218,15 @@ class Analytics_StatsController extends BaseController
      *
      * @return null
      */
-    public function tableChart()
+    private function tableChart()
     {
         try
         {
-            $profile = craft()->analytics->getProfile();
+            $source = craft()->request->getParam('source');
 
-            $realtime = craft()->request->getParam('realtime');
-            $dimension = craft()->request->getParam('dimension');
-            $metric = craft()->request->getParam('metric');
-            $period = craft()->request->getParam('period');
-            $start = date('Y-m-d', strtotime('-1 '.$period));
-            $end = date('Y-m-d');
+            $response = craft()->{'analytics_'.$source}->table();
 
-
-            $criteria = new Analytics_RequestCriteriaModel;
-            $criteria->startDate = $start;
-            $criteria->endDate = $end;
-            $criteria->metrics = $metric;
-
-            if($realtime)
-            {
-                $criteria->optParams = array('dimensions' => $dimension);
-                $criteria->realtime = true;
-            }
-            else
-            {
-                $criteria->optParams = array(
-                    'dimensions' => $dimension,
-                    'sort' => '-'.$metric,
-                    'max-results' => 20,
-                    'filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)'
-                );
-            }
-
-            $tableResponse = craft()->analytics->sendRequest($criteria);
-
-            $this->returnJson(array(
-                'table' => $tableResponse,
-                'dimension' => Craft::t(craft()->analytics->getDimMet($dimension)),
-                'metric' => Craft::t(craft()->analytics->getDimMet($metric)),
-                'period' => $period,
-                'periodLabel' => Craft::t('this '.$period)
-            ));
+            $this->returnJson($response);
         }
         catch(\Exception $e)
         {
