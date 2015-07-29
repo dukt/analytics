@@ -37,5 +37,6 @@ do
     rm -rf "craft-${PLUGIN_NAME_WITH_VERSION}"
     cd ../
 
+    ls -la
 
 done
