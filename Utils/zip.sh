@@ -35,8 +35,9 @@ do
     cd $ZIP_FOLDER
     zip -r "craft-${PLUGIN_NAME_WITH_VERSION}.zip" "craft-${PLUGIN_NAME_WITH_VERSION}"
     rm -rf "craft-${PLUGIN_NAME_WITH_VERSION}"
-    cd ../
 
     ls -la
+
+    cd ../
 
 done
