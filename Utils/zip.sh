@@ -16,6 +16,7 @@ do
     mkdir $BUILD_FOLDER
     cp -R $SOURCE_FOLDER $BUILD_PLUGIN_FOLDER
 
+
     # Clean up Build/
 
     find ./$BUILD_PLUGIN_FOLDER -name ".git" -exec rm -rf {} \;
