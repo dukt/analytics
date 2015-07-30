@@ -50,9 +50,9 @@ do
     then
         echo "Found tag ${VERSION}, don't create it"
     else
-        echo "Tag ${VERSION} not found, create it" | git tag -a ${VERSION} | echo "Tag created"
+        echo "Tag ${VERSION} not found, create it"
+        git tag ${VERSION}
         git push --tags
-        echo "Tag pushed"
     fi
 
 
