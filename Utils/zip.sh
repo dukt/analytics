@@ -55,5 +55,4 @@ do
         git push --tags
     fi
 
-
 done
