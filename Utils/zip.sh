@@ -40,4 +40,19 @@ do
 
     cd ../
 
+
+    # Create git tag
+
+    if GIT_DIR=./.git git show-ref --tags | egrep -q "refs/tags/$1$"
+
+    then
+        echo "Found tag, don't create it"
+    else
+        echo "Tag not found, create it"
+
+        git tag -a $VERSION
+        git push --tags
+    fi
+
+
 done
