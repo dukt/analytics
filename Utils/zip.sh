@@ -49,8 +49,7 @@ do
         echo "Found tag ${VERSION}, don't create it"
     else
         echo "Tag ${VERSION} not found, create it"
-
-        git tag -a $VERSION
+        git tag -a ${VERSION}
         git push --tags
     fi
 
