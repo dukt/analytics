@@ -43,7 +43,9 @@ do
 
     # Create git tag
 
-    if GIT_DIR=./.git git show-ref --tags | egrep -q "refs/tags/${VERSION}$"
+    set -e
+
+    if GIT_DIR=./.git git show-ref --tags | egrep -q "refs/tags/${VERSION}"
 
     then
         echo "Found tag ${VERSION}, don't create it"
