@@ -27,7 +27,7 @@ gulp.task('less', function () {
 
 gulp.task('scripts', function() {
     return gulp.src([
-        paths.js+'/**/*.js'
+        paths.js+'/*.js'
     ])
     .pipe(uglify())
     .pipe(gulp.dest(paths.jsCompressed));
@@ -49,13 +49,13 @@ gulp.task('default', ['clean'], function() {
 
 /* Watch */
 
-// gulp.task('watch', function() {
+gulp.task('watch', function() {
 
-//     gulp.watch(paths.less+'/**/*.less', ['less']);
-//     gulp.watch(paths.js+'/**/*.js', ['scripts']);
+    gulp.watch(paths.less+'/**/*.less', ['less']);
+    gulp.watch(paths.js+'/*.js', ['scripts']);
 
-//     livereload.listen();
+    livereload.listen();
 
-//     gulp.watch([paths.css+'/**', paths.js, paths.jsMin]).on('change', livereload.changed);
+    gulp.watch([paths.css+'/**', paths.jsCompressed]).on('change', livereload.changed);
 
-// });
+});

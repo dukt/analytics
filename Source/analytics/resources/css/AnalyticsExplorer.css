@@ -1,5 +1,18 @@
+.settingsmodal {
+  width: 300px;
+  min-width: 300px;
+  min-height: auto;
+}
+.settingsmodal .footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
 /* general */
 .analytics_explorer {
+  position: relative;
+  overflow: visible !important;
   padding: 0;
 }
 .analytics_explorer h2 {
@@ -139,18 +152,33 @@
 }
 /* menu */
 .analytics-menu {
-  padding: 20px 24px;
+  padding: 0;
 }
 .analytics-menu .select {
   box-shadow: none;
   border: 1px solid #ddd;
 }
 .analytics-collapsible {
-  overflow: hidden;
-  visibility: hidden;
+  /*    &.analytics-collapsed {
+        display: none;
+    }*/
 }
 /* toolbar */
+.analytics-field {
+  display: block;
+}
 .analytics-toolbar .analytics-settings {
+  position: absolute;
+  top: 60px;
+  right: -150px;
+  background: #fff;
+  z-index: 1;
+  border: 1px solid #ccc !important;
+  border-radius: 3px;
+  -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  width: 200px;
+  overflow: hidden;
   margin: 0;
   clear: both;
 }
@@ -165,13 +193,6 @@
 .analytics-toolbar .analytics-settings .analytics-settings-in .analytics-settings-in-in label {
   color: #aaa;
   font-size: 0.8em;
-}
-.analytics-toolbar .analytics-settings .analytics-settings-in .analytics-settings-in-in .analytics-fields {
-  text-align: left;
-}
-.analytics-toolbar .analytics-settings .analytics-settings-in .analytics-settings-in-in .analytics-fields .analytics-field {
-  display: inline-block;
-  text-align: left;
 }
 .analytics-toolbar .analytics-settings .analytics-settings-in .analytics-settings-in-in .analytics-fields .analytics-metric {
   box-shadow: none;
@@ -190,9 +211,7 @@
   color: #6CAB34;
 }
 .analytics-toolbar .analytics-settings .analytics-settings-in .analytics-settings-in-in .analytics-chart-picker {
-  float: left;
-  margin-right: 6px;
-  margin-bottom: 0;
+  margin: 0;
 }
 .analytics-toolbar .analytics-settings .analytics-settings-in .analytics-settings-in-in .analytics-chart-picker .analytics-tabletypes {
   padding-top: 1px;
@@ -211,12 +230,6 @@
   box-shadow: none;
   border: 1px solid #ddd;
 }
-.analytics-small .analytics-toolbar .analytics-settings .analytics-settings-in .analytics-settings-in-in .analytics-fields {
-  float: none;
-}
-.analytics-small .analytics-toolbar .analytics-settings .analytics-settings-in .analytics-settings-in-in .analytics-fields .analytics-field {
-  display: block;
-}
 .analytics-small .analytics-toolbar .analytics-settings .analytics-settings-in .analytics-settings-in-in .right {
   float: none;
 }
@@ -228,19 +241,6 @@
 .analytics-small .analytics-toolbar .analytics-settings .analytics-settings-in .analytics-settings-in-in .right .analytics-period {
   float: none;
   display: block;
-}
-.analytics-small .analytics-toolbar .field {
-  position: relative;
-  margin-bottom: 14px !important;
-  padding-left: 95px;
-}
-.analytics-small .analytics-toolbar .field label {
-  position: absolute;
-  top: 6px;
-  left: 0;
-  width: 80px;
-  text-align: right;
-  color: #555;
 }
 .rtl .analytics-small .analytics-toolbar .field {
   position: relative;

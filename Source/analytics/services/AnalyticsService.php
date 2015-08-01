@@ -21,6 +21,100 @@ class AnalyticsService extends BaseApplicationComponent
     // Public Methods
     // =========================================================================
 
+    public function getApiDimensionsMetrics()
+    {
+        $r = $this->getApiObject()->metadata_columns->listMetadataColumns('ga');
+        return $r;
+    }
+
+    public function getChartData($options = array())
+    {
+        $profile = craft()->analytics->getProfile();
+
+        $realtime = (isset($options['realtime']) ? $options['realtime'] : null);
+        $metric = (isset($options['metric']) ? $options['metric'] : null);
+        $dimension = (isset($options['dimension']) ? $options['dimension'] : null);
+        $period = (isset($options['period']) ? $options['period'] : null);
+        $start = date('Y-m-d', strtotime('-1 '.$period));
+        $end = date('Y-m-d');
+
+        switch($period)
+        {
+            case 'year':
+                $chartDimension = 'ga:yearMonth';
+                $start = date('Y-m-01', strtotime('-1 '.$period));
+                $end = date('Y-m-d');
+                break;
+
+            default:
+                $chartDimension = 'ga:date';
+                $start = date('Y-m-d', strtotime('-1 '.$period));
+                $end = date('Y-m-d');
+        }
+
+
+        // Chart
+
+        $criteria = new Analytics_RequestCriteriaModel;
+        $criteria->startDate = $start;
+        $criteria->endDate = $end;
+        $criteria->metrics = $metric;
+
+        if($realtime)
+        {
+            $criteria->optParams = array('dimensions' => 'rt:userType');
+            $criteria->realtime = true;
+        }
+        else
+        {
+            $optParams = array(
+                'dimensions' => $chartDimension,
+                'sort' => $chartDimension
+            );
+
+            if($dimension)
+            {
+                $optParams['filters'] = $dimension.'!=(not set);'.$dimension.'!=(not provided)';
+            }
+
+            $criteria->optParams = $optParams;
+        }
+
+        $chartResponse = craft()->analytics->sendRequest($criteria);
+
+
+        // Total
+
+        $total = 0;
+
+        $totalCriteria = new Analytics_RequestCriteriaModel;
+        $totalCriteria->startDate = $start;
+        $totalCriteria->endDate = $end;
+        $totalCriteria->metrics = $metric;
+
+        if(isset($criteria->optParams['filters']))
+        {
+            $totalCriteria->optParams = array('filters' => $criteria->optParams['filters']);
+        }
+
+        $response = craft()->analytics->sendRequest($totalCriteria);
+
+        if(!empty($response['rows'][0][0]['f']))
+        {
+            $total = $response['rows'][0][0]['f'];
+        }
+
+
+        // Return JSON
+
+        return (array(
+            'area' => $chartResponse,
+            'total' => $total,
+            'metric' => Craft::t(craft()->analytics->getDimMet($metric)),
+            'period' => Craft::t('this '.$period)
+        ));
+    }
+
     /**
      * Send Request
      */
@@ -320,6 +414,16 @@ class AnalyticsService extends BaseApplicationComponent
         {
             return $dimsmets[$key];
         }
+    }
+
+    public function getDimensions()
+    {
+        return $this->getData('dimensions');
+    }
+
+    public function getMetrics()
+    {
+        return $this->getData('metrics');
     }
 
     /**

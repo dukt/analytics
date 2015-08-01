@@ -1,0 +1,77 @@
+.settingsmodal {
+
+    .body {
+        min-width: 320px;
+        height: ~"calc(100% - 58px)";
+        overflow: auto;
+    }
+
+    .footer {
+        width: 100%;
+    }
+}
+
+.analytics_stats
+{
+    &:hover {
+        .actions { display: block; }
+    }
+
+    .actions { display:none; float: none !important; position: absolute; top: -38px; right: -8px; }
+    .actions a.dk-settings-btn { color: rgb(41, 50, 61); opacity: .5; padding: 6px 8px; }
+    .actions a.dk-settings-btn:hover { opacity: .8;  }
+
+    .body { min-height: 100px; }
+
+    .spinner { position: absolute; top: 50%; left: 50%; margin-left: -12px; margin-top: -24px; }
+
+    .chart { min-height: 150px;  }
+
+    .chart.area { margin: 0 -24px -24px -24px; }
+
+    .chart.counter { min-height: inherit; padding: 12px 0; text-align: center; }
+    .chart.counter .value { font-size: 5em; line-height: 1em; margin-bottom: 0.1em; }
+    .chart.counter .label, .chart.counter .period { display: inline; font-size: 1.2em; opacity: .7; }
+    .chart.counter .label { color: #318EC4; }
+    .chart.counter .period { color: #666; }
+
+    .chart.geo { min-height: 300px; }
+
+    .chart.table {
+
+        margin: 0 0 20px 0; position: relative; min-height: 30px; border-top:1px dotted #e3e5e8; min-height: 60px;
+
+        & > div { position: inherit; }
+
+        td { width: 100px; }
+        td strong { white-space:nowrap; text-overflow: ellipsis;  overflow: hidden; width: 200px; display: block; overflow: hidden; font-weight: normal; }
+
+        .google-visualization-table-table { width: 100%; }
+        .google-visualization-table-th { background: none !important; padding-left: 0; padding-right: 0; border:0; border-bottom: 1px dotted #e3e5e8; color: rgba(0, 0, 0, 0.298039); font-size: 0.8em; white-space:nowrap; }
+        .google-visualization-table-th:first-child { text-align: left; }
+        .google-visualization-table-th:last-child { text-align: right; }
+        .google-visualization-table-th span { display: none; }
+
+        td.google-visualization-table-td { max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; background: #fff; border-left: 0; border-right: 0; border-top:0; border-bottom: 1px dotted #e3e5e8; }
+        td.google-visualization-table-td:hover { background: #fff; }
+        td.google-visualization-table-td.google-visualization-table-td-number { text-align: right; }
+
+        .google-visualization-table-tr-sel td,
+        .google-visualization-table-tr-over td { background-color: #fff; }
+        .google-visualization-table-tr-sel.google-visualization-table-tr-odd,
+        .google-visualization-table-tr-over.google-visualization-table-tr-odd { background-color: #fff; }
+        .google-visualization-table-div-page { margin-top: 10px; text-align: center; position: absolute; bottom: -35px; left: 0; width: 100%; }
+        .google-visualization-table-div-page .charts-custom-button-inner-box { padding: 2px 10px; }
+        .google-visualization-table-div-page .charts-custom-button { background: #fff; margin: 0 3px; }
+        .google-visualization-table-div-page .charts-custom-button .charts-custom-button-outer-box { border-color:#ccc; }
+        .google-visualization-table-div-page .charts-custom-button .charts-custom-button-outer-box .charts-custom-button-inner-box { border-color:#ccc; }
+        .google-visualization-table-div-page .charts-custom-button:hover, .charts-custom-button-hover { background: #fff; }
+        .google-visualization-table-div-page .charts-custom-button:hover .charts-custom-button-outer-box,
+        .google-visualization-table-div-page .charts-custom-button-hover .charts-custom-button-outer-box { border-color:#bbb !important; }
+        .google-visualization-table-div-page .charts-custom-button:hover .charts-custom-button-outer-box,
+        .google-visualization-table-div-page .charts-custom-button-hover .charts-custom-button-outer-box .charts-custom-button-inner-box { border-color:#bbb !important; }
+        .google-visualization-table-div-page .charts-custom-button-disabled { opacity: .1; }
+        .google-visualization-table-div-page .page-number { padding: 10px; }
+        .google-visualization-table-page-numbers { display: none; }
+    }
+}

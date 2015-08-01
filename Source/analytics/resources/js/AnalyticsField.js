@@ -71,16 +71,6 @@ AnalyticsField = Garnish.Base.extend({
 
                 this.chartData = AnalyticsUtils.responseToDataTable(response.data);
 
-                // $.each(apiData.columns, $.proxy(function(k, apiColumn)
-                // {
-                //     var column = AnalyticsUtils.parseColumn(apiColumn);
-                //     this.chartData.addColumn(column.type, column.label);
-                // }, this));
-
-                // rows = AnalyticsUtils.parseRows(apiData.columns, apiData.rows);
-
-                // this.chartData.addRows(rows);
-
                 this.chart = new google.visualization.AreaChart(this.$chartElement.get(0));
 
                 if(typeof(this.chart) != 'undefined')

@@ -11,13 +11,15 @@ var googleVisualisationCalled = false;
  * Explorer
  */
 Analytics.Explorer = Garnish.Base.extend({
-    init: function(element, settings)
+    init: function(element, settings, chartData)
     {
         this.$element = $('#'+element);
         this.$widget = $('.analytics-widget:first', this.$element);
         this.$views = $('.analytics-view', this.$element);
         this.$error = $('.analytics-error', this.$element);
+        this.$openModal = $('.open-modal', this.$element);
 
+        this.chartData = chartData;
         this.view = false;
         this.views = {};
         this.section = false;
@@ -25,8 +27,50 @@ Analytics.Explorer = Garnish.Base.extend({
         this.loaded = false;
 
         this.addListener(Garnish.$win, 'resize', 'resize');
-
+        this.addListener(this.$openModal, 'click', 'openModal');
         this.visualizationLoad();
+    },
+
+    openModal: function(ev)
+    {
+        if(!this.settingsModal)
+        {
+            $settingsModal = $('<div class="settingsmodal modal"></div>').appendTo(Garnish.$bod);
+            $body = $('<div class="body"/>').appendTo($settingsModal),
+            $footer = $('<div class="footer"/>').appendTo($settingsModal),
+            $buttons = $('<div class="buttons right"/>').appendTo($footer),
+            $cancelBtn = $('<div class="btn">'+Craft.t('Cancel')+'</div>').appendTo($buttons),
+            $saveBtn = $('<input type="submit" class="btn submit" value="'+Craft.t('Save')+'" />').appendTo($buttons);
+
+            this.settingsModal = new Garnish.Modal($settingsModal, {
+                visible: false,
+                resizable: false
+            });
+
+            this.addListener($cancelBtn, 'click', function() {
+                this.settingsModal.hide();
+            });
+
+            this.addListener($saveBtn, 'click', function() {
+                console.log('save');
+            });
+
+            Craft.postActionRequest('analytics/settingsModal', {}, $.proxy(function(response, textStatus)
+            {
+                $('.body', this.settingsModal.$container).html(response.html);
+                Craft.initUiElements();
+            }, this));
+        }
+        else
+        {
+            Craft.postActionRequest('analytics/settingsModal', {}, $.proxy(function(response, textStatus)
+            {
+                $('.body', this.settingsModal.$container).html(response.html);
+                Craft.initUiElements();
+            }, this));
+
+            this.settingsModal.show();
+        }
     },
 
     loadInterface: function()
@@ -392,7 +436,7 @@ Analytics.BrowserView = Garnish.Base.extend({
  * Browser
  */
 Analytics.Browser = Garnish.Base.extend({
-    init: function(explorer, data)
+    init: function(explorer, data, chartData)
     {
         this.explorer = explorer;
         this.$element = this.explorer.$element;
@@ -416,14 +460,21 @@ Analytics.Browser = Garnish.Base.extend({
         this.$counterLabel = $('.analytics-counter-label', this.$element);
         this.$counterPeriod = $('.analytics-counter-period', this.$element);
 
-        this.timer = false;
-        this.data = data;
-
-        this.request();
-
-        if(this.data.realtime)
+        if(this.explorer.chartData)
         {
-            this.startRealtime();
+            this.handleResponse(this.explorer.chartData, this.explorer.settings.chart);
+        }
+        else
+        {
+            this.timer = false;
+            this.data = data;
+
+            this.request();
+
+            if(this.data.realtime)
+            {
+                this.startRealtime();
+            }
         }
     },
 
@@ -884,12 +935,7 @@ Analytics.PinBtn = Garnish.Base.extend({
         if(this.pinned)
         {
             this.$pinBtn.addClass('active');
-            this.$collapsible.addClass('analytics-collapsed');
-
-            this.$collapsible.animate({
-                opacity: 0,
-                height: "toggle"
-            }, 0);
+            this.$collapsible.addClass('hidden');
         }
         else
         {
@@ -919,13 +965,8 @@ Analytics.PinBtn = Garnish.Base.extend({
     pin: function(saveState)
     {
         this.$pinBtn.addClass('active');
-        this.$collapsible.addClass('analytics-collapsed');
+        this.$collapsible.addClass('hidden');
         this.pinned = 1;
-
-        this.$collapsible.animate({
-            opacity: 0,
-            height: "toggle"
-        }, 200);
 
         this.settings.onPinChange(saveState);
     },
@@ -933,13 +974,8 @@ Analytics.PinBtn = Garnish.Base.extend({
     unpin: function()
     {
         this.$pinBtn.removeClass('active');
-        this.$collapsible.removeClass('analytics-collapsed');
+        this.$collapsible.removeClass('hidden');
         this.pinned = 0;
-        this.$collapsible.css('visibility', 'visible');
-        this.$collapsible.animate({
-            opacity: 1,
-            height: "toggle"
-        }, 200);
 
         this.settings.onPinChange();
     }
