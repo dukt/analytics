@@ -17,10 +17,21 @@ class AnalyticsService extends BaseApplicationComponent
 
     private $oauthHandle = 'google';
     private $token;
+    private $tracking;
 
     // Public Methods
     // =========================================================================
 
+    public function track($options)
+    {
+        if(!$this->tracking)
+        {
+            $this->tracking = new AnalyticsTracking($options);
+        }
+
+        return $this->tracking;
+    }
+    
     /**
      * Send Request
      */
