@@ -6,5 +6,4 @@ Google Analytics widgets for your Craft dashboard.
 - [Analytics Docs](https://dukt.net/craft/analytics/docs)
 - [Analytics License](https://dukt.net/craft/analytics/docs/license)
 
-
 [Dukt.net](https://dukt.net/) © 2015 - All rights reserved
