@@ -1,1 +1,8 @@
-BaseDataSource.php
+<?php
+
+class BaseDataSource {
+    public function getSettingsHtml()
+    {
+
+    }
+}

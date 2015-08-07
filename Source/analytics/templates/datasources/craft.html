@@ -1,0 +1,36 @@
+{{ forms.selectField({
+    label: "Element"|t,
+    name: "element",
+    options: {
+        entries: "Entries"|t,
+        users: "Users"|t
+    },
+    toggle: true,
+    targetPrefix: 'element'
+}) }}
+
+<div id="elemententries">
+    {% set sectionOptions = [] %}
+    {% for section in craft.sections.getAllSections() %}
+        {% set sectionOptions = sectionOptions|merge([{ label: section.name|t, value: section.id }]) %}
+    {% endfor %}
+
+   {{ forms.selectField({
+        label: "Section"|t,
+        name: "section",
+        options: sectionOptions,
+    }) }}
+</div>
+
+<div id="elementusers" class="hidden">
+    {% set groupOptions = [] %}
+    {% for group in craft.userGroups.getAllGroups() %}
+        {% set groupOptions = groupOptions|merge([{ label: group.name|t, value: group.id }]) %}
+    {% endfor %}
+
+   {{ forms.selectField({
+        label: "User Group"|t,
+        name: "group",
+        options: groupOptions,
+    }) }}
+</div>

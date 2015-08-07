@@ -30,5 +30,8 @@ class Craft extends BaseDataSource
 
     public function area() {}
     public function table() {}
-    public function getSettingsHtml() {}
+    public function getSettingsHtml()
+    {
+
+    }
 }
