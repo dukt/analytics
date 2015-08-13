@@ -3,14 +3,21 @@ var gulp = require('gulp'),
     livereload = require('gulp-livereload'),
     del = require('del'),
     uglify = require('gulp-uglify'),
-    rename = require('gulp-rename');
+    rename = require('gulp-rename'),
+    bower = require('gulp-bower');
 
 var paths = {
     less: './analytics/resources/less',
     css: './analytics/resources/css',
     js: './analytics/resources/js',
     jsCompressed: './analytics/resources/js/compressed',
+    bower: './analytics/resources/lib/',
 }
+
+gulp.task('bower', function() {
+  return bower()
+    .pipe(gulp.dest(paths.bower))
+});
 
 /* Less */
 
@@ -43,7 +50,7 @@ gulp.task('clean', function(cb) {
 /* Default Task */
 
 gulp.task('default', ['clean'], function() {
-    gulp.start('less', 'scripts');
+    gulp.start('bower', 'less', 'scripts');
 });
 
 
