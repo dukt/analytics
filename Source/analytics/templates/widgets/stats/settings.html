@@ -7,7 +7,7 @@
     class: 'realtime-select',
     name: 'realtime',
     options: ["No"|t, "Yes"|t],
-    value: settings.realtime,
+    value: (settings.realtime is defined ? settings.realtime : false),
     toggle: true,
     targetPrefix: 'realtime-'
 }) }}

@@ -204,15 +204,14 @@ class AnalyticsController extends BaseController
             $postSettings = craft()->request->getPost('settings');
 
             $widgetSettings = [
-                'colspan' => 1,
+                'colspan' => $postSettings['colspan'],
                 'chart' => $postSettings['chart'],
                 'period' => $postSettings['period'],
-                'options' => $postSettings['options'],
             ];
 
-            if(!empty($formerWidget->settings['colspan']))
+            if(isset($postSettings['options']))
             {
-                $widgetSettings['colspan'] = $formerWidget->settings['colspan'];
+                $widgetSettings['options'] = $postSettings['options'];
             }
 
             $widget = new WidgetModel();

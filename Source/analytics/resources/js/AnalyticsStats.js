@@ -16,7 +16,6 @@ Analytics.Stats = Garnish.Base.extend({
         this.$body = $('.body', this.$element);
         this.$spinner = $('.spinner', this.$element);
         this.$settingsBtn = $('.dk-settings-btn', this.$element);
-        this.$period = $('.period select', this.$element);
 
 
         // default/cached request and response
@@ -27,13 +26,11 @@ Analytics.Stats = Garnish.Base.extend({
         if(typeof(this.chartRequest) != 'undefined')
         {
             this.requestData = this.chartRequest;
-            this.$period.val(this.requestData.period);
         }
 
 
         // listeners
 
-        this.addListener(this.$period, 'change', 'periodChange');
         this.addListener(this.$settingsBtn, 'click', 'openSettings');
 
         // initialize Google Visualization
@@ -125,11 +122,17 @@ Analytics.Stats = Garnish.Base.extend({
 
                 console.log('parsedParams', this.requestData);
 
+                // this.$element.parents('.item').data('colspan', this.requestData.colspan);
+
                 this.chartResponse = this.sendRequest(this.requestData);
 
                 this.settingsModal.hide();
 
                 this.saveState();
+
+                // Craft.initUiElements();
+
+                // Garnish.$win.trigger('resize');
 
             }, this));
 
@@ -137,15 +140,26 @@ Analytics.Stats = Garnish.Base.extend({
             {
                 $('.body', this.settingsModal.$container).html(response.html);
 
+                this.$periodSelect = $('.period select', this.settingsModal.$container);
                 this.$chartSelect = $('.chart-select select', this.settingsModal.$container);
+
+                // this.$realtimeSelect = $('.realtime-select select', this.settingsModal.$container);
+                // this.addListener(this.$periodSelect, 'change', 'periodChange');
 
                 if(this.requestData)
                 {
                     this.$chartSelect.val(this.requestData.chart);
                     this.$chartSelect.trigger('change');
+
+                    this.$periodSelect.val(this.requestData.period);
+                    this.$periodSelect.trigger('change');
+
+                    // this.$realtimeSelect.val(this.requestData.realtime);
+                    // this.$realtimeSelect.trigger('change');
                 }
 
                 Craft.initUiElements();
+
             }, this));
         }
         else
@@ -161,6 +175,7 @@ Analytics.Stats = Garnish.Base.extend({
         var data = {
             id: this.$element.data('id'),
             settings: {
+                colspan: this.requestData['colspan'],
                 chart: this.requestData['chart'],
                 period: this.requestData['period'],
                 options: this.requestData['options'],
@@ -179,7 +194,7 @@ Analytics.Stats = Garnish.Base.extend({
     sendRequest: function(data)
     {
         // data[csrfTokenName] = csrfTokenValue;
-        data.period = this.$period.val();
+        //data.period = this.$period.val();
 
         this.$spinner.removeClass('hidden');
 

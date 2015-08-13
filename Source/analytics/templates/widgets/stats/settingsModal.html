@@ -1,37 +1,5 @@
 {% import "_includes/forms" as forms %}
 
 <div class="settings-modal">
-
-    {{ forms.selectField({
-        label: "Realtime"|t,
-        class: 'chart-select',
-        name: 'chart',
-        options: ["No"|t, "Yes"|t],
-        toggle: true,
-        targetPrefix: 'realtime'
-    }) }}
-
-    <div id="realtime-0">
-        {{ forms.selectField({
-            label: "Chart"|t,
-            class: 'chart-select',
-            name: 'chart',
-            options: {
-                area: "Area"|t,
-                counter: "Counter"|t,
-                pie: "Pie"|t,
-                table: "Table"|t,
-                geo: "Geo"|t,
-            },
-            toggle: true,
-            targetPrefix: 'chart'
-        }) }}
-    </div>
-
-    <div id="realtime-1">
-        Realtime enabled
-    </div>
-
-
-    {{ inject|raw }}
+    {% include 'analytics/widgets/stats/settings' %}
 </div>
