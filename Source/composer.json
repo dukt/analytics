@@ -2,6 +2,11 @@
     "config": {
         "vendor-dir": "analytics/vendor/"
     },
+    "autoload": {
+        "psr-4": {
+            "Dukt\\Analytics\\DataSources\\": "analytics/datasources/"
+        }
+    },
     "require": {
         "google/apiclient": "dev-master"
     }
