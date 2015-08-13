@@ -7,3 +7,5 @@ Source/analytics/Info.php
 Source/analytics/vendor
 Source/composer.lock
 Source/node_modules/
+Source/bower_components/
+Source/analytics/resources/lib/
