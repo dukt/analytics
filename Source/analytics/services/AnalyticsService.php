@@ -21,20 +21,26 @@ class AnalyticsService extends BaseApplicationComponent
     // Public Methods
     // =========================================================================
 
+    public function getDataSource($className)
+    {
+        $nsClassName = "\\Dukt\\Analytics\\DataSources\\$className";
+        return new $nsClassName;
+    }
+    
     public function getApiDimensionsMetrics()
     {
         $r = $this->getApiObject()->metadata_columns->listMetadataColumns('ga');
         return $r;
     }
 
-    public function getChartData($options = array())
+    public function getChartData($requestData = array())
     {
         $profile = craft()->analytics->getProfile();
 
-        $realtime = (isset($options['realtime']) ? $options['realtime'] : null);
-        $metric = (isset($options['metric']) ? $options['metric'] : null);
-        $dimension = (isset($options['dimension']) ? $options['dimension'] : null);
-        $period = (isset($options['period']) ? $options['period'] : null);
+        $realtime = (isset($requestData['realtime']) ? $requestData['realtime'] : null);
+        $metric = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
+        $dimension = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
+        $period = (isset($requestData['period']) ? $requestData['period'] : null);
         $start = date('Y-m-d', strtotime('-1 '.$period));
         $end = date('Y-m-d');
 
@@ -108,7 +114,7 @@ class AnalyticsService extends BaseApplicationComponent
         // Return JSON
 
         return (array(
-            'area' => $chartResponse,
+            'chart' => $chartResponse,
             'total' => $total,
             'metric' => Craft::t(craft()->analytics->getDimMet($metric)),
             'period' => Craft::t('this '.$period)
@@ -418,12 +424,42 @@ class AnalyticsService extends BaseApplicationComponent
 
     public function getDimensions()
     {
-        return $this->getData('dimensions');
+        $data = $this->getData('dimensions');
+
+        foreach($data as $k => $row)
+        {
+            if(is_string($row))
+            {
+                $label = Craft::t($this->getDimMet($row));
+
+                if(!empty($label))
+                {
+                    $data[$k] = $label;
+                }
+            }
+        }
+
+        return $data;
     }
 
     public function getMetrics()
     {
-        return $this->getData('metrics');
+        $data = $this->getData('metrics');
+
+        foreach($data as $k => $row)
+        {
+            if(is_string($row))
+            {
+                $label = Craft::t($this->getDimMet($row));
+
+                if(!empty($label))
+                {
+                    $data[$k] = $label;
+                }
+            }
+        }
+
+        return $data;
     }
 
     /**

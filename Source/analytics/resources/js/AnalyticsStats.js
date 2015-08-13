@@ -2,25 +2,51 @@ var Analytics = {};
 var googleVisualisationCalled = false;
 
 Analytics.Stats = Garnish.Base.extend({
-    data:{period:'week'},
+    requestData: null,
     init: function(element, options)
     {
+        console.log('Analytics.Stats(element, options)');
+        console.log('---- element', element);
+        console.log('---- options', options);
+
+
+        // elements
+
         this.$element = $('#'+element);
         this.$body = $('.body', this.$element);
         this.$spinner = $('.spinner', this.$element);
         this.$settingsBtn = $('.dk-settings-btn', this.$element);
+        this.$period = $('.period select', this.$element);
+
+
+        // default/cached request and response
 
         this.chartRequest = options['cachedRequest'];
         this.chartResponse = options['cachedResponse'];
 
+        if(typeof(this.chartRequest) != 'undefined')
+        {
+            this.requestData = this.chartRequest;
+            this.$period.val(this.requestData.period);
+        }
+
+
+        // listeners
+
+        this.addListener(this.$period, 'change', 'periodChange');
         this.addListener(this.$settingsBtn, 'click', 'openSettings');
+
+        // initialize Google Visualization
 
         this.initGoogleVisualization($.proxy(function() {
 
             // Google Visualization is loaded and ready
 
-            this.handleChartResponse('area', this.chartResponse);
-
+            if(this.chartResponse)
+            {
+                this.$spinner.addClass('hidden');
+                this.handleChartResponse(this.requestData.chart, this.chartResponse);
+            }
         }, this));
     },
 
@@ -57,6 +83,18 @@ Analytics.Stats = Garnish.Base.extend({
         }, this));
     },
 
+    periodChange: function(ev)
+    {
+        console.log('Analytics.Stats.periodChange()');
+
+        if(this.requestData)
+        {
+            this.requestData.period = $(ev.currentTarget).val();
+
+            this.chartResponse = this.sendRequest(this.requestData);
+        }
+    },
+
     openSettings: function(ev)
     {
         if(!this.settingsModal)
@@ -81,18 +119,32 @@ Analytics.Stats = Garnish.Base.extend({
 
                 ev.preventDefault();
 
-                var data = $('input, textarea, select', $form).filter(':visible').serialize();
-                var request = $.parseParams(data);
+                var stringData = $('input, textarea, select', $form).filter(':visible').serializeJSON();
 
-                this.chartResponse = this.sendRequest(request);
+                this.requestData = stringData;
+
+                console.log('parsedParams', this.requestData);
+
+                this.chartResponse = this.sendRequest(this.requestData);
 
                 this.settingsModal.hide();
 
+                this.saveState();
+
             }, this));
 
-            Craft.postActionRequest('analytics/settingsModal', {}, $.proxy(function(response, textStatus)
+            Craft.postActionRequest('analytics/settingsModal', { id: this.$element.data('id') }, $.proxy(function(response, textStatus)
             {
                 $('.body', this.settingsModal.$container).html(response.html);
+
+                this.$chartSelect = $('.chart-select select', this.settingsModal.$container);
+
+                if(this.requestData)
+                {
+                    this.$chartSelect.val(this.requestData.chart);
+                    this.$chartSelect.trigger('change');
+                }
+
                 Craft.initUiElements();
             }, this));
         }
@@ -102,13 +154,39 @@ Analytics.Stats = Garnish.Base.extend({
         }
     },
 
+    saveState: function()
+    {
+        console.log('Analytics.Stats().saveState()');
+
+        var data = {
+            id: this.$element.data('id'),
+            settings: {
+                chart: this.requestData['chart'],
+                period: this.requestData['period'],
+                options: this.requestData['options'],
+            }
+        };
+
+        console.log('Save state data', data);
+
+        Craft.queueActionRequest('analytics/saveWidgetState', data, $.proxy(function(response)
+        {
+            // state saved
+
+        }, this));
+    },
+
     sendRequest: function(data)
     {
         // data[csrfTokenName] = csrfTokenValue;
+        data.period = this.$period.val();
 
         this.$spinner.removeClass('hidden');
 
         $('.chart', this.$body).remove();
+
+        console.log('Analytics.Stats().sendRequest(data)');
+        console.log('---- data', data);
 
         Craft.postActionRequest('analytics/stats/getChart', data, $.proxy(function(response, textStatus)
         {
@@ -152,7 +230,7 @@ Analytics.Stats = Garnish.Base.extend({
         $chart.appendTo(this.$body);
 
         this.chartDataTable = Analytics.Utils.responseToDataTable(response.table);
-        this.chartOptions = Analytics.ChartOptions.geo(this.data.dimensions);
+        this.chartOptions = Analytics.ChartOptions.geo(this.requestData.dimensions);
         this.chart = new google.visualization.GeoChart($chart.get(0));
         this.chart.draw(this.chartDataTable, this.chartOptions);
     },
@@ -173,7 +251,7 @@ Analytics.Stats = Garnish.Base.extend({
         $chart = $('<div class="chart pie" />');
         $chart.appendTo(this.$body);
 
-        this.chartDataTable = Analytics.Utils.responseToDataTable(response.table);
+        this.chartDataTable = Analytics.Utils.responseToDataTable(response.chart);
         this.chartOptions = Analytics.ChartOptions.pie();
         this.chart = new google.visualization.PieChart($chart.get(0));
         this.chart.draw(this.chartDataTable, this.chartOptions);
@@ -225,6 +303,8 @@ Analytics.Utils = {
 
     responseToDataTable: function(response)
     {
+        console.log('responseToDataTable', response);
+
         var data = new google.visualization.DataTable();
 
         $.each(response.cols, function(k, column) {
@@ -462,25 +542,3 @@ Analytics.ChartOptions = Garnish.Base.extend({}, {
         }
     }
 });
-
-
-/**
- * $.parseParams - parse query string paramaters into an object.
- */
-(function($) {
-var re = /([^&=]+)=?([^&]*)/g;
-var decodeRE = /\+/g;  // Regex for replacing addition symbol with a space
-var decode = function (str) {return decodeURIComponent( str.replace(decodeRE, " ") );};
-$.parseParams = function(query) {
-    var params = {}, e;
-    while ( e = re.exec(query) ) {
-        var k = decode( e[1] ), v = decode( e[2] );
-        if (k.substring(k.length - 2) === '[]') {
-            k = k.substring(0, k.length - 2);
-            (params[k] || (params[k] = [])).push(v);
-        }
-        else params[k] = v;
-    }
-    return params;
-};
-})(jQuery);
