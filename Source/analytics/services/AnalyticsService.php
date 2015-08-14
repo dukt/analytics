@@ -531,39 +531,6 @@ class AnalyticsService extends BaseApplicationComponent
     }
 
     /**
-     * Get Browser Select
-     */
-    public function getBrowserSelect()
-    {
-        $plugin = craft()->plugins->getPlugin('analytics');
-        $pluginSettings = $plugin->getSettings();
-
-        $browserSelect = array();
-
-        if($pluginSettings->enableRealtime)
-        {
-            $browserSelect = array_merge($browserSelect, $this->getData('browserSelectRealtime'));
-        }
-
-        $browserSelect = array_merge($browserSelect, $this->getData('browserSelect'));
-
-        foreach($browserSelect as $k => $row)
-        {
-            if(!empty($browserSelect[$k]['optgroup']))
-            {
-                $browserSelect[$k]['optgroup'] = Craft::t($browserSelect[$k]['optgroup']);
-            }
-
-            if(!empty($browserSelect[$k]['label']))
-            {
-                $browserSelect[$k]['label'] = Craft::t($browserSelect[$k]['label']);
-            }
-        }
-
-        return $browserSelect;
-    }
-
-    /**
      * Get Language
      */
     public function getLanguage()
