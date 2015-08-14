@@ -2,23 +2,46 @@ AnalyticsField = Garnish.Base.extend({
 
     init: function(fieldId)
     {
-        if(typeof(google.visualization) == 'undefined')
+        this.initGoogleVisualization($.proxy(function() {
+
+            // Google Visualization is loaded and ready
+
+            this.initField(fieldId);
+
+        }, this));
+    },
+
+    initGoogleVisualization: function(onGoogleVisualizationLoaded)
+    {
+        if(Analytics.GoogleVisualisationCalled == false)
         {
             if(typeof(AnalyticsChartLanguage) == 'undefined')
             {
                 AnalyticsChartLanguage = 'en';
             }
 
-            google.load("visualization", "1", {
-                packages:['corechart'],
-                language: AnalyticsChartLanguage,
-                callback: $.proxy(this, 'initField', fieldId)
-            });
+            google.load("visualization", "1", { packages:['corechart'], 'language': AnalyticsChartLanguage });
+
+            Analytics.GoogleVisualisationCalled = true;
         }
-        else
-        {
-            this.initField(fieldId);
-        }
+
+        google.setOnLoadCallback($.proxy(function() {
+
+            if(typeof(google.visualization) == 'undefined')
+            {
+                // No Internet ?
+
+                // this.$widget.addClass('hidden');
+                // this.$error.html('An unknown error occured');
+                // this.$error.removeClass('hidden');
+
+                return;
+            }
+            else
+            {
+                onGoogleVisualizationLoaded();
+            }
+        }, this));
     },
 
     initField: function(fieldId)

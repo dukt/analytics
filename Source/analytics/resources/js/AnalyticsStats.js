@@ -1,4 +1,4 @@
-var googleVisualisationCalled = false;
+
 
 Analytics.Stats = Garnish.Base.extend({
     requestData: null,
@@ -50,7 +50,7 @@ Analytics.Stats = Garnish.Base.extend({
 
     initGoogleVisualization: function(onGoogleVisualizationLoaded)
     {
-        if(googleVisualisationCalled == false)
+        if(Analytics.GoogleVisualisationCalled == false)
         {
             if(typeof(AnalyticsChartLanguage) == 'undefined')
             {
@@ -59,7 +59,7 @@ Analytics.Stats = Garnish.Base.extend({
 
             google.load("visualization", "1", { packages:['corechart', 'table', 'geochart'], 'language': AnalyticsChartLanguage });
 
-            googleVisualisationCalled = true;
+            Analytics.GoogleVisualisationCalled = true;
         }
 
         google.setOnLoadCallback($.proxy(function() {

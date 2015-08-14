@@ -1,4 +1,6 @@
-var Analytics = {};
+var Analytics = {
+    GoogleVisualisationCalled: false
+};
 
 /**
  * Chart Options
