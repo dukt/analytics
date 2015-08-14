@@ -40,10 +40,17 @@ Analytics.Stats = Garnish.Base.extend({
 
             // Google Visualization is loaded and ready
 
-            if(this.chartResponse)
+            if(this.chartRequest)
             {
-                this.$spinner.addClass('hidden');
-                this.handleChartResponse(this.requestData.chart, this.chartResponse);
+                if(this.chartResponse)
+                {
+                    this.$spinner.addClass('hidden');
+                    this.handleChartResponse(this.requestData.chart, this.chartResponse);
+                }
+                else
+                {
+                    this.chartResponse = this.sendRequest(this.requestData);
+                }
             }
         }, this));
     },

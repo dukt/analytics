@@ -19,9 +19,22 @@ class Analytics_StatsController extends BaseController
         try
         {
             $dataSourceClassName = 'GoogleAnalytics';
-            $dataSource = craft()->analytics->getDataSource($dataSourceClassName);
-            $postData = craft()->request->getPost();
-            $response = $dataSource->getChartData($postData);
+            $request = craft()->request->getPost();
+
+            $requestHash = $request;
+            unset($requestHash['CRAFT_CSRF_TOKEN']);
+            $requestHash = md5(serialize($requestHash));
+            
+            $cacheKey = 'analytics.dataSources.'.$dataSourceClassName.'.getChartData.'.$requestHash;
+
+            $response = craft()->cache->get($cacheKey);
+
+            if(!$response)
+            {
+                $dataSource = craft()->analytics->getDataSource($dataSourceClassName);
+                $response = $dataSource->getChartData($request);
+                craft()->cache->set($cacheKey, $response);
+            }
 
             $this->returnJson($response);
         }

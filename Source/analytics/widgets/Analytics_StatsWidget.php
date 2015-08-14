@@ -60,23 +60,29 @@ class Analytics_StatsWidget extends BaseWidget
 
         // build request from db or default
 
-        $cachedRequest = array(
-            'realtime' => (isset($settings['realtime']) ? $settings['realtime'] : null),
+        $options = [];
+
+        $request = array(
             'chart' => (isset($settings['chart']) ? $settings['chart'] : null),
             'period' => (isset($settings['period']) ? $settings['period'] : null),
             'options' => (isset($settings['options']) ? $settings['options'] : null),
+            'colspan' => (isset($settings['colspan']) ? $settings['colspan'] : null),
         );
+
+        $options['cachedRequest'] = $request;
 
         $dataSourceClassName = 'GoogleAnalytics';
-        $dataSource = craft()->analytics->getDataSource($dataSourceClassName);
-        $cachedResponse = $dataSource->getChartData($cachedRequest);
+        // $dataSource = craft()->analytics->getDataSource($dataSourceClassName);
+        // $response = $dataSource->getChartData($request);
 
-        $cachedResponse['request'] = $cachedRequest;
+        $cacheKey = 'analytics.dataSources.'.$dataSourceClassName.'.getChartData.'.md5(serialize($request));
 
-        $options = array(
-            'cachedRequest' => $cachedRequest,
-            'cachedResponse' => $cachedResponse,
-        );
+        $cachedResponse = craft()->cache->get($cacheKey);
+
+        if($cachedResponse)
+        {
+            $options['cachedResponse'] = $cachedResponse;
+        }
 
         $widgetId = $this->model->id;
         $jsonOptions = json_encode($options);
