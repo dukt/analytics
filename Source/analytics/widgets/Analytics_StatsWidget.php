@@ -53,6 +53,7 @@ class Analytics_StatsWidget extends BaseWidget
 
         craft()->templates->includeJsResource('analytics/js/jsapi.js', true);
         craft()->templates->includeJsResource('analytics/lib/jquery.serializeJSON/jquery.serializejson.min.js');
+        craft()->templates->includeJsResource('analytics/js/Analytics.js');
         craft()->templates->includeJsResource('analytics/js/AnalyticsStats.js');
         craft()->templates->includeCssResource('analytics/css/AnalyticsStats.css');
 

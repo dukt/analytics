@@ -69,7 +69,7 @@ AnalyticsField = Garnish.Base.extend({
             {
                 this.$field.removeClass('analytics-error');
 
-                this.chartData = AnalyticsUtils.responseToDataTable(response.data);
+                this.chartData = Analytics.Utils.responseToDataTable(response.data);
 
                 this.chart = new google.visualization.AreaChart(this.$chartElement.get(0));
 
@@ -90,6 +90,5 @@ AnalyticsField = Garnish.Base.extend({
         }
     },
 
-    chartOptions: AnalyticsChartOptions.field()
+    chartOptions: Analytics.ChartOptions.field()
 });
-
