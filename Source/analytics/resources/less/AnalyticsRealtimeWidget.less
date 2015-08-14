@@ -1,0 +1,81 @@
+
+/* realtime visitors */
+
+@blue:         #058DC7;
+@green:         #50B431;
+
+.analytics-realtime-visitors {
+    padding: 48px 24px;
+
+    .active-visitors {
+        text-align: center;
+        margin-bottom: 1em;
+
+        .currently {
+            font-size: 1.5em;
+        }
+        .count {
+            display: block;
+            font-size: 10em;
+            line-height: 1.2em;
+        }
+    }
+
+    .progress {
+        color:#fff;
+        margin: 2em 0;
+        text-align: center;
+
+        .progress-bar {
+            float: left;
+
+            span {
+                display: block;
+                padding:0 0.5em;
+                line-height: 1.5em;
+            }
+
+            &.blue {
+                background: #058DC7;
+            }
+
+            &.green {
+                background: #50B431;
+            }
+        }
+    }
+
+    .legend {
+        text-align: center;
+
+        li {
+            clear: left;
+            display: inline-block;
+            margin-right: 1em;
+
+            strong {
+                margin-top:2px;
+                background: #eee;
+                width: 12px;
+                height: 12px;
+                border-radius: 12px;
+                display: block;
+                float: left;
+                margin-right: 0.3em;
+                text-indent: -3000px;
+            }
+
+            &.blue {
+                strong {
+                    background: @blue;
+                }
+            }
+
+            &.green {
+                strong {
+                    background: @green;
+                }
+            }
+        }
+    }
+}

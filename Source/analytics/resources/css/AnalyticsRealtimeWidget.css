@@ -1,0 +1,60 @@
+/* realtime visitors */
+.analytics-realtime-visitors {
+  padding: 48px 24px;
+}
+.analytics-realtime-visitors .active-visitors {
+  text-align: center;
+  margin-bottom: 1em;
+}
+.analytics-realtime-visitors .active-visitors .currently {
+  font-size: 1.5em;
+}
+.analytics-realtime-visitors .active-visitors .count {
+  display: block;
+  font-size: 10em;
+  line-height: 1.2em;
+}
+.analytics-realtime-visitors .progress {
+  color: #fff;
+  margin: 2em 0;
+  text-align: center;
+}
+.analytics-realtime-visitors .progress .progress-bar {
+  float: left;
+}
+.analytics-realtime-visitors .progress .progress-bar span {
+  display: block;
+  padding: 0 0.5em;
+  line-height: 1.5em;
+}
+.analytics-realtime-visitors .progress .progress-bar.blue {
+  background: #058DC7;
+}
+.analytics-realtime-visitors .progress .progress-bar.green {
+  background: #50B431;
+}
+.analytics-realtime-visitors .legend {
+  text-align: center;
+}
+.analytics-realtime-visitors .legend li {
+  clear: left;
+  display: inline-block;
+  margin-right: 1em;
+}
+.analytics-realtime-visitors .legend li strong {
+  margin-top: 2px;
+  background: #eee;
+  width: 12px;
+  height: 12px;
+  border-radius: 12px;
+  display: block;
+  float: left;
+  margin-right: 0.3em;
+  text-indent: -3000px;
+}
+.analytics-realtime-visitors .legend li.blue strong {
+  background: #058dc7;
+}
+.analytics-realtime-visitors .legend li.green strong {
+  background: #50b431;
+}
