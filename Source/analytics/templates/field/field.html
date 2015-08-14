@@ -1,12 +1,6 @@
 {% import "_includes/forms" as forms %}
 
-{% includeCssResource "analytics/css/AnalyticsField.css" %}
-
 {% if craft.analytics.isConfigured %}
-
-    {%- includeJsResource 'analytics/js/jsapi.js' first %}
-    {% includeJsResource 'analytics/js/AnalyticsUtils.js' %}
-    {% includeJsResource 'analytics/js/AnalyticsField.js' %}
 
     {% if hasUrl %}
 

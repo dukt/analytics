@@ -1,17 +1,42 @@
 {% import "_includes/forms" as forms %}
 
+{% includeJsResource 'analytics/js/settings.js' %}
+
+{{ forms.selectField({
+    label: "Chart"|t,
+    class: 'chart-select',
+    name: 'chart',
+    options: {
+        area: "Area"|t,
+        counter: "Counter"|t,
+        pie: "Pie"|t,
+        table: "Table"|t,
+        geo: "Geo"|t,
+    },
+    value: settings.chart,
+    toggle: true,
+    targetPrefix: 'chart'
+}) }}
+
+{{ forms.selectField({
+    label: "Period"|t,
+    name: 'period',
+    class: 'period',
+    options: {
+        week: "Week"|t,
+        month: "Month"|t,
+        year: "Year"|t,
+    },
+    value: settings.period
+}) }}
+
+{{ inject|raw }}
+
 {% set colspanOptions = { 1:1, 2:2, 3:3, 4:4 } %}
 
 {{ forms.selectField({
-    first: true,
     label: "Columns"|t,
     options: colspanOptions,
     name: 'colspan',
     value: (settings.colspan is not null ? settings.colspan : 2)
 }) }}
-
-{% for key, value in settings.attributes %}
-    {% if key != 'colspan' %}
-        <input type="hidden" name="{{ key }}" value="{{ value }}" />
-    {% endif %}
-{% endfor %}

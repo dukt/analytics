@@ -1,6 +1,31 @@
+{% import "_includes/forms" as forms %}
+
+
+<div class="infos">
+    <h2 class="title">Title</h2>
+    <div class="date light">This week</div>
+</div>
+
 <div class="actions">
     <ul>
+        {#
+        <li>
+
+            {{ forms.select({
+                name: 'period',
+                class: 'period',
+                options: {
+                    week: "Week"|t,
+                    month: "Month"|t,
+                    year: "Year"|t,
+                }
+            }) }}
+
+        </li>
+        #}
+
         <li><a class="dk-settings-btn" data-icon="settings"></a></li>
+
     </ul>
 </div>
 

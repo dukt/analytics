@@ -201,21 +201,22 @@ class AnalyticsController extends BaseController
 
         if($formerWidget)
         {
-            $widgetSettings = craft()->request->getPost('settings');
+            $postSettings = craft()->request->getPost('settings');
 
-            if(!empty($formerWidget->settings['colspan']))
-            {
-                $widgetSettings['colspan'] = $formerWidget->settings['colspan'];
-            }
+            $widgetSettings = [
+                'colspan' => $postSettings['colspan'],
+                'chart' => $postSettings['chart'],
+                'period' => $postSettings['period'],
+            ];
 
-            if(empty($widgetSettings['colspan']))
+            if(isset($postSettings['options']))
             {
-                $widgetSettings['colspan'] = 1;
+                $widgetSettings['options'] = $postSettings['options'];
             }
 
             $widget = new WidgetModel();
             $widget->id = $widgetId;
-            $widget->type = 'Analytics_Explorer';
+            $widget->type = $formerWidget->type;
             $widget->settings = $widgetSettings;
 
             if (craft()->dashboard->saveUserWidget($widget))
@@ -235,12 +236,18 @@ class AnalyticsController extends BaseController
 
     public function actionSettingsModal()
     {
-        $dimensions = craft()->analytics->getDimensions();
-        $metrics = craft()->analytics->getMetrics();
+        $widgetId = craft()->request->getPost('id');
+        $widget = craft()->dashboard->getUserWidgetById($widgetId);
+
+        $dataSourceClassName = 'GoogleAnalytics';
+        $dataSource = craft()->analytics->getDataSource($dataSourceClassName);
+        $inject = $dataSource->getSettingsHtml([
+            'settings' => $widget->settings,
+        ]);
 
         $response['html'] = craft()->templates->render('analytics/widgets/stats/settingsModal', array(
-            'dimensionsOptions' => $dimensions,
-            'metricsOptions' => $metrics,
+            'settings' => $widget->settings,
+            'inject' => $inject,
         ));
 
         $this->returnJson($response);

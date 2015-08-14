@@ -24,8 +24,16 @@ class Analytics_StatsWidget extends BaseWidget
 
     public function getSettingsHtml()
     {
+        $settings = $this->getSettings();
+        $dataSourceClassName = 'GoogleAnalytics';
+        $dataSource = craft()->analytics->getDataSource($dataSourceClassName);
+        $inject = $dataSource->getSettingsHtml([
+            'settings' => $settings
+        ]);
+
         return craft()->templates->render('analytics/widgets/stats/settings', array(
-           'settings' => $this->getSettings()
+           'settings' => $settings,
+           'inject' => $inject,
         ));
     }
 
@@ -44,26 +52,37 @@ class Analytics_StatsWidget extends BaseWidget
         }
 
         craft()->templates->includeJsResource('analytics/js/jsapi.js', true);
+        craft()->templates->includeJsResource('analytics/lib/jquery.serializeJSON/jquery.serializejson.min.js');
+        craft()->templates->includeJsResource('analytics/js/Analytics.js');
         craft()->templates->includeJsResource('analytics/js/AnalyticsStats.js');
         craft()->templates->includeCssResource('analytics/css/AnalyticsStats.css');
 
-        $request = array(
-            'chart' => 'area',
-            'metric' => 'ga:pageviews',
-            'period' => 'week'
+
+        // build request from db or default
+
+        $cachedRequest = array(
+            'realtime' => (isset($settings['realtime']) ? $settings['realtime'] : null),
+            'chart' => (isset($settings['chart']) ? $settings['chart'] : null),
+            'period' => (isset($settings['period']) ? $settings['period'] : null),
+            'options' => (isset($settings['options']) ? $settings['options'] : null),
         );
 
-        $cachedResponse = craft()->analytics->getChartData($request);
-        $cachedResponse['request'] = $request;
+        $dataSourceClassName = 'GoogleAnalytics';
+        $dataSource = craft()->analytics->getDataSource($dataSourceClassName);
+        $cachedResponse = $dataSource->getChartData($cachedRequest);
+
+        $cachedResponse['request'] = $cachedRequest;
 
         $options = array(
+            'cachedRequest' => $cachedRequest,
             'cachedResponse' => $cachedResponse,
         );
 
         $widgetId = $this->model->id;
         $jsonOptions = json_encode($options);
 
-        $jsTemplate = 'window.csrfTokenName = "{{ craft.config.csrfTokenName|e(\'js\') }}"; window.csrfTokenValue = "{{ craft.request.csrfToken|e(\'js\') }}";';
+        $jsTemplate = 'window.csrfTokenName = "{{ craft.config.csrfTokenName|e(\'js\') }}";';
+        $jsTemplate .= 'window.csrfTokenValue = "{{ craft.request.csrfToken|e(\'js\') }}";';
         $js = craft()->templates->renderString($jsTemplate);
         craft()->templates->includeJs($js);
 
@@ -93,14 +112,11 @@ class Analytics_StatsWidget extends BaseWidget
     protected function defineSettings()
     {
         return array(
-           'menu' => array(AttributeType::String),
-           'dimension' => array(AttributeType::String),
-           'metric' => array(AttributeType::String),
-           'chart' => array(AttributeType::String),
-           'chart' => array(AttributeType::String),
-           'period' => array(AttributeType::String),
-           'pinned' => array(AttributeType::Bool),
-           'colspan' => array(AttributeType::Number, 'default' => 2)
+            'colspan' => array(AttributeType::Number, 'default' => 2),
+            'realtime' => array(AttributeType::Bool),
+            'chart' => array(AttributeType::String),
+            'period' => array(AttributeType::String),
+            'options' => array(AttributeType::Mixed),
         );
     }
 }

@@ -1,0 +1,19 @@
+{
+  "name": "analytics",
+  "version": "4.0",
+  "homepage": "https://github.com/dukt/craft-analytics",
+  "authors": [
+    "Benjamin David <ben@dukt.net>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery.serializeJSON": "~2.6.1"
+  }
+}
