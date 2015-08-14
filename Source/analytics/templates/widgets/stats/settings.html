@@ -12,7 +12,7 @@
     targetPrefix: 'realtime-'
 }) }}
 
-<div id="realtime-0">
+<div id="realtime-0"{% if settings.realtime != false %} class="hidden"{% endif %}>
 
     {{ forms.selectField({
         label: "Chart"|t,
@@ -45,15 +45,15 @@
     {{ inject|raw }}
 </div>
 
-<div id="realtime-1" class="hidden">
+<div id="realtime-1"{% if settings.realtime != true %} class="hidden"{% endif %}>
 
     {{ forms.selectField({
         label: "Chart"|t,
         class: 'chart-select',
         name: 'chart',
         options: {
-            area: "Area"|t,
             counter: "Counter"|t,
+            pie: "Pie"|t,
             table: "Table"|t,
             geo: "Geo"|t,
         },

@@ -60,9 +60,10 @@ class Analytics_StatsWidget extends BaseWidget
         // build request from db or default
 
         $cachedRequest = array(
-            'chart' => $settings['chart'],
-            'period' => $settings['period'],
-            'options' => $settings['options'],
+            'realtime' => (isset($settings['realtime']) ? $settings['realtime'] : null),
+            'chart' => (isset($settings['chart']) ? $settings['chart'] : null),
+            'period' => (isset($settings['period']) ? $settings['period'] : null),
+            'options' => (isset($settings['options']) ? $settings['options'] : null),
         );
 
         $dataSourceClassName = 'GoogleAnalytics';
