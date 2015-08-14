@@ -13,7 +13,9 @@ Analytics.Stats = Garnish.Base.extend({
         // elements
 
         this.$element = $('#'+element);
+        this.$title = $('.title', this.$element);
         this.$body = $('.body', this.$element);
+        this.$date = $('.date', this.$element);
         this.$spinner = $('.spinner', this.$element);
         this.$settingsBtn = $('.dk-settings-btn', this.$element);
 
@@ -295,6 +297,9 @@ Analytics.Stats = Garnish.Base.extend({
         // Chart
         this.chart = new google.visualization.AreaChart($chart.get(0));
         this.chart.draw(this.chartDataTable, this.chartOptions);
+
+        this.$title.html(response.metric);
+        this.$date.html(response.periodLabel);
     },
 
     handleCounterResponse: function(response)
