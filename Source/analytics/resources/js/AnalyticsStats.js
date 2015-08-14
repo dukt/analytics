@@ -133,7 +133,6 @@ Analytics.Stats = Garnish.Base.extend({
                 this.saveState();
 
                 // Craft.initUiElements();
-
                 // Garnish.$win.trigger('resize');
 
             }, this));
@@ -145,9 +144,6 @@ Analytics.Stats = Garnish.Base.extend({
                 this.$periodSelect = $('.period select', this.settingsModal.$container);
                 this.$chartSelect = $('.chart-select select', this.settingsModal.$container);
 
-                // this.$realtimeSelect = $('.realtime-select select', this.settingsModal.$container);
-                // this.addListener(this.$periodSelect, 'change', 'periodChange');
-
                 if(this.requestData)
                 {
                     this.$chartSelect.val(this.requestData.chart);
@@ -155,9 +151,6 @@ Analytics.Stats = Garnish.Base.extend({
 
                     this.$periodSelect.val(this.requestData.period);
                     this.$periodSelect.trigger('change');
-
-                    // this.$realtimeSelect.val(this.requestData.realtime);
-                    // this.$realtimeSelect.trigger('change');
                 }
 
                 Craft.initUiElements();

@@ -3,68 +3,34 @@
 {% includeJsResource 'analytics/js/settings.js' %}
 
 {{ forms.selectField({
-    label: "Realtime"|t,
-    class: 'realtime-select',
-    name: 'realtime',
-    options: ["No"|t, "Yes"|t],
-    value: (settings.realtime is defined ? settings.realtime : false),
+    label: "Chart"|t,
+    class: 'chart-select',
+    name: 'chart',
+    options: {
+        area: "Area"|t,
+        counter: "Counter"|t,
+        pie: "Pie"|t,
+        table: "Table"|t,
+        geo: "Geo"|t,
+    },
+    value: settings.chart,
     toggle: true,
-    targetPrefix: 'realtime-'
+    targetPrefix: 'chart'
 }) }}
 
-<div id="realtime-0"{% if settings.realtime != false %} class="hidden"{% endif %}>
+{{ forms.selectField({
+    label: "Period"|t,
+    name: 'period',
+    class: 'period',
+    options: {
+        week: "Week"|t,
+        month: "Month"|t,
+        year: "Year"|t,
+    },
+    value: settings.period
+}) }}
 
-    {{ forms.selectField({
-        label: "Chart"|t,
-        class: 'chart-select',
-        name: 'chart',
-        options: {
-            area: "Area"|t,
-            counter: "Counter"|t,
-            pie: "Pie"|t,
-            table: "Table"|t,
-            geo: "Geo"|t,
-        },
-        value: settings.chart,
-        toggle: true,
-        targetPrefix: 'chart'
-    }) }}
-
-    {{ forms.selectField({
-        label: "Period"|t,
-        name: 'period',
-        class: 'period',
-        options: {
-            week: "Week"|t,
-            month: "Month"|t,
-            year: "Year"|t,
-        },
-        value: settings.period
-    }) }}
-
-    {{ inject|raw }}
-</div>
-
-<div id="realtime-1"{% if settings.realtime != true %} class="hidden"{% endif %}>
-
-    {{ forms.selectField({
-        label: "Chart"|t,
-        class: 'chart-select',
-        name: 'chart',
-        options: {
-            counter: "Counter"|t,
-            pie: "Pie"|t,
-            table: "Table"|t,
-            geo: "Geo"|t,
-        },
-        value: settings.chart,
-        toggle: true,
-        targetPrefix: 'chart'
-    }) }}
-
-</div>
-
-
+{{ inject|raw }}
 
 {% set colspanOptions = { 1:1, 2:2, 3:3, 4:4 } %}
 

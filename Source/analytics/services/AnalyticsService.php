@@ -26,7 +26,7 @@ class AnalyticsService extends BaseApplicationComponent
         $nsClassName = "\\Dukt\\Analytics\\DataSources\\$className";
         return new $nsClassName;
     }
-    
+
     public function getApiDimensionsMetrics()
     {
         $r = $this->getApiObject()->metadata_columns->listMetadataColumns('ga');
@@ -37,7 +37,6 @@ class AnalyticsService extends BaseApplicationComponent
     {
         $profile = craft()->analytics->getProfile();
 
-        $realtime = (isset($requestData['realtime']) ? $requestData['realtime'] : null);
         $metric = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
         $dimension = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
         $period = (isset($requestData['period']) ? $requestData['period'] : null);
@@ -66,25 +65,18 @@ class AnalyticsService extends BaseApplicationComponent
         $criteria->endDate = $end;
         $criteria->metrics = $metric;
 
-        if($realtime)
-        {
-            $criteria->optParams = array('dimensions' => 'rt:userType');
-            $criteria->realtime = true;
-        }
-        else
-        {
-            $optParams = array(
-                'dimensions' => $chartDimension,
-                'sort' => $chartDimension
-            );
+        $optParams = array(
+            'dimensions' => $chartDimension,
+            'sort' => $chartDimension
+        );
 
-            if($dimension)
-            {
-                $optParams['filters'] = $dimension.'!=(not set);'.$dimension.'!=(not provided)';
-            }
-
-            $criteria->optParams = $optParams;
+        if($dimension)
+        {
+            $optParams['filters'] = $dimension.'!=(not set);'.$dimension.'!=(not provided)';
         }
+
+        $criteria->optParams = $optParams;
+
 
         $chartResponse = craft()->analytics->sendRequest($criteria);
 

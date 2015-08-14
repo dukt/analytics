@@ -29,7 +29,6 @@ class GoogleAnalytics extends BaseDataSource
     {
         $profile = Craft::app()->analytics->getProfile();
 
-        $realtime = (isset($requestData['realtime']) ? $requestData['realtime'] : null);
         $period = (isset($requestData['period']) ? $requestData['period'] : null);
         $dimension = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
         $metric = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
@@ -56,25 +55,17 @@ class GoogleAnalytics extends BaseDataSource
         $criteria->endDate = $end;
         $criteria->metrics = $metric;
 
-        if($realtime)
-        {
-            $criteria->optParams = array('dimensions' => 'rt:userType');
-            $criteria->realtime = true;
-        }
-        else
-        {
-            $optParams = array(
-                'dimensions' => $chartDimension,
-                'sort' => $chartDimension
-            );
+        $optParams = array(
+            'dimensions' => $chartDimension,
+            'sort' => $chartDimension
+        );
 
-            if($dimension)
-            {
-                $optParams['filters'] = $dimension.'!=(not set);'.$dimension.'!=(not provided)';
-            }
-
-            $criteria->optParams = $optParams;
+        if($dimension)
+        {
+            $optParams['filters'] = $dimension.'!=(not set);'.$dimension.'!=(not provided)';
         }
+
+        $criteria->optParams = $optParams;
 
         $chartResponse = Craft::app()->analytics->sendRequest($criteria);
 
@@ -116,7 +107,6 @@ class GoogleAnalytics extends BaseDataSource
     {
         $profile = Craft::app()->analytics->getProfile();
 
-        $realtime = (isset($requestData['realtime']) ? $requestData['realtime'] : null);
         $period = (isset($requestData['period']) ? $requestData['period'] : null);
         $dimension = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
         $metric = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
@@ -129,20 +119,12 @@ class GoogleAnalytics extends BaseDataSource
         $criteria->endDate = $end;
         $criteria->metrics = $metric;
 
-        if($realtime)
-        {
-            $criteria->optParams = array('dimensions' => $dimension);
-            $criteria->realtime = true;
-        }
-        else
-        {
-            $criteria->optParams = array(
-                'dimensions' => $dimension,
-                'sort' => '-'.$metric,
-                'max-results' => 20,
-                'filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)'
-            );
-        }
+        $criteria->optParams = array(
+            'dimensions' => $dimension,
+            'sort' => '-'.$metric,
+            'max-results' => 20,
+            'filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)'
+        );
 
         $tableResponse = Craft::app()->analytics->sendRequest($criteria);
 
@@ -159,7 +141,6 @@ class GoogleAnalytics extends BaseDataSource
     {
         $profile = Craft::app()->analytics->getProfile();
 
-        $realtime = (isset($requestData['realtime']) ? $requestData['realtime'] : null);
         $period = (isset($requestData['period']) ? $requestData['period'] : null);
         $dimension = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
         $metric = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
@@ -175,17 +156,10 @@ class GoogleAnalytics extends BaseDataSource
         $criteria->endDate = $end;
         $criteria->metrics = $metric;
 
-        if($realtime)
+        if($dimension)
         {
-            $criteria->realtime = true;
-        }
-        else
-        {
-            if($dimension)
-            {
-                $optParams = array('filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)');
-                $criteria->optParams = $optParams;
-            }
+            $optParams = array('filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)');
+            $criteria->optParams = $optParams;
         }
 
         $response = Craft::app()->analytics->sendRequest($criteria);
@@ -220,7 +194,6 @@ class GoogleAnalytics extends BaseDataSource
     {
         $profile = Craft::app()->analytics->getProfile();
 
-        $realtime = (isset($requestData['realtime']) ? $requestData['realtime'] : null);
         $period = (isset($requestData['period']) ? $requestData['period'] : null);
         $dimension = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
         $metric = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
@@ -239,23 +212,14 @@ class GoogleAnalytics extends BaseDataSource
         $criteria = new Analytics_RequestCriteriaModel;
         $criteria->metrics = $metric;
 
-
-        if($realtime)
-        {
-            $criteria->optParams = array('dimensions' => $dimension);
-            $criteria->realtime = true;
-        }
-        else
-        {
-            $criteria->startDate = $start;
-            $criteria->endDate = $end;
-            $criteria->optParams = array(
-                'dimensions' => $dimension,
-                'sort' => '-'.$metric,
-                'max-results' => 20,
-                'filters' => $originDimension.'!=(not set);'.$originDimension.'!=(not provided)',
-            );
-        }
+        $criteria->startDate = $start;
+        $criteria->endDate = $end;
+        $criteria->optParams = array(
+            'dimensions' => $dimension,
+            'sort' => '-'.$metric,
+            'max-results' => 20,
+            'filters' => $originDimension.'!=(not set);'.$originDimension.'!=(not provided)',
+        );
 
         $tableResponse = Craft::app()->analytics->sendRequest($criteria);
 
@@ -272,7 +236,6 @@ class GoogleAnalytics extends BaseDataSource
     {
         $profile = Craft::app()->analytics->getProfile();
 
-        $realtime = (isset($requestData['realtime']) ? $requestData['realtime'] : null);
         $period = (isset($requestData['period']) ? $requestData['period'] : null);
         $dimension = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
         $metric = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
@@ -284,21 +247,13 @@ class GoogleAnalytics extends BaseDataSource
         $criteria->startDate = $start;
         $criteria->endDate = $end;
         $criteria->metrics = $metric;
-
-        if($realtime)
-        {
-            $criteria->optParams = array('dimensions' => $dimension);
-            $criteria->realtime = true;
-        }
-        else
-        {
-            $criteria->optParams = array(
-                'dimensions' => $dimension,
-                'sort' => '-'.$metric,
-                'max-results' => 20,
-                'filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)'
-            );
-        }
+        
+        $criteria->optParams = array(
+            'dimensions' => $dimension,
+            'sort' => '-'.$metric,
+            'max-results' => 20,
+            'filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)'
+        );
 
         $tableResponse = Craft::app()->analytics->sendRequest($criteria);
 
