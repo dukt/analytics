@@ -204,7 +204,7 @@ Analytics.Stats = Garnish.Base.extend({
         console.log('Analytics.Stats().sendRequest(data)');
         console.log('---- data', data);
 
-        Craft.postActionRequest('analytics/stats/getChart', data, $.proxy(function(response, textStatus)
+        Craft.postActionRequest('analytics/reports/getChartReport', data, $.proxy(function(response, textStatus)
         {
             this.$spinner.addClass('hidden');
             this.handleChartResponse(data.chart, response);

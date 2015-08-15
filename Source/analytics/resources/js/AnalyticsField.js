@@ -79,7 +79,7 @@ AnalyticsField = Garnish.Base.extend({
 
         this.$spinner.removeClass('hidden');
 
-        Craft.postActionRequest('analytics/field/elementReport', { elementId: this.elementId, locale: this.locale, metric: this.$metric }, $.proxy(function(response) {
+        Craft.postActionRequest('analytics/reports/getElementReport', { elementId: this.elementId, locale: this.locale, metric: this.$metric }, $.proxy(function(response) {
 
             this.$spinner.addClass('hidden');
 

@@ -1,0 +1,161 @@
+<?php
+/**
+ * @link      https://dukt.net/craft/analytics/
+ * @copyright Copyright (c) 2015, Dukt
+ * @license   https://dukt.net/craft/analytics/docs/license
+ */
+
+namespace Craft;
+
+class Analytics_ReportsController extends BaseController
+{
+    // Public Methods
+    // =========================================================================
+
+    /**
+     * Real-Time Visitors
+     *
+     * @return null
+     */
+    public function actionGetRealtimeReport()
+    {
+        try
+        {
+            $data = array(
+                'newVisitor' => 0,
+                'returningVisitor' => 0
+            );
+
+            $criteria = new Analytics_RequestCriteriaModel;
+            $criteria->realtime = true;
+            $criteria->metrics = 'ga:activeVisitors';
+            $criteria->optParams = array('dimensions' => 'ga:visitorType');
+
+            $results = craft()->analytics->sendRequest($criteria);
+
+            if(!empty($results['totalResults']))
+            {
+                $data['total'] = $results['totalResults'];
+            }
+
+            if(!empty($results['rows'][0][1]['v']))
+            {
+                switch($results['rows'][0][0]['v'])
+                {
+                    case "RETURNING":
+                    $data['returningVisitor'] = $results['rows'][0][1]['v'];
+                    break;
+
+                    case "NEW":
+                    $data['newVisitor'] = $results['rows'][0][1]['v'];
+                    break;
+                }
+            }
+
+            if(!empty($results['rows'][1][1]['v']))
+            {
+                switch($results['rows'][1][0]['v'])
+                {
+                    case "RETURNING":
+                    $data['returningVisitor'] = $results['rows'][1][1]['v'];
+                    break;
+
+                    case "NEW":
+                    $data['newVisitor'] = $results['rows'][1][1]['v'];
+                    break;
+                }
+            }
+
+            $this->returnJson($data);
+        }
+        catch(\Exception $e)
+        {
+            $this->returnErrorJson($e->getMessage());
+        }
+    }
+
+    public function actionGetChartReport()
+    {
+        $chart = craft()->request->getRequiredParam('chart');
+
+        try
+        {
+            $dataSourceClassName = 'GoogleAnalytics';
+            $request = craft()->request->getPost();
+
+            $requestHash = $request;
+            unset($requestHash['CRAFT_CSRF_TOKEN']);
+            $requestHash = md5(serialize($requestHash));
+
+            $cacheKey = 'analytics.dataSources.'.$dataSourceClassName.'.getChartData.'.$requestHash;
+
+            $response = craft()->cache->get($cacheKey);
+
+            if(!$response)
+            {
+                $dataSource = craft()->analytics->getDataSource($dataSourceClassName);
+                $response = $dataSource->getChartData($request);
+                craft()->cache->set($cacheKey, $response);
+            }
+
+            $this->returnJson($response);
+        }
+        catch(\Exception $e)
+        {
+            $this->returnErrorJson($e->getMessage());
+        }
+    }
+
+    /**
+     * Element Report
+     *
+     * @param array $variables
+     *
+     * @return null
+     */
+    public function actionGetElementReport(array $variables = array())
+    {
+        try {
+            $elementId = craft()->request->getRequiredParam('elementId');
+            $locale = craft()->request->getRequiredParam('locale');
+            $metric = craft()->request->getRequiredParam('metric');
+
+            $uri = craft()->analytics->getElementUrlPath($elementId, $locale);
+
+            if($uri)
+            {
+                if($uri == '__home__')
+                {
+                    $uri = '';
+                }
+
+                $start = date('Y-m-d', strtotime('-1 month'));
+                $end = date('Y-m-d');
+                $dimensions = 'ga:date';
+
+                $optParams = array(
+                        'dimensions' => $dimensions,
+                        'filters' => "ga:pagePath==".$uri
+                    );
+
+                $criteria = new Analytics_RequestCriteriaModel;
+                $criteria->startDate = $start;
+                $criteria->endDate = $end;
+                $criteria->metrics = $metric;
+                $criteria->optParams = $optParams;
+
+                $response = craft()->analytics->sendRequest($criteria);
+
+                $this->returnJson(array('data' => $response));
+            }
+            else
+            {
+               throw new Exception("Element doesn't support URLs.", 1);
+            }
+        }
+        catch(\Exception $e)
+        {
+            $this->returnErrorJson($e->getMessage());
+        }
+    }
+}
