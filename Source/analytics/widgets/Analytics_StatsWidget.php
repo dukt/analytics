@@ -22,21 +22,6 @@ class Analytics_StatsWidget extends BaseWidget
         return Craft::t('Analytics Stats');
     }
 
-    public function getSettingsHtml()
-    {
-        $settings = $this->getSettings();
-        $dataSourceClassName = 'GoogleAnalytics';
-        $dataSource = craft()->analytics->getDataSource($dataSourceClassName);
-        $inject = $dataSource->getSettingsHtml([
-            'settings' => $settings
-        ]);
-
-        return craft()->templates->render('analytics/widgets/stats/settings', array(
-           'settings' => $settings,
-           'inject' => $inject,
-        ));
-    }
-
     public function getBodyHtml()
     {
         $widgets = craft()->dashboard->getUserWidgets();
@@ -54,8 +39,8 @@ class Analytics_StatsWidget extends BaseWidget
         craft()->templates->includeJsResource('analytics/js/jsapi.js', true);
         craft()->templates->includeJsResource('analytics/lib/jquery.serializeJSON/jquery.serializejson.min.js');
         craft()->templates->includeJsResource('analytics/js/Analytics.js');
-        craft()->templates->includeJsResource('analytics/js/AnalyticsStats.js');
-        craft()->templates->includeCssResource('analytics/css/AnalyticsStats.css');
+        craft()->templates->includeJsResource('analytics/js/AnalyticsStatsWidget.js');
+        craft()->templates->includeCssResource('analytics/css/AnalyticsStatsWidget.css');
 
 
         // build request from db or default
@@ -97,6 +82,21 @@ class Analytics_StatsWidget extends BaseWidget
         return craft()->templates->render('analytics/widgets/stats');
     }
 
+    public function getSettingsHtml()
+    {
+        $settings = $this->getSettings();
+        $dataSourceClassName = 'GoogleAnalytics';
+        $dataSource = craft()->analytics->getDataSource($dataSourceClassName);
+        $inject = $dataSource->getSettingsHtml([
+            'settings' => $settings
+        ]);
+
+        return craft()->templates->render('analytics/widgets/stats/settings', array(
+           'settings' => $settings,
+           'inject' => $inject,
+        ));
+    }
+    
     public function getColspan()
     {
         $settings = $this->getSettings();

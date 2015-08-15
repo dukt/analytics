@@ -28,12 +28,12 @@ class Analytics_RealtimeWidget extends BaseWidget
         // craft()->templates->includeJsResource('analytics/lib/jquery.serializeJSON/jquery.serializejson.min.js');
 
         $realtimeRefreshInterval = 15;
-        
+
         $widgetId = $this->model->id;
         $jsonOptions = json_encode([]);
 
         craft()->templates->includeJsResource('analytics/js/Analytics.js');
-        craft()->templates->includeJsResource('analytics/js/AnalyticsRealtime.js');
+        craft()->templates->includeJsResource('analytics/js/AnalyticsRealtimeWidget.js');
         craft()->templates->includeCssResource('analytics/css/AnalyticsRealtimeWidget.css');
 
         craft()->templates->includeJs('var AnalyticsChartLanguage = "'.craft()->analytics->getLanguage().'";', true);
