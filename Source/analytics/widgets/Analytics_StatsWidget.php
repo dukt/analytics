@@ -24,17 +24,7 @@ class Analytics_StatsWidget extends BaseWidget
 
     public function getBodyHtml()
     {
-        $widgets = craft()->dashboard->getUserWidgets();
-        $requiredChartTypes = [];
-
-        foreach($widgets as $widget)
-        {
-            if($widget->type == 'Analytics_Stats')
-            {
-                $settings = $widget->settings;
-                $requiredChartTypes[] = $settings['chart'];
-            }
-        }
+        $settings = $this->settings;
 
         craft()->templates->includeJsResource('analytics/js/jsapi.js', true);
         craft()->templates->includeJsResource('analytics/lib/jquery.serializeJSON/jquery.serializejson.min.js');
@@ -96,7 +86,7 @@ class Analytics_StatsWidget extends BaseWidget
            'inject' => $inject,
         ));
     }
-    
+
     public function getColspan()
     {
         $settings = $this->getSettings();
