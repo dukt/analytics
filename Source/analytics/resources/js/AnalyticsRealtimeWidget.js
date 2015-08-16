@@ -14,26 +14,17 @@ Analytics.Realtime = Garnish.Base.extend({
 
         this.timer = false;
 
-        this.startRealtime();
+        this.start();
     },
 
-    enable: function()
-    {
-        this.request();
-        this.startRealtime();
-    },
-
-    disable: function()
-    {
-        this.stopRealtime();
-    },
-
-    startRealtime: function()
+    start: function()
     {
         if(this.timer)
         {
-            this.stopRealtime();
+            this.stop();
         }
+
+        this.request();
 
         this.timer = setInterval($.proxy(function()
         {
@@ -42,7 +33,7 @@ Analytics.Realtime = Garnish.Base.extend({
         }, this), AnalyticsRealtimeInterval * 1000);
     },
 
-    stopRealtime: function()
+    stop: function()
     {
         clearInterval(this.timer);
     },
