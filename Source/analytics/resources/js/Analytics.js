@@ -1,6 +1,203 @@
-var Analytics = {
+/**
+ * Analytics
+ */
+
+ var Analytics = {
     GoogleVisualisationCalled: false
 };
+
+
+/**
+ * Visualization
+ */
+Analytics.Visualization = Garnish.Base.extend({
+
+    options: null,
+
+    init: function(options)
+    {
+        this.options = options;
+
+        if(Analytics.GoogleVisualisationCalled == false)
+        {
+            if(typeof(AnalyticsChartLanguage) == 'undefined')
+            {
+                AnalyticsChartLanguage = 'en';
+            }
+
+            google.load("visualization", "1", {
+                packages:['corechart', 'table'],
+                language: AnalyticsChartLanguage,
+                callback: $.proxy(function() {
+                    this.onAfterInit();
+                }, this)
+            });
+
+            Analytics.GoogleVisualisationCalled = true;
+        }
+        else
+        {
+            this.onAfterInit();
+        }
+    },
+
+    onAfterInit: function()
+    {
+        this.options.onAfterInit();
+    }
+});
+
+
+/**
+ * Chart
+ */
+Analytics.Chart = Garnish.Base.extend({
+
+    type: null,
+    chart: null,
+    data: null,
+    period: null,
+    options: null,
+    visualization: null,
+
+    init: function($chart, data)
+    {
+        this.visualization = new Analytics.Visualization({
+            onAfterInit: $.proxy(function() {
+
+                this.$chart = $chart;
+                this.data = data;
+
+                if(typeof(this.data.chartOptions) != 'undefined')
+                {
+                    this.chartOptions = this.data.chartOptions;
+                }
+
+                if(typeof(this.data.type) != 'undefined')
+                {
+                    this.type = this.data.type;
+                }
+
+                if(typeof(this.data.period) != 'undefined')
+                {
+                    this.period = this.data.period;
+                }
+
+                this.addListener(Garnish.$win, 'resize', 'resize');
+
+                this.initChart();
+
+                if(typeof(this.data.onAfterInit) != 'undefined')
+                {
+                    this.data.onAfterInit();
+                }
+            }, this)
+        });
+    },
+
+    initAreaChart: function()
+    {
+        this.dataTable = Analytics.Utils.responseToDataTable(this.data.chart);
+
+        this.chartOptions = Analytics.ChartOptions.area(this.data.period);
+
+        if(this.data.period == 'year')
+        {
+            var dateFormatter = new google.visualization.DateFormat({
+                pattern: "MMMM yyyy"
+            });
+
+            dateFormatter.format(this.dataTable, 0);
+        }
+
+        this.chart = new google.visualization.AreaChart(this.$chart.get(0));
+
+        this.draw();
+    },
+
+    initCounterChart: function()
+    {
+        $value = $('<div class="value" />').appendTo(this.$chart),
+        $label = $('<div class="label" />').appendTo(this.$chart),
+        $period = $('<div class="period" />').appendTo(this.$chart);
+
+        $value.html(this.data.counter.count);
+        $label.html(this.data.metric);
+        $period.html(this.data.period);
+    },
+
+    initPieChart: function()
+    {
+        this.dataTable = Analytics.Utils.responseToDataTable(this.data.chart);
+        this.chartOptions = Analytics.ChartOptions.pie();
+        this.chart = new google.visualization.PieChart(this.$chart.get(0));
+        this.draw();
+    },
+
+    initTableChart: function()
+    {
+        this.dataTable = Analytics.Utils.responseToDataTable(this.data.chart);
+        this.chartOptions = Analytics.ChartOptions.table();
+        this.chart = new google.visualization.Table(this.$chart.get(0));
+        this.draw();
+    },
+
+    initGeoChart: function()
+    {
+        this.dataTable = Analytics.Utils.responseToDataTable(this.data.chart);
+        this.chartOptions = Analytics.ChartOptions.geo(this.data.dimensionRaw);
+        this.chart = new google.visualization.GeoChart(this.$chart.get(0));
+        this.draw();
+    },
+
+    initChart: function()
+    {
+        this.$chart.addClass(this.type);
+
+        switch(this.type)
+        {
+            case "area":
+                this.initAreaChart();
+                break;
+
+            case "counter":
+                this.initCounterChart();
+                break;
+
+            case "geo":
+                this.initGeoChart();
+                break;
+
+            case "pie":
+                this.initPieChart();
+                break;
+
+            case "table":
+                this.initTableChart();
+                break;
+
+            default:
+                console.error('Chart type "'+this.type+'" not supported.')
+        }
+    },
+
+    draw: function()
+    {
+        if(this.dataTable && this.chartOptions)
+        {
+            this.chart.draw(this.dataTable, this.chartOptions);
+        }
+    },
+
+    resize: function()
+    {
+        if(this.chart && this.dataTable && this.chartOptions)
+        {
+            this.chart.draw(this.dataTable, this.chartOptions);
+        }
+    },
+});
+
 
 /**
  * Chart Options

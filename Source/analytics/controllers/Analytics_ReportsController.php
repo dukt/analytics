@@ -146,7 +146,10 @@ class Analytics_ReportsController extends BaseController
 
                 $response = craft()->analytics->sendRequest($criteria);
 
-                $this->returnJson(array('data' => $response));
+                $this->returnJson([
+                    'type' => 'area',
+                    'chart' => $response
+                ]);
             }
             else
             {
