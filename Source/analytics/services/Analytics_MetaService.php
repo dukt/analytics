@@ -11,6 +11,60 @@ class Analytics_MetaService extends BaseApplicationComponent
 {
     private $columns;
 
+    /**
+     * Get Continent Code
+     *
+     * @param string $label
+     */
+    public function getContinentCode($label)
+    {
+        $continents = $this->getData('continents');
+
+        foreach($continents as $continent)
+        {
+            if($continent['label'] == $label)
+            {
+                return $continent['code'];
+            }
+        }
+    }
+
+    /**
+     * Get Sub-Continent Code
+     *
+     * @param string $label
+     */
+    public function getSubContinentCode($label)
+    {
+        $subContinents = $this->getData('subContinents');
+
+        foreach($subContinents as $subContinent)
+        {
+            if($subContinent['label'] == $label)
+            {
+                return $subContinent['code'];
+            }
+        }
+    }
+
+    /**
+     * Get a dimension or a metric label from its key
+     *
+     * @param string $key
+     */
+    public function getDimMet($id)
+    {
+        $columns = $this->getColumns();
+
+        foreach($columns as $column)
+        {
+            if($column->id == $id)
+            {
+                return $column->uiName;
+            }
+        }
+    }
+
     public function searchColumns($q)
     {
         $columns = $this->getColumns();
@@ -99,11 +153,14 @@ class Analytics_MetaService extends BaseApplicationComponent
         return $this->getColumns('DIMENSION');
     }
 
+    // Private Methods
+    // =========================================================================
+
     private function loadColumns()
     {
         $columns = [];
 
-        $items = craft()->analytics->getApiDimensionsMetrics()->items;
+        $items = craft()->analytics_api->metadataColumns->listMetadataColumns('ga');
 
         foreach($items as $item)
         {
@@ -152,5 +209,19 @@ class Analytics_MetaService extends BaseApplicationComponent
         }
 
         return $columns;
+    }
+
+
+    /**
+     * Get Data
+     *
+     * @param string $label
+     */
+    private function getData($name)
+    {
+        $jsonData = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/'.$name.'.json');
+        $data = json_decode($jsonData, true);
+
+        return $data;
     }
 }

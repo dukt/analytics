@@ -24,8 +24,6 @@ class GoogleAnalytics extends BaseDataSource
 
     public function area($requestData)
     {
-        $profile = Craft::app()->analytics->getProfile();
-
         $period = (isset($requestData['period']) ? $requestData['period'] : null);
         $dimension = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
         $metric = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
@@ -95,7 +93,7 @@ class GoogleAnalytics extends BaseDataSource
             'type' => 'area',
             'chart' => $chartResponse,
             'total' => $total,
-            'metric' => Craft::t(Craft::app()->analytics->getDimMet($metric)),
+            'metric' => Craft::t(Craft::app()->analytics_meta->getDimMet($metric)),
             'period' => $period,
             'periodLabel' => Craft::t('this '.$period)
         ];
@@ -103,8 +101,6 @@ class GoogleAnalytics extends BaseDataSource
 
     public function counter($requestData)
     {
-        $profile = Craft::app()->analytics->getProfile();
-
         $period = (isset($requestData['period']) ? $requestData['period'] : null);
         $dimension = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
         $metric = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
@@ -139,7 +135,7 @@ class GoogleAnalytics extends BaseDataSource
 
         $counter = array(
             'count' => $count,
-            'label' => strtolower(Craft::t(Craft::app()->analytics->getDimMet($metric)))
+            'label' => strtolower(Craft::t(Craft::app()->analytics_meta->getDimMet($metric)))
         );
 
 
@@ -149,7 +145,7 @@ class GoogleAnalytics extends BaseDataSource
             'type' => 'counter',
             'counter' => $counter,
             'response' => $response,
-            'metric' => Craft::t(Craft::app()->analytics->getDimMet($metric)),
+            'metric' => Craft::t(Craft::app()->analytics_meta->getDimMet($metric)),
             'period' => $period,
             'periodLabel' => Craft::t('this '.$period)
         ];
@@ -157,8 +153,6 @@ class GoogleAnalytics extends BaseDataSource
 
     public function pie($requestData)
     {
-        $profile = Craft::app()->analytics->getProfile();
-
         $period = (isset($requestData['period']) ? $requestData['period'] : null);
         $dimension = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
         $metric = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
@@ -183,8 +177,8 @@ class GoogleAnalytics extends BaseDataSource
         return [
             'type' => 'pie',
             'chart' => $tableResponse,
-            'dimension' => Craft::t(Craft::app()->analytics->getDimMet($dimension)),
-            'metric' => Craft::t(Craft::app()->analytics->getDimMet($metric)),
+            'dimension' => Craft::t(Craft::app()->analytics_meta->getDimMet($dimension)),
+            'metric' => Craft::t(Craft::app()->analytics_meta->getDimMet($metric)),
             'period' => $period,
             'periodLabel' => Craft::t('this '.$period)
         ];
@@ -192,8 +186,6 @@ class GoogleAnalytics extends BaseDataSource
 
     public function table($requestData)
     {
-        $profile = Craft::app()->analytics->getProfile();
-
         $period = (isset($requestData['period']) ? $requestData['period'] : null);
         $dimension = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
         $metric = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
@@ -218,8 +210,8 @@ class GoogleAnalytics extends BaseDataSource
         return [
             'type' => 'table',
             'chart' => $tableResponse,
-            'dimension' => Craft::t(Craft::app()->analytics->getDimMet($dimension)),
-            'metric' => Craft::t(Craft::app()->analytics->getDimMet($metric)),
+            'dimension' => Craft::t(Craft::app()->analytics_meta->getDimMet($dimension)),
+            'metric' => Craft::t(Craft::app()->analytics_meta->getDimMet($metric)),
             'period' => $period,
             'periodLabel' => Craft::t('this '.$period)
         ];
@@ -227,8 +219,6 @@ class GoogleAnalytics extends BaseDataSource
 
     public function geo($requestData)
     {
-        $profile = Craft::app()->analytics->getProfile();
-
         $period = (isset($requestData['period']) ? $requestData['period'] : null);
         $dimension = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
         $metric = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
@@ -262,8 +252,8 @@ class GoogleAnalytics extends BaseDataSource
             'type' => 'geo',
             'chart' => $tableResponse,
             'dimensionRaw' => $originDimension,
-            'dimension' => Craft::t(Craft::app()->analytics->getDimMet($originDimension)),
-            'metric' => Craft::t(Craft::app()->analytics->getDimMet($metric)),
+            'dimension' => Craft::t(Craft::app()->analytics_meta->getDimMet($originDimension)),
+            'metric' => Craft::t(Craft::app()->analytics_meta->getDimMet($metric)),
             'period' => $period,
             'periodLabel' => Craft::t('this '.$period)
         ];
