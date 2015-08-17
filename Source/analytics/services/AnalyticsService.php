@@ -7,9 +7,6 @@
 
 namespace Craft;
 
-use \Google_Client;
-use \Google_Service_Analytics;
-
 class AnalyticsService extends BaseApplicationComponent
 {
     // Properties
@@ -28,6 +25,136 @@ class AnalyticsService extends BaseApplicationComponent
     {
         $nsClassName = "\\Dukt\\Analytics\\DataSources\\$className";
         return new $nsClassName;
+    }
+
+    /**
+     * Get Profile
+     */
+    public function getProfile()
+    {
+        $r = array();
+
+        $webProperty = $this->getWebProperty();
+
+        $profile = craft()->cache->get('analytics.profile');
+
+        if(!$profile && !empty($webProperty['accountId']))
+        {
+            $profiles = craft()->analytics_api->managementProfiles->listManagementProfiles($webProperty['accountId'], $webProperty['id']);
+
+            $profile = $profiles['items'][0];
+
+            craft()->cache->set('analytics.profile', $profile);
+        }
+
+        if($profile)
+        {
+            return $profile;
+        }
+        else
+        {
+            throw new Exception("Couldn't get profile");
+        }
+
+        return $r;
+    }
+
+    /**
+     * Get Web Property
+     */
+    public function getWebProperty()
+    {
+        $r = array();
+
+        try
+        {
+            $webProperty = craft()->cache->get('analytics.webProperty');
+
+            if(!$webProperty)
+            {
+                $webProperties = craft()->analytics_api->managementWebproperties->listManagementWebproperties("~all");
+
+                foreach($webProperties['items'] as $webPropertyItem)
+                {
+                    if($webPropertyItem['id'] == $this->getSetting('profileId'))
+                    {
+                        $webProperty = $webPropertyItem;
+                    }
+                }
+
+                if($webProperty)
+                {
+                    craft()->cache->set('analytics.webProperty', $webProperty);
+                }
+            }
+
+            $r = $webProperty;
+
+        }
+        catch(\Exception $e)
+        {
+            $r['error'] = $e->getMessage();
+        }
+
+        return $r;
+    }
+
+    /**
+     * Get Properties Opts
+     */
+    public function getPropertiesOpts()
+    {
+        $properties = array("" => Craft::t("Select"));
+
+        $response = craft()->analytics_api->managementWebproperties->listManagementWebproperties("~all");
+
+        if(!$response)
+        {
+            Craft::log(__METHOD__.' : Could not list management web properties', LogLevel::Info, true);
+            return false;
+        }
+
+        $items = $response['items'];
+
+        foreach($items as $item)
+        {
+            $name = $item['id'];
+
+            if(!empty($item['websiteUrl']))
+            {
+                $name .= ' - '.$item['websiteUrl'];
+            }
+            elseif(!empty($item['name']))
+            {
+                $name .= ' - '.$item['name'];
+            }
+
+            $properties[$item['id']] = $name;
+        }
+
+        return $properties;
+    }
+
+    /**
+     * Get Setting
+     *
+     * @param string $key
+     */
+    public function getSetting($key)
+    {
+        $plugin = craft()->plugins->getPlugin('analytics');
+
+        $settings = $plugin->getSettings();
+
+        return $settings[$key];
+    }
+
+    /**
+     * Get Language
+     */
+    public function getLanguage()
+    {
+        return craft()->language;
     }
 
     /**
@@ -91,133 +218,6 @@ class AnalyticsService extends BaseApplicationComponent
         }
 
         return $uri;
-    }
-
-    /**
-     * Get Profile
-     */
-    public function getProfile()
-    {
-        $r = array();
-
-        $webProperty = $this->getWebProperty();
-
-        $profile = craft()->cache->get('analytics.profile');
-
-        if(!$profile && !empty($webProperty['accountId']))
-        {
-            $profiles = craft()->analytics_api->managementProfiles->listManagementProfiles($webProperty['accountId'], $webProperty['id']);
-
-            $profile = $profiles['items'][0];
-
-            craft()->cache->set('analytics.profile', $profile);
-        }
-
-        if($profile)
-        {
-            return $profile;
-        }
-        else
-        {
-            throw new Exception("Couldn't get profile");
-        }
-
-        return $r;
-    }
-
-    /**
-     * Get Web Property
-     */
-    public function getWebProperty()
-    {
-        $r = array();
-
-        try
-        {
-            $webProperty = craft()->cache->get('analytics.webProperty');
-
-            if(!$webProperty)
-            {
-                $webProperties = craft()->analytics_api->managementWebproperties->listManagementWebproperties("~all");
-
-                foreach($webProperties['items'] as $webPropertyItem) {
-
-                    if($webPropertyItem['id'] == $this->getSetting('profileId')) {
-                        $webProperty = $webPropertyItem;
-                    }
-                }
-
-                if($webProperty)
-                {
-                    craft()->cache->set('analytics.webProperty', $webProperty);
-                }
-            }
-
-            $r = $webProperty;
-
-        } catch(\Exception $e) {
-            $r['error'] = $e->getMessage();
-        }
-
-        return $r;
-    }
-
-    /**
-     * Get Properties Opts
-     */
-    public function getPropertiesOpts()
-    {
-        $properties = array("" => Craft::t("Select"));
-
-        $response = craft()->analytics_api->managementWebproperties->listManagementWebproperties("~all");
-
-        if(!$response)
-        {
-            Craft::log(__METHOD__.' : Could not list management web properties', LogLevel::Info, true);
-            return false;
-        }
-
-        $items = $response['items'];
-
-        foreach($items as $item)
-        {
-            $name = $item['id'];
-
-            if(!empty($item['websiteUrl']))
-            {
-                $name .= ' - '.$item['websiteUrl'];
-            }
-            elseif(!empty($item['name']))
-            {
-                $name .= ' - '.$item['name'];
-            }
-
-            $properties[$item['id']] = $name;
-        }
-
-        return $properties;
-    }
-
-    /**
-     * Get Setting
-     *
-     * @param string $key
-     */
-    public function getSetting($key)
-    {
-        $plugin = craft()->plugins->getPlugin('analytics');
-
-        $settings = $plugin->getSettings();
-
-        return $settings[$key];
-    }
-
-    /**
-     * Get Language
-     */
-    public function getLanguage()
-    {
-        return craft()->language;
     }
 
     /**
