@@ -12,7 +12,7 @@ class Analytics_TestController extends BaseController
     // Public Methods
     // =========================================================================
 
-    public function actionTestMeta()
+    public function actionMeta()
     {
         $dimensions = array();
         $metrics = array();
