@@ -36,29 +36,6 @@ class AnalyticsVariable
     }
 
     /**
-     * Get Web Property
-     */
-    public function getWebProperty()
-    {
-        return craft()->analytics->getWebProperty();
-    }
-
-    /**
-     * Get Profile
-     */
-    public function getProfile()
-    {
-        try
-        {
-            return craft()->analytics->getProfile();
-        }
-        catch(\Exception $e)
-        {
-            Craft::log('Couldn’t get profile: '.$e->getMessage(), LogLevel::Info, true);
-        }
-    }
-
-    /**
      * Is Configured
      */
     public function isConfigured()
