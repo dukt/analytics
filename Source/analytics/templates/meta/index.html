@@ -1,0 +1,39 @@
+{% import "_includes/forms" as forms %}
+
+{% extends "_layouts/cp" %}
+
+{% set crumbs = [
+    { label: "Settings"|t, url: url('settings') },
+    { label: "Plugins"|t, url: url('settings/plugins') }
+] %}
+
+{% set title = "Analytics Meta"|t %}
+
+{% set content %}
+
+    <form action="" method="post">
+
+        {{ getCsrfInput() }}
+
+        <input type="hidden" name="action" value="analytics/meta/search">
+
+        {{ forms.textField({
+            first: true,
+        	placeholder: "Search dimensions & metrics"|t,
+            name: 'q',
+            value: (q is defined ? q),
+        }) }}
+
+        <input type="submit" class="btn submit" value="Search" />
+
+    </form>
+
+    {% if columns is defined %}
+        <hr>
+
+        {% for column in columns %}
+            {% include 'analytics/meta/_column' %}
+        {% endfor %}
+    {% endif %}
+
+{% endset %}

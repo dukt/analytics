@@ -1,0 +1,14 @@
+{#<pre>
+    {{ dump(column) }}
+</pre>
+#}
+
+{% set attributes = column.attributes %}
+
+<h2>{{column.id}}</h2>
+
+<ul>
+    {% for key, attribute in attributes %}
+        <li><strong>{{key}}: </strong> {{attribute}}</li>
+    {% endfor %}
+</ul>
