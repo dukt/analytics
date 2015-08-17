@@ -91,6 +91,7 @@ class AnalyticsPlugin extends BasePlugin
         return array(
             'analytics\/console' => array('action' => "analytics/console"),
             'analytics\/settings' => array('action' => "analytics/settings"),
+            'analytics\/meta' => array('action' => "analytics/meta/index"),
         );
     }
 

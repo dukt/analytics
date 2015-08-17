@@ -9,11 +9,8 @@ class GoogleAnalytics extends BaseDataSource
 {
     public function getSettingsHtml($variables = [])
     {
-        $dimensions = Craft::app()->analytics->getDimensions();
-        $metrics = Craft::app()->analytics->getMetrics();
-
-        $variables['dimensionsOptions'] = $dimensions;
-        $variables['metricsOptions'] = $metrics;
+        $variables['dimensionsOptions'] = Craft::app()->analytics_meta->getSelectOptions('DIMENSION');
+        $variables['metricsOptions'] = Craft::app()->analytics_meta->getSelectOptions('METRIC');
 
         return Craft::app()->templates->render('analytics/widgets/stats/_googleAnalyticsSettings', $variables);
     }
