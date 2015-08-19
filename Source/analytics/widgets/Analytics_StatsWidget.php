@@ -47,7 +47,12 @@ class Analytics_StatsWidget extends BaseWidget
         $options['cachedRequest'] = $request;
 
         $dataSourceClassName = 'GoogleAnalytics';
-        $cacheKey = 'analytics.dataSources.'.$dataSourceClassName.'.getChartData.'.md5(serialize($request));
+        $requestHash = $request;
+        unset($requestHash['CRAFT_CSRF_TOKEN']);
+        $requestHash = md5(serialize($requestHash));
+
+        $cacheKey = 'analytics.dataSources.'.$dataSourceClassName.'.getChartData.'.$requestHash;
+
         $cachedResponse = craft()->cache->get($cacheKey);
 
         if($cachedResponse)
