@@ -26,12 +26,7 @@ Analytics.Stats = Garnish.Base.extend({
 
         if(typeof(this.chartResponse) != 'undefined')
         {
-            this.$spinner.addClass('hidden');
-
-            $chart = $('<div class="chart"></div>');
-            $chart.appendTo(this.$body);
-
-            this.chart = new Analytics.Chart($chart, this.chartResponse);
+            this.parseResponse(this.chartResponse);
         }
 
         // listeners
@@ -43,7 +38,6 @@ Analytics.Stats = Garnish.Base.extend({
         if(this.requestData)
         {
             this.requestData.period = $(ev.currentTarget).val();
-
             this.chartResponse = this.sendRequest(this.requestData);
         }
     },
@@ -77,7 +71,7 @@ Analytics.Stats = Garnish.Base.extend({
                 this.requestData = stringData;
 
 
-                // this.$element.parents('.item').data('colspan', this.requestData.colspan);
+                this.$element.parents('.item').data('colspan', this.requestData.colspan);
 
                 this.chartResponse = this.sendRequest(this.requestData);
 
@@ -85,8 +79,8 @@ Analytics.Stats = Garnish.Base.extend({
 
                 this.saveState();
 
-                // Craft.initUiElements();
-                // Garnish.$win.trigger('resize');
+                Craft.initUiElements();
+                Garnish.$win.trigger('resize');
 
             }, this));
 
@@ -146,13 +140,22 @@ Analytics.Stats = Garnish.Base.extend({
 
         Craft.postActionRequest('analytics/reports/getChartReport', data, $.proxy(function(response, textStatus)
         {
-            this.$spinner.addClass('hidden');
-
-            $chart = $('<div class="chart"></div>');
-            $chart.appendTo(this.$body);
-
-            this.chart = new Analytics.Chart($chart, response);
+            this.parseResponse(response);
 
         }, this));
+    },
+
+    parseResponse: function(response)
+    {
+        this.$spinner.addClass('hidden');
+
+        $chart = $('<div class="chart"></div>');
+        $chart.appendTo(this.$body);
+
+        this.$title.html(response.metric);
+        this.$date.html(response.periodLabel);
+
+
+        this.chart = new Analytics.Chart($chart, response);
     }
 });
