@@ -7,6 +7,7 @@ Analytics.Stats = Garnish.Base.extend({
 
     init: function(element, options)
     {
+        console.log('options', options);
         // elements
         this.$element = $('#'+element);
         this.$title = $('.title', this.$element);
@@ -14,6 +15,13 @@ Analytics.Stats = Garnish.Base.extend({
         this.$date = $('.date', this.$element);
         this.$spinner = $('.spinner', this.$element);
         this.$settingsBtn = $('.dk-settings-btn', this.$element);
+
+
+        if(typeof(options['settingsModalTemplate']) != 'undefined')
+        {
+            this.settingsModalTemplate = options['settingsModalTemplate'];
+        }
+
 
         // default/cached request and response
         this.chartRequest = options['cachedRequest'];
@@ -84,25 +92,21 @@ Analytics.Stats = Garnish.Base.extend({
 
             }, this));
 
-            Craft.postActionRequest('analytics/settingsModal', { id: this.$element.data('id') }, $.proxy(function(response, textStatus)
+            $('.body', this.settingsModal.$container).html(this.settingsModalTemplate);
+
+            this.$periodSelect = $('.period select', this.settingsModal.$container);
+            this.$chartSelect = $('.chart-select select', this.settingsModal.$container);
+
+            if(this.requestData)
             {
-                $('.body', this.settingsModal.$container).html(response.html);
+                this.$chartSelect.val(this.requestData.chart);
+                this.$chartSelect.trigger('change');
 
-                this.$periodSelect = $('.period select', this.settingsModal.$container);
-                this.$chartSelect = $('.chart-select select', this.settingsModal.$container);
+                this.$periodSelect.val(this.requestData.period);
+                this.$periodSelect.trigger('change');
+            }
 
-                if(this.requestData)
-                {
-                    this.$chartSelect.val(this.requestData.chart);
-                    this.$chartSelect.trigger('change');
-
-                    this.$periodSelect.val(this.requestData.period);
-                    this.$periodSelect.trigger('change');
-                }
-
-                Craft.initUiElements();
-
-            }, this));
+            Craft.initUiElements();
         }
         else
         {

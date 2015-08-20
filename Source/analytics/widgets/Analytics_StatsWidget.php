@@ -60,6 +60,22 @@ class Analytics_StatsWidget extends BaseWidget
             $options['cachedResponse'] = $cachedResponse;
         }
 
+
+        // settings modal
+
+        $dataSourceClassName = 'GoogleAnalytics';
+        $dataSource = craft()->analytics->getDataSource($dataSourceClassName);
+        $inject = $dataSource->getSettingsHtml([
+            'settings' => $this->settings,
+        ]);
+
+        $options['settingsModalTemplate'] = craft()->templates->render('analytics/widgets/stats/settingsModal', array(
+            'settings' => $this->settings,
+            'inject' => $inject,
+        ));
+
+        //-----------------------------------------------
+
         $widgetId = $this->model->id;
         $jsonOptions = json_encode($options);
 
