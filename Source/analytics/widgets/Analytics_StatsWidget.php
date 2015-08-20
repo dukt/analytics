@@ -19,13 +19,6 @@ class Analytics_StatsWidget extends BaseWidget
      */
     public function getName()
     {
-        if(!empty($this->settings['options']['metric']) && !empty($this->settings['period']))
-        {
-            $name = craft()->analytics_meta->getDimMet($this->settings['options']['metric']);
-            $name .= " - ".$this->settings['period'];
-            return $name;
-        }
-
         return Craft::t('Analytics Stats');
     }
 
@@ -36,6 +29,12 @@ class Analytics_StatsWidget extends BaseWidget
      */
     public function getTitle()
     {
+        if(!empty($this->settings['options']['metric']))
+        {
+            $name = craft()->analytics_meta->getDimMet($this->settings['options']['metric']);
+            return $name;
+        }
+
         return Craft::t('Analytics Stats');
     }
 
