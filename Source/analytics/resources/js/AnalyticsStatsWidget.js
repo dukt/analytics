@@ -87,8 +87,8 @@ Analytics.Stats = Garnish.Base.extend({
 
                 this.saveState();
 
-                Craft.initUiElements();
-                Garnish.$win.trigger('resize');
+                // Craft.initUiElements();
+                // Garnish.$win.trigger('resize');
 
             }, this));
 
