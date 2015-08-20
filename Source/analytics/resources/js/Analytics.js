@@ -60,13 +60,16 @@ Analytics.Chart = Garnish.Base.extend({
     options: null,
     visualization: null,
 
-    init: function($chart, data)
+    init: function($element, data)
     {
         this.visualization = new Analytics.Visualization({
             onAfterInit: $.proxy(function() {
 
-                this.$chart = $chart;
+                this.$chart = $element,
+                this.$graph = $('<div class="graph" />').appendTo(this.$chart);
+
                 this.data = data;
+
 
                 if(typeof(this.data.chartOptions) != 'undefined')
                 {
@@ -95,64 +98,9 @@ Analytics.Chart = Garnish.Base.extend({
         });
     },
 
-    initAreaChart: function()
-    {
-        this.dataTable = Analytics.Utils.responseToDataTable(this.data.chart);
-
-        this.chartOptions = Analytics.ChartOptions.area(this.data.period);
-
-        if(this.data.period == 'year')
-        {
-            var dateFormatter = new google.visualization.DateFormat({
-                pattern: "MMMM yyyy"
-            });
-
-            dateFormatter.format(this.dataTable, 0);
-        }
-
-        this.chart = new google.visualization.AreaChart(this.$chart.get(0));
-
-        this.draw();
-    },
-
-    initCounterChart: function()
-    {
-        $value = $('<div class="value" />').appendTo(this.$chart),
-        $label = $('<div class="label" />').appendTo(this.$chart),
-        $period = $('<div class="period" />').appendTo(this.$chart);
-
-        $value.html(this.data.counter.count);
-        $label.html(this.data.metric);
-        $period.html(this.data.period);
-    },
-
-    initPieChart: function()
-    {
-        this.dataTable = Analytics.Utils.responseToDataTable(this.data.chart);
-        this.chartOptions = Analytics.ChartOptions.pie();
-        this.chart = new google.visualization.PieChart(this.$chart.get(0));
-        this.draw();
-    },
-
-    initTableChart: function()
-    {
-        this.dataTable = Analytics.Utils.responseToDataTable(this.data.chart);
-        this.chartOptions = Analytics.ChartOptions.table();
-        this.chart = new google.visualization.Table(this.$chart.get(0));
-        this.draw();
-    },
-
-    initGeoChart: function()
-    {
-        this.dataTable = Analytics.Utils.responseToDataTable(this.data.chart);
-        this.chartOptions = Analytics.ChartOptions.geo(this.data.dimensionRaw);
-        this.chart = new google.visualization.GeoChart(this.$chart.get(0));
-        this.draw();
-    },
-
     initChart: function()
     {
-        this.$chart.addClass(this.type);
+        this.$graph.addClass(this.type);
 
         switch(this.type)
         {
@@ -179,6 +127,66 @@ Analytics.Chart = Garnish.Base.extend({
             default:
                 console.error('Chart type "'+this.type+'" not supported.')
         }
+    },
+
+    initAreaChart: function()
+    {
+        $period = $('<div class="period" />').prependTo(this.$chart);
+        $title = $('<div class="title" />').prependTo(this.$chart);
+
+        $title.html(this.data.metric);
+        $period.html(this.data.periodLabel);
+
+        this.dataTable = Analytics.Utils.responseToDataTable(this.data.chart);
+        this.chartOptions = Analytics.ChartOptions.area(this.data.period);
+
+        if(this.data.period == 'year')
+        {
+            var dateFormatter = new google.visualization.DateFormat({
+                pattern: "MMMM yyyy"
+            });
+
+            dateFormatter.format(this.dataTable, 0);
+        }
+
+        this.chart = new google.visualization.AreaChart(this.$graph.get(0));
+
+        this.draw();
+    },
+
+    initCounterChart: function()
+    {
+        $value = $('<div class="value" />').appendTo(this.$graph),
+        $label = $('<div class="label" />').appendTo(this.$graph),
+        $period = $('<div class="period" />').appendTo(this.$graph);
+
+        $value.html(this.data.counter.count);
+        $label.html(this.data.metric);
+        $period.html(' '+this.data.periodLabel);
+    },
+
+    initPieChart: function()
+    {
+        this.dataTable = Analytics.Utils.responseToDataTable(this.data.chart);
+        this.chartOptions = Analytics.ChartOptions.pie();
+        this.chart = new google.visualization.PieChart(this.$graph.get(0));
+        this.draw();
+    },
+
+    initTableChart: function()
+    {
+        this.dataTable = Analytics.Utils.responseToDataTable(this.data.chart);
+        this.chartOptions = Analytics.ChartOptions.table();
+        this.chart = new google.visualization.Table(this.$graph.get(0));
+        this.draw();
+    },
+
+    initGeoChart: function()
+    {
+        this.dataTable = Analytics.Utils.responseToDataTable(this.data.chart);
+        this.chartOptions = Analytics.ChartOptions.geo(this.data.dimensionRaw);
+        this.chart = new google.visualization.GeoChart(this.$graph.get(0));
+        this.draw();
     },
 
     draw: function()

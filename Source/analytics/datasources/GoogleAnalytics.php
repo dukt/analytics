@@ -95,7 +95,7 @@ class GoogleAnalytics extends BaseDataSource
             'total' => $total,
             'metric' => Craft::t(Craft::app()->analytics_meta->getDimMet($metric)),
             'period' => $period,
-            'periodLabel' => Craft::t('this '.$period)
+            'periodLabel' => Craft::t('This '.$period)
         ];
     }
 
