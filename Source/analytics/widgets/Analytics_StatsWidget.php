@@ -60,14 +60,10 @@ class Analytics_StatsWidget extends BaseWidget
             'colspan' => (isset($settings['colspan']) ? $settings['colspan'] : null),
         );
 
-        $options['cachedRequest'] = $request;
 
-        $dataSourceClassName = 'GoogleAnalytics';
-        $requestHash = $request;
-        unset($requestHash['CRAFT_CSRF_TOKEN']);
-        $requestHash = md5(serialize($requestHash));
+        // cached response
 
-        $cacheKey = 'analytics.dataSources.'.$dataSourceClassName.'.getChartData.'.$requestHash;
+        $cacheKey = craft()->analytics->getCacheKey('getChartData', $options['request']);
 
         $cachedResponse = craft()->cache->get($cacheKey);
 

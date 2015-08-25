@@ -81,13 +81,10 @@ class Analytics_ReportsController extends BaseController
         try
         {
             $dataSourceClassName = 'GoogleAnalytics';
+
             $request = craft()->request->getPost();
 
-            $requestHash = $request;
-            unset($requestHash['CRAFT_CSRF_TOKEN']);
-            $requestHash = md5(serialize($requestHash));
-
-            $cacheKey = 'analytics.dataSources.'.$dataSourceClassName.'.getChartData.'.$requestHash;
+            $cacheKey = craft()->analytics->getCacheKey('getChartData', $request);
 
             $response = craft()->cache->get($cacheKey);
 
