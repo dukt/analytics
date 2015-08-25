@@ -88,7 +88,17 @@ class AnalyticsController extends BaseController
                         }
                         catch(\Exception $e)
                         {
-                            Craft::log('Couldn’t get account. '.$e->getMessage(), LogLevel::Error);
+
+                            Craft::log("Analytics.Debug - Couldn't get account\r\n".$e->getMessage().'\r\n'.$e->getTraceAsString(), LogLevel::Info, true);
+
+                            if(method_exists($e, 'getResponse'))
+                            {
+                                    Craft::log("Videos.Debug.GuzzleErrorResponse\r\n".$e->getResponse(), LogLevel::Info, true);
+                            }
+
+                            // throw $e;
+
+                            // Craft::log('Couldn’t get account. '.$e->getMessage(), LogLevel::Error);
 
                             $variables['error'] = $e->getMessage();
                         }
@@ -126,6 +136,10 @@ class AnalyticsController extends BaseController
             craft()->httpSession->add('analytics.referer', $referer);
         }
 
+        Craft::log('Analytics Connect - Step 1'."\r\n".print_r([
+                'referer' => $referer,
+            ], true), LogLevel::Info, true);
+
 
         // connect
 
@@ -144,6 +158,10 @@ class AnalyticsController extends BaseController
                 // save token
                 craft()->analytics->saveToken($token);
 
+                Craft::log('Analytics Connect - Step 2'."\r\n".print_r([
+                        'token' => $token,
+                    ], true), LogLevel::Info, true);
+
                 // session notice
                 craft()->userSession->setNotice(Craft::t("Connected to Google Analytics."));
             }
@@ -159,6 +177,7 @@ class AnalyticsController extends BaseController
             craft()->userSession->setError(Craft::t("Couldn’t connect"));
         }
 
+        // OAuth Step 5
 
         // redirect
 
