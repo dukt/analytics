@@ -1,3 +1,5 @@
+var superItem;
+
 /**
  * Stats Widget
  */
@@ -8,6 +10,7 @@ Analytics.Stats = Garnish.Base.extend({
     init: function(element, options)
     {
         console.log('options', options);
+
         // elements
         this.$element = $('#'+element);
         this.$title = $('.title', this.$element);
@@ -23,18 +26,24 @@ Analytics.Stats = Garnish.Base.extend({
         }
 
 
-        // default/cached request and response
-        this.chartRequest = options['cachedRequest'];
-        this.chartResponse = options['cachedResponse'];
+        // default/cached request
+        this.chartRequest = options['request'];
 
         if(typeof(this.chartRequest) != 'undefined')
         {
             this.requestData = this.chartRequest;
         }
 
+        // default/cached response
+        this.chartResponse = options['cachedResponse'];
+
         if(typeof(this.chartResponse) != 'undefined')
         {
             this.parseResponse(this.chartResponse);
+        }
+        else if(this.requestData)
+        {
+            this.chartResponse = this.sendRequest(this.requestData);
         }
 
         // listeners
@@ -79,7 +88,13 @@ Analytics.Stats = Garnish.Base.extend({
                 this.requestData = stringData;
 
 
-                this.$element.parents('.item').data('colspan', this.requestData.colspan);
+                // var item = this.$element.parents('.item').data('colspan', this.requestData.colspan);
+                var item = this.$element.parents('.item');
+                var itemIndex = item.index() - 1;
+
+                // $('#main .grid').data('grid').items[itemIndex].data('colspan', this.requestData.colspan);
+                $('#main .grid').data('grid').items[itemIndex].data('colspan', Number(this.requestData.colspan));
+                $('#main .grid').data('grid').refreshCols(true);
 
                 this.chartResponse = this.sendRequest(this.requestData);
 

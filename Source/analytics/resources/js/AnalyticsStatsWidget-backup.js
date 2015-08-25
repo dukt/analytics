@@ -21,7 +21,7 @@ Analytics.Stats = Garnish.Base.extend({
 
         // default/cached request and response
 
-        this.chartRequest = options['cachedRequest'];
+        this.chartRequest = options['request'];
         this.chartResponse = options['cachedResponse'];
 
         if(typeof(this.chartRequest) != 'undefined')

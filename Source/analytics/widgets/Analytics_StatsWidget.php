@@ -49,11 +49,11 @@ class Analytics_StatsWidget extends BaseWidget
         craft()->templates->includeCssResource('analytics/css/AnalyticsStatsWidget.css');
 
 
-        // build request from db or default
-
         $options = [];
 
-        $request = array(
+        // request
+
+        $options['request'] = array(
             'chart' => (isset($settings['chart']) ? $settings['chart'] : null),
             'period' => (isset($settings['period']) ? $settings['period'] : null),
             'options' => (isset($settings['options']) ? $settings['options'] : null),
