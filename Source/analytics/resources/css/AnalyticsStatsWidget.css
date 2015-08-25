@@ -12,6 +12,14 @@
 .analytics_stats:hover .actions {
   display: block;
 }
+.analytics_stats div.title {
+  font-weight: bold;
+  font-size: 15px;
+  margin-bottom: 7px;
+}
+.analytics_stats div.period {
+  margin-bottom: 24px;
+}
 .analytics_stats .actions {
   display: none;
   float: none !important;
