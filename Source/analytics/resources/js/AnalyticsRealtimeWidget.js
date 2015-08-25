@@ -9,12 +9,26 @@ Analytics.Realtime = Garnish.Base.extend({
         this.$title = $('.title', this.$element);
         this.$body = $('.body', this.$element);
         this.$spinner = $('.spinner', this.$element);
+        this.$streamstatus = $('.streamstatus', this.$element);
 
         this.$realtimeVisitors = $('.analytics-realtime-visitors', this.$element);
 
         this.timer = false;
 
         this.start();
+
+        setInterval($.proxy(function()
+        {
+            if(this.$streamstatus.hasClass('hidden'))
+            {
+                this.$streamstatus.removeClass('hidden');
+            }
+            else
+            {
+                this.$streamstatus.addClass('hidden');
+            }
+
+        }, this), 1000);
     },
 
     start: function()
