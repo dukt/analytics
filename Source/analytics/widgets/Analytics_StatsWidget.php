@@ -75,8 +75,7 @@ class Analytics_StatsWidget extends BaseWidget
 
         // settings modal
 
-        $dataSourceClassName = 'GoogleAnalytics';
-        $dataSource = craft()->analytics->getDataSource($dataSourceClassName);
+        $dataSource = craft()->analytics->getDataSource();
         $inject = $dataSource->getSettingsHtml([
             'settings' => $this->settings,
         ]);
@@ -104,8 +103,8 @@ class Analytics_StatsWidget extends BaseWidget
     public function getSettingsHtml()
     {
         $settings = $this->getSettings();
-        $dataSourceClassName = 'GoogleAnalytics';
-        $dataSource = craft()->analytics->getDataSource($dataSourceClassName);
+
+        $dataSource = craft()->analytics->getDataSource();
         $inject = $dataSource->getSettingsHtml([
             'settings' => $settings
         ]);

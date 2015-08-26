@@ -80,8 +80,6 @@ class Analytics_ReportsController extends BaseController
 
         try
         {
-            $dataSourceClassName = 'GoogleAnalytics';
-
             $request = craft()->request->getPost();
 
             $cacheKey = craft()->analytics->getCacheKey('getChartData', $request);
@@ -90,7 +88,7 @@ class Analytics_ReportsController extends BaseController
 
             if(!$response)
             {
-                $dataSource = craft()->analytics->getDataSource($dataSourceClassName);
+                $dataSource = craft()->analytics->getDataSource();
                 $response = $dataSource->getChartData($request);
                 craft()->cache->set($cacheKey, $response);
             }

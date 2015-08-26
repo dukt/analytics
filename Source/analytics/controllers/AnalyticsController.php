@@ -258,8 +258,7 @@ class AnalyticsController extends BaseController
         $widgetId = craft()->request->getPost('id');
         $widget = craft()->dashboard->getUserWidgetById($widgetId);
 
-        $dataSourceClassName = 'GoogleAnalytics';
-        $dataSource = craft()->analytics->getDataSource($dataSourceClassName);
+        $dataSource = craft()->analytics->getDataSource();
         $inject = $dataSource->getSettingsHtml([
             'settings' => $widget->settings,
         ]);

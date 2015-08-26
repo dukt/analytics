@@ -34,7 +34,7 @@ class AnalyticsService extends BaseApplicationComponent
     /**
      * Get data soruce from its class name
      */
-    public function getDataSource($className)
+    public function getDataSource($className = 'GoogleAnalytics')
     {
         $nsClassName = "\\Dukt\\Analytics\\DataSources\\$className";
         return new $nsClassName;
