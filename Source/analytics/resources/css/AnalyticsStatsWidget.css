@@ -24,6 +24,7 @@
   display: none;
   float: none !important;
   position: absolute;
+  z-index: 1;
   top: 0px;
   right: -7px;
   margin: 0;
