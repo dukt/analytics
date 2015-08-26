@@ -3,9 +3,9 @@
  */
 
  var Analytics = {
-    GoogleVisualisationCalled: false
+    GoogleVisualizationCalled: false,
+    GoogleVisualizationReady: false
 };
-
 
 /**
  * Visualization
@@ -13,13 +13,16 @@
 Analytics.Visualization = Garnish.Base.extend({
 
     options: null,
+    afterInitStack: [],
 
     init: function(options)
     {
         this.options = options;
 
-        if(Analytics.GoogleVisualisationCalled == false)
+        if(Analytics.GoogleVisualizationCalled == false)
         {
+            Analytics.GoogleVisualizationCalled = true;
+
             if(typeof(AnalyticsChartLanguage) == 'undefined')
             {
                 AnalyticsChartLanguage = 'en';
@@ -29,11 +32,13 @@ Analytics.Visualization = Garnish.Base.extend({
                 packages:['corechart', 'table'],
                 language: AnalyticsChartLanguage,
                 callback: $.proxy(function() {
+                    Analytics.GoogleVisualizationReady = true;
+
                     this.onAfterInit();
+
+                    this.onAfterFirstInit();
                 }, this)
             });
-
-            Analytics.GoogleVisualisationCalled = true;
         }
         else
         {
@@ -41,9 +46,27 @@ Analytics.Visualization = Garnish.Base.extend({
         }
     },
 
+    onAfterFirstInit: function()
+    {
+        // call inAfterInits that are waiting for initialization completion
+
+        for(i=0; i < this.afterInitStack.length; i++)
+        {
+            this.afterInitStack[i]();
+        }
+    },
+
     onAfterInit: function()
     {
-        this.options.onAfterInit();
+        if(Analytics.GoogleVisualizationReady)
+        {
+            this.options.onAfterInit();
+        }
+        else
+        {
+            // add it to the stack
+            this.afterInitStack.push(this.options.onAfterInit);
+        }
     }
 });
 
