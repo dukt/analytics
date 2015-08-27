@@ -1,6 +1,6 @@
 {% import "_includes/forms" as forms %}
 
-<div id="chartarea"{% if settings.chart != 'area' %} class="hidden"{% endif %}>
+<div id="chartarea"{% if settings.chart != 'area' and settings.chart is not null %} class="hidden"{% endif %}>
 
     {{ forms.selectField({
         label: "Metric"|t,
