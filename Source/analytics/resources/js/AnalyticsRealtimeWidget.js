@@ -10,6 +10,7 @@ Analytics.Realtime = Garnish.Base.extend({
         this.$body = $('.body', this.$element);
         this.$spinner = $('.spinner', this.$element);
         this.$streamstatus = $('.streamstatus', this.$element);
+        this.$error = $('.error', this.$element);
 
         this.$realtimeVisitors = $('.analytics-realtime-visitors', this.$element);
 
@@ -61,12 +62,13 @@ Analytics.Realtime = Garnish.Base.extend({
         {
             if(textStatus == 'success' && typeof(response.error) == 'undefined')
             {
+                this.$error.addClass('hidden');
                 this.$realtimeVisitors.removeClass('hidden');
-                // this.explorer.$error.addClass('hidden');
                 this.handleResponse(response);
             }
             else
             {
+                console.log('------------error', response);
                 msg = 'An unknown error occured.';
 
                 if(typeof(response) != 'undefined' && response && typeof(response.error) != 'undefined')
@@ -75,8 +77,8 @@ Analytics.Realtime = Garnish.Base.extend({
                 }
 
                 this.$realtimeVisitors.addClass('hidden');
-                // this.explorer.$error.html(msg);
-                // this.explorer.$error.removeClass('hidden');
+                this.$error.html(msg);
+                this.$error.removeClass('hidden');
             }
 
             this.$spinner.addClass('hidden');

@@ -4,8 +4,8 @@
   top: 24px;
   right: 24px;
 }
-.analytics_realtime .body {
-  padding: 24px 0;
+.analytics_realtime .analytics-realtime-visitors {
+  padding: 14px 0;
 }
 .analytics_realtime .active-visitors {
   text-align: center;
