@@ -5,7 +5,7 @@
     {{ forms.selectField({
         label: "Metric"|t,
         name: 'options[metric]',
-        options: metricsOptions,
+        options: selectOptions.area.metrics,
         value: (settings.options.metric is defined ? settings.options.metric : null),
     }) }}
 
@@ -16,7 +16,7 @@
     {{ forms.selectField({
         label: "Metric"|t,
         name: 'options[metric]',
-        options: metricsOptions,
+        options: selectOptions.counter.metrics,
         value: (settings.options.metric is defined ? settings.options.metric : null),
     }) }}
 
@@ -27,14 +27,14 @@
     {{ forms.selectField({
         label: "Dimension"|t,
         name: 'options[dimension]',
-        options: dimensionsOptions,
+        options: selectOptions.pie.dimensions,
         value: (settings.options.dimension is defined ? settings.options.dimension : null),
     }) }}
 
     {{ forms.selectField({
         label: "Metric"|t,
         name: 'options[metric]',
-        options: metricsOptions,
+        options: selectOptions.pie.metrics,
         value: (settings.options.metric is defined ? settings.options.metric : null),
     }) }}
 
@@ -44,14 +44,14 @@
     {{ forms.selectField({
         label: "Dimension"|t,
         name: 'options[dimension]',
-        options: dimensionsOptions,
+        options: selectOptions.table.dimensions,
         value: (settings.options.dimension is defined ? settings.options.dimension : null),
     }) }}
 
     {{ forms.selectField({
         label: "Metric"|t,
         name: 'options[metric]',
-        options: metricsOptions,
+        options: selectOptions.table.metrics,
         value: (settings.options.metric is defined ? settings.options.metric : null),
     }) }}
 </div>
@@ -61,14 +61,14 @@
     {{ forms.selectField({
         label: "Dimension"|t,
         name: 'options[dimension]',
-        options: dimensionsOptions,
+        options: selectOptions.geo.dimensions,
         value: (settings.options.dimension is defined ? settings.options.dimension : null),
     }) }}
 
     {{ forms.selectField({
         label: "Metric"|t,
         name: 'options[metric]',
-        options: metricsOptions,
+        options: selectOptions.geo.metrics,
         value: (settings.options.metric is defined ? settings.options.metric : null),
     }) }}
 

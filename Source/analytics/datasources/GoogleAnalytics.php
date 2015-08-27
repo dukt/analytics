@@ -9,8 +9,16 @@ class GoogleAnalytics extends BaseDataSource
 {
     public function getSettingsHtml($variables = [])
     {
-        $variables['dimensionsOptions'] = Craft::app()->analytics_meta->getSelectOptions('DIMENSION');
-        $variables['metricsOptions'] = Craft::app()->analytics_meta->getSelectOptions('METRIC');
+        $chartTypes = ['area', 'counter', 'pie', 'table', 'geo'];
+
+        $selectOptions = [];
+
+        foreach($chartTypes as $chartType)
+        {
+            $selectOptions[$chartType] = $this->getOptions($chartType);
+        }
+
+        $variables['selectOptions'] = $selectOptions;
 
         return Craft::app()->templates->render('analytics/widgets/stats/_googleAnalyticsSettings', $variables);
     }
@@ -20,6 +28,30 @@ class GoogleAnalytics extends BaseDataSource
         $chart = $options['chart'];
 
         return $this->{$chart}($options);
+    }
+
+    private function getOptions($chart)
+    {
+        switch($chart)
+        {
+            case 'geo':
+
+                $options = [
+                    'dimensions' => Craft::app()->analytics_meta->getSelectOptions('DIMENSION', ['ga:city', 'ga:country']),
+                    'metrics' => Craft::app()->analytics_meta->getSelectOptions('METRIC')
+                ];
+
+                break;
+
+            default:
+
+                $options = [
+                    'dimensions' => Craft::app()->analytics_meta->getSelectOptions('DIMENSION'),
+                    'metrics' => Craft::app()->analytics_meta->getSelectOptions('METRIC')
+                ];
+        }
+
+        return $options;
     }
 
     public function area($requestData)
