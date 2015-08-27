@@ -29,10 +29,21 @@ class Analytics_StatsWidget extends BaseWidget
      */
     public function getTitle()
     {
+        $name = [];
+
+        if(!empty($this->settings['options']['dimension']))
+        {
+            $name[] = craft()->analytics_meta->getDimMet($this->settings['options']['dimension']);
+        }
+
         if(!empty($this->settings['options']['metric']))
         {
-            $name = craft()->analytics_meta->getDimMet($this->settings['options']['metric']);
-            return $name;
+            $name[] = craft()->analytics_meta->getDimMet($this->settings['options']['metric']);
+        }
+
+        if(count($name) > 0)
+        {
+            return implode(" - ", $name);
         }
 
         return Craft::t('Analytics Stats');
