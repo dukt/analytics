@@ -156,7 +156,6 @@ Analytics.Chart = Garnish.Base.extend({
     {
         $period = $('<div class="period" />').prependTo(this.$chart);
         $title = $('<div class="title" />').prependTo(this.$chart);
-
         $title.html(this.data.metric);
         $period.html(this.data.periodLabel);
 
