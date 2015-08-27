@@ -27,7 +27,7 @@ class Analytics_RealtimeWidget extends BaseWidget
         // craft()->templates->includeJsResource('analytics/js/jsapi.js', true);
         // craft()->templates->includeJsResource('analytics/lib/jquery.serializeJSON/jquery.serializejson.min.js');
 
-        $realtimeRefreshInterval = 15;
+        $realtimeRefreshInterval = craft()->config->get('realtimeRefreshInterval', 'analytics');
 
         $widgetId = $this->model->id;
         $jsonOptions = json_encode([]);
