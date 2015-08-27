@@ -128,7 +128,7 @@ class Analytics_MetaService extends BaseApplicationComponent
         return $groups;
     }
 
-    public function getSelectOptions($type = null)
+    public function getSelectOptions($type = null, $filters = null)
     {
         $options = [];
 
@@ -145,7 +145,41 @@ class Analytics_MetaService extends BaseApplicationComponent
             }
         }
 
-        return $options;
+        if($filters && is_array($filters))
+        {
+            $filteredOptions = [];
+
+            foreach($options as $id => $option)
+            {
+                if(isset($option['optgroup']))
+                {
+                    $optgroup = null;
+                    $lastOptgroup = $option['optgroup'];
+                }
+                else
+                {
+                    foreach($filters as $filter)
+                    {
+                        if($id == $filter)
+                        {
+                            if(!$optgroup)
+                            {
+                                $optgroup = $lastOptgroup;
+                                $filteredOptions[]['optgroup'] = $optgroup;
+                            }
+
+                            $filteredOptions[$id] = $option;
+                        }
+                    }
+                }
+            }
+
+            return $filteredOptions;
+        }
+        else
+        {
+            return $options;
+        }
     }
 
     public function getMetrics()
