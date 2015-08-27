@@ -68,8 +68,7 @@ Analytics.Realtime = Garnish.Base.extend({
             }
             else
             {
-                console.log('------------error', response);
-                msg = 'An unknown error occured.';
+                var msg = 'An unknown error occured.';
 
                 if(typeof(response) != 'undefined' && response && typeof(response.error) != 'undefined')
                 {

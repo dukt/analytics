@@ -17,7 +17,9 @@ Analytics.Stats = Garnish.Base.extend({
         this.$body = $('.body', this.$element);
         this.$date = $('.date', this.$element);
         this.$spinner = $('.spinner', this.$element);
+        this.$spinner.removeClass('body-loading');
         this.$settingsBtn = $('.dk-settings-btn', this.$element);
+        this.$error = $('.error', this.$element);
 
 
         if(typeof(options['settingsModalTemplate']) != 'undefined')
@@ -157,9 +159,28 @@ Analytics.Stats = Garnish.Base.extend({
 
         $('.chart', this.$body).remove();
 
+        this.$error.addClass('hidden');
+
         Craft.postActionRequest('analytics/reports/getChartReport', data, $.proxy(function(response, textStatus)
         {
-            this.parseResponse(response);
+            this.$spinner.addClass('hidden');
+
+            if(textStatus == 'success' && typeof(response.error) == 'undefined')
+            {
+                this.parseResponse(response);
+            }
+            else
+            {
+                var msg = 'An unknown error occured.';
+
+                if(typeof(response) != 'undefined' && response && typeof(response.error) != 'undefined')
+                {
+                    msg = response.error;
+                }
+
+                this.$error.html(msg);
+                this.$error.removeClass('hidden');
+            }
 
         }, this));
     },

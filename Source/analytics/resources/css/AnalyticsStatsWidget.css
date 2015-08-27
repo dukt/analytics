@@ -42,7 +42,7 @@
   opacity: .8;
 }
 .analytics_stats .body {
-  min-height: 100px;
+  min-height: 20px;
 }
 .analytics_stats .body h2.title {
   display: block;
@@ -56,8 +56,8 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  margin-left: -12px;
-  margin-top: -24px;
+  margin-left: -14px;
+  margin-top: -14px;
 }
 .analytics_stats .graph {
   min-height: 150px;
