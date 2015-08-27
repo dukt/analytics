@@ -101,9 +101,6 @@
 .analytics_stats .graph.table > div {
   position: inherit;
 }
-.analytics_stats .graph.table td {
-  width: 100px;
-}
 .analytics_stats .graph.table td strong {
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -112,10 +109,17 @@
   overflow: hidden;
   font-weight: normal;
 }
+.analytics_stats .graph.table .google-visualization-table {
+  width: 100%;
+  border: 0;
+}
 .analytics_stats .graph.table .google-visualization-table-table {
   width: 100%;
 }
-.analytics_stats .graph.table .google-visualization-table-th {
+.analytics_stats .graph.table thead tr {
+  background: none;
+}
+.analytics_stats .graph.table thead tr .google-visualization-table-th {
   background: none !important;
   padding-left: 0;
   padding-right: 0;
@@ -125,13 +129,13 @@
   font-size: 0.8em;
   white-space: nowrap;
 }
-.analytics_stats .graph.table .google-visualization-table-th:first-child {
+.analytics_stats .graph.table thead tr .google-visualization-table-th:first-child {
   text-align: left;
 }
-.analytics_stats .graph.table .google-visualization-table-th:last-child {
+.analytics_stats .graph.table thead tr .google-visualization-table-th:last-child {
   text-align: right;
 }
-.analytics_stats .graph.table .google-visualization-table-th span {
+.analytics_stats .graph.table thead tr .google-visualization-table-th span {
   display: none;
 }
 .analytics_stats .graph.table td.google-visualization-table-td {

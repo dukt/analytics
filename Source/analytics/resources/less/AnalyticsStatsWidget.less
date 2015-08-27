@@ -53,14 +53,18 @@
 
         & > div { position: inherit; }
 
-        td { width: 100px; }
+        // td { width: 100px; }
+
         td strong { white-space:nowrap; text-overflow: ellipsis;  overflow: hidden; width: 200px; display: block; overflow: hidden; font-weight: normal; }
 
+        .google-visualization-table { width: 100%; border: 0; }
         .google-visualization-table-table { width: 100%; }
-        .google-visualization-table-th { background: none !important; padding-left: 0; padding-right: 0; border:0; border-bottom: 1px dotted #e3e5e8; color: rgba(0, 0, 0, 0.298039); font-size: 0.8em; white-space:nowrap; }
-        .google-visualization-table-th:first-child { text-align: left; }
-        .google-visualization-table-th:last-child { text-align: right; }
-        .google-visualization-table-th span { display: none; }
+
+        thead tr { background: none; }
+        thead tr .google-visualization-table-th { background: none !important; padding-left: 0; padding-right: 0; border:0; border-bottom: 1px dotted #e3e5e8; color: rgba(0, 0, 0, 0.298039); font-size: 0.8em; white-space:nowrap; }
+        thead tr .google-visualization-table-th:first-child { text-align: left; }
+        thead tr .google-visualization-table-th:last-child { text-align: right; }
+        thead tr .google-visualization-table-th span { display: none; }
 
         td.google-visualization-table-td { max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; background: #fff; border-left: 0; border-right: 0; border-top:0; border-bottom: 1px dotted #e3e5e8; }
         td.google-visualization-table-td:hover { background: #fff; }
