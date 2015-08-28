@@ -88,7 +88,8 @@ Analytics.Chart = Garnish.Base.extend({
         this.visualization = new Analytics.Visualization({
             onAfterInit: $.proxy(function() {
 
-                this.$chart = $element,
+                this.$chart = $element;
+                this.$chart.html('');
                 this.$graph = $('<div class="graph" />').appendTo(this.$chart);
 
                 this.data = data;
