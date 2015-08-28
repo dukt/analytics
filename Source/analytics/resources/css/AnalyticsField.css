@@ -4,7 +4,7 @@
 .analytics-field {
   background: #fdfdfd;
   margin: 0 -24px;
-  padding: 12px 24px;
+  padding: 14px 24px;
   border: 1px solid #e3e5e8;
   border-left: 0;
   border-right: 0;
@@ -48,5 +48,6 @@
 }
 .analytics-field .chart {
   clear: both;
-  height: 150px;
+  margin: 0 -24px -15px -24px;
+  /*height:150px;*/
 }
