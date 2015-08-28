@@ -90,7 +90,11 @@ class Analytics_ReportsController extends BaseController
             {
                 $dataSource = craft()->analytics->getDataSource();
                 $response = $dataSource->getChartData($request);
-                craft()->cache->set($cacheKey, $response);
+
+                if($response)
+                {
+                    craft()->cache->set($cacheKey, $response);
+                }
             }
 
             $this->returnJson($response);
@@ -139,7 +143,18 @@ class Analytics_ReportsController extends BaseController
                 $criteria->metrics = $metric;
                 $criteria->optParams = $optParams;
 
-                $response = craft()->analytics->sendRequest($criteria);
+                $cacheKey = craft()->analytics->getCacheKey('ReportsController.actionGetElementReport', $criteria->getAttributes());
+                $response = craft()->cache->get($cacheKey);
+
+                if(!$response)
+                {
+                    $response = craft()->analytics->sendRequest($criteria);
+
+                    if($response)
+                    {
+                        craft()->cache->set($cacheKey, $response);
+                    }
+                }
 
                 $this->returnJson([
                     'type' => 'area',

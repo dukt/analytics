@@ -12,6 +12,13 @@ class AnalyticsHelper
     // Public Methods
     // =========================================================================
 
+    public function formatDuration($cacheDuration, $format='%s')
+    {
+        $cacheDuration = new DateInterval($cacheDuration);
+        $cacheDurationSeconds = $cacheDuration->format('%s');
+
+        return $cacheDurationSeconds;
+    }
     /**
      * Transforms a GA Data object to an array
      */

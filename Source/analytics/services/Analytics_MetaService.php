@@ -10,6 +10,8 @@ namespace Craft;
 class Analytics_MetaService extends BaseApplicationComponent
 {
     private $columns;
+    private $selectDimensionOptions;
+    private $selectMetricOptions;
 
     /**
      * Get Continent Code
@@ -56,12 +58,9 @@ class Analytics_MetaService extends BaseApplicationComponent
     {
         $columns = $this->getColumns();
 
-        foreach($columns as $column)
+        if(isset($columns[$id]))
         {
-            if($column->id == $id)
-            {
-                return $column->uiName;
-            }
+            return $columns[$id]->uiName;
         }
     }
 
@@ -128,6 +127,94 @@ class Analytics_MetaService extends BaseApplicationComponent
         return $groups;
     }
 
+    public function getSelectDimensionOptions($filters = null)
+    {
+        if(!$this->selectDimensionOptions)
+        {
+            $this->selectDimensionOptions = $this->getSelectOptions('DIMENSION');
+        }
+
+        if($filters && is_array($filters))
+        {
+            $filteredOptions = [];
+
+            foreach($this->selectDimensionOptions as $id => $option)
+            {
+                if(isset($option['optgroup']))
+                {
+                    $optgroup = null;
+                    $lastOptgroup = $option['optgroup'];
+                }
+                else
+                {
+                    foreach($filters as $filter)
+                    {
+                        if($id == $filter)
+                        {
+                            if(!$optgroup)
+                            {
+                                $optgroup = $lastOptgroup;
+                                $filteredOptions[]['optgroup'] = $optgroup;
+                            }
+
+                            $filteredOptions[$id] = $option;
+                        }
+                    }
+                }
+            }
+
+            return $filteredOptions;
+        }
+        else
+        {
+            return $this->selectDimensionOptions;
+        }
+    }
+
+    public function getSelectMetricOptions($filters = null)
+    {
+        if(!$this->selectMetricOptions)
+        {
+            $this->selectMetricOptions = $this->getSelectOptions('METRIC');
+        }
+
+        if($filters && is_array($filters))
+        {
+            $filteredOptions = [];
+
+            foreach($this->selectMetricOptions as $id => $option)
+            {
+                if(isset($option['optgroup']))
+                {
+                    $optgroup = null;
+                    $lastOptgroup = $option['optgroup'];
+                }
+                else
+                {
+                    foreach($filters as $filter)
+                    {
+                        if($id == $filter)
+                        {
+                            if(!$optgroup)
+                            {
+                                $optgroup = $lastOptgroup;
+                                $filteredOptions[]['optgroup'] = $optgroup;
+                            }
+
+                            $filteredOptions[$id] = $option;
+                        }
+                    }
+                }
+            }
+
+            return $filteredOptions;
+        }
+        else
+        {
+            return $this->selectMetricOptions;
+        }
+    }
+
     public function getSelectOptions($type = null, $filters = null)
     {
         $options = [];
@@ -184,7 +271,7 @@ class Analytics_MetaService extends BaseApplicationComponent
 
     public function getMetrics()
     {
-        return $this->getColumns('DIMENSION');
+        return $this->getColumns('METRIC');
     }
 
     // Private Methods
@@ -194,7 +281,19 @@ class Analytics_MetaService extends BaseApplicationComponent
     {
         $columns = [];
 
-        $items = craft()->analytics_api->metadataColumns->listMetadataColumns('ga');
+        $cacheKey = craft()->analytics->getCacheKey('Analytics_MetaService.loadColumns.columns', []);
+
+        $items = craft()->cache->get($cacheKey);
+
+        if(!$items)
+        {
+            $items = craft()->analytics_api->metadataColumns->listMetadataColumns('ga');
+
+            if($items)
+            {
+                craft()->cache->set($cacheKey, $items);
+            }
+        }
 
         foreach($items as $item)
         {
@@ -220,7 +319,7 @@ class Analytics_MetaService extends BaseApplicationComponent
                         $column->allowInSegments = $item->attributes['allowInSegments'];
                     }
 
-                    $columns[] = $column;
+                    $columns[$column->id] = $column;
                 }
             }
             else
@@ -238,7 +337,7 @@ class Analytics_MetaService extends BaseApplicationComponent
                     $column->allowInSegments = $item->attributes['allowInSegments'];
                 }
 
-                $columns[] = $column;
+                $columns[$column->id] = $column;
             }
         }
 

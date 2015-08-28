@@ -37,8 +37,8 @@ class GoogleAnalytics extends BaseDataSource
             case 'geo':
 
                 $options = [
-                    'dimensions' => Craft::app()->analytics_meta->getSelectOptions('DIMENSION', ['ga:city', 'ga:country']),
-                    'metrics' => Craft::app()->analytics_meta->getSelectOptions('METRIC')
+                    'dimensions' => Craft::app()->analytics_meta->getSelectDimensionOptions(['ga:city', 'ga:country']),
+                    'metrics' => Craft::app()->analytics_meta->getSelectMetricOptions()
                 ];
 
                 break;
@@ -46,8 +46,8 @@ class GoogleAnalytics extends BaseDataSource
             default:
 
                 $options = [
-                    'dimensions' => Craft::app()->analytics_meta->getSelectOptions('DIMENSION'),
-                    'metrics' => Craft::app()->analytics_meta->getSelectOptions('METRIC')
+                    'dimensions' => Craft::app()->analytics_meta->getSelectDimensionOptions(),
+                    'metrics' => Craft::app()->analytics_meta->getSelectMetricOptions()
                 ];
         }
 

@@ -39,7 +39,15 @@ class Analytics_ApiService extends BaseApplicationComponent
      */
     public function apiGetGAData($ids, $startDate, $endDate, $metrics, $optParams = array(), $enableCache = true)
     {
-        $cacheDuration = $this->cacheDuration();
+        $cacheDuration = craft()->config->get('analyticsCacheDuration');
+
+        if(!$cacheDuration)
+        {
+            // default value
+            $cacheDuration = craft()->config->get('analyticsCacheDuration', 'analytics');
+        }
+
+        $cacheDuration = AnalyticsHelper::formatDuration($cacheDuration);
 
         $api = craft()->analytics_api->getDataGa();
 
@@ -60,7 +68,8 @@ class Analytics_ApiService extends BaseApplicationComponent
 
         if($enableCache)
         {
-            $cacheKey = 'analytics/explorer/'.md5(serialize(array($ids, $startDate, $endDate, $metrics, $optParams)));
+            $request = [$ids, $startDate, $endDate, $metrics, $optParams];
+            $cacheKey = craft()->analytics->getCacheKey('api.apiGetGAData', $request);
             $response = craft()->cache->get($cacheKey);
 
             if(!$response)
@@ -116,7 +125,8 @@ class Analytics_ApiService extends BaseApplicationComponent
 
         if($enableCache)
         {
-            $cacheKey = 'analytics/explorer/'.md5(serialize(array($ids, $metrics, $optParams)));
+            $cacheKey = craft()->analytics->getCacheKey('api.apiGetGADataRealtime', [$ids, $metrics, $optParams]);
+
             $response = craft()->cache->get($cacheKey);
 
             if(!$response)
@@ -209,24 +219,5 @@ class Analytics_ApiService extends BaseApplicationComponent
             Craft::log(__METHOD__.' : Could not get provider connected', LogLevel::Info, true);
             return false;
         }
-    }
-
-    /**
-     * Cache Duration
-     */
-    private function cacheDuration()
-    {
-        $cacheDuration = craft()->config->get('analyticsCacheDuration');
-
-        if(!$cacheDuration)
-        {
-            // default value
-            $cacheDuration = craft()->config->get('analyticsCacheDuration', 'analytics');
-        }
-
-        $cacheDuration = new DateInterval($cacheDuration);
-        $cacheDurationSeconds = $cacheDuration->format('%s');
-
-        return $cacheDurationSeconds;
     }
 }
