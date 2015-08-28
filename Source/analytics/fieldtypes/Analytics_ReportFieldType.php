@@ -67,6 +67,42 @@ class Analytics_ReportFieldType extends BaseFieldType
         {
             $uri = craft()->analytics->getElementUrlPath($this->element->id, $this->element->locale);
 
+            $profile = craft()->analytics->getProfile();
+            $ids = 'ga:'.$profile['id'];
+
+            $startDate = date('Y-m-d', strtotime('-1 month'));
+            $endDate = date('Y-m-d');
+            $metrics = 'ga:pageviews';
+            $dimensions = 'ga:date';
+
+            $optParams = array(
+                'dimensions' => $dimensions,
+                'filters' => "ga:pagePath==".$uri
+            );
+
+
+            $criteria = new Analytics_RequestCriteriaModel;
+            $criteria->startDate = $startDate;
+            $criteria->endDate = $endDate;
+            $criteria->metrics = $metrics;
+            $criteria->optParams = $optParams;
+
+            $cacheKey = craft()->analytics->getCacheKey('ReportsController.actionGetElementReport', $criteria->getAttributes());
+
+            $response = craft()->cache->get($cacheKey);
+
+            if($response)
+            {
+                $response = [
+                    'type' => 'area',
+                    'chart' => $response
+                ];
+            }
+
+            $jsonOptions = json_encode([
+                'cachedResponse' => $response
+            ]);
+
             craft()->templates->includeJsResource('analytics/js/jsapi.js', true);
             craft()->templates->includeJsResource('analytics/lib/jquery.serializeJSON/jquery.serializejson.min.js');
             craft()->templates->includeJsResource('analytics/js/Analytics.js');
@@ -74,7 +110,7 @@ class Analytics_ReportFieldType extends BaseFieldType
             craft()->templates->includeCssResource('analytics/css/AnalyticsField.css');
 
             craft()->templates->includeJs('var AnalyticsChartLanguage = "'.Craft::t('analyticsChartLanguage').'";');
-            craft()->templates->includeJs('new AnalyticsField("'.$namespacedId.'-field");');
+            craft()->templates->includeJs('new AnalyticsField("'.$namespacedId.'-field", '.$jsonOptions.');');
 
             $variables = array(
                 'isNew'   => false,

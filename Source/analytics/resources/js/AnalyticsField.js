@@ -3,8 +3,9 @@
  */
  AnalyticsField = Garnish.Base.extend({
 
-    init: function(fieldId)
+    init: function(fieldId, options)
     {
+        console.log('AnalyticsField options', options);
         this.$element = $("#"+fieldId);
         this.$field = $(".analytics-field", this.$element);
         this.$metric = $('.analytics-metric select', this.$element);
@@ -18,7 +19,16 @@
 
         this.addListener(this.$metric, 'change', 'onMetricChange');
 
-        this.request();
+        if(typeof(options['cachedResponse']) != 'undefined')
+        {
+            console.log('parse');
+            this.parseResponse(options['cachedResponse']);
+        }
+        else
+        {
+            this.request();
+        }
+
     },
 
     onMetricChange: function(ev)
@@ -29,6 +39,7 @@
 
     request: function()
     {
+        console.log('request');
         this.$spinner.removeClass('hidden');
         this.$field.removeClass('analytics-error');
 
@@ -37,21 +48,26 @@
             locale: this.locale,
             metric: this.metric
         };
-        
+
         Craft.postActionRequest('analytics/reports/getElementReport', data, $.proxy(function(response) {
 
-            this.$spinner.addClass('hidden');
-
-            if(typeof(response.error) != 'undefined')
-            {
-                this.$error.html(response.error);
-                this.$field.addClass('analytics-error');
-            }
-            else
-            {
-                this.chart = new Analytics.Chart(this.$chart, response);
-            }
+            this.parseResponse(response);
 
         }, this));
     },
+
+    parseResponse: function(response)
+    {
+        this.$spinner.addClass('hidden');
+
+        if(typeof(response.error) != 'undefined')
+        {
+            this.$error.html(response.error);
+            this.$field.addClass('analytics-error');
+        }
+        else
+        {
+            this.chart = new Analytics.Chart(this.$chart, response);
+        }
+    }
 });
