@@ -23,8 +23,7 @@ class Analytics_ConsoleController extends BaseController
     {
         if(empty($variables['profileId']))
         {
-            $profile = craft()->analytics->getProfile();
-            $variables['profileId'] = $profile['id'];
+            $variables['profileId'] = craft()->analytics->getProfileId();
         }
 
         $this->renderTemplate('analytics/console', $variables);

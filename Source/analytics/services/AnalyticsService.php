@@ -40,36 +40,15 @@ class AnalyticsService extends BaseApplicationComponent
         return new $nsClassName;
     }
 
-    /**
-     * Get Profile
-     */
-    public function getProfile()
+    public function getProfileId()
     {
-        $r = array();
+        $plugin = craft()->plugins->getPlugin('analytics');
+        $settings = $plugin->getSettings();
 
-        $webProperty = $this->getWebProperty();
-
-        $profile = craft()->cache->get('analytics.profile');
-
-        if(!$profile && !empty($webProperty['accountId']))
+        if(!empty($settings['profileId']))
         {
-            $profiles = craft()->analytics_api->managementProfiles->listManagementProfiles($webProperty['accountId'], $webProperty['id']);
-
-            $profile = $profiles['items'][0];
-
-            craft()->cache->set('analytics.profile', $profile);
+            return 'ga:'.$settings['profileId'];
         }
-
-        if($profile)
-        {
-            return $profile;
-        }
-        else
-        {
-            throw new Exception("Couldn't get profile");
-        }
-
-        return $r;
     }
 
     /**
@@ -85,11 +64,11 @@ class AnalyticsService extends BaseApplicationComponent
 
             if(!$webProperty)
             {
-                $webProperties = craft()->analytics_api->managementWebproperties->listManagementWebproperties("~all");
+                $webProperties = craft()->analytics_api->getWebProperties();
 
-                foreach($webProperties['items'] as $webPropertyItem)
+                foreach($webProperties as $webPropertyItem)
                 {
-                    if($webPropertyItem['id'] == $this->getSetting('profileId'))
+                    if($webPropertyItem['id'] == $this->getSetting('webPropertyId'))
                     {
                         $webProperty = $webPropertyItem;
                     }
@@ -119,15 +98,7 @@ class AnalyticsService extends BaseApplicationComponent
     {
         $properties = array("" => Craft::t("Select"));
 
-        $response = craft()->analytics_api->managementWebproperties->listManagementWebproperties("~all");
-
-        if(!$response)
-        {
-            Craft::log(__METHOD__.' : Could not list management web properties', LogLevel::Info, true);
-            return false;
-        }
-
-        $items = $response['items'];
+        $items = craft()->analytics_api->getWebProperties();
 
         foreach($items as $item)
         {
@@ -175,9 +146,7 @@ class AnalyticsService extends BaseApplicationComponent
      */
     public function sendRequest(Analytics_RequestCriteriaModel $criteria)
     {
-        $profile = craft()->analytics->getProfile();
-
-        $criteria->ids = 'ga:'.$profile['id'];
+        $criteria->ids = craft()->analytics->getProfileId();
 
         if($criteria->realtime)
         {

@@ -67,8 +67,7 @@ class Analytics_ReportFieldType extends BaseFieldType
         {
             $uri = craft()->analytics->getElementUrlPath($this->element->id, $this->element->locale);
 
-            $profile = craft()->analytics->getProfile();
-            $ids = 'ga:'.$profile['id'];
+            $ids = craft()->analytics->getProfileId();
 
             $startDate = date('Y-m-d', strtotime('-1 month'));
             $endDate = date('Y-m-d');

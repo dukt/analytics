@@ -80,9 +80,10 @@ class Analytics_ReportsController extends BaseController
 
         try
         {
+            $profileId = craft()->analytics->getProfileId();
             $request = craft()->request->getPost();
 
-            $cacheKey = craft()->analytics->getCacheKey('getChartData', $request);
+            $cacheKey = craft()->analytics->getCacheKey('getChartData', [$request, $profileId]);
 
             $response = craft()->cache->get($cacheKey);
 

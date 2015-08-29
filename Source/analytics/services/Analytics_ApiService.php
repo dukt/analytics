@@ -13,7 +13,47 @@ use \Google_Service_Analytics;
 class Analytics_ApiService extends BaseApplicationComponent
 {
     private $oauthHandle = 'google';
+    private $webProperties;
 
+    public function getProfiles($webProperty)
+    {
+        if($webProperty)
+        {
+            $response = craft()->analytics_api->managementProfiles->listManagementProfiles($webProperty['accountId'], $webProperty['id']);
+
+            return $response['items'];
+        }
+    }
+
+    public function getWebProperties()
+    {
+        if(!$this->webProperties)
+        {
+            $response = craft()->analytics_api->managementWebproperties->listManagementWebproperties("~all");
+
+            if(!$response)
+            {
+                Craft::log(__METHOD__.' : Could not list management web properties', LogLevel::Info, true);
+                return false;
+            }
+
+            $this->webProperties = $response['items'];
+        }
+
+        return $this->webProperties;
+    }
+
+    public function getWebProperty($webPropertyId)
+    {
+        foreach($this->getWebProperties() as $webProperty)
+        {
+            if($webProperty->id == $webPropertyId)
+            {
+                return $webProperty;
+            }
+        }
+
+    }
 
     /**
      * Returns Analytics data for a view (profile). (ga.get)

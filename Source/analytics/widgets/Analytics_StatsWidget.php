@@ -74,7 +74,9 @@ class Analytics_StatsWidget extends BaseWidget
 
         // cached response
 
-        $cacheKey = craft()->analytics->getCacheKey('getChartData', $options['request']);
+        $profileId = craft()->analytics->getProfileId();
+
+        $cacheKey = craft()->analytics->getCacheKey('getChartData', [$options['request'], $profileId]);
 
         $cachedResponse = craft()->cache->get($cacheKey);
 
