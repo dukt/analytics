@@ -119,6 +119,63 @@ class AnalyticsController extends BaseController
     }
 
     /**
+     * Saves a plugin's settings.
+     *
+     * @throws Exception
+     * @return null
+     */
+    public function actionSavePluginSettings()
+    {
+        $this->requirePostRequest();
+        $pluginClass = craft()->request->getRequiredPost('pluginClass');
+        $settings = craft()->request->getPost('settings');
+
+        $plugin = craft()->plugins->getPlugin($pluginClass);
+
+        if (!$plugin)
+        {
+            throw new Exception(Craft::t('No plugin exists with the class “{class}”', array('class' => $pluginClass)));
+        }
+
+
+        if(!empty($settings['webPropertyId']))
+        {
+            $webPropertyId = $settings['webPropertyId'];
+            $webProperty = craft()->analytics_api->getWebProperty($webPropertyId);
+
+            if($webProperty)
+            {
+                $profiles = craft()->analytics_api->getProfiles($webProperty);
+
+                $profile = $profiles[0];
+
+                $settings['profileId'] = $profile['id'];
+                $settings['accountId'] = $webProperty->accountId;
+                $settings['internalWebPropertyId'] = $webProperty->internalWebPropertyId;
+            }
+        }
+
+        // var_dump($webProperty);
+
+        // var_dump($settings);
+        // die();
+
+        if (craft()->plugins->savePluginSettings($plugin, $settings))
+        {
+            craft()->userSession->setNotice(Craft::t('Plugin settings saved.'));
+
+            $this->redirectToPostedUrl();
+        }
+
+        craft()->userSession->setError(Craft::t('Couldn’t save plugin settings.'));
+
+        // Send the plugin back to the template
+        craft()->urlManager->setRouteVariables(array(
+            'plugin' => $plugin
+        ));
+    }
+
+    /**
      * Connect
      *
      * @return null

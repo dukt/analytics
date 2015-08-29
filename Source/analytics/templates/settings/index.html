@@ -12,7 +12,7 @@
 
                     {{ getCsrfInput() }}
 
-                    <input type="hidden" name="action" value="plugins/savePluginSettings">
+                    <input type="hidden" name="action" value="analytics/savePluginSettings">
                     <input type="hidden" name="pluginClass" value="Analytics">
                     <input type="hidden" name="redirect" value="analytics/settings">
 
@@ -32,12 +32,27 @@
 
                     {{ forms.selectField({
                         first: true,
-                        label: "Web Profile"|t,
+                        label: "Web Property"|t,
+                        class: 'webpropertyid',
                         instructions: "Select an Analytics web profile to associate with your Craft website"|t,
                         options: propertiesOpts,
-                        name: 'settings[profileId]',
-                        value: settings.profileId
+                        name: 'settings[webPropertyId]',
+                        value: settings.webPropertyId
                     }) }}
+{#
+                    {{ forms.textField({
+                        label: "Account ID"|t,
+                        class: 'accountid',
+                        name: 'settings[accountId]',
+                        value: settings.accountId
+                    }) }}
+
+                    {{ forms.textField({
+                        label: "Web Property Internal ID"|t,
+                        class: 'internalwebpropertyid',
+                        name: 'settings[internalWebPropertyId]',
+                        value: settings.internalWebPropertyId
+                    }) }} #}
 
                     {{ forms.checkboxField({
                         label: "Enable real-time"|t,
@@ -57,9 +72,9 @@
                         }) }}
                     </div>
 
-                    <p>
+                    <div class="buttons">
                         <input type="submit" class="btn submit force" value="{{'Save'|t}}">
-                    </p>
+                    </div>
 
                 </form>
 
