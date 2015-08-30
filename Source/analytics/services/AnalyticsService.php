@@ -17,9 +17,20 @@ class AnalyticsService extends BaseApplicationComponent
 
     private $oauthHandle = 'google';
     private $token;
+    private $tracking;
 
     // Public Methods
     // =========================================================================
+
+    public function track($options)
+    {
+        if(!$this->tracking)
+        {
+            $this->tracking = new AnalyticsTracking($options);
+        }
+
+        return $this->tracking;
+    }
 
     /**
      * Send Request
@@ -558,19 +569,9 @@ class AnalyticsService extends BaseApplicationComponent
         $cacheDuration = $this->cacheDuration();
         $api = $this->getApiObject()->data_ga;
 
-        if(craft()->config->get('disableAnalyticsCache') === null)
+        if(craft()->config->get('enableCache', 'analytics') !== true)
         {
-            if(craft()->config->get('disableAnalyticsCache', 'analytics') === true)
-            {
-                $enableCache = false;
-            }
-        }
-        else
-        {
-            if(craft()->config->get('disableAnalyticsCache') === true)
-            {
-                $enableCache = false;
-            }
+            $enableCache = false;
         }
 
         if($enableCache)
@@ -596,7 +597,7 @@ class AnalyticsService extends BaseApplicationComponent
      * Returns real time data for a view (profile).
      *
      * @param string $ids Unique table ID for retrieving real time data. Table ID is of the form ga:XXXX, where XXXX is the Analytics view (profile) ID.
-     * @param string $p2 A comma-separated list of real time metrics. E.g., 'rt:activeUsers'. At least one metric must be specified.
+     * @param string $metrics A comma-separated list of real time metrics. E.g., 'rt:activeUsers'. At least one metric must be specified.
      * @param array $optParams Optional parameters.
      *
      * @opt_param int max-results The maximum number of entries to include in this feed.
@@ -613,19 +614,9 @@ class AnalyticsService extends BaseApplicationComponent
         $cacheDuration = $this->getSetting('realtimeRefreshInterval');
         $api = $this->getApiObject()->data_realtime;
 
-        if(craft()->config->get('disableAnalyticsCache') === null)
+        if(craft()->config->get('enableCache', 'analytics') !== true)
         {
-            if(craft()->config->get('disableAnalyticsCache', 'analytics') === true)
-            {
-                $enableCache = false;
-            }
-        }
-        else
-        {
-            if(craft()->config->get('disableAnalyticsCache') === true)
-            {
-                $enableCache = false;
-            }
+            $enableCache = false;
         }
 
         if($enableCache)
@@ -652,14 +643,7 @@ class AnalyticsService extends BaseApplicationComponent
      */
     private function cacheDuration()
     {
-        $cacheDuration = craft()->config->get('analyticsCacheDuration');
-
-        if(!$cacheDuration)
-        {
-            // default value
-            $cacheDuration = craft()->config->get('analyticsCacheDuration', 'analytics');
-        }
-
+        $cacheDuration = craft()->config->get('cacheDuration', 'analytics');
         $cacheDuration = new DateInterval($cacheDuration);
         $cacheDurationSeconds = $cacheDuration->format('%s');
 
@@ -669,7 +653,7 @@ class AnalyticsService extends BaseApplicationComponent
     /**
      * Get Data
      *
-     * @param string $label
+     * @param string $name
      */
     private function getData($name)
     {
