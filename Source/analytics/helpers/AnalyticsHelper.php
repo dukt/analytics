@@ -12,6 +12,9 @@ class AnalyticsHelper
     // Public Methods
     // =========================================================================
 
+    /**
+     * Format a duration in PHP Date Interval format (to seconds by default)
+     */
     public function formatDuration($cacheDuration, $format='%s')
     {
         $cacheDuration = new DateInterval($cacheDuration);
@@ -19,6 +22,7 @@ class AnalyticsHelper
 
         return $cacheDurationSeconds;
     }
+
     /**
      * Transforms a GA Data object to an array
      */
