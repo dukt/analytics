@@ -18,6 +18,9 @@ class AnalyticsService extends BaseApplicationComponent
     // Public Methods
     // =========================================================================
 
+    /**
+     * Get cache key
+     */
     public function getCacheKey($key, array $request)
     {
         $dataSourceClassName = 'GoogleAnalytics';
@@ -40,6 +43,9 @@ class AnalyticsService extends BaseApplicationComponent
         return new $nsClassName;
     }
 
+    /**
+     * Get Profile ID
+     */
     public function getProfileId()
     {
         $plugin = craft()->plugins->getPlugin('analytics');
