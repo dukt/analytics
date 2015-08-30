@@ -13,7 +13,7 @@ class Analytics_RealtimeWidget extends BaseWidget
     // =========================================================================
 
     /**
-     * @inheritDoc IComponentType::getName()
+     * @inheritDoc IWidget::getTitle()
      *
      * @return string
      */
@@ -22,6 +22,11 @@ class Analytics_RealtimeWidget extends BaseWidget
         return Craft::t('Analytics Realtime');
     }
 
+    /**
+     * @inheritDoc IWidget::getBodyHtml()
+     *
+     * @return string|false
+     */
     public function getBodyHtml()
     {
         $realtimeRefreshInterval = craft()->config->get('realtimeRefreshInterval', 'analytics');
@@ -40,6 +45,11 @@ class Analytics_RealtimeWidget extends BaseWidget
         return craft()->templates->render('analytics/widgets/realtime');
     }
 
+    /**
+     * @inheritDoc IWidget::getColspan()
+     *
+     * @return int
+     */
     public function getColSpan()
     {
         return 1;

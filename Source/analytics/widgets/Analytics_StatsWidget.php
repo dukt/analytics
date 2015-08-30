@@ -49,6 +49,11 @@ class Analytics_StatsWidget extends BaseWidget
         return Craft::t('Analytics Stats');
     }
 
+    /**
+     * @inheritDoc IWidget::getBodyHtml()
+     *
+     * @return string|false
+     */
     public function getBodyHtml()
     {
         $settings = $this->settings;
@@ -113,6 +118,11 @@ class Analytics_StatsWidget extends BaseWidget
         return craft()->templates->render('analytics/widgets/stats');
     }
 
+    /**
+     * @inheritDoc ISavableComponentType::getSettingsHtml()
+     *
+     * @return string
+     */
     public function getSettingsHtml()
     {
         $settings = $this->getSettings();
@@ -128,6 +138,11 @@ class Analytics_StatsWidget extends BaseWidget
         ));
     }
 
+    /**
+     * @inheritDoc IWidget::getColspan()
+     *
+     * @return int
+     */
     public function getColspan()
     {
         $settings = $this->getSettings();
@@ -146,6 +161,11 @@ class Analytics_StatsWidget extends BaseWidget
     // Protected Methods
     // =========================================================================
 
+    /**
+     * @inheritDoc BaseSavableComponentType::defineSettings()
+     *
+     * @return array
+     */
     protected function defineSettings()
     {
         return array(

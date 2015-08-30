@@ -27,29 +27,6 @@ class Analytics_PluginController extends BaseController
     // Public Methods
     // =========================================================================
 
-    public function actionTest()
-    {
-        $pluginHandle = 'analytics';
-
-        $url = 'http://dukt.dk/api/updates?plugin='.$pluginHandle;
-
-        $client = new Client();
-
-        $response = $client->get($url)->send();
-
-        $updates = $response->json();
-
-        echo '<h1>Updates</h1>';
-
-        foreach($updates as $update)
-        {
-            echo $update['tag'];
-            echo '<hr />';
-        }
-
-        die();
-    }
-
     /**
      * Constructor
      *

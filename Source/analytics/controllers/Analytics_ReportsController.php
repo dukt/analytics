@@ -90,6 +90,7 @@ class Analytics_ReportsController extends BaseController
             if(!$response)
             {
                 $dataSource = craft()->analytics->getDataSource();
+
                 $response = $dataSource->getChartData($request);
 
                 if($response)

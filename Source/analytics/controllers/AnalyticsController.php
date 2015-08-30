@@ -310,6 +310,11 @@ class AnalyticsController extends BaseController
         }
     }
 
+    /**
+     * Settings Modal
+     *
+     * @return null
+     */
     public function actionSettingsModal()
     {
         $widgetId = craft()->request->getPost('id');

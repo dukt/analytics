@@ -13,7 +13,9 @@ class Analytics_ReportFieldType extends BaseFieldType
     // =========================================================================
 
     /**
-     * Get Name
+     * @inheritDoc IComponentType::getName()
+     *
+     * @return string
      */
     public function getName()
     {
@@ -21,7 +23,9 @@ class Analytics_ReportFieldType extends BaseFieldType
     }
 
     /**
-     * Save it
+     * @inheritDoc IFieldType::defineContentAttribute()
+     *
+     * @return mixed
      */
     public function defineContentAttribute()
     {
