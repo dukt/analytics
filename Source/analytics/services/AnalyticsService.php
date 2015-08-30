@@ -52,20 +52,6 @@ class AnalyticsService extends BaseApplicationComponent
     }
 
     /**
-     * Get Setting
-     *
-     * @param string $key
-     */
-    public function getSetting($key)
-    {
-        $plugin = craft()->plugins->getPlugin('analytics');
-
-        $settings = $plugin->getSettings();
-
-        return $settings[$key];
-    }
-
-    /**
      * Send Request
      */
     public function sendRequest(Analytics_RequestCriteriaModel $criteria)

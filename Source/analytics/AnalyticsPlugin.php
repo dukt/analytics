@@ -171,7 +171,11 @@ class AnalyticsPlugin extends BasePlugin
 
         // check if profile id is set up
 
-        $profileId = craft()->analytics->getSetting('profileId');
+        $plugin = craft()->plugins->getPlugin('analytics');
+
+        $settings = $plugin->getSettings();
+
+        $profileId = $settings['profileId'];
 
 
         if(!$profileId)
