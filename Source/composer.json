@@ -8,6 +8,7 @@
         }
     },
     "require": {
-        "google/apiclient": "dev-master"
+        "google/apiclient": "dev-master",
+        "ins0/google-measurement-php-client": "dev-master"
     }
 }

@@ -1,8 +1,27 @@
 <?php
 
 return array(
-    'analyticsCacheDuration' => 'PT15M',
+
     'realtimeRefreshInterval' => 5,
-    'disableAnalyticsCache' => false,
-    'disableAnalytics' => false
+	/**
+	 * The amount of time cache should last
+	 *
+	 * @see http://www.php.net/manual/en/dateinterval.construct.php
+	 */
+    'cacheDuration' => 'PT15M',
+
+    /**
+     * Whether request to APIs should be cached or not
+     */
+    'enableCache' => true,
+
+    /**
+     * Whether Analytics widget is enabled or disabled
+     */
+    'enableWidget' => true,
+
+    /**
+     * Whether Analytics fieldtype is enabled or not
+     */
+    'enableFieldtype' => true,
 );
