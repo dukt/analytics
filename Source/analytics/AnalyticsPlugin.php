@@ -63,19 +63,6 @@ class AnalyticsPlugin extends BasePlugin
     }
 
     /**
-     * Prep Settings
-     */
-    public function prepSettings($settings)
-    {
-        // refresh profileId and webProperty cache when settings saved
-
-        craft()->cache->delete('analytics.profile');
-        craft()->cache->delete('analytics.webProperty');
-
-        return $settings;
-    }
-
-    /**
      * Get Settings URL
      */
     public function getSettingsUrl()
