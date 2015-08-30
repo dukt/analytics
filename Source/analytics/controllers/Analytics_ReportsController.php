@@ -94,7 +94,7 @@ class Analytics_ReportsController extends BaseController
 
                 if($response)
                 {
-                    craft()->anaytics_cache->set($cacheId, $response);
+                    craft()->analytics_cache->set($cacheId, $response);
                 }
             }
 
