@@ -156,7 +156,7 @@ class AnalyticsPlugin extends BasePlugin
         if($provider)
         {
             // token
-            $token = craft()->analytics->getToken();
+            $token = craft()->analytics_oauth->getToken();
 
             if (!$token)
             {

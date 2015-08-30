@@ -66,7 +66,7 @@ class AnalyticsController extends BaseController
 
                 if ($provider && $provider->isConfigured())
                 {
-                    $token = craft()->analytics->getToken();
+                    $token = craft()->analytics_oauth->getToken();
 
                     if ($token)
                     {
@@ -213,7 +213,7 @@ class AnalyticsController extends BaseController
                 $token = $response['token'];
 
                 // save token
-                craft()->analytics->saveToken($token);
+                craft()->analytics_oauth->saveToken($token);
 
                 Craft::log('Analytics Connect - Step 2'."\r\n".print_r([
                         'token' => $token,
@@ -250,7 +250,7 @@ class AnalyticsController extends BaseController
      */
     public function actionDisconnect()
     {
-        if (craft()->analytics->deleteToken())
+        if (craft()->analytics_oauth->deleteToken())
         {
             craft()->userSession->setNotice(Craft::t("Disconnected from Google Analytics."));
         }

@@ -227,7 +227,7 @@ class Analytics_ApiService extends BaseApplicationComponent
         if($provider)
         {
             // token
-            $token = craft()->analytics->getToken();
+            $token = craft()->analytics_oauth->getToken();
 
             if ($token)
             {

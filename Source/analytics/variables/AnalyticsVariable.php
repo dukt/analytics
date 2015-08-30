@@ -27,7 +27,7 @@ class AnalyticsVariable
     {
         try
         {
-            return craft()->analytics->getToken();
+            return craft()->analytics_oauth->getToken();
         }
         catch(\Exception $e)
         {
