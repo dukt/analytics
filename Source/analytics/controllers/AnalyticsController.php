@@ -76,7 +76,7 @@ class AnalyticsController extends BaseController
                         {
                             $account = $provider->getAccount();
 
-                            $propertiesOpts = craft()->analytics->getPropertiesOpts();
+                            $propertiesOpts = $this->getPropertiesOpts();
 
                             if ($account)
                             {
@@ -332,4 +332,36 @@ class AnalyticsController extends BaseController
 
         $this->returnJson($response);
     }
+
+    // Private Methods
+    // =========================================================================
+
+    /**
+     * Get Properties Opts
+     */
+    private function getPropertiesOpts()
+    {
+        $properties = array("" => Craft::t("Select"));
+
+        $items = craft()->analytics_api->getWebProperties();
+
+        foreach($items as $item)
+        {
+            $name = $item['id'];
+
+            if(!empty($item['websiteUrl']))
+            {
+                $name .= ' - '.$item['websiteUrl'];
+            }
+            elseif(!empty($item['name']))
+            {
+                $name .= ' - '.$item['name'];
+            }
+
+            $properties[$item['id']] = $name;
+        }
+
+        return $properties;
+    }
+
 }

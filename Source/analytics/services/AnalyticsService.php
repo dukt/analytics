@@ -92,34 +92,6 @@ class AnalyticsService extends BaseApplicationComponent
     }
 
     /**
-     * Get Properties Opts
-     */
-    public function getPropertiesOpts()
-    {
-        $properties = array("" => Craft::t("Select"));
-
-        $items = craft()->analytics_api->getWebProperties();
-
-        foreach($items as $item)
-        {
-            $name = $item['id'];
-
-            if(!empty($item['websiteUrl']))
-            {
-                $name .= ' - '.$item['websiteUrl'];
-            }
-            elseif(!empty($item['name']))
-            {
-                $name .= ' - '.$item['name'];
-            }
-
-            $properties[$item['id']] = $name;
-        }
-
-        return $properties;
-    }
-
-    /**
      * Get Setting
      *
      * @param string $key
