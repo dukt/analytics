@@ -52,46 +52,6 @@ class AnalyticsService extends BaseApplicationComponent
     }
 
     /**
-     * Get Web Property
-     */
-    public function getWebProperty()
-    {
-        $r = array();
-
-        try
-        {
-            $webProperty = craft()->cache->get('analytics.webProperty');
-
-            if(!$webProperty)
-            {
-                $webProperties = craft()->analytics_api->getWebProperties();
-
-                foreach($webProperties as $webPropertyItem)
-                {
-                    if($webPropertyItem['id'] == $this->getSetting('webPropertyId'))
-                    {
-                        $webProperty = $webPropertyItem;
-                    }
-                }
-
-                if($webProperty)
-                {
-                    craft()->cache->set('analytics.webProperty', $webProperty);
-                }
-            }
-
-            $r = $webProperty;
-
-        }
-        catch(\Exception $e)
-        {
-            $r['error'] = $e->getMessage();
-        }
-
-        return $r;
-    }
-
-    /**
      * Get Setting
      *
      * @param string $key
