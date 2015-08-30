@@ -13,22 +13,6 @@ class AnalyticsService extends BaseApplicationComponent
     // =========================================================================
 
     /**
-     * Get cache key
-     */
-    public function getCacheKey($key, array $request)
-    {
-        $dataSourceClassName = 'GoogleAnalytics';
-
-        unset($request['CRAFT_CSRF_TOKEN']);
-
-        $hash = md5(serialize($request));
-
-        $cacheKey = 'analytics.'.$key.'.'.$dataSourceClassName.'.getChartData.'.$hash;
-
-        return $cacheKey;
-    }
-
-    /**
      * Get data soruce from its class name
      */
     public function getDataSource($className = 'GoogleAnalytics')

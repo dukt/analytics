@@ -281,9 +281,8 @@ class Analytics_MetaService extends BaseApplicationComponent
     {
         $columns = [];
 
-        $cacheKey = craft()->analytics->getCacheKey('Analytics_MetaService.loadColumns.columns', []);
-
-        $items = craft()->cache->get($cacheKey);
+        $cacheId = ['Analytics_MetaService.loadColumns.columns'];
+        $items = craft()->analytics_cache->get($cacheId);
 
         if(!$items)
         {
@@ -291,7 +290,7 @@ class Analytics_MetaService extends BaseApplicationComponent
 
             if($items)
             {
-                craft()->cache->set($cacheKey, $items);
+                craft()->analytics_cache->set($cacheId, $items);
             }
         }
 

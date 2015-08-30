@@ -83,9 +83,8 @@ class Analytics_ReportsController extends BaseController
             $profileId = craft()->analytics->getProfileId();
             $request = craft()->request->getPost();
 
-            $cacheKey = craft()->analytics->getCacheKey('getChartData', [$request, $profileId]);
-
-            $response = craft()->cache->get($cacheKey);
+            $cacheId = ['getChartData', $request, $profileId];
+            $response = craft()->analytics_cache->get($cacheId);
 
             if(!$response)
             {
@@ -95,7 +94,7 @@ class Analytics_ReportsController extends BaseController
 
                 if($response)
                 {
-                    craft()->cache->set($cacheKey, $response);
+                    craft()->anaytics_cache->set($cacheId, $response);
                 }
             }
 
@@ -145,8 +144,9 @@ class Analytics_ReportsController extends BaseController
                 $criteria->metrics = $metric;
                 $criteria->optParams = $optParams;
 
-                $cacheKey = craft()->analytics->getCacheKey('ReportsController.actionGetElementReport', $criteria->getAttributes());
-                $response = craft()->cache->get($cacheKey);
+
+                $cacheId = ['ReportsController.actionGetElementReport', $criteria->getAttributes()];
+                $response = craft()->analytics_cache->get($cacheId);
 
                 if(!$response)
                 {
@@ -154,7 +154,7 @@ class Analytics_ReportsController extends BaseController
 
                     if($response)
                     {
-                        craft()->cache->set($cacheKey, $response);
+                        craft()->analytics_cache->set($cacheId, $response);
                     }
                 }
 

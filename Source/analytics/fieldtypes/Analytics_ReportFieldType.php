@@ -90,9 +90,9 @@ class Analytics_ReportFieldType extends BaseFieldType
             $criteria->metrics = $metrics;
             $criteria->optParams = $optParams;
 
-            $cacheKey = craft()->analytics->getCacheKey('ReportsController.actionGetElementReport', $criteria->getAttributes());
 
-            $response = craft()->cache->get($cacheKey);
+            $cacheId = ['ReportsController.actionGetElementReport', $criteria->getAttributes()];
+            $response = craft()->analytics_cache->get($cacheId);
 
             if($response)
             {

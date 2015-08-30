@@ -109,13 +109,14 @@ class Analytics_ApiService extends BaseApplicationComponent
         if($enableCache)
         {
             $request = [$ids, $startDate, $endDate, $metrics, $optParams];
-            $cacheKey = craft()->analytics->getCacheKey('api.apiGetGAData', $request);
-            $response = craft()->cache->get($cacheKey);
+
+            $cacheId = ['api.apiGetGAData', $request];
+            $response = craft()->analytics_cache->get($cacheId);
 
             if(!$response)
             {
                 $response = $api->get($ids, $startDate, $endDate, $metrics, $optParams);
-                craft()->cache->set($cacheKey, $response, $cacheDuration);
+                craft()->analytics_cache->set($cacheId, $response, $cacheDuration);
             }
         }
         else
@@ -169,14 +170,15 @@ class Analytics_ApiService extends BaseApplicationComponent
 
         if($enableCache)
         {
-            $cacheKey = craft()->analytics->getCacheKey('api.apiGetGADataRealtime', [$ids, $metrics, $optParams]);
 
-            $response = craft()->cache->get($cacheKey);
+            $cacheId = ['api.apiGetGADataRealtime', $ids, $metrics, $optParams];
+            $response = craft()->analytics_cache->get($cacheId);
 
             if(!$response)
             {
                 $response = $api->get($ids, $metrics, $optParams);
-                craft()->cache->set($cacheKey, $response, $cacheDuration);
+
+                craft()->analytics_cache->set($cacheId, $response, $cacheDuration);
             }
         }
         else
