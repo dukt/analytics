@@ -66,14 +66,6 @@ class AnalyticsService extends BaseApplicationComponent
     }
 
     /**
-     * Get Language
-     */
-    public function getLanguage()
-    {
-        return craft()->language;
-    }
-
-    /**
      * Send Request
      */
     public function sendRequest(Analytics_RequestCriteriaModel $criteria)

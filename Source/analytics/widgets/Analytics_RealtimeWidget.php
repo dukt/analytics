@@ -37,7 +37,7 @@ class Analytics_RealtimeWidget extends BaseWidget
         craft()->templates->includeJsResource('analytics/js/AnalyticsRealtimeWidget.js');
         craft()->templates->includeCssResource('analytics/css/AnalyticsRealtimeWidget.css');
 
-        craft()->templates->includeJs('var AnalyticsChartLanguage = "'.craft()->analytics->getLanguage().'";', true);
+        craft()->templates->includeJs('var AnalyticsChartLanguage = "'.craft()->language.'";', true);
         craft()->templates->includeJs('var AnalyticsRealtimeInterval = "'.$realtimeRefreshInterval.'";', true);
 
         craft()->templates->includeJs('new Analytics.Realtime("widget'.$widgetId.'");');
