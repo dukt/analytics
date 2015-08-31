@@ -111,7 +111,7 @@ class Analytics_ApiService extends BaseApplicationComponent
      *
      * @return Google_Service_Analytics_RealtimeData
      */
-    public function apiGetGADataRealtime($ids, $metrics, $optParams = array(), $enableCache = true)
+    public function apiGetGADataRealtime($ids, $metrics, $optParams = array())
     {
         $plugin = craft()->plugins->getPlugin('analytics');
 
@@ -121,27 +121,14 @@ class Analytics_ApiService extends BaseApplicationComponent
 
         $api = craft()->analytics_api->getDataRealtime();
 
-        if(craft()->config->get('enableCache', 'analytics') !== true)
-        {
-            $enableCache = false;
-        }
+        $cacheId = ['api.apiGetGADataRealtime', $ids, $metrics, $optParams];
+        $response = craft()->analytics_cache->get($cacheId);
 
-        if($enableCache)
-        {
-
-            $cacheId = ['api.apiGetGADataRealtime', $ids, $metrics, $optParams];
-            $response = craft()->analytics_cache->get($cacheId);
-
-            if(!$response)
-            {
-                $response = $api->get($ids, $metrics, $optParams);
-
-                craft()->analytics_cache->set($cacheId, $response, $cacheDuration);
-            }
-        }
-        else
+        if(!$response)
         {
             $response = $api->get($ids, $metrics, $optParams);
+
+            craft()->analytics_cache->set($cacheId, $response, $cacheDuration);
         }
 
         return $response;

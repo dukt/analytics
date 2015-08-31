@@ -63,8 +63,7 @@ class AnalyticsService extends BaseApplicationComponent
             $response = craft()->analytics_api->apiGetGADataRealtime(
                 $criteria->ids,
                 $criteria->metrics,
-                $criteria->optParams,
-                $criteria->enableCache
+                $criteria->optParams
             );
         }
         else
