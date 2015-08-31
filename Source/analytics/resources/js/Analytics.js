@@ -94,7 +94,6 @@ Analytics.Chart = Garnish.Base.extend({
 
                 this.data = data;
 
-
                 if(typeof(this.data.chartOptions) != 'undefined')
                 {
                     this.chartOptions = this.data.chartOptions;
@@ -162,6 +161,11 @@ Analytics.Chart = Garnish.Base.extend({
 
         this.dataTable = Analytics.Utils.responseToDataTable(this.data.chart);
         this.chartOptions = Analytics.ChartOptions.area(this.data.period);
+
+        if(typeof(this.data.chartOptions) != 'undefined')
+        {
+            $.extend(this.chartOptions, this.data.chartOptions);
+        }
 
         if(this.data.period == 'year')
         {

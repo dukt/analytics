@@ -64,6 +64,7 @@
         }
         else
         {
+            response.chartOptions = { backgroundColor: '#fdfdfd' };
             this.chart = new Analytics.Chart(this.$chart, response);
         }
     }
