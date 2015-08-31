@@ -12,8 +12,6 @@ class AnalyticsService extends BaseApplicationComponent
     // Public Methods
     // =========================================================================
 
-    private $oauthHandle = 'google';
-    private $token;
     private $tracking;
 
     /**
