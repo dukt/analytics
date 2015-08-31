@@ -9,8 +9,6 @@ Analytics.Stats = Garnish.Base.extend({
 
     init: function(element, options)
     {
-        console.log('options', options);
-
         // elements
         this.$element = $('#'+element);
         this.$title = $('.title', this.$element);
@@ -20,7 +18,6 @@ Analytics.Stats = Garnish.Base.extend({
         this.$spinner.removeClass('body-loading');
         this.$settingsBtn = $('.dk-settings-btn', this.$element);
         this.$error = $('.error', this.$element);
-
 
         if(typeof(options['settingsModalTemplate']) != 'undefined')
         {
@@ -153,8 +150,6 @@ Analytics.Stats = Garnish.Base.extend({
 
     sendRequest: function(data)
     {
-        console.log('sendRequest');
-
         this.$spinner.removeClass('hidden');
 
         $('.chart', this.$body).remove();

@@ -438,17 +438,14 @@ Analytics.Utils = {
 
     responseToDataTable: function(response)
     {
-        console.log('responseToDataTable', response);
-
         var data = new google.visualization.DataTable();
 
         $.each(response.cols, function(k, column) {
             data.addColumn(column);
         });
 
-        console.log('response', response);
-
         $.each(response.rows, function(kRow, row) {
+
             $.each(row, function(kCell, cell) {
 
                 switch(response.cols[kCell]['type'])

@@ -5,7 +5,6 @@
 
     init: function(fieldId, options)
     {
-        console.log('AnalyticsField options', options);
         this.$element = $("#"+fieldId);
         this.$field = $(".analytics-field", this.$element);
         this.$metric = $('.analytics-metric select', this.$element);
@@ -21,7 +20,6 @@
 
         if(typeof(options['cachedResponse']) != 'undefined')
         {
-            console.log('parse');
             this.parseResponse(options['cachedResponse']);
         }
         else
@@ -39,7 +37,6 @@
 
     request: function()
     {
-        console.log('request');
         this.$spinner.removeClass('hidden');
         this.$field.removeClass('analytics-error');
 
