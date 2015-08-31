@@ -74,7 +74,13 @@ class AnalyticsController extends BaseController
 
                         try
                         {
-                            $account = $provider->getAccount();
+                            $account = craft()->analytics_cache->get(['getAccount', $token]);
+
+                            if(!$account)
+                            {
+                                $account = $provider->getAccount();
+                                craft()->analytics_cache->set(['getAccount', $token], $account);
+                            }
 
                             $propertiesOpts = $this->getPropertiesOpts();
 
