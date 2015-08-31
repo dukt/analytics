@@ -201,11 +201,18 @@ class AnalyticsHelper
         switch($type)
         {
             case 'INTEGER':
-            case 'CURRENCY':
             case 'FLOAT':
             $value = (float) $value;
             $value = round($value, 2);
             $value = craft()->numberFormatter->formatDecimal($value);
+            break;
+
+            case 'CURRENCY':
+            $currency = 'USD';
+            $value = (float) $value;
+            $value = round($value, 2);
+            $value = craft()->numberFormatter->formatDecimal($value);
+            $value = craft()->numberFormatter->formatCurrency($value, $currency);
             break;
 
             case 'TIME':
@@ -221,7 +228,7 @@ class AnalyticsHelper
             break;
 
             default:
-            $value = (string) $value;
+            $value = (string) $value.$type;
         }
 
         return (string) $value;
