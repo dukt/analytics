@@ -144,7 +144,6 @@ class Analytics_ReportsController extends BaseController
                 $criteria->metrics = $metric;
                 $criteria->optParams = $optParams;
 
-
                 $cacheId = ['ReportsController.actionGetElementReport', $criteria->getAttributes()];
                 $response = craft()->analytics_cache->get($cacheId);
 

@@ -88,7 +88,7 @@ class AnalyticsController extends BaseController
                             {
 
                                 $variables['account'] = $account;
-                                $variables['propertiesOpts'] =$propertiesOpts;
+                                $variables['propertiesOpts'] = $propertiesOpts;
                                 $variables['settings'] = $plugin->getSettings();
                             }
                         }
