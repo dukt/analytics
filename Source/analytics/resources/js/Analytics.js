@@ -377,7 +377,7 @@ Analytics.ChartOptions = Garnish.Base.extend({}, {
             backgroundColor: '#FFF',
             colors: ['#058DC7'],
             areaOpacity: 0.1,
-            pointSize: 8,
+            pointSize: 0,
             lineWidth: 4,
             chartArea: {
             },
@@ -404,7 +404,10 @@ Analytics.ChartOptions = Garnish.Base.extend({}, {
                 gridlines: {
                     color: '#fafafa'
                 },
-                maxValue: 0
+                // viewWindow: {min:0, max: 10},
+                minValue: 0,
+                maxValue: 10,
+                format: '#'
             }
         },
 

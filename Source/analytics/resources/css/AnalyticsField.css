@@ -49,6 +49,5 @@
 }
 .analytics-field .chart {
   clear: both;
-  margin: 0 -24px -15px -24px;
-  /*height:150px;*/
+  margin: 15px -24px -15px -24px;
 }
