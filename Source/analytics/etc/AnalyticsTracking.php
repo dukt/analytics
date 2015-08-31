@@ -48,7 +48,7 @@ class AnalyticsTracking
         }
         else
         {
-            $webProperty = craft()->analytics->getWebProperty();
+            $webProperty = craft()->analytics_api->getWebProperty();
 
             if ($webProperty)
             {

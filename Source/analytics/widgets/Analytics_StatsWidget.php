@@ -79,15 +79,18 @@ class Analytics_StatsWidget extends BaseWidget
 
         // cached response
 
-        $profileId = craft()->analytics->getProfileId();
-
-
-        $cacheId = ['getChartData', $options['request'], $profileId];
-        $cachedResponse = craft()->analytics_cache->get($cacheId);
-
-        if($cachedResponse)
+        if(craft()->config->get('enableCache', 'analytics') === true)
         {
-            $options['cachedResponse'] = $cachedResponse;
+            $profileId = craft()->analytics->getProfileId();
+
+
+            $cacheId = ['getChartData', $options['request'], $profileId];
+            $cachedResponse = craft()->analytics_cache->get($cacheId);
+
+            if($cachedResponse)
+            {
+                $options['cachedResponse'] = $cachedResponse;
+            }
         }
 
 

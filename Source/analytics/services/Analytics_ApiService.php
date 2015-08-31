@@ -79,49 +79,17 @@ class Analytics_ApiService extends BaseApplicationComponent
      */
     public function apiGetGAData($ids, $startDate, $endDate, $metrics, $optParams = array(), $enableCache = true)
     {
-        $cacheDuration = craft()->config->get('analyticsCacheDuration');
-
-        if(!$cacheDuration)
-        {
-            // default value
-            $cacheDuration = craft()->config->get('analyticsCacheDuration', 'analytics');
-        }
-
-        $cacheDuration = AnalyticsHelper::formatDuration($cacheDuration);
-
         $api = craft()->analytics_api->getDataGa();
 
-        if(craft()->config->get('disableAnalyticsCache') === null)
-        {
-            if(craft()->config->get('disableAnalyticsCache', 'analytics') === true)
-            {
-                $enableCache = false;
-            }
-        }
-        else
-        {
-            if(craft()->config->get('disableAnalyticsCache') === true)
-            {
-                $enableCache = false;
-            }
-        }
+        $request = [$ids, $startDate, $endDate, $metrics, $optParams];
 
-        if($enableCache)
-        {
-            $request = [$ids, $startDate, $endDate, $metrics, $optParams];
+        $cacheId = ['api.apiGetGAData', $request];
+        $response = craft()->analytics_cache->get($cacheId);
 
-            $cacheId = ['api.apiGetGAData', $request];
-            $response = craft()->analytics_cache->get($cacheId);
-
-            if(!$response)
-            {
-                $response = $api->get($ids, $startDate, $endDate, $metrics, $optParams);
-                craft()->analytics_cache->set($cacheId, $response, $cacheDuration);
-            }
-        }
-        else
+        if(!$response)
         {
             $response = $api->get($ids, $startDate, $endDate, $metrics, $optParams);
+            craft()->analytics_cache->set($cacheId, $response, null, null, $enableCache);
         }
 
         return $response;
@@ -149,23 +117,13 @@ class Analytics_ApiService extends BaseApplicationComponent
 
         $settings = $plugin->getSettings();
 
-        $cacheDuration = $settings['realtimeRefreshInterval'];
+        $cacheDuration = craft()->config->get('realtimeRefreshInterval', 'analytics');
 
         $api = craft()->analytics_api->getDataRealtime();
 
-        if(craft()->config->get('disableAnalyticsCache') === null)
+        if(craft()->config->get('enableCache', 'analytics') !== true)
         {
-            if(craft()->config->get('disableAnalyticsCache', 'analytics') === true)
-            {
-                $enableCache = false;
-            }
-        }
-        else
-        {
-            if(craft()->config->get('disableAnalyticsCache') === true)
-            {
-                $enableCache = false;
-            }
+            $enableCache = false;
         }
 
         if($enableCache)

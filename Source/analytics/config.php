@@ -2,7 +2,11 @@
 
 return array(
 
+    /**
+     * Interval at which the realtime widget should refresh its data (in seconds)
+     */
     'realtimeRefreshInterval' => 5,
+
 	/**
 	 * The amount of time cache should last
 	 *

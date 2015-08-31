@@ -11,16 +11,33 @@ class Analytics_CacheService extends BaseApplicationComponent
 {
     public function get($id)
     {
-        $cacheKey = $this->getCacheKey($id);
+        if(craft()->config->get('enableCache', 'analytics') == true)
+        {
+            $cacheKey = $this->getCacheKey($id);
 
-        return craft()->cache->get($cacheKey);
+            return craft()->cache->get($cacheKey);
+        }
     }
 
-    public function set($id, $value, $expire = null, $dependency = null)
+    public function set($id, $value, $expire = null, $dependency = null, $enableCache = null)
     {
-        $cacheKey = $this->getCacheKey($id);
+        if(is_null($enableCache))
+        {
+            $enableCache = craft()->config->get('enableCache', 'analytics');
+        }
 
-        return craft()->cache->set($cacheKey, $value, $expire, $dependency);
+        if($enableCache)
+        {
+            $cacheKey = $this->getCacheKey($id);
+
+            if(!$expire)
+            {
+                $expire = craft()->config->get('cacheDuration', 'analytics');
+                $expire = AnalyticsHelper::formatDuration($expire);
+            }
+
+            return craft()->cache->set($cacheKey, $value, $expire, $dependency);
+        }
     }
 
     private function getCacheKey(array $request)

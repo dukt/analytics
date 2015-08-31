@@ -73,6 +73,7 @@ class Analytics_ReportFieldType extends BaseFieldType
             $criteria->metrics = $metrics;
             $criteria->optParams = $optParams;
 
+            $options = [];
 
             $cacheId = ['ReportsController.actionGetElementReport', $criteria->getAttributes()];
             $response = craft()->analytics_cache->get($cacheId);
@@ -83,11 +84,13 @@ class Analytics_ReportFieldType extends BaseFieldType
                     'type' => 'area',
                     'chart' => $response
                 ];
+
+                $options = [
+                    'cachedResponse' => $response
+                ];
             }
 
-            $jsonOptions = json_encode([
-                'cachedResponse' => $response
-            ]);
+            $jsonOptions = json_encode($options);
 
             craft()->templates->includeJsResource('analytics/js/jsapi.js', true);
             craft()->templates->includeJsResource('analytics/lib/jquery.serializeJSON/jquery.serializejson.min.js');
