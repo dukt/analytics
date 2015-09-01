@@ -357,54 +357,6 @@ Analytics.ChartOptions = Garnish.Base.extend({}, {
                 maxValue: 10,
                 format: '#'
             }
-
-            // theme: 'maximized',
-            // legend: 'none',
-            // colors: ['#058DC7'],
-            // backgroundColor: '#fdfdfd',
-            // areaOpacity: 0.1,
-            // pointSize: 8,
-            // lineWidth: 4,
-            // hAxis: {
-            //     textStyle: { color: '#888' },
-            //     baselineColor: '#fdfdfd',
-            //     gridlines: {
-            //         color: 'none',
-            //     }
-            // },
-            // vAxis:{
-            //     maxValue: 5,
-            // },
-            // series:{
-            //     0:{targetAxisIndex:0},
-            //     1:{targetAxisIndex:1}
-            // },
-            // vAxes: [
-            //     {
-            //         textStyle: { color: '#888' },
-            //         format: '#',
-            //         textPosition: 'in',
-            //         baselineColor: '#eee',
-            //         gridlines: {
-            //             color: '#eee'
-            //         }
-            //     },
-            //     {
-            //         textStyle: { color: '#888' },
-            //         format: '#',
-            //         textPosition: 'in',
-            //         baselineColor: '#eee',
-            //         gridlines: {
-            //             color: '#eee'
-            //         }
-            //     }
-            // ],
-            // chartArea:{
-            //     top:10,
-            //     bottom:10,
-            //     width:"100%",
-            //     height:"80%"
-            // }
         };
     },
 
@@ -415,7 +367,7 @@ Analytics.ChartOptions = Garnish.Base.extend({}, {
             backgroundColor: '#FFF',
             colors: ['#058DC7'],
             areaOpacity: 0.1,
-            pointSize: 0,
+            pointSize: 7,
             lineWidth: 4,
             chartArea: {
             },
