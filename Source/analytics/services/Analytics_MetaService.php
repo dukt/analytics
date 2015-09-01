@@ -221,16 +221,19 @@ class Analytics_MetaService extends BaseApplicationComponent
 
         foreach($this->getGroups($type) as $group)
         {
-            $options[]['optgroup'] = $group;
+            $options[]['optgroup'] = Craft::t($group);
 
             foreach($this->getColumns($type) as $column)
             {
                 if($column->group == $group)
                 {
-                    $options[$column->id] = $column->uiName;
+                    $options[$column->id] = Craft::t($column->uiName);
                 }
             }
         }
+
+
+        // filters
 
         if($filters && is_array($filters))
         {
