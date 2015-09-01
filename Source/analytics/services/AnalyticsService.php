@@ -14,6 +14,29 @@ class AnalyticsService extends BaseApplicationComponent
 
     private $tracking;
 
+    public function getRealtimeRefreshInterval()
+    {
+        $interval = craft()->config->get('realtimeRefreshInterval', 'analytics');
+
+        if(!$interval)
+        {
+            $plugin = craft()->plugins->getPlugin('analytics');
+            $settings = $plugin->getSettings();
+
+            if(!empty($settings['realtimeRefreshInterval']))
+            {
+                $interval = $settings['realtimeRefreshInterval'];
+            }
+        }
+
+        if(empty($interval))
+        {
+            $interval = 60;
+        }
+
+        return $interval;
+    }
+
     /**
      * Get data source from its class name
      */

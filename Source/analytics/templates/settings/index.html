@@ -2,6 +2,16 @@
 
 {% import "_includes/forms" as forms %}
 
+
+{% macro configWarning(setting, file) -%}
+    {{ "This is being overridden by the {setting} config setting."|t({
+        setting: '<strong>'~setting~'</strong>'
+    })|raw }}
+{%- endmacro %}
+
+{% from _self import configWarning %}
+
+
 {% set content %}
 
     {% if not error %}
@@ -39,23 +49,10 @@
                         name: 'settings[webPropertyId]',
                         value: settings.webPropertyId
                     }) }}
-{#
-                    {{ forms.textField({
-                        label: "Account ID"|t,
-                        class: 'accountid',
-                        name: 'settings[accountId]',
-                        value: settings.accountId
-                    }) }}
-
-                    {{ forms.textField({
-                        label: "Web Property Internal ID"|t,
-                        class: 'internalwebpropertyid',
-                        name: 'settings[internalWebPropertyId]',
-                        value: settings.internalWebPropertyId
-                    }) }} #}
 
                     {{ forms.checkboxField({
                         label: "Enable real-time"|t,
+                        warning: (craft.config.get('enableRealtime', 'analytics') ? configWarning('enableRealtime')),
                         name: 'settings[enableRealtime]',
                         checked: (settings.enableRealtime ? settings.enableRealtime : false),
                         toggle: 'enableRealtime'
@@ -65,6 +62,7 @@
 
                         {{ forms.textField({
                             label: "Real-Time Refresh Interval"|t,
+                            warning: (craft.config.get('realtimeRefreshInterval', 'analytics') ? configWarning('realtimeRefreshInterval')),
                             instructions: "Interval in seconds between requests to real-time API"|t,
                             name: 'settings[realtimeRefreshInterval]',
                             value: (settings.realtimeRefreshInterval ? settings.realtimeRefreshInterval : '10'),

@@ -321,52 +321,90 @@ Analytics.ChartOptions = Garnish.Base.extend({}, {
     field: function()
     {
         return {
-            colors: ['#058DC7'],
+            theme: 'maximized',
+            legend: 'none',
             backgroundColor: '#fdfdfd',
+            colors: ['#058DC7'],
             areaOpacity: 0.1,
-            pointSize: 8,
+            pointSize: 0,
             lineWidth: 4,
-            legend: false,
+            height: 120,
             hAxis: {
-                textStyle: { color: '#888' },
-                baselineColor: '#fdfdfd',
-                gridlines: {
-                    color: 'none',
-                }
-            },
-            vAxis:{
-                maxValue: 5,
-            },
-            series:{
-                0:{targetAxisIndex:0},
-                1:{targetAxisIndex:1}
-            },
-            vAxes: [
-                {
-                    textStyle: { color: '#888' },
-                    format: '#',
-                    textPosition: 'in',
-                    baselineColor: '#eee',
-                    gridlines: {
-                        color: '#eee'
-                    }
+                //format:'MMM yy',
+                format: 'MMM d',
+                // format: 'E',
+                textPosition: 'in',
+                textStyle: {
+                    color: '#058DC7'
                 },
-                {
-                    textStyle: { color: '#888' },
-                    format: '#',
-                    textPosition: 'in',
-                    baselineColor: '#eee',
-                    gridlines: {
-                        color: '#eee'
-                    }
+                showTextEvery: 1,
+                baselineColor: '#fff',
+                gridlines: {
+                    color: 'none'
                 }
-            ],
-            chartArea:{
-                top:10,
-                bottom:10,
-                width:"100%",
-                height:"80%"
+            },
+            vAxis: {
+                textPosition: 'in',
+                textStyle: {
+                    color: '#058DC7'
+                },
+                baselineColor: '#ccc',
+                gridlines: {
+                    color: '#f4f4f4'
+                },
+                // viewWindow: {min:0, max: 10},
+                minValue: 0,
+                maxValue: 10,
+                format: '#'
             }
+
+            // theme: 'maximized',
+            // legend: 'none',
+            // colors: ['#058DC7'],
+            // backgroundColor: '#fdfdfd',
+            // areaOpacity: 0.1,
+            // pointSize: 8,
+            // lineWidth: 4,
+            // hAxis: {
+            //     textStyle: { color: '#888' },
+            //     baselineColor: '#fdfdfd',
+            //     gridlines: {
+            //         color: 'none',
+            //     }
+            // },
+            // vAxis:{
+            //     maxValue: 5,
+            // },
+            // series:{
+            //     0:{targetAxisIndex:0},
+            //     1:{targetAxisIndex:1}
+            // },
+            // vAxes: [
+            //     {
+            //         textStyle: { color: '#888' },
+            //         format: '#',
+            //         textPosition: 'in',
+            //         baselineColor: '#eee',
+            //         gridlines: {
+            //             color: '#eee'
+            //         }
+            //     },
+            //     {
+            //         textStyle: { color: '#888' },
+            //         format: '#',
+            //         textPosition: 'in',
+            //         baselineColor: '#eee',
+            //         gridlines: {
+            //             color: '#eee'
+            //         }
+            //     }
+            // ],
+            // chartArea:{
+            //     top:10,
+            //     bottom:10,
+            //     width:"100%",
+            //     height:"80%"
+            // }
         };
     },
 

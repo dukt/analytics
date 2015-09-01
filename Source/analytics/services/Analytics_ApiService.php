@@ -117,7 +117,7 @@ class Analytics_ApiService extends BaseApplicationComponent
 
         $settings = $plugin->getSettings();
 
-        $cacheDuration = craft()->config->get('realtimeRefreshInterval', 'analytics');
+        $cacheDuration = craft()->analytics->getRealtimeRefreshInterval();
 
         $api = craft()->analytics_api->getDataRealtime();
 

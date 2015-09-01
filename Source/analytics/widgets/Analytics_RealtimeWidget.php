@@ -12,6 +12,19 @@ class Analytics_RealtimeWidget extends BaseWidget
     // Public Methods
     // =========================================================================
 
+    public function isSelectable()
+    {
+        $plugin = craft()->plugins->getPlugin('analytics');
+        $settings = $plugin->getSettings();
+
+        if(empty($settings['enableRealtime']))
+        {
+            return false;
+        }
+
+        return parent::isSelectable();
+    }
+
     /**
      * @inheritDoc IWidget::getTitle()
      *
@@ -29,20 +42,30 @@ class Analytics_RealtimeWidget extends BaseWidget
      */
     public function getBodyHtml()
     {
-        $realtimeRefreshInterval = craft()->config->get('realtimeRefreshInterval', 'analytics');
+        $plugin = craft()->plugins->getPlugin('analytics');
+        $settings = $plugin->getSettings();
 
-        $widgetId = $this->model->id;
+        if(!empty($settings['enableRealtime']))
+        {
+            $realtimeRefreshInterval = craft()->analytics->getRealtimeRefreshInterval();
 
-        craft()->templates->includeJsResource('analytics/js/Analytics.js');
-        craft()->templates->includeJsResource('analytics/js/AnalyticsRealtimeWidget.js');
-        craft()->templates->includeCssResource('analytics/css/AnalyticsRealtimeWidget.css');
+            $widgetId = $this->model->id;
 
-        craft()->templates->includeJs('var AnalyticsChartLanguage = "'.craft()->language.'";', true);
-        craft()->templates->includeJs('var AnalyticsRealtimeInterval = "'.$realtimeRefreshInterval.'";', true);
+            craft()->templates->includeJsResource('analytics/js/Analytics.js');
+            craft()->templates->includeJsResource('analytics/js/AnalyticsRealtimeWidget.js');
+            craft()->templates->includeCssResource('analytics/css/AnalyticsRealtimeWidget.css');
 
-        craft()->templates->includeJs('new Analytics.Realtime("widget'.$widgetId.'");');
+            craft()->templates->includeJs('var AnalyticsChartLanguage = "'.craft()->language.'";', true);
+            craft()->templates->includeJs('var AnalyticsRealtimeInterval = "'.$realtimeRefreshInterval.'";', true);
 
-        return craft()->templates->render('analytics/widgets/realtime');
+            craft()->templates->includeJs('new Analytics.Realtime("widget'.$widgetId.'");');
+
+            return craft()->templates->render('analytics/widgets/realtime');
+        }
+        else
+        {
+            return craft()->templates->render('analytics/widgets/realtime/_disabled');
+        }
     }
 
     /**

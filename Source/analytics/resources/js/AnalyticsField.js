@@ -64,7 +64,8 @@
         }
         else
         {
-            response.chartOptions = { backgroundColor: '#fdfdfd', height: 120 };
+            // response.chartOptions = { backgroundColor: '#fdfdfd', height: 120, hAxis: {format: 'E'} };
+            response.chartOptions = Analytics.ChartOptions.field();
             this.chart = new Analytics.Chart(this.$chart, response);
         }
     }
