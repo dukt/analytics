@@ -228,7 +228,7 @@ class AnalyticsHelper
             break;
 
             default:
-            $value = (string) $value.$type;
+            $value = (string) $value;
         }
 
         return (string) $value;
