@@ -7,6 +7,8 @@
 
 return array(
 
+    'analyticsChartLanguage' => 'fr',
+
     // Settings
 
     "Google Analytics Account" => "Compte Google Analytics",

@@ -116,6 +116,7 @@ class Analytics_StatsWidget extends BaseWidget
         $js = craft()->templates->renderString($jsTemplate);
         craft()->templates->includeJs($js);
 
+        craft()->templates->includeJs('var AnalyticsChartLanguage = "'.Craft::t('analyticsChartLanguage').'";');
         craft()->templates->includeJs('new Analytics.Stats("widget'.$widgetId.'", '.$jsonOptions.');');
 
         return craft()->templates->render('analytics/widgets/stats');

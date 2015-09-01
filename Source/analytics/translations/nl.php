@@ -10,6 +10,9 @@
  */
 
 return array(
+
+    'analyticsChartLanguage' => 'nl'
+
     "Analytics" => "Analytics",
     "Plugin installed" => "Plugin geïnstalleerd",
     "Couldn't install plugin." => "Kon plugin niet installeren",
