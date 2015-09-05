@@ -42,7 +42,7 @@ class Analytics_PluginService extends BaseApplicationComponent
         {
             $return['msg'] = "Couldn’t get plugin’s last version";
 
-            Craft::log('Couldn’t get plugin’s last version' , LogLevel::Error);
+            Craft::log($return['msg'], LogLevel::Error);
 
             return $return;
         }
