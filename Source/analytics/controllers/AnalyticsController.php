@@ -61,6 +61,7 @@ class AnalyticsController extends BaseController
 
                             if ($account)
                             {
+                                AnalyticsHelper::log("Analytics OAuth Account:\r\n".print_r($account, true), LogLevel::Info);
 
                                 $variables['account'] = $account;
                                 $variables['propertiesOpts'] = $propertiesOpts;
@@ -69,17 +70,14 @@ class AnalyticsController extends BaseController
                         }
                         catch(\Exception $e)
                         {
-
-                            Craft::log("Analytics.Debug - Couldn't get account\r\n".$e->getMessage().'\r\n'.$e->getTraceAsString(), LogLevel::Info, true);
-
                             if(method_exists($e, 'getResponse'))
                             {
-                                    Craft::log("Videos.Debug.GuzzleErrorResponse\r\n".$e->getResponse(), LogLevel::Info, true);
+                                    Craft::log("Couldn’t get account: ".$e->getResponse(), LogLevel::Error);
                             }
-
-                            // throw $e;
-
-                            // Craft::log('Couldn’t get account. '.$e->getMessage(), LogLevel::Error);
+                            else
+                            {
+                                Craft::log("Couldn’t get account: ".$e->getMessage(), LogLevel::Error);
+                            }
 
                             $variables['error'] = $e->getMessage();
                         }

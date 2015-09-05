@@ -168,7 +168,7 @@ class AnalyticsPlugin extends BasePlugin
 
         if(!$profileId)
         {
-            Craft::log(__METHOD__.' : Analytics profileId not found', LogLevel::Info, true);
+            Craft::log('Analytics profileId not found', LogLevel::Info, true);
             return false;
         }
 

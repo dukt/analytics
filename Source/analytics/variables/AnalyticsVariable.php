@@ -36,7 +36,7 @@ class AnalyticsVariable
         }
         catch(\Exception $e)
         {
-            Craft::log('Couldn’t get token: '.$e->getMessage(), LogLevel::Info, true);
+            Craft::log('Couldn’t get token: '.$e->getMessage(), LogLevel::Error);
         }
     }
 

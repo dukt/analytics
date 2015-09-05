@@ -33,7 +33,7 @@ class Analytics_ApiService extends BaseApplicationComponent
 
             if(!$response)
             {
-                Craft::log(__METHOD__.' : Could not list management web properties', LogLevel::Info, true);
+                Craft::log('Could not list management web properties', LogLevel::Error);
                 return false;
             }
 
@@ -201,13 +201,13 @@ class Analytics_ApiService extends BaseApplicationComponent
             }
             else
             {
-                Craft::log(__METHOD__.' : No token defined', LogLevel::Info, true);
+                Craft::log('Undefined token', LogLevel::Error);
                 return false;
             }
         }
         else
         {
-            Craft::log(__METHOD__.' : Could not get provider connected', LogLevel::Info, true);
+            Craft::log('Couldn’t get connect provider', LogLevel::Error);
             return false;
         }
     }

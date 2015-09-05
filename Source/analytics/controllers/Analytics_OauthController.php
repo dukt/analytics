@@ -53,11 +53,9 @@ class Analytics_OauthController extends BaseController
             $referer = craft()->request->getUrlReferrer();
 
             craft()->httpSession->add('analytics.referer', $referer);
-        }
 
-        Craft::log('Analytics Connect - Step 1'."\r\n".print_r([
-                'referer' => $referer,
-            ], true), LogLevel::Info, true);
+            AnalyticsHelper::log('Analytics OAuth Connect Step 1: '."\r\n".print_r(['referer' => $referer], true), LogLevel::Info);
+        }
 
 
         // connect
@@ -77,9 +75,7 @@ class Analytics_OauthController extends BaseController
                 // save token
                 craft()->analytics_oauth->saveToken($token);
 
-                Craft::log('Analytics Connect - Step 2'."\r\n".print_r([
-                        'token' => $token,
-                    ], true), LogLevel::Info, true);
+                AnalyticsHelper::log('Analytics OAuth Connect Step 2: '."\r\n".print_r(['token' => $token], true), LogLevel::Info);
 
                 // session notice
                 craft()->userSession->setNotice(Craft::t("Connected to Google Analytics."));

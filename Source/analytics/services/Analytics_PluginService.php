@@ -19,8 +19,6 @@ class Analytics_PluginService extends BaseApplicationComponent
      */
     public function download($pluginHandle)
     {
-        Craft::log(__METHOD__, LogLevel::Info, true);
-
         // -------------------------------
         // Get ready to download & unzip
         // -------------------------------
@@ -40,10 +38,11 @@ class Analytics_PluginService extends BaseApplicationComponent
 
         $remotePlugin = $this->_getRemotePlugin($pluginHandle);
 
-        if(!$remotePlugin) {
-            $return['msg'] = "Couldn't get plugin last version";
+        if(!$remotePlugin)
+        {
+            $return['msg'] = "Couldn’t get plugin’s last version";
 
-            Craft::log(__METHOD__.' : Could not get last version' , LogLevel::Info, true);
+            Craft::log('Couldn’t get plugin’s last version' , LogLevel::Error);
 
             return $return;
         }
@@ -115,7 +114,7 @@ class Analytics_PluginService extends BaseApplicationComponent
 
             $return['msg'] = $e->getMessage();
 
-            Craft::log(__METHOD__.' : Crashed : '.$e->getMessage() , LogLevel::Info, true);
+            Craft::log('Couldn’t download plugin: '.$e->getMessage() , LogLevel::Error);
 
             return $return;
         }
@@ -130,12 +129,10 @@ class Analytics_PluginService extends BaseApplicationComponent
 
             $return['msg'] = $e->getMessage();
 
-            Craft::log(__METHOD__.' : Crashed : '.$e->getMessage() , LogLevel::Info, true);
+            Craft::log('Couldn’t remove download files: '.$e->getMessage() , LogLevel::Error);
 
             return $return;
         }
-
-        Craft::log(__METHOD__.' : Success : ' , LogLevel::Info, true);
 
         $return['success'] = true;
 
@@ -147,8 +144,6 @@ class Analytics_PluginService extends BaseApplicationComponent
      */
     public function enable($pluginHandle)
     {
-        Craft::log(__METHOD__, LogLevel::Info, true);
-
         $pluginComponent = craft()->plugins->getPlugin($pluginHandle, false);
 
         try {
@@ -165,7 +160,7 @@ class Analytics_PluginService extends BaseApplicationComponent
 
         } catch(\Exception $e) {
 
-            Craft::log(__METHOD__.' : Crashed : '.$e->getMessage(), LogLevel::Info, true);
+            Craft::log('Couldn’t enable plugin: '.$e->getMessage(), LogLevel::Error);
 
             return false;
         }
@@ -176,8 +171,6 @@ class Analytics_PluginService extends BaseApplicationComponent
      */
     public function install($pluginHandle)
     {
-        Craft::log(__METHOD__, LogLevel::Info, true);
-
         craft()->plugins->loadPlugins();
 
         $pluginComponent = craft()->plugins->getPlugin($pluginHandle, false);
@@ -185,7 +178,7 @@ class Analytics_PluginService extends BaseApplicationComponent
         try {
             if(!$pluginComponent)
             {
-                Craft::log(__METHOD__.' : '.$pluginHandle.' component not found', LogLevel::Info, true);
+                Craft::log($pluginHandle.' plugin not found', LogLevel::Error);
 
                 return false;
             }
@@ -195,7 +188,7 @@ class Analytics_PluginService extends BaseApplicationComponent
                     return true;
                 } else {
 
-                    Craft::log(__METHOD__.' : '.$pluginHandle.' component not installed', LogLevel::Info, true);
+                    Craft::log($pluginHandle.' plugin not installed', LogLevel::Error);
 
                     return false;
                 }
@@ -204,7 +197,7 @@ class Analytics_PluginService extends BaseApplicationComponent
             }
         } catch(\Exception $e) {
 
-            Craft::log(__METHOD__.' : Crashed : '.$e->getMessage(), LogLevel::Info, true);
+            Craft::log('Couldn’t install plugin: '.$e->getMessage(), LogLevel::Error);
 
             return false;
         }
@@ -218,13 +211,7 @@ class Analytics_PluginService extends BaseApplicationComponent
      */
     private function _getRemotePlugin($pluginHandle)
     {
-        Craft::log(__METHOD__, LogLevel::Info, true);
-
         $url = 'https://dukt.net/craft/'.$pluginHandle.'/releases.xml';
-
-
-        // or refresh cache and get new updates if cache expired or forced update
-
 
         $client = new Client();
         $response = $client->get($url)->send();
@@ -247,7 +234,7 @@ class Analytics_PluginService extends BaseApplicationComponent
                 return $versions[$version_number];
             }
         } else {
-            Craft::log(__METHOD__.' : Could not get channel items', LogLevel::Info, true);
+            Craft::log('Could not get channel items', LogLevel::Error);
         }
     }
 }

@@ -44,8 +44,6 @@ class Analytics_PluginController extends BaseController
      */
     public function actionDownload()
     {
-        Craft::log(__METHOD__, LogLevel::Info, true);
-
         $pluginHandle = craft()->request->getParam('plugin');
 
 
@@ -73,7 +71,7 @@ class Analytics_PluginController extends BaseController
                 $msg = $download['msg'];
             }
 
-            Craft::log(__METHOD__.' : '.$msg, LogLevel::Info, true);
+            Craft::log($msg, LogLevel::Error);
 
             craft()->userSession->setError(Craft::t($msg));
         }
@@ -89,8 +87,6 @@ class Analytics_PluginController extends BaseController
      */
     public function actionEnable()
     {
-        Craft::log(__METHOD__, LogLevel::Info, true);
-
         $pluginHandle = craft()->request->getParam('plugin');
 
         $this->pluginService->enable($pluginHandle);
@@ -105,8 +101,6 @@ class Analytics_PluginController extends BaseController
      */
     public function actionInstall()
     {
-        Craft::log(__METHOD__, LogLevel::Info, true);
-
         // pluginHandle
 
         $pluginHandle = craft()->request->getParam('plugin');
@@ -122,12 +116,12 @@ class Analytics_PluginController extends BaseController
 
         if($this->pluginService->install($pluginHandle))
         {
-            Craft::log(__METHOD__." : ".$pluginHandle.' plugin installed.', LogLevel::Info, true);
+            Craft::log($pluginHandle.' plugin installed.', LogLevel::Info);
             craft()->userSession->setNotice(Craft::t('Plugin installed.'));
         }
         else
         {
-            Craft::log(__METHOD__." : Couldn't install ".$pluginHandle." plugin.", LogLevel::Info, true);
+            Craft::log("Couldn't install ".$pluginHandle." plugin.", LogLevel::Error);
             craft()->userSession->setError(Craft::t("Couldn't install plugin."));
         }
 
