@@ -14,6 +14,23 @@ class Analytics_PluginService extends BaseApplicationComponent
     // Public Methods
     // =========================================================================
 
+    public function requireDependencies()
+    {
+        $plugin = craft()->plugins->getPlugin('analytics');
+        $pluginDependencies = $plugin->getPluginDependencies();
+
+        if (count($pluginDependencies) > 0)
+        {
+            $url = UrlHelper::getUrl('analytics/_special/dependencies');
+            craft()->request->redirect($url);
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
     /**
      * Download
      */

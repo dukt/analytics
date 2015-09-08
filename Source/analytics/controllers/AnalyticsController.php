@@ -19,82 +19,70 @@ class AnalyticsController extends BaseController
      */
     public function actionSettings()
     {
+        craft()->analytics_plugin->requireDependencies();
+        craft()->analytics_oauth->requireOauth();
+
         $plugin = craft()->plugins->getPlugin('analytics');
-        $pluginDependencies = $plugin->getPluginDependencies();
 
-        if (count($pluginDependencies) > 0)
+        $variables = array(
+            'provider' => false,
+            'account' => false,
+            'token' => false,
+            'error' => false
+        );
+
+        $provider = craft()->oauth->getProvider('google');
+
+        if ($provider && $provider->isConfigured())
         {
-            $this->renderTemplate('analytics/settings/_dependencies', ['pluginDependencies' => $pluginDependencies]);
-        }
-        else
-        {
-            if (isset(craft()->oauth))
+            $token = craft()->analytics_oauth->getToken();
+
+            if ($token)
             {
-                $variables = array(
-                    'provider' => false,
-                    'account' => false,
-                    'token' => false,
-                    'error' => false
-                );
+                $provider->setToken($token);
 
-                $provider = craft()->oauth->getProvider('google');
-
-                if ($provider && $provider->isConfigured())
+                try
                 {
-                    $token = craft()->analytics_oauth->getToken();
+                    $account = craft()->analytics_cache->get(['getAccount', $token]);
 
-                    if ($token)
+                    if(!$account)
                     {
-                        $provider->setToken($token);
-
-                        try
-                        {
-                            $account = craft()->analytics_cache->get(['getAccount', $token]);
-
-                            if(!$account)
-                            {
-                                $account = $provider->getAccount();
-                                craft()->analytics_cache->set(['getAccount', $token], $account);
-                            }
-
-                            $propertiesOpts = $this->getPropertiesOpts();
-
-                            if ($account)
-                            {
-                                AnalyticsHelper::log("Analytics OAuth Account:\r\n".print_r($account, true), LogLevel::Info);
-
-                                $variables['account'] = $account;
-                                $variables['propertiesOpts'] = $propertiesOpts;
-                                $variables['settings'] = $plugin->getSettings();
-                            }
-                        }
-                        catch(\Exception $e)
-                        {
-                            if(method_exists($e, 'getResponse'))
-                            {
-                                    Craft::log("Couldn’t get account: ".$e->getResponse(), LogLevel::Error);
-                            }
-                            else
-                            {
-                                Craft::log("Couldn’t get account: ".$e->getMessage(), LogLevel::Error);
-                            }
-
-                            $variables['error'] = $e->getMessage();
-                        }
+                        $account = $provider->getAccount();
+                        craft()->analytics_cache->set(['getAccount', $token], $account);
                     }
 
-                    $variables['token'] = $token;
+                    $propertiesOpts = $this->getPropertiesOpts();
 
-                    $variables['provider'] = $provider;
+                    if ($account)
+                    {
+                        AnalyticsHelper::log("Analytics OAuth Account:\r\n".print_r($account, true), LogLevel::Info);
+
+                        $variables['account'] = $account;
+                        $variables['propertiesOpts'] = $propertiesOpts;
+                        $variables['settings'] = $plugin->getSettings();
+                    }
                 }
+                catch(\Exception $e)
+                {
+                    if(method_exists($e, 'getResponse'))
+                    {
+                            Craft::log("Couldn’t get account: ".$e->getResponse(), LogLevel::Error);
+                    }
+                    else
+                    {
+                        Craft::log("Couldn’t get account: ".$e->getMessage(), LogLevel::Error);
+                    }
 
-                $this->renderTemplate('analytics/settings', $variables);
+                    $variables['error'] = $e->getMessage();
+                }
             }
-            else
-            {
-                $this->renderTemplate('analytics/settings/_oauthNotInstalled');
-            }
+
+            $variables['token'] = $token;
+
+            $variables['provider'] = $provider;
         }
+
+        $this->renderTemplate('analytics/settings', $variables);
     }
 
     /**
@@ -112,7 +100,7 @@ class AnalyticsController extends BaseController
             'settings' => $widget->settings,
         ]);
 
-        $response['html'] = craft()->templates->render('analytics/widgets/stats/settingsModal', array(
+        $response['html'] = craft()->templates->render('analytics/_components/widgets/Stats/settingsModal', array(
             'settings' => $widget->settings,
             'inject' => $inject,
         ));
@@ -129,6 +117,7 @@ class AnalyticsController extends BaseController
     public function actionSavePluginSettings()
     {
         $this->requirePostRequest();
+
         $pluginClass = craft()->request->getRequiredPost('pluginClass');
         $settings = craft()->request->getPost('settings');
 

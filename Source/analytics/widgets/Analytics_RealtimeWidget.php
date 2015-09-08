@@ -60,11 +60,11 @@ class Analytics_RealtimeWidget extends BaseWidget
 
             craft()->templates->includeJs('new Analytics.Realtime("widget'.$widgetId.'");');
 
-            return craft()->templates->render('analytics/widgets/realtime');
+            return craft()->templates->render('analytics/_components/widgets/Realtime/body');
         }
         else
         {
-            return craft()->templates->render('analytics/widgets/realtime/_disabled');
+            return craft()->templates->render('analytics/_components/widgets/Realtime/_disabled');
         }
     }
 

@@ -1,7 +1,6 @@
-{% extends "analytics/settings/_layout" %}
+{% extends "analytics/_layouts/settings" %}
 
 {% import "_includes/forms" as forms %}
-
 
 {% macro configWarning(setting, file) -%}
     {{ "This is being overridden by the {setting} config setting."|t({
@@ -11,96 +10,74 @@
 
 {% from _self import configWarning %}
 
-
 {% set content %}
 
-    {% if not error %}
-        {% if provider %}
-            {% if account %}
-
-                <form method="post" accept-charset="UTF-8" data-saveshortcut>
-
-                    {{ getCsrfInput() }}
-
-                    <input type="hidden" name="action" value="analytics/savePluginSettings">
-                    <input type="hidden" name="pluginClass" value="Analytics">
-                    <input type="hidden" name="redirect" value="analytics/settings">
-
-                    <h2 class="first">{{'Google Analytics Account'|t}}</h2>
-                    <p>{{'You are authenticated to Google Analytics with the following account'|t}} :</p>
-
-                    <ul>
-                        <li><strong>{{ 'UID'|t }} : </strong> {{ account.uid }}</li>
-                        <li><strong>{{ 'Name'|t }} : </strong> {{ account.name }}</li>
-                    </ul>
-
-                    <p><a class="btn small" href="{{ actionUrl('analytics/oauth/disconnect') }}">{{'Disconnect'|t}}</a></p>
-
-                    <hr />
-
-                    <h2 class="first">{{'Plugin Settings'|t}}</h2>
-
-                    {{ forms.selectField({
-                        first: true,
-                        label: "Web Property"|t,
-                        class: 'webpropertyid',
-                        instructions: "Select an Analytics web profile to associate with your Craft website"|t,
-                        options: propertiesOpts,
-                        name: 'settings[webPropertyId]',
-                        value: settings.webPropertyId
-                    }) }}
-
-                    {{ forms.checkboxField({
-                        label: "Enable real-time"|t,
-                        warning: (craft.config.get('enableRealtime', 'analytics') ? configWarning('enableRealtime')),
-                        name: 'settings[enableRealtime]',
-                        checked: (settings.enableRealtime ? settings.enableRealtime : false),
-                        toggle: 'enableRealtime'
-                    }) }}
-
-                    <div id="enableRealtime"{% if not settings.enableRealtime %} class="hidden"{% endif %}>
-
-                        {{ forms.textField({
-                            label: "Real-Time Refresh Interval"|t,
-                            warning: (craft.config.get('realtimeRefreshInterval', 'analytics') ? configWarning('realtimeRefreshInterval')),
-                            instructions: "Interval in seconds between requests to real-time API"|t,
-                            name: 'settings[realtimeRefreshInterval]',
-                            value: (settings.realtimeRefreshInterval ? settings.realtimeRefreshInterval : '10'),
-                            size: 4
-                        }) }}
-                    </div>
-
-                    <div class="buttons">
-                        <input type="submit" class="btn submit force" value="{{'Save'|t}}">
-                    </div>
-
-                </form>
-
-            {% else %}
-
-                <h2 class="first">{{'Google Analytics Account'|t}}</h2>
-                <p>{{'You need to connect Craft to a Google account in order to get started.'|t}}</p>
-                <p>{{"Getting errors trying to connect ?"|t}} <a href="{{url('oauth/google')}}">{{"Check Google API key & secret in OAuth settings"|t}}</a>.</p>
-                <p><a class="btn submit" href="{{ actionUrl('analytics/oauth/connect') }}">{{"Connect to Google Analytics"|t}}</a></p>
-
-            {% endif %}
-
-        {% else %}
-
-            <h2 class="first">{{'Google provider not configured'|t}}</h2>
-            <p>{{'Please fill API client id & secret for Analytics provider.'|t}}</p>
-            <p><a class="btn" href="{{url('oauth/google')}}">{{'Google OAuth settings'|t}}</a></p>
-
-        {% endif %}
-    {% else %}
+    {% if not account %}
 
         <h2 class="first">{{'Google Analytics Account'|t}}</h2>
+        <p>{{'You need to connect Craft to a Google account in order to get started.'|t}}</p>
+        <p>{{"Getting errors trying to connect ?"|t}} <a href="{{url('oauth/google')}}">{{"Check Google API key & secret in OAuth settings"|t}}</a>.</p>
+        <p><a class="btn submit" href="{{ actionUrl('analytics/oauth/connect') }}">{{"Connect to Google Analytics"|t}}</a></p>
 
-        <p class="error">{{ error }}</p>
+    {% else %}
 
-        {% if token %}
+        <form method="post" accept-charset="UTF-8" data-saveshortcut>
+
+            {{ getCsrfInput() }}
+
+            <input type="hidden" name="action" value="analytics/savePluginSettings">
+            <input type="hidden" name="pluginClass" value="Analytics">
+            <input type="hidden" name="redirect" value="analytics/settings">
+
+            <h2 class="first">{{'Google Analytics Account'|t}}</h2>
+            <p>{{'You are authenticated to Google Analytics with the following account'|t}} :</p>
+
+            <ul>
+                <li><strong>{{ 'UID'|t }} : </strong> {{ account.uid }}</li>
+                <li><strong>{{ 'Name'|t }} : </strong> {{ account.name }}</li>
+            </ul>
+
             <p><a class="btn small" href="{{ actionUrl('analytics/oauth/disconnect') }}">{{'Disconnect'|t}}</a></p>
-        {% endif %}
+
+            <hr />
+
+            <h2 class="first">{{'Plugin Settings'|t}}</h2>
+
+            {{ forms.selectField({
+                first: true,
+                label: "Web Property"|t,
+                class: 'webpropertyid',
+                instructions: "Select an Analytics web profile to associate with your Craft website"|t,
+                options: propertiesOpts,
+                name: 'settings[webPropertyId]',
+                value: settings.webPropertyId
+            }) }}
+
+            {{ forms.checkboxField({
+                label: "Enable real-time"|t,
+                warning: (craft.config.get('enableRealtime', 'analytics') ? configWarning('enableRealtime')),
+                name: 'settings[enableRealtime]',
+                checked: (settings.enableRealtime ? settings.enableRealtime : false),
+                toggle: 'enableRealtime'
+            }) }}
+
+            <div id="enableRealtime"{% if not settings.enableRealtime %} class="hidden"{% endif %}>
+
+                {{ forms.textField({
+                    label: "Real-Time Refresh Interval"|t,
+                    warning: (craft.config.get('realtimeRefreshInterval', 'analytics') ? configWarning('realtimeRefreshInterval')),
+                    instructions: "Interval in seconds between requests to real-time API"|t,
+                    name: 'settings[realtimeRefreshInterval]',
+                    value: (settings.realtimeRefreshInterval ? settings.realtimeRefreshInterval : '10'),
+                    size: 4
+                }) }}
+            </div>
+
+            <div class="buttons">
+                <input type="submit" class="btn submit force" value="{{'Save'|t}}">
+            </div>
+
+        </form>
 
     {% endif %}
 

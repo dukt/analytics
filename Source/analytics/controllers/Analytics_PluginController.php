@@ -37,6 +37,21 @@ class Analytics_PluginController extends BaseController
         $this->pluginService = craft()->{$this->pluginHandle.'_plugin'};
     }
 
+    public function actionDependencies()
+    {
+        $plugin = craft()->plugins->getPlugin('analytics');
+        $pluginDependencies = $plugin->getPluginDependencies();
+
+        if (count($pluginDependencies) > 0)
+        {
+            $this->renderTemplate('analytics/_special/dependencies', ['pluginDependencies' => $pluginDependencies]);
+        }
+        else
+        {
+            $this->redirect('analytics/settings');
+        }
+    }
+
     /**
      * Download
      *

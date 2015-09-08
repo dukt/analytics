@@ -14,6 +14,22 @@ class Analytics_OauthService extends BaseApplicationComponent
 
     private $token;
 
+    public function requireOauth()
+    {
+        $provider = craft()->oauth->getProvider('google');
+
+        if ($provider && $provider->isConfigured())
+        {
+            return true;
+        }
+        else
+        {
+            $url = UrlHelper::getUrl('analytics/_special/dependencies');
+            craft()->request->redirect($url);
+            return false;
+        }
+    }
+
     /**
      * Save Token
      *

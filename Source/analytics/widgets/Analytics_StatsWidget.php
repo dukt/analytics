@@ -101,7 +101,7 @@ class Analytics_StatsWidget extends BaseWidget
             'settings' => $this->settings,
         ]);
 
-        $options['settingsModalTemplate'] = craft()->templates->render('analytics/widgets/stats/settingsModal', array(
+        $options['settingsModalTemplate'] = craft()->templates->render('analytics/_components/widgets/Stats/settingsModal', array(
             'settings' => $this->settings,
             'inject' => $inject,
         ));
@@ -119,7 +119,7 @@ class Analytics_StatsWidget extends BaseWidget
         craft()->templates->includeJs('var AnalyticsChartLanguage = "'.Craft::t('analyticsChartLanguage').'";');
         craft()->templates->includeJs('new Analytics.Stats("widget'.$widgetId.'", '.$jsonOptions.');');
 
-        return craft()->templates->render('analytics/widgets/stats');
+        return craft()->templates->render('analytics/_components/widgets/Stats/body');
     }
 
     /**
@@ -136,7 +136,7 @@ class Analytics_StatsWidget extends BaseWidget
             'settings' => $settings
         ]);
 
-        return craft()->templates->render('analytics/widgets/stats/settings', array(
+        return craft()->templates->render('analytics/_components/widgets/Stats/settings', array(
            'settings' => $settings,
            'inject' => $inject,
         ));
