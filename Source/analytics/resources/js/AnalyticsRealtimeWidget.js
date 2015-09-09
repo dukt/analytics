@@ -115,6 +115,7 @@ Analytics.Realtime = Garnish.Base.extend({
 
         var green = 100 - blue;
 
+
         // blue
 
         $('.progress-bar.blue', this.$realtimeVisitors).css('width', blue+'%');
@@ -128,6 +129,7 @@ Analytics.Realtime = Garnish.Base.extend({
         {
             $('.progress-bar.blue', this.$realtimeVisitors).addClass('hidden');
         }
+
 
         // green
 

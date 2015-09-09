@@ -9,7 +9,6 @@ Analytics.Stats = Garnish.Base.extend({
 
     init: function(element, options)
     {
-        // elements
         this.$element = $('#'+element);
         this.$title = $('.title', this.$element);
         this.$body = $('.body', this.$element);
@@ -24,8 +23,11 @@ Analytics.Stats = Garnish.Base.extend({
             this.settingsModalTemplate = options['settingsModalTemplate'];
         }
 
+        this.addListener(this.$settingsBtn, 'click', 'openSettings');
+
 
         // default/cached request
+
         this.chartRequest = options['request'];
 
         if(typeof(this.chartRequest) != 'undefined')
@@ -33,7 +35,9 @@ Analytics.Stats = Garnish.Base.extend({
             this.requestData = this.chartRequest;
         }
 
+
         // default/cached response
+
         this.chartResponse = options['cachedResponse'];
 
         if(typeof(this.chartResponse) != 'undefined')
@@ -44,9 +48,6 @@ Analytics.Stats = Garnish.Base.extend({
         {
             this.chartResponse = this.sendRequest(this.requestData);
         }
-
-        // listeners
-        this.addListener(this.$settingsBtn, 'click', 'openSettings');
     },
 
     periodChange: function(ev)
@@ -64,6 +65,7 @@ Analytics.Stats = Garnish.Base.extend({
         {
             $form = $('<form class="settingsmodal modal fitted"></form>').appendTo(Garnish.$bod);
             $body = $('<div class="body"/>').appendTo($form),
+            $container = $(this.settingsModalTemplate).appendTo($body),
             $footer = $('<div class="footer"/>').appendTo($form),
             $buttons = $('<div class="buttons right"/>').appendTo($footer),
             $cancelBtn = $('<div class="btn">'+Craft.t('Cancel')+'</div>').appendTo($buttons),
@@ -87,11 +89,9 @@ Analytics.Stats = Garnish.Base.extend({
                 this.requestData = stringData;
 
 
-                // var item = this.$element.parents('.item').data('colspan', this.requestData.colspan);
                 var item = this.$element.parents('.item');
-                var itemIndex = item.index() - 1;
+                var itemIndex = item.index();
 
-                // $('#main .grid').data('grid').items[itemIndex].data('colspan', this.requestData.colspan);
                 $('#main .grid').data('grid').items[itemIndex].data('colspan', Number(this.requestData.colspan));
                 $('#main .grid').data('grid').refreshCols(true);
 
@@ -101,12 +101,7 @@ Analytics.Stats = Garnish.Base.extend({
 
                 this.saveState();
 
-                // Craft.initUiElements();
-                // Garnish.$win.trigger('resize');
-
             }, this));
-
-            $('.body', this.settingsModal.$container).html(this.settingsModalTemplate);
 
             this.$periodSelect = $('.period select', this.settingsModal.$container);
             this.$chartSelect = $('.chart-select select', this.settingsModal.$container);
@@ -189,7 +184,6 @@ Analytics.Stats = Garnish.Base.extend({
 
         this.$title.html(response.metric);
         this.$date.html(response.periodLabel);
-
 
         this.chart = new Analytics.Chart($chart, response);
     }
