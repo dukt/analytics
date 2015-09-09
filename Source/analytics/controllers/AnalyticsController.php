@@ -86,29 +86,6 @@ class AnalyticsController extends BaseController
     }
 
     /**
-     * Settings Modal
-     *
-     * @return null
-     */
-    public function actionSettingsModal()
-    {
-        $widgetId = craft()->request->getPost('id');
-        $widget = craft()->dashboard->getUserWidgetById($widgetId);
-
-        $dataSource = craft()->analytics->getDataSource();
-        $inject = $dataSource->getSettingsHtml([
-            'settings' => $widget->settings,
-        ]);
-
-        $response['html'] = craft()->templates->render('analytics/_components/widgets/Stats/settingsModal', array(
-            'settings' => $widget->settings,
-            'inject' => $inject,
-        ));
-
-        $this->returnJson($response);
-    }
-
-    /**
      * Saves a plugin's settings.
      *
      * @throws Exception

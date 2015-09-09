@@ -37,6 +37,11 @@ class Analytics_OauthController extends BaseController
     // Public Methods
     // =========================================================================
 
+    /**
+     * Settings
+     *
+     * @return null
+     */
     public function actionSettings()
     {
         craft()->analytics_plugin->requireDependencies();

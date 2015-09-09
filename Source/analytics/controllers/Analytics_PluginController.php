@@ -37,6 +37,11 @@ class Analytics_PluginController extends BaseController
         $this->pluginService = craft()->{$this->pluginHandle.'_plugin'};
     }
 
+    /**
+     * Dependencies
+     *
+     * @return null
+     */
     public function actionDependencies()
     {
         $plugin = craft()->plugins->getPlugin('analytics');

@@ -1,0 +1,75 @@
+{% import "_includes/forms" as forms %}
+
+<div id="chartarea"{% if settings.chart != 'area' and settings.chart is not null %} class="hidden"{% endif %}>
+
+    {{ forms.selectField({
+        label: "Metric"|t,
+        name: 'options[metric]',
+        options: selectOptions.area.metrics,
+        value: (settings.options.metric is defined ? settings.options.metric : null),
+    }) }}
+
+</div>
+
+<div id="chartcounter"{% if settings.chart != 'counter' %} class="hidden"{% endif %}>
+
+    {{ forms.selectField({
+        label: "Metric"|t,
+        name: 'options[metric]',
+        options: selectOptions.counter.metrics,
+        value: (settings.options.metric is defined ? settings.options.metric : null),
+    }) }}
+
+</div>
+
+<div id="chartpie"{% if settings.chart != 'pie' %} class="hidden"{% endif %}>
+
+    {{ forms.selectField({
+        label: "Dimension"|t,
+        name: 'options[dimension]',
+        options: selectOptions.pie.dimensions,
+        value: (settings.options.dimension is defined ? settings.options.dimension : null),
+    }) }}
+
+    {{ forms.selectField({
+        label: "Metric"|t,
+        name: 'options[metric]',
+        options: selectOptions.pie.metrics,
+        value: (settings.options.metric is defined ? settings.options.metric : null),
+    }) }}
+
+</div>
+
+<div id="charttable"{% if settings.chart != 'table' %} class="hidden"{% endif %}>
+    {{ forms.selectField({
+        label: "Dimension"|t,
+        name: 'options[dimension]',
+        options: selectOptions.table.dimensions,
+        value: (settings.options.dimension is defined ? settings.options.dimension : null),
+    }) }}
+
+    {{ forms.selectField({
+        label: "Metric"|t,
+        name: 'options[metric]',
+        options: selectOptions.table.metrics,
+        value: (settings.options.metric is defined ? settings.options.metric : null),
+    }) }}
+</div>
+
+<div id="chartgeo"{% if settings.chart != 'geo' %} class="hidden"{% endif %}>
+
+    {{ forms.selectField({
+        label: "Dimension"|t,
+        name: 'options[dimension]',
+        options: selectOptions.geo.dimensions,
+        value: (settings.options.dimension is defined ? settings.options.dimension : null),
+    }) }}
+
+    {{ forms.selectField({
+        label: "Metric"|t,
+        name: 'options[metric]',
+        options: selectOptions.geo.metrics,
+        value: (settings.options.metric is defined ? settings.options.metric : null),
+    }) }}
+
+</div>
