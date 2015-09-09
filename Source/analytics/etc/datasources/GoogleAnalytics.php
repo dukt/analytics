@@ -20,7 +20,7 @@ class GoogleAnalytics extends BaseDataSource
 
         $variables['selectOptions'] = $selectOptions;
 
-        return Craft::app()->templates->render('analytics/_components/widgets/Stats/_googleAnalyticsSettings', $variables);
+        return Craft::app()->templates->render('analytics/_components/datasources/googleanalytics', $variables);
     }
 
     public function getChartData($options)
