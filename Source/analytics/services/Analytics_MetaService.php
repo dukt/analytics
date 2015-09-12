@@ -354,7 +354,7 @@ class Analytics_MetaService extends BaseApplicationComponent
      */
     private function getData($name)
     {
-        $jsonData = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/'.$name.'.json');
+        $jsonData = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/etc/data/'.$name.'.json');
         $data = json_decode($jsonData, true);
 
         return $data;
