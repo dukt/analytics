@@ -102,6 +102,16 @@ class Analytics_ReportsController extends BaseController
         }
         catch(\Exception $e)
         {
+            if(method_exists($e, 'getErrors'))
+            {
+                $errors = $e->getErrors();
+
+                if(isset($errors[0]['message']))
+                {
+                    $this->returnErrorJson(Craft::t($errors[0]['message']));
+                }
+            }
+
             $this->returnErrorJson($e->getMessage());
         }
     }
