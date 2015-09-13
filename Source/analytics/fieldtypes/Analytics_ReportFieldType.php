@@ -39,7 +39,7 @@ class Analytics_ReportFieldType extends BaseFieldType
     {
         if(!craft()->config->get('enableFieldtype', 'analytics'))
         {
-            return craft()->templates->render('analytics/_components/widgets/Stats/disabled', array());
+            return craft()->templates->render('analytics/_components/fieldtypes/Report/disabled', array());
         }
 
         // Reformat the input name into something that looks more like an ID
