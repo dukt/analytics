@@ -3,7 +3,9 @@
   line-height: 0;
   margin-top: -14px;
   color: #fff;
-  border: 1px solid #eee;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  overflow: hidden;
 }
 .chart-picker ul.chart-types li {
   display: inline-block;
