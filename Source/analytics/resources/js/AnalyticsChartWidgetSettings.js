@@ -7,9 +7,11 @@ Analytics.ChartWidgetSettings = Garnish.Base.extend({
     {
         this.$container = container;
 
-        $('#main #content form', this.$container).submit(function(ev) {
-            $('input[type=text], textarea, select', this).filter(':hidden').remove();
-        });
+        // $('#main #content form', this.$container).submit(function(ev) {
+        //     var $hiddenElements = $('input[type=text], textarea, select:not([name=chart])', this).filter(':hidden');
+        //     console.log('$hiddenElements', $hiddenElements);
+        //     $hiddenElements.remove();
+        // });
 
         $('.chart-picker ul.chart-types li', this.$container).click(function() {
             $('.chart-picker ul.chart-types li', this.$container).removeClass('active');

@@ -86,10 +86,11 @@ Analytics.ChartWidget = Garnish.Base.extend({
 
                 ev.preventDefault();
 
-                var stringData = $('input, textarea, select', $form).filter(':visible').serializeJSON();
+                var $visibleElements = $('input, textarea, select', $form).filter(':visible');
+                $visibleElements.push($('select[name=chart]', $form).get(0));
+                var stringData = $visibleElements.serializeJSON();
 
                 this.requestData = stringData;
-
 
                 var item = this.$element.parents('.item');
                 var itemIndex = item.index();
