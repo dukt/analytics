@@ -7,7 +7,7 @@
 
 namespace Craft;
 
-class Analytics_StatsWidget extends BaseWidget
+class Analytics_ChartWidget extends BaseWidget
 {
     // Public Methods
     // =========================================================================
@@ -46,7 +46,7 @@ class Analytics_StatsWidget extends BaseWidget
             return implode(" - ", $name);
         }
 
-        return Craft::t('Analytics Stats');
+        return Craft::t('Analytics Chart');
     }
 
     /**
@@ -61,9 +61,9 @@ class Analytics_StatsWidget extends BaseWidget
         craft()->templates->includeJsResource('analytics/js/jsapi.js', true);
         craft()->templates->includeJsResource('analytics/lib/jquery.serializeJSON/jquery.serializejson.min.js');
         craft()->templates->includeJsResource('analytics/js/Analytics.js');
-        craft()->templates->includeJsResource('analytics/js/AnalyticsStatsWidgetSettings.js');
-        craft()->templates->includeJsResource('analytics/js/AnalyticsStatsWidget.js');
-        craft()->templates->includeCssResource('analytics/css/AnalyticsStatsWidget.css');
+        craft()->templates->includeJsResource('analytics/js/AnalyticsChartWidgetSettings.js');
+        craft()->templates->includeJsResource('analytics/js/AnalyticsChartWidget.js');
+        craft()->templates->includeCssResource('analytics/css/AnalyticsChartWidget.css');
 
 
         $options = [];
@@ -102,7 +102,7 @@ class Analytics_StatsWidget extends BaseWidget
             'settings' => $this->settings,
         ]);
 
-        $options['settingsModalTemplate'] = craft()->templates->render('analytics/_components/widgets/Stats/settingsModal', array(
+        $options['settingsModalTemplate'] = craft()->templates->render('analytics/_components/widgets/Chart/settingsModal', array(
             'settings' => $this->settings,
             'inject' => $inject,
         ));
@@ -118,9 +118,9 @@ class Analytics_StatsWidget extends BaseWidget
         craft()->templates->includeJs($js);
 
         craft()->templates->includeJs('var AnalyticsChartLanguage = "'.Craft::t('analyticsChartLanguage').'";');
-        craft()->templates->includeJs('new Analytics.Stats("widget'.$widgetId.'", '.$jsonOptions.');');
+        craft()->templates->includeJs('new Analytics.ChartWidget("widget'.$widgetId.'", '.$jsonOptions.');');
 
-        return craft()->templates->render('analytics/_components/widgets/Stats/body');
+        return craft()->templates->render('analytics/_components/widgets/Chart/body');
     }
 
     /**
@@ -137,7 +137,7 @@ class Analytics_StatsWidget extends BaseWidget
             'settings' => $settings
         ]);
 
-        return craft()->templates->render('analytics/_components/widgets/Stats/settings', array(
+        return craft()->templates->render('analytics/_components/widgets/Chart/settings', array(
            'settings' => $settings,
            'inject' => $inject,
         ));

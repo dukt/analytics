@@ -2,7 +2,7 @@ $(document).ready(function() {
 
 });
 
-Analytics.StatsWidgetSettings = Garnish.Base.extend({
+Analytics.ChartWidgetSettings = Garnish.Base.extend({
     init: function(container)
     {
         this.$container = container;

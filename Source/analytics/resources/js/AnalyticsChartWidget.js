@@ -1,9 +1,9 @@
 var superItem;
 
 /**
- * Stats Widget
+ * Chart Widget
  */
-Analytics.Stats = Garnish.Base.extend({
+Analytics.ChartWidget = Garnish.Base.extend({
 
     requestData: null,
 
@@ -71,7 +71,7 @@ Analytics.Stats = Garnish.Base.extend({
             $cancelBtn = $('<div class="btn">'+Craft.t('Cancel')+'</div>').appendTo($buttons),
             $saveBtn = $('<input type="submit" class="btn submit" value="'+Craft.t('Save')+'" />').appendTo($buttons);
 
-            new Analytics.StatsWidgetSettings($form);
+            new Analytics.ChartWidgetSettings($form);
 
             this.settingsModal = new Garnish.Modal($form, {
                 visible: false,
