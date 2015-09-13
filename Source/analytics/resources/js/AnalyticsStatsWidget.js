@@ -71,6 +71,8 @@ Analytics.Stats = Garnish.Base.extend({
             $cancelBtn = $('<div class="btn">'+Craft.t('Cancel')+'</div>').appendTo($buttons),
             $saveBtn = $('<input type="submit" class="btn submit" value="'+Craft.t('Save')+'" />').appendTo($buttons);
 
+            new Analytics.StatsWidgetSettings($form);
+
             this.settingsModal = new Garnish.Modal($form, {
                 visible: false,
                 resizable: false

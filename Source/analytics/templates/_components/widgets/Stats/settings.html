@@ -1,22 +1,35 @@
 {% import "_includes/forms" as forms %}
 
+{% includeCssResource 'analytics/css/AnalyticsStatsWidgetSettings.css' %}
 {% includeJsResource 'analytics/js/AnalyticsStatsWidgetSettings.js' %}
 
-{{ forms.selectField({
-    label: "Chart"|t,
-    class: 'chart-select',
-    name: 'chart',
-    options: {
+{% set chartTypes = {
         area: "Area"|t,
         counter: "Counter"|t,
         pie: "Pie"|t,
         table: "Table"|t,
         geo: "Geo"|t,
-    },
-    value: settings.chart,
-    toggle: true,
-    targetPrefix: 'chart'
-}) }}
+} %}
+
+{% spaceless %}
+    <div class="chart-picker">
+        {{ forms.selectField({
+            label: "Chart"|t,
+            class: 'chart-select',
+            name: 'chart',
+            options: chartTypes,
+            value: settings.chart,
+            toggle: true,
+            targetPrefix: 'chart'
+        }) }}
+
+        <ul class="chart-types">
+            {% for chartType, chartLabel in chartTypes %}
+                <li data-chart-type="{{ chartType }}"{{ settings.chart == chartType ? ' class="active"' }}></li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endspaceless %}
 
 {{ forms.selectField({
     label: "Period"|t,

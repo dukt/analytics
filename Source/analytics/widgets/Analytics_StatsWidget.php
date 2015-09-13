@@ -19,7 +19,7 @@ class Analytics_StatsWidget extends BaseWidget
      */
     public function getName()
     {
-        return Craft::t('Analytics Stats');
+        return Craft::t('Analytics Chart');
     }
 
     /**
@@ -61,6 +61,7 @@ class Analytics_StatsWidget extends BaseWidget
         craft()->templates->includeJsResource('analytics/js/jsapi.js', true);
         craft()->templates->includeJsResource('analytics/lib/jquery.serializeJSON/jquery.serializejson.min.js');
         craft()->templates->includeJsResource('analytics/js/Analytics.js');
+        craft()->templates->includeJsResource('analytics/js/AnalyticsStatsWidgetSettings.js');
         craft()->templates->includeJsResource('analytics/js/AnalyticsStatsWidget.js');
         craft()->templates->includeCssResource('analytics/css/AnalyticsStatsWidget.css');
 
