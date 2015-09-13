@@ -71,7 +71,30 @@ Analytics.ChartWidget = Garnish.Base.extend({
             $cancelBtn = $('<div class="btn">'+Craft.t('Cancel')+'</div>').appendTo($buttons),
             $saveBtn = $('<input type="submit" class="btn submit" value="'+Craft.t('Save')+'" />').appendTo($buttons);
 
-            new Analytics.ChartWidgetSettings($form);
+            new Analytics.ChartWidgetSettings($form, {
+                onSubmit: $.proxy(function(ev)
+                {
+                    ev.preventDefault();
+
+                    var $visibleElements = $('input, textarea, select', $form).filter(':visible');
+                    $visibleElements.push($('select[name=chart]', $form).get(0));
+                    var stringData = $visibleElements.serializeJSON();
+
+                    this.requestData = stringData;
+
+                    var item = this.$element.parents('.item');
+                    var itemIndex = item.index();
+
+                    $('#main .grid').data('grid').items[itemIndex].data('colspan', Number(this.requestData.colspan));
+                    $('#main .grid').data('grid').refreshCols(true);
+
+                    this.chartResponse = this.sendRequest(this.requestData);
+
+                    this.settingsModal.hide();
+
+                    this.saveState();
+                }, this)
+            });
 
             this.settingsModal = new Garnish.Modal($form, {
                 visible: false,
@@ -82,29 +105,6 @@ Analytics.ChartWidget = Garnish.Base.extend({
                 this.settingsModal.hide();
             });
 
-            this.addListener($form, 'submit', $.proxy(function(ev) {
-
-                ev.preventDefault();
-
-                var $visibleElements = $('input, textarea, select', $form).filter(':visible');
-                $visibleElements.push($('select[name=chart]', $form).get(0));
-                var stringData = $visibleElements.serializeJSON();
-
-                this.requestData = stringData;
-
-                var item = this.$element.parents('.item');
-                var itemIndex = item.index();
-
-                $('#main .grid').data('grid').items[itemIndex].data('colspan', Number(this.requestData.colspan));
-                $('#main .grid').data('grid').refreshCols(true);
-
-                this.chartResponse = this.sendRequest(this.requestData);
-
-                this.settingsModal.hide();
-
-                this.saveState();
-
-            }, this));
 
             this.$periodSelect = $('.period select', this.settingsModal.$container);
             this.$chartSelect = $('.chart-select select', this.settingsModal.$container);

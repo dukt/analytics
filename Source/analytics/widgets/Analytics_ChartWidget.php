@@ -64,6 +64,7 @@ class Analytics_ChartWidget extends BaseWidget
         craft()->templates->includeJsResource('analytics/js/AnalyticsChartWidgetSettings.js');
         craft()->templates->includeJsResource('analytics/js/AnalyticsChartWidget.js');
         craft()->templates->includeCssResource('analytics/css/AnalyticsChartWidget.css');
+        craft()->templates->includeCssResource('analytics/css/AnalyticsChartWidgetSettings.css');
 
 
         $options = [];
@@ -130,6 +131,24 @@ class Analytics_ChartWidget extends BaseWidget
      */
     public function getSettingsHtml()
     {
+        craft()->templates->includeJsResource('analytics/js/Analytics.js');
+        craft()->templates->includeJsResource('analytics/js/AnalyticsChartWidgetSettings.js');
+        craft()->templates->includeCssResource('analytics/css/AnalyticsChartWidgetSettings.css');
+
+        craft()->templates->includeJs("
+            new Analytics.ChartWidgetSettings($('#content form'), {
+                onSubmit: function(ev)
+                {
+                    ev.preventDefault();
+
+                    var hiddenElements = $('input[type=text], textarea, select', this.\$form).filter(':hidden').filter(':not(.chart-select select)');
+                    hiddenElements.remove();
+
+                    ev.currentTarget.submit();
+                }
+            });
+        ");
+
         $settings = $this->getSettings();
 
         $dataSource = craft()->analytics->getDataSource();

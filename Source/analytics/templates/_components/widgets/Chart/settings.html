@@ -1,8 +1,5 @@
 {% import "_includes/forms" as forms %}
 
-{% includeCssResource 'analytics/css/AnalyticsChartWidgetSettings.css' %}
-{% includeJsResource 'analytics/js/AnalyticsChartWidgetSettings.js' %}
-
 {% set chartTypes = {
         area: "Area"|t,
         counter: "Counter"|t,
@@ -22,6 +19,8 @@
             toggle: true,
             targetPrefix: 'chart'
         }) }}
+
+        {# <input type="text" class="chart-input" name="chart" value="{{settings.chart}}"> #}
 
         <ul class="chart-types">
             {% for chartType, chartLabel in chartTypes %}
