@@ -24,20 +24,4 @@ class AnalyticsVariable
     {
         return new Analytics_RequestCriteriaModel($attributes);
     }
-
-    /**
-     * Get Token
-     */
-    public function getToken()
-    {
-        try
-        {
-            return craft()->analytics_oauth->getToken();
-        }
-        catch(\Exception $e)
-        {
-            Craft::log('Couldn’t get token: '.$e->getMessage(), LogLevel::Error);
-        }
-    }
-    }
 }
