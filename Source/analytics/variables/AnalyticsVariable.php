@@ -12,6 +12,9 @@ class AnalyticsVariable
     // Public Methods
     // =========================================================================
 
+    /**
+     * Track
+     */
     public function track($options = null)
     {
         return craft()->analytics->track($options);
@@ -19,6 +22,10 @@ class AnalyticsVariable
 
     /**
      * Request the API.
+     *
+     * @param array $attributes
+     *
+     * @return Analytics_RequestCriteriaModel
      */
     public function api($attributes = null)
     {
