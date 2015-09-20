@@ -39,14 +39,5 @@ class AnalyticsVariable
             Craft::log('Couldn’t get token: '.$e->getMessage(), LogLevel::Error);
         }
     }
-
-    /**
-     * Is Configured
-     */
-    public function isConfigured()
-    {
-        $plugin = craft()->plugins->getPlugin('analytics');
-
-        return $plugin->isConfigured();
     }
 }

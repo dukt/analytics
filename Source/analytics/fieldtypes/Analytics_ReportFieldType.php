@@ -42,6 +42,8 @@ class Analytics_ReportFieldType extends BaseFieldType
             return craft()->templates->render('analytics/_components/fieldtypes/Report/disabled', array());
         }
 
+        $plugin = craft()->plugins->getPlugin('analytics');
+
         // Reformat the input name into something that looks more like an ID
         $id = craft()->templates->formatInputId($name);
 
