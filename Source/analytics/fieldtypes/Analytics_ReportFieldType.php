@@ -129,6 +129,8 @@ class Analytics_ReportFieldType extends BaseFieldType
             );
         }
 
+        $variables['isConfigured'] = $plugin->isConfigured();
+
         return craft()->templates->render('analytics/_components/fieldtypes/Report/input', $variables);
     }
 }
