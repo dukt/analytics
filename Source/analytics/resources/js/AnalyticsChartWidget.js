@@ -5,6 +5,8 @@ var superItem;
  */
 Analytics.ChartWidget = Garnish.Base.extend({
 
+    $grid: null,
+
     requestData: null,
 
     init: function(element, options)
@@ -17,6 +19,10 @@ Analytics.ChartWidget = Garnish.Base.extend({
         this.$spinner.removeClass('body-loading');
         this.$settingsBtn = $('.dk-settings-btn', this.$element);
         this.$error = $('.error', this.$element);
+
+        Garnish.$doc.ready($.proxy(function() {
+            this.$grid = $('#main > .grid');
+        }, this));
 
         if(typeof(options['settingsModalTemplate']) != 'undefined')
         {
@@ -85,8 +91,8 @@ Analytics.ChartWidget = Garnish.Base.extend({
                     var item = this.$element.parents('.item');
                     var itemIndex = item.index();
 
-                    $('#main .grid').data('grid').items[itemIndex].data('colspan', Number(this.requestData.colspan));
-                    $('#main .grid').data('grid').refreshCols(true);
+                    this.$grid.data('grid').items[itemIndex].data('colspan', Number(this.requestData.colspan));
+                    this.$grid.data('grid').refreshCols(true);
 
                     this.chartResponse = this.sendRequest(this.requestData);
 
@@ -118,7 +124,7 @@ Analytics.ChartWidget = Garnish.Base.extend({
                 this.$periodSelect.trigger('change');
             }
 
-            Craft.initUiElements();
+            Craft.initUiElements($form);
         }
         else
         {
