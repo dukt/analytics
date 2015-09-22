@@ -13,7 +13,11 @@ class AnalyticsVariable
     // =========================================================================
 
     /**
-     * Track
+     * Sends tracking data to Google Analytics.
+     *
+     * @param array $options
+     *
+     * @return AnalyticsTracking|null
      */
     public function track($options = null)
     {
@@ -21,7 +25,7 @@ class AnalyticsVariable
     }
 
     /**
-     * Request the API.
+     * Returns a Analytics_RequestCriteriaModel model that can be sent to request Google Analytics' API.
      *
      * @param array $attributes
      *

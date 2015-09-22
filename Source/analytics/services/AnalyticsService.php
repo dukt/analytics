@@ -62,7 +62,11 @@ class AnalyticsService extends BaseApplicationComponent
     }
 
     /**
-     * Track
+     * Send tracking data to Google Analytics.
+     *
+     * @param array $options
+     *
+     * @return AnalyticsTracking|null
      */
     public function track($options)
     {
@@ -75,7 +79,11 @@ class AnalyticsService extends BaseApplicationComponent
     }
 
     /**
-     * Send Request
+     * Sends a request based on Analytics_RequestCriteriaModel to Google Analytics' API.
+     *
+     * @param Analytics_RequestCriteriaModel $criteria
+     *
+     * @return string
      */
     public function sendRequest(Analytics_RequestCriteriaModel $criteria)
     {
