@@ -23,6 +23,8 @@ Analytics.ChartWidgetSettings = Garnish.Base.extend({
             this.$chartSelect.trigger('change');
 
         }, this));
+
+        this.$chartTypes.filter('[data-chart-type='+this.$chartSelect.val()+']').trigger('click');
     },
 
     onSubmit: function(ev)
