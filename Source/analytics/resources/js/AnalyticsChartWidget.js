@@ -1,5 +1,3 @@
-var superItem;
-
 /**
  * Chart Widget
  */
