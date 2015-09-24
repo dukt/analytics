@@ -4,15 +4,17 @@ return array(
 
     /**
      * Interval at which the realtime widget should refresh its data (in seconds)
+     *
+     * @see http://www.php.net/manual/en/dateinterval.construct.php
      */
-    'realtimeRefreshInterval' => null,
+    'realtimeRefreshInterval' => 'PT15S',
 
 	/**
 	 * The amount of time cache should last
 	 *
 	 * @see http://www.php.net/manual/en/dateinterval.construct.php
 	 */
-    'cacheDuration' => 'PT15M',
+    'cacheDuration' => 'PT10M',
 
     /**
      * Whether request to APIs should be cached or not
