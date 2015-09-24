@@ -1,11 +1,11 @@
 /**
  * Chart Widget
  */
-Analytics.ChartWidget = Garnish.Base.extend({
+Analytics.ChartWidget = Garnish.Base.extend(
+{
+    requestData: null,
 
     $grid: null,
-
-    requestData: null,
 
     init: function(element, options)
     {
