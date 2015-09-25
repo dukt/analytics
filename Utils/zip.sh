@@ -25,6 +25,8 @@ do
     rm ./$BUILD_PLUGIN_FOLDER/gulpfile.js
     rm ./$BUILD_PLUGIN_FOLDER/package.json
     rm ./$BUILD_PLUGIN_FOLDER/bower.json
+    rm -rf ./$BUILD_PLUGIN_FOLDER/bower_components/
+    rm -rf ./$BUILD_PLUGIN_FOLDER/node_modules/
 
     # zip
 
