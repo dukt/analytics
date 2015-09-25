@@ -24,6 +24,7 @@ do
     rm ./$BUILD_PLUGIN_FOLDER/composer.lock
     rm ./$BUILD_PLUGIN_FOLDER/gulpfile.js
     rm ./$BUILD_PLUGIN_FOLDER/package.json
+    rm ./$BUILD_PLUGIN_FOLDER/bower.json
 
     # zip
 
