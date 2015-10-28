@@ -2,6 +2,12 @@
     "require": {
         "google/apiclient": "dev-master"
     },
+    "autoload": {
+        "psr-4": {
+            "Craft\\": "etc/craft/",
+            "Dukt\\Analytics\\DataSources\\": "etc/datasources/"
+        }
+    },
     "scripts": {
         "post-update-cmd": ["echo [WARNING] Delete all .git dirs", "rm -rf vendor/**/**/.git"],
         "post-install-cmd": ["echo [WARNING] Delete all .git dirs", "rm -rf vendor/**/**/.git"]

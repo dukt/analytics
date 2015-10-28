@@ -6,6 +6,22 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'BeforeValidException' => $vendorDir . '/firebase/php-jwt/Firebase/PHP-JWT/Exceptions/BeforeValidException.php',
+    'ExpiredException' => $vendorDir . '/firebase/php-jwt/Firebase/PHP-JWT/Exceptions/ExpiredException.php',
+    'Google\\Auth\\AppIdentityCredentials' => $vendorDir . '/google/auth/src/AppIdentityCredentials.php',
+    'Google\\Auth\\ApplicationDefaultCredentials' => $vendorDir . '/google/auth/src/ApplicationDefaultCredentials.php',
+    'Google\\Auth\\AuthTokenFetcher' => $vendorDir . '/google/auth/src/AuthTokenFetcher.php',
+    'Google\\Auth\\CacheInterface' => $vendorDir . '/google/auth/src/CacheInterface.php',
+    'Google\\Auth\\CredentialsLoader' => $vendorDir . '/google/auth/src/CredentialsLoader.php',
+    'Google\\Auth\\FetchAuthTokenInterface' => $vendorDir . '/google/auth/src/FetchAuthTokenInterface.php',
+    'Google\\Auth\\GCECredentials' => $vendorDir . '/google/auth/src/GCECredentials.php',
+    'Google\\Auth\\IAMCredentials' => $vendorDir . '/google/auth/src/IAMCredentials.php',
+    'Google\\Auth\\OAuth2' => $vendorDir . '/google/auth/src/OAuth2.php',
+    'Google\\Auth\\ScopedAccessToken' => $vendorDir . '/google/auth/src/ScopedAccessToken.php',
+    'Google\\Auth\\ServiceAccountCredentials' => $vendorDir . '/google/auth/src/ServiceAccountCredentials.php',
+    'Google\\Auth\\ServiceAccountJwtAccessCredentials' => $vendorDir . '/google/auth/src/ServiceAccountJwtAccessCredentials.php',
+    'Google\\Auth\\Simple' => $vendorDir . '/google/auth/src/Simple.php',
+    'Google\\Auth\\UserRefreshCredentials' => $vendorDir . '/google/auth/src/UserRefreshCredentials.php',
     'Google_Auth_Abstract' => $vendorDir . '/google/apiclient/src/Google/Auth/Abstract.php',
     'Google_Auth_AppIdentity' => $vendorDir . '/google/apiclient/src/Google/Auth/AppIdentity.php',
     'Google_Auth_AssertionCredentials' => $vendorDir . '/google/apiclient/src/Google/Auth/AssertionCredentials.php',
@@ -3022,4 +3038,6 @@ return array(
     'Google_Utils_URITemplate' => $vendorDir . '/google/apiclient/src/Google/Utils/URITemplate.php',
     'Google_Verifier_Abstract' => $vendorDir . '/google/apiclient/src/Google/Verifier/Abstract.php',
     'Google_Verifier_Pem' => $vendorDir . '/google/apiclient/src/Google/Verifier/Pem.php',
+    'JWT' => $vendorDir . '/firebase/php-jwt/Firebase/PHP-JWT/Authentication/JWT.php',
+    'SignatureInvalidException' => $vendorDir . '/firebase/php-jwt/Firebase/PHP-JWT/Exceptions/SignatureInvalidException.php',
 );
