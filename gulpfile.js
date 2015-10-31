@@ -8,11 +8,11 @@ var gulp = require('gulp'),
     bower = require('gulp-bower');
 
 var paths = {
-    less: './analytics/resources/less',
-    css: './analytics/resources/css',
-    js: './analytics/resources/js',
-    jsCompressed: './analytics/resources/js/compressed',
-    bower: './analytics/resources/lib/',
+    less: './resources/less',
+    css: './resources/css',
+    js: './resources/js',
+    jsCompressed: './resources/js/compressed',
+    bower: './resources/lib/',
 }
 
 gulp.task('bower', function() {
