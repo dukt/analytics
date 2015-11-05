@@ -4,9 +4,9 @@
 
     {{ forms.selectField({
         label: "Metric"|t,
-        name: 'options[metric]',
+        name: 'options[area][metric]',
         options: selectOptions.area.metrics,
-        value: (settings.options.metric is defined ? settings.options.metric : null),
+        value: (settings.options.area.metric is defined ? settings.options.area.metric : null),
     }) }}
 
 </div>
@@ -15,9 +15,9 @@
 
     {{ forms.selectField({
         label: "Metric"|t,
-        name: 'options[metric]',
+        name: 'options[counter][metric]',
         options: selectOptions.counter.metrics,
-        value: (settings.options.metric is defined ? settings.options.metric : null),
+        value: (settings.options.counter.metric is defined ? settings.options.counter.metric : null),
     }) }}
 
 </div>
@@ -26,16 +26,16 @@
 
     {{ forms.selectField({
         label: "Dimension"|t,
-        name: 'options[dimension]',
+        name: 'options[pie][dimension]',
         options: selectOptions.pie.dimensions,
-        value: (settings.options.dimension is defined ? settings.options.dimension : null),
+        value: (settings.options.pie.dimension is defined ? settings.options.pie.dimension : null),
     }) }}
 
     {{ forms.selectField({
         label: "Metric"|t,
-        name: 'options[metric]',
+        name: 'options[pie][metric]',
         options: selectOptions.pie.metrics,
-        value: (settings.options.metric is defined ? settings.options.metric : null),
+        value: (settings.options.pie.metric is defined ? settings.options.pie.metric : null),
     }) }}
 
 </div>
@@ -43,16 +43,16 @@
 <div id="charttable"{% if settings.chart != 'table' %} class="hidden"{% endif %}>
     {{ forms.selectField({
         label: "Dimension"|t,
-        name: 'options[dimension]',
+        name: 'options[table][dimension]',
         options: selectOptions.table.dimensions,
-        value: (settings.options.dimension is defined ? settings.options.dimension : null),
+        value: (settings.options.table.dimension is defined ? settings.options.table.dimension : null),
     }) }}
 
     {{ forms.selectField({
         label: "Metric"|t,
-        name: 'options[metric]',
+        name: 'options[table][metric]',
         options: selectOptions.table.metrics,
-        value: (settings.options.metric is defined ? settings.options.metric : null),
+        value: (settings.options.table.metric is defined ? settings.options.table.metric : null),
     }) }}
 </div>
 
@@ -60,16 +60,16 @@
 
     {{ forms.selectField({
         label: "Dimension"|t,
-        name: 'options[dimension]',
+        name: 'options[geo][dimension]',
         options: selectOptions.geo.dimensions,
-        value: (settings.options.dimension is defined ? settings.options.dimension : null),
+        value: (settings.options.geo.dimension is defined ? settings.options.geo.dimension : null),
     }) }}
 
     {{ forms.selectField({
         label: "Metric"|t,
-        name: 'options[metric]',
+        name: 'options[geo][metric]',
         options: selectOptions.geo.metrics,
-        value: (settings.options.metric is defined ? settings.options.metric : null),
+        value: (settings.options.geo.metric is defined ? settings.options.geo.metric : null),
     }) }}
 
 </div>

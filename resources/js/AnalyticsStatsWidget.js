@@ -15,19 +15,11 @@ Analytics.StatsWidget = Garnish.Base.extend(
         this.$date = $('.date', this.$element);
         this.$spinner = $('.spinner', this.$element);
         this.$spinner.removeClass('body-loading');
-        this.$settingsBtn = $('.dk-settings-btn', this.$element);
         this.$error = $('.error', this.$element);
 
         Garnish.$doc.ready($.proxy(function() {
             this.$grid = $('#main > .grid');
         }, this));
-
-        if(typeof(options['settingsModalTemplate']) != 'undefined')
-        {
-            this.settingsModalTemplate = options['settingsModalTemplate'];
-        }
-
-        this.addListener(this.$settingsBtn, 'click', 'openSettings');
 
 
         // default/cached request
@@ -52,102 +44,6 @@ Analytics.StatsWidget = Garnish.Base.extend(
         {
             this.chartResponse = this.sendRequest(this.requestData);
         }
-    },
-
-    periodChange: function(ev)
-    {
-        if(this.requestData)
-        {
-            this.requestData.period = $(ev.currentTarget).val();
-            this.chartResponse = this.sendRequest(this.requestData);
-        }
-    },
-
-    openSettings: function(ev)
-    {
-        if(!this.settingsModal)
-        {
-            $form = $('<form class="settingsmodal modal fitted"></form>').appendTo(Garnish.$bod);
-            $body = $('<div class="body"/>').appendTo($form),
-            $container = $(this.settingsModalTemplate).appendTo($body),
-            $footer = $('<div class="footer"/>').appendTo($form),
-            $buttons = $('<div class="buttons right"/>').appendTo($footer),
-            $cancelBtn = $('<div class="btn">'+Craft.t('Cancel')+'</div>').appendTo($buttons),
-            $saveBtn = $('<input type="submit" class="btn submit" value="'+Craft.t('Save')+'" />').appendTo($buttons);
-
-            new Analytics.StatsWidgetSettings($form, {
-                onSubmit: $.proxy(function(ev)
-                {
-                    ev.preventDefault();
-
-                    var $visibleElements = $('input, textarea, select', $form).filter(':visible');
-                    $visibleElements.push($('select[name=chart]', $form).get(0));
-                    var stringData = $visibleElements.serializeJSON();
-
-                    this.requestData = stringData;
-
-                    var item = this.$element.parents('.item');
-                    var itemIndex = item.index();
-
-                    this.$grid.data('grid').items[itemIndex].data('colspan', Number(this.requestData.colspan));
-                    this.$grid.data('grid').refreshCols(true);
-
-                    this.chartResponse = this.sendRequest(this.requestData);
-
-                    this.settingsModal.hide();
-
-                    this.saveState();
-                }, this)
-            });
-
-            this.settingsModal = new Garnish.Modal($form, {
-                visible: false,
-                resizable: false
-            });
-
-            this.addListener($cancelBtn, 'click', function() {
-                this.settingsModal.hide();
-            });
-
-
-            this.$periodSelect = $('.period select', this.settingsModal.$container);
-            this.$chartSelect = $('.chart-select select', this.settingsModal.$container);
-
-            if(this.requestData)
-            {
-                this.$chartSelect.val(this.requestData.chart);
-                this.$chartSelect.trigger('change');
-
-                this.$periodSelect.val(this.requestData.period);
-                this.$periodSelect.trigger('change');
-            }
-
-            Craft.initUiElements($form);
-        }
-        else
-        {
-            this.settingsModal.show();
-        }
-    },
-
-    saveState: function()
-    {
-
-        var data = {
-            id: this.$element.data('id'),
-            settings: {
-                colspan: this.requestData['colspan'],
-                chart: this.requestData['chart'],
-                period: this.requestData['period'],
-                options: this.requestData['options'],
-            }
-        };
-
-
-        Craft.queueActionRequest('analytics/saveWidgetState', data, $.proxy(function(response)
-        {
-            // state saved
-        }, this));
     },
 
     sendRequest: function(data)

@@ -30,15 +30,21 @@ class Analytics_StatsWidget extends BaseWidget
     public function getTitle()
     {
         $name = [];
+        $chartType = $this->settings['chart'];
 
-        if(!empty($this->settings['options']['dimension']))
+        if(isset($this->settings['options'][$chartType]))
         {
-            $name[] = craft()->analytics_meta->getDimMet($this->settings['options']['dimension']);
-        }
+            $options = $this->settings['options'][$chartType];
 
-        if(!empty($this->settings['options']['metric']))
-        {
-            $name[] = craft()->analytics_meta->getDimMet($this->settings['options']['metric']);
+            if(!empty($options['dimension']))
+            {
+                $name[] = craft()->analytics_meta->getDimMet($options['dimension']);
+            }
+
+            if(!empty($options['metric']))
+            {
+                $name[] = craft()->analytics_meta->getDimMet($options['metric']);
+            }
         }
 
         if(count($name) > 0)
@@ -74,7 +80,7 @@ class Analytics_StatsWidget extends BaseWidget
         $options['request'] = array(
             'chart' => (isset($settings['chart']) ? $settings['chart'] : null),
             'period' => (isset($settings['period']) ? $settings['period'] : null),
-            'options' => (isset($settings['options']) ? $settings['options'] : null),
+            'options' => (isset($settings['options'][$settings['chart']]) ? $settings['options'][$settings['chart']] : null),
             'colspan' => (isset($settings['colspan']) ? $settings['colspan'] : null),
         );
 
@@ -103,11 +109,6 @@ class Analytics_StatsWidget extends BaseWidget
             'settings' => $this->settings,
         ]);
 
-        $options['settingsModalTemplate'] = craft()->templates->render('analytics/_components/widgets/Chart/settingsModal', array(
-            'settings' => $this->settings,
-            'inject' => $inject,
-        ));
-
         //-----------------------------------------------
 
         $widgetId = $this->model->id;
@@ -121,7 +122,7 @@ class Analytics_StatsWidget extends BaseWidget
         craft()->templates->includeJs('var AnalyticsChartLanguage = "'.Craft::t('analyticsChartLanguage').'";');
         craft()->templates->includeJs('new Analytics.StatsWidget("widget'.$widgetId.'", '.$jsonOptions.');');
 
-        return craft()->templates->render('analytics/_components/widgets/Chart/body');
+        return craft()->templates->render('analytics/_components/widgets/Stats/body');
     }
 
     /**
@@ -135,19 +136,10 @@ class Analytics_StatsWidget extends BaseWidget
         craft()->templates->includeJsResource('analytics/js/AnalyticsStatsWidgetSettings.js');
         craft()->templates->includeCssResource('analytics/css/AnalyticsStatsWidgetSettings.css');
 
-        craft()->templates->includeJs("
-            new Analytics.StatsWidgetSettings($('#content form'), {
-                onSubmit: function(ev)
-                {
-                    ev.preventDefault();
+        $id = 'analytics-settings-'.StringHelper::randomString();
+        $namespaceId = craft()->templates->namespaceInputId($id);
 
-                    var hiddenElements = $('input[type=text], textarea, select', this.\$form).filter(':hidden').filter(':not(.chart-select select)');
-                    hiddenElements.remove();
-
-                    ev.currentTarget.submit();
-                }
-            });
-        ");
+        craft()->templates->includeJs("new Analytics.StatsWidgetSettings('".$namespaceId."');");
 
         $settings = $this->getSettings();
 
@@ -156,7 +148,8 @@ class Analytics_StatsWidget extends BaseWidget
             'settings' => $settings
         ]);
 
-        return craft()->templates->render('analytics/_components/widgets/Chart/settings', array(
+        return craft()->templates->render('analytics/_components/widgets/Stats/settings', array(
+           'id' => $id,
            'settings' => $settings,
            'inject' => $inject,
         ));

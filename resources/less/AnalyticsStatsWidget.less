@@ -1,31 +1,11 @@
-.settingsmodal {
-
-    .body {
-        min-width: 320px;
-        height: ~"calc(100% - 58px)";
-        overflow: auto;
-    }
-
-    .footer {
-        width: 100%;
-    }
-}
-
 .analytics_stats
 {
-    h2 { display: none; }
+    .settings.icon { position: relative; z-index: 1; }
 
-    &:hover {
-        .actions { display: block; }
-    }
+    h2 { display: none; }
 
     div.title { font-weight: bold; font-size: 15px; margin-bottom: 7px; }
     div.period { margin-bottom: 24px; }
-
-    .actions { display: none; float: none !important; position: absolute; z-index: 2; top: 0px; right: -7px; margin: 0; }
-    .actions ul li { display: inline-block; margin-left: 7px;}
-    .actions a.dk-settings-btn { color: rgb(41, 50, 61); opacity: .5; padding: 6px 8px; }
-    .actions a.dk-settings-btn:hover { opacity: .8;  }
 
     .body { min-height: 20px; }
     .body h2.title { display: block; margin: 0; margin-bottom: 7px; }

@@ -1,16 +1,9 @@
-.settingsmodal .body {
-  min-width: 320px;
-  height: calc(100% - 58px);
-  overflow: auto;
-}
-.settingsmodal .footer {
-  width: 100%;
+.analytics_stats .settings.icon {
+  position: relative;
+  z-index: 1;
 }
 .analytics_stats h2 {
   display: none;
-}
-.analytics_stats:hover .actions {
-  display: block;
 }
 .analytics_stats div.title {
   font-weight: bold;
@@ -19,27 +12,6 @@
 }
 .analytics_stats div.period {
   margin-bottom: 24px;
-}
-.analytics_stats .actions {
-  display: none;
-  float: none !important;
-  position: absolute;
-  z-index: 2;
-  top: 0px;
-  right: -7px;
-  margin: 0;
-}
-.analytics_stats .actions ul li {
-  display: inline-block;
-  margin-left: 7px;
-}
-.analytics_stats .actions a.dk-settings-btn {
-  color: #29323d;
-  opacity: .5;
-  padding: 6px 8px;
-}
-.analytics_stats .actions a.dk-settings-btn:hover {
-  opacity: .8;
 }
 .analytics_stats .body {
   min-height: 20px;
