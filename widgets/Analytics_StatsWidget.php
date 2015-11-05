@@ -29,27 +29,33 @@ class Analytics_StatsWidget extends BaseWidget
      */
     public function getTitle()
     {
-        $name = [];
-        $chartType = $this->settings['chart'];
+        try {
+            $name = [];
+            $chartType = $this->settings['chart'];
 
-        if(isset($this->settings['options'][$chartType]))
-        {
-            $options = $this->settings['options'][$chartType];
-
-            if(!empty($options['dimension']))
+            if(isset($this->settings['options'][$chartType]))
             {
-                $name[] = craft()->analytics_meta->getDimMet($options['dimension']);
+                $options = $this->settings['options'][$chartType];
+
+                if(!empty($options['dimension']))
+                {
+                    $name[] = craft()->analytics_meta->getDimMet($options['dimension']);
+                }
+
+                if(!empty($options['metric']))
+                {
+                    $name[] = craft()->analytics_meta->getDimMet($options['metric']);
+                }
             }
 
-            if(!empty($options['metric']))
+            if(count($name) > 0)
             {
-                $name[] = craft()->analytics_meta->getDimMet($options['metric']);
+                return implode(" - ", $name);
             }
         }
-
-        if(count($name) > 0)
+        catch(\Exception $e)
         {
-            return implode(" - ", $name);
+            // todo: error handling
         }
 
         return Craft::t('Analytics Stats');
@@ -103,13 +109,6 @@ class Analytics_StatsWidget extends BaseWidget
 
         // settings modal
 
-        $dataSource = craft()->analytics->getDataSource();
-        $inject = $dataSource->getSettingsHtml([
-            'settings' => $this->settings,
-        ]);
-
-        //-----------------------------------------------
-
         $widgetId = $this->model->id;
         $jsonOptions = json_encode($options);
 
@@ -142,10 +141,19 @@ class Analytics_StatsWidget extends BaseWidget
 
         $settings = $this->getSettings();
 
-        $dataSource = craft()->analytics->getDataSource();
-        $inject = $dataSource->getSettingsHtml([
-            'settings' => $settings
-        ]);
+        try {
+            $dataSource = craft()->analytics->getDataSource();
+
+            $inject = $dataSource->getSettingsHtml([
+                'settings' => $settings
+            ]);
+        }
+        catch(\Exception $e)
+        {
+            // todo: exception handling
+
+            $inject = null;
+        }
 
         return craft()->templates->render('analytics/_components/widgets/Stats/settings', array(
            'id' => $id,
