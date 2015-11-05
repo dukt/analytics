@@ -20,7 +20,7 @@ class Analytics_OauthController extends BaseController
     /**
      * @var array
      */
-    private $scopes = array(
+    private $scope = array(
         'https://www.googleapis.com/auth/userinfo.profile',
         'https://www.googleapis.com/auth/userinfo.email',
         'https://www.googleapis.com/auth/analytics'
@@ -29,7 +29,7 @@ class Analytics_OauthController extends BaseController
     /**
      * @var array
      */
-    private $params = array(
+    private $authorizationOptions = array(
         'access_type' => 'offline',
         'approval_prompt' => 'force'
     );
@@ -84,8 +84,8 @@ class Analytics_OauthController extends BaseController
         if ($response = craft()->oauth->connect(array(
             'plugin'   => 'analytics',
             'provider' => $this->handle,
-            'scopes'   => $this->scopes,
-            'params'   => $this->params
+            'scope'   => $this->scope,
+            'authorizationOptions'   => $this->authorizationOptions
         )))
         {
             if ($response['success'])
