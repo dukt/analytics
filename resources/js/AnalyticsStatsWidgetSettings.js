@@ -1,4 +1,4 @@
-Analytics.ChartWidgetSettings = Garnish.Base.extend({
+Analytics.StatsWidgetSettings = Garnish.Base.extend({
     init: function(form, settings)
     {
         this.$form = form;

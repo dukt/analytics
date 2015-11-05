@@ -7,7 +7,7 @@
 
 namespace Craft;
 
-class Analytics_ChartWidget extends BaseWidget
+class Analytics_StatsWidget extends BaseWidget
 {
     // Public Methods
     // =========================================================================
@@ -19,7 +19,7 @@ class Analytics_ChartWidget extends BaseWidget
      */
     public function getName()
     {
-        return Craft::t('Analytics Chart');
+        return Craft::t('Analytics Stats');
     }
 
     /**
@@ -46,7 +46,7 @@ class Analytics_ChartWidget extends BaseWidget
             return implode(" - ", $name);
         }
 
-        return Craft::t('Analytics Chart');
+        return Craft::t('Analytics Stats');
     }
 
     /**
@@ -61,10 +61,10 @@ class Analytics_ChartWidget extends BaseWidget
         craft()->templates->includeJsResource('analytics/js/jsapi.js', true);
         craft()->templates->includeJsResource('analytics/lib/jquery.serializeJSON/jquery.serializejson.min.js');
         craft()->templates->includeJsResource('analytics/js/Analytics.js');
-        craft()->templates->includeJsResource('analytics/js/AnalyticsChartWidgetSettings.js');
-        craft()->templates->includeJsResource('analytics/js/AnalyticsChartWidget.js');
-        craft()->templates->includeCssResource('analytics/css/AnalyticsChartWidget.css');
-        craft()->templates->includeCssResource('analytics/css/AnalyticsChartWidgetSettings.css');
+        craft()->templates->includeJsResource('analytics/js/AnalyticsStatsWidgetSettings.js');
+        craft()->templates->includeJsResource('analytics/js/AnalyticsStatsWidget.js');
+        craft()->templates->includeCssResource('analytics/css/AnalyticsStatsWidget.css');
+        craft()->templates->includeCssResource('analytics/css/AnalyticsStatsWidgetSettings.css');
 
 
         $options = [];
@@ -119,7 +119,7 @@ class Analytics_ChartWidget extends BaseWidget
         craft()->templates->includeJs($js);
 
         craft()->templates->includeJs('var AnalyticsChartLanguage = "'.Craft::t('analyticsChartLanguage').'";');
-        craft()->templates->includeJs('new Analytics.ChartWidget("widget'.$widgetId.'", '.$jsonOptions.');');
+        craft()->templates->includeJs('new Analytics.StatsWidget("widget'.$widgetId.'", '.$jsonOptions.');');
 
         return craft()->templates->render('analytics/_components/widgets/Chart/body');
     }
@@ -132,11 +132,11 @@ class Analytics_ChartWidget extends BaseWidget
     public function getSettingsHtml()
     {
         craft()->templates->includeJsResource('analytics/js/Analytics.js');
-        craft()->templates->includeJsResource('analytics/js/AnalyticsChartWidgetSettings.js');
-        craft()->templates->includeCssResource('analytics/css/AnalyticsChartWidgetSettings.css');
+        craft()->templates->includeJsResource('analytics/js/AnalyticsStatsWidgetSettings.js');
+        craft()->templates->includeCssResource('analytics/css/AnalyticsStatsWidgetSettings.css');
 
         craft()->templates->includeJs("
-            new Analytics.ChartWidgetSettings($('#content form'), {
+            new Analytics.StatsWidgetSettings($('#content form'), {
                 onSubmit: function(ev)
                 {
                     ev.preventDefault();

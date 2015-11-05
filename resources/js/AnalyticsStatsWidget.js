@@ -1,7 +1,7 @@
 /**
  * Chart Widget
  */
-Analytics.ChartWidget = Garnish.Base.extend(
+Analytics.StatsWidget = Garnish.Base.extend(
 {
     requestData: null,
 
@@ -75,7 +75,7 @@ Analytics.ChartWidget = Garnish.Base.extend(
             $cancelBtn = $('<div class="btn">'+Craft.t('Cancel')+'</div>').appendTo($buttons),
             $saveBtn = $('<input type="submit" class="btn submit" value="'+Craft.t('Save')+'" />').appendTo($buttons);
 
-            new Analytics.ChartWidgetSettings($form, {
+            new Analytics.StatsWidgetSettings($form, {
                 onSubmit: $.proxy(function(ev)
                 {
                     ev.preventDefault();
