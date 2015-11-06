@@ -1,9 +1,23 @@
-# Analytics <small>_for Craft CMS_</small>
+# Craft Analytics
 
-Google Analytics widgets for your Craft dashboard.
+Customizable statistics widgets and entry tracking for Craft & Google Analytics
 
-- [Analytics Overview](https://dukt.net/craft/analytics/)
-- [Analytics Docs](https://dukt.net/craft/analytics/docs)
-- [Analytics License](https://dukt.net/craft/analytics/docs/license)
+-------------------------------------------
+
+## Requirements
+
+- Craft 2.5
+- Craft OAuth 1.0
+
+## Installation
+
+1. Download the latest release of the plugin
+2. Drop the `analytics` plugin folder to `craft/plugins`
+3. Install Analytics plugin from the control panel in `Settings > Plugins`
+
+## Links
+
+- [Analytics Plugin Overview](https://dukt.net/craft/analytics/)
+- [Analytics Documentation](https://dukt.net/craft/analytics/docs)
 
 [Dukt.net](https://dukt.net/) © 2015 - All rights reserved
