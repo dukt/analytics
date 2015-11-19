@@ -19,58 +19,70 @@ class Analytics_ReportsController extends BaseController
      */
     public function actionGetRealtimeReport()
     {
-        try
+        if(!craft()->config->get('demoMode', 'analytics'))
         {
-            $data = array(
-                'newVisitor' => 0,
-                'returningVisitor' => 0
-            );
-
-            $criteria = new Analytics_RequestCriteriaModel;
-            $criteria->realtime = true;
-            $criteria->metrics = 'ga:activeVisitors';
-            $criteria->optParams = array('dimensions' => 'ga:visitorType');
-
-            $results = craft()->analytics->sendRequest($criteria);
-
-            if(!empty($results['totalResults']))
+            try
             {
-                $data['total'] = $results['totalResults'];
-            }
+                $data = array(
+                    'newVisitor' => 0,
+                    'returningVisitor' => 0
+                );
 
-            if(!empty($results['rows'][0][1]['v']))
-            {
-                switch($results['rows'][0][0]['v'])
+                $criteria = new Analytics_RequestCriteriaModel;
+                $criteria->realtime = true;
+                $criteria->metrics = 'ga:activeVisitors';
+                $criteria->optParams = array('dimensions' => 'ga:visitorType');
+
+                $results = craft()->analytics->sendRequest($criteria);
+
+                if(!empty($results['totalResults']))
                 {
-                    case "RETURNING":
-                    $data['returningVisitor'] = $results['rows'][0][1]['v'];
-                    break;
-
-                    case "NEW":
-                    $data['newVisitor'] = $results['rows'][0][1]['v'];
-                    break;
+                    $data['total'] = $results['totalResults'];
                 }
-            }
 
-            if(!empty($results['rows'][1][1]['v']))
-            {
-                switch($results['rows'][1][0]['v'])
+                if(!empty($results['rows'][0][1]['v']))
                 {
-                    case "RETURNING":
-                    $data['returningVisitor'] = $results['rows'][1][1]['v'];
-                    break;
+                    switch($results['rows'][0][0]['v'])
+                    {
+                        case "RETURNING":
+                        $data['returningVisitor'] = $results['rows'][0][1]['v'];
+                        break;
 
-                    case "NEW":
-                    $data['newVisitor'] = $results['rows'][1][1]['v'];
-                    break;
+                        case "NEW":
+                        $data['newVisitor'] = $results['rows'][0][1]['v'];
+                        break;
+                    }
                 }
+
+                if(!empty($results['rows'][1][1]['v']))
+                {
+                    switch($results['rows'][1][0]['v'])
+                    {
+                        case "RETURNING":
+                        $data['returningVisitor'] = $results['rows'][1][1]['v'];
+                        break;
+
+                        case "NEW":
+                        $data['newVisitor'] = $results['rows'][1][1]['v'];
+                        break;
+                    }
+                }
+
+                $this->returnJson($data);
             }
+            catch(\Exception $e)
+            {
+                $this->returnErrorJson($e->getMessage());
+            }
+        }
+        else
+        {
+            $data = [
+                'newVisitor' => 5,
+                'returningVisitor' => 7
+            ];
 
             $this->returnJson($data);
-        }
-        catch(\Exception $e)
-        {
-            $this->returnErrorJson($e->getMessage());
         }
     }
 
