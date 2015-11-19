@@ -21,7 +21,7 @@ class Analytics_PluginService extends BaseApplicationComponent
 
         if (count($pluginDependencies) > 0)
         {
-            $url = UrlHelper::getUrl('analytics/_special/dependencies');
+            $url = UrlHelper::getUrl('analytics/install/dependencies');
             craft()->request->redirect($url);
             return false;
         }

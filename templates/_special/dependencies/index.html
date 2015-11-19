@@ -31,14 +31,14 @@
                 </ul>
 
 
-                <p><a class="btn small" href="{{ actionUrl('analytics/plugin/download', { plugin: dependency.handle }) }}">{{ "Download & Install {name} plugin"|t({ name: dependency.name }) }}</a></p>
+                <p><a class="btn" href="{{ actionUrl('analytics/plugin/download', { plugin: dependency.handle }) }}">{{ "Download & Install {name} plugin"|t({ name: dependency.name }) }}</a></p>
 
             {% endif %}
         {% else %}
 
             <p>{{ "{name} plugin is required to continue."|t({ name: dependency.name }) }}</p>
 
-            <p><a class="btn small" href="{{ actionUrl('analytics/plugin/download', { plugin: dependency.handle }) }}">{{ "Download & Install {name} plugin"|t({ name: dependency.name }) }}</a></p>
+            <p><a class="btn" href="{{ actionUrl('analytics/plugin/download', { plugin: dependency.handle }) }}">{{ "Download & Install {name} plugin"|t({ name: dependency.name }) }}</a></p>
 
         {% endif %}
 

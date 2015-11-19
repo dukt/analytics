@@ -76,8 +76,8 @@ class AnalyticsPlugin extends BasePlugin
     {
         return array(
             'analytics/settings' => array('action' => "analytics/settings"),
-            'analytics/_special/oauth' => array('action' => "analytics/oauth/settings"),
-            'analytics/_special/dependencies' => array('action' => "analytics/plugin/dependencies"),
+            'analytics/install/oauth' => array('action' => "analytics/oauth/settings"),
+            'analytics/install/dependencies' => array('action' => "analytics/plugin/dependencies"),
             'analytics/meta' => array('action' => "analytics/meta/index"),
         );
     }
