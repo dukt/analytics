@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="128px" height="109px" viewBox="0 0 128 109" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.4.2 (15855) - http://www.bohemiancoding.com/sketch -->
+    <title>analytics-realtime</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="New-Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="dukt-plugin-icons" sketch:type="MSArtboardGroup" transform="translate(-1344.000000, -329.000000)" fill="#3A95FE">
+            <g id="Rectangle-47-+-Group" sketch:type="MSLayerGroup" transform="translate(1280.000000, 256.000000)">
+                <g id="analytics-realtime" transform="translate(64.000000, 73.000000)" sketch:type="MSShapeGroup">
+                    <g id="Group" transform="translate(0.000000, 15.000000)">
+                        <path d="M0.17067188,0.445805162 L25.9421258,0.445805162 L25.9421258,93.6326518 L0.17067188,93.6326518 L0.17067188,0.445805162 Z M34.134376,47.0392285 L59.90583,47.0392285 L59.90583,93.6326518 L34.134376,93.6326518 L34.134376,47.0392285 Z" id="analytics-stats"></path>
+                    </g>
+                    <rect id="Rectangle-path" opacity="0.5" x="68.1834162" y="31.2329541" width="25.7714539" height="77.1436899"></rect>
+                    <rect id="Rectangle-path" opacity="0.5" x="102.232456" y="0.426679701" width="25.7714539" height="107.60862"></rect>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

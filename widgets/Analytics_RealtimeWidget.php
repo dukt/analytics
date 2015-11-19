@@ -36,6 +36,16 @@ class Analytics_RealtimeWidget extends BaseWidget
     }
 
     /**
+     * @inheritDoc IWidget::getIconPath()
+     *
+     * @return string
+     */
+    public function getIconPath()
+    {
+        return craft()->resources->getResourcePath('analytics/images/widgets/realtime.svg');
+    }
+
+    /**
      * @inheritDoc IWidget::getBodyHtml()
      *
      * @return string|false
