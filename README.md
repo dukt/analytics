@@ -6,8 +6,8 @@ Customizable statistics widgets and entry tracking for Craft & Google Analytics
 
 ## Requirements
 
-- Craft 2.5
-- Craft OAuth 1.0
+- [Craft 2.5+](http://buildwithcraft.com/)
+- [Craft OAuth 1.0+](https://dukt.net/craft/oauth)
 
 ## Installation
 
