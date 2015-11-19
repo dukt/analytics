@@ -69,7 +69,6 @@ class Analytics_StatsWidget extends BaseWidget
     public function getIconPath()
     {
         return craft()->resources->getResourcePath('analytics/images/widgets/stats.svg');
-        // return CRAFT_PLUGINS_PATH.'analytics/resources/images/widgets/stats.svg';
     }
 
     /**
