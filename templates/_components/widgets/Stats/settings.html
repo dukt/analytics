@@ -21,8 +21,6 @@
                 targetPrefix: 'chart'
             }) }}
 
-            {# <input type="text" class="chart-input" name="chart" value="{{settings.chart}}"> #}
-
             <ul class="chart-types">
                 {% for chartType, chartLabel in chartTypes %}
                     <li data-chart-type="{{ chartType }}"{{ settings.chart == chartType ? ' class="active"' }}></li>
