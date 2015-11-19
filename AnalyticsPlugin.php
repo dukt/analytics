@@ -27,7 +27,7 @@ class AnalyticsPlugin extends BasePlugin
      */
     public function getVersion()
     {
-        return '3.2.137';
+        return '3.2.138';
     }
 
     /**
