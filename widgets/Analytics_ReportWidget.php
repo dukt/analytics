@@ -7,7 +7,7 @@
 
 namespace Craft;
 
-class Analytics_StatsWidget extends BaseWidget
+class Analytics_ReportWidget extends BaseWidget
 {
     // Public Methods
     // =========================================================================
@@ -19,7 +19,7 @@ class Analytics_StatsWidget extends BaseWidget
      */
     public function getName()
     {
-        return Craft::t('Analytics Stats');
+        return Craft::t('Analytics Report');
     }
 
     /**
@@ -58,7 +58,7 @@ class Analytics_StatsWidget extends BaseWidget
             // todo: error handling
         }
 
-        return Craft::t('Analytics Stats');
+        return Craft::t('Analytics Report');
     }
 
     /**
@@ -86,10 +86,11 @@ class Analytics_StatsWidget extends BaseWidget
         {
             craft()->templates->includeJsResource('analytics/js/jsapi.js', true);
             craft()->templates->includeJsResource('analytics/js/Analytics.js');
-            craft()->templates->includeJsResource('analytics/js/AnalyticsStatsWidgetSettings.js');
-            craft()->templates->includeJsResource('analytics/js/AnalyticsStatsWidget.js');
-            craft()->templates->includeCssResource('analytics/css/AnalyticsStatsWidget.css');
-            craft()->templates->includeCssResource('analytics/css/AnalyticsStatsWidgetSettings.css');
+            craft()->templates->includeJsResource('analytics/js/AnalyticsReportWidgetSettings.js');
+            craft()->templates->includeJsResource('analytics/js/AnalyticsReportWidget.js');
+
+            craft()->templates->includeCssResource('analytics/css/AnalyticsReportWidget.css');
+            craft()->templates->includeCssResource('analytics/css/AnalyticsReportWidgetSettings.css');
 
 
             $options = [];
@@ -128,9 +129,9 @@ class Analytics_StatsWidget extends BaseWidget
             craft()->templates->includeJs($js);
 
             craft()->templates->includeJs('var AnalyticsChartLanguage = "'.Craft::t('analyticsChartLanguage').'";');
-            craft()->templates->includeJs('new Analytics.StatsWidget("widget'.$widgetId.'", '.$jsonOptions.');');
+            craft()->templates->includeJs('new Analytics.ReportWidget("widget'.$widgetId.'", '.$jsonOptions.');');
 
-            return craft()->templates->render('analytics/_components/widgets/Stats/body');
+            return craft()->templates->render('analytics/_components/widgets/Report/body');
         }
         else
         {
@@ -148,13 +149,13 @@ class Analytics_StatsWidget extends BaseWidget
     public function getSettingsHtml()
     {
         craft()->templates->includeJsResource('analytics/js/Analytics.js');
-        craft()->templates->includeJsResource('analytics/js/AnalyticsStatsWidgetSettings.js');
-        craft()->templates->includeCssResource('analytics/css/AnalyticsStatsWidgetSettings.css');
+        craft()->templates->includeJsResource('analytics/js/AnalyticsReportWidgetSettings.js');
+        craft()->templates->includeCssResource('analytics/css/AnalyticsReportWidgetSettings.css');
 
         $id = 'analytics-settings-'.StringHelper::randomString();
         $namespaceId = craft()->templates->namespaceInputId($id);
 
-        craft()->templates->includeJs("new Analytics.StatsWidgetSettings('".$namespaceId."');");
+        craft()->templates->includeJs("new Analytics.ReportWidgetSettings('".$namespaceId."');");
 
         $settings = $this->getSettings();
 
@@ -172,7 +173,7 @@ class Analytics_StatsWidget extends BaseWidget
             $inject = null;
         }
 
-        return craft()->templates->render('analytics/_components/widgets/Stats/settings', array(
+        return craft()->templates->render('analytics/_components/widgets/Report/settings', array(
            'id' => $id,
            'settings' => $settings,
            'inject' => $inject,

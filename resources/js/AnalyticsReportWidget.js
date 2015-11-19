@@ -1,7 +1,7 @@
 /**
  * Chart Widget
  */
-Analytics.StatsWidget = Garnish.Base.extend(
+Analytics.ReportWidget = Garnish.Base.extend(
 {
     requestData: null,
 

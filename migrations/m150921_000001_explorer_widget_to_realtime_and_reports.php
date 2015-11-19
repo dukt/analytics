@@ -4,7 +4,7 @@ namespace Craft;
 /**
  * The class name is the UTC timestamp in the format of mYYMMDD_HHMMSS_pluginHandle_migrationName
  */
-class m150921_000001_explorer_widget_to_realtime_and_charts extends BaseMigration
+class m150921_000001_explorer_widget_to_realtime_and_reports extends BaseMigration
 {
     /**
      * Any migration code in here is wrapped inside of a transaction.
@@ -59,7 +59,7 @@ class m150921_000001_explorer_widget_to_realtime_and_charts extends BaseMigratio
                         break;
 
                     default:
-                        $type='Analytics_Stats';
+                        $type='Analytics_Report';
                 }
 
 

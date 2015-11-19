@@ -1,4 +1,4 @@
-Analytics.StatsWidgetSettings = Garnish.Base.extend({
+Analytics.ReportWidgetSettings = Garnish.Base.extend({
     init: function(id, settings)
     {
         this.$container = $('#'+id);
