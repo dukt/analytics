@@ -70,57 +70,65 @@ class Analytics_StatsWidget extends BaseWidget
     {
         $settings = $this->settings;
 
-        craft()->templates->includeJsResource('analytics/js/jsapi.js', true);
-        craft()->templates->includeJsResource('analytics/js/Analytics.js');
-        craft()->templates->includeJsResource('analytics/js/AnalyticsStatsWidgetSettings.js');
-        craft()->templates->includeJsResource('analytics/js/AnalyticsStatsWidget.js');
-        craft()->templates->includeCssResource('analytics/css/AnalyticsStatsWidget.css');
-        craft()->templates->includeCssResource('analytics/css/AnalyticsStatsWidgetSettings.css');
+        $profileId = craft()->analytics->getProfileId();
 
-
-        $options = [];
-
-        // request
-
-        $options['request'] = array(
-            'chart' => (isset($settings['chart']) ? $settings['chart'] : null),
-            'period' => (isset($settings['period']) ? $settings['period'] : null),
-            'options' => (isset($settings['options'][$settings['chart']]) ? $settings['options'][$settings['chart']] : null),
-            'colspan' => (isset($settings['colspan']) ? $settings['colspan'] : null),
-        );
-
-
-        // cached response
-
-        if(craft()->config->get('enableCache', 'analytics') === true)
+        if($profileId)
         {
-            $profileId = craft()->analytics->getProfileId();
+            craft()->templates->includeJsResource('analytics/js/jsapi.js', true);
+            craft()->templates->includeJsResource('analytics/js/Analytics.js');
+            craft()->templates->includeJsResource('analytics/js/AnalyticsStatsWidgetSettings.js');
+            craft()->templates->includeJsResource('analytics/js/AnalyticsStatsWidget.js');
+            craft()->templates->includeCssResource('analytics/css/AnalyticsStatsWidget.css');
+            craft()->templates->includeCssResource('analytics/css/AnalyticsStatsWidgetSettings.css');
 
 
-            $cacheId = ['getChartData', $options['request'], $profileId];
-            $cachedResponse = craft()->analytics_cache->get($cacheId);
+            $options = [];
 
-            if($cachedResponse)
+            // request
+
+            $options['request'] = array(
+                'chart' => (isset($settings['chart']) ? $settings['chart'] : null),
+                'period' => (isset($settings['period']) ? $settings['period'] : null),
+                'options' => (isset($settings['options'][$settings['chart']]) ? $settings['options'][$settings['chart']] : null),
+                'colspan' => (isset($settings['colspan']) ? $settings['colspan'] : null),
+            );
+
+
+            // cached response
+
+            if(craft()->config->get('enableCache', 'analytics') === true)
             {
-                $options['cachedResponse'] = $cachedResponse;
+                $cacheId = ['getChartData', $options['request'], $profileId];
+                $cachedResponse = craft()->analytics_cache->get($cacheId);
+
+                if($cachedResponse)
+                {
+                    $options['cachedResponse'] = $cachedResponse;
+                }
             }
+
+
+            // settings modal
+
+            $widgetId = $this->model->id;
+            $jsonOptions = json_encode($options);
+
+            $jsTemplate = 'window.csrfTokenName = "{{ craft.config.csrfTokenName|e(\'js\') }}";';
+            $jsTemplate .= 'window.csrfTokenValue = "{{ craft.request.csrfToken|e(\'js\') }}";';
+            $js = craft()->templates->renderString($jsTemplate);
+            craft()->templates->includeJs($js);
+
+            craft()->templates->includeJs('var AnalyticsChartLanguage = "'.Craft::t('analyticsChartLanguage').'";');
+            craft()->templates->includeJs('new Analytics.StatsWidget("widget'.$widgetId.'", '.$jsonOptions.');');
+
+            return craft()->templates->render('analytics/_components/widgets/Stats/body');
+        }
+        else
+        {
+            return craft()->templates->render('analytics/_components/widgets/_plugin-not-configured');
         }
 
 
-        // settings modal
-
-        $widgetId = $this->model->id;
-        $jsonOptions = json_encode($options);
-
-        $jsTemplate = 'window.csrfTokenName = "{{ craft.config.csrfTokenName|e(\'js\') }}";';
-        $jsTemplate .= 'window.csrfTokenValue = "{{ craft.request.csrfToken|e(\'js\') }}";';
-        $js = craft()->templates->renderString($jsTemplate);
-        craft()->templates->includeJs($js);
-
-        craft()->templates->includeJs('var AnalyticsChartLanguage = "'.Craft::t('analyticsChartLanguage').'";');
-        craft()->templates->includeJs('new Analytics.StatsWidget("widget'.$widgetId.'", '.$jsonOptions.');');
-
-        return craft()->templates->render('analytics/_components/widgets/Stats/body');
     }
 
     /**

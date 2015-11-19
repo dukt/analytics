@@ -103,6 +103,10 @@ class AnalyticsController extends BaseController
             throw new Exception(Craft::t('No plugin exists with the class “{class}”', array('class' => $pluginClass)));
         }
 
+        $profileId = null;
+        $accountId = null;
+        $internalWebPropertyId = null;
+
         if(!empty($settings['webPropertyId']))
         {
             $webPropertyId = $settings['webPropertyId'];
@@ -114,11 +118,15 @@ class AnalyticsController extends BaseController
 
                 $profile = $profiles[0];
 
-                $settings['profileId'] = $profile['id'];
-                $settings['accountId'] = $webProperty->accountId;
-                $settings['internalWebPropertyId'] = $webProperty->internalWebPropertyId;
+                $profileId = $profile['id'];
+                $accountId = $webProperty->accountId;
+                $internalWebPropertyId = $webProperty->internalWebPropertyId;
             }
         }
+
+        $settings['profileId'] = $profileId;
+        $settings['accountId'] = $accountId;
+        $settings['internalWebPropertyId'] = $internalWebPropertyId;
 
         if (craft()->plugins->savePluginSettings($plugin, $settings))
         {
