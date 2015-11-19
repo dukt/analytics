@@ -100,7 +100,6 @@ class Analytics_StatsWidget extends BaseWidget
                 'chart' => (isset($settings['chart']) ? $settings['chart'] : null),
                 'period' => (isset($settings['period']) ? $settings['period'] : null),
                 'options' => (isset($settings['options'][$settings['chart']]) ? $settings['options'][$settings['chart']] : null),
-                'colspan' => (isset($settings['colspan']) ? $settings['colspan'] : null),
             );
 
 
@@ -187,16 +186,6 @@ class Analytics_StatsWidget extends BaseWidget
      */
     public function getColspan()
     {
-        $settings = $this->getSettings();
-
-        if(isset($settings->colspan))
-        {
-            if($settings->colspan > 0)
-            {
-                return $settings->colspan;
-            }
-        }
-
         return 1;
     }
 
@@ -211,7 +200,6 @@ class Analytics_StatsWidget extends BaseWidget
     protected function defineSettings()
     {
         return array(
-            'colspan' => array(AttributeType::Number, 'default' => 2),
             'realtime' => array(AttributeType::Bool),
             'chart' => array(AttributeType::String),
             'period' => array(AttributeType::String),

@@ -29,8 +29,6 @@ class m150921_000001_explorer_widget_to_realtime_and_charts extends BaseMigratio
                 // old to new
 
                 $newSettings = [];
-                $newSettings['colspan'] = $oldSettings['colspan'];
-
 
                 if(isset($oldSettings['chart']))
                 {

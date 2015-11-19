@@ -37,8 +37,6 @@ class m141009_105954_analytics_reportsWidgetToExplorerWidget extends BaseMigrati
                                 'metric' => 'ga:sessions',
                                 'chart' => "area",
                                 'period' => "month",
-                                'pinned' => 1,
-                                'colspan' => (!empty($settings['colspan']) ? $settings['colspan'] : 1)
                             );
                             break;
 
@@ -49,8 +47,6 @@ class m141009_105954_analytics_reportsWidgetToExplorerWidget extends BaseMigrati
                                 "metric" => "ga:pageviewsPerSession",
                                 "chart" => "geo",
                                 "period" => "month",
-                                "pinned" => 1,
-                                'colspan' => (!empty($settings['colspan']) ? $settings['colspan'] : 1)
                             );
                             break;
 
@@ -61,8 +57,6 @@ class m141009_105954_analytics_reportsWidgetToExplorerWidget extends BaseMigrati
                                 "metric" => "ga:sessions",
                                 "chart" => "pie",
                                 "period" => "week",
-                                "pinned" => 1,
-                                'colspan' => (!empty($settings['colspan']) ? $settings['colspan'] : 1)
                             );
                             break;
 
@@ -73,8 +67,6 @@ class m141009_105954_analytics_reportsWidgetToExplorerWidget extends BaseMigrati
                                 "metric" => "ga:pageviews",
                                 "chart" => "table",
                                 "period" => "week",
-                                "pinned" => 1,
-                                'colspan' => (!empty($settings['colspan']) ? $settings['colspan'] : 1)
                             );
                             break;
 
@@ -85,8 +77,6 @@ class m141009_105954_analytics_reportsWidgetToExplorerWidget extends BaseMigrati
                                 "metric" => "ga:sessions",
                                 "chart" => "table",
                                 "period" => "week",
-                                "pinned" => 1,
-                                'colspan' => (!empty($settings['colspan']) ? $settings['colspan'] : 1)
                             );
                             break;
 
@@ -97,8 +87,6 @@ class m141009_105954_analytics_reportsWidgetToExplorerWidget extends BaseMigrati
                                 "metric" => "ga:sessions",
                                 "chart" => "pie",
                                 "period" => "week",
-                                "pinned" => 1,
-                                'colspan' => (!empty($settings['colspan']) ? $settings['colspan'] : 1)
                             );
                             break;
 
@@ -109,8 +97,6 @@ class m141009_105954_analytics_reportsWidgetToExplorerWidget extends BaseMigrati
                                 "metric" => "ga:goalCompletionsAll",
                                 "chart" => "area",
                                 "period" => "week",
-                                "pinned" => 1,
-                                'colspan' => (!empty($settings['colspan']) ? $settings['colspan'] : 1)
                             );
                             break;
 
@@ -123,8 +109,6 @@ class m141009_105954_analytics_reportsWidgetToExplorerWidget extends BaseMigrati
                                 'metric' => 'ga:sessions',
                                 'chart' => "area",
                                 'period' => "month",
-                                'pinned' => 0,
-                                'colspan' => (!empty($settings['colspan']) ? $settings['colspan'] : 1)
                             );
                             break;
                     }
