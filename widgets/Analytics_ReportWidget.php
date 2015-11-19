@@ -180,16 +180,6 @@ class Analytics_ReportWidget extends BaseWidget
         ));
     }
 
-    /**
-     * @inheritDoc IWidget::getColspan()
-     *
-     * @return int
-     */
-    public function getColspan()
-    {
-        return 1;
-    }
-
     // Protected Methods
     // =========================================================================
 
