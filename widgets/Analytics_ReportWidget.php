@@ -39,12 +39,12 @@ class Analytics_ReportWidget extends BaseWidget
 
                 if(!empty($options['dimension']))
                 {
-                    $name[] = craft()->analytics_meta->getDimMet($options['dimension']);
+                    $name[] = Craft::t(craft()->analytics_meta->getDimMet($options['dimension']));
                 }
 
                 if(!empty($options['metric']))
                 {
-                    $name[] = craft()->analytics_meta->getDimMet($options['metric']);
+                    $name[] = Craft::t(craft()->analytics_meta->getDimMet($options['metric']));
                 }
             }
 

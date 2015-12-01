@@ -34,13 +34,13 @@
     {% elseif isNew %}
 
         <div class="analytics-field analytics-error disable-icon">
-            <div class="error">Report will appear when the element is saved.</div>
+            <div class="error">{{ "Report will appear when the element is saved."|t }}</div>
         </div>
 
     {% else %}
 
         <div class="analytics-field analytics-error">
-            <div class="error">This element doesn't support urls.</div>
+            <div class="error">{{ "This element doesn't support urls."|t }}</div>
         </div>
 
     {% endif %}
@@ -48,9 +48,7 @@
 {% else %}
 
     <div class="analytics-field center">
-
         <p><a href="{{url('analytics/settings')}}">{{'Configure Analytics plugin in order to get started'|t}}</a></p>
-
     </div>
 
 {% endif %}
