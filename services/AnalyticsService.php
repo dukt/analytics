@@ -37,7 +37,16 @@ class AnalyticsService extends BaseApplicationComponent
 
             if ($provider && $provider->isConfigured())
             {
-                return true;
+                $token = craft()->analytics_oauth->getToken();
+
+                if($token)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {
