@@ -119,16 +119,19 @@ class Analytics_ApiService extends BaseApplicationComponent
 
         $cacheDuration = craft()->analytics->getRealtimeRefreshInterval();
 
-        $api = craft()->analytics_api->getDataRealtime();
-
         $cacheId = ['api.apiGetGADataRealtime', $ids, $metrics, $optParams];
         $response = craft()->analytics_cache->get($cacheId);
 
         if(!$response)
         {
-            $response = $api->get($ids, $metrics, $optParams);
+            $api = craft()->analytics_api->getDataRealtime();
 
-            craft()->analytics_cache->set($cacheId, $response, $cacheDuration);
+            if($api)
+            {
+                $response = $api->get($ids, $metrics, $optParams);
+
+                craft()->analytics_cache->set($cacheId, $response, $cacheDuration);
+            }
         }
 
         return $response;
@@ -136,27 +139,52 @@ class Analytics_ApiService extends BaseApplicationComponent
 
     public function getDataRealtime()
     {
-        return $this->api()->data_realtime;
+        $api = $this->api();
+
+        if($api)
+        {
+            return $api->data_realtime;
+        }
     }
 
     public function getDataGa()
     {
-        return $this->api()->data_ga;
+        $api = $this->api();
+
+        if($api)
+        {
+            return $api->data_ga;
+        }
     }
 
     public function getManagementWebproperties()
     {
-        return $this->api()->management_webproperties;
+        $api = $this->api();
+
+        if($api)
+        {
+            return $api->management_webproperties;
+        }
     }
 
     public function getManagementProfiles()
     {
-        return $this->api()->management_profiles;
+        $api = $this->api();
+
+        if($api)
+        {
+            return $api->management_profiles;
+        }
     }
 
     public function getMetadataColumns()
     {
-        return $this->api()->metadata_columns;
+        $api = $this->api();
+
+        if($api)
+        {
+            return $api->metadata_columns;
+        }
     }
 
     // Private Methods

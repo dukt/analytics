@@ -289,32 +289,57 @@ class Analytics_MetaService extends BaseApplicationComponent
 
         if(!$items)
         {
-            $items = craft()->analytics_api->metadataColumns->listMetadataColumns('ga');
+            $metadataColumns = craft()->analytics_api->getMetadataColumns();
 
-            if($items)
+            if($metadataColumns)
             {
-                craft()->analytics_cache->set($cacheId, $items);
+                $items = $metadataColumns->listMetadataColumns('ga');
+
+                if($items)
+                {
+                    craft()->analytics_cache->set($cacheId, $items);
+                }
             }
         }
 
-        foreach($items as $item)
+        if($items)
         {
-            if($item->attributes['status'] == 'DEPRECATED')
+            foreach($items as $item)
             {
-                continue;
-            }
+                if($item->attributes['status'] == 'DEPRECATED')
+                {
+                    continue;
+                }
 
-            if(isset($item->attributes['minTemplateIndex']))
-            {
-                for($i = $item->attributes['minTemplateIndex']; $i <= $item->attributes['maxTemplateIndex']; $i++)
+                if(isset($item->attributes['minTemplateIndex']))
+                {
+                    for($i = $item->attributes['minTemplateIndex']; $i <= $item->attributes['maxTemplateIndex']; $i++)
+                    {
+                        $column = new Analytics_ColumnModel;
+                        $column->id = str_replace('XX', $i, $item->id);
+                        $column->type = $item->attributes['type'];
+                        $column->group = $item->attributes['group'];
+                        $column->status = $item->attributes['status'];
+                        $column->uiName = str_replace('XX', $i, $item->attributes['uiName']);
+                        $column->description = str_replace('XX', $i, $item->attributes['description']);
+
+                        if(isset($item->attributes['allowInSegments']))
+                        {
+                            $column->allowInSegments = $item->attributes['allowInSegments'];
+                        }
+
+                        $columns[$column->id] = $column;
+                    }
+                }
+                else
                 {
                     $column = new Analytics_ColumnModel;
-                    $column->id = str_replace('XX', $i, $item->id);
+                    $column->id = $item->id;
                     $column->type = $item->attributes['type'];
                     $column->group = $item->attributes['group'];
                     $column->status = $item->attributes['status'];
-                    $column->uiName = str_replace('XX', $i, $item->attributes['uiName']);
-                    $column->description = str_replace('XX', $i, $item->attributes['description']);
+                    $column->uiName = $item->attributes['uiName'];
+                    $column->description = $item->attributes['description'];
 
                     if(isset($item->attributes['allowInSegments']))
                     {
@@ -323,23 +348,6 @@ class Analytics_MetaService extends BaseApplicationComponent
 
                     $columns[$column->id] = $column;
                 }
-            }
-            else
-            {
-                $column = new Analytics_ColumnModel;
-                $column->id = $item->id;
-                $column->type = $item->attributes['type'];
-                $column->group = $item->attributes['group'];
-                $column->status = $item->attributes['status'];
-                $column->uiName = $item->attributes['uiName'];
-                $column->description = $item->attributes['description'];
-
-                if(isset($item->attributes['allowInSegments']))
-                {
-                    $column->allowInSegments = $item->attributes['allowInSegments'];
-                }
-
-                $columns[$column->id] = $column;
             }
         }
 
