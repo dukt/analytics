@@ -52,37 +52,45 @@ class Analytics_RealtimeWidget extends BaseWidget
      */
     public function getBodyHtml()
     {
-        $plugin = craft()->plugins->getPlugin('analytics');
-        $settings = $plugin->getSettings();
-        $profileId = craft()->analytics->getProfileId();
-
-        if($profileId)
+        if(craft()->analytics->checkRequirements())
         {
-            if(!empty($settings['enableRealtime']))
+            $profileId = craft()->analytics->getProfileId();
+
+            if($profileId)
             {
-                $realtimeRefreshInterval = craft()->analytics->getRealtimeRefreshInterval();
+                $plugin = craft()->plugins->getPlugin('analytics');
+                $settings = $plugin->getSettings();
 
-                $widgetId = $this->model->id;
+                if(!empty($settings['enableRealtime']))
+                {
+                    $realtimeRefreshInterval = craft()->analytics->getRealtimeRefreshInterval();
 
-                craft()->templates->includeJsResource('analytics/js/Analytics.js');
-                craft()->templates->includeJsResource('analytics/js/AnalyticsRealtimeWidget.js');
-                craft()->templates->includeCssResource('analytics/css/AnalyticsRealtimeWidget.css');
+                    $widgetId = $this->model->id;
 
-                craft()->templates->includeJs('var AnalyticsChartLanguage = "'.craft()->language.'";', true);
-                craft()->templates->includeJs('var AnalyticsRealtimeInterval = "'.$realtimeRefreshInterval.'";', true);
+                    craft()->templates->includeJsResource('analytics/js/Analytics.js');
+                    craft()->templates->includeJsResource('analytics/js/AnalyticsRealtimeWidget.js');
+                    craft()->templates->includeCssResource('analytics/css/AnalyticsRealtimeWidget.css');
 
-                craft()->templates->includeJs('new Analytics.Realtime("widget'.$widgetId.'");');
+                    craft()->templates->includeJs('var AnalyticsChartLanguage = "'.craft()->language.'";', true);
+                    craft()->templates->includeJs('var AnalyticsRealtimeInterval = "'.$realtimeRefreshInterval.'";', true);
 
-                return craft()->templates->render('analytics/_components/widgets/Realtime/body');
+                    craft()->templates->includeJs('new Analytics.Realtime("widget'.$widgetId.'");');
+
+                    return craft()->templates->render('analytics/_components/widgets/Realtime/body');
+                }
+                else
+                {
+                    return craft()->templates->render('analytics/_components/widgets/Realtime/_disabled');
+                }
             }
             else
             {
-                return craft()->templates->render('analytics/_components/widgets/Realtime/_disabled');
+                return craft()->templates->render('analytics/_install/plugin-not-configured');
             }
         }
         else
         {
-            return craft()->templates->render('analytics/_components/widgets/_plugin-not-configured');
+            return craft()->templates->render('analytics/_install/plugin-not-configured');
         }
     }
 

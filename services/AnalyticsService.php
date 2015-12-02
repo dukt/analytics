@@ -14,6 +14,44 @@ class AnalyticsService extends BaseApplicationComponent
 
     private $tracking;
 
+    public function checkRequirements($redirect = false)
+    {
+        // dependencies
+        $plugin = craft()->plugins->getPlugin('analytics');
+        $pluginDependencies = $plugin->getPluginDependencies();
+
+        if (count($pluginDependencies) > 0)
+        {
+            if($redirect)
+            {
+                $url = UrlHelper::getUrl('analytics/install');
+                craft()->request->redirect($url);
+            }
+
+            return false;
+        }
+        else
+        {
+            // oauth
+            $provider = craft()->oauth->getProvider('google');
+
+            if ($provider && $provider->isConfigured())
+            {
+                return true;
+            }
+            else
+            {
+                if($redirect)
+                {
+                    $url = UrlHelper::getUrl('analytics/install');
+                    craft()->request->redirect($url);
+                }
+
+                return false;
+            }
+        }
+    }
+
     public function getRealtimeRefreshInterval()
     {
         $interval = craft()->config->get('realtimeRefreshInterval', 'analytics');
