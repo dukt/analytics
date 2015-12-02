@@ -24,7 +24,7 @@ class Analytics_OauthService extends BaseApplicationComponent
         }
         else
         {
-            $url = UrlHelper::getUrl('analytics/install/oauth');
+            $url = UrlHelper::getUrl('analytics/install');
             craft()->request->redirect($url);
             return false;
         }

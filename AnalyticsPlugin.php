@@ -86,8 +86,7 @@ class AnalyticsPlugin extends BasePlugin
     {
         return array(
             'analytics/settings' => array('action' => "analytics/settings"),
-            'analytics/install/oauth' => array('action' => "analytics/oauth/settings"),
-            'analytics/install/dependencies' => array('action' => "analytics/plugin/dependencies"),
+            'analytics/install' => array('action' => "analytics/install"),
             'analytics/meta' => array('action' => "analytics/meta/index"),
         );
     }
@@ -244,6 +243,7 @@ class AnalyticsPlugin extends BasePlugin
 
         $dependency['isMissing'] = $isMissing;
         $dependency['plugin'] = $plugin;
+        $dependency['pluginLink'] = 'https://dukt.net/craft/'.$dependency['handle'];
 
         return $dependency;
     }

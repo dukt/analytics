@@ -54,7 +54,7 @@ class Analytics_OauthController extends BaseController
         }
         else
         {
-            $this->renderTemplate('analytics/_special/oauth/_providerNotConfigured');
+            $this->renderTemplate('analytics/_install/oauth-provider-not-configured');
         }
     }
 
