@@ -199,7 +199,7 @@ class AnalyticsTracking
         }
         catch(\Exception $e)
         {
-            Craft::log('Couldn’t send tracking: '.$e->getMessage(), LogLevel::Error);
+            AnalyticsPlugin::log('Couldn’t send tracking: '.$e->getMessage(), LogLevel::Error);
         }
     }
 

@@ -90,11 +90,11 @@ class AnalyticsController extends BaseController
                 {
                     if(method_exists($e, 'getResponse'))
                     {
-                            Craft::log("Couldn’t get account: ".$e->getResponse(), LogLevel::Error);
+                            AnalyticsPlugin::log("Couldn’t get account: ".$e->getResponse(), LogLevel::Error);
                     }
                     else
                     {
-                        Craft::log("Couldn’t get account: ".$e->getMessage(), LogLevel::Error);
+                        AnalyticsPlugin::log("Couldn’t get account: ".$e->getMessage(), LogLevel::Error);
                     }
 
                     $variables['error'] = $e->getMessage();

@@ -19,7 +19,7 @@ class AnalyticsHelper
     {
         if(craft()->config->get('duktDevMode'))
         {
-            Craft::log($message, $level, $force, $category, $plugin);
+            AnalyticsPlugin::log($message, $level, $force, $category, $plugin);
         }
     }
 
