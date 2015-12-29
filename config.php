@@ -20,9 +20,9 @@ return array(
     'enableCache' => true,
 
     /**
-     * Whether Analytics widget is enabled or disabled
+     * Whether Analytics widgets are enabled or disabled
      */
-    'enableWidget' => true,
+    'enableWidgets' => true,
 
     /**
      * Whether Analytics fieldtype is enabled or not
