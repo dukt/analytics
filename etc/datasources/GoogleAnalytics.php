@@ -4,6 +4,7 @@ namespace Dukt\Analytics\DataSources;
 
 use Craft\Craft;
 use Craft\Analytics_RequestCriteriaModel;
+use Craft\StringHelper;
 
 class GoogleAnalytics extends BaseDataSource
 {
@@ -167,7 +168,7 @@ class GoogleAnalytics extends BaseDataSource
 
         $counter = array(
             'count' => $count,
-            'label' => strtolower(Craft::t(Craft::app()->analytics_meta->getDimMet($metric)))
+            'label' => StringHelper::toLowerCase(Craft::t(Craft::app()->analytics_meta->getDimMet($metric)))
         );
 
 
