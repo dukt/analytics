@@ -177,3 +177,8 @@
 .analytics_report .graph.table .google-visualization-table-page-numbers {
   display: none;
 }
+body.rtl .widget > .front > .pane > .icon.settings {
+  float: left;
+  margin-left: 0;
+  margin-right: 7px;
+}
