@@ -14,6 +14,23 @@ class AnalyticsService extends BaseApplicationComponent
 
     private $tracking;
 
+    public function requireDependencies()
+    {
+        $plugin = craft()->plugins->getPlugin('analytics');
+        $pluginDependencies = $plugin->getPluginDependencies();
+
+        if (count($pluginDependencies) > 0)
+        {
+            $url = UrlHelper::getUrl('analytics/install');
+            craft()->request->redirect($url);
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
     public function checkRequirements($redirect = false)
     {
         // dependencies

@@ -23,7 +23,7 @@ class AnalyticsController extends BaseController
         }
         else
         {
-            craft()->analytics_plugin->requireDependencies();
+            craft()->analytics->requireDependencies();
 
             $provider = craft()->oauth->getProvider('google');
 
@@ -45,7 +45,7 @@ class AnalyticsController extends BaseController
      */
     public function actionSettings()
     {
-        craft()->analytics_plugin->requireDependencies();
+        craft()->analytics->requireDependencies();
         craft()->analytics_oauth->requireOauth();
 
         $plugin = craft()->plugins->getPlugin('analytics');
