@@ -48,7 +48,11 @@ class AnalyticsTracking
         }
         else
         {
-            $webProperty = craft()->analytics_api->getWebProperty();
+            $plugin = craft()->plugins->getPlugin('analytics');
+            $settings = $plugin->getSettings();
+
+            $webPropertyId = $settings['webPropertyId'];
+            $webProperty = craft()->analytics_api->getWebProperty($webPropertyId);
 
             if ($webProperty)
             {
