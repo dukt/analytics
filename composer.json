@@ -1,6 +1,7 @@
 {
     "require": {
-        "google/apiclient": "dev-master"
+        "google/apiclient": "1.1.6",
+        "ins0/google-measurement-php-client": "v2.0.1"
     },
     "autoload": {
         "psr-4": {

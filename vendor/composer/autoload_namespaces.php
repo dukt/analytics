@@ -6,5 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Psr\\Log\\' => array($vendorDir . '/psr/log'),
+    'Racecore\\GATracking' => array($vendorDir . '/ins0/google-measurement-php-client/src'),
 );
