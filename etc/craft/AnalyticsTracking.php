@@ -37,49 +37,34 @@ class AnalyticsTracking
      */
     public function __construct($options = null)
     {
-        // accountId
-
-        $accountId = false;
-
         if(!empty($options['accountId']))
         {
             $accountId = $options['accountId'];
-            unset($options['accountId']);
+
+            $this->tracking = new \Racecore\GATracking\GATracking($accountId);
+
+            // clientId
+
+            if(!empty($options['clientId']))
+            {
+                $clientId = $options['clientId'];
+                $this->tracking->setClientID($clientId);
+                unset($options['clientId']);
+            }
+
+
+            // userId
+
+            if(!empty($options['userId']))
+            {
+                $userId = $options['userId'];
+                $this->tracking->setUserID($userId);
+                unset($options['userId']);
+            }
         }
         else
         {
-            $plugin = craft()->plugins->getPlugin('analytics');
-            $settings = $plugin->getSettings();
-
-            $webPropertyId = $settings['webPropertyId'];
-            $webProperty = craft()->analytics_api->getWebProperty($webPropertyId);
-
-            if ($webProperty)
-            {
-                $accountId = $webProperty->id;
-            }
-        }
-
-        $this->tracking = new \Racecore\GATracking\GATracking($accountId);
-
-
-        // clientId
-
-        if(!empty($options['clientId']))
-        {
-            $clientId = $options['clientId'];
-            $this->tracking->setClientID($clientId);
-            unset($options['clientId']);
-        }
-
-
-        // userId
-
-        if(!empty($options['userId']))
-        {
-            $userId = $options['userId'];
-            $this->tracking->setUserID($userId);
-            unset($options['userId']);
+            throw new Exception("Account ID not provided");
         }
     }
 
