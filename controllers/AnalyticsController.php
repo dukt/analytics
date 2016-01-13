@@ -12,6 +12,11 @@ class AnalyticsController extends BaseController
     // Public Methods
     // =========================================================================
 
+    /**
+     * Install
+     *
+     * @return null
+     */
     public function actionInstall()
     {
         $plugin = craft()->plugins->getPlugin('analytics');

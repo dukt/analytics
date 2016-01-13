@@ -14,6 +14,11 @@ class Analytics_OauthService extends BaseApplicationComponent
 
     private $token;
 
+    /**
+     * Require OAuth with configured provider
+     *
+     * @return bool
+     */
     public function requireOauth()
     {
         $provider = craft()->oauth->getProvider('google');

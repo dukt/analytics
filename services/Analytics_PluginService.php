@@ -12,6 +12,11 @@ class Analytics_PluginService extends BaseApplicationComponent
     // Public Methods
     // =========================================================================
 
+    /**
+     * Require dependencies
+     *
+     * @return bool
+     */
     public function requireDependencies()
     {
         $plugin = craft()->plugins->getPlugin('analytics');
@@ -29,6 +34,11 @@ class Analytics_PluginService extends BaseApplicationComponent
         }
     }
 
+    /**
+     * Check requirements
+     *
+     * @return bool
+     */
     public function checkRequirements($redirect = false)
     {
         // dependencies
