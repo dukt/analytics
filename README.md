@@ -20,4 +20,4 @@ Customizable statistics widgets and entry tracking for Craft & Google Analytics
 - [Analytics Plugin Overview](https://dukt.net/craft/analytics/)
 - [Analytics Documentation](https://dukt.net/craft/analytics/docs)
 
-[Dukt.net](https://dukt.net/) © 2015 - All rights reserved
+[Dukt.net](https://dukt.net/) 2016 - All rights reserved
