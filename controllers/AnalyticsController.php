@@ -84,7 +84,7 @@ class AnalyticsController extends BaseController
 
                     if ($account)
                     {
-                        AnalyticsHelper::log("Analytics OAuth Account:\r\n".print_r($account, true), LogLevel::Info);
+                        AnalyticsPlugin::log("Account:\r\n".print_r($account, true), LogLevel::Info);
 
                         $variables['account'] = $account;
                         $variables['propertiesOpts'] = $propertiesOpts;
