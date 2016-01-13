@@ -18,23 +18,20 @@ class AnalyticsService extends BaseApplicationComponent
     {
         $interval = craft()->config->get('realtimeRefreshInterval', 'analytics');
 
-        if(!$interval)
+        if($interval)
+        {
+            return $interval;
+        }
+        else
         {
             $plugin = craft()->plugins->getPlugin('analytics');
             $settings = $plugin->getSettings();
 
             if(!empty($settings['realtimeRefreshInterval']))
             {
-                $interval = $settings['realtimeRefreshInterval'];
+                return $settings['realtimeRefreshInterval'];
             }
         }
-
-        if(!$interval)
-        {
-            $interval = 60;
-        }
-
-        return $interval;
     }
 
     /**
