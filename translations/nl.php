@@ -11,7 +11,7 @@
 
 return array(
 
-    'analyticsChartLanguage' => 'nl'
+    'analyticsChartLanguage' => 'nl',
 
     "Analytics" => "Analytics",
     "Plugin installed" => "Plugin geïnstalleerd",
