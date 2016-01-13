@@ -52,7 +52,7 @@ class Analytics_RealtimeWidget extends BaseWidget
      */
     public function getBodyHtml()
     {
-        if(craft()->analytics->checkRequirements())
+        if(craft()->analytics_plugin->checkRequirements())
         {
             if(craft()->config->get('enableWidgets', 'analytics'))
             {
