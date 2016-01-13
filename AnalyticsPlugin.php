@@ -72,6 +72,14 @@ class AnalyticsPlugin extends BasePlugin
     }
 
     /**
+     * Get Documentation URL
+     */
+    public function getDocumentationUrl()
+    {
+        return 'https://dukt.net/craft/analytics/docs/';
+    }
+
+    /**
      * Get Settings URL
      */
     public function getSettingsUrl()
