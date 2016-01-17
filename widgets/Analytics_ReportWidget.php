@@ -48,6 +48,11 @@ class Analytics_ReportWidget extends BaseWidget
                 }
             }
 
+            if(!empty($this->settings['period']))
+            {
+                $name[] = Craft::t(ucfirst($this->settings['period']));
+            }
+
             if(count($name) > 0)
             {
                 return implode(" - ", $name);
