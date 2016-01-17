@@ -1,8 +1,8 @@
 
 /* realtime visitors */
 
-@blue:         #058DC7;
-@green:         #50B431;
+$blue: #058DC7;
+$green: #50B431;
 
 .analytics_realtime {
 
@@ -78,13 +78,13 @@
 
             &.blue {
                 strong {
-                    background: @blue;
+                    background: $blue;
                 }
             }
 
             &.green {
                 strong {
-                    background: @green;
+                    background: $green;
                 }
             }
         }

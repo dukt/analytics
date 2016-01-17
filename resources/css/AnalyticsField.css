@@ -1,6 +1,6 @@
 .center {
-  text-align: center;
-}
+  text-align: center; }
+
 .analytics-field {
   background: #fdfdfd;
   margin: 0 -24px;
@@ -9,45 +9,34 @@
   border-left: 0;
   border-right: 0;
   position: relative;
-  min-height: 46px;
-}
-.analytics-field .error {
-  background: url("../images/error.png") no-repeat center 20px;
-  padding-top: 80px;
-  color: #aaa !important;
-  display: none;
-  margin-bottom: 1em;
-  text-align: center;
-}
-.analytics-field.analytics-error.disable-icon .error {
-  background: none;
-  padding-top: inherit;
-}
-.analytics-field .uri {
-  margin-top: 14px;
-  margin-right: 20px;
-}
-.analytics-field.analytics-error .chart {
-  display: none;
-}
-.analytics-field.analytics-error .select {
-  display: none;
-}
-.analytics-field.analytics-error .error {
-  display: block;
-}
-.analytics-field .spinner {
-  position: absolute;
-  top: 20px;
-  right: 10px;
-}
-.analytics-field .select {
-  margin: 10px 0;
-}
-.analytics-field .select select {
-  font-size: 0.9em;
-}
-.analytics-field .chart {
-  clear: both;
-  margin: 15px -24px -15px -24px;
-}
+  min-height: 46px; }
+  .analytics-field .error {
+    background: url("../images/error.png") no-repeat center 20px;
+    padding-top: 80px;
+    color: #aaa !important;
+    display: none;
+    margin-bottom: 1em;
+    text-align: center; }
+  .analytics-field.analytics-error.disable-icon .error {
+    background: none;
+    padding-top: inherit; }
+  .analytics-field .uri {
+    margin-top: 14px;
+    margin-right: 20px; }
+  .analytics-field.analytics-error .chart {
+    display: none; }
+  .analytics-field.analytics-error .select {
+    display: none; }
+  .analytics-field.analytics-error .error {
+    display: block; }
+  .analytics-field .spinner {
+    position: absolute;
+    top: 20px;
+    right: 10px; }
+  .analytics-field .select {
+    margin: 10px 0; }
+    .analytics-field .select select {
+      font-size: 0.9em; }
+  .analytics-field .chart {
+    clear: both;
+    margin: 15px -24px -15px -24px; }
