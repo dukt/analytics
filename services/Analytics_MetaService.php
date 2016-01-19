@@ -9,6 +9,7 @@ namespace Craft;
 
 class Analytics_MetaService extends BaseApplicationComponent
 {
+    private $groups;
     private $dimensions;
     private $columns;
     private $selectDimensionOptions;
@@ -134,17 +135,29 @@ class Analytics_MetaService extends BaseApplicationComponent
 
     public function getGroups($type = null)
     {
-        $groups = [];
-
-        foreach($this->getColumns() as $column)
+        if($type && isset($this->groups[$type]))
         {
-            if(!$type || ($type && $column->type == $type))
-            {
-                $groups[$column->group] = $column->group;
-            }
+            return $this->groups[$type];
         }
+        else
+        {
+            $groups = [];
 
-        return $groups;
+            foreach($this->getColumns() as $column)
+            {
+                if(!$type || ($type && $column->type == $type))
+                {
+                    $groups[$column->group] = $column->group;
+                }
+            }
+
+            if($type)
+            {
+                $this->groups[$type] = $groups;
+            }
+
+            return $groups;
+        }
     }
 
     public function getSelectDimensionOptions($filters = null)
