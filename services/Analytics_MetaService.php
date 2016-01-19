@@ -11,6 +11,7 @@ class Analytics_MetaService extends BaseApplicationComponent
 {
     private $groups;
     private $dimensions;
+    private $metrics;
     private $columns;
     private $selectDimensionOptions;
     private $selectMetricOptions;
@@ -307,7 +308,12 @@ class Analytics_MetaService extends BaseApplicationComponent
 
     public function getMetrics()
     {
-        return $this->getColumns('METRIC');
+        if(!$this->metrics)
+        {
+            $this->metrics = $this->getColumns('METRIC');
+        }
+
+        return $this->metrics;
     }
 
     public function getMetadataFilePath()
