@@ -277,6 +277,10 @@ class Analytics_MetaService extends BaseApplicationComponent
         return $this->getColumns('METRIC');
     }
 
+    public function getMetadataFilePath()
+    {
+        return CRAFT_PLUGINS_PATH.'analytics/etc/metadata/ga/columns.json';
+    }
     // Private Methods
     // =========================================================================
 
