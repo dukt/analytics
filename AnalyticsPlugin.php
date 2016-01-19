@@ -87,6 +87,16 @@ class AnalyticsPlugin extends BasePlugin
         return 'analytics/settings';
     }
 
+    public function hasCpSection()
+    {
+        if(craft()->config->get('advancedMode', 'analytics'))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * Hook Register CP Routes
      */
