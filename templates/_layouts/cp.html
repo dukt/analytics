@@ -1,0 +1,8 @@
+{% extends "_layouts/cp" %}
+
+{% set tabs = {
+    meta: { label: "Manage Metadata"|t, url: url('analytics/meta/manage') },
+    search: { label: "Search Dimensions & Metrics"|t, url: url('analytics/meta/search') },
+} %}
+
+{% set title = 'Analytics'|t %}
