@@ -9,6 +9,7 @@ namespace Craft;
 
 class Analytics_MetaService extends BaseApplicationComponent
 {
+    private $dimensions;
     private $columns;
     private $selectDimensionOptions;
     private $selectMetricOptions;
@@ -123,7 +124,12 @@ class Analytics_MetaService extends BaseApplicationComponent
 
     public function getDimensions()
     {
-        return $this->getColumns('DIMENSION');
+        if(!$this->dimensions)
+        {
+            $this->dimensions = $this->getColumns('DIMENSION');
+        }
+
+        return $this->dimensions;
     }
 
     public function getGroups($type = null)
