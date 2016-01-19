@@ -325,78 +325,24 @@ class Analytics_MetaService extends BaseApplicationComponent
 
     private function loadColumns()
     {
-        $columns = [];
+        $cols = [];
 
-        $cacheId = ['Analytics_MetaService.loadColumns.columns'];
-        $items = craft()->analytics_cache->get($cacheId);
+        $path = craft()->analytics_meta->getMetadataFilePath();
 
-        if(!$items)
+
+        $json = IOHelper::getFileContents($path);
+        $columnsResponse = JsonHelper::decode($json);
+
+        if($columnsResponse)
         {
-            $metadataColumns = craft()->analytics_api->getMetadataColumns();
-
-            if($metadataColumns)
+            foreach($columnsResponse as $columnResponse)
             {
-                $items = $metadataColumns->listMetadataColumns('ga');
-
-                if($items)
-                {
-                    craft()->analytics_cache->set($cacheId, $items);
-                }
+                $cols[$columnResponse['id']] = new Analytics_ColumnModel($columnResponse);
             }
         }
 
-        if($items)
-        {
-            foreach($items as $item)
-            {
-                if($item->attributes['status'] == 'DEPRECATED')
-                {
-                    continue;
-                }
-
-                if(isset($item->attributes['minTemplateIndex']))
-                {
-                    for($i = $item->attributes['minTemplateIndex']; $i <= $item->attributes['maxTemplateIndex']; $i++)
-                    {
-                        $column = new Analytics_ColumnModel;
-                        $column->id = str_replace('XX', $i, $item->id);
-                        $column->type = $item->attributes['type'];
-                        $column->group = $item->attributes['group'];
-                        $column->status = $item->attributes['status'];
-                        $column->uiName = str_replace('XX', $i, $item->attributes['uiName']);
-                        $column->description = str_replace('XX', $i, $item->attributes['description']);
-
-                        if(isset($item->attributes['allowInSegments']))
-                        {
-                            $column->allowInSegments = $item->attributes['allowInSegments'];
-                        }
-
-                        $columns[$column->id] = $column;
-                    }
-                }
-                else
-                {
-                    $column = new Analytics_ColumnModel;
-                    $column->id = $item->id;
-                    $column->type = $item->attributes['type'];
-                    $column->group = $item->attributes['group'];
-                    $column->status = $item->attributes['status'];
-                    $column->uiName = $item->attributes['uiName'];
-                    $column->description = $item->attributes['description'];
-
-                    if(isset($item->attributes['allowInSegments']))
-                    {
-                        $column->allowInSegments = $item->attributes['allowInSegments'];
-                    }
-
-                    $columns[$column->id] = $column;
-                }
-            }
-        }
-
-        return $columns;
+        return $cols;
     }
-
 
     /**
      * Get Data
