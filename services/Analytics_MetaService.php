@@ -13,6 +13,20 @@ class Analytics_MetaService extends BaseApplicationComponent
     private $selectDimensionOptions;
     private $selectMetricOptions;
 
+    public function metadataFileExists()
+    {
+        $path = craft()->analytics_meta->getMetadataFilePath();
+
+        if(IOHelper::fileExists($path, false))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     /**
      * Get Continent Code
      *
