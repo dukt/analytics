@@ -11,10 +11,10 @@ class Analytics_MetadataController extends BaseController
 {
     public function actionIndex(array $variables = array())
     {
-        $variables['dimensions'] = craft()->analytics_meta->getDimensions();
-        $variables['metrics'] = craft()->analytics_meta->getMetrics();
+        $variables['dimensions'] = craft()->analytics_metadata->getDimensions();
+        $variables['metrics'] = craft()->analytics_metadata->getMetrics();
 
-        $variables['metadataFileExists'] = craft()->analytics_meta->metadataFileExists();
+        $variables['metadataFileExists'] = craft()->analytics_metadata->metadataFileExists();
 
         $this->renderTemplate('analytics/metadata/_index', $variables);
     }
@@ -22,7 +22,7 @@ class Analytics_MetadataController extends BaseController
     public function actionSearch()
     {
         $q = craft()->request->getParam('q');
-        $columns = craft()->analytics_meta->searchColumns($q);
+        $columns = craft()->analytics_metadata->searchColumns($q);
 
         // Send the source back to the template
         craft()->urlManager->setRouteVariables(array(
@@ -44,7 +44,7 @@ class Analytics_MetadataController extends BaseController
 
     private function deleteMetadata()
     {
-        $path = craft()->analytics_meta->getMetadataFilePath();
+        $path = craft()->analytics_metadata->getMetadataFilePath();
 
         IOHelper::deleteFile($path);
     }
@@ -111,7 +111,7 @@ class Analytics_MetadataController extends BaseController
 
         $contents = json_encode($columns);
 
-        $path = craft()->analytics_meta->getMetadataFilePath();
+        $path = craft()->analytics_metadata->getMetadataFilePath();
 
         $res = IOHelper::writeToFile($path, $contents);
     }

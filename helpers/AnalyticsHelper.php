@@ -38,7 +38,7 @@ class AnalyticsHelper
             $dataType = $col->dataType;
             $type = $col->dataType;
             $id = $col->name;
-            $label = craft()->analytics_meta->getDimMet($col->name);
+            $label = craft()->analytics_metadata->getDimMet($col->name);
 
             switch($col->name)
             {
@@ -99,12 +99,12 @@ class AnalyticsHelper
 
                     if($col['id'] == 'ga:continent')
                     {
-                        $cell['v'] = craft()->analytics_meta->getContinentCode($cell['v']);
+                        $cell['v'] = craft()->analytics_metadata->getContinentCode($cell['v']);
                     }
 
                     if($col['id'] == 'ga:subContinent')
                     {
-                        $cell['v'] = craft()->analytics_meta->getSubContinentCode($cell['v']);
+                        $cell['v'] = craft()->analytics_metadata->getSubContinentCode($cell['v']);
                     }
 
                     // translate values

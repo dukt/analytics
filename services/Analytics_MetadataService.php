@@ -7,7 +7,7 @@
 
 namespace Craft;
 
-class Analytics_MetaService extends BaseApplicationComponent
+class Analytics_MetadataService extends BaseApplicationComponent
 {
     private $groups;
     private $dimensions;
@@ -18,7 +18,7 @@ class Analytics_MetaService extends BaseApplicationComponent
 
     public function metadataFileExists()
     {
-        $path = craft()->analytics_meta->getMetadataFilePath();
+        $path = craft()->analytics_metadata->getMetadataFilePath();
 
         if(IOHelper::fileExists($path, false))
         {
@@ -327,7 +327,7 @@ class Analytics_MetaService extends BaseApplicationComponent
     {
         $cols = [];
 
-        $path = craft()->analytics_meta->getMetadataFilePath();
+        $path = craft()->analytics_metadata->getMetadataFilePath();
 
 
         $json = IOHelper::getFileContents($path);
