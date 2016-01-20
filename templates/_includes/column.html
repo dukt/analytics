@@ -1,9 +1,9 @@
-<pre>
+{# <pre>
     {{ dump(column.attributes) }}
 </pre>
 
-
-{# {% set attributes = column.attributes %}
+ #}
+{% set attributes = column.attributes %}
 
 <h2>{{column.id}}</h2>
 
@@ -12,4 +12,3 @@
         <li><strong>{{key}}: </strong> {{attribute}}</li>
     {% endfor %}
 </ul>
- #}

@@ -7,38 +7,49 @@
 
 namespace Craft;
 
-class Analytics_MetaController extends BaseController
+class Analytics_MetadataController extends BaseController
 {
-    public function actionManage(array $variables = array())
+    public function actionIndex(array $variables = array())
     {
         $variables['dimensions'] = craft()->analytics_meta->getDimensions();
         $variables['metrics'] = craft()->analytics_meta->getMetrics();
 
         $variables['metadataFileExists'] = craft()->analytics_meta->metadataFileExists();
 
-        $this->renderTemplate('analytics/meta/manage/_index', $variables);
+        $this->renderTemplate('analytics/metadata/_index', $variables);
     }
 
-    public function actionSearch(array $variables = array())
+    public function actionSearch()
     {
+        $q = craft()->request->getParam('q');
+        $columns = craft()->analytics_meta->searchColumns($q);
 
-        $variables['q'] = craft()->request->getParam('q');
-        $variables['columns'] = craft()->analytics_meta->searchColumns($variables['q']);
-
-        $this->renderTemplate('analytics/meta/search/_index', $variables);
+        // Send the source back to the template
+        craft()->urlManager->setRouteVariables(array(
+            'q' => $q,
+            'columns' => $columns,
+        ));
     }
 
-    public function actionDeleteMetadata()
+    public function actionloadMetadata()
     {
-        $path = craft()->analytics_meta->getMetadataFilePath();
+        $this->deleteMetadata();
+        $this->importMetadata();
 
-        IOHelper::deleteFile($path);
+        craft()->userSession->setNotice(Craft::t("Metadata loaded."));
 
         $referer = craft()->request->getUrlReferrer();
         $this->redirect($referer);
     }
 
-    public function actionImportMetadata()
+    private function deleteMetadata()
+    {
+        $path = craft()->analytics_meta->getMetadataFilePath();
+
+        IOHelper::deleteFile($path);
+    }
+
+    private function importMetadata()
     {
         $columns = [];
 
@@ -103,8 +114,5 @@ class Analytics_MetaController extends BaseController
         $path = craft()->analytics_meta->getMetadataFilePath();
 
         $res = IOHelper::writeToFile($path, $contents);
-
-        $referer = craft()->request->getUrlReferrer();
-        $this->redirect($referer);
     }
 }
