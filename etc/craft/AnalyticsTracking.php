@@ -203,10 +203,13 @@ class AnalyticsTracking
             $aliases = array(
                 'id' => 'ID',
                 'transactionId' => 'transactionID',
+                'nonInteractionHit' => 'asNonInteractionHit'
             );
+
 
             foreach($options as $k => $v)
             {
+
                 if(!empty($aliases[$k]))
                 {
                     $item->{'set'.ucfirst($aliases[$k])}($v);
@@ -216,6 +219,7 @@ class AnalyticsTracking
                     $item->{'set'.ucfirst($k)}($v);
                 }
             }
+
         }
 
         return $item;
