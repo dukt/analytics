@@ -41,26 +41,24 @@ class AnalyticsTracking
         {
             $accountId = $options['accountId'];
 
-            $this->tracking = new \Racecore\GATracking\GATracking($accountId);
+            $this->tracking = new \Racecore\GATracking\GATracking($accountId, array(
+                // 'client_create_random_id' => true, // create a random client id when the class can't fetch the current cliend id or none is provided by "client_id"
+                // 'client_fallback_id' => 555, // fallback client id when cid was not found and random client id is off
+                // 'client_id' => null,    // override client id
+                // 'user_id' => null,  // determine current user id
 
-            // clientId
+                // // adapter options
+                // 'adapter' => array(
+                //     'async' => true, // requests to google are async - don't wait for google server response
+                //     'ssl' => false // use ssl connection to google server
+                // )
 
-            if(!empty($options['clientId']))
-            {
-                $clientId = $options['clientId'];
-                $this->tracking->setClientID($clientId);
-                unset($options['clientId']);
-            }
-
-
-            // userId
-
-            if(!empty($options['userId']))
-            {
-                $userId = $options['userId'];
-                $this->tracking->setUserID($userId);
-                unset($options['userId']);
-            }
+                // // use proxy
+                // 'proxy' => array(
+                //    'ip' => '127.0.0.1', // override the proxy ip with this one
+                //    'user_agent' => 'override agent' // override the proxy user agent
+                // )
+            ));
         }
         else
         {
