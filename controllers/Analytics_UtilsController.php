@@ -7,19 +7,19 @@
 
 namespace Craft;
 
-class Analytics_MetadataController extends BaseController
+class Analytics_UtilsController extends BaseController
 {
-    public function actionIndex(array $variables = array())
+    public function actionMetadata(array $variables = array())
     {
         $variables['dimensions'] = craft()->analytics_metadata->getDimensions();
         $variables['metrics'] = craft()->analytics_metadata->getMetrics();
 
         $variables['metadataFileExists'] = craft()->analytics_metadata->metadataFileExists();
 
-        $this->renderTemplate('analytics/metadata/_index', $variables);
+        $this->renderTemplate('analytics/utils/metadata/_index', $variables);
     }
 
-    public function actionSearch()
+    public function actionSearchMetadata()
     {
         $q = craft()->request->getParam('q');
         $columns = craft()->analytics_metadata->searchColumns($q);
