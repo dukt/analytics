@@ -14,7 +14,7 @@
 
     .spinner { position: absolute; top: 50%; left: 50%; margin-left: -14px; margin-top: -14px; }
 
-    .graph { min-height: 150px;  }
+    .graph { min-height: 150px; overflow: hidden;  }
 
     .graph.area { margin: 0 -24px -24px -24px; }
 
