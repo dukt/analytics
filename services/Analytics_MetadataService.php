@@ -18,7 +18,7 @@ class Analytics_MetadataService extends BaseApplicationComponent
 
     public function metadataFileExists()
     {
-        $path = craft()->analytics_metadata->getMetadataFilePath();
+        $path = craft()->analytics_metadata->getDimensionsMetricsFilePath();
 
         if(IOHelper::fileExists($path, false))
         {
@@ -316,10 +316,11 @@ class Analytics_MetadataService extends BaseApplicationComponent
         return $this->metrics;
     }
 
-    public function getMetadataFilePath()
+    public function getDimensionsMetricsFilePath()
     {
-        return CRAFT_PLUGINS_PATH.'analytics/etc/metadata/ga/columns.json';
+        return CRAFT_PLUGINS_PATH.'analytics/etc/data/dimensions-metrics.json';
     }
+
     // Private Methods
     // =========================================================================
 
@@ -327,7 +328,7 @@ class Analytics_MetadataService extends BaseApplicationComponent
     {
         $cols = [];
 
-        $path = craft()->analytics_metadata->getMetadataFilePath();
+        $path = craft()->analytics_metadata->getDimensionsMetricsFilePath();
 
 
         $json = IOHelper::getFileContents($path);

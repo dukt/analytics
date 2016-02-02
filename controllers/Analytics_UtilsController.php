@@ -44,7 +44,7 @@ class Analytics_UtilsController extends BaseController
 
     private function deleteMetadata()
     {
-        $path = craft()->analytics_metadata->getMetadataFilePath();
+        $path = craft()->analytics_metadata->getDimensionsMetricsFilePath();
 
         IOHelper::deleteFile($path);
     }
@@ -111,7 +111,7 @@ class Analytics_UtilsController extends BaseController
 
         $contents = json_encode($columns);
 
-        $path = craft()->analytics_metadata->getMetadataFilePath();
+        $path = craft()->analytics_metadata->getDimensionsMetricsFilePath();
 
         $res = IOHelper::writeToFile($path, $contents);
     }
