@@ -8,7 +8,7 @@
 
     <h2>{{ "Status"|t }}</h2>
 
-    {% if metadataFileExists %}
+    {% if dimmetsFileExists %}
         <ul>
             <li>{{ "{count}  dimensions loaded."|t({ count: dimensions|length })}}</li>
             <li>{{ "{count}  metrics loaded."|t({ count: metrics|length })}}</li>

@@ -14,7 +14,7 @@ class Analytics_UtilsController extends BaseController
         $variables['dimensions'] = craft()->analytics_metadata->getDimensions();
         $variables['metrics'] = craft()->analytics_metadata->getMetrics();
 
-        $variables['metadataFileExists'] = craft()->analytics_metadata->metadataFileExists();
+        $variables['dimmetsFileExists'] = craft()->analytics_metadata->dimmetsFileExists();
 
         $this->renderTemplate('analytics/utils/metadata/_index', $variables);
     }
@@ -44,7 +44,7 @@ class Analytics_UtilsController extends BaseController
 
     private function deleteMetadata()
     {
-        $path = craft()->analytics_metadata->getDimensionsMetricsFilePath();
+        $path = craft()->analytics_metadata->getDimmetsFilePath();
 
         IOHelper::deleteFile($path);
     }
@@ -111,7 +111,7 @@ class Analytics_UtilsController extends BaseController
 
         $contents = json_encode($columns);
 
-        $path = craft()->analytics_metadata->getDimensionsMetricsFilePath();
+        $path = craft()->analytics_metadata->getDimmetsFilePath();
 
         $res = IOHelper::writeToFile($path, $contents);
     }

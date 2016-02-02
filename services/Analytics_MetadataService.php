@@ -16,9 +16,9 @@ class Analytics_MetadataService extends BaseApplicationComponent
     private $selectDimensionOptions;
     private $selectMetricOptions;
 
-    public function metadataFileExists()
+    public function dimmetsFileExists()
     {
-        $path = craft()->analytics_metadata->getDimensionsMetricsFilePath();
+        $path = craft()->analytics_metadata->getDimmetsFilePath();
 
         if(IOHelper::fileExists($path, false))
         {
@@ -316,7 +316,7 @@ class Analytics_MetadataService extends BaseApplicationComponent
         return $this->metrics;
     }
 
-    public function getDimensionsMetricsFilePath()
+    public function getDimmetsFilePath()
     {
         return CRAFT_PLUGINS_PATH.'analytics/etc/data/dimensions-metrics.json';
     }
@@ -328,7 +328,7 @@ class Analytics_MetadataService extends BaseApplicationComponent
     {
         $cols = [];
 
-        $path = craft()->analytics_metadata->getDimensionsMetricsFilePath();
+        $path = craft()->analytics_metadata->getDimmetsFilePath();
 
 
         $json = IOHelper::getFileContents($path);
