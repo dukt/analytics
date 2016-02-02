@@ -10,7 +10,7 @@ namespace Craft;
 use \Google_Client;
 use \Google_Service_Analytics;
 
-class Analytics_GoogleAnalyticsDataSourceService extends BaseApplicationComponent
+class Analytics_ChartDataService extends BaseApplicationComponent
 {
     public function getChartData($options)
     {
