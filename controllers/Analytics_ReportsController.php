@@ -100,7 +100,7 @@ class Analytics_ReportsController extends BaseController
 
             if(!$response)
             {
-                $response = craft()->analytics_chartData->getChartData($request);
+                $response = craft()->analytics_reports->getChartReport($request);
 
                 if($response)
                 {
