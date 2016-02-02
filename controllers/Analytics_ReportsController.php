@@ -19,56 +19,64 @@ class Analytics_ReportsController extends BaseController
      */
     public function actionGetRealtimeReport()
     {
+        $newVisitor = 0;
+        $returningVisitor = 0;
+        $total = 0;
+
         if(!craft()->config->get('demoMode', 'analytics'))
         {
             try
             {
-                $data = array(
-                    'newVisitor' => 0,
-                    'returningVisitor' => 0
-                );
-
                 $criteria = new Analytics_RequestCriteriaModel;
                 $criteria->realtime = true;
                 $criteria->metrics = 'ga:activeVisitors';
                 $criteria->optParams = array('dimensions' => 'ga:visitorType');
 
-                $results = craft()->analytics->sendRequest($criteria);
+                $response = craft()->analytics->sendRequest($criteria);
 
-                if(!empty($results['totalResults']))
+
+                // total
+
+                if(!empty($response['totalResults']))
                 {
-                    $data['total'] = $results['totalResults'];
+                    $total = $response['totalResults'];
                 }
 
-                if(!empty($results['rows'][0][1]['v']))
-                {
-                    switch($results['rows'][0][0]['v'])
-                    {
-                        case "RETURNING":
-                        $data['returningVisitor'] = $results['rows'][0][1]['v'];
-                        break;
 
-                        case "NEW":
-                        $data['newVisitor'] = $results['rows'][0][1]['v'];
-                        break;
+                // new & returning visitors
+
+                if(!empty($response['rows']))
+                {
+                    $rows = $response['rows'];
+
+                    if(!empty($rows[0][1]['v']))
+                    {
+                        switch($rows[0][0]['v'])
+                        {
+                            case "RETURNING":
+                            $returningVisitor = $rows[0][1]['v'];
+                            break;
+
+                            case "NEW":
+                            $newVisitor = $rows[0][1]['v'];
+                            break;
+                        }
+                    }
+
+                    if(!empty($rows[1][1]['v']))
+                    {
+                        switch($rows[1][0]['v'])
+                        {
+                            case "RETURNING":
+                            $returningVisitor = $rows[1][1]['v'];
+                            break;
+
+                            case "NEW":
+                            $newVisitor = $rows[1][1]['v'];
+                            break;
+                        }
                     }
                 }
-
-                if(!empty($results['rows'][1][1]['v']))
-                {
-                    switch($results['rows'][1][0]['v'])
-                    {
-                        case "RETURNING":
-                        $data['returningVisitor'] = $results['rows'][1][1]['v'];
-                        break;
-
-                        case "NEW":
-                        $data['newVisitor'] = $results['rows'][1][1]['v'];
-                        break;
-                    }
-                }
-
-                $this->returnJson($data);
             }
             catch(\Exception $e)
             {
@@ -77,13 +85,16 @@ class Analytics_ReportsController extends BaseController
         }
         else
         {
-            $data = [
-                'newVisitor' => 5,
-                'returningVisitor' => 7
-            ];
-
-            $this->returnJson($data);
+            $newVisitor = 5;
+            $returningVisitor = 7;
+            $total = ($newVisitor + $returningVisitor);
         }
+
+        $this->returnJson(array(
+            'total' => $total,
+            'newVisitor' => $newVisitor,
+            'returningVisitor' => $returningVisitor
+        ));
     }
 
     public function actionGetChartReport()
