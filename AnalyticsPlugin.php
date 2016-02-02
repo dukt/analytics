@@ -95,7 +95,8 @@ class AnalyticsPlugin extends BasePlugin
         return array(
             'analytics/settings' => array('action' => "analytics/settings"),
             'analytics/install' => array('action' => "analytics/install"),
-            'analytics/meta' => array('action' => "analytics/meta/index"),
+            'analytics/utils' => array('action' => "analytics/utils/metadata"),
+            'analytics/utils/metadata' => array('action' => "analytics/utils/metadata"),
         );
     }
 

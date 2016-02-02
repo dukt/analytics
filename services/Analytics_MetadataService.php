@@ -7,11 +7,28 @@
 
 namespace Craft;
 
-class Analytics_MetaService extends BaseApplicationComponent
+class Analytics_MetadataService extends BaseApplicationComponent
 {
+    private $groups;
+    private $dimensions;
+    private $metrics;
     private $columns;
     private $selectDimensionOptions;
     private $selectMetricOptions;
+
+    public function metadataFileExists()
+    {
+        $path = craft()->analytics_metadata->getMetadataFilePath();
+
+        if(IOHelper::fileExists($path, false))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
     /**
      * Get Continent Code
@@ -109,22 +126,39 @@ class Analytics_MetaService extends BaseApplicationComponent
 
     public function getDimensions()
     {
-        return $this->getColumns('DIMENSION');
+        if(!$this->dimensions)
+        {
+            $this->dimensions = $this->getColumns('DIMENSION');
+        }
+
+        return $this->dimensions;
     }
 
     public function getGroups($type = null)
     {
-        $groups = [];
-
-        foreach($this->getColumns() as $column)
+        if($type && isset($this->groups[$type]))
         {
-            if(!$type || ($type && $column->type == $type))
-            {
-                $groups[$column->group] = $column->group;
-            }
+            return $this->groups[$type];
         }
+        else
+        {
+            $groups = [];
 
-        return $groups;
+            foreach($this->getColumns() as $column)
+            {
+                if(!$type || ($type && $column->type == $type))
+                {
+                    $groups[$column->group] = $column->group;
+                }
+            }
+
+            if($type)
+            {
+                $this->groups[$type] = $groups;
+            }
+
+            return $groups;
+        }
     }
 
     public function getSelectDimensionOptions($filters = null)
@@ -274,86 +308,41 @@ class Analytics_MetaService extends BaseApplicationComponent
 
     public function getMetrics()
     {
-        return $this->getColumns('METRIC');
+        if(!$this->metrics)
+        {
+            $this->metrics = $this->getColumns('METRIC');
+        }
+
+        return $this->metrics;
     }
 
+    public function getMetadataFilePath()
+    {
+        return CRAFT_PLUGINS_PATH.'analytics/etc/metadata/ga/columns.json';
+    }
     // Private Methods
     // =========================================================================
 
     private function loadColumns()
     {
-        $columns = [];
+        $cols = [];
 
-        $cacheId = ['Analytics_MetaService.loadColumns.columns'];
-        $items = craft()->analytics_cache->get($cacheId);
+        $path = craft()->analytics_metadata->getMetadataFilePath();
 
-        if(!$items)
+
+        $json = IOHelper::getFileContents($path);
+        $columnsResponse = JsonHelper::decode($json);
+
+        if($columnsResponse)
         {
-            $metadataColumns = craft()->analytics_api->getMetadataColumns();
-
-            if($metadataColumns)
+            foreach($columnsResponse as $columnResponse)
             {
-                $items = $metadataColumns->listMetadataColumns('ga');
-
-                if($items)
-                {
-                    craft()->analytics_cache->set($cacheId, $items);
-                }
+                $cols[$columnResponse['id']] = new Analytics_ColumnModel($columnResponse);
             }
         }
 
-        if($items)
-        {
-            foreach($items as $item)
-            {
-                if($item->attributes['status'] == 'DEPRECATED')
-                {
-                    continue;
-                }
-
-                if(isset($item->attributes['minTemplateIndex']))
-                {
-                    for($i = $item->attributes['minTemplateIndex']; $i <= $item->attributes['maxTemplateIndex']; $i++)
-                    {
-                        $column = new Analytics_ColumnModel;
-                        $column->id = str_replace('XX', $i, $item->id);
-                        $column->type = $item->attributes['type'];
-                        $column->group = $item->attributes['group'];
-                        $column->status = $item->attributes['status'];
-                        $column->uiName = str_replace('XX', $i, $item->attributes['uiName']);
-                        $column->description = str_replace('XX', $i, $item->attributes['description']);
-
-                        if(isset($item->attributes['allowInSegments']))
-                        {
-                            $column->allowInSegments = $item->attributes['allowInSegments'];
-                        }
-
-                        $columns[$column->id] = $column;
-                    }
-                }
-                else
-                {
-                    $column = new Analytics_ColumnModel;
-                    $column->id = $item->id;
-                    $column->type = $item->attributes['type'];
-                    $column->group = $item->attributes['group'];
-                    $column->status = $item->attributes['status'];
-                    $column->uiName = $item->attributes['uiName'];
-                    $column->description = $item->attributes['description'];
-
-                    if(isset($item->attributes['allowInSegments']))
-                    {
-                        $column->allowInSegments = $item->attributes['allowInSegments'];
-                    }
-
-                    $columns[$column->id] = $column;
-                }
-            }
-        }
-
-        return $columns;
+        return $cols;
     }
-
 
     /**
      * Get Data

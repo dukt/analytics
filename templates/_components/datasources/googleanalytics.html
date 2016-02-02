@@ -5,6 +5,7 @@
     {{ forms.selectField({
         label: "Metric"|t,
         name: 'options[area][metric]',
+        class: 'selectize',
         options: selectOptions.area.metrics,
         value: (settings.options.area.metric is defined ? settings.options.area.metric : null),
     }) }}
@@ -16,6 +17,7 @@
     {{ forms.selectField({
         label: "Metric"|t,
         name: 'options[counter][metric]',
+        class: 'selectize',
         options: selectOptions.counter.metrics,
         value: (settings.options.counter.metric is defined ? settings.options.counter.metric : null),
     }) }}
@@ -27,6 +29,7 @@
     {{ forms.selectField({
         label: "Dimension"|t,
         name: 'options[pie][dimension]',
+        class: 'selectize',
         options: selectOptions.pie.dimensions,
         value: (settings.options.pie.dimension is defined ? settings.options.pie.dimension : null),
     }) }}
@@ -34,6 +37,7 @@
     {{ forms.selectField({
         label: "Metric"|t,
         name: 'options[pie][metric]',
+        class: 'selectize',
         options: selectOptions.pie.metrics,
         value: (settings.options.pie.metric is defined ? settings.options.pie.metric : null),
     }) }}
@@ -44,6 +48,7 @@
     {{ forms.selectField({
         label: "Dimension"|t,
         name: 'options[table][dimension]',
+        class: 'selectize',
         options: selectOptions.table.dimensions,
         value: (settings.options.table.dimension is defined ? settings.options.table.dimension : null),
     }) }}
@@ -51,6 +56,7 @@
     {{ forms.selectField({
         label: "Metric"|t,
         name: 'options[table][metric]',
+        class: 'selectize',
         options: selectOptions.table.metrics,
         value: (settings.options.table.metric is defined ? settings.options.table.metric : null),
     }) }}
@@ -61,6 +67,7 @@
     {{ forms.selectField({
         label: "Dimension"|t,
         name: 'options[geo][dimension]',
+        class: 'selectize',
         options: selectOptions.geo.dimensions,
         value: (settings.options.geo.dimension is defined ? settings.options.geo.dimension : null),
     }) }}
@@ -68,6 +75,7 @@
     {{ forms.selectField({
         label: "Metric"|t,
         name: 'options[geo][metric]',
+        class: 'selectize',
         options: selectOptions.geo.metrics,
         value: (settings.options.geo.metric is defined ? settings.options.geo.metric : null),
     }) }}

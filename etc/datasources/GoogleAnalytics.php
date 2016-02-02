@@ -38,8 +38,8 @@ class GoogleAnalytics extends BaseDataSource
             case 'geo':
 
                 $options = [
-                    'dimensions' => Craft::app()->analytics_meta->getSelectDimensionOptions(['ga:city', 'ga:country', 'ga:continent', 'ga:subContinent']),
-                    'metrics' => Craft::app()->analytics_meta->getSelectMetricOptions()
+                    'dimensions' => Craft::app()->analytics_metadata->getSelectDimensionOptions(['ga:city', 'ga:country', 'ga:continent', 'ga:subContinent']),
+                    'metrics' => Craft::app()->analytics_metadata->getSelectMetricOptions()
                 ];
 
                 break;
@@ -47,8 +47,8 @@ class GoogleAnalytics extends BaseDataSource
             default:
 
                 $options = [
-                    'dimensions' => Craft::app()->analytics_meta->getSelectDimensionOptions(),
-                    'metrics' => Craft::app()->analytics_meta->getSelectMetricOptions()
+                    'dimensions' => Craft::app()->analytics_metadata->getSelectDimensionOptions(),
+                    'metrics' => Craft::app()->analytics_metadata->getSelectMetricOptions()
                 ];
         }
 
@@ -126,7 +126,7 @@ class GoogleAnalytics extends BaseDataSource
             'type' => 'area',
             'chart' => $chartResponse,
             'total' => $total,
-            'metric' => Craft::t(Craft::app()->analytics_meta->getDimMet($metric)),
+            'metric' => Craft::t(Craft::app()->analytics_metadata->getDimMet($metric)),
             'period' => $period,
             'periodLabel' => Craft::t('This '.$period)
         ];
@@ -168,7 +168,7 @@ class GoogleAnalytics extends BaseDataSource
 
         $counter = array(
             'count' => $count,
-            'label' => StringHelper::toLowerCase(Craft::t(Craft::app()->analytics_meta->getDimMet($metric)))
+            'label' => StringHelper::toLowerCase(Craft::t(Craft::app()->analytics_metadata->getDimMet($metric)))
         );
 
 
@@ -178,7 +178,7 @@ class GoogleAnalytics extends BaseDataSource
             'type' => 'counter',
             'counter' => $counter,
             'response' => $response,
-            'metric' => Craft::t(Craft::app()->analytics_meta->getDimMet($metric)),
+            'metric' => Craft::t(Craft::app()->analytics_metadata->getDimMet($metric)),
             'period' => $period,
             'periodLabel' => Craft::t('this '.$period)
         ];
@@ -210,8 +210,8 @@ class GoogleAnalytics extends BaseDataSource
         return [
             'type' => 'pie',
             'chart' => $tableResponse,
-            'dimension' => Craft::t(Craft::app()->analytics_meta->getDimMet($dimension)),
-            'metric' => Craft::t(Craft::app()->analytics_meta->getDimMet($metric)),
+            'dimension' => Craft::t(Craft::app()->analytics_metadata->getDimMet($dimension)),
+            'metric' => Craft::t(Craft::app()->analytics_metadata->getDimMet($metric)),
             'period' => $period,
             'periodLabel' => Craft::t('this '.$period)
         ];
@@ -243,8 +243,8 @@ class GoogleAnalytics extends BaseDataSource
         return [
             'type' => 'table',
             'chart' => $tableResponse,
-            'dimension' => Craft::t(Craft::app()->analytics_meta->getDimMet($dimension)),
-            'metric' => Craft::t(Craft::app()->analytics_meta->getDimMet($metric)),
+            'dimension' => Craft::t(Craft::app()->analytics_metadata->getDimMet($dimension)),
+            'metric' => Craft::t(Craft::app()->analytics_metadata->getDimMet($metric)),
             'period' => $period,
             'periodLabel' => Craft::t('this '.$period)
         ];
@@ -285,8 +285,8 @@ class GoogleAnalytics extends BaseDataSource
             'type' => 'geo',
             'chart' => $tableResponse,
             'dimensionRaw' => $originDimension,
-            'dimension' => Craft::t(Craft::app()->analytics_meta->getDimMet($originDimension)),
-            'metric' => Craft::t(Craft::app()->analytics_meta->getDimMet($metric)),
+            'dimension' => Craft::t(Craft::app()->analytics_metadata->getDimMet($originDimension)),
+            'metric' => Craft::t(Craft::app()->analytics_metadata->getDimMet($metric)),
             'period' => $period,
             'periodLabel' => Craft::t('this '.$period)
         ];

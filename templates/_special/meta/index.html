@@ -15,7 +15,7 @@
 
         {{ getCsrfInput() }}
 
-        <input type="hidden" name="action" value="analytics/meta/search">
+        <input type="hidden" name="action" value="analytics/utils/searchMetadata">
 
         {{ forms.textField({
             first: true,
@@ -32,7 +32,7 @@
         <hr>
 
         {% for column in columns %}
-            {% include 'analytics/meta/_column' %}
+            {% include 'analytics/utils/metadata/_column' %}
         {% endfor %}
     {% endif %}
 

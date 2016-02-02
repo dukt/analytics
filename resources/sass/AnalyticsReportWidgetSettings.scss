@@ -13,6 +13,25 @@
 .chart-picker ul.chart-types li[data-chart-type="geo"] { background-image: url(../images/charttypes/geo-black.png); }
 
 
+.selectize {
+    display: block;
+    width: 100%;
+    line-height: 0;
+}
+
+.selectize > .selectize-control {
+    width: 100%;
+}
+.selectize > .selectize-control > .selectize-input {
+    padding: 7px 22px 7px 10px;
+}
+
+.selectize > .selectize-control > .selectize-input.focus {
+    -webkit-box-shadow: 0 0 2px hsl(205, 100%, 60%), inset 0 0 0 1px hsla(205, 100%, 60%, 0.5);
+    -moz-box-shadow: 0 0 2px hsl(205, 100%, 60%), inset 0 0 0 1px hsla(205, 100%, 60%, 0.5);
+    box-shadow: 0 0 2px hsl(205, 100%, 60%), inset 0 0 0 1px hsla(205, 100%, 60%, 0.5);
+}
+
 @media (-webkit-min-device-pixel-ratio: 2) {
 
     .chart-picker ul.chart-types li[data-chart-type="area"] { background-image: url(../images/charttypes/area-black@2x.png); }
