@@ -176,10 +176,9 @@ class Analytics_ReportWidget extends BaseWidget
 
         $settings = $this->getSettings();
 
-        try {
-            $dataSource = craft()->analytics->getDataSource();
-
-            $inject = $dataSource->getSettingsHtml([
+        try
+        {
+            $inject = craft()->analytics_googleAnalyticsDataSource->getSettingsHtml([
                 'settings' => $settings
             ]);
         }

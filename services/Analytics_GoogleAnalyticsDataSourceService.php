@@ -1,12 +1,16 @@
 <?php
+/**
+ * @link      https://dukt.net/craft/analytics/
+ * @copyright Copyright (c) 2016, Dukt
+ * @license   https://dukt.net/craft/analytics/docs/license
+ */
 
-namespace Dukt\Analytics\DataSources;
+namespace Craft;
 
-use Craft\Craft;
-use Craft\Analytics_RequestCriteriaModel;
-use Craft\StringHelper;
+use \Google_Client;
+use \Google_Service_Analytics;
 
-class GoogleAnalytics extends BaseDataSource
+class Analytics_GoogleAnalyticsDataSourceService extends BaseApplicationComponent
 {
     public function getSettingsHtml($variables = [])
     {
@@ -21,7 +25,7 @@ class GoogleAnalytics extends BaseDataSource
 
         $variables['selectOptions'] = $selectOptions;
 
-        return Craft::app()->templates->render('analytics/_components/datasources/googleanalytics', $variables);
+        return craft()->templates->render('analytics/_components/datasources/googleanalytics', $variables);
     }
 
     public function getChartData($options)
@@ -38,8 +42,8 @@ class GoogleAnalytics extends BaseDataSource
             case 'geo':
 
                 $options = [
-                    'dimensions' => Craft::app()->analytics_metadata->getSelectDimensionOptions(['ga:city', 'ga:country', 'ga:continent', 'ga:subContinent']),
-                    'metrics' => Craft::app()->analytics_metadata->getSelectMetricOptions()
+                    'dimensions' => craft()->analytics_metadata->getSelectDimensionOptions(['ga:city', 'ga:country', 'ga:continent', 'ga:subContinent']),
+                    'metrics' => craft()->analytics_metadata->getSelectMetricOptions()
                 ];
 
                 break;
@@ -47,8 +51,8 @@ class GoogleAnalytics extends BaseDataSource
             default:
 
                 $options = [
-                    'dimensions' => Craft::app()->analytics_metadata->getSelectDimensionOptions(),
-                    'metrics' => Craft::app()->analytics_metadata->getSelectMetricOptions()
+                    'dimensions' => craft()->analytics_metadata->getSelectDimensionOptions(),
+                    'metrics' => craft()->analytics_metadata->getSelectMetricOptions()
                 ];
         }
 
@@ -95,7 +99,7 @@ class GoogleAnalytics extends BaseDataSource
 
         $criteria->optParams = $optParams;
 
-        $chartResponse = Craft::app()->analytics->sendRequest($criteria);
+        $chartResponse = craft()->analytics->sendRequest($criteria);
 
 
         // Total
@@ -112,7 +116,7 @@ class GoogleAnalytics extends BaseDataSource
             $totalCriteria->optParams = array('filters' => $criteria->optParams['filters']);
         }
 
-        $response = Craft::app()->analytics->sendRequest($totalCriteria);
+        $response = craft()->analytics->sendRequest($totalCriteria);
 
         if(!empty($response['rows'][0][0]['f']))
         {
@@ -126,7 +130,7 @@ class GoogleAnalytics extends BaseDataSource
             'type' => 'area',
             'chart' => $chartResponse,
             'total' => $total,
-            'metric' => Craft::t(Craft::app()->analytics_metadata->getDimMet($metric)),
+            'metric' => Craft::t(craft()->analytics_metadata->getDimMet($metric)),
             'period' => $period,
             'periodLabel' => Craft::t('This '.$period)
         ];
@@ -155,7 +159,7 @@ class GoogleAnalytics extends BaseDataSource
             $criteria->optParams = $optParams;
         }
 
-        $response = Craft::app()->analytics->sendRequest($criteria);
+        $response = craft()->analytics->sendRequest($criteria);
 
         if(!empty($response['rows'][0][0]['f']))
         {
@@ -168,7 +172,7 @@ class GoogleAnalytics extends BaseDataSource
 
         $counter = array(
             'count' => $count,
-            'label' => StringHelper::toLowerCase(Craft::t(Craft::app()->analytics_metadata->getDimMet($metric)))
+            'label' => StringHelper::toLowerCase(Craft::t(craft()->analytics_metadata->getDimMet($metric)))
         );
 
 
@@ -178,7 +182,7 @@ class GoogleAnalytics extends BaseDataSource
             'type' => 'counter',
             'counter' => $counter,
             'response' => $response,
-            'metric' => Craft::t(Craft::app()->analytics_metadata->getDimMet($metric)),
+            'metric' => Craft::t(craft()->analytics_metadata->getDimMet($metric)),
             'period' => $period,
             'periodLabel' => Craft::t('this '.$period)
         ];
@@ -205,13 +209,13 @@ class GoogleAnalytics extends BaseDataSource
             'filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)'
         );
 
-        $tableResponse = Craft::app()->analytics->sendRequest($criteria);
+        $tableResponse = craft()->analytics->sendRequest($criteria);
 
         return [
             'type' => 'pie',
             'chart' => $tableResponse,
-            'dimension' => Craft::t(Craft::app()->analytics_metadata->getDimMet($dimension)),
-            'metric' => Craft::t(Craft::app()->analytics_metadata->getDimMet($metric)),
+            'dimension' => Craft::t(craft()->analytics_metadata->getDimMet($dimension)),
+            'metric' => Craft::t(craft()->analytics_metadata->getDimMet($metric)),
             'period' => $period,
             'periodLabel' => Craft::t('this '.$period)
         ];
@@ -238,13 +242,13 @@ class GoogleAnalytics extends BaseDataSource
             'filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)'
         );
 
-        $tableResponse = Craft::app()->analytics->sendRequest($criteria);
+        $tableResponse = craft()->analytics->sendRequest($criteria);
 
         return [
             'type' => 'table',
             'chart' => $tableResponse,
-            'dimension' => Craft::t(Craft::app()->analytics_metadata->getDimMet($dimension)),
-            'metric' => Craft::t(Craft::app()->analytics_metadata->getDimMet($metric)),
+            'dimension' => Craft::t(craft()->analytics_metadata->getDimMet($dimension)),
+            'metric' => Craft::t(craft()->analytics_metadata->getDimMet($metric)),
             'period' => $period,
             'periodLabel' => Craft::t('this '.$period)
         ];
@@ -279,16 +283,17 @@ class GoogleAnalytics extends BaseDataSource
             'filters' => $originDimension.'!=(not set);'.$originDimension.'!=(not provided)',
         );
 
-        $tableResponse = Craft::app()->analytics->sendRequest($criteria);
+        $tableResponse = craft()->analytics->sendRequest($criteria);
 
         return [
             'type' => 'geo',
             'chart' => $tableResponse,
             'dimensionRaw' => $originDimension,
-            'dimension' => Craft::t(Craft::app()->analytics_metadata->getDimMet($originDimension)),
-            'metric' => Craft::t(Craft::app()->analytics_metadata->getDimMet($metric)),
+            'dimension' => Craft::t(craft()->analytics_metadata->getDimMet($originDimension)),
+            'metric' => Craft::t(craft()->analytics_metadata->getDimMet($metric)),
             'period' => $period,
             'periodLabel' => Craft::t('this '.$period)
         ];
     }
+
 }
