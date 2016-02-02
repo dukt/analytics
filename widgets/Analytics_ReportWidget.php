@@ -176,24 +176,46 @@ class Analytics_ReportWidget extends BaseWidget
 
         $settings = $this->getSettings();
 
-        try
-        {
-            $inject = craft()->analytics_googleAnalyticsDataSource->getSettingsHtml([
-                'settings' => $settings
-            ]);
-        }
-        catch(\Exception $e)
-        {
-            // todo: exception handling
+        // select options
 
-            $inject = null;
+        $chartTypes = ['area', 'counter', 'pie', 'table', 'geo'];
+
+        $selectOptions = [];
+
+        foreach($chartTypes as $chartType)
+        {
+            $selectOptions[$chartType] = $this->_getOptions($chartType);
         }
 
         return craft()->templates->render('analytics/_components/widgets/Report/settings', array(
            'id' => $id,
            'settings' => $settings,
-           'inject' => $inject,
+           'selectOptions' => $selectOptions,
         ));
+    }
+
+    private function _getOptions($chart)
+    {
+        switch($chart)
+        {
+            case 'geo':
+
+                $options = [
+                    'dimensions' => craft()->analytics_metadata->getSelectDimensionOptions(['ga:city', 'ga:country', 'ga:continent', 'ga:subContinent']),
+                    'metrics' => craft()->analytics_metadata->getSelectMetricOptions()
+                ];
+
+                break;
+
+            default:
+
+                $options = [
+                    'dimensions' => craft()->analytics_metadata->getSelectDimensionOptions(),
+                    'metrics' => craft()->analytics_metadata->getSelectMetricOptions()
+                ];
+        }
+
+        return $options;
     }
 
     // Protected Methods

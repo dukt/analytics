@@ -12,51 +12,11 @@ use \Google_Service_Analytics;
 
 class Analytics_GoogleAnalyticsDataSourceService extends BaseApplicationComponent
 {
-    public function getSettingsHtml($variables = [])
-    {
-        $chartTypes = ['area', 'counter', 'pie', 'table', 'geo'];
-
-        $selectOptions = [];
-
-        foreach($chartTypes as $chartType)
-        {
-            $selectOptions[$chartType] = $this->getOptions($chartType);
-        }
-
-        $variables['selectOptions'] = $selectOptions;
-
-        return craft()->templates->render('analytics/_components/datasources/googleanalytics', $variables);
-    }
-
     public function getChartData($options)
     {
         $chart = $options['chart'];
 
         return $this->{$chart}($options);
-    }
-
-    private function getOptions($chart)
-    {
-        switch($chart)
-        {
-            case 'geo':
-
-                $options = [
-                    'dimensions' => craft()->analytics_metadata->getSelectDimensionOptions(['ga:city', 'ga:country', 'ga:continent', 'ga:subContinent']),
-                    'metrics' => craft()->analytics_metadata->getSelectMetricOptions()
-                ];
-
-                break;
-
-            default:
-
-                $options = [
-                    'dimensions' => craft()->analytics_metadata->getSelectDimensionOptions(),
-                    'metrics' => craft()->analytics_metadata->getSelectMetricOptions()
-                ];
-        }
-
-        return $options;
     }
 
     public function area($requestData)

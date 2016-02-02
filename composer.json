@@ -5,8 +5,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Craft\\": "etc/craft/",
-            "Dukt\\Analytics\\DataSources\\": "etc/datasources/"
+            "Craft\\": "etc/craft/"
         }
     },
     "scripts": {

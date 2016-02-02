@@ -6,6 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Dukt\\Analytics\\DataSources\\' => array($baseDir . '/etc/datasources'),
     'Craft\\' => array($baseDir . '/etc/craft'),
 );
