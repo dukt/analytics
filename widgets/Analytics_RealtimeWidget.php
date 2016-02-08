@@ -9,6 +9,13 @@ namespace Craft;
 
 class Analytics_RealtimeWidget extends BaseWidget
 {
+    /**
+     * Whether users should be able to select more than one of this widget type.
+     *
+     * @var bool
+     */
+    protected $multi = false;
+
     // Public Methods
     // =========================================================================
 
