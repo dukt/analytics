@@ -95,11 +95,11 @@ class Analytics_ReportWidget extends BaseWidget
                 {
                     craft()->templates->includeJsResource('analytics/js/jsapi.js', true);
                     craft()->templates->includeJsResource('analytics/js/Analytics.js');
-                    craft()->templates->includeJsResource('analytics/js/AnalyticsReportWidgetSettings.js');
-                    craft()->templates->includeJsResource('analytics/js/AnalyticsReportWidget.js');
+                    craft()->templates->includeJsResource('analytics/js/ReportWidgetSettings.js');
+                    craft()->templates->includeJsResource('analytics/js/ReportWidget.js');
 
-                    craft()->templates->includeCssResource('analytics/css/AnalyticsReportWidget.css');
-                    craft()->templates->includeCssResource('analytics/css/AnalyticsReportWidgetSettings.css');
+                    craft()->templates->includeCssResource('analytics/css/ReportWidget.css');
+                    craft()->templates->includeCssResource('analytics/css/ReportWidgetSettings.css');
 
 
                     $options = [];
@@ -166,8 +166,8 @@ class Analytics_ReportWidget extends BaseWidget
     public function getSettingsHtml()
     {
         craft()->templates->includeJsResource('analytics/js/Analytics.js');
-        craft()->templates->includeJsResource('analytics/js/AnalyticsReportWidgetSettings.js');
-        craft()->templates->includeCssResource('analytics/css/AnalyticsReportWidgetSettings.css');
+        craft()->templates->includeJsResource('analytics/js/ReportWidgetSettings.js');
+        craft()->templates->includeCssResource('analytics/css/ReportWidgetSettings.css');
 
         $id = 'analytics-settings-'.StringHelper::randomString();
         $namespaceId = craft()->templates->namespaceInputId($id);

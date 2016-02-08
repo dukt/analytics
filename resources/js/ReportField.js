@@ -1,7 +1,7 @@
 /**
  * Field
  */
- AnalyticsField = Garnish.Base.extend({
+ AnalyticsReportField = Garnish.Base.extend({
 
     init: function(fieldId, options)
     {
@@ -64,7 +64,7 @@
         else
         {
             response.chartOptions = Analytics.ChartOptions.field();
-            this.chart = new Analytics.Chart(this.$chart, response);
+            this.chart = new Analytics.charts.Area(this.$chart, response);
         }
     }
 });

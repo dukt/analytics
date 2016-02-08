@@ -95,11 +95,11 @@ class Analytics_ReportFieldType extends BaseFieldType
 
                     craft()->templates->includeJsResource('analytics/js/jsapi.js', true);
                     craft()->templates->includeJsResource('analytics/js/Analytics.js');
-                    craft()->templates->includeJsResource('analytics/js/AnalyticsField.js');
-                    craft()->templates->includeCssResource('analytics/css/AnalyticsField.css');
+                    craft()->templates->includeJsResource('analytics/js/ReportField.js');
+                    craft()->templates->includeCssResource('analytics/css/ReportField.css');
 
                     craft()->templates->includeJs('var AnalyticsChartLanguage = "'.Craft::t('analyticsChartLanguage').'";');
-                    craft()->templates->includeJs('new AnalyticsField("'.$namespacedId.'-field", '.$jsonOptions.');');
+                    craft()->templates->includeJs('new AnalyticsReportField("'.$namespacedId.'-field", '.$jsonOptions.');');
 
                     $variables = array(
                         'isNew'   => false,
