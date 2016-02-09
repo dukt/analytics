@@ -146,7 +146,7 @@ class Analytics_OauthController extends BaseController
         }
         else
         {
-            $this->renderTemplate('analytics/_special/installoauth-provider-not-configured');
+            $this->renderTemplate('analytics/_special/install/oauth-provider-not-configured');
         }
     }
 }
