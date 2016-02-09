@@ -24,7 +24,7 @@ class AnalyticsController extends BaseController
 
         if (count($pluginDependencies) > 0)
         {
-            $this->renderTemplate('analytics/_install/dependencies', ['pluginDependencies' => $pluginDependencies]);
+            $this->renderTemplate('analytics/_special/installdependencies', ['pluginDependencies' => $pluginDependencies]);
         }
         else
         {
@@ -38,7 +38,7 @@ class AnalyticsController extends BaseController
             }
             else
             {
-                $this->renderTemplate('analytics/_install/oauth-provider-not-configured');
+                $this->renderTemplate('analytics/_special/installoauth-provider-not-configured');
             }
         }
     }

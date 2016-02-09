@@ -144,7 +144,7 @@ class Analytics_ReportWidget extends BaseWidget
                 }
                 else
                 {
-                    return craft()->templates->render('analytics/_install/plugin-not-configured');
+                    return craft()->templates->render('analytics/_special/installplugin-not-configured');
                 }
             }
             else
@@ -154,7 +154,7 @@ class Analytics_ReportWidget extends BaseWidget
         }
         else
         {
-            return craft()->templates->render('analytics/_install/plugin-not-configured');
+            return craft()->templates->render('analytics/_special/installplugin-not-configured');
         }
     }
 

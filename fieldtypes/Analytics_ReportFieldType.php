@@ -139,7 +139,7 @@ class Analytics_ReportFieldType extends BaseFieldType
         }
         else
         {
-            return craft()->templates->render('analytics/_install/plugin-not-configured');
+            return craft()->templates->render('analytics/_special/installplugin-not-configured');
         }
 
     }
