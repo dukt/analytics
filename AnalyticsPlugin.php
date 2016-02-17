@@ -80,6 +80,14 @@ class AnalyticsPlugin extends BasePlugin
     }
 
     /**
+     * Get Release Feed URL
+     */
+    public function getReleaseFeedUrl()
+    {
+        return 'https://dukt.net/craft/analytics/updates.json';
+    }
+
+    /**
      * Get Settings URL
      */
     public function getSettingsUrl()
