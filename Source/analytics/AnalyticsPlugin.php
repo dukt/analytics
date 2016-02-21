@@ -22,13 +22,22 @@ class AnalyticsPlugin extends BasePlugin
         return Craft::t('Analytics');
     }
 
-    /**
-     * Get Version
-     */
-    public function getVersion()
-    {
-        return '3.2.142';
-    }
+	/**
+	 * Get Version
+	 */
+	public function getVersion()
+	{
+		$path = CRAFT_PLUGINS_PATH.'analytics/Info.php';
+
+		if(IOHelper::fileExists($path))
+		{
+			require_once($path);
+
+			return ANALYTICS_VERSION;
+		}
+
+		return '3.2.0';
+	}
 
     /**
      * Get Schema Version
