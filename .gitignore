@@ -3,3 +3,4 @@
 composer.lock
 node_modules/
 bower_components/
+/Source/analytics/vendor/
