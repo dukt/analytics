@@ -74,7 +74,8 @@ class AnalyticsService extends BaseApplicationComponent
     {
         if(!$this->tracking)
         {
-            $this->tracking = new AnalyticsTracking($options);
+	        require_once(CRAFT_PLUGINS_PATH.'analytics/etc/craft/AnalyticsTracking.php');
+	        $this->tracking = new AnalyticsTracking($options);
         }
 
         return $this->tracking;
