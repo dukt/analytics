@@ -35,13 +35,10 @@
             <ul>
                 {% if account.uid is defined %}
                     <li><strong>{{ 'UID'|t }} : </strong> {{ account.uid }}</li>
-                {% endif %}
-
-                {% if account.id is defined %}
+                {% elseif account.id is defined %}
                     <li><strong>{{ 'UID'|t }} : </strong> {{ account.id }}</li>
                 {% endif %}
-
-
+				
                 <li><strong>{{ 'Name'|t }} : </strong> {{ account.name }}</li>
             </ul>
 
