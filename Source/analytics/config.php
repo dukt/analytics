@@ -7,11 +7,11 @@ return array(
      */
     'realtimeRefreshInterval' => 15,
 
-	/**
-	 * The amount of time cache should last
-	 *
-	 * @see http://www.php.net/manual/en/dateinterval.construct.php
-	 */
+    /**
+     * The amount of time cache should last
+     *
+     * @see http://www.php.net/manual/en/dateinterval.construct.php
+     */
     'cacheDuration' => 'PT10M',
 
     /**
@@ -29,8 +29,8 @@ return array(
      */
     'enableFieldtype' => true,
 
-	/**
-	 * Defines global filters applied to every request to the Core Reporting API
-	 */
-	'filters' => [],
+    /**
+     * Defines global filters applied to every request to the Core Reporting API
+     */
+    'filters' => [],
 );
