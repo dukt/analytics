@@ -28,4 +28,9 @@ return array(
      * Whether Analytics fieldtype is enabled or not
      */
     'enableFieldtype' => true,
+
+	/**
+	 * Defines global filters applied to every request to the Core Reporting API
+	 */
+	'filters' => [],
 );

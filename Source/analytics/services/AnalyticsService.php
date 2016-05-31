@@ -90,7 +90,43 @@ class AnalyticsService extends BaseApplicationComponent
      */
     public function sendRequest(Analytics_RequestCriteriaModel $criteria)
     {
+        // Profile ID
+
         $criteria->ids = craft()->analytics->getProfileId();
+
+
+        // Filters
+
+        $filters = [];
+
+        if(isset($criteria->optParams['filters']))
+        {
+            $filters = $criteria->optParams['filters'];
+
+            if(is_string($filters))
+            {
+                $filters = explode(";", $filters);
+            }
+        }
+
+        $configFilters = craft()->config->get('filters', 'analytics');
+
+        if($configFilters)
+        {
+            $filters = array_merge($filters, $configFilters);
+        }
+
+        if(count($filters) > 0)
+        {
+            $optParams = $criteria->optParams;
+
+            $optParams['filters'] = implode(";", $filters);
+
+            $criteria->optParams = $optParams;
+        }
+
+
+        // Perform request
 
         if($criteria->realtime)
         {
@@ -111,6 +147,9 @@ class AnalyticsService extends BaseApplicationComponent
                 $criteria->enableCache
             );
         }
+
+
+        // Response
 
         if($criteria->format == 'gaData')
         {

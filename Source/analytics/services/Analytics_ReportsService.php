@@ -47,21 +47,19 @@ class Analytics_ReportsService extends BaseApplicationComponent
         $criteria->endDate = $end;
         $criteria->metrics = $metric;
 
-        $optParams = array(
+        $criteria->optParams = array(
             'dimensions' => $chartDimension,
             'sort' => $chartDimension
         );
 
         if($dimension)
         {
-            $optParams['filters'] = $dimension.'!=(not set);'.$dimension.'!=(not provided)';
+            $criteria->optParams['filters'] = $dimension.'!=(not set);'.$dimension.'!=(not provided)';
         }
-
-        $criteria->optParams = $optParams;
 
         $chartResponse = craft()->analytics->sendRequest($criteria);
 
-
+        
         // Total
 
         $total = 0;
