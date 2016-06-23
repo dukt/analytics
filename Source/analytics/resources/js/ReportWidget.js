@@ -5,8 +5,6 @@ Analytics.ReportWidget = Garnish.Base.extend(
 {
     requestData: null,
 
-    $grid: null,
-
     init: function(element, options)
     {
         this.$element = $('#'+element);
@@ -16,10 +14,6 @@ Analytics.ReportWidget = Garnish.Base.extend(
         this.$spinner = $('.spinner', this.$element);
         this.$spinner.removeClass('body-loading');
         this.$error = $('.error', this.$element);
-
-        Garnish.$doc.ready($.proxy(function() {
-            this.$grid = $('#main > .grid');
-        }, this));
 
 
         // default/cached request
@@ -74,6 +68,8 @@ Analytics.ReportWidget = Garnish.Base.extend(
                 this.$error.html(msg);
                 this.$error.removeClass('hidden');
             }
+
+            window.dashboard.grid.refreshCols(true);
 
         }, this));
     },

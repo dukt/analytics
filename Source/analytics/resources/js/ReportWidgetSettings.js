@@ -29,6 +29,9 @@ Analytics.ReportWidgetSettings = Garnish.Base.extend({
             }, this));
 
             this.$chartTypes.filter('[data-chart-type='+this.$chartSelect.val()+']').trigger('click');
+
+            window.dashboard.grid.refreshCols(true);
+
         }, this), 1);
     }
 });
