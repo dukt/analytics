@@ -1,0 +1,102 @@
+[
+    {
+        "name": "google/apiclient",
+        "version": "1.1.6",
+        "version_normalized": "1.1.6.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/google/google-api-php-client.git",
+            "reference": "a25dc9d5c109ebb02945ba1ff6336cc937c27628"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/google/google-api-php-client/zipball/a25dc9d5c109ebb02945ba1ff6336cc937c27628",
+            "reference": "a25dc9d5c109ebb02945ba1ff6336cc937c27628",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.2.1"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "3.7.*",
+            "squizlabs/php_codesniffer": "~2.3"
+        },
+        "time": "2015-10-16 22:11:08",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.1.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "src/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "Apache-2.0"
+        ],
+        "description": "Client library for Google APIs",
+        "homepage": "http://developers.google.com/api-client-library/php",
+        "keywords": [
+            "google"
+        ]
+    },
+    {
+        "name": "ins0/google-measurement-php-client",
+        "version": "v2.0.1",
+        "version_normalized": "2.0.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/ins0/google-measurement-php-client.git",
+            "reference": "2f10e4269784d31f2d41ff563568c8a1913a0c12"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/ins0/google-measurement-php-client/zipball/2f10e4269784d31f2d41ff563568c8a1913a0c12",
+            "reference": "2f10e4269784d31f2d41ff563568c8a1913a0c12",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "require-dev": {
+            "phpmd/phpmd": "~2.1",
+            "phpunit/phpunit": "4.0.*",
+            "squizlabs/php_codesniffer": "~2.0.0@RC"
+        },
+        "time": "2015-03-04 13:00:32",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.0.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Racecore\\GATracking": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "authors": [
+            {
+                "name": "Marco Rieger",
+                "email": "rieger@racecore.de"
+            }
+        ],
+        "description": "Server-Side PHP Client to communicate to Google Analytics over the Google Measurement Protocol",
+        "homepage": "http://www.racecore.de/",
+        "keywords": [
+            "analytics",
+            "client",
+            "google",
+            "measurement"
+        ]
+    }
+]
