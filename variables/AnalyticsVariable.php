@@ -25,16 +25,6 @@ class AnalyticsVariable
     }
 
     /**
-     * Returns the Google Analytics Profile ID
-     *
-     * @return string|null
-     */
-    public function getProfileId()
-    {
-        return craft()->analytics->getProfileId();
-    }
-
-    /**
      * Sends tracking data to Google Analytics.
      *
      * @param array $options
