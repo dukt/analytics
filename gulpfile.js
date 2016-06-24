@@ -7,10 +7,10 @@ var gulp = require('gulp'),
     concat = require('gulp-concat');
 
 var paths = {
-    sass: './Source/analytics/resources/sass',
-    css: './Source/analytics/resources/css',
-    js: './Source/analytics/resources/js',
-    jsCompressed: './Source/analytics/resources/js/compressed'
+    sass: './resources/sass',
+    css: './resources/css',
+    js: './resources/js',
+    jsCompressed: './resources/js/compressed'
 }
 
 /* CSS */
