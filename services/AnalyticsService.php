@@ -49,7 +49,9 @@ class AnalyticsService extends BaseApplicationComponent
     }
 
     /**
-     * Get Profile ID
+     * Returns the Google Analytics Profile ID
+     *
+     * @return string|null
      */
     public function getProfileId()
     {
@@ -60,7 +62,6 @@ class AnalyticsService extends BaseApplicationComponent
         {
             return 'ga:'.$settings['profileId'];
         }
-
     }
 
     /**

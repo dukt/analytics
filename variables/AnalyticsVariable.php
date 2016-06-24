@@ -35,4 +35,14 @@ class AnalyticsVariable
     {
         return new Analytics_RequestCriteriaModel($attributes);
     }
+
+    /**
+     * Returns the Google Analytics Profile ID
+     *
+     * @return string|null
+     */
+    public function getProfileId()
+    {
+        return craft()->analytics->getProfileId();
+    }
 }
