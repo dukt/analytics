@@ -13,18 +13,6 @@ class AnalyticsVariable
     // =========================================================================
 
     /**
-     * Sends tracking data to Google Analytics.
-     *
-     * @param array $options
-     *
-     * @return AnalyticsTracking|null
-     */
-    public function track($options = null)
-    {
-        return craft()->analytics->track($options);
-    }
-
-    /**
      * Returns a Analytics_RequestCriteriaModel model that can be sent to request Google Analytics' API.
      *
      * @param array $attributes
@@ -44,5 +32,17 @@ class AnalyticsVariable
     public function getProfileId()
     {
         return craft()->analytics->getProfileId();
+    }
+
+    /**
+     * Sends tracking data to Google Analytics.
+     *
+     * @param array $options
+     *
+     * @return AnalyticsTracking|null
+     */
+    public function track($options = null)
+    {
+        return craft()->analytics->track($options);
     }
 }
