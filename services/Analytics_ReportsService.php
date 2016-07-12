@@ -12,7 +12,7 @@ namespace Craft;
 
 class Analytics_ReportsService extends BaseApplicationComponent
 {
-    public function getChartReport($options)
+    public function getReport($options)
     {
         $chart = $options['chart'];
 

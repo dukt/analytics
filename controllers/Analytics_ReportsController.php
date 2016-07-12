@@ -97,7 +97,7 @@ class Analytics_ReportsController extends BaseController
         ));
     }
 
-    public function actionGetChartReport()
+    public function actionGetReport()
     {
         $chart = craft()->request->getRequiredParam('chart');
 
@@ -111,7 +111,7 @@ class Analytics_ReportsController extends BaseController
 
             if(!$response)
             {
-                $response = craft()->analytics_reports->getChartReport($request);
+                $response = craft()->analytics_reports->getReport($request);
 
                 if($response)
                 {
