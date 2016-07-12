@@ -11,38 +11,7 @@ class AnalyticsController extends BaseController
 {
     // Public Methods
     // =========================================================================
-
-    /**
-     * Install
-     *
-     * @return null
-     */
-    public function actionInstall()
-    {
-        $plugin = craft()->plugins->getPlugin('analytics');
-        $pluginDependencies = $plugin->getPluginDependencies();
-
-        if (count($pluginDependencies) > 0)
-        {
-            $this->renderTemplate('analytics/_special/install/dependencies', ['pluginDependencies' => $pluginDependencies]);
-        }
-        else
-        {
-            craft()->analytics_plugin->requireDependencies();
-
-            $provider = craft()->oauth->getProvider('google');
-
-            if ($provider && $provider->isConfigured())
-            {
-                $this->redirect('analytics/settings');
-            }
-            else
-            {
-                $this->renderTemplate('analytics/_special/install/oauth-provider-not-configured');
-            }
-        }
-    }
-
+    
     /**
      * Save Widget State
      *

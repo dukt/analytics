@@ -102,7 +102,7 @@ class AnalyticsPlugin extends BasePlugin
     {
         return array(
             'analytics/settings' => array('action' => "analytics/settings/index"),
-            'analytics/install' => array('action' => "analytics/install"),
+            'analytics/install' => array('action' => "analytics/install/index"),
             'analytics/utils' => array('action' => "analytics/utils/metadata"),
             'analytics/utils/metadata' => array('action' => "analytics/utils/metadata"),
         );
@@ -120,41 +120,12 @@ class AnalyticsPlugin extends BasePlugin
     }
 
     /**
-     * Get Plugin Dependencies
-     */
-    public function getPluginDependencies($missingOnly = true)
-    {
-        $dependencies = array();
-
-        $plugins = $this->getRequiredPlugins();
-
-        foreach($plugins as $key => $plugin)
-        {
-            $dependency = $this->getPluginDependency($plugin);
-
-            if($missingOnly)
-            {
-                if($dependency['isMissing'])
-                {
-                    $dependencies[] = $dependency;
-                }
-            }
-            else
-            {
-                $dependencies[] = $dependency;
-            }
-        }
-
-        return $dependencies;
-    }
-
-    /**
      * Is Configured
      */
     public function isConfigured()
     {
         // check dependencies
-        $pluginDependencies = $this->getPluginDependencies();
+        $pluginDependencies = $this->getMissingDependencies();
 
         if(count($pluginDependencies) > 0)
         {
@@ -217,51 +188,5 @@ class AnalyticsPlugin extends BasePlugin
             'enableRealtime' => array(AttributeType::Bool),
             'tokenId' => array(AttributeType::Number),
         );
-    }
-
-    // Private Methods
-    // =========================================================================
-
-    /**
-     * Get Plugin Dependency
-     */
-    private function getPluginDependency($dependency)
-    {
-        $isMissing = true;
-        $isInstalled = true;
-
-        $plugin = craft()->plugins->getPlugin($dependency['handle'], false);
-
-        if($plugin)
-        {
-            $currentVersion = $plugin->version;
-
-
-            // requires update ?
-
-            if(version_compare($currentVersion, $dependency['version']) >= 0)
-            {
-                // no (requirements OK)
-
-                if($plugin->isInstalled && $plugin->isEnabled)
-                {
-                    $isMissing = false;
-                }
-            }
-            else
-            {
-                // yes (requirement not OK)
-            }
-        }
-        else
-        {
-            // not installed
-        }
-
-        $dependency['isMissing'] = $isMissing;
-        $dependency['plugin'] = $plugin;
-        $dependency['pluginLink'] = 'https://dukt.net/craft/'.$dependency['handle'];
-
-        return $dependency;
     }
 }
