@@ -117,7 +117,14 @@ class Analytics_ReportWidget extends BaseWidget
 
                     if(craft()->config->get('enableCache', 'analytics') === true)
                     {
-                        $cacheId = ['getChartData', $options['request'], $profileId];
+                        $reportRequest = [
+                            'chart' => $options['chart'],
+                            'period' => $options['period'],
+                            'options' => $options['options'],
+                        ];
+
+                        $cacheId = ['getChartData', $reportRequest, $profileId];
+
                         $cachedResponse = craft()->analytics_cache->get($cacheId);
 
                         if($cachedResponse)

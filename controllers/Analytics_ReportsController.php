@@ -104,14 +104,19 @@ class Analytics_ReportsController extends BaseController
         try
         {
             $profileId = craft()->analytics->getProfileId();
-            $request = craft()->request->getPost();
+            $reportRequest = [
+                'chart' => craft()->request->getPost('chart'),
+                'period' => craft()->request->getPost('period'),
+                'options' => craft()->request->getPost('options'),
+            ];
 
-            $cacheId = ['getChartData', $request, $profileId];
+            $cacheId = ['getChartData', $reportRequest, $profileId];
+
             $response = craft()->analytics_cache->get($cacheId);
 
             if(!$response)
             {
-                $response = craft()->analytics_reports->getReport($request);
+                $response = craft()->analytics_reports->getReport($reportRequest);
 
                 if($response)
                 {
