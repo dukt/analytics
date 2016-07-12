@@ -10,45 +10,55 @@
 .analytics_realtime .active-visitors {
   text-align: center;
   margin-bottom: 1em; }
-  .analytics_realtime .active-visitors .currently {
-    font-size: 1.5em; }
-  .analytics_realtime .active-visitors .count {
-    display: block;
-    font-size: 10em;
-    line-height: 1.2em; }
+
+.analytics_realtime .active-visitors .currently {
+  font-size: 1.5em; }
+
+.analytics_realtime .active-visitors .count {
+  display: block;
+  font-size: 10em;
+  line-height: 1.2em; }
 
 .analytics_realtime .progress {
   color: #fff;
   margin: 2em 0;
   text-align: center; }
-  .analytics_realtime .progress .progress-bar {
-    float: left; }
-    .analytics_realtime .progress .progress-bar span {
-      display: block;
-      padding: 0 0.5em;
-      line-height: 1.5em; }
-    .analytics_realtime .progress .progress-bar.blue {
-      background: #058DC7; }
-    .analytics_realtime .progress .progress-bar.green {
-      background: #50B431; }
+
+.analytics_realtime .progress .progress-bar {
+  float: left; }
+
+.analytics_realtime .progress .progress-bar span {
+  display: block;
+  padding: 0 0.5em;
+  line-height: 1.5em; }
+
+.analytics_realtime .progress .progress-bar.blue {
+  background: #058DC7; }
+
+.analytics_realtime .progress .progress-bar.green {
+  background: #50B431; }
 
 .analytics_realtime .legend {
   text-align: center; }
-  .analytics_realtime .legend li {
-    clear: left;
-    display: inline-block;
-    margin-right: 1em; }
-    .analytics_realtime .legend li strong {
-      margin-top: 2px;
-      background: #eee;
-      width: 12px;
-      height: 12px;
-      border-radius: 12px;
-      display: block;
-      float: left;
-      margin-right: 0.3em;
-      text-indent: -3000px; }
-    .analytics_realtime .legend li.blue strong {
-      background: #058DC7; }
-    .analytics_realtime .legend li.green strong {
-      background: #50B431; }
+
+.analytics_realtime .legend li {
+  clear: left;
+  display: inline-block;
+  margin-right: 1em; }
+
+.analytics_realtime .legend li strong {
+  margin-top: 2px;
+  background: #eee;
+  width: 12px;
+  height: 12px;
+  border-radius: 12px;
+  display: block;
+  float: left;
+  margin-right: 0.3em;
+  text-indent: -3000px; }
+
+.analytics_realtime .legend li.blue strong {
+  background: #058DC7; }
+
+.analytics_realtime .legend li.green strong {
+  background: #50B431; }
