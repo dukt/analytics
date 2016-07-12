@@ -71,13 +71,13 @@ Analytics.ReportWidget = Garnish.Base.extend(
 
             window.dashboard.grid.refreshCols(true);
 
+            this.$spinner.addClass('hidden');
+
         }, this));
     },
 
     parseResponse: function(response)
     {
-        this.$spinner.addClass('hidden');
-
         $chart = $('<div class="report"></div>');
         $chart.appendTo(this.$body);
 
