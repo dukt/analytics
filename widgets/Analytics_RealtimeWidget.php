@@ -94,7 +94,7 @@ class Analytics_RealtimeWidget extends BaseWidget
                 }
                 else
                 {
-                    return craft()->templates->render('analytics/_special/install/plugin-not-configured');
+                    return craft()->templates->render('analytics/_special/plugin-not-configured');
                 }
             }
             else
@@ -104,7 +104,7 @@ class Analytics_RealtimeWidget extends BaseWidget
         }
         else
         {
-            return craft()->templates->render('analytics/_special/install/plugin-not-configured');
+            return craft()->templates->render('analytics/_special/plugin-not-configured');
         }
     }
 
