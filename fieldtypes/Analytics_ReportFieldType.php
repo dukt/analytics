@@ -94,7 +94,7 @@ class Analytics_ReportFieldType extends BaseFieldType
                     $jsonOptions = json_encode($options);
 
                     craft()->templates->includeJsResource('analytics/js/jsapi.js', true);
-                    craft()->templates->includeJsResource('analytics/js/Analytics.js');
+                    craft()->templates->includeJsResource('analytics/js/Analytics.js', true);
                     craft()->templates->includeJsResource('analytics/js/Reports.js');
                     craft()->templates->includeJsResource('analytics/js/ReportField.js');
                     craft()->templates->includeCssResource('analytics/css/ReportField.css');

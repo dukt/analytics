@@ -94,7 +94,7 @@ class Analytics_ReportWidget extends BaseWidget
                 if($profileId)
                 {
                     craft()->templates->includeJsResource('analytics/js/jsapi.js', true);
-                    craft()->templates->includeJsResource('analytics/js/Analytics.js');
+                    craft()->templates->includeJsResource('analytics/js/Analytics.js', true);
                     craft()->templates->includeJsResource('analytics/js/Reports.js');
                     craft()->templates->includeJsResource('analytics/js/ReportWidgetSettings.js');
                     craft()->templates->includeJsResource('analytics/js/ReportWidget.js');
@@ -173,7 +173,7 @@ class Analytics_ReportWidget extends BaseWidget
      */
     public function getSettingsHtml()
     {
-        craft()->templates->includeJsResource('analytics/js/Analytics.js');
+        craft()->templates->includeJsResource('analytics/js/Analytics.js', true);
         craft()->templates->includeJsResource('analytics/js/ReportWidgetSettings.js');
         craft()->templates->includeCssResource('analytics/css/ReportWidgetSettings.css');
 
