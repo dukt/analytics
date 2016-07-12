@@ -101,7 +101,7 @@ class AnalyticsPlugin extends BasePlugin
     public function registerCpRoutes()
     {
         return array(
-            'analytics/settings' => array('action' => "analytics/settings"),
+            'analytics/settings' => array('action' => "analytics/settings/index"),
             'analytics/install' => array('action' => "analytics/install"),
             'analytics/utils' => array('action' => "analytics/utils/metadata"),
             'analytics/utils/metadata' => array('action' => "analytics/utils/metadata"),
