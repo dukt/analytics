@@ -128,25 +128,4 @@ class Analytics_OauthController extends BaseController
         $redirect = craft()->request->getUrlReferrer();
         $this->redirect($redirect);
     }
-
-    /**
-     * Settings
-     *
-     * @return null
-     */
-    public function actionSettings()
-    {
-        craft()->analytics->requireDependencies();
-
-        $provider = craft()->oauth->getProvider('google');
-
-        if ($provider && $provider->isConfigured())
-        {
-            $this->redirect('analytics/settings');
-        }
-        else
-        {
-            $this->renderTemplate('analytics/_special/install/oauth-provider-not-configured');
-        }
-    }
 }
