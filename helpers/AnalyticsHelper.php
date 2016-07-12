@@ -137,35 +137,6 @@ class AnalyticsHelper
     }
 
     /**
-     * Format Cell
-     */
-    public static function formatCell($value, $column)
-    {
-        switch($column['name'])
-        {
-            case "ga:avgTimeOnPage":
-                $value = self::formatTime($value);
-                return $value;
-                break;
-
-            case 'ga:pageviewsPerSession':
-                $value = round($value, 2);
-                return $value;
-                break;
-
-            case 'ga:entranceRate':
-            case 'ga:visitBounceRate':
-            case 'ga:exitRate':
-                $value = round($value, 2)."%";
-                return $value;
-                break;
-
-            default:
-                return $value;
-        }
-    }
-
-    /**
      * Format RAW value
      *
      * @param string $type
