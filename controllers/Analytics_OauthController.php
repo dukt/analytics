@@ -136,7 +136,7 @@ class Analytics_OauthController extends BaseController
      */
     public function actionSettings()
     {
-        craft()->analytics_plugin->requireDependencies();
+        craft()->analytics->requireDependencies();
 
         $provider = craft()->oauth->getProvider('google');
 

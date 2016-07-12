@@ -37,7 +37,7 @@ class Analytics_ReportFieldType extends BaseFieldType
      */
     public function getInputHtml($name, $value)
     {
-        if(craft()->analytics_plugin->checkRequirements())
+        if(craft()->analytics->checkRequirements())
         {
             if(craft()->config->get('enableFieldtype', 'analytics'))
             {
@@ -127,7 +127,7 @@ class Analytics_ReportFieldType extends BaseFieldType
                     );
                 }
 
-                $variables['isConfigured'] = $plugin->isConfigured();
+                $variables['isConfigured'] = craft()->analytics->isConfigured();
 
                 return craft()->templates->render('analytics/_components/fieldtypes/Report/input', $variables);
             }

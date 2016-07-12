@@ -19,7 +19,7 @@ class Analytics_SettingsController extends BaseController
 	 */
 	public function actionIndex()
 	{
-		craft()->analytics_plugin->requireDependencies();
+		craft()->analytics->requireDependencies();
 		craft()->analytics_oauth->requireOauth();
 
 		$plugin = craft()->plugins->getPlugin('analytics');
