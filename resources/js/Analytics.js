@@ -90,7 +90,7 @@ Analytics.reports.BaseReport = Garnish.Base.extend({
 
                 this.$report = $element;
                 this.$report.html('');
-                this.$chart = $('<div class="graph" />').appendTo(this.$report);
+                this.$chart = $('<div class="chart" />').appendTo(this.$report);
 
                 this.data = data;
 

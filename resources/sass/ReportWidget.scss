@@ -14,19 +14,21 @@
 
     .spinner { position: absolute; top: 50%; left: 50%; margin-left: -14px; margin-top: -14px; }
 
-    .graph { min-height: 150px; overflow: hidden;  }
+    .chart { min-height: 150px; overflow: hidden;  }
 
-    .graph.area { margin: 0 -24px -24px -24px; }
+    .chart.area { margin: 0 -24px 0 -24px; }
+    .chart.pie { margin: 0 -24px 48px -24px; }
 
-    .graph.counter { min-height: inherit; padding: 12px 0; text-align: center; }
-    .graph.counter .value { font-size: 5em; line-height: 1em; margin-bottom: 0.1em; }
-    .graph.counter .label, .graph.counter .period { display: inline; font-size: 1.2em; opacity: .7; }
-    .graph.counter .label { color: #318EC4; }
-    .graph.counter .period { color: #666; }
+    .chart.counter { min-height: inherit; padding: 12px 0; text-align: center; }
+    .chart.counter .value { font-size: 5em; line-height: 1em; margin-bottom: 0.1em; }
+    .chart.counter .label,
+    .chart.counter .period { display: inline; font-size: 1.2em; opacity: .7; }
+    .chart.counter .label { color: #318EC4; }
+    .chart.counter .period { color: #666; }
 
-    .graph.geo { min-height: 300px; }
+    .chart.geo { min-height: 300px; }
 
-    .graph.table {
+    .chart.table {
 
         z-index: 1;
 
