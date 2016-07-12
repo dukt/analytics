@@ -32,10 +32,10 @@
   padding: 0 0.5em;
   line-height: 1.5em; }
 
-.analytics_realtime .progress .progress-bar.blue {
+.analytics_realtime .progress .progress-bar.new-visitors {
   background: #058DC7; }
 
-.analytics_realtime .progress .progress-bar.green {
+.analytics_realtime .progress .progress-bar.returning-visitors {
   background: #50B431; }
 
 .analytics_realtime .legend {
@@ -57,8 +57,8 @@
   margin-right: 0.3em;
   text-indent: -3000px; }
 
-.analytics_realtime .legend li.blue strong {
+.analytics_realtime .legend li.new-visitors strong {
   background: #058DC7; }
 
-.analytics_realtime .legend li.green strong {
+.analytics_realtime .legend li.returning-visitors strong {
   background: #50B431; }

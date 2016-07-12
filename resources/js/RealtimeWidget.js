@@ -12,7 +12,17 @@ Analytics.Realtime = Garnish.Base.extend({
         this.$streamstatus = $('.streamstatus', this.$element);
         this.$error = $('.error', this.$element);
 
+        this.$activeVisitorsCount = $('.active-visitors .count', this.$realtimeVisitors);
+
+        this.$progress = $('.progress', this.$realtimeVisitors);
+        this.$legend = $('.legend', this.$realtimeVisitors);
+
         this.$realtimeVisitors = $('.analytics-realtime-visitors', this.$element);
+
+        this.$newVisitorsProgress = $('.progress-bar.new-visitors', this.$realtimeVisitors);
+        this.$newVisitorsValue = $('.progress-bar.new-visitors span', this.$realtimeVisitors);
+        this.$returningVisitorsProgress = $('.progress-bar.returning-visitors', this.$realtimeVisitors);
+        this.$returningVisitorsValue = $('.progress-bar.returning-visitors span', this.$realtimeVisitors);
 
         this.timer = false;
 
@@ -92,57 +102,58 @@ Analytics.Realtime = Garnish.Base.extend({
 
         var calcTotal = ((returningVisitor * 1) + (newVisitor * 1));
 
-        $('.active-visitors .count', this.$realtimeVisitors).text(calcTotal);
+        this.$activeVisitorsCount.text(calcTotal);
 
-        if (calcTotal > 0) {
-            $('.progress', this.$realtimeVisitors).removeClass('hidden');
-            $('.legend', this.$realtimeVisitors).removeClass('hidden');
+        if (calcTotal > 0)
+        {
+            this.$progress.removeClass('hidden');
+            this.$legend.removeClass('hidden');
         }
         else
         {
-            $('.progress', this.$realtimeVisitors).addClass('hidden');
-            $('.legend', this.$realtimeVisitors).addClass('hidden');
+            this.$progress.addClass('hidden');
+            this.$legend.addClass('hidden');
         }
 
         if(calcTotal > 0)
         {
-            var blue = Math.round(100 * newVisitor / calcTotal);
+            var calcNewVisitor = Math.round(100 * newVisitor / calcTotal);
         }
         else
         {
-            var blue = 100;
+            var calcNewVisitor = 100;
         }
 
-        var green = 100 - blue;
+        var calcReturningVisitor = 100 - calcNewVisitor;
 
 
-        // blue
+        // new-visitor
 
-        $('.progress-bar.blue', this.$realtimeVisitors).css('width', blue+'%');
-        $('.progress-bar.blue span', this.$realtimeVisitors).text(blue+'%');
+        this.$newVisitorsProgress.css('width', calcNewVisitor+'%');
+        this.$newVisitorsValue.text(calcNewVisitor+'%');
 
-        if(blue > 0)
+        if(calcNewVisitor > 0)
         {
-            $('.progress-bar.blue', this.$realtimeVisitors).removeClass('hidden');
-        }
-        else
-        {
-            $('.progress-bar.blue', this.$realtimeVisitors).addClass('hidden');
-        }
-
-
-        // green
-
-        $('.progress-bar.green', this.$realtimeVisitors).css('width', green+'%');
-        $('.progress-bar.green span', this.$realtimeVisitors).text(green+'%');
-
-        if(green > 0)
-        {
-            $('.progress-bar.green', this.$realtimeVisitors).removeClass('hidden');
+            this.$newVisitorsProgress.removeClass('hidden');
         }
         else
         {
-            $('.progress-bar.green', this.$realtimeVisitors).addClass('hidden');
+            this.$newVisitorsProgress.addClass('hidden');
+        }
+
+
+        // returning-visitor
+
+        this.$returningVisitorsProgress.css('width', calcReturningVisitor+'%');
+        this.$returningVisitorsValue.text(calcReturningVisitor+'%');
+
+        if(calcReturningVisitor > 0)
+        {
+            this.$returningVisitorsProgress.removeClass('hidden');
+        }
+        else
+        {
+            this.$returningVisitorsProgress.addClass('hidden');
         }
     },
 });

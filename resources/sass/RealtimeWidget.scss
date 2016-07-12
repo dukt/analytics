@@ -17,12 +17,12 @@ $green: #50B431;
     .progress { color:#fff; margin: 2em 0; text-align: center; }
     .progress .progress-bar { float: left; }
     .progress .progress-bar span { display: block; padding:0 0.5em; line-height: 1.5em; }
-    .progress .progress-bar.blue { background: $blue; }
-    .progress .progress-bar.green { background: $green; }
+    .progress .progress-bar.new-visitors { background: $blue; }
+    .progress .progress-bar.returning-visitors { background: $green; }
 
     .legend { text-align: center; }
     .legend li { clear: left; display: inline-block; margin-right: 1em; }
     .legend li strong { margin-top:2px; background: #eee; width: 12px; height: 12px; border-radius: 12px; display: block; float: left; margin-right: 0.3em; text-indent: -3000px; }
-    .legend li.blue strong { background: $blue; }
-    .legend li.green strong { background: $green; }
+    .legend li.new-visitors strong { background: $blue; }
+    .legend li.returning-visitors strong { background: $green; }
 }
