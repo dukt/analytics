@@ -95,6 +95,7 @@ class Analytics_ReportWidget extends BaseWidget
                 {
                     craft()->templates->includeJsResource('analytics/js/jsapi.js', true);
                     craft()->templates->includeJsResource('analytics/js/Analytics.js');
+                    craft()->templates->includeJsResource('analytics/js/Reports.js');
                     craft()->templates->includeJsResource('analytics/js/ReportWidgetSettings.js');
                     craft()->templates->includeJsResource('analytics/js/ReportWidget.js');
 
