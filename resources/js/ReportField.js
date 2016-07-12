@@ -5,6 +5,8 @@
 
     init: function(fieldId, options)
     {
+        this.setSettings(options, AnalyticsReportField.defaults);
+
         this.$element = $("#"+fieldId);
         this.$field = $(".analytics-field", this.$element);
         this.$metric = $('.analytics-metric select', this.$element);
@@ -18,23 +20,23 @@
 
         this.addListener(this.$metric, 'change', 'onMetricChange');
 
-        if(typeof(options['cachedResponse']) != 'undefined')
+        if(!this.settings.cachedResponse)
         {
-            this.parseResponse(options['cachedResponse']);
+            this.sendRequest();
         }
         else
         {
-            this.request();
+            this.parseResponse(this.settings.cachedResponse);
         }
     },
 
     onMetricChange: function(ev)
     {
         this.metric = $(ev.currentTarget).val();
-        this.request();
+        this.sendRequest();
     },
 
-    request: function()
+    sendRequest: function()
     {
         this.$spinner.removeClass('hidden');
         this.$field.removeClass('analytics-error');
@@ -45,29 +47,39 @@
             metric: this.metric
         };
 
-        Craft.postActionRequest('analytics/reports/getElementReport', data, $.proxy(function(response) {
+        Craft.postActionRequest('analytics/reports/getElementReport', data, $.proxy(function(response, textStatus) {
+            if(textStatus == 'success' && typeof(response.error) == 'undefined')
+            {
+                this.parseResponse(response);
+            }
+            else
+            {
+                var msg = Craft.t('An unknown error occurred.');
 
-            this.parseResponse(response);
+                if(typeof(response) != 'undefined' && response && typeof(response.error) != 'undefined')
+                {
+                    msg = response.error;
+                }
+
+                this.$error.html(msg);
+                this.$error.removeClass('hidden');
+
+                this.$field.addClass('analytics-error');
+            }
+
+            this.$spinner.addClass('hidden');
 
         }, this));
     },
 
     parseResponse: function(response)
     {
-        this.$spinner.addClass('hidden');
-
-        if(typeof(response.error) != 'undefined')
-        {
-            this.$error.html(response.error);
-            this.$field.addClass('analytics-error');
-        }
-        else
-        {
-            response.chartOptions = Analytics.ChartOptions.field();
-
-            Garnish.requestAnimationFrame($.proxy(function() {
-                this.chart = new Analytics.reports.Area(this.$chart, response);
-            }, this));
-        }
+        Garnish.requestAnimationFrame($.proxy(function() {
+            this.chart = new Analytics.reports.Area(this.$chart, response);
+        }, this));
     }
-});
+}, {
+     defaults: {
+         cachedResponse: null,
+     }
+ });
