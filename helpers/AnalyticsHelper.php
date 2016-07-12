@@ -26,7 +26,7 @@ class AnalyticsHelper
     /**
      * Transforms a GA Data object to an array
      */
-    public static function gaDataToArray($data)
+    public static function parseGoogleAnalyticsResponse($data)
     {
         // cols
         $cols = [];

@@ -158,7 +158,7 @@ class AnalyticsService extends BaseApplicationComponent
         }
         else
         {
-            return AnalyticsHelper::gaDataToArray($response);
+            return AnalyticsHelper::parseGoogleAnalyticsResponse($response);
         }
     }
 
