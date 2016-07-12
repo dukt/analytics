@@ -5,7 +5,7 @@
  var Analytics = {
     GoogleVisualizationCalled: false,
     GoogleVisualizationReady: false,
-    charts: {}
+    reports: {}
 };
 
 /**
@@ -72,9 +72,9 @@ Analytics.Visualization = Garnish.Base.extend({
 });
 
 /**
- * BaseChart
+ * BaseReport
  */
-Analytics.charts.BaseChart = Garnish.Base.extend({
+Analytics.reports.BaseReport = Garnish.Base.extend({
 
     type: null,
     chart: null,
@@ -88,9 +88,9 @@ Analytics.charts.BaseChart = Garnish.Base.extend({
         this.visualization = new Analytics.Visualization({
             onAfterInit: $.proxy(function() {
 
-                this.$chart = $element;
-                this.$chart.html('');
-                this.$graph = $('<div class="graph" />').appendTo(this.$chart);
+                this.$report = $element;
+                this.$report.html('');
+                this.$chart = $('<div class="graph" />').appendTo(this.$report);
 
                 this.data = data;
 
@@ -123,7 +123,7 @@ Analytics.charts.BaseChart = Garnish.Base.extend({
 
     initChart: function()
     {
-        this.$graph.addClass(this.type);
+        this.$chart.addClass(this.type);
         // console.error('Chart type "'+this.type+'" not supported.')
     },
 
@@ -147,14 +147,14 @@ Analytics.charts.BaseChart = Garnish.Base.extend({
 /**
  * Area
  */
-Analytics.charts.Area = Analytics.charts.BaseChart.extend(
+Analytics.reports.Area = Analytics.reports.BaseReport.extend(
 {
     initChart: function()
     {
         this.base();
 
-        $period = $('<div class="period" />').prependTo(this.$chart);
-        $title = $('<div class="title" />').prependTo(this.$chart);
+        $period = $('<div class="period" />').prependTo(this.$report);
+        $title = $('<div class="title" />').prependTo(this.$report);
         $title.html(this.data.metric);
         $period.html(this.data.periodLabel);
 
@@ -175,7 +175,7 @@ Analytics.charts.Area = Analytics.charts.BaseChart.extend(
             dateFormatter.format(this.dataTable, 0);
         }
 
-        this.chart = new google.visualization.AreaChart(this.$graph.get(0));
+        this.chart = new google.visualization.AreaChart(this.$chart.get(0));
 
         this.draw();
     }
@@ -184,15 +184,15 @@ Analytics.charts.Area = Analytics.charts.BaseChart.extend(
 /**
  * Counter
  */
-Analytics.charts.Counter = Analytics.charts.BaseChart.extend(
+Analytics.reports.Counter = Analytics.reports.BaseReport.extend(
 {
     initChart: function()
     {
         this.base();
 
-        $value = $('<div class="value" />').appendTo(this.$graph),
-        $label = $('<div class="label" />').appendTo(this.$graph),
-        $period = $('<div class="period" />').appendTo(this.$graph);
+        $value = $('<div class="value" />').appendTo(this.$chart),
+        $label = $('<div class="label" />').appendTo(this.$chart),
+        $period = $('<div class="period" />').appendTo(this.$chart);
 
         $value.html(this.data.counter.count);
         $label.html(this.data.metric);
@@ -203,20 +203,20 @@ Analytics.charts.Counter = Analytics.charts.BaseChart.extend(
 /**
  * Pie
  */
-Analytics.charts.Pie = Analytics.charts.BaseChart.extend(
+Analytics.reports.Pie = Analytics.reports.BaseReport.extend(
 {
     initChart: function()
     {
         this.base();
 
-        $period = $('<div class="period" />').prependTo(this.$chart);
-        $title = $('<div class="title" />').prependTo(this.$chart);
+        $period = $('<div class="period" />').prependTo(this.$report);
+        $title = $('<div class="title" />').prependTo(this.$report);
         $title.html(this.data.dimension);
         $period.html(this.data.metric+" "+this.data.periodLabel);
 
         this.dataTable = Analytics.Utils.responseToDataTable(this.data.chart);
         this.chartOptions = Analytics.ChartOptions.pie();
-        this.chart = new google.visualization.PieChart(this.$graph.get(0));
+        this.chart = new google.visualization.PieChart(this.$chart.get(0));
         this.draw();
     }
 });
@@ -224,20 +224,20 @@ Analytics.charts.Pie = Analytics.charts.BaseChart.extend(
 /**
  * Table
  */
-Analytics.charts.Table = Analytics.charts.BaseChart.extend(
+Analytics.reports.Table = Analytics.reports.BaseReport.extend(
 {
     initChart: function()
     {
         this.base();
 
-        $period = $('<div class="period" />').prependTo(this.$chart);
-        $title = $('<div class="title" />').prependTo(this.$chart);
+        $period = $('<div class="period" />').prependTo(this.$report);
+        $title = $('<div class="title" />').prependTo(this.$report);
         $title.html(this.data.metric);
         $period.html(this.data.periodLabel);
 
         this.dataTable = Analytics.Utils.responseToDataTable(this.data.chart);
         this.chartOptions = Analytics.ChartOptions.table();
-        this.chart = new google.visualization.Table(this.$graph.get(0));
+        this.chart = new google.visualization.Table(this.$chart.get(0));
         this.draw();
     }
 });
@@ -245,20 +245,20 @@ Analytics.charts.Table = Analytics.charts.BaseChart.extend(
 /**
  * Geo
  */
-Analytics.charts.Geo = Analytics.charts.BaseChart.extend(
+Analytics.reports.Geo = Analytics.reports.BaseReport.extend(
 {
     initChart: function()
     {
         this.base();
 
-        $period = $('<div class="period" />').prependTo(this.$chart);
-        $title = $('<div class="title" />').prependTo(this.$chart);
+        $period = $('<div class="period" />').prependTo(this.$report);
+        $title = $('<div class="title" />').prependTo(this.$report);
         $title.html(this.data.metric);
         $period.html(this.data.periodLabel);
 
         this.dataTable = Analytics.Utils.responseToDataTable(this.data.chart);
         this.chartOptions = Analytics.ChartOptions.geo(this.data.dimensionRaw);
-        this.chart = new google.visualization.GeoChart(this.$graph.get(0));
+        this.chart = new google.visualization.GeoChart(this.$chart.get(0));
         this.draw();
     }
 });

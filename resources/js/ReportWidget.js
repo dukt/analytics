@@ -87,6 +87,6 @@ Analytics.ReportWidget = Garnish.Base.extend(
         var chartType = response.type;
         chartType = chartType.charAt(0).toUpperCase() + chartType.slice(1);
 
-        this.chart = new Analytics.charts[chartType]($chart, response);
+        this.chart = new Analytics.reports[chartType]($chart, response);
     }
 });

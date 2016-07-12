@@ -64,7 +64,7 @@
         else
         {
             response.chartOptions = Analytics.ChartOptions.field();
-            this.chart = new Analytics.charts.Area(this.$chart, response);
+            this.chart = new Analytics.reports.Area(this.$chart, response);
         }
     }
 });
