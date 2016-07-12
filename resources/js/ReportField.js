@@ -64,7 +64,10 @@
         else
         {
             response.chartOptions = Analytics.ChartOptions.field();
-            this.chart = new Analytics.reports.Area(this.$chart, response);
+
+            Garnish.requestAnimationFrame($.proxy(function() {
+                this.chart = new Analytics.reports.Area(this.$chart, response);
+            }, this));
         }
     }
 });
