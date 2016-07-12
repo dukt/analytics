@@ -7,7 +7,7 @@
 
 namespace Craft;
 
-class Analytics_CacheService extends BaseApplicationComponent
+class Analytics_CacheService extends CacheService
 {
     public function get($id)
     {
@@ -15,7 +15,7 @@ class Analytics_CacheService extends BaseApplicationComponent
         {
             $cacheKey = $this->getCacheKey($id);
 
-            return craft()->cache->get($cacheKey);
+            return parent::get($cacheKey);
         }
     }
 
@@ -32,12 +32,17 @@ class Analytics_CacheService extends BaseApplicationComponent
 
             if(!$expire)
             {
-                $expire = craft()->config->get('cacheDuration', 'analytics');
-                $expire = AnalyticsHelper::formatDuration($expire);
+                $expire = $this->getCacheDuration();
             }
 
-            return craft()->cache->set($cacheKey, $value, $expire, $dependency);
+            return parent::set($cacheKey, $value, $expire, $dependency);
         }
+    }
+
+    private function getCacheDuration()
+    {
+        $duration = craft()->config->get('cacheDuration', 'analytics');
+        return DateTimeHelper::timeFormatToSeconds($duration);
     }
 
     private function getCacheKey(array $request)
