@@ -7,7 +7,7 @@
 
 namespace Craft;
 
-class AnalyticsBehavior extends BaseBehavior
+class AnalyticsTrait extends BaseBehavior
 {
     // Public Methods
     // =========================================================================

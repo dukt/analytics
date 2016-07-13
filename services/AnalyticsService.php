@@ -7,8 +7,15 @@
 
 namespace Craft;
 
+require_once(CRAFT_PLUGINS_PATH.'analytics/base/AnalyticsTrait.php');
+
 class AnalyticsService extends BaseApplicationComponent
 {
+    // Traits
+    // =========================================================================
+
+    use AnalyticsTrait;
+
     // Properties
     // =========================================================================
 
@@ -16,14 +23,6 @@ class AnalyticsService extends BaseApplicationComponent
 
     // Public Methods
     // =========================================================================
-
-    public function init()
-    {
-        parent::init();
-
-        require_once(CRAFT_PLUGINS_PATH.'analytics/behaviors/AnalyticsBehavior.php');
-        $this->attachBehavior('AnalyticsBehavior', new AnalyticsBehavior());
-    }
 
     /**
      * Get realtime refresh intervall
