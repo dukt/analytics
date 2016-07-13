@@ -22,6 +22,14 @@ class AnalyticsPlugin extends BasePlugin
         return Craft::t('Analytics');
     }
 
+   /**
+     * Get Description
+     */
+    public function getDescription()
+    {
+        return Craft::t('Customizable statistics widgets and entry tracking for Google Analytics.');
+    }
+
 	/**
 	 * Get Version
 	 */
