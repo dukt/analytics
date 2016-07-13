@@ -9,6 +9,14 @@ namespace Craft;
 
 class Analytics_ColumnModel extends BaseModel
 {
+    // Protected Methods
+    // =========================================================================
+
+    /**
+     * @inheritDoc BaseModel::defineAttributes()
+     *
+     * @return array
+     */
     protected function defineAttributes()
     {
         return array(

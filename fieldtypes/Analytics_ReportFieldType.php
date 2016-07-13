@@ -67,7 +67,6 @@ class Analytics_ReportFieldType extends BaseFieldType
                         'filters' => "ga:pagePath==".$uri
                     );
 
-
                     $criteria = new Analytics_RequestCriteriaModel;
                     $criteria->startDate = $startDate;
                     $criteria->endDate = $endDate;
@@ -136,12 +135,10 @@ class Analytics_ReportFieldType extends BaseFieldType
             {
                 return craft()->templates->render('analytics/_components/fieldtypes/Report/disabled');
             }
-
         }
         else
         {
             return craft()->templates->render('analytics/_special/plugin-not-configured');
         }
-
     }
 }

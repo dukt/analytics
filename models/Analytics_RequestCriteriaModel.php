@@ -9,20 +9,14 @@ namespace Craft;
 
 class Analytics_RequestCriteriaModel extends BaseModel
 {
-    protected function defineAttributes()
-    {
-        return array(
-            'ids' => AttributeType::String,
-            'startDate' => AttributeType::String,
-            'endDate' => AttributeType::String,
-            'metrics' => AttributeType::String,
-            'optParams' => array(AttributeType::Mixed, 'default' => array()),
-            'format' => AttributeType::String,
-            'realtime' => array(AttributeType::Bool, 'default' => false),
-            'enableCache' => array(AttributeType::Bool, 'default' => true),
-        );
-    }
+    // Public Methods
+    // =========================================================================
 
+    /**
+     * Sends the request
+     *
+     * @return array
+     */
     public function send()
     {
         $response = array(
@@ -50,5 +44,27 @@ class Analytics_RequestCriteriaModel extends BaseModel
         }
 
         return $response;
+    }
+
+    // Protected Methods
+    // =========================================================================
+
+    /**
+     * @inheritDoc BaseModel::defineAttributes()
+     *
+     * @return array
+     */
+    protected function defineAttributes()
+    {
+        return array(
+            'ids' => AttributeType::String,
+            'startDate' => AttributeType::String,
+            'endDate' => AttributeType::String,
+            'metrics' => AttributeType::String,
+            'optParams' => array(AttributeType::Mixed, 'default' => array()),
+            'format' => AttributeType::String,
+            'realtime' => array(AttributeType::Bool, 'default' => false),
+            'enableCache' => array(AttributeType::Bool, 'default' => true),
+        );
     }
 }
