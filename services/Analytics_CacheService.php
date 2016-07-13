@@ -9,6 +9,9 @@ namespace Craft;
 
 class Analytics_CacheService extends CacheService
 {
+    // Public Methods
+    // =========================================================================
+
     /**
      * Get cache
      *
@@ -56,6 +59,9 @@ class Analytics_CacheService extends CacheService
             return parent::set($cacheKey, $value, $expire, $dependency);
         }
     }
+
+    // Private Methods
+    // =========================================================================
 
     /**
      * Get cache duration (in seconds)

@@ -14,6 +14,9 @@ class Analytics_OauthService extends BaseApplicationComponent
 
     private $token;
 
+    // Public Methods
+    // =========================================================================
+
     /**
      * Require OAuth with configured provider
      *

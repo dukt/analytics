@@ -9,12 +9,18 @@ namespace Craft;
 
 class Analytics_MetadataService extends BaseApplicationComponent
 {
+    // Properties
+    // =========================================================================
+
     private $groups;
     private $dimensions;
     private $metrics;
     private $columns;
     private $selectDimensionOptions;
     private $selectMetricOptions;
+
+    // Public Methods
+    // =========================================================================
 
     /**
      * Checks whether the dimensions & metrics file exists

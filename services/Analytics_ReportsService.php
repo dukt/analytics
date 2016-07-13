@@ -7,11 +7,11 @@
 
 namespace Craft;
 
-// use \Google_Client;
-// use \Google_Service_Analytics;
-
 class Analytics_ReportsService extends BaseApplicationComponent
 {
+    // Public Methods
+    // =========================================================================
+
     public function getReport($options)
     {
         $chart = $options['chart'];
@@ -59,7 +59,7 @@ class Analytics_ReportsService extends BaseApplicationComponent
 
         $chartResponse = craft()->analytics->sendRequest($criteria);
 
-        
+
         // Total
 
         $total = 0;

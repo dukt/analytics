@@ -9,6 +9,9 @@ namespace Craft;
 
 class Analytics_UtilsController extends BaseController
 {
+    // Public Methods
+    // =========================================================================
+
     public function actionMetadata(array $variables = array())
     {
         $variables['dimensions'] = craft()->analytics_metadata->getDimensions();
@@ -41,6 +44,9 @@ class Analytics_UtilsController extends BaseController
         $referer = craft()->request->getUrlReferrer();
         $this->redirect($referer);
     }
+
+    // Private Methods
+    // =========================================================================
 
     private function deleteMetadata()
     {

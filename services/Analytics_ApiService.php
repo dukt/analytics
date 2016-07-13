@@ -12,8 +12,14 @@ use \Google_Service_Analytics;
 
 class Analytics_ApiService extends BaseApplicationComponent
 {
+    // Public Methods
+    // =========================================================================
+
     private $oauthHandle = 'google';
     private $webProperties;
+
+    // Public Methods
+    // =========================================================================
 
     /**
      * Get profiles
