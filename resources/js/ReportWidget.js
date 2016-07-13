@@ -32,12 +32,16 @@ Analytics.ReportWidget = Garnish.Base.extend(
 
         if(typeof(this.chartResponse) != 'undefined')
         {
+            this.$spinner.removeClass('hidden');
+
             this.parseResponse(this.chartResponse);
         }
         else if(this.requestData)
         {
             this.chartResponse = this.sendRequest(this.requestData);
         }
+
+
     },
 
     sendRequest: function(data)
@@ -71,8 +75,6 @@ Analytics.ReportWidget = Garnish.Base.extend(
 
             window.dashboard.grid.refreshCols(true);
 
-            this.$spinner.addClass('hidden');
-
         }, this));
     },
 
@@ -86,6 +88,10 @@ Analytics.ReportWidget = Garnish.Base.extend(
 
         var chartType = response.type;
         chartType = chartType.charAt(0).toUpperCase() + chartType.slice(1);
+
+        response['onAfterInit'] = $.proxy(function() {
+            this.$spinner.addClass('hidden');
+        }, this);
 
         this.chart = new Analytics.reports[chartType]($chart, response);
     }

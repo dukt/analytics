@@ -103,28 +103,20 @@ class Analytics_ReportWidget extends BaseWidget
                     craft()->templates->includeCssResource('analytics/css/ReportWidgetSettings.css');
 
 
-                    $options = [];
+	                $options = [];
 
-                    // request
+	                // request
+	                $options['request'] = array(
+		                'chart' => (isset($settings['chart']) ? $settings['chart'] : null),
+		                'period' => (isset($settings['period']) ? $settings['period'] : null),
+		                'options' => (isset($settings['options'][$settings['chart']]) ? $settings['options'][$settings['chart']] : null),
+	                );
 
-                    $options['request'] = array(
-                        'chart' => (isset($settings['chart']) ? $settings['chart'] : null),
-                        'period' => (isset($settings['period']) ? $settings['period'] : null),
-                        'options' => (isset($settings['options'][$settings['chart']]) ? $settings['options'][$settings['chart']] : null),
-                    );
-
-
-                    // cached response
+	                // use cached report response if present
 
                     if(craft()->config->get('enableCache', 'analytics') === true)
                     {
-                        $reportRequest = [
-                            'chart' => $options['chart'],
-                            'period' => $options['period'],
-                            'options' => $options['options'],
-                        ];
-
-                        $cacheId = ['getChartData', $reportRequest, $profileId];
+                        $cacheId = ['getChartData', $options['request'], $profileId];
 
                         $cachedResponse = craft()->analytics_cache->get($cacheId);
 
