@@ -1,5 +1,5 @@
 /**
- * Chart Widget
+ * Report Widget
  */
 Analytics.ReportWidget = Garnish.Base.extend(
 {
@@ -40,8 +40,6 @@ Analytics.ReportWidget = Garnish.Base.extend(
         {
             this.chartResponse = this.sendRequest(this.requestData);
         }
-
-
     },
 
     sendRequest: function(data)

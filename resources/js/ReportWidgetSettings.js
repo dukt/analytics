@@ -1,3 +1,6 @@
+/**
+ * Report Widget Settings
+ */
 Analytics.ReportWidgetSettings = Garnish.Base.extend({
     init: function(id, settings)
     {
