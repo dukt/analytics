@@ -339,6 +339,11 @@ class Analytics_MetadataService extends BaseApplicationComponent
             foreach($columnsResponse as $columnResponse)
             {
                 $cols[$columnResponse['id']] = new Analytics_ColumnModel($columnResponse);
+
+                if($columnResponse['id'] == 'ga:countryIsoCode')
+                {
+                    $cols[$columnResponse['id']]->uiName = 'Country';
+                }
             }
         }
 
