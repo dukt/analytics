@@ -28,18 +28,14 @@ class Analytics_InstallController extends BaseController
 		}
 		else
 		{
-			craft()->analytics->requireDependencies();
-
-			$provider = craft()->oauth->getProvider('google');
-
-			if ($provider && $provider->isConfigured())
-			{
-				$this->redirect('analytics/settings');
-			}
-			else
-			{
-				$this->renderTemplate('analytics/_special/install/oauth-provider-not-configured');
-			}
+			if(craft()->analytics->isOauthProviderConfigured())
+	        {
+		        $this->redirect('analytics/settings');
+	        }
+	        else
+	        {
+		        $this->renderTemplate('analytics/_special/install/oauth-provider-not-configured');
+	        }
 		}
 	}
 }
