@@ -28,14 +28,7 @@ class Analytics_InstallController extends BaseController
 		}
 		else
 		{
-			if(craft()->analytics->isOauthProviderConfigured())
-	        {
-		        $this->redirect('analytics/settings');
-	        }
-	        else
-	        {
-		        $this->renderTemplate('analytics/_special/install/oauth-provider-not-configured');
-	        }
+			$this->redirect('analytics/settings');
 		}
 	}
 }

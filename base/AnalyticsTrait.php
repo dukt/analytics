@@ -7,35 +7,39 @@
 
 namespace Craft;
 
-class AnalyticsTrait extends BaseBehavior
+trait AnalyticsTrait
 {
     // Public Methods
     // =========================================================================
 
     /**
-     * Is Configured
+     * Checks plugin requirements (dependencies, configured OAuth provider, and token)
+     *
+     * @return bool
      */
-    public function isConfigured()
+    public function checkPluginRequirements()
     {
-        // check dependencies
-        $missingPlugins = $this->getMissingDependencies();
-
-        if(count($missingPlugins) > 0)
+        if(!$this->areDependenciesMissing())
         {
-            return false;
-        }
-
-
-        // check provider and token
-
-        $provider = craft()->oauth->getProvider('google');
-
-        if($provider)
-        {
-            // token
-            $token = craft()->analytics_oauth->getToken();
-
-            if (!$token)
+            if($this->isOauthProviderConfigured())
+            {
+                if($this->isTokenSet())
+                {
+                    if($this->isGoogleAnalyticsAccountConfigured())
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
             {
                 return false;
             }
@@ -44,36 +48,42 @@ class AnalyticsTrait extends BaseBehavior
         {
             return false;
         }
-
-
-        // check if profile id is set up
-
-        $plugin = craft()->plugins->getPlugin('analytics');
-
-        $settings = $plugin->getSettings();
-
-        $profileId = $settings['profileId'];
-
-
-        if(!$profileId)
-        {
-            AnalyticsPlugin::log('Analytics profileId not found', LogLevel::Info, true);
-            return false;
-        }
-
-        return true;
     }
 
     /**
-     * Require dependencies
+     * Checks if the OAuth provider is configured
+     *
+     * @return bool
+     */
+    public function isOauthProviderConfigured()
+    {
+        if(isset(craft()->oauth))
+        {
+            $provider = craft()->oauth->getProvider('google');
+
+            if($provider && $provider->isConfigured())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /**
+     * Checks dependencies and redirects to install if one or more are missing
      *
      * @return bool
      */
     public function requireDependencies()
     {
-        $missingDependencies = $this->getMissingDependencies();
-
-        if (count($missingDependencies) > 0)
+        if ($this->areDependenciesMissing())
         {
             $url = UrlHelper::getUrl('analytics/install');
             craft()->request->redirect($url);
@@ -86,70 +96,9 @@ class AnalyticsTrait extends BaseBehavior
     }
 
     /**
-     * Check Dependencies
-     */
-    public function checkDependencies()
-    {
-        $missingDependencies = $this->getMissingDependencies();
-
-        if(count($missingDependencies) > 0)
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Check requirements
-     *
-     * @return bool
-     */
-    public function checkRequirements($redirect = false)
-    {
-        if(!$this->checkDependencies())
-        {
-            if($redirect)
-            {
-                $url = UrlHelper::getUrl('analytics/install');
-                craft()->request->redirect($url);
-            }
-
-            return false;
-        }
-        else
-        {
-            // oauth
-            $provider = craft()->oauth->getProvider('google');
-
-            if ($provider && $provider->isConfigured())
-            {
-                $token = craft()->analytics_oauth->getToken();
-
-                if($token)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                if($redirect)
-                {
-                    $url = UrlHelper::getUrl('analytics/install');
-                    craft()->request->redirect($url);
-                }
-
-                return false;
-            }
-        }
-    }
-
-    /**
      * Get Missing Dependencies
+     *
+     * @return array
      */
     public function getMissingDependencies()
     {
@@ -160,7 +109,89 @@ class AnalyticsTrait extends BaseBehavior
     // =========================================================================
 
     /**
-     * Get Plugin Dependencies
+     * Is Google Analytics Account Configured (OAuth Token and Google Analytics Profile ID set)
+     *
+     * @return bool
+     */
+    private function isGoogleAnalyticsAccountConfigured()
+    {
+        if(!$this->areDependenciesMissing())
+        {
+            if(!$this->isTokenSet())
+            {
+                return false;
+            }
+
+            // check if profile id is set up
+
+            $plugin = craft()->plugins->getPlugin('analytics');
+
+            $settings = $plugin->getSettings();
+
+            $profileId = $settings['profileId'];
+
+
+            if(!$profileId)
+            {
+                AnalyticsPlugin::log('Analytics profileId not found', LogLevel::Info, true);
+                return false;
+            }
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /**
+     * Checks if token is set
+     *
+     * @return bool
+     */
+    private function isTokenSet()
+    {
+        if($this->isOauthProviderConfigured())
+        {
+            $token = craft()->analytics_oauth->getToken();
+
+            if ($token)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /**
+     * Returns `true` if dependencies are missing, and `false` otherwise
+     *
+     * @return bool
+     */
+    private function areDependenciesMissing()
+    {
+        $missingDependencies = $this->getMissingDependencies();
+
+        if(count($missingDependencies) > 0)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Get dependencies
+     *
+     * @return array
      */
     private function getDependencies($missingOnly = false)
     {
@@ -190,7 +221,9 @@ class AnalyticsTrait extends BaseBehavior
     }
 
     /**
-     * Get Plugin Dependency
+     * Get dependency
+     *
+     * @return array
      */
     private function getPluginDependency($dependency)
     {
@@ -208,21 +241,11 @@ class AnalyticsTrait extends BaseBehavior
 
             if(version_compare($currentVersion, $dependency['version']) >= 0)
             {
-                // no (requirements OK)
-
                 if($plugin->isInstalled && $plugin->isEnabled)
                 {
                     $isMissing = false;
                 }
             }
-            else
-            {
-                // yes (requirement not OK)
-            }
-        }
-        else
-        {
-            // not installed
         }
 
         $dependency['isMissing'] = $isMissing;
