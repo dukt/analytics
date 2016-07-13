@@ -60,7 +60,7 @@ class Analytics_ReportWidget extends BaseWidget
         }
         catch(\Exception $e)
         {
-            // todo: error handling
+            AnalyticsPlugin::log('Couldn’t get Analytics Report’s title: '.$e->getMessage(), LogLevel::Error);
         }
 
         return Craft::t('Analytics Report');
