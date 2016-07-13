@@ -57,8 +57,13 @@
   margin-right: 0.3em;
   text-indent: -3000px; }
 
-.analytics_realtime .legend li.new-visitors strong {
+.analytics_realtime .legend li span.status {
+  border: 0;
+  width: 10px;
+  height: 10px; }
+
+.analytics_realtime .legend li.new-visitors span.status {
   background: #058DC7; }
 
-.analytics_realtime .legend li.returning-visitors strong {
+.analytics_realtime .legend li.returning-visitors span.status {
   background: #50B431; }

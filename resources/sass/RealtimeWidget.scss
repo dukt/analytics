@@ -21,8 +21,10 @@ $green: #50B431;
     .progress .progress-bar.returning-visitors { background: $green; }
 
     .legend { text-align: center; }
+
     .legend li { clear: left; display: inline-block; margin-right: 1em; }
     .legend li strong { margin-top:2px; background: #eee; width: 12px; height: 12px; border-radius: 12px; display: block; float: left; margin-right: 0.3em; text-indent: -3000px; }
-    .legend li.new-visitors strong { background: $blue; }
-    .legend li.returning-visitors strong { background: $green; }
+    .legend li span.status { border: 0; width: 10px; height: 10px; }
+    .legend li.new-visitors span.status { background: $blue; }
+    .legend li.returning-visitors span.status { background: $green; }
 }
