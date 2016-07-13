@@ -1,9 +1,9 @@
 
 /**
- * BaseReport
+ * BaseChart
  */
-Analytics.reports.BaseReport = Garnish.Base.extend(
-{
+Analytics.reports.BaseChart = Garnish.Base.extend({
+
     type: null,
     chart: null,
     data: null,
@@ -11,45 +11,48 @@ Analytics.reports.BaseReport = Garnish.Base.extend(
     options: null,
     visualization: null,
 
-    $report: null,
-    $chart: null,
-
-    init: function($element, response)
+    init: function($element, data)
     {
-        this.$report = $element;
-        this.$report.html('');
-        this.$chart = $('<div class="chart" />').appendTo(this.$report);
+        this.visualization = new Analytics.Visualization({
+            onAfterInit: $.proxy(function() {
 
-        this.data = response;
+                this.$chart = $element;
+                this.$chart.html('');
+                this.$graph = $('<div class="chart" />').appendTo(this.$chart);
 
-        if(typeof(this.data.chartOptions) != 'undefined')
-        {
-            this.chartOptions = this.data.chartOptions;
-        }
+                this.data = data;
 
-        if(typeof(this.data.type) != 'undefined')
-        {
-            this.type = this.data.type;
-        }
+                if(typeof(this.data.chartOptions) != 'undefined')
+                {
+                    this.chartOptions = this.data.chartOptions;
+                }
 
-        if(typeof(this.data.period) != 'undefined')
-        {
-            this.period = this.data.period;
-        }
+                if(typeof(this.data.type) != 'undefined')
+                {
+                    this.type = this.data.type;
+                }
 
-        this.addListener(Garnish.$win, 'resize', 'resize');
+                if(typeof(this.data.period) != 'undefined')
+                {
+                    this.period = this.data.period;
+                }
 
-        this.initChart();
+                this.addListener(Garnish.$win, 'resize', 'resize');
 
-        if(typeof(this.data.onAfterInit) != 'undefined')
-        {
-            this.data.onAfterInit();
-        }
+                this.initChart();
+
+                if(typeof(this.data.onAfterInit) != 'undefined')
+                {
+                    this.data.onAfterInit();
+                }
+            }, this)
+        });
     },
 
     initChart: function()
     {
-        this.$chart.addClass(this.type);
+        this.$graph.addClass(this.type);
+        // console.error('Chart type "'+this.type+'" not supported.')
     },
 
     draw: function()
@@ -69,53 +72,55 @@ Analytics.reports.BaseReport = Garnish.Base.extend(
     },
 });
 
-
 /**
  * Area
  */
-Analytics.reports.Area = Analytics.reports.BaseReport.extend(
+Analytics.reports.Area = Analytics.reports.BaseChart.extend(
 {
     initChart: function()
     {
         this.base();
 
-        $period = $('<div class="period" />').prependTo(this.$report);
-        $title = $('<div class="title" />').prependTo(this.$report);
+        $period = $('<div class="period" />').prependTo(this.$chart);
+        $title = $('<div class="title" />').prependTo(this.$chart);
         $title.html(this.data.metric);
         $period.html(this.data.periodLabel);
 
-        this.chart = new Craft.charts.Area(this.$chart);
+        this.dataTable = Analytics.Utils.responseToDataTable(this.data.chart);
+        this.chartOptions = Analytics.ChartOptions.area(this.data.period);
 
-        var chartDataTable = new Craft.charts.DataTable(this.data.dataTable);
+        if(typeof(this.data.chartOptions) != 'undefined')
+        {
+            $.extend(this.chartOptions, this.data.chartOptions);
+        }
 
-        var scales = {
-            week: 'day',
-            month: 'day',
-            year: 'month'
-        };
+        if(this.data.period == 'year')
+        {
+            var dateFormatter = new google.visualization.DateFormat({
+                pattern: "MMMM yyyy"
+            });
 
-        var scale = scales[this.data.period];
+            dateFormatter.format(this.dataTable, 0);
+        }
 
-        var chartSettings = {
-            dataScale: scale
-        };
+        this.chart = new google.visualization.AreaChart(this.$graph.get(0));
 
-        this.chart.draw(chartDataTable, chartSettings);
+        this.draw();
     }
 });
 
 /**
  * Counter
  */
-Analytics.reports.Counter = Analytics.reports.BaseReport.extend(
+Analytics.reports.Counter = Analytics.reports.BaseChart.extend(
 {
     initChart: function()
     {
         this.base();
 
-        $value = $('<div class="value" />').appendTo(this.$chart),
-        $label = $('<div class="label" />').appendTo(this.$chart),
-        $period = $('<div class="period" />').appendTo(this.$chart);
+        $value = $('<div class="value" />').appendTo(this.$graph),
+        $label = $('<div class="label" />').appendTo(this.$graph),
+        $period = $('<div class="period" />').appendTo(this.$graph);
 
         $value.html(this.data.counter.count);
         $label.html(this.data.metric);
@@ -126,79 +131,62 @@ Analytics.reports.Counter = Analytics.reports.BaseReport.extend(
 /**
  * Pie
  */
-Analytics.reports.Pie = Analytics.reports.BaseReport.extend(
+Analytics.reports.Pie = Analytics.reports.BaseChart.extend(
 {
     initChart: function()
     {
         this.base();
 
-        $period = $('<div class="period" />').prependTo(this.$report);
-        $title = $('<div class="title" />').prependTo(this.$report);
+        $period = $('<div class="period" />').prependTo(this.$chart);
+        $title = $('<div class="title" />').prependTo(this.$chart);
         $title.html(this.data.dimension);
         $period.html(this.data.metric+" "+this.data.periodLabel);
 
-        this.chart = new Craft.charts.Pie(this.$chart);
-
-        var chartDataTable = new Craft.charts.DataTable(this.data.dataTable);
-
-        this.chart.draw(chartDataTable);
+        this.dataTable = Analytics.Utils.responseToDataTable(this.data.chart);
+        this.chartOptions = Analytics.ChartOptions.pie();
+        this.chart = new google.visualization.PieChart(this.$graph.get(0));
+        this.draw();
     }
 });
 
 /**
  * Table
  */
-Analytics.reports.Table = Analytics.reports.BaseReport.extend(
+Analytics.reports.Table = Analytics.reports.BaseChart.extend(
 {
     initChart: function()
     {
         this.base();
 
-        this.$chart.empty();
-
-        $period = $('<div class="period" />').prependTo(this.$report);
-        $title = $('<div class="title" />').prependTo(this.$report);
+        $period = $('<div class="period" />').prependTo(this.$chart);
+        $title = $('<div class="title" />').prependTo(this.$chart);
         $title.html(this.data.metric);
         $period.html(this.data.periodLabel);
 
-        var $table = $('<table class="data fullwidth">').appendTo(this.$chart);
-        var $thead = $('<thead>').appendTo($table);
-        var $theadTr = $('<tr>').appendTo($thead);
-        var $tbody = $('<tbody>').appendTo($table);
-
-        $.each(this.data.chart.columns, function(k, v) {
-            var $th = $('<th>'+v.label+'</th>').appendTo($theadTr);
-        });
-        $.each(this.data.chart.rows, function(rowKey, row)
-        {
-            var $tr = $('<tr>').appendTo($tbody);
-
-            $.each(row, function(cellKey, cellValue)
-            {
-                var $td = $('<td>'+cellValue+'</td>').appendTo($tr);
-            });
-        });
+        this.dataTable = Analytics.Utils.responseToDataTable(this.data.chart);
+        this.chartOptions = Analytics.ChartOptions.table();
+        this.chart = new google.visualization.Table(this.$graph.get(0));
+        this.draw();
     }
 });
 
 /**
  * Geo
  */
-Analytics.reports.Geo = Analytics.reports.BaseReport.extend(
+Analytics.reports.Geo = Analytics.reports.BaseChart.extend(
 {
     initChart: function()
     {
         this.base();
 
-        $period = $('<div class="period" />').prependTo(this.$report);
-        $title = $('<div class="title" />').prependTo(this.$report);
+        $period = $('<div class="period" />').prependTo(this.$chart);
+        $title = $('<div class="title" />').prependTo(this.$chart);
         $title.html(this.data.metric);
         $period.html(this.data.periodLabel);
 
-        this.chart = new Craft.charts.Map(this.$chart);
-
-        var chartDataTable = this.data.chart;
-
-        this.chart.draw(chartDataTable);
+        this.dataTable = Analytics.Utils.responseToDataTable(this.data.chart);
+        this.chartOptions = Analytics.ChartOptions.geo(this.data.dimensionRaw);
+        this.chart = new google.visualization.GeoChart(this.$graph.get(0));
+        this.draw();
     }
 });
