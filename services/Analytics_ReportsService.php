@@ -12,14 +12,33 @@ class Analytics_ReportsService extends BaseApplicationComponent
     // Public Methods
     // =========================================================================
 
+    /**
+     * Returns a report for any chart type (Area,  Counter,  Pie,  Table,  Geo)
+     *
+     * @param array $options
+     *
+     * @return array
+     */
     public function getReport($options)
     {
         $chart = $options['chart'];
 
-        return $this->{$chart}($options);
+        $methodName = 'get'.ucfirst($chart).'Report';
+
+        return $this->{$methodName}($options);
     }
 
-    public function area($requestData)
+    // Private Methods
+    // =========================================================================
+
+    /**
+     * Returns an area report
+     *
+     * @param array $requestData
+     *
+     * @return array
+     */
+    private function getAreaReport($requestData)
     {
         $period = (isset($requestData['period']) ? $requestData['period'] : null);
         $dimension = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
@@ -94,7 +113,14 @@ class Analytics_ReportsService extends BaseApplicationComponent
         ];
     }
 
-    public function counter($requestData)
+    /**
+     * Returns a counter report
+     *
+     * @param array $requestData
+     *
+     * @return array
+     */
+    private function getCounterReport($requestData)
     {
         $period = (isset($requestData['period']) ? $requestData['period'] : null);
         $dimension = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
@@ -146,7 +172,14 @@ class Analytics_ReportsService extends BaseApplicationComponent
         ];
     }
 
-    public function pie($requestData)
+    /**
+     * Returns a pie report
+     *
+     * @param array $requestData
+     *
+     * @return array
+     */
+    private function getPieReport($requestData)
     {
         $period = (isset($requestData['period']) ? $requestData['period'] : null);
         $dimension = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
@@ -179,7 +212,14 @@ class Analytics_ReportsService extends BaseApplicationComponent
         ];
     }
 
-    public function table($requestData)
+    /**
+     * Returns a table report
+     *
+     * @param array $requestData
+     *
+     * @return array
+     */
+    private function getTableReport($requestData)
     {
         $period = (isset($requestData['period']) ? $requestData['period'] : null);
         $dimension = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
@@ -212,7 +252,14 @@ class Analytics_ReportsService extends BaseApplicationComponent
         ];
     }
 
-    public function geo($requestData)
+    /**
+     * Returns a geo report
+     *
+     * @param array $requestData
+     *
+     * @return array
+     */
+    private function getGeoReport($requestData)
     {
         $period = (isset($requestData['period']) ? $requestData['period'] : null);
         $dimension = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
