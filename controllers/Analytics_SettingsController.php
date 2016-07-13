@@ -145,7 +145,7 @@ class Analytics_SettingsController extends BaseController
     /**
      * Get Properties Opts
      *
-     * @return bool
+     * @return array
      */
     private function getPropertiesOpts()
     {

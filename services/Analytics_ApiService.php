@@ -15,6 +15,13 @@ class Analytics_ApiService extends BaseApplicationComponent
     private $oauthHandle = 'google';
     private $webProperties;
 
+    /**
+     * Get profiles
+     *
+     * @param $webProperty
+     *
+     * @return mixed
+     */
     public function getProfiles($webProperty)
     {
         if($webProperty)
@@ -25,6 +32,11 @@ class Analytics_ApiService extends BaseApplicationComponent
         }
     }
 
+    /**
+     * Get web properties
+     *
+     * @return bool
+     */
     public function getWebProperties()
     {
         if(!$this->webProperties)
@@ -43,6 +55,12 @@ class Analytics_ApiService extends BaseApplicationComponent
         return $this->webProperties;
     }
 
+    /**
+     * Get web property
+     * @param $webPropertyId
+     *
+     * @return mixed
+     */
     public function getWebProperty($webPropertyId)
     {
         foreach($this->getWebProperties() as $webProperty)
@@ -137,6 +155,10 @@ class Analytics_ApiService extends BaseApplicationComponent
         return $response;
     }
 
+    /**
+     * Get Data Realtime
+     * @return \Google_Service_Analytics_DataRealtime_Resource
+     */
     public function getDataRealtime()
     {
         $api = $this->api();
@@ -147,6 +169,11 @@ class Analytics_ApiService extends BaseApplicationComponent
         }
     }
 
+    /**
+     * Get Data GA
+     *
+     * @return \Google_Service_Analytics_DataGa_Resource
+     */
     public function getDataGa()
     {
         $api = $this->api();
@@ -157,6 +184,11 @@ class Analytics_ApiService extends BaseApplicationComponent
         }
     }
 
+    /**
+     * Get management web properties
+     *
+     * @return \Google_Service_Analytics_ManagementWebproperties_Resource
+     */
     public function getManagementWebproperties()
     {
         $api = $this->api();
@@ -167,6 +199,11 @@ class Analytics_ApiService extends BaseApplicationComponent
         }
     }
 
+    /**
+     * Get management profiles
+     *
+     * @return \Google_Service_Analytics_ManagementProfiles_Resource
+     */
     public function getManagementProfiles()
     {
         $api = $this->api();
@@ -177,6 +214,11 @@ class Analytics_ApiService extends BaseApplicationComponent
         }
     }
 
+    /**
+     * Get metadata columns
+     *
+     * @return \Google_Service_Analytics_MetadataColumns_Resource
+     */
     public function getMetadataColumns()
     {
         $api = $this->api();
@@ -190,6 +232,11 @@ class Analytics_ApiService extends BaseApplicationComponent
     // Private Methods
     // =========================================================================
 
+    /**
+     * Returns a API object
+     *
+     * @return bool|Google_Service_Analytics
+     */
     private function api()
     {
         $handle = $this->oauthHandle;

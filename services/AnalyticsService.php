@@ -51,6 +51,10 @@ class AnalyticsService extends BaseApplicationComponent
 
     /**
      * Get data source from its class name
+     *
+     * @param string $className
+     *
+     * @return mixed
      */
     public function getDataSource($className = 'GoogleAnalytics')
     {

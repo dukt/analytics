@@ -13,7 +13,7 @@ class Analytics_ReportsController extends BaseController
     // =========================================================================
 
     /**
-     * Real-Time Visitors
+     * Get Real-Time Report
      *
      * @return null
      */
@@ -97,6 +97,11 @@ class Analytics_ReportsController extends BaseController
         ));
     }
 
+    /**
+     * Get report
+     *
+     * @return null
+     */
     public function actionGetReport()
     {
         $chart = craft()->request->getRequiredParam('chart');
@@ -143,7 +148,7 @@ class Analytics_ReportsController extends BaseController
     }
 
     /**
-     * Element Report
+     * Get Element Report
      *
      * @param array $variables
      *

@@ -70,6 +70,8 @@ class Analytics_OauthService extends BaseApplicationComponent
 
     /**
      * Get OAuth Token
+     *
+     * @return mixed
      */
     public function getToken()
     {
@@ -97,6 +99,8 @@ class Analytics_OauthService extends BaseApplicationComponent
 
     /**
      * Delete Token
+     *
+     * @return bool
      */
     public function deleteToken()
     {

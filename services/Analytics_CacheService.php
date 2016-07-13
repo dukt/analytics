@@ -9,6 +9,13 @@ namespace Craft;
 
 class Analytics_CacheService extends CacheService
 {
+    /**
+     * Get cache
+     *
+     * @param $id
+     *
+     * @return mixed
+     */
     public function get($id)
     {
         if(craft()->config->get('enableCache', 'analytics') == true)
@@ -19,6 +26,17 @@ class Analytics_CacheService extends CacheService
         }
     }
 
+    /**
+     * Set cache
+     *
+     * @param      $id
+     * @param      $value
+     * @param null $expire
+     * @param null $dependency
+     * @param null $enableCache
+     *
+     * @return mixed
+     */
     public function set($id, $value, $expire = null, $dependency = null, $enableCache = null)
     {
         if(is_null($enableCache))
@@ -39,12 +57,24 @@ class Analytics_CacheService extends CacheService
         }
     }
 
+    /**
+     * Get cache duration (in seconds)
+     *
+     * @return int
+     */
     private function getCacheDuration()
     {
         $duration = craft()->config->get('cacheDuration', 'analytics');
         return DateTimeHelper::timeFormatToSeconds($duration);
     }
 
+    /**
+     * Get cache key
+     *
+     * @param array $request
+     *
+     * @return string
+     */
     private function getCacheKey(array $request)
     {
         $dataSourceClassName = 'GoogleAnalytics';
