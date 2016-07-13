@@ -12,284 +12,284 @@ use \Google_Service_Analytics;
 
 class Analytics_ApiService extends BaseApplicationComponent
 {
-    // Public Methods
-    // =========================================================================
+	// Public Methods
+	// =========================================================================
 
-    private $oauthHandle = 'google';
-    private $webProperties;
+	private $oauthHandle = 'google';
+	private $webProperties;
 
-    // Public Methods
-    // =========================================================================
+	// Public Methods
+	// =========================================================================
 
-    /**
-     * Get profiles
-     *
-     * @param $webProperty
-     *
-     * @return mixed
-     */
-    public function getProfiles($webProperty)
-    {
-        if($webProperty)
-        {
-            $response = craft()->analytics_api->managementProfiles->listManagementProfiles($webProperty['accountId'], $webProperty['id']);
+	/**
+	 * Get profiles
+	 *
+	 * @param $webProperty
+	 *
+	 * @return mixed
+	 */
+	public function getProfiles($webProperty)
+	{
+		if($webProperty)
+		{
+			$response = craft()->analytics_api->managementProfiles->listManagementProfiles($webProperty['accountId'], $webProperty['id']);
 
-            return $response['items'];
-        }
-    }
+			return $response['items'];
+		}
+	}
 
-    /**
-     * Get web properties
-     *
-     * @return bool
-     */
-    public function getWebProperties()
-    {
-        if(!$this->webProperties)
-        {
-            $response = craft()->analytics_api->managementWebproperties->listManagementWebproperties("~all");
+	/**
+	 * Get web properties
+	 *
+	 * @return bool
+	 */
+	public function getWebProperties()
+	{
+		if(!$this->webProperties)
+		{
+			$response = craft()->analytics_api->managementWebproperties->listManagementWebproperties("~all");
 
-            if(!$response)
-            {
-                AnalyticsPlugin::log('Could not list management web properties', LogLevel::Error);
-                return false;
-            }
+			if(!$response)
+			{
+				AnalyticsPlugin::log('Could not list management web properties', LogLevel::Error);
+				return false;
+			}
 
-            $this->webProperties = $response['items'];
-        }
+			$this->webProperties = $response['items'];
+		}
 
-        return $this->webProperties;
-    }
+		return $this->webProperties;
+	}
 
-    /**
-     * Get web property
-     * @param $webPropertyId
-     *
-     * @return mixed
-     */
-    public function getWebProperty($webPropertyId)
-    {
-        foreach($this->getWebProperties() as $webProperty)
-        {
-            if($webProperty->id == $webPropertyId)
-            {
-                return $webProperty;
-            }
-        }
+	/**
+	 * Get web property
+	 * @param $webPropertyId
+	 *
+	 * @return mixed
+	 */
+	public function getWebProperty($webPropertyId)
+	{
+		foreach($this->getWebProperties() as $webProperty)
+		{
+			if($webProperty->id == $webPropertyId)
+			{
+				return $webProperty;
+			}
+		}
 
-    }
+	}
 
-    /**
-     * Returns Analytics data for a view (profile). (ga.get)
-     *
-     * @param string $ids Unique table ID for retrieving Analytics data. Table ID is of the form ga:XXXX, where XXXX is the Analytics view (profile) ID.
-     * @param string $startDate Start date for fetching Analytics data. Requests can specify a start date formatted as YYYY-MM-DD, or as a relative date (e.g., today, yesterday, or 7daysAgo). The default value is 7daysAgo.
-     * @param string $endDate End date for fetching Analytics data. Request can should specify an end date formatted as YYYY-MM-DD, or as a relative date (e.g., today, yesterday, or 7daysAgo). The default value is yesterday.
-     * @param string $metrics A comma-separated list of Analytics metrics. E.g., 'ga:sessions,ga:pageviews'. At least one metric must be specified.
-     * @param array $optParams Optional parameters.
-     *
-     * @opt_param int max-results The maximum number of entries to include in this feed.
-     * @opt_param string sort A comma-separated list of dimensions or metrics that determine the sort order for Analytics data.
-     * @opt_param string dimensions A comma-separated list of Analytics dimensions. E.g., 'ga:browser,ga:city'.
-     * @opt_param int start-index An index of the first entity to retrieve. Use this parameter as a pagination mechanism along with the max-results parameter.
-     * @opt_param string segment An Analytics segment to be applied to data.
-     * @opt_param string samplingLevel The desired sampling level.
-     * @opt_param string filters A comma-separated list of dimension or metric filters to be applied to Analytics data.
-     * @opt_param string output The selected format for the response. Default format is JSON.
-     *
-     * @param bool $enableCache Caches the API response when set to 'true'. Default value is 'true'.
-     *
-     * @return Google_Service_Analytics_GaData
-     */
-    public function apiGetGAData($ids, $startDate, $endDate, $metrics, $optParams = array(), $enableCache = true)
-    {
-        $api = craft()->analytics_api->getDataGa();
+	/**
+	 * Returns Analytics data for a view (profile). (ga.get)
+	 *
+	 * @param string $ids Unique table ID for retrieving Analytics data. Table ID is of the form ga:XXXX, where XXXX is the Analytics view (profile) ID.
+	 * @param string $startDate Start date for fetching Analytics data. Requests can specify a start date formatted as YYYY-MM-DD, or as a relative date (e.g., today, yesterday, or 7daysAgo). The default value is 7daysAgo.
+	 * @param string $endDate End date for fetching Analytics data. Request can should specify an end date formatted as YYYY-MM-DD, or as a relative date (e.g., today, yesterday, or 7daysAgo). The default value is yesterday.
+	 * @param string $metrics A comma-separated list of Analytics metrics. E.g., 'ga:sessions,ga:pageviews'. At least one metric must be specified.
+	 * @param array $optParams Optional parameters.
+	 *
+	 * @opt_param int max-results The maximum number of entries to include in this feed.
+	 * @opt_param string sort A comma-separated list of dimensions or metrics that determine the sort order for Analytics data.
+	 * @opt_param string dimensions A comma-separated list of Analytics dimensions. E.g., 'ga:browser,ga:city'.
+	 * @opt_param int start-index An index of the first entity to retrieve. Use this parameter as a pagination mechanism along with the max-results parameter.
+	 * @opt_param string segment An Analytics segment to be applied to data.
+	 * @opt_param string samplingLevel The desired sampling level.
+	 * @opt_param string filters A comma-separated list of dimension or metric filters to be applied to Analytics data.
+	 * @opt_param string output The selected format for the response. Default format is JSON.
+	 *
+	 * @param bool $enableCache Caches the API response when set to 'true'. Default value is 'true'.
+	 *
+	 * @return Google_Service_Analytics_GaData
+	 */
+	public function apiGetGAData($ids, $startDate, $endDate, $metrics, $optParams = array(), $enableCache = true)
+	{
+		$api = craft()->analytics_api->getDataGa();
 
-        $request = [$ids, $startDate, $endDate, $metrics, $optParams];
+		$request = [$ids, $startDate, $endDate, $metrics, $optParams];
 
-        $cacheId = ['api.apiGetGAData', $request];
-        $response = craft()->analytics_cache->get($cacheId);
+		$cacheId = ['api.apiGetGAData', $request];
+		$response = craft()->analytics_cache->get($cacheId);
 
-        if(!$response)
-        {
-            $response = $api->get($ids, $startDate, $endDate, $metrics, $optParams);
-            craft()->analytics_cache->set($cacheId, $response, null, null, $enableCache);
-        }
+		if(!$response)
+		{
+			$response = $api->get($ids, $startDate, $endDate, $metrics, $optParams);
+			craft()->analytics_cache->set($cacheId, $response, null, null, $enableCache);
+		}
 
-        return $response;
-    }
+		return $response;
+	}
 
-    /**
-     * Returns real time data for a view (profile).
-     *
-     * @param string $ids Unique table ID for retrieving real time data. Table ID is of the form ga:XXXX, where XXXX is the Analytics view (profile) ID.
-     * @param string $p2 A comma-separated list of real time metrics. E.g., 'rt:activeUsers'. At least one metric must be specified.
-     * @param array $optParams Optional parameters.
-     *
-     * @opt_param int max-results The maximum number of entries to include in this feed.
-     * @opt_param string sort A comma-separated list of dimensions or metrics that determine the sort order for real time data.
-     * @opt_param string dimensions A comma-separated list of real time dimensions. E.g., 'rt:medium,rt:city'.
-     * @opt_param string filters A comma-separated list of dimension or metric filters to be applied to real time data.
-     *
-     * @param bool $enableCache Caches the API response when set to 'true'. Default value is 'true'.
-     *
-     * @return Google_Service_Analytics_RealtimeData
-     */
-    public function apiGetGADataRealtime($ids, $metrics, $optParams = array())
-    {
-        $plugin = craft()->plugins->getPlugin('analytics');
+	/**
+	 * Returns real time data for a view (profile).
+	 *
+	 * @param string $ids Unique table ID for retrieving real time data. Table ID is of the form ga:XXXX, where XXXX is the Analytics view (profile) ID.
+	 * @param string $p2 A comma-separated list of real time metrics. E.g., 'rt:activeUsers'. At least one metric must be specified.
+	 * @param array $optParams Optional parameters.
+	 *
+	 * @opt_param int max-results The maximum number of entries to include in this feed.
+	 * @opt_param string sort A comma-separated list of dimensions or metrics that determine the sort order for real time data.
+	 * @opt_param string dimensions A comma-separated list of real time dimensions. E.g., 'rt:medium,rt:city'.
+	 * @opt_param string filters A comma-separated list of dimension or metric filters to be applied to real time data.
+	 *
+	 * @param bool $enableCache Caches the API response when set to 'true'. Default value is 'true'.
+	 *
+	 * @return Google_Service_Analytics_RealtimeData
+	 */
+	public function apiGetGADataRealtime($ids, $metrics, $optParams = array())
+	{
+		$plugin = craft()->plugins->getPlugin('analytics');
 
-        $settings = $plugin->getSettings();
+		$settings = $plugin->getSettings();
 
-        $cacheDuration = craft()->analytics->getRealtimeRefreshInterval();
+		$cacheDuration = craft()->analytics->getRealtimeRefreshInterval();
 
-        $cacheId = ['api.apiGetGADataRealtime', $ids, $metrics, $optParams];
-        $response = craft()->analytics_cache->get($cacheId);
+		$cacheId = ['api.apiGetGADataRealtime', $ids, $metrics, $optParams];
+		$response = craft()->analytics_cache->get($cacheId);
 
-        if(!$response)
-        {
-            $api = craft()->analytics_api->getDataRealtime();
+		if(!$response)
+		{
+			$api = craft()->analytics_api->getDataRealtime();
 
-            if($api)
-            {
-                $response = $api->get($ids, $metrics, $optParams);
+			if($api)
+			{
+				$response = $api->get($ids, $metrics, $optParams);
 
-                craft()->analytics_cache->set($cacheId, $response, $cacheDuration);
-            }
-        }
+				craft()->analytics_cache->set($cacheId, $response, $cacheDuration);
+			}
+		}
 
-        return $response;
-    }
+		return $response;
+	}
 
-    /**
-     * Get Data Realtime
-     * @return \Google_Service_Analytics_DataRealtime_Resource
-     */
-    public function getDataRealtime()
-    {
-        $api = $this->api();
+	/**
+	 * Get Data Realtime
+	 * @return \Google_Service_Analytics_DataRealtime_Resource
+	 */
+	public function getDataRealtime()
+	{
+		$api = $this->api();
 
-        if($api)
-        {
-            return $api->data_realtime;
-        }
-    }
+		if($api)
+		{
+			return $api->data_realtime;
+		}
+	}
 
-    /**
-     * Get Data GA
-     *
-     * @return \Google_Service_Analytics_DataGa_Resource
-     */
-    public function getDataGa()
-    {
-        $api = $this->api();
+	/**
+	 * Get Data GA
+	 *
+	 * @return \Google_Service_Analytics_DataGa_Resource
+	 */
+	public function getDataGa()
+	{
+		$api = $this->api();
 
-        if($api)
-        {
-            return $api->data_ga;
-        }
-    }
+		if($api)
+		{
+			return $api->data_ga;
+		}
+	}
 
-    /**
-     * Get management web properties
-     *
-     * @return \Google_Service_Analytics_ManagementWebproperties_Resource
-     */
-    public function getManagementWebproperties()
-    {
-        $api = $this->api();
+	/**
+	 * Get management web properties
+	 *
+	 * @return \Google_Service_Analytics_ManagementWebproperties_Resource
+	 */
+	public function getManagementWebproperties()
+	{
+		$api = $this->api();
 
-        if($api)
-        {
-            return $api->management_webproperties;
-        }
-    }
+		if($api)
+		{
+			return $api->management_webproperties;
+		}
+	}
 
-    /**
-     * Get management profiles
-     *
-     * @return \Google_Service_Analytics_ManagementProfiles_Resource
-     */
-    public function getManagementProfiles()
-    {
-        $api = $this->api();
+	/**
+	 * Get management profiles
+	 *
+	 * @return \Google_Service_Analytics_ManagementProfiles_Resource
+	 */
+	public function getManagementProfiles()
+	{
+		$api = $this->api();
 
-        if($api)
-        {
-            return $api->management_profiles;
-        }
-    }
+		if($api)
+		{
+			return $api->management_profiles;
+		}
+	}
 
-    /**
-     * Get metadata columns
-     *
-     * @return \Google_Service_Analytics_MetadataColumns_Resource
-     */
-    public function getMetadataColumns()
-    {
-        $api = $this->api();
+	/**
+	 * Get metadata columns
+	 *
+	 * @return \Google_Service_Analytics_MetadataColumns_Resource
+	 */
+	public function getMetadataColumns()
+	{
+		$api = $this->api();
 
-        if($api)
-        {
-            return $api->metadata_columns;
-        }
-    }
+		if($api)
+		{
+			return $api->metadata_columns;
+		}
+	}
 
-    // Private Methods
-    // =========================================================================
+	// Private Methods
+	// =========================================================================
 
-    /**
-     * Returns a API object
-     *
-     * @return bool|Google_Service_Analytics
-     */
-    private function api()
-    {
-        $handle = $this->oauthHandle;
+	/**
+	 * Returns a API object
+	 *
+	 * @return bool|Google_Service_Analytics
+	 */
+	private function api()
+	{
+		$handle = $this->oauthHandle;
 
 
-        // provider
+		// provider
 
-        $provider = craft()->oauth->getProvider($handle);
+		$provider = craft()->oauth->getProvider($handle);
 
-        if($provider)
-        {
-            // token
-            $token = craft()->analytics_oauth->getToken();
+		if($provider)
+		{
+			// token
+			$token = craft()->analytics_oauth->getToken();
 
-            if ($token)
-            {
-                // make token compatible with Google library
-                $arrayToken = array(
-                    'created' => 0,
-                    'access_token' => $token->accessToken,
-                    'expires_in' => $token->endOfLife,
-                );
+			if ($token)
+			{
+				// make token compatible with Google library
+				$arrayToken = array(
+					'created' => 0,
+					'access_token' => $token->accessToken,
+					'expires_in' => $token->endOfLife,
+				);
 
-                $arrayToken = json_encode($arrayToken);
+				$arrayToken = json_encode($arrayToken);
 
-                // client
-                $client = new Google_Client();
-                $client->setApplicationName('Google+ PHP Starter Application');
-                $client->setClientId('clientId');
-                $client->setClientSecret('clientSecret');
-                $client->setRedirectUri('redirectUri');
-                $client->setAccessToken($arrayToken);
+				// client
+				$client = new Google_Client();
+				$client->setApplicationName('Google+ PHP Starter Application');
+				$client->setClientId('clientId');
+				$client->setClientSecret('clientSecret');
+				$client->setRedirectUri('redirectUri');
+				$client->setAccessToken($arrayToken);
 
-                $api = new Google_Service_Analytics($client);
+				$api = new Google_Service_Analytics($client);
 
-                return $api;
-            }
-            else
-            {
-                AnalyticsPlugin::log('Undefined token', LogLevel::Error);
-                return false;
-            }
-        }
-        else
-        {
-            AnalyticsPlugin::log('Couldn’t get connect provider', LogLevel::Error);
-            return false;
-        }
-    }
+				return $api;
+			}
+			else
+			{
+				AnalyticsPlugin::log('Undefined token', LogLevel::Error);
+				return false;
+			}
+		}
+		else
+		{
+			AnalyticsPlugin::log('Couldn’t get connect provider', LogLevel::Error);
+			return false;
+		}
+	}
 }

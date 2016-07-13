@@ -9,198 +9,198 @@ namespace Craft;
 
 class AnalyticsHelper
 {
-    // Public Methods
-    // =========================================================================
+	// Public Methods
+	// =========================================================================
 
-    /**
-     * Transforms a GA Data object to an array
-     */
-    public static function parseGoogleAnalyticsResponse($data)
-    {
-        // cols
-        $cols = [];
+	/**
+	 * Transforms a GA Data object to an array
+	 */
+	public static function parseGoogleAnalyticsResponse($data)
+	{
+		// cols
+		$cols = [];
 
-        foreach($data->columnHeaders as $col)
-        {
-            // define the right type for the chart
+		foreach($data->columnHeaders as $col)
+		{
+			// define the right type for the chart
 
-            $dataType = $col->dataType;
-            $type = $col->dataType;
-            $id = $col->name;
-            $label = craft()->analytics_metadata->getDimMet($col->name);
+			$dataType = $col->dataType;
+			$type = $col->dataType;
+			$id = $col->name;
+			$label = craft()->analytics_metadata->getDimMet($col->name);
 
-            switch($col->name)
-            {
-                case 'ga:date':
-                case 'ga:yearMonth':
-                $type = 'date';
-                break;
+			switch($col->name)
+			{
+				case 'ga:date':
+				case 'ga:yearMonth':
+				$type = 'date';
+				break;
 
-                case 'ga:latitude':
-                case 'ga:longitude':
-                $type = 'number';
-                $dataType = 'FLOAT';
-                break;
-            }
+				case 'ga:latitude':
+				case 'ga:longitude':
+				$type = 'number';
+				$dataType = 'FLOAT';
+				break;
+			}
 
-            switch($type)
-            {
-                case 'INTEGER':
-                case 'CURRENCY':
-                case 'FLOAT':
-                case 'TIME':
-                case 'PERCENT':
-                $type = 'number';
-                break;
+			switch($type)
+			{
+				case 'INTEGER':
+				case 'CURRENCY':
+				case 'FLOAT':
+				case 'TIME':
+				case 'PERCENT':
+				$type = 'number';
+				break;
 
-                case 'STRING':
-                $type = 'string';
-                break;
-            }
+				case 'STRING':
+				$type = 'string';
+				break;
+			}
 
-            $cols[] = array(
-                'type' => $type,
-                'dataType' => $dataType,
-                'id' => $id,
-                'label' => Craft::t($label),
-            );
-        }
+			$cols[] = array(
+				'type' => $type,
+				'dataType' => $dataType,
+				'id' => $id,
+				'label' => Craft::t($label),
+			);
+		}
 
-        // rows
-        $rows = [];
+		// rows
+		$rows = [];
 
-        if($data->rows)
-        {
-            $rows = $data->rows;
+		if($data->rows)
+		{
+			$rows = $data->rows;
 
-            foreach($rows as $kRow => $row)
-            {
-                foreach($row as $kCell => $value)
-                {
-                    $col = $cols[$kCell];
+			foreach($rows as $kRow => $row)
+			{
+				foreach($row as $kCell => $value)
+				{
+					$col = $cols[$kCell];
 
-                    // replace value by cell
+					// replace value by cell
 
-                    $cell = array(
-                        'v' => AnalyticsHelper::formatRawValue($col['dataType'], $value),
-                        'f' => AnalyticsHelper::formatValue($col['dataType'], $value)
-                    );
+					$cell = array(
+						'v' => AnalyticsHelper::formatRawValue($col['dataType'], $value),
+						'f' => AnalyticsHelper::formatValue($col['dataType'], $value)
+					);
 
-                    if($col['id'] == 'ga:continent')
-                    {
-                        $cell['v'] = craft()->analytics_metadata->getContinentCode($cell['v']);
-                    }
+					if($col['id'] == 'ga:continent')
+					{
+						$cell['v'] = craft()->analytics_metadata->getContinentCode($cell['v']);
+					}
 
-                    if($col['id'] == 'ga:subContinent')
-                    {
-                        $cell['v'] = craft()->analytics_metadata->getSubContinentCode($cell['v']);
-                    }
+					if($col['id'] == 'ga:subContinent')
+					{
+						$cell['v'] = craft()->analytics_metadata->getSubContinentCode($cell['v']);
+					}
 
-                    // translate values
-                    switch($col['id'])
-                    {
-                        case 'ga:country':
-                        case 'ga:city':
-                        case 'ga:continent':
-                        case 'ga:subContinent':
-                        case 'ga:userType':
-                        case 'ga:javaEnabled':
-                        case 'ga:deviceCategory':
-                        case 'ga:mobileInputSelector':
-                        case 'ga:channelGrouping':
-                        case 'ga:medium':
-                            $cell['f'] = Craft::t($cell['f']);
-                            break;
-                    }
+					// translate values
+					switch($col['id'])
+					{
+						case 'ga:country':
+						case 'ga:city':
+						case 'ga:continent':
+						case 'ga:subContinent':
+						case 'ga:userType':
+						case 'ga:javaEnabled':
+						case 'ga:deviceCategory':
+						case 'ga:mobileInputSelector':
+						case 'ga:channelGrouping':
+						case 'ga:medium':
+							$cell['f'] = Craft::t($cell['f']);
+							break;
+					}
 
-                    // update cell
-                    $rows[$kRow][$kCell] = $cell;
-                }
-            }
-        }
+					// update cell
+					$rows[$kRow][$kCell] = $cell;
+				}
+			}
+		}
 
-        return array(
-            'cols' => $cols,
-            'rows' => $rows
-        );
-    }
+		return array(
+			'cols' => $cols,
+			'rows' => $rows
+		);
+	}
 
-    /**
-     * Format RAW value
-     *
-     * @param string $type
-     * @param string $value
-     */
-    public static function formatRawValue($type, $value)
-    {
-        switch($type)
-        {
-            case 'INTEGER':
-            case 'CURRENCY':
-            case 'FLOAT':
-            case 'TIME':
-            case 'PERCENT':
-            $value = (float) $value;
-            break;
+	/**
+	 * Format RAW value
+	 *
+	 * @param string $type
+	 * @param string $value
+	 */
+	public static function formatRawValue($type, $value)
+	{
+		switch($type)
+		{
+			case 'INTEGER':
+			case 'CURRENCY':
+			case 'FLOAT':
+			case 'TIME':
+			case 'PERCENT':
+			$value = (float) $value;
+			break;
 
-            default:
-            $value = (string) $value;
-        }
+			default:
+			$value = (string) $value;
+		}
 
-        return $value;
-    }
+		return $value;
+	}
 
-    /**
-     * Format Value
-     *
-     * @param string $type
-     * @param string $value
-     */
-    public static function formatValue($type, $value)
-    {
-        switch($type)
-        {
-            case 'INTEGER':
-            case 'FLOAT':
-            $value = (float) $value;
-            $value = round($value, 2);
-            $value = craft()->numberFormatter->formatDecimal($value);
-            break;
+	/**
+	 * Format Value
+	 *
+	 * @param string $type
+	 * @param string $value
+	 */
+	public static function formatValue($type, $value)
+	{
+		switch($type)
+		{
+			case 'INTEGER':
+			case 'FLOAT':
+			$value = (float) $value;
+			$value = round($value, 2);
+			$value = craft()->numberFormatter->formatDecimal($value);
+			break;
 
-            case 'CURRENCY':
-            $currency = 'USD';
-            $value = (float) $value;
-            $value = round($value, 2);
-            $value = craft()->numberFormatter->formatDecimal($value);
-            $value = craft()->numberFormatter->formatCurrency($value, $currency);
-            break;
+			case 'CURRENCY':
+			$currency = 'USD';
+			$value = (float) $value;
+			$value = round($value, 2);
+			$value = craft()->numberFormatter->formatDecimal($value);
+			$value = craft()->numberFormatter->formatCurrency($value, $currency);
+			break;
 
-            case 'TIME':
-            $value = (float) $value;
-            $value = self::formatTime($value);
-            break;
+			case 'TIME':
+			$value = (float) $value;
+			$value = self::formatTime($value);
+			break;
 
-            case 'PERCENT':
-            $value = (float) $value;
-            $value = round($value, 2);
-            $value = $value.'%';
+			case 'PERCENT':
+			$value = (float) $value;
+			$value = round($value, 2);
+			$value = $value.'%';
 
-            break;
+			break;
 
-            default:
-            $value = (string) $value;
-        }
+			default:
+			$value = (string) $value;
+		}
 
-        return (string) $value;
-    }
+		return (string) $value;
+	}
 
-    /**
-     * Format Time in HH:MM:SS from seconds
-     *
-     * @param int $seconds
-     */
-    public static function formatTime($seconds)
-    {
-        return gmdate("H:i:s", $seconds);
-    }
+	/**
+	 * Format Time in HH:MM:SS from seconds
+	 *
+	 * @param int $seconds
+	 */
+	public static function formatTime($seconds)
+	{
+		return gmdate("H:i:s", $seconds);
+	}
 }

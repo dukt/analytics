@@ -9,208 +9,208 @@ namespace Craft;
 
 class Analytics_ReportsController extends BaseController
 {
-    // Public Methods
-    // =========================================================================
+	// Public Methods
+	// =========================================================================
 
-    /**
-     * Get Real-Time Report
-     *
-     * @return null
-     */
-    public function actionGetRealtimeReport()
-    {
-        $newVisitor = 0;
-        $returningVisitor = 0;
-        $total = 0;
+	/**
+	 * Get Real-Time Report
+	 *
+	 * @return null
+	 */
+	public function actionGetRealtimeReport()
+	{
+		$newVisitor = 0;
+		$returningVisitor = 0;
+		$total = 0;
 
-        if(!craft()->config->get('demoMode', 'analytics'))
-        {
-            try
-            {
-                $criteria = new Analytics_RequestCriteriaModel;
-                $criteria->realtime = true;
-                $criteria->metrics = 'ga:activeVisitors';
-                $criteria->optParams = array('dimensions' => 'ga:visitorType');
+		if(!craft()->config->get('demoMode', 'analytics'))
+		{
+			try
+			{
+				$criteria = new Analytics_RequestCriteriaModel;
+				$criteria->realtime = true;
+				$criteria->metrics = 'ga:activeVisitors';
+				$criteria->optParams = array('dimensions' => 'ga:visitorType');
 
-                $response = craft()->analytics->sendRequest($criteria);
-
-
-                // total
-
-                if(!empty($response['totalResults']))
-                {
-                    $total = $response['totalResults'];
-                }
+				$response = craft()->analytics->sendRequest($criteria);
 
 
-                // new & returning visitors
+				// total
 
-                if(!empty($response['rows']))
-                {
-                    $rows = $response['rows'];
+				if(!empty($response['totalResults']))
+				{
+					$total = $response['totalResults'];
+				}
 
-                    if(!empty($rows[0][1]['v']))
-                    {
-                        switch($rows[0][0]['v'])
-                        {
-                            case "RETURNING":
-                            $returningVisitor = $rows[0][1]['v'];
-                            break;
 
-                            case "NEW":
-                            $newVisitor = $rows[0][1]['v'];
-                            break;
-                        }
-                    }
+				// new & returning visitors
 
-                    if(!empty($rows[1][1]['v']))
-                    {
-                        switch($rows[1][0]['v'])
-                        {
-                            case "RETURNING":
-                            $returningVisitor = $rows[1][1]['v'];
-                            break;
+				if(!empty($response['rows']))
+				{
+					$rows = $response['rows'];
 
-                            case "NEW":
-                            $newVisitor = $rows[1][1]['v'];
-                            break;
-                        }
-                    }
-                }
-            }
-            catch(\Exception $e)
-            {
-                $this->returnErrorJson($e->getMessage());
-            }
-        }
-        else
-        {
-            $newVisitor = 5;
-            $returningVisitor = 7;
-            $total = ($newVisitor + $returningVisitor);
-        }
+					if(!empty($rows[0][1]['v']))
+					{
+						switch($rows[0][0]['v'])
+						{
+							case "RETURNING":
+							$returningVisitor = $rows[0][1]['v'];
+							break;
 
-        $this->returnJson(array(
-            'total' => $total,
-            'newVisitor' => $newVisitor,
-            'returningVisitor' => $returningVisitor
-        ));
-    }
+							case "NEW":
+							$newVisitor = $rows[0][1]['v'];
+							break;
+						}
+					}
 
-    /**
-     * Get report
-     *
-     * @return null
-     */
-    public function actionGetReport()
-    {
-        $chart = craft()->request->getRequiredParam('chart');
+					if(!empty($rows[1][1]['v']))
+					{
+						switch($rows[1][0]['v'])
+						{
+							case "RETURNING":
+							$returningVisitor = $rows[1][1]['v'];
+							break;
 
-        try
-        {
-            $profileId = craft()->analytics->getProfileId();
-            $reportRequest = [
-                'chart' => craft()->request->getPost('chart'),
-                'period' => craft()->request->getPost('period'),
-                'options' => craft()->request->getPost('options'),
-            ];
+							case "NEW":
+							$newVisitor = $rows[1][1]['v'];
+							break;
+						}
+					}
+				}
+			}
+			catch(\Exception $e)
+			{
+				$this->returnErrorJson($e->getMessage());
+			}
+		}
+		else
+		{
+			$newVisitor = 5;
+			$returningVisitor = 7;
+			$total = ($newVisitor + $returningVisitor);
+		}
 
-            $cacheId = ['getChartData', $reportRequest, $profileId];
+		$this->returnJson(array(
+			'total' => $total,
+			'newVisitor' => $newVisitor,
+			'returningVisitor' => $returningVisitor
+		));
+	}
 
-            $response = craft()->analytics_cache->get($cacheId);
+	/**
+	 * Get report
+	 *
+	 * @return null
+	 */
+	public function actionGetReport()
+	{
+		$chart = craft()->request->getRequiredParam('chart');
 
-            if(!$response)
-            {
-                $response = craft()->analytics_reports->getReport($reportRequest);
+		try
+		{
+			$profileId = craft()->analytics->getProfileId();
+			$reportRequest = [
+				'chart' => craft()->request->getPost('chart'),
+				'period' => craft()->request->getPost('period'),
+				'options' => craft()->request->getPost('options'),
+			];
 
-                if($response)
-                {
-                    craft()->analytics_cache->set($cacheId, $response);
-                }
-            }
+			$cacheId = ['getChartData', $reportRequest, $profileId];
 
-            $this->returnJson($response);
-        }
-        catch(\Exception $e)
-        {
-            if(method_exists($e, 'getErrors'))
-            {
-                $errors = $e->getErrors();
+			$response = craft()->analytics_cache->get($cacheId);
 
-                if(isset($errors[0]['message']))
-                {
-                    $this->returnErrorJson(Craft::t($errors[0]['message']));
-                }
-            }
+			if(!$response)
+			{
+				$response = craft()->analytics_reports->getReport($reportRequest);
 
-            $this->returnErrorJson($e->getMessage());
-        }
-    }
+				if($response)
+				{
+					craft()->analytics_cache->set($cacheId, $response);
+				}
+			}
 
-    /**
-     * Get Element Report
-     *
-     * @param array $variables
-     *
-     * @return null
-     */
-    public function actionGetElementReport(array $variables = array())
-    {
-        try {
-            $elementId = craft()->request->getRequiredParam('elementId');
-            $locale = craft()->request->getRequiredParam('locale');
-            $metric = craft()->request->getRequiredParam('metric');
+			$this->returnJson($response);
+		}
+		catch(\Exception $e)
+		{
+			if(method_exists($e, 'getErrors'))
+			{
+				$errors = $e->getErrors();
 
-            $uri = craft()->analytics->getElementUrlPath($elementId, $locale);
+				if(isset($errors[0]['message']))
+				{
+					$this->returnErrorJson(Craft::t($errors[0]['message']));
+				}
+			}
 
-            if($uri)
-            {
-                if($uri == '__home__')
-                {
-                    $uri = '';
-                }
+			$this->returnErrorJson($e->getMessage());
+		}
+	}
 
-                $start = date('Y-m-d', strtotime('-1 month'));
-                $end = date('Y-m-d');
-                $dimensions = 'ga:date';
+	/**
+	 * Get Element Report
+	 *
+	 * @param array $variables
+	 *
+	 * @return null
+	 */
+	public function actionGetElementReport(array $variables = array())
+	{
+		try {
+			$elementId = craft()->request->getRequiredParam('elementId');
+			$locale = craft()->request->getRequiredParam('locale');
+			$metric = craft()->request->getRequiredParam('metric');
 
-                $optParams = array(
-                        'dimensions' => $dimensions,
-                        'filters' => "ga:pagePath==".$uri
-                    );
+			$uri = craft()->analytics->getElementUrlPath($elementId, $locale);
 
-                $criteria = new Analytics_RequestCriteriaModel;
-                $criteria->startDate = $start;
-                $criteria->endDate = $end;
-                $criteria->metrics = $metric;
-                $criteria->optParams = $optParams;
+			if($uri)
+			{
+				if($uri == '__home__')
+				{
+					$uri = '';
+				}
 
-                $cacheId = ['ReportsController.actionGetElementReport', $criteria->getAttributes()];
-                $response = craft()->analytics_cache->get($cacheId);
+				$start = date('Y-m-d', strtotime('-1 month'));
+				$end = date('Y-m-d');
+				$dimensions = 'ga:date';
 
-                if(!$response)
-                {
-                    $response = craft()->analytics->sendRequest($criteria);
+				$optParams = array(
+						'dimensions' => $dimensions,
+						'filters' => "ga:pagePath==".$uri
+					);
 
-                    if($response)
-                    {
-                        craft()->analytics_cache->set($cacheId, $response);
-                    }
-                }
+				$criteria = new Analytics_RequestCriteriaModel;
+				$criteria->startDate = $start;
+				$criteria->endDate = $end;
+				$criteria->metrics = $metric;
+				$criteria->optParams = $optParams;
 
-                $this->returnJson([
-                    'type' => 'area',
-                    'chart' => $response
-                ]);
-            }
-            else
-            {
-               throw new Exception("Element doesn't support URLs.", 1);
-            }
-        }
-        catch(\Exception $e)
-        {
-            $this->returnErrorJson($e->getMessage());
-        }
-    }
+				$cacheId = ['ReportsController.actionGetElementReport', $criteria->getAttributes()];
+				$response = craft()->analytics_cache->get($cacheId);
+
+				if(!$response)
+				{
+					$response = craft()->analytics->sendRequest($criteria);
+
+					if($response)
+					{
+						craft()->analytics_cache->set($cacheId, $response);
+					}
+				}
+
+				$this->returnJson([
+					'type' => 'area',
+					'chart' => $response
+				]);
+			}
+			else
+			{
+			   throw new Exception("Element doesn't support URLs.", 1);
+			}
+		}
+		catch(\Exception $e)
+		{
+			$this->returnErrorJson($e->getMessage());
+		}
+	}
 }

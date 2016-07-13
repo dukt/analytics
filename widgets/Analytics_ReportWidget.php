@@ -9,230 +9,230 @@ namespace Craft;
 
 class Analytics_ReportWidget extends BaseWidget
 {
-    // Public Methods
-    // =========================================================================
+	// Public Methods
+	// =========================================================================
 
-    /**
-     * @inheritDoc IComponentType::getName()
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return Craft::t('Analytics Report');
-    }
+	/**
+	 * @inheritDoc IComponentType::getName()
+	 *
+	 * @return string
+	 */
+	public function getName()
+	{
+		return Craft::t('Analytics Report');
+	}
 
-    /**
-     * @inheritDoc IWidget::getTitle()
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        try {
-            $name = [];
-            $chartType = $this->settings['chart'];
+	/**
+	 * @inheritDoc IWidget::getTitle()
+	 *
+	 * @return string
+	 */
+	public function getTitle()
+	{
+		try {
+			$name = [];
+			$chartType = $this->settings['chart'];
 
-            if(isset($this->settings['options'][$chartType]))
-            {
-                $options = $this->settings['options'][$chartType];
+			if(isset($this->settings['options'][$chartType]))
+			{
+				$options = $this->settings['options'][$chartType];
 
-                if(!empty($options['dimension']))
-                {
-                    $name[] = Craft::t(craft()->analytics_metadata->getDimMet($options['dimension']));
-                }
+				if(!empty($options['dimension']))
+				{
+					$name[] = Craft::t(craft()->analytics_metadata->getDimMet($options['dimension']));
+				}
 
-                if(!empty($options['metric']))
-                {
-                    $name[] = Craft::t(craft()->analytics_metadata->getDimMet($options['metric']));
-                }
-            }
+				if(!empty($options['metric']))
+				{
+					$name[] = Craft::t(craft()->analytics_metadata->getDimMet($options['metric']));
+				}
+			}
 
-            if(!empty($this->settings['period']))
-            {
-                $name[] = Craft::t(ucfirst($this->settings['period']));
-            }
+			if(!empty($this->settings['period']))
+			{
+				$name[] = Craft::t(ucfirst($this->settings['period']));
+			}
 
-            if(count($name) > 0)
-            {
-                return implode(" - ", $name);
-            }
-        }
-        catch(\Exception $e)
-        {
-            AnalyticsPlugin::log('Couldn’t get Analytics Report’s title: '.$e->getMessage(), LogLevel::Error);
-        }
+			if(count($name) > 0)
+			{
+				return implode(" - ", $name);
+			}
+		}
+		catch(\Exception $e)
+		{
+			AnalyticsPlugin::log('Couldn’t get Analytics Report’s title: '.$e->getMessage(), LogLevel::Error);
+		}
 
-        return Craft::t('Analytics Report');
-    }
+		return Craft::t('Analytics Report');
+	}
 
-    /**
-     * @inheritDoc IWidget::getIconPath()
-     *
-     * @return string
-     */
-    public function getIconPath()
-    {
-        return craft()->resources->getResourcePath('analytics/images/widgets/stats.svg');
-    }
+	/**
+	 * @inheritDoc IWidget::getIconPath()
+	 *
+	 * @return string
+	 */
+	public function getIconPath()
+	{
+		return craft()->resources->getResourcePath('analytics/images/widgets/stats.svg');
+	}
 
-    /**
-     * @inheritDoc IWidget::getBodyHtml()
-     *
-     * @return string|false
-     */
-    public function getBodyHtml()
-    {
-        if(craft()->analytics->checkPluginRequirements())
-        {
-            if(craft()->config->get('enableWidgets', 'analytics'))
-            {
-                $settings = $this->settings;
+	/**
+	 * @inheritDoc IWidget::getBodyHtml()
+	 *
+	 * @return string|false
+	 */
+	public function getBodyHtml()
+	{
+		if(craft()->analytics->checkPluginRequirements())
+		{
+			if(craft()->config->get('enableWidgets', 'analytics'))
+			{
+				$settings = $this->settings;
 
-                $profileId = craft()->analytics->getProfileId();
+				$profileId = craft()->analytics->getProfileId();
 
-                if($profileId)
-                {
-                    craft()->templates->includeJsResource('analytics/js/jsapi.js', true);
-                    craft()->templates->includeJsResource('analytics/js/Analytics.js', true);
-                    craft()->templates->includeJsResource('analytics/js/Reports.js');
-                    craft()->templates->includeJsResource('analytics/js/ReportWidgetSettings.js');
-                    craft()->templates->includeJsResource('analytics/js/ReportWidget.js');
+				if($profileId)
+				{
+					craft()->templates->includeJsResource('analytics/js/jsapi.js', true);
+					craft()->templates->includeJsResource('analytics/js/Analytics.js', true);
+					craft()->templates->includeJsResource('analytics/js/Reports.js');
+					craft()->templates->includeJsResource('analytics/js/ReportWidgetSettings.js');
+					craft()->templates->includeJsResource('analytics/js/ReportWidget.js');
 
-                    craft()->templates->includeCssResource('analytics/css/ReportWidget.css');
-                    craft()->templates->includeCssResource('analytics/css/ReportWidgetSettings.css');
-
-
-	                $options = [];
-
-	                // request
-	                $options['request'] = array(
-		                'chart' => (isset($settings['chart']) ? $settings['chart'] : null),
-		                'period' => (isset($settings['period']) ? $settings['period'] : null),
-		                'options' => (isset($settings['options'][$settings['chart']]) ? $settings['options'][$settings['chart']] : null),
-	                );
-
-	                // use cached report response if present
-
-                    if(craft()->config->get('enableCache', 'analytics') === true)
-                    {
-                        $cacheId = ['getChartData', $options['request'], $profileId];
-
-                        $cachedResponse = craft()->analytics_cache->get($cacheId);
-
-                        if($cachedResponse)
-                        {
-                            $options['cachedResponse'] = $cachedResponse;
-                        }
-                    }
+					craft()->templates->includeCssResource('analytics/css/ReportWidget.css');
+					craft()->templates->includeCssResource('analytics/css/ReportWidgetSettings.css');
 
 
-                    // settings modal
+					$options = [];
 
-                    $widgetId = $this->model->id;
-                    $jsonOptions = json_encode($options);
+					// request
+					$options['request'] = array(
+						'chart' => (isset($settings['chart']) ? $settings['chart'] : null),
+						'period' => (isset($settings['period']) ? $settings['period'] : null),
+						'options' => (isset($settings['options'][$settings['chart']]) ? $settings['options'][$settings['chart']] : null),
+					);
 
-                    $jsTemplate = 'window.csrfTokenName = "{{ craft.config.csrfTokenName|e(\'js\') }}";';
-                    $jsTemplate .= 'window.csrfTokenValue = "{{ craft.request.csrfToken|e(\'js\') }}";';
-                    $js = craft()->templates->renderString($jsTemplate);
-                    craft()->templates->includeJs($js);
+					// use cached report response if present
 
-                    craft()->templates->includeJs('var AnalyticsChartLanguage = "'.Craft::t('analyticsChartLanguage').'";');
-                    craft()->templates->includeJs('new Analytics.ReportWidget("widget'.$widgetId.'", '.$jsonOptions.');');
+					if(craft()->config->get('enableCache', 'analytics') === true)
+					{
+						$cacheId = ['getChartData', $options['request'], $profileId];
 
-                    return craft()->templates->render('analytics/_components/widgets/Report/body');
-                }
-                else
-                {
-                    return craft()->templates->render('analytics/_special/plugin-not-configured');
-                }
-            }
-            else
-            {
-                return craft()->templates->render('analytics/_components/widgets/Report/disabled');
-            }
-        }
-        else
-        {
-            return craft()->templates->render('analytics/_special/plugin-not-configured');
-        }
-    }
+						$cachedResponse = craft()->analytics_cache->get($cacheId);
 
-    /**
-     * @inheritDoc ISavableComponentType::getSettingsHtml()
-     *
-     * @return string
-     */
-    public function getSettingsHtml()
-    {
-        craft()->templates->includeJsResource('analytics/js/Analytics.js', true);
-        craft()->templates->includeJsResource('analytics/js/ReportWidgetSettings.js');
-        craft()->templates->includeCssResource('analytics/css/ReportWidgetSettings.css');
+						if($cachedResponse)
+						{
+							$options['cachedResponse'] = $cachedResponse;
+						}
+					}
 
-        $id = 'analytics-settings-'.StringHelper::randomString();
-        $namespaceId = craft()->templates->namespaceInputId($id);
 
-        craft()->templates->includeJs("new Analytics.ReportWidgetSettings('".$namespaceId."');");
+					// settings modal
 
-        $settings = $this->getSettings();
+					$widgetId = $this->model->id;
+					$jsonOptions = json_encode($options);
 
-        // select options
+					$jsTemplate = 'window.csrfTokenName = "{{ craft.config.csrfTokenName|e(\'js\') }}";';
+					$jsTemplate .= 'window.csrfTokenValue = "{{ craft.request.csrfToken|e(\'js\') }}";';
+					$js = craft()->templates->renderString($jsTemplate);
+					craft()->templates->includeJs($js);
 
-        $chartTypes = ['area', 'counter', 'pie', 'table', 'geo'];
+					craft()->templates->includeJs('var AnalyticsChartLanguage = "'.Craft::t('analyticsChartLanguage').'";');
+					craft()->templates->includeJs('new Analytics.ReportWidget("widget'.$widgetId.'", '.$jsonOptions.');');
 
-        $selectOptions = [];
+					return craft()->templates->render('analytics/_components/widgets/Report/body');
+				}
+				else
+				{
+					return craft()->templates->render('analytics/_special/plugin-not-configured');
+				}
+			}
+			else
+			{
+				return craft()->templates->render('analytics/_components/widgets/Report/disabled');
+			}
+		}
+		else
+		{
+			return craft()->templates->render('analytics/_special/plugin-not-configured');
+		}
+	}
 
-        foreach($chartTypes as $chartType)
-        {
-            $selectOptions[$chartType] = $this->_getOptions($chartType);
-        }
+	/**
+	 * @inheritDoc ISavableComponentType::getSettingsHtml()
+	 *
+	 * @return string
+	 */
+	public function getSettingsHtml()
+	{
+		craft()->templates->includeJsResource('analytics/js/Analytics.js', true);
+		craft()->templates->includeJsResource('analytics/js/ReportWidgetSettings.js');
+		craft()->templates->includeCssResource('analytics/css/ReportWidgetSettings.css');
 
-        return craft()->templates->render('analytics/_components/widgets/Report/settings', array(
-           'id' => $id,
-           'settings' => $settings,
-           'selectOptions' => $selectOptions,
-        ));
-    }
+		$id = 'analytics-settings-'.StringHelper::randomString();
+		$namespaceId = craft()->templates->namespaceInputId($id);
 
-    private function _getOptions($chart)
-    {
-        switch($chart)
-        {
-            case 'geo':
+		craft()->templates->includeJs("new Analytics.ReportWidgetSettings('".$namespaceId."');");
 
-                $options = [
-                    'dimensions' => craft()->analytics_metadata->getSelectDimensionOptions(['ga:city', 'ga:country', 'ga:continent', 'ga:subContinent']),
-                    'metrics' => craft()->analytics_metadata->getSelectMetricOptions()
-                ];
+		$settings = $this->getSettings();
 
-                break;
+		// select options
 
-            default:
+		$chartTypes = ['area', 'counter', 'pie', 'table', 'geo'];
 
-                $options = [
-                    'dimensions' => craft()->analytics_metadata->getSelectDimensionOptions(),
-                    'metrics' => craft()->analytics_metadata->getSelectMetricOptions()
-                ];
-        }
+		$selectOptions = [];
 
-        return $options;
-    }
+		foreach($chartTypes as $chartType)
+		{
+			$selectOptions[$chartType] = $this->_getOptions($chartType);
+		}
 
-    // Protected Methods
-    // =========================================================================
+		return craft()->templates->render('analytics/_components/widgets/Report/settings', array(
+		   'id' => $id,
+		   'settings' => $settings,
+		   'selectOptions' => $selectOptions,
+		));
+	}
 
-    /**
-     * @inheritDoc BaseSavableComponentType::defineSettings()
-     *
-     * @return array
-     */
-    protected function defineSettings()
-    {
-        return array(
-            'realtime' => array(AttributeType::Bool),
-            'chart' => array(AttributeType::String),
-            'period' => array(AttributeType::String),
-            'options' => array(AttributeType::Mixed),
-        );
-    }
+	private function _getOptions($chart)
+	{
+		switch($chart)
+		{
+			case 'geo':
+
+				$options = [
+					'dimensions' => craft()->analytics_metadata->getSelectDimensionOptions(['ga:city', 'ga:country', 'ga:continent', 'ga:subContinent']),
+					'metrics' => craft()->analytics_metadata->getSelectMetricOptions()
+				];
+
+				break;
+
+			default:
+
+				$options = [
+					'dimensions' => craft()->analytics_metadata->getSelectDimensionOptions(),
+					'metrics' => craft()->analytics_metadata->getSelectMetricOptions()
+				];
+		}
+
+		return $options;
+	}
+
+	// Protected Methods
+	// =========================================================================
+
+	/**
+	 * @inheritDoc BaseSavableComponentType::defineSettings()
+	 *
+	 * @return array
+	 */
+	protected function defineSettings()
+	{
+		return array(
+			'realtime' => array(AttributeType::Bool),
+			'chart' => array(AttributeType::String),
+			'period' => array(AttributeType::String),
+			'options' => array(AttributeType::Mixed),
+		);
+	}
 }

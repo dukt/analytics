@@ -9,51 +9,51 @@ namespace Craft;
 
 class AnalyticsController extends BaseController
 {
-    // Public Methods
-    // =========================================================================
-    
-    /**
-     * Save Widget State
-     *
-     * @return null
-     */
-    public function actionSaveWidgetState()
-    {
-        $widgetId = craft()->request->getPost('id');
+	// Public Methods
+	// =========================================================================
 
-        $formerWidget = craft()->dashboard->getUserWidgetById($widgetId);
+	/**
+	 * Save Widget State
+	 *
+	 * @return null
+	 */
+	public function actionSaveWidgetState()
+	{
+		$widgetId = craft()->request->getPost('id');
 
-        if($formerWidget)
-        {
-            $postSettings = craft()->request->getPost('settings');
+		$formerWidget = craft()->dashboard->getUserWidgetById($widgetId);
 
-            $widgetSettings = [
-                'chart' => $postSettings['chart'],
-                'period' => $postSettings['period'],
-            ];
+		if($formerWidget)
+		{
+			$postSettings = craft()->request->getPost('settings');
 
-            if(isset($postSettings['options']))
-            {
-                $widgetSettings['options'] = $postSettings['options'];
-            }
+			$widgetSettings = [
+				'chart' => $postSettings['chart'],
+				'period' => $postSettings['period'],
+			];
 
-            $widget = new WidgetModel();
-            $widget->id = $widgetId;
-            $widget->type = $formerWidget->type;
-            $widget->settings = $widgetSettings;
+			if(isset($postSettings['options']))
+			{
+				$widgetSettings['options'] = $postSettings['options'];
+			}
 
-            if (craft()->dashboard->saveUserWidget($widget))
-            {
-                $this->returnJson(true);
-            }
-            else
-            {
-                $this->returnErrorJson('Couldn’t save widget');
-            }
-        }
-        else
-        {
-            $this->returnErrorJson('Couldn’t save widget');
-        }
-    }
+			$widget = new WidgetModel();
+			$widget->id = $widgetId;
+			$widget->type = $formerWidget->type;
+			$widget->settings = $widgetSettings;
+
+			if (craft()->dashboard->saveUserWidget($widget))
+			{
+				$this->returnJson(true);
+			}
+			else
+			{
+				$this->returnErrorJson('Couldn’t save widget');
+			}
+		}
+		else
+		{
+			$this->returnErrorJson('Couldn’t save widget');
+		}
+	}
 }

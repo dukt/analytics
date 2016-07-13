@@ -2,36 +2,36 @@
  * Report Widget Settings
  */
 Analytics.ReportWidgetSettings = Garnish.Base.extend({
-    init: function(id, settings)
-    {
-        this.$container = $('#'+id);
-        this.$form = this.$container.closest('form');
+	init: function(id, settings)
+	{
+		this.$container = $('#'+id);
+		this.$form = this.$container.closest('form');
 
-        this.settings = settings;
+		this.settings = settings;
 
-        this.$chartTypes = $('.chart-picker ul.chart-types li', this.$form);
-        this.$chartSelect = $('.chart-select select', this.$form);
+		this.$chartTypes = $('.chart-picker ul.chart-types li', this.$form);
+		this.$chartSelect = $('.chart-select select', this.$form);
 
-        this.$selectizeSelects = $('.selectize select', this.$form);
+		this.$selectizeSelects = $('.selectize select', this.$form);
 
-        this.$selectizeSelects.selectize();
+		this.$selectizeSelects.selectize();
 
-        this.addListener(this.$chartTypes, 'click', $.proxy(function(ev) {
+		this.addListener(this.$chartTypes, 'click', $.proxy(function(ev) {
 
-            var $target = $(ev.currentTarget);
+			var $target = $(ev.currentTarget);
 
-            this.$chartTypes.removeClass('active');
+			this.$chartTypes.removeClass('active');
 
-            $target.addClass('active');
+			$target.addClass('active');
 
-            this.$chartSelect.val($target.data('chart-type'));
-            this.$chartSelect.trigger('change');
+			this.$chartSelect.val($target.data('chart-type'));
+			this.$chartSelect.trigger('change');
 
-        }, this));
+		}, this));
 
-        this.$chartTypes.filter('[data-chart-type='+this.$chartSelect.val()+']').trigger('click');
+		this.$chartTypes.filter('[data-chart-type='+this.$chartSelect.val()+']').trigger('click');
 
-        window.dashboard.grid.refreshCols(true);
-    }
+		window.dashboard.grid.refreshCols(true);
+	}
 });
 

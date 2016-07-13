@@ -9,296 +9,296 @@ namespace Craft;
 
 class Analytics_ReportsService extends BaseApplicationComponent
 {
-    // Public Methods
-    // =========================================================================
+	// Public Methods
+	// =========================================================================
 
-    /**
-     * Returns a report for any chart type (Area,  Counter,  Pie,  Table,  Geo)
-     *
-     * @param array $options
-     *
-     * @return array
-     */
-    public function getReport($options)
-    {
-        $chart = $options['chart'];
+	/**
+	 * Returns a report for any chart type (Area,  Counter,  Pie,  Table,  Geo)
+	 *
+	 * @param array $options
+	 *
+	 * @return array
+	 */
+	public function getReport($options)
+	{
+		$chart = $options['chart'];
 
-        $methodName = 'get'.ucfirst($chart).'Report';
+		$methodName = 'get'.ucfirst($chart).'Report';
 
-        return $this->{$methodName}($options);
-    }
+		return $this->{$methodName}($options);
+	}
 
-    // Private Methods
-    // =========================================================================
+	// Private Methods
+	// =========================================================================
 
-    /**
-     * Returns an area report
-     *
-     * @param array $requestData
-     *
-     * @return array
-     */
-    private function getAreaReport($requestData)
-    {
-        $period = (isset($requestData['period']) ? $requestData['period'] : null);
-        $dimension = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
-        $metric = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
+	/**
+	 * Returns an area report
+	 *
+	 * @param array $requestData
+	 *
+	 * @return array
+	 */
+	private function getAreaReport($requestData)
+	{
+		$period = (isset($requestData['period']) ? $requestData['period'] : null);
+		$dimension = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
+		$metric = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
 
-        switch($period)
-        {
-            case 'year':
-                $chartDimension = 'ga:yearMonth';
-                $start = date('Y-m-01', strtotime('-1 '.$period));
-                $end = date('Y-m-d');
-                break;
+		switch($period)
+		{
+			case 'year':
+				$chartDimension = 'ga:yearMonth';
+				$start = date('Y-m-01', strtotime('-1 '.$period));
+				$end = date('Y-m-d');
+				break;
 
-            default:
-                $chartDimension = 'ga:date';
-                $start = date('Y-m-d', strtotime('-1 '.$period));
-                $end = date('Y-m-d');
-        }
-
-
-        // Chart
-
-        $criteria = new Analytics_RequestCriteriaModel;
-        $criteria->startDate = $start;
-        $criteria->endDate = $end;
-        $criteria->metrics = $metric;
-
-        $criteria->optParams = array(
-            'dimensions' => $chartDimension,
-            'sort' => $chartDimension
-        );
-
-        if($dimension)
-        {
-            $criteria->optParams['filters'] = $dimension.'!=(not set);'.$dimension.'!=(not provided)';
-        }
-
-        $chartResponse = craft()->analytics->sendRequest($criteria);
+			default:
+				$chartDimension = 'ga:date';
+				$start = date('Y-m-d', strtotime('-1 '.$period));
+				$end = date('Y-m-d');
+		}
 
 
-        // Total
+		// Chart
 
-        $total = 0;
+		$criteria = new Analytics_RequestCriteriaModel;
+		$criteria->startDate = $start;
+		$criteria->endDate = $end;
+		$criteria->metrics = $metric;
 
-        $totalCriteria = new Analytics_RequestCriteriaModel;
-        $totalCriteria->startDate = $start;
-        $totalCriteria->endDate = $end;
-        $totalCriteria->metrics = $metric;
+		$criteria->optParams = array(
+			'dimensions' => $chartDimension,
+			'sort' => $chartDimension
+		);
 
-        if(isset($criteria->optParams['filters']))
-        {
-            $totalCriteria->optParams = array('filters' => $criteria->optParams['filters']);
-        }
+		if($dimension)
+		{
+			$criteria->optParams['filters'] = $dimension.'!=(not set);'.$dimension.'!=(not provided)';
+		}
 
-        $response = craft()->analytics->sendRequest($totalCriteria);
-
-        if(!empty($response['rows'][0][0]['f']))
-        {
-            $total = $response['rows'][0][0]['f'];
-        }
+		$chartResponse = craft()->analytics->sendRequest($criteria);
 
 
-        // Return JSON
+		// Total
 
-        return [
-            'type' => 'area',
-            'chart' => $chartResponse,
-            'total' => $total,
-            'metric' => Craft::t(craft()->analytics_metadata->getDimMet($metric)),
-            'period' => $period,
-            'periodLabel' => Craft::t('This '.$period)
-        ];
-    }
+		$total = 0;
 
-    /**
-     * Returns a counter report
-     *
-     * @param array $requestData
-     *
-     * @return array
-     */
-    private function getCounterReport($requestData)
-    {
-        $period = (isset($requestData['period']) ? $requestData['period'] : null);
-        $dimension = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
-        $metric = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
+		$totalCriteria = new Analytics_RequestCriteriaModel;
+		$totalCriteria->startDate = $start;
+		$totalCriteria->endDate = $end;
+		$totalCriteria->metrics = $metric;
 
-        $start = date('Y-m-d', strtotime('-1 '.$period));
-        $end = date('Y-m-d');
+		if(isset($criteria->optParams['filters']))
+		{
+			$totalCriteria->optParams = array('filters' => $criteria->optParams['filters']);
+		}
+
+		$response = craft()->analytics->sendRequest($totalCriteria);
+
+		if(!empty($response['rows'][0][0]['f']))
+		{
+			$total = $response['rows'][0][0]['f'];
+		}
 
 
-        // Counter
+		// Return JSON
 
-        $criteria = new Analytics_RequestCriteriaModel;
-        $criteria->startDate = $start;
-        $criteria->endDate = $end;
-        $criteria->metrics = $metric;
+		return [
+			'type' => 'area',
+			'chart' => $chartResponse,
+			'total' => $total,
+			'metric' => Craft::t(craft()->analytics_metadata->getDimMet($metric)),
+			'period' => $period,
+			'periodLabel' => Craft::t('This '.$period)
+		];
+	}
 
-        if($dimension)
-        {
-            $optParams = array('filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)');
-            $criteria->optParams = $optParams;
-        }
+	/**
+	 * Returns a counter report
+	 *
+	 * @param array $requestData
+	 *
+	 * @return array
+	 */
+	private function getCounterReport($requestData)
+	{
+		$period = (isset($requestData['period']) ? $requestData['period'] : null);
+		$dimension = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
+		$metric = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
 
-        $response = craft()->analytics->sendRequest($criteria);
-
-        if(!empty($response['rows'][0][0]['f']))
-        {
-            $count = $response['rows'][0][0]['f'];
-        }
-        else
-        {
-            $count = 0;
-        }
-
-        $counter = array(
-            'count' => $count,
-            'label' => StringHelper::toLowerCase(Craft::t(craft()->analytics_metadata->getDimMet($metric)))
-        );
-
-
-        // Return JSON
-
-        return [
-            'type' => 'counter',
-            'counter' => $counter,
-            'response' => $response,
-            'metric' => Craft::t(craft()->analytics_metadata->getDimMet($metric)),
-            'period' => $period,
-            'periodLabel' => Craft::t('this '.$period)
-        ];
-    }
-
-    /**
-     * Returns a pie report
-     *
-     * @param array $requestData
-     *
-     * @return array
-     */
-    private function getPieReport($requestData)
-    {
-        $period = (isset($requestData['period']) ? $requestData['period'] : null);
-        $dimension = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
-        $metric = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
-
-        $start = date('Y-m-d', strtotime('-1 '.$period));
-        $end = date('Y-m-d');
-
-        $criteria = new Analytics_RequestCriteriaModel;
-        $criteria->startDate = $start;
-        $criteria->endDate = $end;
-        $criteria->metrics = $metric;
-
-        $criteria->optParams = array(
-            'dimensions' => $dimension,
-            'sort' => '-'.$metric,
-            'max-results' => 20,
-            'filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)'
-        );
-
-        $tableResponse = craft()->analytics->sendRequest($criteria);
-
-        return [
-            'type' => 'pie',
-            'chart' => $tableResponse,
-            'dimension' => Craft::t(craft()->analytics_metadata->getDimMet($dimension)),
-            'metric' => Craft::t(craft()->analytics_metadata->getDimMet($metric)),
-            'period' => $period,
-            'periodLabel' => Craft::t('this '.$period)
-        ];
-    }
-
-    /**
-     * Returns a table report
-     *
-     * @param array $requestData
-     *
-     * @return array
-     */
-    private function getTableReport($requestData)
-    {
-        $period = (isset($requestData['period']) ? $requestData['period'] : null);
-        $dimension = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
-        $metric = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
-
-        $start = date('Y-m-d', strtotime('-1 '.$period));
-        $end = date('Y-m-d');
-
-        $criteria = new Analytics_RequestCriteriaModel;
-        $criteria->startDate = $start;
-        $criteria->endDate = $end;
-        $criteria->metrics = $metric;
-
-        $criteria->optParams = array(
-            'dimensions' => $dimension,
-            'sort' => '-'.$metric,
-            'max-results' => 20,
-            'filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)'
-        );
-
-        $tableResponse = craft()->analytics->sendRequest($criteria);
-
-        return [
-            'type' => 'table',
-            'chart' => $tableResponse,
-            'dimension' => Craft::t(craft()->analytics_metadata->getDimMet($dimension)),
-            'metric' => Craft::t(craft()->analytics_metadata->getDimMet($metric)),
-            'period' => $period,
-            'periodLabel' => Craft::t('this '.$period)
-        ];
-    }
-
-    /**
-     * Returns a geo report
-     *
-     * @param array $requestData
-     *
-     * @return array
-     */
-    private function getGeoReport($requestData)
-    {
-        $period = (isset($requestData['period']) ? $requestData['period'] : null);
-        $dimension = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
-        $metric = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
-
-        $start = date('Y-m-d', strtotime('-1 '.$period));
-        $end = date('Y-m-d');
-
-        $originDimension = $dimension;
-
-        if($dimension == 'ga:city')
-        {
-            $dimension = 'ga:latitude, ga:longitude,'.$dimension;
-        }
+		$start = date('Y-m-d', strtotime('-1 '.$period));
+		$end = date('Y-m-d');
 
 
-        $criteria = new Analytics_RequestCriteriaModel;
-        $criteria->metrics = $metric;
+		// Counter
 
-        $criteria->startDate = $start;
-        $criteria->endDate = $end;
-        $criteria->optParams = array(
-            'dimensions' => $dimension,
-            'sort' => '-'.$metric,
-            'max-results' => 20,
-            'filters' => $originDimension.'!=(not set);'.$originDimension.'!=(not provided)',
-        );
+		$criteria = new Analytics_RequestCriteriaModel;
+		$criteria->startDate = $start;
+		$criteria->endDate = $end;
+		$criteria->metrics = $metric;
 
-        $tableResponse = craft()->analytics->sendRequest($criteria);
+		if($dimension)
+		{
+			$optParams = array('filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)');
+			$criteria->optParams = $optParams;
+		}
 
-        return [
-            'type' => 'geo',
-            'chart' => $tableResponse,
-            'dimensionRaw' => $originDimension,
-            'dimension' => Craft::t(craft()->analytics_metadata->getDimMet($originDimension)),
-            'metric' => Craft::t(craft()->analytics_metadata->getDimMet($metric)),
-            'period' => $period,
-            'periodLabel' => Craft::t('this '.$period)
-        ];
-    }
+		$response = craft()->analytics->sendRequest($criteria);
+
+		if(!empty($response['rows'][0][0]['f']))
+		{
+			$count = $response['rows'][0][0]['f'];
+		}
+		else
+		{
+			$count = 0;
+		}
+
+		$counter = array(
+			'count' => $count,
+			'label' => StringHelper::toLowerCase(Craft::t(craft()->analytics_metadata->getDimMet($metric)))
+		);
+
+
+		// Return JSON
+
+		return [
+			'type' => 'counter',
+			'counter' => $counter,
+			'response' => $response,
+			'metric' => Craft::t(craft()->analytics_metadata->getDimMet($metric)),
+			'period' => $period,
+			'periodLabel' => Craft::t('this '.$period)
+		];
+	}
+
+	/**
+	 * Returns a pie report
+	 *
+	 * @param array $requestData
+	 *
+	 * @return array
+	 */
+	private function getPieReport($requestData)
+	{
+		$period = (isset($requestData['period']) ? $requestData['period'] : null);
+		$dimension = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
+		$metric = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
+
+		$start = date('Y-m-d', strtotime('-1 '.$period));
+		$end = date('Y-m-d');
+
+		$criteria = new Analytics_RequestCriteriaModel;
+		$criteria->startDate = $start;
+		$criteria->endDate = $end;
+		$criteria->metrics = $metric;
+
+		$criteria->optParams = array(
+			'dimensions' => $dimension,
+			'sort' => '-'.$metric,
+			'max-results' => 20,
+			'filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)'
+		);
+
+		$tableResponse = craft()->analytics->sendRequest($criteria);
+
+		return [
+			'type' => 'pie',
+			'chart' => $tableResponse,
+			'dimension' => Craft::t(craft()->analytics_metadata->getDimMet($dimension)),
+			'metric' => Craft::t(craft()->analytics_metadata->getDimMet($metric)),
+			'period' => $period,
+			'periodLabel' => Craft::t('this '.$period)
+		];
+	}
+
+	/**
+	 * Returns a table report
+	 *
+	 * @param array $requestData
+	 *
+	 * @return array
+	 */
+	private function getTableReport($requestData)
+	{
+		$period = (isset($requestData['period']) ? $requestData['period'] : null);
+		$dimension = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
+		$metric = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
+
+		$start = date('Y-m-d', strtotime('-1 '.$period));
+		$end = date('Y-m-d');
+
+		$criteria = new Analytics_RequestCriteriaModel;
+		$criteria->startDate = $start;
+		$criteria->endDate = $end;
+		$criteria->metrics = $metric;
+
+		$criteria->optParams = array(
+			'dimensions' => $dimension,
+			'sort' => '-'.$metric,
+			'max-results' => 20,
+			'filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)'
+		);
+
+		$tableResponse = craft()->analytics->sendRequest($criteria);
+
+		return [
+			'type' => 'table',
+			'chart' => $tableResponse,
+			'dimension' => Craft::t(craft()->analytics_metadata->getDimMet($dimension)),
+			'metric' => Craft::t(craft()->analytics_metadata->getDimMet($metric)),
+			'period' => $period,
+			'periodLabel' => Craft::t('this '.$period)
+		];
+	}
+
+	/**
+	 * Returns a geo report
+	 *
+	 * @param array $requestData
+	 *
+	 * @return array
+	 */
+	private function getGeoReport($requestData)
+	{
+		$period = (isset($requestData['period']) ? $requestData['period'] : null);
+		$dimension = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
+		$metric = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
+
+		$start = date('Y-m-d', strtotime('-1 '.$period));
+		$end = date('Y-m-d');
+
+		$originDimension = $dimension;
+
+		if($dimension == 'ga:city')
+		{
+			$dimension = 'ga:latitude, ga:longitude,'.$dimension;
+		}
+
+
+		$criteria = new Analytics_RequestCriteriaModel;
+		$criteria->metrics = $metric;
+
+		$criteria->startDate = $start;
+		$criteria->endDate = $end;
+		$criteria->optParams = array(
+			'dimensions' => $dimension,
+			'sort' => '-'.$metric,
+			'max-results' => 20,
+			'filters' => $originDimension.'!=(not set);'.$originDimension.'!=(not provided)',
+		);
+
+		$tableResponse = craft()->analytics->sendRequest($criteria);
+
+		return [
+			'type' => 'geo',
+			'chart' => $tableResponse,
+			'dimensionRaw' => $originDimension,
+			'dimension' => Craft::t(craft()->analytics_metadata->getDimMet($originDimension)),
+			'metric' => Craft::t(craft()->analytics_metadata->getDimMet($metric)),
+			'period' => $period,
+			'periodLabel' => Craft::t('this '.$period)
+		];
+	}
 
 }

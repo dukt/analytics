@@ -11,207 +11,207 @@ require_once(CRAFT_PLUGINS_PATH.'analytics/base/AnalyticsTrait.php');
 
 class AnalyticsService extends BaseApplicationComponent
 {
-    // Traits
-    // =========================================================================
+	// Traits
+	// =========================================================================
 
-    use AnalyticsTrait;
+	use AnalyticsTrait;
 
-    // Properties
-    // =========================================================================
+	// Properties
+	// =========================================================================
 
-    private $tracking;
+	private $tracking;
 
-    // Public Methods
-    // =========================================================================
+	// Public Methods
+	// =========================================================================
 
-    /**
-     * Get realtime refresh intervall
-     *
-     * @return int|null
-     */
-    public function getRealtimeRefreshInterval()
-    {
-        $interval = craft()->config->get('realtimeRefreshInterval', 'analytics');
+	/**
+	 * Get realtime refresh intervall
+	 *
+	 * @return int|null
+	 */
+	public function getRealtimeRefreshInterval()
+	{
+		$interval = craft()->config->get('realtimeRefreshInterval', 'analytics');
 
-        if($interval)
-        {
-            return $interval;
-        }
-        else
-        {
-            $plugin = craft()->plugins->getPlugin('analytics');
-            $settings = $plugin->getSettings();
+		if($interval)
+		{
+			return $interval;
+		}
+		else
+		{
+			$plugin = craft()->plugins->getPlugin('analytics');
+			$settings = $plugin->getSettings();
 
-            if(!empty($settings['realtimeRefreshInterval']))
-            {
-                return $settings['realtimeRefreshInterval'];
-            }
-        }
-    }
+			if(!empty($settings['realtimeRefreshInterval']))
+			{
+				return $settings['realtimeRefreshInterval'];
+			}
+		}
+	}
 
-    /**
-     * Get data source from its class name
-     *
-     * @param string $className
-     *
-     * @return mixed
-     */
-    public function getDataSource($className = 'GoogleAnalytics')
-    {
-        $nsClassName = "\\Dukt\\Analytics\\DataSources\\$className";
-        return new $nsClassName;
-    }
+	/**
+	 * Get data source from its class name
+	 *
+	 * @param string $className
+	 *
+	 * @return mixed
+	 */
+	public function getDataSource($className = 'GoogleAnalytics')
+	{
+		$nsClassName = "\\Dukt\\Analytics\\DataSources\\$className";
+		return new $nsClassName;
+	}
 
-    /**
-     * Returns the Google Analytics Profile ID
-     *
-     * @return string|null
-     */
-    public function getProfileId()
-    {
-        $plugin = craft()->plugins->getPlugin('analytics');
-        $settings = $plugin->getSettings();
+	/**
+	 * Returns the Google Analytics Profile ID
+	 *
+	 * @return string|null
+	 */
+	public function getProfileId()
+	{
+		$plugin = craft()->plugins->getPlugin('analytics');
+		$settings = $plugin->getSettings();
 
-        if(!empty($settings['profileId']))
-        {
-            return 'ga:'.$settings['profileId'];
-        }
-    }
+		if(!empty($settings['profileId']))
+		{
+			return 'ga:'.$settings['profileId'];
+		}
+	}
 
-    /**
-     * Send tracking data to Google Analytics.
-     *
-     * @param array $options
-     *
-     * @return AnalyticsTracking|null
-     */
-    public function track($options)
-    {
-        if(!$this->tracking)
-        {
-	        require_once(CRAFT_PLUGINS_PATH.'analytics/etc/craft/AnalyticsTracking.php');
-	        $this->tracking = new AnalyticsTracking($options);
-        }
+	/**
+	 * Send tracking data to Google Analytics.
+	 *
+	 * @param array $options
+	 *
+	 * @return AnalyticsTracking|null
+	 */
+	public function track($options)
+	{
+		if(!$this->tracking)
+		{
+			require_once(CRAFT_PLUGINS_PATH.'analytics/etc/craft/AnalyticsTracking.php');
+			$this->tracking = new AnalyticsTracking($options);
+		}
 
-        return $this->tracking;
-    }
+		return $this->tracking;
+	}
 
-    /**
-     * Sends a request based on Analytics_RequestCriteriaModel to Google Analytics' API.
-     *
-     * @param Analytics_RequestCriteriaModel $criteria
-     *
-     * @return string
-     */
-    public function sendRequest(Analytics_RequestCriteriaModel $criteria)
-    {
-        // Profile ID
+	/**
+	 * Sends a request based on Analytics_RequestCriteriaModel to Google Analytics' API.
+	 *
+	 * @param Analytics_RequestCriteriaModel $criteria
+	 *
+	 * @return string
+	 */
+	public function sendRequest(Analytics_RequestCriteriaModel $criteria)
+	{
+		// Profile ID
 
-        $criteria->ids = craft()->analytics->getProfileId();
-
-
-        // Filters
-
-        $filters = [];
-
-        if(isset($criteria->optParams['filters']))
-        {
-            $filters = $criteria->optParams['filters'];
-
-            if(is_string($filters))
-            {
-                $filters = explode(";", $filters);
-            }
-        }
-
-        $configFilters = craft()->config->get('filters', 'analytics');
-
-        if($configFilters)
-        {
-            $filters = array_merge($filters, $configFilters);
-        }
-
-        if(count($filters) > 0)
-        {
-            $optParams = $criteria->optParams;
-
-            $optParams['filters'] = implode(";", $filters);
-
-            $criteria->optParams = $optParams;
-        }
+		$criteria->ids = craft()->analytics->getProfileId();
 
 
-        // Perform request
+		// Filters
 
-        if($criteria->realtime)
-        {
-            $response = craft()->analytics_api->apiGetGADataRealtime(
-                $criteria->ids,
-                $criteria->metrics,
-                $criteria->optParams
-            );
-        }
-        else
-        {
-            $response = craft()->analytics_api->apiGetGAData(
-                $criteria->ids,
-                $criteria->startDate,
-                $criteria->endDate,
-                $criteria->metrics,
-                $criteria->optParams,
-                $criteria->enableCache
-            );
-        }
+		$filters = [];
+
+		if(isset($criteria->optParams['filters']))
+		{
+			$filters = $criteria->optParams['filters'];
+
+			if(is_string($filters))
+			{
+				$filters = explode(";", $filters);
+			}
+		}
+
+		$configFilters = craft()->config->get('filters', 'analytics');
+
+		if($configFilters)
+		{
+			$filters = array_merge($filters, $configFilters);
+		}
+
+		if(count($filters) > 0)
+		{
+			$optParams = $criteria->optParams;
+
+			$optParams['filters'] = implode(";", $filters);
+
+			$criteria->optParams = $optParams;
+		}
 
 
-        // Response
+		// Perform request
 
-        if($criteria->format == 'gaData')
-        {
-            return $response;
-        }
-        else
-        {
-            return AnalyticsHelper::parseGoogleAnalyticsResponse($response);
-        }
-    }
+		if($criteria->realtime)
+		{
+			$response = craft()->analytics_api->apiGetGADataRealtime(
+				$criteria->ids,
+				$criteria->metrics,
+				$criteria->optParams
+			);
+		}
+		else
+		{
+			$response = craft()->analytics_api->apiGetGAData(
+				$criteria->ids,
+				$criteria->startDate,
+				$criteria->endDate,
+				$criteria->metrics,
+				$criteria->optParams,
+				$criteria->enableCache
+			);
+		}
 
-    /**
-     * Get Element URL Path
-     *
-     * @param int           $elementId
-     * @param string|null   $localeId
-     */
-    public function getElementUrlPath($elementId, $localeId)
-    {
-        $element = craft()->elements->getElementById($elementId, null, $localeId);
 
-        $uri = $element->uri;
-        $url = $element->url;
+		// Response
 
-        $components = parse_url($url);
+		if($criteria->format == 'gaData')
+		{
+			return $response;
+		}
+		else
+		{
+			return AnalyticsHelper::parseGoogleAnalyticsResponse($response);
+		}
+	}
 
-        if($components['path'])
-        {
-            $uri = $components['path'];
-        }
+	/**
+	 * Get Element URL Path
+	 *
+	 * @param int           $elementId
+	 * @param string|null   $localeId
+	 */
+	public function getElementUrlPath($elementId, $localeId)
+	{
+		$element = craft()->elements->getElementById($elementId, null, $localeId);
 
-        return $uri;
-    }
+		$uri = $element->uri;
+		$url = $element->url;
 
-    // Private Methods
-    // =========================================================================
+		$components = parse_url($url);
 
-    /**
-     * Get Data
-     *
-     * @param string $name
-     */
-    private function getData($name)
-    {
-        $jsonData = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/'.$name.'.json');
-        $data = json_decode($jsonData, true);
+		if($components['path'])
+		{
+			$uri = $components['path'];
+		}
 
-        return $data;
-    }
+		return $uri;
+	}
+
+	// Private Methods
+	// =========================================================================
+
+	/**
+	 * Get Data
+	 *
+	 * @param string $name
+	 */
+	private function getData($name)
+	{
+		$jsonData = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/'.$name.'.json');
+		$data = json_decode($jsonData, true);
+
+		return $data;
+	}
 }

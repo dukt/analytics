@@ -2,49 +2,49 @@
 
 {% set content %}
 
-    {% for dependency in pluginDependencies %}
+	{% for dependency in pluginDependencies %}
 
-        <h2>{{ dependency.name }}</h2>
+		<h2>{{ dependency.name }}</h2>
 
-        {% if dependency.plugin %}
-            {% if not dependency.plugin.isInstalled %}
+		{% if dependency.plugin %}
+			{% if not dependency.plugin.isInstalled %}
 
-                <p>{{ "{name} is not installed."|t({ name: dependency.name }) }}</p>
+				<p>{{ "{name} is not installed."|t({ name: dependency.name }) }}</p>
 
-                <p>{{ "Please install {name} in {url} to continue."|t({name: dependency.name, url: '<a href="'~url('settings/plugins')~'">{title}</a>'|t({title: 'plugin settings'})})|raw }}</p>
+				<p>{{ "Please install {name} in {url} to continue."|t({name: dependency.name, url: '<a href="'~url('settings/plugins')~'">{title}</a>'|t({title: 'plugin settings'})})|raw }}</p>
 
-            {% elseif not dependency.plugin.isEnabled %}
+			{% elseif not dependency.plugin.isEnabled %}
 
-                <p>{{ "{name} is installed but disabled."|t({ name: dependency.name }) }}</p>
+				<p>{{ "{name} is installed but disabled."|t({ name: dependency.name }) }}</p>
 
-                <p>{{ "Please enable {name} in {url} to continue."|t({name: dependency.name, url: '<a href="'~url('settings/plugins')~'">{title}</a>'|t({title: 'plugin settings'})})|raw }}</p>
+				<p>{{ "Please enable {name} in {url} to continue."|t({name: dependency.name, url: '<a href="'~url('settings/plugins')~'">{title}</a>'|t({title: 'plugin settings'})})|raw }}</p>
 
-            {% else %}
+			{% else %}
 
-                <p>{{ "{name} plugin requires an update."|t({ name: dependency.name }) }}</p>
+				<p>{{ "{name} plugin requires an update."|t({ name: dependency.name }) }}</p>
 
-                <ul class="light">
-                    {% if dependency.plugin %}
-                        <li>{{ "Current: {name} {version}"|t({ name: dependency.name, version: dependency.plugin.version  }) }}</li>
-                    {% endif %}
-                    <li>{{ "Required: {name} {version} or above required"|t({ name: dependency.name, version: dependency.version  }) }}</li>
-                </ul>
+				<ul class="light">
+					{% if dependency.plugin %}
+						<li>{{ "Current: {name} {version}"|t({ name: dependency.name, version: dependency.plugin.version  }) }}</li>
+					{% endif %}
+					<li>{{ "Required: {name} {version} or above required"|t({ name: dependency.name, version: dependency.version  }) }}</li>
+				</ul>
 
 
-                <p><a class="btn" href="{{ dependency.pluginLink }}">{{ "Download Latest {name} plugin"|t({ name: dependency.name }) }}</a></p>
+				<p><a class="btn" href="{{ dependency.pluginLink }}">{{ "Download Latest {name} plugin"|t({ name: dependency.name }) }}</a></p>
 
-            {% endif %}
-        {% else %}
+			{% endif %}
+		{% else %}
 
-            <p>{{ "{name} plugin is required to continue."|t({ name: dependency.name }) }}</p>
+			<p>{{ "{name} plugin is required to continue."|t({ name: dependency.name }) }}</p>
 
-            <p><a class="btn" href="{{ dependency.pluginLink }}">{{ "Download Latest {name} plugin"|t({ name: dependency.name }) }}</a></p>
+			<p><a class="btn" href="{{ dependency.pluginLink }}">{{ "Download Latest {name} plugin"|t({ name: dependency.name }) }}</a></p>
 
-        {% endif %}
+		{% endif %}
 
-        {% if not loop.last %}
-            <hr />
-        {% endif %}
+		{% if not loop.last %}
+			<hr />
+		{% endif %}
 
-    {% endfor %}
+	{% endfor %}
 {% endset %}
