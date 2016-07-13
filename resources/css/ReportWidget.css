@@ -36,10 +36,7 @@
   overflow: hidden; }
 
 .analytics_report .chart.area {
-  margin: 0 -24px 0 -24px; }
-
-.analytics_report .chart.pie {
-  margin: 0 -24px 48px -24px; }
+  margin: 0 -24px -24px -24px; }
 
 .analytics_report .chart.counter {
   min-height: inherit;
@@ -51,8 +48,7 @@
   line-height: 1em;
   margin-bottom: 0.1em; }
 
-.analytics_report .chart.counter .label,
-.analytics_report .chart.counter .period {
+.analytics_report .chart.counter .label, .analytics_report .chart.counter .period {
   display: inline;
   font-size: 1.2em;
   opacity: .7; }
