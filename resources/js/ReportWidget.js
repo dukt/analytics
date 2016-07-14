@@ -3,94 +3,104 @@
  */
 Analytics.ReportWidget = Garnish.Base.extend(
 {
-    requestData: null,
+	report: null,
 
-    init: function(element, options)
-    {
-        this.$element = $('#'+element);
-        this.$title = $('.title', this.$element);
-        this.$body = $('.body', this.$element);
-        this.$date = $('.date', this.$element);
-        this.$spinner = $('.spinner', this.$element);
-        this.$spinner.removeClass('body-loading');
-        this.$error = $('.error', this.$element);
+	$title: null,
+	$body: null,
+	$date: null,
+	$spinner: null,
+	$error: null,
+	$report: null,
 
-
-        // default/cached request
-
-        this.chartRequest = options['request'];
-
-        if(typeof(this.chartRequest) != 'undefined')
-        {
-            this.requestData = this.chartRequest;
-        }
+	init: function(element, options)
+	{
+		this.$element = $('#'+element);
+		this.$title = $('.title', this.$element);
+		this.$body = $('.body', this.$element);
+		this.$date = $('.date', this.$element);
+		this.$spinner = $('.spinner', this.$element);
+		this.$spinner.removeClass('body-loading');
+		this.$error = $('.error', this.$element);
 
 
-        // default/cached response
+		// cached request
 
-        this.chartResponse = options['cachedResponse'];
+		var request;
 
-        if(typeof(this.chartResponse) != 'undefined')
-        {
-            this.$spinner.removeClass('hidden');
+		if(typeof(options['request']) != 'undefined')
+		{
+			request = options['request'];
+		}
 
-            this.parseResponse(this.chartResponse);
-        }
-        else if(this.requestData)
-        {
-            this.chartResponse = this.sendRequest(this.requestData);
-        }
-    },
 
-    sendRequest: function(data)
-    {
-        this.$spinner.removeClass('hidden');
+		// default/cached response
 
-        $('.chart', this.$body).remove();
+		if(typeof(options['cachedResponse']) != 'undefined')
+		{
+			this.$spinner.removeClass('hidden');
 
-        this.$error.addClass('hidden');
+			var response = options['cachedResponse'];
 
-        Craft.postActionRequest('analytics/reports/getReport', data, $.proxy(function(response, textStatus)
-        {
-            this.$spinner.addClass('hidden');
+			this.parseResponse(response);
+		}
+		else if(request)
+		{
+			this.sendRequest(request);
+		}
+	},
 
-            if(textStatus == 'success' && typeof(response.error) == 'undefined')
-            {
-                this.parseResponse(response);
-            }
-            else
-            {
-                var msg = 'An unknown error occured.';
+	sendRequest: function(data)
+	{
+		this.$spinner.removeClass('hidden');
 
-                if(typeof(response) != 'undefined' && response && typeof(response.error) != 'undefined')
-                {
-                    msg = response.error;
-                }
+		$('.report', this.$body).remove();
 
-                this.$error.html(msg);
-                this.$error.removeClass('hidden');
-            }
+		this.$error.addClass('hidden');
 
-            window.dashboard.grid.refreshCols(true);
+		Craft.postActionRequest('analytics/reports/getReport', data, $.proxy(function(response, textStatus)
+		{
+			this.$spinner.addClass('hidden');
 
-        }, this));
-    },
+			if(textStatus == 'success' && typeof(response.error) == 'undefined')
+			{
+				this.parseResponse(response);
+			}
+			else
+			{
+				var msg = 'An unknown error occured.';
 
-    parseResponse: function(response)
-    {
-        $chart = $('<div class="report"></div>');
-        $chart.appendTo(this.$body);
+				if(typeof(response) != 'undefined' && response && typeof(response.error) != 'undefined')
+				{
+					msg = response.error;
+				}
 
-        this.$title.html(response.metric);
-        this.$date.html(response.periodLabel);
+				this.$error.html(msg);
+				this.$error.removeClass('hidden');
+			}
 
-        var chartType = response.type;
-        chartType = chartType.charAt(0).toUpperCase() + chartType.slice(1);
+			window.dashboard.grid.refreshCols(true);
 
-        response['onAfterInit'] = $.proxy(function() {
-            this.$spinner.addClass('hidden');
-        }, this);
+		}, this));
+	},
 
-        this.chart = new Analytics.reports[chartType]($chart, response);
-    }
+	parseResponse: function(response)
+	{
+	    var chartData = response,
+			metric = response.metric,
+            periodLabel = response.periodLabel,
+            type = response.type,
+            chartType = type.charAt(0).toUpperCase() + type.slice(1);
+
+		this.$report = $('<div class="report"></div>');
+		this.$report.appendTo(this.$body);
+
+		this.$title.html(metric);
+		this.$date.html(periodLabel);
+
+		chartData['onAfterInit'] = $.proxy(function() {
+			this.$spinner.addClass('hidden');
+		}, this);
+
+		this.report = new Analytics.reports[chartType](this.$report, chartData);
+	}
 });

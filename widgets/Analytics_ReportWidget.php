@@ -29,7 +29,8 @@ class Analytics_ReportWidget extends BaseWidget
 	 */
 	public function getTitle()
 	{
-		try {
+		try
+		{
 			$name = [];
 			$chartType = $this->settings['chart'];
 
@@ -102,21 +103,18 @@ class Analytics_ReportWidget extends BaseWidget
 					craft()->templates->includeCssResource('analytics/css/ReportWidget.css');
 					craft()->templates->includeCssResource('analytics/css/ReportWidgetSettings.css');
 
-
-					$options = [];
-
-					// request
-					$options['request'] = array(
+					$request = [
 						'chart' => (isset($settings['chart']) ? $settings['chart'] : null),
 						'period' => (isset($settings['period']) ? $settings['period'] : null),
 						'options' => (isset($settings['options'][$settings['chart']]) ? $settings['options'][$settings['chart']] : null),
-					);
+					];
 
-					// use cached report response if present
+
+					// use cached response if available
 
 					if(craft()->config->get('enableCache', 'analytics') === true)
 					{
-						$cacheId = ['getChartData', $options['request'], $profileId];
+						$cacheId = ['getChartData', $request, $profileId];
 
 						$cachedResponse = craft()->analytics_cache->get($cacheId);
 
@@ -130,6 +128,11 @@ class Analytics_ReportWidget extends BaseWidget
 					// settings modal
 
 					$widgetId = $this->model->id;
+
+					$options = [
+						'request' => $request
+					];
+
 					$jsonOptions = json_encode($options);
 
 					$jsTemplate = 'window.csrfTokenName = "{{ craft.config.csrfTokenName|e(\'js\') }}";';
