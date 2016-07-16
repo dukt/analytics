@@ -1,0 +1,16 @@
+{% extends "analytics/_layouts/utils" %}
+{% import "_includes/forms" as forms %}
+
+{% set selectedTab = 'columnGroups' %}
+
+{% set content %}
+
+	<p>{{ "Column groups for dimensions & metrics:" }}</p>
+
+	<ul>
+		{% for key, columnGroup in columnGroups %}
+			<li>{{ columnGroup }}</li>
+		{% endfor %}
+	</ul>
+
+{% endset %}

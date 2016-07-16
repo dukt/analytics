@@ -209,6 +209,8 @@ class Analytics_MetadataService extends BaseApplicationComponent
 				}
 			}
 
+			ksort($groups);
+
 			if($type)
 			{
 				$this->groups[$type] = $groups;

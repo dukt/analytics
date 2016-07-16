@@ -58,6 +58,18 @@ class Analytics_UtilsController extends BaseController
 		$this->renderTemplate('analytics/utils/_dataTypes', $variables);
 	}
 
+	/**
+	 * Groups
+	 *
+	 * @return null
+	 */
+	public function actionColumnGroups(array $variables = array())
+	{
+		$variables['columnGroups'] = craft()->analytics_metadata->getColumnGroups();
+
+		$this->renderTemplate('analytics/utils/_columnGroups', $variables);
+	}
+
 	// Private Methods
 	// =========================================================================
 
