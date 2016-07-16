@@ -191,7 +191,7 @@ class Analytics_MetadataService extends BaseApplicationComponent
 	 *
 	 * @return array
 	 */
-	public function getGroups($type = null)
+	public function getColumnGroups($type = null)
 	{
 		if($type && isset($this->groups[$type]))
 		{
@@ -332,7 +332,7 @@ class Analytics_MetadataService extends BaseApplicationComponent
 	{
 		$options = [];
 
-		foreach($this->getGroups($type) as $group)
+		foreach($this->getColumnGroups($type) as $group)
 		{
 			$options[]['optgroup'] = Craft::t($group);
 
