@@ -1,0 +1,16 @@
+{% extends "analytics/_layouts/utils" %}
+{% import "_includes/forms" as forms %}
+
+{% set selectedTab = 'dataTypes' %}
+
+{% set content %}
+
+	<p>{{ "Dimensions and metrics data returned by Google Analytics' API can be of the following type:"|t }}</p>
+
+	<ul>
+		{% for dataType in dataTypes %}
+			<li>{{ dataType }}</li>
+		{% endfor %}
+	</ul>
+
+{% endset %}

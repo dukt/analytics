@@ -113,6 +113,7 @@ class AnalyticsPlugin extends BasePlugin
 			'analytics/install' => array('action' => "analytics/install/index"),
 			'analytics/utils' => array('action' => "analytics/utils/metadata"),
 			'analytics/utils/metadata' => array('action' => "analytics/utils/metadata"),
+			'analytics/utils/dataTypes' => array('action' => "analytics/utils/dataTypes"),
 		);
 	}
 

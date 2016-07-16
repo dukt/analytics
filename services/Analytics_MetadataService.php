@@ -42,6 +42,28 @@ class Analytics_MetadataService extends BaseApplicationComponent
 	}
 
 	/**
+	 * Returns available data types
+	 *
+	 * @param bool
+	 */
+	public function getDataTypes()
+	{
+		$columns = $this->getColumns();
+
+		$dataTypes = [];
+
+		foreach($columns as $column)
+		{
+			if(!isset($dataTypes[$column->dataType]) && !empty($column->dataType))
+			{
+				$dataTypes[$column->dataType] = $column->dataType;
+			}
+		}
+
+		return $dataTypes;
+	}
+
+	/**
 	 * Get Continent Code
 	 *
 	 * @param string $label

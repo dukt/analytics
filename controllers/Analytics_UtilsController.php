@@ -45,6 +45,19 @@ class Analytics_UtilsController extends BaseController
 		$this->redirect($referer);
 	}
 
+	/**
+	 * Data Types
+	 *
+	 * @return null
+	 */
+	public function actionDataTypes(array $variables = array())
+	{
+
+		$variables['dataTypes'] = craft()->analytics_metadata->getDataTypes();
+
+		$this->renderTemplate('analytics/utils/_dataTypes', $variables);
+	}
+
 	// Private Methods
 	// =========================================================================
 
@@ -82,6 +95,7 @@ class Analytics_UtilsController extends BaseController
 							$column['id'] = str_replace('XX', $i, $item->id);
 							$column['type'] = $item->attributes['type'];
 							$column['group'] = $item->attributes['group'];
+							$column['dataType'] = $item->attributes['dataType'];
 							$column['status'] = $item->attributes['status'];
 							$column['uiName'] = str_replace('XX', $i, $item->attributes['uiName']);
 							$column['description'] = str_replace('XX', $i, $item->attributes['description']);
@@ -99,6 +113,7 @@ class Analytics_UtilsController extends BaseController
 						$column = [];
 						$column['id'] = $item->id;
 						$column['type'] = $item->attributes['type'];
+						$column['dataType'] = $item->attributes['dataType'];
 						$column['group'] = $item->attributes['group'];
 						$column['status'] = $item->attributes['status'];
 						$column['uiName'] = $item->attributes['uiName'];

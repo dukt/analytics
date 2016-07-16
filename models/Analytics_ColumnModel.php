@@ -22,6 +22,7 @@ class Analytics_ColumnModel extends BaseModel
 		return array(
 			'id' => AttributeType::String,
 			'type' => AttributeType::String,
+			'dataType' => AttributeType::String,
 			'group' => AttributeType::String,
 			'status' => AttributeType::String,
 			'uiName' => AttributeType::String,
