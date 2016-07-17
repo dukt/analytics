@@ -29,39 +29,11 @@ class Analytics_ReportWidget extends BaseWidget
 	 */
 	public function getTitle()
 	{
-		try
+		$reportTitle = $this->_getReportTitle();
+
+		if($reportTitle)
 		{
-			$name = [];
-			$chartType = $this->settings['chart'];
-
-			if(isset($this->settings['options'][$chartType]))
-			{
-				$options = $this->settings['options'][$chartType];
-
-				if(!empty($options['dimension']))
-				{
-					$name[] = Craft::t(craft()->analytics_metadata->getDimMet($options['dimension']));
-				}
-
-				if(!empty($options['metric']))
-				{
-					$name[] = Craft::t(craft()->analytics_metadata->getDimMet($options['metric']));
-				}
-			}
-
-			if(!empty($this->settings['period']))
-			{
-				$name[] = Craft::t(ucfirst($this->settings['period']));
-			}
-
-			if(count($name) > 0)
-			{
-				return implode(" - ", $name);
-			}
-		}
-		catch(\Exception $e)
-		{
-			AnalyticsPlugin::log('Couldn’t get Analytics Report’s title: '.$e->getMessage(), LogLevel::Error);
+			return $reportTitle;
 		}
 
 		return Craft::t('Analytics Report');
@@ -237,5 +209,46 @@ class Analytics_ReportWidget extends BaseWidget
 			'period' => array(AttributeType::String),
 			'options' => array(AttributeType::Mixed),
 		);
+	}
+	
+	// Protected Methods
+	// =========================================================================
+
+	private function _getReportTitle()
+	{
+		try
+		{
+			$name = [];
+			$chartType = $this->settings['chart'];
+
+			if(isset($this->settings['options'][$chartType]))
+			{
+				$options = $this->settings['options'][$chartType];
+
+				if(!empty($options['dimension']))
+				{
+					$name[] = Craft::t(craft()->analytics_metadata->getDimMet($options['dimension']));
+				}
+
+				if(!empty($options['metric']))
+				{
+					$name[] = Craft::t(craft()->analytics_metadata->getDimMet($options['metric']));
+				}
+			}
+
+			if(!empty($this->settings['period']))
+			{
+				$name[] = Craft::t(ucfirst($this->settings['period']));
+			}
+
+			if(count($name) > 0)
+			{
+				return implode(" - ", $name);
+			}
+		}
+		catch(\Exception $e)
+		{
+			AnalyticsPlugin::log('Couldn’t get Analytics Report’s title: '.$e->getMessage(), LogLevel::Error);
+		}
 	}
 }
