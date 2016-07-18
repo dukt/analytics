@@ -2,10 +2,14 @@
 /**
  * BaseChart
  */
-Analytics.reports.BaseChart = Garnish.Base.extend({
+Analytics.reports.BaseChart = Garnish.Base.extend(
+{
+	$chart: null,
+	$graph: null,
 
 	type: null,
 	chart: null,
+	chartOptions: null,
 	data: null,
 	period: null,
 	options: null,
