@@ -7,12 +7,17 @@
 
 namespace Craft;
 
-require_once(CRAFT_PLUGINS_PATH.'analytics/vendor/autoload.php');
-
 class AnalyticsPlugin extends BasePlugin
 {
 	// Public Methods
 	// =========================================================================
+
+	public function init()
+	{
+		require_once(CRAFT_PLUGINS_PATH.'analytics/vendor/autoload.php');
+
+		parent::init();
+	}
 
 	/**
 	 * Get Name
