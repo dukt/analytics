@@ -46,7 +46,7 @@ class Analytics_SettingsController extends BaseController
 						craft()->analytics_cache->set(['getAccount', $token], $account);
 					}
 
-					$propertiesOpts = $this->getPropertiesOpts();
+					$propertiesOpts = $this->_getPropertiesOpts();
 
 					if ($account)
 					{
@@ -147,7 +147,7 @@ class Analytics_SettingsController extends BaseController
 	 *
 	 * @return array
 	 */
-	private function getPropertiesOpts()
+	private function _getPropertiesOpts()
 	{
 		$properties = array("" => Craft::t("Select"));
 

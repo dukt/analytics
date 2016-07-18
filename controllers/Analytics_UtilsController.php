@@ -36,8 +36,8 @@ class Analytics_UtilsController extends BaseController
 
 	public function actionloadMetadata()
 	{
-		$this->deleteMetadata();
-		$this->importMetadata();
+		$this->_deleteMetadata();
+		$this->_importMetadata();
 
 		craft()->userSession->setNotice(Craft::t("Metadata loaded."));
 
@@ -73,14 +73,14 @@ class Analytics_UtilsController extends BaseController
 	// Private Methods
 	// =========================================================================
 
-	private function deleteMetadata()
+	private function _deleteMetadata()
 	{
 		$path = craft()->analytics_metadata->getDimmetsFilePath();
 
 		IOHelper::deleteFile($path);
 	}
 
-	private function importMetadata()
+	private function _importMetadata()
 	{
 		$columns = [];
 

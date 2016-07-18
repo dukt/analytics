@@ -17,7 +17,8 @@ class AnalyticsHelper
 	 */
 	public static function parseGoogleAnalyticsResponse($data)
 	{
-		// cols
+		// Columns
+
 		$cols = [];
 
 		foreach($data->columnHeaders as $col)
@@ -66,7 +67,9 @@ class AnalyticsHelper
 			);
 		}
 
-		// rows
+
+		// Rows
+
 		$rows = [];
 
 		if($data->rows)

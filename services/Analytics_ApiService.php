@@ -39,7 +39,7 @@ class Analytics_ApiService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Get web properties
+	 * Returns all web properties
 	 *
 	 * @return bool
 	 */
@@ -62,7 +62,8 @@ class Analytics_ApiService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Get web property
+	 * Returns the web property from its ID
+	 *
 	 * @param $webPropertyId
 	 *
 	 * @return mixed
@@ -76,7 +77,6 @@ class Analytics_ApiService extends BaseApplicationComponent
 				return $webProperty;
 			}
 		}
-
 	}
 
 	/**

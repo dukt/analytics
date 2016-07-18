@@ -156,7 +156,8 @@ class Analytics_ReportsController extends BaseController
 	 */
 	public function actionGetElementReport(array $variables = array())
 	{
-		try {
+		try
+		{
 			$elementId = craft()->request->getRequiredParam('elementId');
 			$locale = craft()->request->getRequiredParam('locale');
 			$metric = craft()->request->getRequiredParam('metric');

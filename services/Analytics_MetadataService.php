@@ -70,7 +70,7 @@ class Analytics_MetadataService extends BaseApplicationComponent
 	 */
 	public function getContinentCode($label)
 	{
-		$continents = $this->getData('continents');
+		$continents = $this->_getData('continents');
 
 		foreach($continents as $continent)
 		{
@@ -88,7 +88,7 @@ class Analytics_MetadataService extends BaseApplicationComponent
 	 */
 	public function getSubContinentCode($label)
 	{
-		$subContinents = $this->getData('subContinents');
+		$subContinents = $this->_getData('subContinents');
 
 		foreach($subContinents as $subContinent)
 		{
@@ -146,7 +146,7 @@ class Analytics_MetadataService extends BaseApplicationComponent
 	{
 		if(!$this->columns)
 		{
-			$this->columns = $this->loadColumns();
+			$this->columns = $this->_loadColumns();
 		}
 
 		if($type)
@@ -420,7 +420,7 @@ class Analytics_MetadataService extends BaseApplicationComponent
 	 *
 	 * @return array
 	 */
-	private function loadColumns()
+	private function _loadColumns()
 	{
 		$cols = [];
 
@@ -451,7 +451,7 @@ class Analytics_MetadataService extends BaseApplicationComponent
 	 *
 	 * @param string $label
 	 */
-	private function getData($name)
+	private function _getData($name)
 	{
 		$jsonData = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/etc/data/'.$name.'.json');
 		$data = json_decode($jsonData, true);
