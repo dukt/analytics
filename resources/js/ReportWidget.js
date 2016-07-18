@@ -35,7 +35,7 @@ Analytics.ReportWidget = Garnish.Base.extend(
 
 		// default/cached response
 
-		if(typeof(options['cachedResponse']) != 'undefined')
+		if(typeof(options['cachedResponse']) != 'undefined' && options['cachedResponse'])
 		{
 			this.$spinner.removeClass('hidden');
 

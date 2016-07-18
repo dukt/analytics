@@ -81,10 +81,6 @@ class Analytics_ReportWidget extends BaseWidget
 						'options' => (isset($settings['options'][$settings['chart']]) ? $settings['options'][$settings['chart']] : null),
 					];
 
-					$options = [
-						'request' => $request
-					];
-
 
 					// use cached response if available
 
@@ -93,27 +89,24 @@ class Analytics_ReportWidget extends BaseWidget
 						$cacheId = ['getChartData', $request, $profileId];
 
 						$cachedResponse = craft()->analytics_cache->get($cacheId);
-
-						if($cachedResponse)
-						{
-							$options['cachedResponse'] = $cachedResponse;
-						}
 					}
 
 
-					// settings modal
+					// render
 
 					$widgetId = $this->model->id;
 
-					$jsonOptions = json_encode($options);
+					$widgetOptions = [
+						'request' => $request,
+						'cachedResponse' => isset($cachedResponse) ? $cachedResponse : null,
+					];
 
 					$jsTemplate = 'window.csrfTokenName = "{{ craft.config.csrfTokenName|e(\'js\') }}";';
 					$jsTemplate .= 'window.csrfTokenValue = "{{ craft.request.csrfToken|e(\'js\') }}";';
 					$js = craft()->templates->renderString($jsTemplate);
 					craft()->templates->includeJs($js);
-
 					craft()->templates->includeJs('var AnalyticsChartLanguage = "'.Craft::t('analyticsChartLanguage').'";');
-					craft()->templates->includeJs('new Analytics.ReportWidget("widget'.$widgetId.'", '.$jsonOptions.');');
+					craft()->templates->includeJs('new Analytics.ReportWidget("widget'.$widgetId.'", '.JsonHelper::encode($widgetOptions).');');
 
 					return craft()->templates->render('analytics/_components/widgets/Report/body');
 				}
@@ -159,7 +152,7 @@ class Analytics_ReportWidget extends BaseWidget
 
 		foreach($chartTypes as $chartType)
 		{
-			$selectOptions[$chartType] = $this->_getOptions($chartType);
+			$selectOptions[$chartType] = $this->_geSelectOptionsByChartType($chartType);
 		}
 
 		return craft()->templates->render('analytics/_components/widgets/Report/settings', array(
@@ -197,7 +190,7 @@ class Analytics_ReportWidget extends BaseWidget
 	 *
 	 * @return array
 	 */
-	private function _getOptions($chartType)
+	private function _geSelectOptionsByChartType($chartType)
 	{
 		switch($chartType)
 		{
