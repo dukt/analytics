@@ -17,9 +17,10 @@ Analytics.reports.BaseChart = Garnish.Base.extend(
 
 	init: function($element, data)
 	{
-		this.visualization = new Analytics.Visualization({
-			onAfterInit: $.proxy(function() {
-
+		this.visualization = new Analytics.Visualization(
+		{
+			onAfterInit: $.proxy(function()
+			{
 				this.$chart = $element;
 				this.$chart.html('');
 				this.$graph = $('<div class="chart" />').appendTo(this.$chart);
