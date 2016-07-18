@@ -81,6 +81,10 @@ class Analytics_ReportWidget extends BaseWidget
 						'options' => (isset($settings['options'][$settings['chart']]) ? $settings['options'][$settings['chart']] : null),
 					];
 
+					$options = [
+						'request' => $request
+					];
+
 
 					// use cached response if available
 
@@ -100,10 +104,6 @@ class Analytics_ReportWidget extends BaseWidget
 					// settings modal
 
 					$widgetId = $this->model->id;
-
-					$options = [
-						'request' => $request
-					];
 
 					$jsonOptions = json_encode($options);
 
@@ -169,9 +169,37 @@ class Analytics_ReportWidget extends BaseWidget
 		));
 	}
 
-	private function _getOptions($chart)
+	// Protected Methods
+	// =========================================================================
+
+	/**
+	 * @inheritDoc BaseSavableComponentType::defineSettings()
+	 *
+	 * @return array
+	 */
+	protected function defineSettings()
 	{
-		switch($chart)
+		return array(
+			'realtime' => array(AttributeType::Bool),
+			'chart' => array(AttributeType::String),
+			'period' => array(AttributeType::String),
+			'options' => array(AttributeType::Mixed),
+		);
+	}
+	
+	// Private Methods
+	// =========================================================================
+
+	/**
+	 * Returns the dimension & metrics options for a given chart type
+	 *
+	 * @param $chartType
+	 *
+	 * @return array
+	 */
+	private function _getOptions($chartType)
+	{
+		switch($chartType)
 		{
 			case 'geo':
 
@@ -193,27 +221,11 @@ class Analytics_ReportWidget extends BaseWidget
 		return $options;
 	}
 
-	// Protected Methods
-	// =========================================================================
-
 	/**
-	 * @inheritDoc BaseSavableComponentType::defineSettings()
+	 * Returns the title of the report
 	 *
-	 * @return array
+	 * @return string|null
 	 */
-	protected function defineSettings()
-	{
-		return array(
-			'realtime' => array(AttributeType::Bool),
-			'chart' => array(AttributeType::String),
-			'period' => array(AttributeType::String),
-			'options' => array(AttributeType::Mixed),
-		);
-	}
-	
-	// Protected Methods
-	// =========================================================================
-
 	private function _getReportTitle()
 	{
 		try

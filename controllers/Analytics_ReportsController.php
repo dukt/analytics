@@ -54,12 +54,12 @@ class Analytics_ReportsController extends BaseController
 						switch($rows[0][0]['v'])
 						{
 							case "RETURNING":
-							$returningVisitor = $rows[0][1]['v'];
-							break;
+								$returningVisitor = $rows[0][1]['v'];
+								break;
 
 							case "NEW":
-							$newVisitor = $rows[0][1]['v'];
-							break;
+								$newVisitor = $rows[0][1]['v'];
+								break;
 						}
 					}
 
@@ -68,12 +68,12 @@ class Analytics_ReportsController extends BaseController
 						switch($rows[1][0]['v'])
 						{
 							case "RETURNING":
-							$returningVisitor = $rows[1][1]['v'];
-							break;
+								$returningVisitor = $rows[1][1]['v'];
+								break;
 
 							case "NEW":
-							$newVisitor = $rows[1][1]['v'];
-							break;
+								$newVisitor = $rows[1][1]['v'];
+								break;
 						}
 					}
 				}
@@ -85,6 +85,7 @@ class Analytics_ReportsController extends BaseController
 		}
 		else
 		{
+			// Demo Mode
 			$newVisitor = 5;
 			$returningVisitor = 7;
 			$total = ($newVisitor + $returningVisitor);
@@ -174,9 +175,9 @@ class Analytics_ReportsController extends BaseController
 				$dimensions = 'ga:date';
 
 				$optParams = array(
-						'dimensions' => $dimensions,
-						'filters' => "ga:pagePath==".$uri
-					);
+					'dimensions' => $dimensions,
+					'filters' => "ga:pagePath==".$uri
+				);
 
 				$criteria = new Analytics_RequestCriteriaModel;
 				$criteria->startDate = $start;
