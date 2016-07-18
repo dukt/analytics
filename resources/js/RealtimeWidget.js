@@ -1,7 +1,24 @@
 /**
  * Realtime
  */
-Analytics.Realtime = Garnish.Base.extend({
+Analytics.Realtime = Garnish.Base.extend(
+{
+	$element: null,
+	$title: null,
+	$body: null,
+	$spinner: null,
+	$streamstatus: null,
+	$error: null,
+	$activeVisitorsCount: null,
+	$progress: null,
+	$legend: null,
+	$realtimeVisitors: null,
+	$newVisitorsProgress: null,
+	$newVisitorsValue: null,
+	$returningVisitorsProgress: null,
+	$returningVisitorsValue: null,
+
+	timer: null,
 
 	init: function(element)
 	{
