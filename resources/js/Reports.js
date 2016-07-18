@@ -56,7 +56,6 @@ Analytics.reports.BaseChart = Garnish.Base.extend(
 	initChart: function()
 	{
 		this.$graph.addClass(this.type);
-		// console.error('Chart type "'+this.type+'" not supported.')
 	},
 
 	draw: function()
