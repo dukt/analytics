@@ -18,17 +18,41 @@
 
 			<h2 class="first">{{ 'Google Analytics Account'|t }}</h2>
 
-			{% if error %}
-				<p class="error">{{ "Couldn’t connect to your Google Analytics account, please try to connect again."|t }}</p>
+			{% if errors|length > 0 %}
+				<ul class="error">
+					{% for error in errors %}
+						<li>{{ error }}</li>
+					{% endfor %}
+				</ul>
 			{% else %}
 				<p>{{'You need to connect Craft to a Google account in order to get started.'|t}}</p>
 			{% endif %}
 
-			<p>{{"Getting errors trying to connect ?"|t}} <a href="{{url('oauth/providers/google')}}">{{"Check Google API key & secret in OAuth settings"|t}}</a>.</p>
-
-			<p><a class="btn submit" href="{{ actionUrl('analytics/oauth/connect') }}">{{"Connect to Google Analytics"|t}}</a></p>
+			{% if token %}
+				<p><a class="btn small" href="{{ actionUrl('analytics/oauth/disconnect') }}">{{'Disconnect'|t}}</a></p>
+			{% else %}
+				<p>{{"Getting errors trying to connect ?"|t}} <a href="{{url('oauth/providers/google')}}">{{"Check Google API key & secret in OAuth settings"|t}}</a>.</p>
+				<p><a class="btn submit" href="{{ actionUrl('analytics/oauth/connect') }}">{{"Connect to Google Analytics"|t}}</a></p>
+			{% endif %}
 
 		{% else %}
+
+			<h2 class="first">{{'Google Analytics Account'|t}}</h2>
+			<p>{{'You are authenticated to Google Analytics with the following account'|t}} :</p>
+
+			<ul>
+				{% if account.uid is defined %}
+					<li><strong>{{ 'UID'|t }} : </strong> {{ account.uid }}</li>
+				{% elseif account.id is defined %}
+					<li><strong>{{ 'UID'|t }} : </strong> {{ account.id }}</li>
+				{% endif %}
+
+				<li><strong>{{ 'Name'|t }} : </strong> {{ account.name }}</li>
+			</ul>
+
+			<p><a class="btn small" href="{{ actionUrl('analytics/oauth/disconnect') }}">{{'Disconnect'|t}}</a></p>
+
+			<hr />
 
 			<form method="post" accept-charset="UTF-8" data-saveshortcut>
 
@@ -38,23 +62,7 @@
 				<input type="hidden" name="pluginClass" value="Analytics">
 				<input type="hidden" name="redirect" value="analytics/settings">
 
-				<h2 class="first">{{'Google Analytics Account'|t}}</h2>
-				<p>{{'You are authenticated to Google Analytics with the following account'|t}} :</p>
 
-				<ul>
-					{% if account.uid is defined %}
-						<li><strong>{{ 'UID'|t }} : </strong> {{ account.uid }}</li>
-					{% elseif account.id is defined %}
-						<li><strong>{{ 'UID'|t }} : </strong> {{ account.id }}</li>
-					{% endif %}
-
-
-					<li><strong>{{ 'Name'|t }} : </strong> {{ account.name }}</li>
-				</ul>
-
-				<p><a class="btn small" href="{{ actionUrl('analytics/oauth/disconnect') }}">{{'Disconnect'|t}}</a></p>
-
-				<hr />
 
 				<h2 class="first">{{'Plugin Settings'|t}}</h2>
 

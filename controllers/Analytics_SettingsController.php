@@ -28,7 +28,7 @@ class Analytics_SettingsController extends BaseController
 		if($variables['isOauthProviderConfigured'])
 		{
 			$variables['account'] = false;
-			$variables['error'] = false;
+			$variables['errors'] = [];
 
 			$provider = craft()->oauth->getProvider('google');
 			$plugin = craft()->plugins->getPlugin('analytics');
@@ -57,6 +57,15 @@ class Analytics_SettingsController extends BaseController
 						$variables['settings'] = $plugin->getSettings();
 					}
 				}
+				catch(\Google_Service_Exception $e)
+				{
+					AnalyticsPlugin::log("Couldn’t get account: ".$e->getMessage(), LogLevel::Error);
+
+					foreach($e->getErrors() as $error)
+					{
+						array_push($variables['errors'], $error['message']);
+					}
+				}
 				catch(\Exception $e)
 				{
 					if(method_exists($e, 'getResponse'))
@@ -68,7 +77,7 @@ class Analytics_SettingsController extends BaseController
 						AnalyticsPlugin::log("Couldn’t get account: ".$e->getMessage(), LogLevel::Error);
 					}
 
-					$variables['error'] = $e->getMessage();
+					array_push($variables['errors'], $e->getMessage());
 				}
 			}
 
