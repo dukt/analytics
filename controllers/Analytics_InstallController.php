@@ -19,12 +19,13 @@ class Analytics_InstallController extends BaseController
 	 */
 	public function actionIndex()
 	{
-		$plugin = craft()->plugins->getPlugin('analytics');
-		$pluginDependencies = $plugin->getMissingDependencies();
+		$missingDependencies = craft()->analytics->getMissingDependencies();
 
-		if (count($pluginDependencies) > 0)
+		if (count($missingDependencies) > 0)
 		{
-			$this->renderTemplate('analytics/_special/install/dependencies', ['pluginDependencies' => $pluginDependencies]);
+			$this->renderTemplate('analytics/_special/install/dependencies', [
+				'pluginDependencies' => $missingDependencies
+			]);
 		}
 		else
 		{
