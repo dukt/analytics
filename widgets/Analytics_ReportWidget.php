@@ -194,6 +194,22 @@ class Analytics_ReportWidget extends BaseWidget
 	{
 		switch($chartType)
 		{
+			case 'area':
+
+				$options = [
+					'metrics' => craft()->analytics_metadata->getSelectMetricOptions()
+				];
+
+				break;
+
+			case 'counter':
+
+				$options = [
+					'metrics' => craft()->analytics_metadata->getSelectMetricOptions()
+				];
+
+				break;
+
 			case 'geo':
 
 				$options = [
