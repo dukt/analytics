@@ -115,7 +115,7 @@ class Analytics_ReportsController extends BaseController
 				'options' => craft()->request->getPost('options'),
 			];
 
-			$cacheId = ['getChartData', $request, $profileId];
+			$cacheId = ['getReport', $request, $profileId];
 
 			$response = craft()->analytics_cache->get($cacheId);
 
