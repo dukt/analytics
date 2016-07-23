@@ -28,6 +28,7 @@ class Analytics_ColumnModel extends BaseModel
 			'uiName' => AttributeType::String,
 			'description' => AttributeType::String,
 			'allowInSegments' => AttributeType::Bool,
+			'addedInApiVersion' => AttributeType::Number,
 		);
 	}
 }

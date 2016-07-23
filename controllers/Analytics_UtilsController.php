@@ -9,6 +9,11 @@ namespace Craft;
 
 class Analytics_UtilsController extends BaseController
 {
+	// Properties
+	// =========================================================================
+
+	private $addedInApiVersion = 3;
+
 	// Public Methods
 	// =========================================================================
 
@@ -99,44 +104,31 @@ class Analytics_UtilsController extends BaseController
 						continue;
 					}
 
+					if($item->attributes['addedInApiVersion'] > $this->addedInApiVersion)
+					{
+						continue;
+					}
+
 					if(isset($item->attributes['minTemplateIndex']))
 					{
 						for($i = $item->attributes['minTemplateIndex']; $i <= $item->attributes['maxTemplateIndex']; $i++)
 						{
 							$column = [];
 							$column['id'] = str_replace('XX', $i, $item->id);
-							$column['type'] = $item->attributes['type'];
-							$column['group'] = $item->attributes['group'];
-							$column['dataType'] = $item->attributes['dataType'];
-							$column['status'] = $item->attributes['status'];
 							$column['uiName'] = str_replace('XX', $i, $item->attributes['uiName']);
 							$column['description'] = str_replace('XX', $i, $item->attributes['description']);
 
-							if(isset($item->attributes['allowInSegments']))
-							{
-								$column['allowInSegments'] = $item->attributes['allowInSegments'];
-							}
-
-							$columns[$column['id']] = $column;
+							$columns[$column['id']] = $this->populateColumnAttributes($column, $item);
 						}
 					}
 					else
 					{
 						$column = [];
 						$column['id'] = $item->id;
-						$column['type'] = $item->attributes['type'];
-						$column['dataType'] = $item->attributes['dataType'];
-						$column['group'] = $item->attributes['group'];
-						$column['status'] = $item->attributes['status'];
 						$column['uiName'] = $item->attributes['uiName'];
 						$column['description'] = $item->attributes['description'];
 
-						if(isset($item->attributes['allowInSegments']))
-						{
-							$column['allowInSegments'] = $item->attributes['allowInSegments'];
-						}
-
-						$columns[$column['id']] = $column;
+						$columns[$column['id']] = $this->populateColumnAttributes($column, $item);
 					}
 				}
 			}
@@ -147,5 +139,25 @@ class Analytics_UtilsController extends BaseController
 		$path = craft()->analytics_metadata->getDimmetsFilePath();
 
 		$res = IOHelper::writeToFile($path, $contents);
+	}
+
+	private function populateColumnAttributes($column, $item)
+	{
+		$column['type'] = $item->attributes['type'];
+		$column['dataType'] = $item->attributes['dataType'];
+		$column['group'] = $item->attributes['group'];
+		$column['status'] = $item->attributes['status'];
+
+		if(isset($item->attributes['allowInSegments']))
+		{
+			$column['allowInSegments'] = $item->attributes['allowInSegments'];
+		}
+
+		if(isset($item->attributes['addedInApiVersion']))
+		{
+			$column['addedInApiVersion'] = $item->attributes['addedInApiVersion'];
+		}
+
+		return $column;
 	}
 }
