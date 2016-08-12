@@ -171,7 +171,12 @@ Analytics.reports.Table = Analytics.reports.BaseChart.extend(
 		this.chartOptions = Analytics.ChartOptions.table();
 		this.chart = new google.visualization.Table(this.$graph.get(0));
 		this.draw();
-	}
+	},
+
+	resize: function()
+	{
+		// disable resize for the table chart
+	},
 });
 
 /**
