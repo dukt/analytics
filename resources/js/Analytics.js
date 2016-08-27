@@ -89,6 +89,7 @@ Analytics.Utils = {
 				case 'percent':
 				case 'time':
 				case 'integer':
+				case 'currency':
 					type = 'number';
 					break;
 
@@ -145,6 +146,12 @@ Analytics.Utils = {
 							f: cell+'%'
 						};
 						break;
+					case 'currency':
+						row[kCell] = {
+							v: cell,
+							f: Analytics.Utils.formatCurrency(cell)
+						};
+						break;
 
 					case 'time':
 						row[kCell] = {
@@ -159,6 +166,11 @@ Analytics.Utils = {
 		});
 
 		return data;
+	},
+
+	formatCurrency: function(value)
+	{
+		return value+' €';
 	},
 
 	toHHMMSS: function(_seconds)
