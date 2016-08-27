@@ -145,34 +145,11 @@ class AnalyticsService extends BaseApplicationComponent
 
 		if($criteria->realtime)
 		{
-			$response = craft()->analytics_api->apiGetGADataRealtime(
-				$criteria->ids,
-				$criteria->metrics,
-				$criteria->optParams
-			);
+			return $this->_sendRealtimeRequest($criteria);
 		}
 		else
 		{
-			$response = craft()->analytics_api->apiGetGAData(
-				$criteria->ids,
-				$criteria->startDate,
-				$criteria->endDate,
-				$criteria->metrics,
-				$criteria->optParams,
-				$criteria->enableCache
-			);
-		}
-
-
-		// Response
-
-		if($criteria->format == 'gaData')
-		{
-			return $response;
-		}
-		else
-		{
-			return AnalyticsHelper::parseGoogleAnalyticsResponse($response);
+			return $this->_sendRequest($criteria);
 		}
 	}
 
@@ -201,6 +178,27 @@ class AnalyticsService extends BaseApplicationComponent
 
 	// Private Methods
 	// =========================================================================
+
+	private function _sendRequest(Analytics_RequestCriteriaModel $criteria)
+	{
+		return craft()->analytics_api->getReport(
+			$criteria->ids,
+			$criteria->startDate,
+			$criteria->endDate,
+			$criteria->metrics,
+			$criteria->optParams,
+			$criteria->enableCache
+		);
+	}
+
+	private function _sendRealtimeRequest(Analytics_RequestCriteriaModel $criteria)
+	{
+		return craft()->analytics_api->getRealtimeReport(
+			$criteria->ids,
+			$criteria->metrics,
+			$criteria->optParams
+		);
+	}
 
 	/**
 	 * Get Data
