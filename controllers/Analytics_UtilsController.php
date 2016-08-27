@@ -71,6 +71,7 @@ class Analytics_UtilsController extends BaseController
 	 */
 	public function actionTests(array $variables = array())
 	{
+		$variables['formats'] = ChartHelper::getFormats();
 		craft()->templates->includeJsResource('analytics/js/Analytics.js');
 		$this->renderTemplate('analytics/utils/_tests', $variables);
 	}
