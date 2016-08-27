@@ -35,4 +35,9 @@ class AnalyticsVariable
 	{
 		return craft()->analytics->track($options);
 	}
+
+	public function getProfileId()
+	{
+		return craft()->analytics->getProfileId();
+	}
 }
