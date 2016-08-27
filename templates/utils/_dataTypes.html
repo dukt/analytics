@@ -5,10 +5,18 @@
 
 {% set content %}
 
-	<p>{{ "Dimensions and metrics data returned by Google Analytics' API can be of the following type:"|t }}</p>
+	<p>{{ "Analytics plugin data types:"|t }}</p>
 
 	<ul>
 		{% for dataType in dataTypes %}
+			<li>{{ dataType }}</li>
+		{% endfor %}
+	</ul>
+
+	<p>{{ "Google Analytics data types:"|t }}</p>
+
+	<ul>
+		{% for dataType in googleAnalyticsDataTypes %}
 			<li>{{ dataType }}</li>
 		{% endfor %}
 	</ul>

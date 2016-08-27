@@ -46,7 +46,7 @@ class Analytics_MetadataService extends BaseApplicationComponent
 	 *
 	 * @param bool
 	 */
-	public function getDataTypes()
+	public function getGoogleAnalyticsDataTypes()
 	{
 		$columns = $this->getColumns();
 
@@ -61,6 +61,18 @@ class Analytics_MetadataService extends BaseApplicationComponent
 		}
 
 		return $dataTypes;
+	}
+
+	public function getDataTypes()
+	{
+		return [
+			'string',
+			'integer',
+			'time',
+			'currency',
+			'float',
+			'date'
+		];
 	}
 
 	/**

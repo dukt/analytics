@@ -57,6 +57,7 @@ class Analytics_UtilsController extends BaseController
 	 */
 	public function actionDataTypes(array $variables = array())
 	{
+		$variables['googleAnalyticsDataTypes'] = craft()->analytics_metadata->getGoogleAnalyticsDataTypes();
 		$variables['dataTypes'] = craft()->analytics_metadata->getDataTypes();
 
 		$this->renderTemplate('analytics/utils/_dataTypes', $variables);
