@@ -25,7 +25,14 @@ class Analytics_ReportsService extends BaseApplicationComponent
 
 		$methodName = 'get'.ucfirst($chart).'Report';
 
-		return $this->{$methodName}($options);
+		if(method_exists($this, $methodName))
+		{
+			return $this->{$methodName}($options);
+		}
+		else
+		{
+			throw new Exception("Chart type `".$chart."` not supported.");
+		}
 	}
 
 	// Private Methods
