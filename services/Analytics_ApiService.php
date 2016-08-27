@@ -22,6 +22,21 @@ class Analytics_ApiService extends BaseApplicationComponent
 	// =========================================================================
 
 	/**
+	 * Get metadata columns
+	 *
+	 * @return \Google_Service_Analytics_MetadataColumns_Resource
+	 */
+	public function getMetadataColumns()
+	{
+		$api = $this->api();
+
+		if($api)
+		{
+			return $api->metadata_columns;
+		}
+	}
+
+	/**
 	 * Get profiles
 	 *
 	 * @param $webProperty
@@ -32,10 +47,66 @@ class Analytics_ApiService extends BaseApplicationComponent
 	{
 		if($webProperty)
 		{
-			$response = craft()->analytics_api->managementProfiles->listManagementProfiles($webProperty['accountId'], $webProperty['id']);
+			$response = $this->getManagementProfiles()->listManagementProfiles($webProperty['accountId'], $webProperty['id']);
 
 			return $response['items'];
 		}
+	}
+
+	/**
+	 * Get Report
+	 * @param       $ids
+	 * @param       $startDate
+	 * @param       $endDate
+	 * @param       $metrics
+	 * @param array $optParams
+	 * @param bool  $enableCache
+	 *
+	 * @return array
+	 */
+	public function getReport($ids, $startDate, $endDate, $metrics, $optParams = array(), $enableCache = true)
+	{
+		$request = [$ids, $startDate, $endDate, $metrics, $optParams];
+
+		$cacheId = ['api.apiGetGAData', $request];
+		$response = craft()->analytics_cache->get($cacheId);
+
+		if(!$response)
+		{
+			$response = $this->getAnalyticsGaDataGet($ids, $startDate, $endDate, $metrics, $optParams);
+			craft()->analytics_cache->set($cacheId, $response, null, null, $enableCache);
+		}
+
+		return $this->parseGoogleAnalyticsResponse($response);
+	}
+
+	/**
+	 * Get real-time report
+	 * @param       $ids
+	 * @param       $metrics
+	 * @param array $optParams
+	 *
+	 * @return array
+	 */
+	public function getRealtimeReport($ids, $metrics, $optParams = array())
+	{
+		$plugin = craft()->plugins->getPlugin('analytics');
+
+		$settings = $plugin->getSettings();
+
+		$cacheDuration = craft()->analytics->getRealtimeRefreshInterval();
+
+		$cacheId = ['api.apiGetGADataRealtime', $ids, $metrics, $optParams];
+		$response = craft()->analytics_cache->get($cacheId);
+
+		if(!$response)
+		{
+			$response = $this->getRealtimeDataGet($ids, $metrics, $optParams);
+
+			craft()->analytics_cache->set($cacheId, $response, $cacheDuration);
+		}
+
+		return $this->parseGoogleAnalyticsResponse($response);
 	}
 
 	/**
@@ -47,7 +118,7 @@ class Analytics_ApiService extends BaseApplicationComponent
 	{
 		if(!$this->webProperties)
 		{
-			$response = craft()->analytics_api->managementWebproperties->listManagementWebproperties("~all");
+			$response = $this->getManagementWebproperties()->listManagementWebproperties("~all");
 
 			if(!$response)
 			{
@@ -79,6 +150,79 @@ class Analytics_ApiService extends BaseApplicationComponent
 		}
 	}
 
+	// Private Methods
+	// =========================================================================
+
+	/**
+	 * Returns a API object
+	 *
+	 * @return bool|Google_Service_Analytics
+	 */
+	private function api()
+	{
+		$handle = $this->oauthHandle;
+
+
+		// provider
+
+		$provider = craft()->oauth->getProvider($handle);
+
+		if($provider)
+		{
+			// token
+			$token = craft()->analytics_oauth->getToken();
+
+			if ($token)
+			{
+				// make token compatible with Google library
+				$arrayToken = array(
+					'created' => 0,
+					'access_token' => $token->accessToken,
+					'expires_in' => $token->endOfLife,
+				);
+
+				$arrayToken = json_encode($arrayToken);
+
+				// client
+				$client = new Google_Client();
+				$client->setApplicationName('Google+ PHP Starter Application');
+				$client->setClientId('clientId');
+				$client->setClientSecret('clientSecret');
+				$client->setRedirectUri('redirectUri');
+				$client->setAccessToken($arrayToken);
+
+				$api = new Google_Service_Analytics($client);
+
+				return $api;
+			}
+			else
+			{
+				AnalyticsPlugin::log('Undefined token', LogLevel::Error);
+				return false;
+			}
+		}
+		else
+		{
+			AnalyticsPlugin::log('Couldn’t get connect provider', LogLevel::Error);
+			return false;
+		}
+	}
+
+	/**
+	 * Get Data GA
+	 *
+	 * @return \Google_Service_Analytics_DataGa_Resource
+	 */
+	private function getGaData()
+	{
+		$api = $this->api();
+
+		if($api)
+		{
+			return $api->data_ga;
+		}
+	}
+
 	/**
 	 * Returns Analytics data for a view (profile). (ga.get)
 	 *
@@ -101,22 +245,25 @@ class Analytics_ApiService extends BaseApplicationComponent
 	 *
 	 * @return Google_Service_Analytics_GaData
 	 */
-	public function getReport($ids, $startDate, $endDate, $metrics, $optParams = array(), $enableCache = true)
+	private function getAnalyticsGaDataGet($ids, $startDate, $endDate, $metrics, $optParams)
 	{
-		$api = craft()->analytics_api->getDataGa();
+		$gaData = $this->getGaData();
 
-		$request = [$ids, $startDate, $endDate, $metrics, $optParams];
+		return $gaData->get($ids, $startDate, $endDate, $metrics, $optParams);
+	}
 
-		$cacheId = ['api.apiGetGAData', $request];
-		$response = craft()->analytics_cache->get($cacheId);
+	/**
+	 * Get Data Realtime
+	 * @return \Google_Service_Analytics_DataRealtime_Resource
+	 */
+	private function getRealtimeData()
+	{
+		$api = $this->api();
 
-		if(!$response)
+		if($api)
 		{
-			$response = $api->get($ids, $startDate, $endDate, $metrics, $optParams);
-			craft()->analytics_cache->set($cacheId, $response, null, null, $enableCache);
+			return $api->data_realtime;
 		}
-
-		return $this->parseGoogleAnalyticsResponse($response);
 	}
 
 	/**
@@ -135,109 +282,11 @@ class Analytics_ApiService extends BaseApplicationComponent
 	 *
 	 * @return Google_Service_Analytics_RealtimeData
 	 */
-	public function getRealtimeReport($ids, $metrics, $optParams = array())
+	private function getRealtimeDataGet($ids, $metrics, $optParams)
 	{
-		$plugin = craft()->plugins->getPlugin('analytics');
+		$realtimeData = $this->getRealtimeData();
 
-		$settings = $plugin->getSettings();
-
-		$cacheDuration = craft()->analytics->getRealtimeRefreshInterval();
-
-		$cacheId = ['api.apiGetGADataRealtime', $ids, $metrics, $optParams];
-		$response = craft()->analytics_cache->get($cacheId);
-
-		if(!$response)
-		{
-			$api = craft()->analytics_api->getDataRealtime();
-
-			if($api)
-			{
-				$response = $api->get($ids, $metrics, $optParams);
-
-				craft()->analytics_cache->set($cacheId, $response, $cacheDuration);
-			}
-		}
-
-		return $this->parseGoogleAnalyticsResponse($response);
-	}
-
-	/**
-	 * Format RAW value
-	 *
-	 * @param string $type
-	 * @param string $value
-	 */
-	private function formatRawValue($type, $value)
-	{
-		switch($type)
-		{
-			case 'INTEGER':
-			case 'CURRENCY':
-			case 'FLOAT':
-			case 'TIME':
-			case 'PERCENT':
-				$value = (float) $value;
-				break;
-
-			default:
-				$value = (string) $value;
-		}
-
-		return $value;
-	}
-
-	/**
-	 * Format Value
-	 *
-	 * @param string $type
-	 * @param string $value
-	 */
-	private function formatValue($type, $value)
-	{
-		switch($type)
-		{
-			case 'INTEGER':
-			case 'FLOAT':
-				$value = (float) $value;
-				$value = round($value, 2);
-				$value = craft()->numberFormatter->formatDecimal($value);
-				break;
-
-			case 'CURRENCY':
-				$currency = 'USD';
-				$value = (float) $value;
-				$value = round($value, 2);
-				$value = craft()->numberFormatter->formatDecimal($value);
-				$value = craft()->numberFormatter->formatCurrency($value, $currency);
-				break;
-
-			case 'TIME':
-				$value = (float) $value;
-				$value = $this->formatTime($value);
-				break;
-
-			case 'PERCENT':
-				$value = (float) $value;
-				$value = round($value, 2);
-				$value = $value.'%';
-
-				break;
-
-			default:
-				$value = (string) $value;
-		}
-
-		return (string) $value;
-	}
-
-	/**
-	 * Format Time in HH:MM:SS from seconds
-	 *
-	 * @param int $seconds
-	 */
-	private function formatTime($seconds)
-	{
-		return gmdate("H:i:s", $seconds);
+		return $realtimeData->get($ids, $metrics, $optParams);
 	}
 
 	/**
@@ -357,32 +406,82 @@ class Analytics_ApiService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Get Data Realtime
-	 * @return \Google_Service_Analytics_DataRealtime_Resource
+	 * Format RAW value
+	 *
+	 * @param string $type
+	 * @param string $value
 	 */
-	public function getDataRealtime()
+	private function formatRawValue($type, $value)
 	{
-		$api = $this->api();
-
-		if($api)
+		switch($type)
 		{
-			return $api->data_realtime;
+			case 'INTEGER':
+			case 'CURRENCY':
+			case 'FLOAT':
+			case 'TIME':
+			case 'PERCENT':
+				$value = (float) $value;
+				break;
+
+			default:
+				$value = (string) $value;
 		}
+
+		return $value;
 	}
 
 	/**
-	 * Get Data GA
+	 * Format Value
 	 *
-	 * @return \Google_Service_Analytics_DataGa_Resource
+	 * @param string $type
+	 * @param string $value
 	 */
-	public function getDataGa()
+	private function formatValue($type, $value)
 	{
-		$api = $this->api();
-
-		if($api)
+		switch($type)
 		{
-			return $api->data_ga;
+			case 'INTEGER':
+			case 'FLOAT':
+				$value = (float) $value;
+				$value = round($value, 2);
+				$value = craft()->numberFormatter->formatDecimal($value);
+				break;
+
+			case 'CURRENCY':
+				$currency = 'USD';
+				$value = (float) $value;
+				$value = round($value, 2);
+				$value = craft()->numberFormatter->formatDecimal($value);
+				$value = craft()->numberFormatter->formatCurrency($value, $currency);
+				break;
+
+			case 'TIME':
+				$value = (float) $value;
+				$value = $this->formatTime($value);
+				break;
+
+			case 'PERCENT':
+				$value = (float) $value;
+				$value = round($value, 2);
+				$value = $value.'%';
+
+				break;
+
+			default:
+				$value = (string) $value;
 		}
+
+		return (string) $value;
+	}
+
+	/**
+	 * Format Time in HH:MM:SS from seconds
+	 *
+	 * @param int $seconds
+	 */
+	private function formatTime($seconds)
+	{
+		return gmdate("H:i:s", $seconds);
 	}
 
 	/**
@@ -390,7 +489,7 @@ class Analytics_ApiService extends BaseApplicationComponent
 	 *
 	 * @return \Google_Service_Analytics_ManagementWebproperties_Resource
 	 */
-	public function getManagementWebproperties()
+	private function getManagementWebproperties()
 	{
 		$api = $this->api();
 
@@ -405,86 +504,13 @@ class Analytics_ApiService extends BaseApplicationComponent
 	 *
 	 * @return \Google_Service_Analytics_ManagementProfiles_Resource
 	 */
-	public function getManagementProfiles()
+	private function getManagementProfiles()
 	{
 		$api = $this->api();
 
 		if($api)
 		{
 			return $api->management_profiles;
-		}
-	}
-
-	/**
-	 * Get metadata columns
-	 *
-	 * @return \Google_Service_Analytics_MetadataColumns_Resource
-	 */
-	public function getMetadataColumns()
-	{
-		$api = $this->api();
-
-		if($api)
-		{
-			return $api->metadata_columns;
-		}
-	}
-
-	// Private Methods
-	// =========================================================================
-
-	/**
-	 * Returns a API object
-	 *
-	 * @return bool|Google_Service_Analytics
-	 */
-	private function api()
-	{
-		$handle = $this->oauthHandle;
-
-
-		// provider
-
-		$provider = craft()->oauth->getProvider($handle);
-
-		if($provider)
-		{
-			// token
-			$token = craft()->analytics_oauth->getToken();
-
-			if ($token)
-			{
-				// make token compatible with Google library
-				$arrayToken = array(
-					'created' => 0,
-					'access_token' => $token->accessToken,
-					'expires_in' => $token->endOfLife,
-				);
-
-				$arrayToken = json_encode($arrayToken);
-
-				// client
-				$client = new Google_Client();
-				$client->setApplicationName('Google+ PHP Starter Application');
-				$client->setClientId('clientId');
-				$client->setClientSecret('clientSecret');
-				$client->setRedirectUri('redirectUri');
-				$client->setAccessToken($arrayToken);
-
-				$api = new Google_Service_Analytics($client);
-
-				return $api;
-			}
-			else
-			{
-				AnalyticsPlugin::log('Undefined token', LogLevel::Error);
-				return false;
-			}
-		}
-		else
-		{
-			AnalyticsPlugin::log('Couldn’t get connect provider', LogLevel::Error);
-			return false;
 		}
 	}
 }
