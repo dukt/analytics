@@ -303,9 +303,9 @@ class Analytics_ApiService extends BaseApplicationComponent
 			// define the right type for the chart
 
 			$dataType = $col->dataType;
-			$type = $col->dataType;
 			$id = $col->name;
 			$label = craft()->analytics_metadata->getDimMet($col->name);
+			$type = strtolower($dataType);
 
 			switch($col->name)
 			{
@@ -316,23 +316,7 @@ class Analytics_ApiService extends BaseApplicationComponent
 
 				case 'ga:latitude':
 				case 'ga:longitude':
-					$type = 'number';
-					$dataType = 'FLOAT';
-					break;
-			}
-
-			switch($type)
-			{
-				case 'INTEGER':
-				case 'CURRENCY':
-				case 'FLOAT':
-				case 'TIME':
-				case 'PERCENT':
-					$type = 'number';
-					break;
-
-				case 'STRING':
-					$type = 'string';
+					$type = 'float';
 					break;
 			}
 
@@ -355,28 +339,25 @@ class Analytics_ApiService extends BaseApplicationComponent
 
 			foreach($rows as $kRow => $row)
 			{
-				foreach($row as $kCell => $value)
+				foreach($row as $_valueKey => $_value)
 				{
-					$col = $cols[$kCell];
+					$col = $cols[$_valueKey];
 
-					// replace value by cell
-
-					$cell = array(
-						'v' => $this->formatRawValue($col['dataType'], $value),
-						'f' => $this->formatValue($col['dataType'], $value)
-					);
+					$value = $this->formatRawValue($col['dataType'], $_value);
 
 					if($col['id'] == 'ga:continent')
 					{
-						$cell['v'] = craft()->analytics_metadata->getContinentCode($cell['v']);
+						$value = craft()->analytics_metadata->getContinentCode($value);
 					}
 
 					if($col['id'] == 'ga:subContinent')
 					{
-						$cell['v'] = craft()->analytics_metadata->getSubContinentCode($cell['v']);
+						$value = craft()->analytics_metadata->getSubContinentCode($value);
 					}
 
+
 					// translate values
+
 					switch($col['id'])
 					{
 						case 'ga:country':
@@ -389,12 +370,14 @@ class Analytics_ApiService extends BaseApplicationComponent
 						case 'ga:mobileInputSelector':
 						case 'ga:channelGrouping':
 						case 'ga:medium':
-							$cell['f'] = Craft::t($cell['f']);
+							$value = Craft::t($value);
 							break;
 					}
 
+
 					// update cell
-					$rows[$kRow][$kCell] = $cell;
+
+					$rows[$kRow][$_valueKey] = $value;
 				}
 			}
 		}

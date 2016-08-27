@@ -259,8 +259,26 @@ Analytics.Utils = {
 	{
 		var data = new google.visualization.DataTable();
 
-		$.each(response.cols, function(k, column) {
-			data.addColumn(column);
+		$.each(response.cols, function(k, column)
+		{
+			var type;
+
+			switch(column.type)
+			{
+				case 'percent':
+				case 'time':
+					type = 'number';
+					break;
+
+				default:
+					type = column.type;
+			}
+
+			data.addColumn({
+				type: type,
+				label: column.label + '('+column.type+')',
+				id: column.id,
+			});
 		});
 
 		$.each(response.rows, function(kRow, row) {
@@ -271,7 +289,7 @@ Analytics.Utils = {
 				{
 					case 'date':
 
-						$dateString = cell.v;
+						$dateString = cell;
 
 						if($dateString.length == 8)
 						{
@@ -298,6 +316,20 @@ Analytics.Utils = {
 						}
 
 						break;
+
+					case 'percent':
+						row[kCell] = {
+							v: cell,
+							f: cell+'%'
+						};
+						break;
+
+					case 'time':
+						row[kCell] = {
+							v: cell,
+							f: Analytics.Utils.toHHMMSS(cell)
+						};
+						break;
 				}
 			});
 
@@ -305,5 +337,18 @@ Analytics.Utils = {
 		});
 
 		return data;
+	},
+
+	toHHMMSS: function(_seconds)
+	{
+		var sec_num = parseInt(_seconds, 10); // don't forget the second param
+		var hours   = Math.floor(sec_num / 3600);
+		var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+		var seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+		if (hours   < 10) {hours   = "0"+hours;}
+		if (minutes < 10) {minutes = "0"+minutes;}
+		if (seconds < 10) {seconds = "0"+seconds;}
+		return hours+':'+minutes+':'+seconds;
 	}
 };
