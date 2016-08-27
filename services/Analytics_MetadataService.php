@@ -68,6 +68,7 @@ class Analytics_MetadataService extends BaseApplicationComponent
 		return [
 			'string',
 			'integer',
+			'percent',
 			'time',
 			'currency',
 			'float',
