@@ -77,7 +77,7 @@ class Analytics_ApiService extends BaseApplicationComponent
 			craft()->analytics_cache->set($cacheId, $response, null, null, $enableCache);
 		}
 
-		return $this->parseGaDataResponse($response);
+		return $this->parseReportResponse($response);
 	}
 
 	/**
@@ -106,7 +106,7 @@ class Analytics_ApiService extends BaseApplicationComponent
 			craft()->analytics_cache->set($cacheId, $response, $cacheDuration);
 		}
 
-		return $this->parseGaDataResponse($response);
+		return $this->parseReportResponse($response);
 	}
 
 	/**
@@ -292,7 +292,7 @@ class Analytics_ApiService extends BaseApplicationComponent
 	/**
 	 * Transforms a GA Data object to an array
 	 */
-	private function parseGaDataResponse($data)
+	private function parseReportResponse($data)
 	{
 		// Columns
 
