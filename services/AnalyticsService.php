@@ -179,6 +179,13 @@ class AnalyticsService extends BaseApplicationComponent
 	// Private Methods
 	// =========================================================================
 
+	/**
+	 * Send request
+	 * 
+	 * @param Analytics_RequestCriteriaModel $criteria
+	 *
+	 * @return mixed
+	 */
 	private function _sendRequest(Analytics_RequestCriteriaModel $criteria)
 	{
 		return craft()->analytics_api->getReport(
@@ -191,6 +198,13 @@ class AnalyticsService extends BaseApplicationComponent
 		);
 	}
 
+	/**
+	 * Send real-time request
+	 *
+	 * @param Analytics_RequestCriteriaModel $criteria
+	 *
+	 * @return mixed
+	 */
 	private function _sendRealtimeRequest(Analytics_RequestCriteriaModel $criteria)
 	{
 		return craft()->analytics_api->getRealtimeReport(
