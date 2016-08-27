@@ -111,55 +111,17 @@ Analytics.Utils = {
 
 				switch(response.cols[kCell]['type'])
 				{
-					case 'date':
-
-						$dateString = cell;
-
-						if($dateString.length == 8)
-						{
-							// 20150101
-
-							$year = eval($dateString.substr(0, 4));
-							$month = eval($dateString.substr(4, 2)) - 1;
-							$day = eval($dateString.substr(6, 2));
-
-							$date = new Date($year, $month, $day);
-
-							row[kCell] = $date;
-						}
-						else if($dateString.length == 6)
-						{
-							// 201501
-
-							$year = eval($dateString.substr(0, 4));
-							$month = eval($dateString.substr(4, 2)) - 1;
-
-							$date = new Date($year, $month, '01');
-
-							row[kCell] = $date;
-						}
-
-						break;
-
-					case 'percent':
-						row[kCell] = {
-							v: cell,
-							f: cell+'%'
-						};
-						break;
-
 					case 'currency':
-						row[kCell] = {
-							v: cell,
-							f: Analytics.Utils.formatCurrency(cell)
-						};
-						break;
-
+					case 'percent':
 					case 'time':
 						row[kCell] = {
 							v: cell,
-							f: Analytics.Utils.formatDuration(cell)
+							f: Analytics.Utils.formatByType(response.cols[kCell]['type'], cell)
 						};
+						break;
+
+					default:
+						row[kCell] = Analytics.Utils.formatByType(response.cols[kCell]['type'], cell);
 						break;
 				}
 			});
@@ -168,6 +130,56 @@ Analytics.Utils = {
 		});
 
 		return data;
+	},
+
+	formatByType: function(type, value)
+	{
+		switch (type)
+		{
+			case 'currency':
+				return Analytics.Utils.formatCurrency(value);
+				break;
+
+			case 'time':
+				return Analytics.Utils.formatDuration(value);
+				break;
+
+			case 'percent':
+				return value+' %';
+				break;
+
+			case 'date':
+				$dateString = value;
+
+				if($dateString.length == 8)
+				{
+					// 20150101
+
+					$year = eval($dateString.substr(0, 4));
+					$month = eval($dateString.substr(4, 2)) - 1;
+					$day = eval($dateString.substr(6, 2));
+
+					$date = new Date($year, $month, $day);
+
+					return $date;
+				}
+				else if($dateString.length == 6)
+				{
+					// 201501
+
+					$year = eval($dateString.substr(0, 4));
+					$month = eval($dateString.substr(4, 2)) - 1;
+
+					$date = new Date($year, $month, '01');
+
+					return $date;
+				}
+				break;
+
+			default:
+				return value;
+				break;
+		}
 	},
 
 	formatCurrency: function(value)
