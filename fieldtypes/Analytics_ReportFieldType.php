@@ -92,8 +92,8 @@ class Analytics_ReportFieldType extends BaseFieldType
 
 					$jsonOptions = json_encode($options);
 
-					craft()->templates->includeJsResource('analytics/js/jsapi.js', true);
-					craft()->templates->includeJsResource('analytics/js/Analytics.js', true);
+					craft()->templates->includeJsResource('analytics/js/jsapi.js');
+					craft()->templates->includeJsResource('analytics/js/Analytics.js');
 					craft()->templates->includeJsResource('analytics/js/Reports.js');
 					craft()->templates->includeJsResource('analytics/js/ReportField.js');
 					craft()->templates->includeCssResource('analytics/css/ReportField.css');
@@ -126,8 +126,6 @@ class Analytics_ReportFieldType extends BaseFieldType
 						'isNew' => false,
 					);
 				}
-
-				$variables['isConfigured'] = craft()->analytics->isConfigured();
 
 				return craft()->templates->render('analytics/_components/fieldtypes/Report/input', $variables);
 			}
