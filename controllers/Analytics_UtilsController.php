@@ -63,6 +63,18 @@ class Analytics_UtilsController extends BaseController
 	}
 
 	/**
+	 * Columns
+	 *
+	 * @return null
+	 */
+	public function actionColumns(array $variables = array())
+	{
+		$variables['columns'] = craft()->analytics_metadata->getColumns();
+
+		$this->renderTemplate('analytics/utils/_columns', $variables);
+	}
+
+	/**
 	 * Groups
 	 *
 	 * @return null

@@ -1,0 +1,18 @@
+{% extends "analytics/_layouts/utils" %}
+{% import "_includes/forms" as forms %}
+
+{% set selectedTab = 'columns' %}
+
+{% set content %}
+
+	<p>{{ "All dimensions & metrics:" }}</p>
+
+	{% for column in columns %}
+		<hr>
+
+		{% include 'analytics/_includes/column' %}
+
+	{% endfor %}
+
+
+{% endset %}
