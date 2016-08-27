@@ -60,6 +60,7 @@ class Analytics_UtilsController extends BaseController
 		$variables['googleAnalyticsDataTypes'] = craft()->analytics_metadata->getGoogleAnalyticsDataTypes();
 		$variables['dataTypes'] = craft()->analytics_metadata->getDataTypes();
 
+		craft()->templates->includeJsResource('analytics/js/Analytics.js');
 		$this->renderTemplate('analytics/utils/_dataTypes', $variables);
 	}
 

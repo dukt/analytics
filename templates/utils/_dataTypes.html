@@ -5,7 +5,7 @@
 
 {% set content %}
 
-	<p>{{ "Analytics plugin data types:"|t }}</p>
+	<h2>{{ "Data Types"|t }}</h2>
 
 	<ul>
 		{% for dataType in dataTypes %}
@@ -13,7 +13,65 @@
 		{% endfor %}
 	</ul>
 
-	<p>{{ "Google Analytics data types:"|t }}</p>
+	<h2>JS Formatting Tests</h2>
+
+	<table class="data fullwidth formatting-tests">
+		<thead>
+			<tr>
+				<th>Type</th>
+				<th>Value</th>
+				<th>Ouput</th>
+			</tr>
+		</thead>
+	</table>
+
+	{% set js %}
+		var tests = [
+			{
+				type: 'string',
+				value: "Hello world!",
+			},
+			{
+				type: 'percent',
+				value: 36.786,
+			},
+			{
+				type: 'integer',
+				value: 36786,
+			},
+			{
+				type: 'time',
+				value: 36786,
+			},
+			{
+				type: 'currency',
+				value: 36786,
+			},
+			{
+				type: 'float',
+				value: 36.7869,
+			},
+			{
+				type: 'date',
+				value: '201601',
+			},
+		];
+
+		$tests = $('.formatting-tests');
+		$.each(tests, function(key, test) {
+			var output = Analytics.Utils.formatByType(test.type, test.value);
+			$test = $('<tr></tr>');
+			$('<td>'+ test.type +'</td>').appendTo($test);
+			$('<td>'+ test.value +'</td>').appendTo($test);
+			$('<td>'+ output +'</td>').appendTo($test);
+			$test.appendTo($tests);
+		});
+
+	{% endset %}
+
+	{% includejs js %}
+
+	<h2>{{ "Google Analytics Data Types"|t }}</h2>
 
 	<ul>
 		{% for dataType in googleAnalyticsDataTypes %}
