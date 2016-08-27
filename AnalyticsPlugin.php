@@ -121,6 +121,7 @@ class AnalyticsPlugin extends BasePlugin
 			'analytics/utils/dataTypes' => array('action' => "analytics/utils/dataTypes"),
 			'analytics/utils/columns' => array('action' => "analytics/utils/columns"),
 			'analytics/utils/columnGroups' => array('action' => "analytics/utils/columnGroups"),
+			'analytics/utils/tests' => array('action' => "analytics/utils/tests"),
 		);
 	}
 
