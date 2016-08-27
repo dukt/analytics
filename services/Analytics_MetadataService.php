@@ -81,6 +81,16 @@ class Analytics_MetadataService extends BaseApplicationComponent
 		];
 	}
 
+	public function getContinents()
+	{
+		return $this->_getData('continents');
+	}
+
+	public function getSubContinents()
+	{
+		return $this->_getData('subContinents');
+	}
+
 	/**
 	 * Get Continent Code
 	 *

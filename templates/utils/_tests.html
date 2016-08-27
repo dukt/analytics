@@ -20,7 +20,7 @@
 	</table>
 
 	{% includejs %}
-		var formats = {{ formats|json_encode|raw }};
+		var formats = Analytics.formats;
 		var tests = [
 			{
 				type: 'string',
@@ -130,6 +130,7 @@
 		var formattedValue = locale.numberFormat(test.format)(value);
 
 		$tr = $('<tr></tr>');
+		$('<td>'+ test.label +'</td>').appendTo($tr);
 		$('<td>'+ test.format +'</td>').appendTo($tr);
 		$('<td>'+ test.value +'</td>').appendTo($tr);
 		$('<td>'+ formattedValue +'</td>').appendTo($tr);

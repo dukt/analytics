@@ -71,6 +71,49 @@ Analytics.Visualization = Garnish.Base.extend({
 	}
 });
 
+Analytics.Metadata = {
+
+	getContinentByCode: function(code)
+	{
+		var continent;
+
+		$.each(Analytics.continents, function(key, _continent)
+		{
+			if(code == _continent.code)
+			{
+				continent = _continent.label;
+			}
+		});
+
+		if(continent)
+		{
+			return continent;
+		}
+
+		return code;
+	},
+
+	getSubContinentByCode: function(code)
+	{
+		var continent;
+
+		$.each(Analytics.subContinents, function(key, _continent)
+		{
+			if(code == _continent.code)
+			{
+				continent = _continent.label;
+			}
+		});
+
+		if(continent)
+		{
+			return continent;
+		}
+
+		return code;
+	}
+};
+
 /**
  * Utils
  */
@@ -94,6 +137,12 @@ Analytics.Utils = {
 					type = 'number';
 					break;
 
+
+				case 'continent':
+				case 'subContinent':
+					type = 'string';
+					break;
+
 				default:
 					type = column.type;
 			}
@@ -111,6 +160,8 @@ Analytics.Utils = {
 
 				switch(response.cols[kCell]['type'])
 				{
+					case 'continent':
+					case 'subContinent':
 					case 'currency':
 					case 'percent':
 					case 'time':
@@ -136,6 +187,12 @@ Analytics.Utils = {
 	{
 		switch (type)
 		{
+			case 'continent':
+				return Analytics.Metadata.getContinentByCode(value);
+				break;
+			case 'subContinent':
+				return Analytics.Metadata.getSubContinentByCode(value);
+				break;
 			case 'currency':
 				return Analytics.Utils.formatCurrency(value);
 				break;
@@ -145,7 +202,7 @@ Analytics.Utils = {
 				break;
 
 			case 'percent':
-				return value+' %';
+				return Analytics.Utils.formatPercent(value);
 				break;
 
 			case 'date':
@@ -182,9 +239,21 @@ Analytics.Utils = {
 		}
 	},
 
+	formatPercent: function(value)
+	{
+		return this.getD3Locale().numberFormat(Analytics.formats.percentFormat)(value / 100);
+	},
+
 	formatCurrency: function(value)
 	{
-		return value+' €';
+		return this.getD3Locale().numberFormat(Analytics.formats.currencyFormat)(value);
+	},
+
+	getD3Locale: function()
+	{
+		var localeDefinition = window['d3_locale'];
+
+		return d3.locale(localeDefinition);
 	},
 
 	formatDuration: function(_seconds)

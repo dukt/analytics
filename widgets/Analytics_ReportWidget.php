@@ -72,6 +72,13 @@ class Analytics_ReportWidget extends BaseWidget
 					craft()->templates->includeJsResource('analytics/js/ReportWidgetSettings.js');
 					craft()->templates->includeJsResource('analytics/js/ReportWidget.js');
 
+					$continents = craft()->analytics_metadata->getContinents();
+					$subContinents = craft()->analytics_metadata->getSubContinents();
+					$formats = ChartHelper::getFormats();
+					craft()->templates->includeJs('Analytics.continents = '.json_encode($continents));
+					craft()->templates->includeJs('Analytics.subContinents = '.json_encode($subContinents));
+					craft()->templates->includeJs('Analytics.formats = '.json_encode($formats));
+
 					craft()->templates->includeCssResource('analytics/css/ReportWidget.css');
 					craft()->templates->includeCssResource('analytics/css/ReportWidgetSettings.css');
 

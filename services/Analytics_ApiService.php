@@ -312,6 +312,13 @@ class Analytics_ApiService extends BaseApplicationComponent
 					$type = 'date';
 					break;
 
+				case 'ga:continent':
+					$type = 'continent';
+					break;
+				case 'ga:subContinent':
+					$type = 'subContinent';
+					break;
+
 				case 'ga:latitude':
 				case 'ga:longitude':
 					$type = 'float';
@@ -341,7 +348,7 @@ class Analytics_ApiService extends BaseApplicationComponent
 				{
 					$col = $cols[$_valueKey];
 
-					$value = $this->formatRawValue($col['dataType'], $_value);
+					$value = $this->formatRawValue($col['type'], $_value);
 
 					if($col['id'] == 'ga:continent')
 					{
@@ -360,8 +367,8 @@ class Analytics_ApiService extends BaseApplicationComponent
 					{
 						case 'ga:country':
 						case 'ga:city':
-						case 'ga:continent':
-						case 'ga:subContinent':
+						// case 'ga:continent':
+						// case 'ga:subContinent':
 						case 'ga:userType':
 						case 'ga:javaEnabled':
 						case 'ga:deviceCategory':
@@ -396,11 +403,11 @@ class Analytics_ApiService extends BaseApplicationComponent
 	{
 		switch($type)
 		{
-			case 'INTEGER':
-			case 'CURRENCY':
-			case 'FLOAT':
-			case 'TIME':
-			case 'PERCENT':
+			case 'integer':
+			case 'currency':
+			case 'float':
+			case 'time':
+			case 'percent':
 				$value = (float) $value;
 				break;
 

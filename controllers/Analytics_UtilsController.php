@@ -71,8 +71,15 @@ class Analytics_UtilsController extends BaseController
 	 */
 	public function actionTests(array $variables = array())
 	{
-		$variables['formats'] = ChartHelper::getFormats();
 		craft()->templates->includeJsResource('analytics/js/Analytics.js');
+
+		$continents = craft()->analytics_metadata->getContinents();
+		$subContinents = craft()->analytics_metadata->getSubContinents();
+		$formats = ChartHelper::getFormats();
+		craft()->templates->includeJs('Analytics.continents = '.json_encode($continents));
+		craft()->templates->includeJs('Analytics.subContinents = '.json_encode($subContinents));
+		craft()->templates->includeJs('Analytics.formats = '.json_encode($formats));
+
 		$this->renderTemplate('analytics/utils/_tests', $variables);
 	}
 
