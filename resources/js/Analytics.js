@@ -72,6 +72,111 @@ Analytics.Visualization = Garnish.Base.extend({
 });
 
 /**
+ * Utils
+ */
+Analytics.Utils = {
+
+	responseToDataTable: function(response)
+	{
+		var data = new google.visualization.DataTable();
+
+		$.each(response.cols, function(k, column)
+		{
+			var type;
+
+			switch(column.type)
+			{
+				case 'percent':
+				case 'time':
+				case 'integer':
+					type = 'number';
+					break;
+
+				default:
+					type = column.type;
+			}
+
+			data.addColumn({
+				type: type,
+				label: column.label + '('+column.type+')',
+				id: column.id,
+			});
+		});
+
+		$.each(response.rows, function(kRow, row) {
+
+			$.each(row, function(kCell, cell) {
+
+				switch(response.cols[kCell]['type'])
+				{
+					case 'date':
+
+						$dateString = cell;
+
+						if($dateString.length == 8)
+						{
+							// 20150101
+
+							$year = eval($dateString.substr(0, 4));
+							$month = eval($dateString.substr(4, 2)) - 1;
+							$day = eval($dateString.substr(6, 2));
+
+							$date = new Date($year, $month, $day);
+
+							row[kCell] = $date;
+						}
+						else if($dateString.length == 6)
+						{
+							// 201501
+
+							$year = eval($dateString.substr(0, 4));
+							$month = eval($dateString.substr(4, 2)) - 1;
+
+							$date = new Date($year, $month, '01');
+
+							row[kCell] = $date;
+						}
+
+						break;
+
+					case 'percent':
+						row[kCell] = {
+							v: cell,
+							f: cell+'%'
+						};
+						break;
+
+					case 'time':
+						row[kCell] = {
+							v: cell,
+							f: Analytics.Utils.toHHMMSS(cell)
+						};
+						break;
+				}
+			});
+
+			data.addRow(row);
+		});
+
+		return data;
+	},
+
+	toHHMMSS: function(_seconds)
+	{
+		var sec_num = parseInt(_seconds, 10); // don't forget the second param
+		var hours   = Math.floor(sec_num / 3600);
+		var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+		var seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+		if (hours   < 10) {hours   = "0"+hours;}
+		if (minutes < 10) {minutes = "0"+minutes;}
+		if (seconds < 10) {seconds = "0"+seconds;}
+		return hours+':'+minutes+':'+seconds;
+	}
+};
+
+
+/**
  * Chart Options
  */
 Analytics.ChartOptions = Garnish.Base.extend({}, {
@@ -83,19 +188,19 @@ Analytics.ChartOptions = Garnish.Base.extend({}, {
 		switch(scale)
 		{
 			case 'week':
-			options.hAxis.format = 'E';
-			options.hAxis.showTextEvery = 1;
-			break;
+				options.hAxis.format = 'E';
+				options.hAxis.showTextEvery = 1;
+				break;
 
 			case 'month':
-			options.hAxis.format = 'MMM d';
-			options.hAxis.showTextEvery = 1;
-			break;
+				options.hAxis.format = 'MMM d';
+				options.hAxis.showTextEvery = 1;
+				break;
 
 			case 'year':
-			options.hAxis.showTextEvery = 1;
-			options.hAxis.format = 'MMM yy';
-			break;
+				options.hAxis.showTextEvery = 1;
+				options.hAxis.format = 'MMM yy';
+				break;
 		}
 
 		return options;
@@ -113,23 +218,23 @@ Analytics.ChartOptions = Garnish.Base.extend({}, {
 		switch(dimension)
 		{
 			case 'ga:city':
-			options.displayMode = 'markers';
-			break;
+				options.displayMode = 'markers';
+				break;
 
 			case 'ga:country':
-			options.resolution = 'countries';
-			options.displayMode = 'regions';
-			break;
+				options.resolution = 'countries';
+				options.displayMode = 'regions';
+				break;
 
 			case 'ga:continent':
-			options.resolution = 'continents';
-			options.displayMode = 'regions';
-			break;
+				options.resolution = 'continents';
+				options.displayMode = 'regions';
+				break;
 
 			case 'ga:subContinent':
-			options.resolution = 'subcontinents';
-			options.displayMode = 'regions';
-			break;
+				options.resolution = 'subcontinents';
+				options.displayMode = 'regions';
+				break;
 		}
 
 		return options;
@@ -248,107 +353,3 @@ Analytics.ChartOptions = Garnish.Base.extend({}, {
 		}
 	}
 });
-
-
-/**
- * Utils
- */
-Analytics.Utils = {
-
-	responseToDataTable: function(response)
-	{
-		var data = new google.visualization.DataTable();
-
-		$.each(response.cols, function(k, column)
-		{
-			var type;
-
-			switch(column.type)
-			{
-				case 'percent':
-				case 'time':
-					type = 'number';
-					break;
-
-				default:
-					type = column.type;
-			}
-
-			data.addColumn({
-				type: type,
-				label: column.label + '('+column.type+')',
-				id: column.id,
-			});
-		});
-
-		$.each(response.rows, function(kRow, row) {
-
-			$.each(row, function(kCell, cell) {
-
-				switch(response.cols[kCell]['type'])
-				{
-					case 'date':
-
-						$dateString = cell;
-
-						if($dateString.length == 8)
-						{
-							// 20150101
-
-							$year = eval($dateString.substr(0, 4));
-							$month = eval($dateString.substr(4, 2)) - 1;
-							$day = eval($dateString.substr(6, 2));
-
-							$date = new Date($year, $month, $day);
-
-							row[kCell] = $date;
-						}
-						else if($dateString.length == 6)
-						{
-							// 201501
-
-							$year = eval($dateString.substr(0, 4));
-							$month = eval($dateString.substr(4, 2)) - 1;
-
-							$date = new Date($year, $month, '01');
-
-							row[kCell] = $date;
-						}
-
-						break;
-
-					case 'percent':
-						row[kCell] = {
-							v: cell,
-							f: cell+'%'
-						};
-						break;
-
-					case 'time':
-						row[kCell] = {
-							v: cell,
-							f: Analytics.Utils.toHHMMSS(cell)
-						};
-						break;
-				}
-			});
-
-			data.addRow(row);
-		});
-
-		return data;
-	},
-
-	toHHMMSS: function(_seconds)
-	{
-		var sec_num = parseInt(_seconds, 10); // don't forget the second param
-		var hours   = Math.floor(sec_num / 3600);
-		var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
-		var seconds = sec_num - (hours * 3600) - (minutes * 60);
-
-		if (hours   < 10) {hours   = "0"+hours;}
-		if (minutes < 10) {minutes = "0"+minutes;}
-		if (seconds < 10) {seconds = "0"+seconds;}
-		return hours+':'+minutes+':'+seconds;
-	}
-};
