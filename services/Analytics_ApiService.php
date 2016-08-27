@@ -414,16 +414,6 @@ class Analytics_ApiService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Format Time in HH:MM:SS from seconds
-	 *
-	 * @param int $seconds
-	 */
-	private function formatTime($seconds)
-	{
-		return gmdate("H:i:s", $seconds);
-	}
-
-	/**
 	 * Get management web properties
 	 *
 	 * @return \Google_Service_Analytics_ManagementWebproperties_Resource
