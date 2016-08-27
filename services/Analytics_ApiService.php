@@ -28,7 +28,7 @@ class Analytics_ApiService extends BaseApplicationComponent
 	 */
 	public function getMetadataColumns()
 	{
-		$api = $this->api();
+		$api = $this->getGoogleAnalyticsService();
 
 		if($api)
 		{
@@ -158,18 +158,21 @@ class Analytics_ApiService extends BaseApplicationComponent
 	 *
 	 * @return bool|Google_Service_Analytics
 	 */
-	private function api()
+	private function getGoogleAnalyticsService()
+	{
+		$client = $this->getClient();
+
+		return new Google_Service_Analytics($client);
+	}
+
+	private function getClient()
 	{
 		$handle = $this->oauthHandle;
-
-
-		// provider
 
 		$provider = craft()->oauth->getProvider($handle);
 
 		if($provider)
 		{
-			// token
 			$token = craft()->analytics_oauth->getToken();
 
 			if ($token)
@@ -183,7 +186,6 @@ class Analytics_ApiService extends BaseApplicationComponent
 
 				$arrayToken = json_encode($arrayToken);
 
-				// client
 				$client = new Google_Client();
 				$client->setApplicationName('Google+ PHP Starter Application');
 				$client->setClientId('clientId');
@@ -191,9 +193,7 @@ class Analytics_ApiService extends BaseApplicationComponent
 				$client->setRedirectUri('redirectUri');
 				$client->setAccessToken($arrayToken);
 
-				$api = new Google_Service_Analytics($client);
-
-				return $api;
+				return $client;
 			}
 			else
 			{
@@ -215,7 +215,7 @@ class Analytics_ApiService extends BaseApplicationComponent
 	 */
 	private function getGaData()
 	{
-		$api = $this->api();
+		$api = $this->getGoogleAnalyticsService();
 
 		if($api)
 		{
@@ -258,7 +258,7 @@ class Analytics_ApiService extends BaseApplicationComponent
 	 */
 	private function getRealtimeData()
 	{
-		$api = $this->api();
+		$api = $this->getGoogleAnalyticsService();
 
 		if($api)
 		{
@@ -491,7 +491,7 @@ class Analytics_ApiService extends BaseApplicationComponent
 	 */
 	private function getManagementWebproperties()
 	{
-		$api = $this->api();
+		$api = $this->getGoogleAnalyticsService();
 
 		if($api)
 		{
@@ -506,7 +506,7 @@ class Analytics_ApiService extends BaseApplicationComponent
 	 */
 	private function getManagementProfiles()
 	{
-		$api = $this->api();
+		$api = $this->getGoogleAnalyticsService();
 
 		if($api)
 		{
