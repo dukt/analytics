@@ -300,8 +300,6 @@ class Analytics_ApiService extends BaseApplicationComponent
 
 		foreach($data->columnHeaders as $col)
 		{
-			// define the right type for the chart
-
 			$dataType = $col->dataType;
 			$id = $col->name;
 			$label = craft()->analytics_metadata->getDimMet($col->name);
