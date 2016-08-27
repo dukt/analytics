@@ -145,9 +145,9 @@ class Analytics_ReportsService extends BaseApplicationComponent
 
 		$response = craft()->analytics->sendRequest($criteria);
 
-		if(!empty($response['rows'][0][0]['f']))
+		if(!empty($response['rows'][0][0]))
 		{
-			$count = $response['rows'][0][0]['f'];
+			$count = $response['rows'][0][0];
 		}
 		else
 		{
