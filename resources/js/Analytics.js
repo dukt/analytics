@@ -156,7 +156,7 @@ Analytics.Utils = {
 					case 'time':
 						row[kCell] = {
 							v: cell,
-							f: Analytics.Utils.toHHMMSS(cell)
+							f: Analytics.Utils.formatDuration(cell)
 						};
 						break;
 				}
@@ -173,7 +173,7 @@ Analytics.Utils = {
 		return value+' €';
 	},
 
-	toHHMMSS: function(_seconds)
+	formatDuration: function(_seconds)
 	{
 		var sec_num = parseInt(_seconds, 10); // don't forget the second param
 		var hours   = Math.floor(sec_num / 3600);
