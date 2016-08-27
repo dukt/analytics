@@ -414,50 +414,6 @@ class Analytics_ApiService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Format Value
-	 *
-	 * @param string $type
-	 * @param string $value
-	 */
-	private function formatValue($type, $value)
-	{
-		switch($type)
-		{
-			case 'INTEGER':
-			case 'FLOAT':
-				$value = (float) $value;
-				$value = round($value, 2);
-				$value = craft()->numberFormatter->formatDecimal($value);
-				break;
-
-			case 'CURRENCY':
-				$currency = 'USD';
-				$value = (float) $value;
-				$value = round($value, 2);
-				$value = craft()->numberFormatter->formatDecimal($value);
-				$value = craft()->numberFormatter->formatCurrency($value, $currency);
-				break;
-
-			case 'TIME':
-				$value = (float) $value;
-				$value = $this->formatTime($value);
-				break;
-
-			case 'PERCENT':
-				$value = (float) $value;
-				$value = round($value, 2);
-				$value = $value.'%';
-
-				break;
-
-			default:
-				$value = (string) $value;
-		}
-
-		return (string) $value;
-	}
-
-	/**
 	 * Format Time in HH:MM:SS from seconds
 	 *
 	 * @param int $seconds
