@@ -90,6 +90,7 @@ Analytics.Utils = {
 				case 'time':
 				case 'integer':
 				case 'currency':
+				case 'float':
 					type = 'number';
 					break;
 
@@ -146,6 +147,7 @@ Analytics.Utils = {
 							f: cell+'%'
 						};
 						break;
+
 					case 'currency':
 						row[kCell] = {
 							v: cell,
