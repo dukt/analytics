@@ -42,9 +42,9 @@ class Analytics_MetadataService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Returns available data types
+	 * Returns available data types for Google Analytics
 	 *
-	 * @param bool
+	 * @param mixed
 	 */
 	public function getGoogleAnalyticsDataTypes()
 	{
@@ -63,6 +63,11 @@ class Analytics_MetadataService extends BaseApplicationComponent
 		return $dataTypes;
 	}
 
+	/**
+	 * Returns available data types
+	 *
+	 * @param mixed
+	 */
 	public function getDataTypes()
 	{
 		return [
