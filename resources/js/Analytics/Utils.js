@@ -48,6 +48,7 @@ Analytics.Utils = {
 					case 'subContinent':
 					case 'currency':
 					case 'percent':
+					case 'integer':
 					case 'time':
 						row[kCell] = {
 							v: cell,
@@ -79,6 +80,10 @@ Analytics.Utils = {
 				break;
 			case 'currency':
 				return Analytics.Utils.formatCurrency(value);
+				break;
+
+			case 'integer':
+				return Analytics.Utils.formatInteger(value);
 				break;
 
 			case 'time':
@@ -121,6 +126,11 @@ Analytics.Utils = {
 				return value;
 				break;
 		}
+	},
+
+	formatInteger: function(value)
+	{
+		return this.getD3Locale().numberFormat(",")(value);
 	},
 
 	formatPercent: function(value)
