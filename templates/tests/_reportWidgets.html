@@ -1,165 +1,81 @@
 {% extends "analytics/_layouts/tests" %}
 {% import "_includes/forms" as forms %}
+{% import "analytics/tests/_includes/macros" as macros %}
 
 {% set selectedTab = 'reportWidgets' %}
 
 {% set content %}
 
 	{% includejs %}
+		window.csrfTokenName = "{{ craft.config.csrfTokenName|e('js') }}";
+		window.csrfTokenValue = "{{ craft.request.csrfToken|e('js') }}";
 
-	window.csrfTokenName = "{{ craft.config.csrfTokenName|e('js') }}";
-	window.csrfTokenValue = "{{ craft.request.csrfToken|e('js') }}";
-
-	var AnalyticsChartLanguage = "{{ "analyticsChartLanguage"|t }}";
-
+		var AnalyticsChartLanguage = "{{ "analyticsChartLanguage"|t }}";
 	{% endincludejs %}
 
 	<div class="test-report-widget">
 		<h2>Area Report Widget</h2>
 
-		{% set request = {
+		{{ macros.reportWidget({
 			chart: 'area',
 			period: 'month',
 			options: {
 				metric: 'ga:users'
 			}
-		} %}
-
-		<div id="area" class="mock-widget analytics_report">
-			<div class="title"></div>
-			<div class="body"></div>
-			<div class="date"></div>
-			<div class="error"></div>
-			<div class="spinner"></div>
-		</div>
-
-		{% includejs %}
-
-			var reportWidget = new Analytics.ReportWidget("area", {
-				request: {{ request|json_encode|raw }},
-			});
-
-		{% endincludejs %}
+		}) }}
 	</div>
 
 	<div class="test-report-widget">
 		<h2>Counter Report Widget</h2>
 
-		{% set request = {
+		{{ macros.reportWidget({
 			chart: 'counter',
 			period: 'month',
 			options: {
 				metric: 'ga:users'
 			}
-		} %}
-
-		<div id="counter" class="mock-widget analytics_report">
-			<div class="title"></div>
-			<div class="body"></div>
-			<div class="date"></div>
-			<div class="error"></div>
-			<div class="spinner"></div>
-		</div>
-
-		{% includejs %}
-
-			var reportWidget = new Analytics.ReportWidget("counter", {
-				request: {{ request|json_encode|raw }},
-			});
-
-		{% endincludejs %}
+		}) }}
 	</div>
 
 
 	<div class="test-report-widget">
-
 		<h2>Pie Report Widget</h2>
 
-		{% set request = {
+		{{ macros.reportWidget({
 			chart: 'pie',
 			period: 'month',
 			options: {
 				dimension: 'ga:userType',
 				metric: 'ga:users'
 			}
-		} %}
-
-		<div id="pie" class="mock-widget analytics_report">
-			<div class="title"></div>
-			<div class="body"></div>
-			<div class="date"></div>
-			<div class="error"></div>
-			<div class="spinner"></div>
-		</div>
-
-		{% includejs %}
-
-			var reportWidget = new Analytics.ReportWidget("pie", {
-				request: {{ request|json_encode|raw }},
-			});
-
-		{% endincludejs %}
+		}) }}
 	</div>
 
 
 	<div class="test-report-widget">
-
 		<h2>Table Report Widget</h2>
 
-		{% set request = {
+		{{ macros.reportWidget({
 			chart: 'table',
 			period: 'month',
 			options: {
 				dimension: 'ga:userType',
 				metric: 'ga:users'
 			}
-		} %}
-
-		<div id="table" class="mock-widget analytics_report">
-			<div class="title"></div>
-			<div class="body"></div>
-			<div class="date"></div>
-			<div class="error"></div>
-			<div class="spinner"></div>
-		</div>
-
-		{% includejs %}
-
-			var reportWidget = new Analytics.ReportWidget("table", {
-				request: {{ request|json_encode|raw }},
-			});
-
-		{% endincludejs %}
+		}) }}
 	</div>
 
 	<div class="test-report-widget">
-
 		<h2>Geo Report Widget</h2>
 
-		{% set request = {
+		{{ macros.reportWidget({
 			chart: 'geo',
 			period: 'month',
 			options: {
 				dimension: 'ga:subContinent',
 				metric: 'ga:users'
 			}
-		} %}
-
-		<div id="geo" class="mock-widget analytics_report">
-			<div class="title"></div>
-			<div class="body"></div>
-			<div class="date"></div>
-			<div class="error"></div>
-			<div class="spinner"></div>
-		</div>
-
-		{% includejs %}
-
-			var reportWidget = new Analytics.ReportWidget("geo", {
-				request: {{ request|json_encode|raw }},
-			});
-
-		{% endincludejs %}
+		}) }}
 	</div>
 
 

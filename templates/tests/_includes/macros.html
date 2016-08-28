@@ -1,0 +1,25 @@
+{% macro reportWidget(request) %}
+
+	{% set id = 'widget-'~random() %}
+
+	{{ _self.widgetMock(id) }}
+
+	{% includejs %}
+
+		var reportWidget = new Analytics.ReportWidget("{{ id }}", {
+			request: {{ request|json_encode|raw }},
+		});
+
+	{% endincludejs %}
+
+{% endmacro %}
+
+{% macro widgetMock(id) %}
+
+	<div id="{{ id }}" class="mock-widget analytics_report">
+		<div class="body"></div>
+		<div class="error"></div>
+		<div class="spinner"></div>
+	</div>
+
+{% endmacro %}
