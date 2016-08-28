@@ -1,7 +1,6 @@
 .test-report-widget {
   box-sizing:border-box;
   width: 50%;
-  float: left;
   padding: 20px;
 
 }
@@ -12,8 +11,10 @@
   position: relative;
 
   .body {
-    .chart {
-      height: 400px;
+    .report {
+      .chart {
+        height: 400px;
+      }
     }
   }
 }

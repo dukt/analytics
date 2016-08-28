@@ -16,21 +16,16 @@
 
 	.spinner { position: absolute; top: 50%; left: 50%; margin-left: -14px; margin-top: -14px; }
 
-	.chart { min-height: 150px; overflow: hidden;  }
-
-	// .chart.area { margin: 0 -24px -24px -24px; }
-
-	.chart.pie { min-height: 260px; }
-
-	.chart.counter { min-height: inherit; padding: 12px 0; text-align: center; }
-	.chart.counter .value { font-size: 5em; line-height: 1em; margin-bottom: 0.1em; }
-	.chart.counter .label, .chart.counter .period { display: inline; font-size: 1.2em; opacity: .7; }
-	.chart.counter .label { color: #318EC4; }
-	.chart.counter .period { color: #666; }
-
-	.chart.geo { min-height: 300px; }
-
-	.chart.table {
+	.report .chart { overflow: hidden;  }
+	.report .chart.area { min-height: 150px; }
+	.report .chart.pie { min-height: 260px; padding: 14px 0; }
+	.report .chart.counter { padding: 12px 0; text-align: center; }
+	.report .chart.counter .value { font-size: 5em; line-height: 1em; margin-bottom: 0.1em; }
+	.report .chart.counter .label, .report .chart.counter .period { display: inline; font-size: 1.2em; opacity: .7; }
+	.report .chart.counter .label { color: #318EC4; }
+	.report .chart.counter .period { color: #666; }
+	.report .chart.geo { min-height: 300px; }
+	.report .chart.table {
 
 		z-index: 1;
 

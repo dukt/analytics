@@ -1,7 +1,6 @@
 .test-report-widget {
   box-sizing: border-box;
   width: 50%;
-  float: left;
   padding: 20px; }
 
 .mock-widget {
@@ -9,5 +8,5 @@
   border-radius: 4px;
   padding: 24px;
   position: relative; }
-  .mock-widget .body .chart {
+  .mock-widget .body .report .chart {
     height: 400px; }
