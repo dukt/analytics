@@ -1,3 +1,14 @@
+{% macro testReportWidget(name, request) %}
+
+	<div class="test-report-widget">
+		<h2>{{ name }} Report Widget</h2>
+
+		{{ _self.reportWidget(request) }}
+	</div>
+
+{% endmacro %}
+
+
 {% macro reportWidget(request) %}
 
 	{% set id = 'widget-'~random() %}
@@ -13,6 +24,7 @@
 	{% endincludejs %}
 
 {% endmacro %}
+
 
 {% macro widgetMock(id) %}
 

@@ -660,6 +660,8 @@ Analytics.reports.Pie = Analytics.reports.BaseChart.extend(
 		this.chartOptions = Analytics.ChartOptions.pie();
 		this.chart = new google.visualization.PieChart(this.$graph.get(0));
 
+		this.chartOptions.height = this.$graph.height();
+
 		this.addChartReadyListener();
 	}
 });

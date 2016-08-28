@@ -13,70 +13,47 @@
 		var AnalyticsChartLanguage = "{{ "analyticsChartLanguage"|t }}";
 	{% endincludejs %}
 
-	<div class="test-report-widget">
-		<h2>Area Report Widget</h2>
+	{{ macros.testReportWidget("Area", {
+		chart: 'area',
+		period: 'month',
+		options: {
+			metric: 'ga:users'
+		}
+	}) }}
 
-		{{ macros.reportWidget({
-			chart: 'area',
-			period: 'month',
-			options: {
-				metric: 'ga:users'
-			}
-		}) }}
-	</div>
+	{{ macros.testReportWidget("Counter", {
+		chart: 'counter',
+		period: 'month',
+		options: {
+			metric: 'ga:users'
+		}
+	}) }}
 
-	<div class="test-report-widget">
-		<h2>Counter Report Widget</h2>
+	{{ macros.testReportWidget("Pie", {
+		chart: 'pie',
+		period: 'month',
+		options: {
+			dimension: 'ga:userType',
+			metric: 'ga:users'
+		}
+	}) }}
 
-		{{ macros.reportWidget({
-			chart: 'counter',
-			period: 'month',
-			options: {
-				metric: 'ga:users'
-			}
-		}) }}
-	</div>
+	{{ macros.testReportWidget("Table", {
+		chart: 'table',
+		period: 'month',
+		options: {
+			dimension: 'ga:userType',
+			metric: 'ga:users'
+		}
+	}) }}
 
-
-	<div class="test-report-widget">
-		<h2>Pie Report Widget</h2>
-
-		{{ macros.reportWidget({
-			chart: 'pie',
-			period: 'month',
-			options: {
-				dimension: 'ga:userType',
-				metric: 'ga:users'
-			}
-		}) }}
-	</div>
-
-
-	<div class="test-report-widget">
-		<h2>Table Report Widget</h2>
-
-		{{ macros.reportWidget({
-			chart: 'table',
-			period: 'month',
-			options: {
-				dimension: 'ga:userType',
-				metric: 'ga:users'
-			}
-		}) }}
-	</div>
-
-	<div class="test-report-widget">
-		<h2>Geo Report Widget</h2>
-
-		{{ macros.reportWidget({
-			chart: 'geo',
-			period: 'month',
-			options: {
-				dimension: 'ga:subContinent',
-				metric: 'ga:users'
-			}
-		}) }}
-	</div>
-
+	{{ macros.testReportWidget("Geo", {
+		chart: 'geo',
+		period: 'month',
+		options: {
+			dimension: 'ga:subContinent',
+			metric: 'ga:users'
+		}
+	}) }}
 
 {% endset %}

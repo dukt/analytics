@@ -18,7 +18,9 @@
 
 	.chart { min-height: 150px; overflow: hidden;  }
 
-	.chart.area { margin: 0 -24px -24px -24px; }
+	// .chart.area { margin: 0 -24px -24px -24px; }
+
+	.chart.pie { min-height: 260px; }
 
 	.chart.counter { min-height: inherit; padding: 12px 0; text-align: center; }
 	.chart.counter .value { font-size: 5em; line-height: 1em; margin-bottom: 0.1em; }
