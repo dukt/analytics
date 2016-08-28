@@ -155,19 +155,6 @@ class AnalyticsService extends BaseApplicationComponent
 	// =========================================================================
 
 	/**
-	 * Get Data
-	 *
-	 * @param string $name
-	 */
-	private function getData($name)
-	{
-		$jsonData = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/'.$name.'.json');
-		$data = json_decode($jsonData, true);
-
-		return $data;
-	}
-
-	/**
 	 * Populate Criteria
 	 *
 	 * @param Analytics_RequestCriteriaModel $criteria
