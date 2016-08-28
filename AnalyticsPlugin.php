@@ -22,7 +22,6 @@ class AnalyticsPlugin extends BasePlugin
 
 		if (craft()->request->isCpRequest())
 		{
-			craft()->templates->includeJsResource('analytics/js/jsapi.js', true);
 			craft()->templates->includeJsResource('analytics/js/Analytics.js', true);
 
 			$continents = craft()->analytics_metadata->getContinents();
