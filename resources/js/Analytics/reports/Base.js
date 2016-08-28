@@ -47,14 +47,6 @@ Analytics.reports.BaseChart = Garnish.Base.extend(
 
 					this.initChart();
 
-					if(this.chart)
-					{
-						google.visualization.events.addListener(this.chart, 'ready', $.proxy(function () {
-							this.drawing = false;
-						}, this));
-
-					}
-
 					this.draw();
 
 					if(typeof(this.data.onAfterInit) != 'undefined')
@@ -64,6 +56,19 @@ Analytics.reports.BaseChart = Garnish.Base.extend(
 
 				}, this)
 			});
+	},
+
+	addChartReadyListener: function()
+	{
+		google.visualization.events.addListener(this.chart, 'ready', $.proxy(function () {
+			this.drawing = false;
+
+			if(typeof(this.data.onAfterDraw) != 'undefined')
+			{
+				this.data.onAfterDraw();
+			}
+
+		}, this));
 	},
 
 	initChart: function()
@@ -79,6 +84,7 @@ Analytics.reports.BaseChart = Garnish.Base.extend(
 
 			if (this.dataTable && this.chartOptions)
 			{
+
 				this.chart.draw(this.dataTable, this.chartOptions);
 			}
 		}

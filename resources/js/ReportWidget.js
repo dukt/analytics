@@ -22,7 +22,6 @@ Analytics.ReportWidget = Garnish.Base.extend(
 		this.$spinner.removeClass('body-loading');
 		this.$error = $('.error', this.$element);
 
-
 		// cached request
 
 		var request;
@@ -59,8 +58,6 @@ Analytics.ReportWidget = Garnish.Base.extend(
 
 		Craft.postActionRequest('analytics/reports/getReport', data, $.proxy(function(response, textStatus)
 		{
-			this.$spinner.addClass('hidden');
-
 			if(textStatus == 'success' && typeof(response.error) == 'undefined')
 			{
 				this.parseResponse(response);
@@ -97,7 +94,7 @@ Analytics.ReportWidget = Garnish.Base.extend(
 		this.$title.html(metric);
 		this.$date.html(periodLabel);
 
-		chartData['onAfterInit'] = $.proxy(function() {
+		chartData['onAfterDraw'] = $.proxy(function() {
 			this.$spinner.addClass('hidden');
 		}, this);
 

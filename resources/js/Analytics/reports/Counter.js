@@ -16,5 +16,7 @@ Analytics.reports.Counter = Analytics.reports.BaseChart.extend(
 		$value.html(value);
 		$label.html(this.data.metric);
 		$period.html(' '+this.data.periodLabel);
+
+		this.data.onAfterDraw();
 	}
 });

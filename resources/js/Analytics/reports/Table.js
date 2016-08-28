@@ -15,7 +15,8 @@ Analytics.reports.Table = Analytics.reports.BaseChart.extend(
 		this.dataTable = Analytics.Utils.responseToDataTable(this.data.chart);
 		this.chartOptions = Analytics.ChartOptions.table();
 		this.chart = new google.visualization.Table(this.$graph.get(0));
-		this.draw();
+
+		this.addChartReadyListener();
 	},
 
 	resize: function()

@@ -16,6 +16,7 @@ Analytics.reports.Geo = Analytics.reports.BaseChart.extend(
 		this.dataTable = Analytics.Utils.responseToDataTable(this.data.chart);
 		this.chartOptions = Analytics.ChartOptions.geo(this.data.dimensionRaw);
 		this.chart = new google.visualization.GeoChart(this.$graph.get(0));
-		this.draw();
+
+		this.addChartReadyListener();
 	}
 });
