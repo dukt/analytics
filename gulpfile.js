@@ -18,6 +18,8 @@ var globs = {
     concatJs: [
         paths.js + '/Analytics/Base*.js',
         paths.js + '/Analytics/*.js',
+        paths.js + '/Analytics/reports/Base*.js',
+        paths.js + '/Analytics/reports/*.js',
     ],
 
     compressJs: [
@@ -26,7 +28,8 @@ var globs = {
 
     watchJs: [
         paths.js+'/*.js',
-        paths.js+'/Analytics/*.js'
+        paths.js+'/Analytics/*.js',
+        paths.js+'/Analytics/**/*.js'
     ],
 
     watchSass: [
