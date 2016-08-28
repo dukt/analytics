@@ -21,6 +21,7 @@
 			<tr>
 				<th>Account Name</th>
 				<th>Account ID</th>
+				<th>Starred</th>
 			</tr>
 		</thead>
 
@@ -28,6 +29,7 @@
 			<tr>
 				<td>{{ account.name }}</td>
 				<td>{{ account.id }}</td>
+				<td>{{ ( account.starred ? 'yes' : 'no' ) }}</td>
 			</tr>
 		{% endfor %}
 	</table>
@@ -41,6 +43,10 @@
 				<th>Web Property Name</th>
 				<th>Web Property ID</th>
 				<th>Account ID</th>
+				<th>Level</th>
+				<th>Profile Count</th>
+				<th>Starred</th>
+				<th>Website URL</th>
 			</tr>
 		</thead>
 
@@ -49,6 +55,10 @@
 				<td>{{ webProperty.name }}</td>
 				<td>{{ webProperty.id }}</td>
 				<td>{{ webProperty.accountId }}</td>
+				<td>{{ webProperty.level }}</td>
+				<td>{{ webProperty.profileCount }}</td>
+				<td>{{ ( webProperty.starred ? 'true' : 'false' ) }}</td>
+				<td>{{ webProperty.websiteUrl }}</td>
 			</tr>
 		{% endfor %}
 	</table>
@@ -77,7 +87,7 @@
 				<td>{{ profile.id }}</td>
 				<td>{{ profile.accountId }}</td>
 				<td>{{ profile.currency }}</td>
-				<td>{{ profile.eCommerceTracking }}</td>
+				<td>{{ ( profile.eCommerceTracking ? 'true' : 'false' ) }}</td>
 				<td>{{ profile.timezone }}</td>
 				<td>{{ profile.type }}</td>
 				<td>{{ profile.webPropertyId }}</td>
