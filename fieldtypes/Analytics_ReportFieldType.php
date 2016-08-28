@@ -94,7 +94,6 @@ class Analytics_ReportFieldType extends BaseFieldType
 
 					craft()->templates->includeJsResource('analytics/js/jsapi.js');
 					craft()->templates->includeJsResource('analytics/js/Analytics.js');
-					craft()->templates->includeJsResource('analytics/js/Reports.js');
 					craft()->templates->includeJsResource('analytics/js/ReportField.js');
 					craft()->templates->includeCssResource('analytics/css/ReportField.css');
 

@@ -77,7 +77,6 @@ class Analytics_RealtimeWidget extends BaseWidget
 						$widgetId = $this->model->id;
 
 						craft()->templates->includeJsResource('analytics/js/Analytics.js', true);
-						craft()->templates->includeJsResource('analytics/js/Reports.js');
 						craft()->templates->includeJsResource('analytics/js/RealtimeWidget.js');
 						craft()->templates->includeCssResource('analytics/css/RealtimeWidget.css');
 
