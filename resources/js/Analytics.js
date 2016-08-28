@@ -361,26 +361,9 @@ Analytics.Utils = {
 		}
 	},
 
-	formatInteger: function(value)
-	{
-		return this.getD3Locale().numberFormat(",")(value);
-	},
-
-	formatPercent: function(value)
-	{
-		return this.getD3Locale().numberFormat(Analytics.formats.percentFormat)(value / 100);
-	},
-
 	formatCurrency: function(value)
 	{
 		return this.getD3Locale().numberFormat(Analytics.formats.currencyFormat)(value);
-	},
-
-	getD3Locale: function()
-	{
-		var localeDefinition = window['d3_locale'];
-
-		return d3.locale(localeDefinition);
 	},
 
 	formatDuration: function(_seconds)
@@ -394,7 +377,25 @@ Analytics.Utils = {
 		if (minutes < 10) {minutes = "0"+minutes;}
 		if (seconds < 10) {seconds = "0"+seconds;}
 		return hours+':'+minutes+':'+seconds;
-	}
+	},
+
+	formatInteger: function(value)
+	{
+		return this.getD3Locale().numberFormat(",")(value);
+	},
+
+	formatPercent: function(value)
+	{
+		return this.getD3Locale().numberFormat(Analytics.formats.percentFormat)(value / 100);
+	},
+
+	getD3Locale: function()
+	{
+		var localeDefinition = window['d3_locale'];
+
+		return d3.locale(localeDefinition);
+	},
+
 };
 
 
