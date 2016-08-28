@@ -1,0 +1,80 @@
+{% extends "analytics/_layouts/utils" %}
+{% import "_includes/forms" as forms %}
+
+{% set selectedTab = 'charts' %}
+
+{% set content %}
+
+	<h2>Area Report Widget</h2>
+
+	{% set request = {
+		chart: 'area',
+		period: 'month',
+		options: {
+			metric: 'ga:users'
+		}
+	} %}
+
+	<h3>Request</h3>
+	<pre>{{ request|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
+
+	<h3>Widget</h3>
+	<div id="area">
+		<div class="title"></div>
+		<div class="body"></div>
+		<div class="date"></div>
+		<div class="error"></div>
+		<div class="spinner"></div>
+	</div>
+
+	{% includejs %}
+
+	window.csrfTokenName = "{{ craft.config.csrfTokenName|e('js') }}";
+	window.csrfTokenValue = "{{ craft.request.csrfToken|e('js') }}";
+
+	var AnalyticsChartLanguage = "{{ "analyticsChartLanguage"|t }}";
+
+	var reportWidget = new Analytics.ReportWidget("area", {
+		request: {{ request|json_encode|raw }},
+	});
+
+	{% endincludejs %}
+
+	<h2>Pie Report Widget</h2>
+
+	{% set request = {
+		chart: 'pie',
+		period: 'month',
+		options: {
+			dimension: 'ga:userType',
+			metric: 'ga:users'
+		}
+	} %}
+
+	<h3>Request</h3>
+	<pre>{{ request|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
+
+	<h3>Widget</h3>
+	<div id="pie">
+		<div class="title"></div>
+		<div class="body"></div>
+		<div class="date"></div>
+		<div class="error"></div>
+		<div class="spinner"></div>
+	</div>
+
+	{% includejs %}
+
+	window.csrfTokenName = "{{ craft.config.csrfTokenName|e('js') }}";
+	window.csrfTokenValue = "{{ craft.request.csrfToken|e('js') }}";
+
+	var AnalyticsChartLanguage = "{{ "analyticsChartLanguage"|t }}";
+
+	var reportWidget = new Analytics.ReportWidget("pie", {
+		request: {{ request|json_encode|raw }},
+	});
+
+	{% endincludejs %}
+
+
+{% endset %}

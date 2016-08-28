@@ -63,6 +63,19 @@ class Analytics_UtilsController extends BaseController
 		$this->renderTemplate('analytics/utils/_dataTypes', $variables);
 	}
 
+	/**
+	 * Charts
+	 *
+	 * @return null
+	 */
+	public function actionCharts(array $variables = array())
+	{
+		craft()->templates->includeJsResource('analytics/js/jsapi.js', true);
+
+		craft()->templates->includeJsResource('analytics/js/ReportWidget.js');
+
+		$this->renderTemplate('analytics/utils/_charts', $variables);
+	}
 
 	/**
 	 * Tests
