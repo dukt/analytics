@@ -133,11 +133,12 @@ class AnalyticsPlugin extends BasePlugin
 			'analytics/install' => array('action' => "analytics/install/index"),
 			'analytics/utils' => array('action' => "analytics/utils/metadata"),
 			'analytics/utils/metadata' => array('action' => "analytics/utils/metadata"),
-			'analytics/utils/dataTypes' => array('action' => "analytics/utils/dataTypes"),
-			'analytics/utils/columns' => array('action' => "analytics/utils/columns"),
-			'analytics/utils/columnGroups' => array('action' => "analytics/utils/columnGroups"),
-			'analytics/utils/tests' => array('action' => "analytics/utils/tests"),
-			'analytics/utils/charts' => array('action' => "analytics/utils/charts"),
+			'analytics/tests/dataTypes' => array('action' => "analytics/tests/dataTypes"),
+			'analytics/tests' => array('action' => "analytics/tests/columns"),
+			'analytics/tests/columns' => array('action' => "analytics/tests/columns"),
+			'analytics/tests/columnGroups' => array('action' => "analytics/tests/columnGroups"),
+			'analytics/tests/formatting' => array('action' => "analytics/tests/formatting"),
+			'analytics/tests/reportWidgets' => array('action' => "analytics/tests/reportWidgets"),
 		);
 	}
 

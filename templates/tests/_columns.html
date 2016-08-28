@@ -1,16 +1,17 @@
-{% extends "analytics/_layouts/utils" %}
+{% extends "analytics/_layouts/tests" %}
 {% import "_includes/forms" as forms %}
 
 {% set selectedTab = 'columns' %}
 
 {% set content %}
 
-	<p>{{ "All dimensions & metrics:" }}</p>
-
 	{% for column in columns %}
-		<hr>
 
 		{% include 'analytics/_includes/column' %}
+
+		{% if not loop.last %}
+			<hr>
+		{% endif %}
 
 	{% endfor %}
 

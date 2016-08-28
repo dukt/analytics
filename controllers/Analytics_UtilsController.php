@@ -50,67 +50,6 @@ class Analytics_UtilsController extends BaseController
 		$this->redirect($referer);
 	}
 
-	/**
-	 * Data Types
-	 *
-	 * @return null
-	 */
-	public function actionDataTypes(array $variables = array())
-	{
-		$variables['googleAnalyticsDataTypes'] = craft()->analytics_metadata->getGoogleAnalyticsDataTypes();
-		$variables['dataTypes'] = craft()->analytics_metadata->getDataTypes();
-
-		$this->renderTemplate('analytics/utils/_dataTypes', $variables);
-	}
-
-	/**
-	 * Charts
-	 *
-	 * @return null
-	 */
-	public function actionCharts(array $variables = array())
-	{
-		craft()->templates->includeJsResource('analytics/js/jsapi.js', true);
-
-		craft()->templates->includeJsResource('analytics/js/ReportWidget.js');
-
-		$this->renderTemplate('analytics/utils/_charts', $variables);
-	}
-
-	/**
-	 * Tests
-	 *
-	 * @return null
-	 */
-	public function actionTests(array $variables = array())
-	{
-		$this->renderTemplate('analytics/utils/_tests', $variables);
-	}
-
-	/**
-	 * Columns
-	 *
-	 * @return null
-	 */
-	public function actionColumns(array $variables = array())
-	{
-		$variables['columns'] = craft()->analytics_metadata->getColumns();
-
-		$this->renderTemplate('analytics/utils/_columns', $variables);
-	}
-
-	/**
-	 * Groups
-	 *
-	 * @return null
-	 */
-	public function actionColumnGroups(array $variables = array())
-	{
-		$variables['columnGroups'] = craft()->analytics_metadata->getColumnGroups();
-
-		$this->renderTemplate('analytics/utils/_columnGroups', $variables);
-	}
-
 	// Private Methods
 	// =========================================================================
 
