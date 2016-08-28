@@ -42,6 +42,7 @@
 			<tr>
 				<th>Web Property Name</th>
 				<th>Web Property ID</th>
+				<th>Internal Web Property ID</th>
 				<th>Account ID</th>
 				<th>Level</th>
 				<th>Profile Count</th>
@@ -54,6 +55,7 @@
 			<tr>
 				<td>{{ webProperty.name }}</td>
 				<td>{{ webProperty.id }}</td>
+				<td>{{ webProperty.internalWebPropertyId }}</td>
 				<td>{{ webProperty.accountId }}</td>
 				<td>{{ webProperty.level }}</td>
 				<td>{{ webProperty.profileCount }}</td>
@@ -77,6 +79,7 @@
 			<th>Timezone</th>
 			<th>Type</th>
 			<th>Web Property ID</th>
+			<th>Internal Web Property ID</th>
 			<th>Website URL</th>
 		</tr>
 		</thead>
@@ -91,6 +94,7 @@
 				<td>{{ profile.timezone }}</td>
 				<td>{{ profile.type }}</td>
 				<td>{{ profile.webPropertyId }}</td>
+				<td>{{ profile.internalWebPropertyId }}</td>
 				<td>{{ profile.websiteUrl }}</td>
 			</tr>
 		{% endfor %}
