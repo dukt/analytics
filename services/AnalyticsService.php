@@ -105,6 +105,75 @@ class AnalyticsService extends BaseApplicationComponent
 	 */
 	public function sendRequest(Analytics_RequestCriteriaModel $criteria)
 	{
+		$this->populateCriteria($criteria);
+
+		return craft()->analytics_api->getReport(
+			$criteria->ids,
+			$criteria->startDate,
+			$criteria->endDate,
+			$criteria->metrics,
+			$criteria->optParams,
+			$criteria->enableCache
+		);
+	}
+
+	public function sendRealtimeRequest(Analytics_RequestCriteriaModel $criteria)
+	{
+		$this->populateCriteria($criteria);
+
+		return craft()->analytics_api->getRealtimeReport(
+			$criteria->ids,
+			$criteria->metrics,
+			$criteria->optParams
+		);
+	}
+
+	/**
+	 * Get Element URL Path
+	 *
+	 * @param int           $elementId
+	 * @param string|null   $localeId
+	 */
+	public function getElementUrlPath($elementId, $localeId)
+	{
+		$element = craft()->elements->getElementById($elementId, null, $localeId);
+
+		$uri = $element->uri;
+		$url = $element->url;
+
+		$components = parse_url($url);
+
+		if($components['path'])
+		{
+			$uri = $components['path'];
+		}
+
+		return $uri;
+	}
+
+	// Private Methods
+	// =========================================================================
+
+	/**
+	 * Get Data
+	 *
+	 * @param string $name
+	 */
+	private function getData($name)
+	{
+		$jsonData = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/'.$name.'.json');
+		$data = json_decode($jsonData, true);
+
+		return $data;
+	}
+
+	/**
+	 * Populate Criteria
+	 *
+	 * @param Analytics_RequestCriteriaModel $criteria
+	 */
+	private function populateCriteria($criteria)
+	{
 		// Profile ID
 
 		$criteria->ids = craft()->analytics->getProfileId();
@@ -139,91 +208,5 @@ class AnalyticsService extends BaseApplicationComponent
 
 			$criteria->optParams = $optParams;
 		}
-
-
-		// Perform request
-
-		if($criteria->realtime)
-		{
-			return $this->_sendRealtimeRequest($criteria);
-		}
-		else
-		{
-			return $this->_sendRequest($criteria);
-		}
-	}
-
-	/**
-	 * Get Element URL Path
-	 *
-	 * @param int           $elementId
-	 * @param string|null   $localeId
-	 */
-	public function getElementUrlPath($elementId, $localeId)
-	{
-		$element = craft()->elements->getElementById($elementId, null, $localeId);
-
-		$uri = $element->uri;
-		$url = $element->url;
-
-		$components = parse_url($url);
-
-		if($components['path'])
-		{
-			$uri = $components['path'];
-		}
-
-		return $uri;
-	}
-
-	// Private Methods
-	// =========================================================================
-
-	/**
-	 * Send request
-	 * 
-	 * @param Analytics_RequestCriteriaModel $criteria
-	 *
-	 * @return mixed
-	 */
-	private function _sendRequest(Analytics_RequestCriteriaModel $criteria)
-	{
-		return craft()->analytics_api->getReport(
-			$criteria->ids,
-			$criteria->startDate,
-			$criteria->endDate,
-			$criteria->metrics,
-			$criteria->optParams,
-			$criteria->enableCache
-		);
-	}
-
-	/**
-	 * Send real-time request
-	 *
-	 * @param Analytics_RequestCriteriaModel $criteria
-	 *
-	 * @return mixed
-	 */
-	private function _sendRealtimeRequest(Analytics_RequestCriteriaModel $criteria)
-	{
-		return craft()->analytics_api->getRealtimeReport(
-			$criteria->ids,
-			$criteria->metrics,
-			$criteria->optParams
-		);
-	}
-
-	/**
-	 * Get Data
-	 *
-	 * @param string $name
-	 */
-	private function getData($name)
-	{
-		$jsonData = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/data/'.$name.'.json');
-		$data = json_decode($jsonData, true);
-
-		return $data;
 	}
 }
