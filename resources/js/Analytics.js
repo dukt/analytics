@@ -395,7 +395,6 @@ Analytics.Utils = {
 
 		return d3.locale(localeDefinition);
 	},
-
 };
 
 
@@ -477,6 +476,7 @@ Analytics.reports.BaseChart = Garnish.Base.extend(
 	period: null,
 	options: null,
 	visualization: null,
+	drawing: false,
 
 	init: function($element, data)
 	{
@@ -509,10 +509,21 @@ Analytics.reports.BaseChart = Garnish.Base.extend(
 
 					this.initChart();
 
+					if(this.chart)
+					{
+						google.visualization.events.addListener(this.chart, 'ready', $.proxy(function () {
+							this.drawing = false;
+						}, this));
+
+					}
+
+					this.draw();
+
 					if(typeof(this.data.onAfterInit) != 'undefined')
 					{
 						this.data.onAfterInit();
 					}
+
 				}, this)
 			});
 	},
@@ -524,17 +535,22 @@ Analytics.reports.BaseChart = Garnish.Base.extend(
 
 	draw: function()
 	{
-		if(this.dataTable && this.chartOptions)
+		if(!this.drawing)
 		{
-			this.chart.draw(this.dataTable, this.chartOptions);
+			this.drawing = true;
+
+			if (this.dataTable && this.chartOptions)
+			{
+				this.chart.draw(this.dataTable, this.chartOptions);
+			}
 		}
 	},
 
 	resize: function()
 	{
-		if(this.chart && this.dataTable && this.chartOptions)
+		if (this.chart && this.dataTable && this.chartOptions)
 		{
-			this.chart.draw(this.dataTable, this.chartOptions);
+			this.draw(this.dataTable, this.chartOptions);
 		}
 	},
 });
@@ -570,8 +586,6 @@ Analytics.reports.Area = Analytics.reports.BaseChart.extend(
 			}
 
 			this.chart = new google.visualization.AreaChart(this.$graph.get(0));
-
-			this.draw();
 		}
 	});
 

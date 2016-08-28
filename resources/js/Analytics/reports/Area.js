@@ -30,7 +30,5 @@ Analytics.reports.Area = Analytics.reports.BaseChart.extend(
 			}
 
 			this.chart = new google.visualization.AreaChart(this.$graph.get(0));
-
-			this.draw();
 		}
 	});
