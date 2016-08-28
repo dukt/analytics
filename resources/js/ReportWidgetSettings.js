@@ -28,8 +28,57 @@ Analytics.ReportWidgetSettings = Garnish.Base.extend(
 
 			$target.addClass('active');
 
+
+			// before change
+
+			var $chartSettingsBefore = $('.chart-settings > div:not(.hidden)', this.$form);
+
+			var $metricSelectBefore = $('.metric select', $chartSettingsBefore);
+			var $metricValueBefore;
+
+			if($metricSelectBefore.length > 0)
+			{
+				$metricValueBefore = $metricSelectBefore[0].selectize.getValue();
+			}
+
+			var $dimensionSelectBefore = $('.dimension select', $chartSettingsBefore);
+			var $dimensionValueBefore;
+
+			if($dimensionSelectBefore.length > 0)
+			{
+				$dimensionValueBefore = $dimensionSelectBefore[0].selectize.getValue();
+			}
+
+
+			// change chart select
+
 			this.$chartSelect.val($target.data('chart-type'));
 			this.$chartSelect.trigger('change');
+
+			
+			// after change
+
+			var $chartSettingsAfter = $('.chart-settings > div:not(.hidden)', this.$form);
+
+			var $metricSelectAfter = $('.metric select', $chartSettingsAfter);
+
+			if($metricSelectAfter.length > 0)
+			{
+				if($metricSelectAfter[0].selectize.options[$metricValueBefore])
+				{
+					$metricSelectAfter[0].selectize.setValue($metricValueBefore);
+				}
+			}
+
+			var $dimensionSelectAfter = $('.dimension select', $chartSettingsAfter);
+
+			if($dimensionSelectAfter.length > 0)
+			{
+				if($dimensionSelectAfter[0].selectize.options[$dimensionValueBefore])
+				{
+					$dimensionSelectAfter[0].selectize.setValue($dimensionValueBefore);
+				}
+			}
 
 		}, this));
 
