@@ -162,7 +162,8 @@ class Analytics_ReportsService extends BaseApplicationComponent
 		}
 
 		$counter = array(
-			'count' => $count,
+			'type' => $response['cols'][0]['type'],
+			'value' => $count,
 			'label' => StringHelper::toLowerCase(Craft::t(craft()->analytics_metadata->getDimMet($metric)))
 		);
 
