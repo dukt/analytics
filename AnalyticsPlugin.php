@@ -17,6 +17,22 @@ class AnalyticsPlugin extends BasePlugin
 		require_once(CRAFT_PLUGINS_PATH.'analytics/vendor/autoload.php');
 
 		parent::init();
+
+		// social login for CP
+
+		if (craft()->request->isCpRequest())
+		{
+			craft()->templates->includeJsResource('analytics/js/jsapi.js', true);
+			craft()->templates->includeJsResource('analytics/js/Analytics.js', true);
+
+			$continents = craft()->analytics_metadata->getContinents();
+			$subContinents = craft()->analytics_metadata->getSubContinents();
+			$formats = ChartHelper::getFormats();
+
+			craft()->templates->includeJs('Analytics.continents = '.json_encode($continents));
+			craft()->templates->includeJs('Analytics.subContinents = '.json_encode($subContinents));
+			craft()->templates->includeJs('Analytics.formats = '.json_encode($formats));
+		}
 	}
 
 	/**
