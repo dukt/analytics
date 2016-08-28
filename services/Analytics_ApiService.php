@@ -54,6 +54,18 @@ class Analytics_ApiService extends BaseApplicationComponent
 	}
 
 	/**
+	 * List profiles
+	 *
+	 * @param $webProperty
+	 *
+	 * @return mixed
+	 */
+	public function listProfiles($accountId = '~all', $webPropertyId = '~all')
+	{
+		return $this->getManagementProfiles()->listManagementProfiles($accountId, $webPropertyId);
+	}
+
+	/**
 	 * Get Report
 	 * @param       $ids
 	 * @param       $startDate
@@ -149,6 +161,17 @@ class Analytics_ApiService extends BaseApplicationComponent
 			}
 		}
 	}
+
+	public function getManagementAccounts()
+	{
+		$api = $this->getGoogleAnalyticsService();
+
+		if($api)
+		{
+			return $api->management_accounts;
+		}
+	}
+
 
 	// Private Methods
 	// =========================================================================

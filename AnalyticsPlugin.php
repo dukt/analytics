@@ -139,6 +139,7 @@ class AnalyticsPlugin extends BasePlugin
 			'analytics/tests/columnGroups' => array('action' => "analytics/tests/columnGroups"),
 			'analytics/tests/formatting' => array('action' => "analytics/tests/formatting"),
 			'analytics/tests/reportWidgets' => array('action' => "analytics/tests/reportWidgets"),
+			'analytics/tests/accountExplorer' => array('action' => "analytics/tests/accountExplorer"),
 		);
 	}
 
