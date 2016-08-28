@@ -35,6 +35,8 @@ class Analytics_TestsController extends BaseController
 		craft()->templates->includeJsResource('analytics/js/jsapi.js', true);
 
 		craft()->templates->includeJsResource('analytics/js/ReportWidget.js');
+		craft()->templates->includeCssResource('analytics/css/ReportWidget.css');
+		craft()->templates->includeCssResource('analytics/css/tests.css');
 
 		$this->renderTemplate('analytics/tests/_reportWidgets', $variables);
 	}
