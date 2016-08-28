@@ -166,7 +166,7 @@ class AnalyticsService extends BaseApplicationComponent
 	 *
 	 * @param Analytics_RequestCriteriaModel $criteria
 	 */
-	private function populateCriteria($criteria)
+	private function populateCriteria(Analytics_RequestCriteriaModel $criteria)
 	{
 		// Profile ID
 
