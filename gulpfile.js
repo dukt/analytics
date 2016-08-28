@@ -4,6 +4,7 @@ var gulp = require('gulp'),
     del = require('del'),
     uglify = require('gulp-uglify'),
     rename = require('gulp-rename'),
+    plumber = require('gulp-plumber'),
     concat = require('gulp-concat');
 
 var paths = {
@@ -11,50 +12,93 @@ var paths = {
     css: './resources/css',
     js: './resources/js',
     jsCompressed: './resources/js/compressed'
-}
+};
 
-/* CSS */
+var globs = {
+    concatJs: [
+        paths.js + '/Analytics/Base*.js',
+        paths.js + '/Analytics/*.js',
+    ],
 
-gulp.task('styles', function () {
+    compressJs: [
+        paths.js+'/*.js'
+    ],
+
+    watchJs: [
+        paths.js+'/*.js',
+        paths.js+'/Analytics/*.js'
+    ],
+
+    watchSass: [
+        paths.sass+'/*.scss'
+    ],
+
+    watchChange: [
+        paths.css+'/**',
+        paths.jsCompressed
+    ],
+
+    clean: [
+        paths.css,
+        paths.jsCompressed
+    ],
+};
+
+var plumberErrorHandler = function(err) {
+
+    notify.onError({
+        title: "Garnish",
+        message:  "Error: <%= error.message %>",
+        sound:    "Beep"
+    })(err);
+
+    console.log( 'plumber error!' );
+
+    this.emit('end');
+};
+
+
+/* Tasks */
+
+gulp.task('sass', function () {
   return gulp.src(paths.sass+'/*.scss')
     .pipe(sass().on('error', sass.logError))
     .pipe(gulp.dest(paths.css));
 });
 
+gulp.task('concatJs', function() {
+    return gulp.src(globs.concatJs)
+        .pipe(plumber({ errorHandler: plumberErrorHandler }))
+        .pipe(concat('Analytics.js'))
+        .pipe(gulp.dest( paths.js ));
+});
 
-/* JS */
-
-gulp.task('scripts', function() {
-    return gulp.src([
-        paths.js+'/*.js'
-    ])
+gulp.task('compressJs', ['concatJs'], function() {
+    return gulp.src(globs.compressJs)
     .pipe(uglify())
     .pipe(gulp.dest(paths.jsCompressed));
 });
 
-/* Clean */
+gulp.task('js', ['concatJs', 'compressJs']);
 
 gulp.task('clean', function(cb) {
-    del([paths.css, paths.jsCompressed], cb)
+    del(globs.clean, cb)
 });
 
 
-/* Default Task */
-
-gulp.task('default', ['clean'], function() {
-    gulp.start('styles', 'scripts');
+gulp.task('build', ['clean'], function() {
+    gulp.start('sass', 'js');
 });
-
-
-/* Watch */
 
 gulp.task('watch', function() {
 
-    gulp.watch(paths.sass+'/*.scss', ['styles']);
-    gulp.watch(paths.js+'/*.js', ['scripts']);
+    gulp.watch(globs.watchSass, ['sass']);
+    gulp.watch(globs.watchJs, ['js']);
 
     livereload.listen();
 
-    gulp.watch([paths.css+'/**', paths.jsCompressed]).on('change', livereload.changed);
+    gulp.watch(globs.watchChange).on('change', livereload.changed);
 
 });
+
+gulp.task('default', ['build', 'watch']);
