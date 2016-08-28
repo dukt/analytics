@@ -65,6 +65,7 @@ var plumberErrorHandler = function(err) {
 
 gulp.task('sass', function () {
   return gulp.src(paths.sass+'/*.scss')
+    .pipe(plumber({ errorHandler: plumberErrorHandler }))
     .pipe(sass().on('error', sass.logError))
     .pipe(gulp.dest(paths.css));
 });
@@ -78,8 +79,9 @@ gulp.task('concatJs', function() {
 
 gulp.task('compressJs', ['concatJs'], function() {
     return gulp.src(globs.compressJs)
-    .pipe(uglify())
-    .pipe(gulp.dest(paths.jsCompressed));
+        .pipe(plumber({ errorHandler: plumberErrorHandler }))
+        .pipe(uglify())
+        .pipe(gulp.dest(paths.jsCompressed));
 });
 
 gulp.task('js', ['concatJs', 'compressJs']);
@@ -98,9 +100,9 @@ gulp.task('watch', function() {
     gulp.watch(globs.watchSass, ['sass']);
     gulp.watch(globs.watchJs, ['js']);
 
-    livereload.listen();
+    // livereload.listen();
 
-    gulp.watch(globs.watchChange).on('change', livereload.changed);
+    // gulp.watch(globs.watchChange).on('change', livereload.changed);
 
 });
 
