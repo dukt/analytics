@@ -107,11 +107,11 @@ class AnalyticsService extends BaseApplicationComponent
 	{
 		if($criteria->realtime)
 		{
-			$this->sendRealtimeRequest($criteria);
+			return $this->sendRealtimeRequest($criteria);
 		}
 		else
 		{
-			$this->sendReportRequest($criteria);
+			return $this->sendReportRequest($criteria);
 		}
 	}
 
