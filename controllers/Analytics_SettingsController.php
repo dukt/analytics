@@ -120,7 +120,7 @@ class Analytics_SettingsController extends BaseController
 
 			if($webProperty)
 			{
-				$profiles = craft()->analytics_api->getProfiles($webProperty);
+				$profiles = craft()->analytics_api->getProfiles("~all", $webPropertyId);
 
 				$profile = $profiles[0];
 

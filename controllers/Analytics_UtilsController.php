@@ -64,47 +64,42 @@ class Analytics_UtilsController extends BaseController
 	{
 		$columns = [];
 
-		$metadataColumns = craft()->analytics_api->getMetadataColumns();
+		$items = craft()->analytics_api->getColumns();
 
-		if($metadataColumns)
+		if($items)
 		{
-			$items = $metadataColumns->listMetadataColumns('ga');
-
-			if($items)
+			foreach($items as $item)
 			{
-				foreach($items as $item)
+				if($item->attributes['status'] == 'DEPRECATED')
 				{
-					if($item->attributes['status'] == 'DEPRECATED')
-					{
-						continue;
-					}
+					continue;
+				}
 
-					if($item->attributes['addedInApiVersion'] > $this->addedInApiVersion)
-					{
-						continue;
-					}
+				if($item->attributes['addedInApiVersion'] > $this->addedInApiVersion)
+				{
+					continue;
+				}
 
-					if(isset($item->attributes['minTemplateIndex']))
-					{
-						for($i = $item->attributes['minTemplateIndex']; $i <= $item->attributes['maxTemplateIndex']; $i++)
-						{
-							$column = [];
-							$column['id'] = str_replace('XX', $i, $item->id);
-							$column['uiName'] = str_replace('XX', $i, $item->attributes['uiName']);
-							$column['description'] = str_replace('XX', $i, $item->attributes['description']);
-
-							$columns[$column['id']] = $this->populateColumnAttributes($column, $item);
-						}
-					}
-					else
+				if(isset($item->attributes['minTemplateIndex']))
+				{
+					for($i = $item->attributes['minTemplateIndex']; $i <= $item->attributes['maxTemplateIndex']; $i++)
 					{
 						$column = [];
-						$column['id'] = $item->id;
-						$column['uiName'] = $item->attributes['uiName'];
-						$column['description'] = $item->attributes['description'];
+						$column['id'] = str_replace('XX', $i, $item->id);
+						$column['uiName'] = str_replace('XX', $i, $item->attributes['uiName']);
+						$column['description'] = str_replace('XX', $i, $item->attributes['description']);
 
 						$columns[$column['id']] = $this->populateColumnAttributes($column, $item);
 					}
+				}
+				else
+				{
+					$column = [];
+					$column['id'] = $item->id;
+					$column['uiName'] = $item->attributes['uiName'];
+					$column['description'] = $item->attributes['description'];
+
+					$columns[$column['id']] = $this->populateColumnAttributes($column, $item);
 				}
 			}
 		}

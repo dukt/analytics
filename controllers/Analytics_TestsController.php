@@ -19,9 +19,9 @@ class Analytics_TestsController extends BaseController
 	 */
 	public function actionAccountExplorer(array $variables = array())
 	{
-		$variables['accounts'] = craft()->analytics_api->getManagementAccounts()->listManagementAccounts();
+		$variables['accounts'] = craft()->analytics_api->getAccounts();
 		$variables['webProperties'] = craft()->analytics_api->getWebProperties();
-		$variables['profiles'] = craft()->analytics_api->listProfiles();
+		$variables['profiles'] = craft()->analytics_api->getProfiles();
 
 		$this->renderTemplate('analytics/tests/_accountExplorer', $variables);
 	}

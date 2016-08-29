@@ -22,103 +22,25 @@ class Analytics_ApiService extends BaseApplicationComponent
 	// =========================================================================
 
 	/**
-	 * Get metadata columns
-	 *
-	 * @return \Google_Service_Analytics_MetadataColumns_Resource
-	 */
-	public function getMetadataColumns()
-	{
-		$api = $this->getGoogleAnalyticsService();
-
-		if($api)
-		{
-			return $api->metadata_columns;
-		}
-	}
-
-	/**
-	 * Get profiles
-	 *
-	 * @param $webProperty
-	 *
-	 * @return mixed
-	 */
-	public function getProfiles($webProperty)
-	{
-		if($webProperty)
-		{
-			$response = $this->getManagementProfiles()->listManagementProfiles($webProperty['accountId'], $webProperty['id']);
-
-			return $response['items'];
-		}
-	}
-
-	/**
-	 * List profiles
-	 *
-	 * @param $webProperty
-	 *
-	 * @return mixed
-	 */
-	public function listProfiles($accountId = '~all', $webPropertyId = '~all')
-	{
-		return $this->getManagementProfiles()->listManagementProfiles($accountId, $webPropertyId);
-	}
-
-	/**
-	 * Get Report
-	 * @param       $ids
-	 * @param       $startDate
-	 * @param       $endDate
-	 * @param       $metrics
-	 * @param array $optParams
-	 * @param bool  $enableCache
+	 * Get columns
 	 *
 	 * @return array
 	 */
-	public function getReport($ids, $startDate, $endDate, $metrics, $optParams = array(), $enableCache = true)
+	public function getColumns()
 	{
-		$request = [$ids, $startDate, $endDate, $metrics, $optParams];
-
-		$cacheId = ['api.apiGetGAData', $request];
-		$response = craft()->analytics_cache->get($cacheId);
-
-		if(!$response)
-		{
-			$response = $this->getAnalyticsGaDataGet($ids, $startDate, $endDate, $metrics, $optParams);
-			craft()->analytics_cache->set($cacheId, $response, null, null, $enableCache);
-		}
-
-		return $this->parseReportResponse($response);
+		return $this->getGoogleAnalyticsService()->metadata_columns->listMetadataColumns('ga');
 	}
 
 	/**
-	 * Get real-time report
-	 * @param       $ids
-	 * @param       $metrics
-	 * @param array $optParams
+	 * Get accounts
+	 *
+	 * @param $optParams
 	 *
 	 * @return array
 	 */
-	public function getRealtimeReport($ids, $metrics, $optParams = array())
+	public function getAccounts($optParams = array())
 	{
-		$plugin = craft()->plugins->getPlugin('analytics');
-
-		$settings = $plugin->getSettings();
-
-		$cacheDuration = craft()->analytics->getRealtimeRefreshInterval();
-
-		$cacheId = ['api.apiGetGADataRealtime', $ids, $metrics, $optParams];
-		$response = craft()->analytics_cache->get($cacheId);
-
-		if(!$response)
-		{
-			$response = $this->getRealtimeDataGet($ids, $metrics, $optParams);
-
-			craft()->analytics_cache->set($cacheId, $response, $cacheDuration);
-		}
-
-		return $this->parseReportResponse($response);
+		return $this->getGoogleAnalyticsService()->management_accounts->listManagementAccounts($optParams);
 	}
 
 	/**
@@ -130,7 +52,7 @@ class Analytics_ApiService extends BaseApplicationComponent
 	{
 		if(!$this->webProperties)
 		{
-			$response = $this->getManagementWebproperties()->listManagementWebproperties("~all");
+			$response = $this->getGoogleAnalyticsService()->management_webproperties->listManagementWebproperties("~all");
 
 			if(!$response)
 			{
@@ -162,16 +84,74 @@ class Analytics_ApiService extends BaseApplicationComponent
 		}
 	}
 
-	public function getManagementAccounts()
+	/**
+	 * Get profiles
+	 *
+	 * @param $accountId
+	 * @param $webPropertyId
+	 *
+	 * @return array
+	 */
+	public function getProfiles($accountId = '~all', $webPropertyId = '~all')
 	{
-		$api = $this->getGoogleAnalyticsService();
-
-		if($api)
-		{
-			return $api->management_accounts;
-		}
+		return $this->getGoogleAnalyticsService()->management_profiles->listManagementProfiles($accountId, $webPropertyId);
 	}
 
+	/**
+	 * Get Report
+	 * @param       $ids
+	 * @param       $startDate
+	 * @param       $endDate
+	 * @param       $metrics
+	 * @param array $optParams
+	 * @param bool  $enableCache
+	 *
+	 * @return array
+	 */
+	public function getReport($ids, $startDate, $endDate, $metrics, $optParams = array(), $enableCache = true)
+	{
+		$request = [$ids, $startDate, $endDate, $metrics, $optParams];
+
+		$cacheId = ['api.apiGetGAData', $request];
+		$response = craft()->analytics_cache->get($cacheId);
+
+		if(!$response)
+		{
+			$response = $this->sendReportRequest($ids, $startDate, $endDate, $metrics, $optParams);
+			craft()->analytics_cache->set($cacheId, $response, null, null, $enableCache);
+		}
+
+		return $this->parseReportResponse($response);
+	}
+
+	/**
+	 * Get real-time report
+	 * @param       $ids
+	 * @param       $metrics
+	 * @param array $optParams
+	 *
+	 * @return array
+	 */
+	public function getRealtimeReport($ids, $metrics, $optParams = array())
+	{
+		$plugin = craft()->plugins->getPlugin('analytics');
+
+		$settings = $plugin->getSettings();
+
+		$cacheDuration = craft()->analytics->getRealtimeRefreshInterval();
+
+		$cacheId = ['api.apiGetGADataRealtime', $ids, $metrics, $optParams];
+		$response = craft()->analytics_cache->get($cacheId);
+
+		if(!$response)
+		{
+			$response = $this->sendRealtimeReportRequest($ids, $metrics, $optParams);
+
+			craft()->analytics_cache->set($cacheId, $response, $cacheDuration);
+		}
+
+		return $this->parseReportResponse($response);
+	}
 
 	// Private Methods
 	// =========================================================================
@@ -188,6 +168,11 @@ class Analytics_ApiService extends BaseApplicationComponent
 		return new Google_Service_Analytics($client);
 	}
 
+	/**
+	 * Returns a Google client
+	 *
+	 * @return bool|Google_Client
+	 */
 	private function getClient()
 	{
 		$handle = $this->oauthHandle;
@@ -231,20 +216,6 @@ class Analytics_ApiService extends BaseApplicationComponent
 		}
 	}
 
-	/**
-	 * Get Data GA
-	 *
-	 * @return \Google_Service_Analytics_DataGa_Resource
-	 */
-	private function getGaData()
-	{
-		$api = $this->getGoogleAnalyticsService();
-
-		if($api)
-		{
-			return $api->data_ga;
-		}
-	}
 
 	/**
 	 * Returns Analytics data for a view (profile). (ga.get)
@@ -268,25 +239,9 @@ class Analytics_ApiService extends BaseApplicationComponent
 	 *
 	 * @return Google_Service_Analytics_GaData
 	 */
-	private function getAnalyticsGaDataGet($ids, $startDate, $endDate, $metrics, $optParams)
+	private function sendReportRequest($ids, $startDate, $endDate, $metrics, $optParams)
 	{
-		$gaData = $this->getGaData();
-
-		return $gaData->get($ids, $startDate, $endDate, $metrics, $optParams);
-	}
-
-	/**
-	 * Get Data Realtime
-	 * @return \Google_Service_Analytics_DataRealtime_Resource
-	 */
-	private function getRealtimeData()
-	{
-		$api = $this->getGoogleAnalyticsService();
-
-		if($api)
-		{
-			return $api->data_realtime;
-		}
+		return $this->getGoogleAnalyticsService()->data_ga->get($ids, $startDate, $endDate, $metrics, $optParams);
 	}
 
 	/**
@@ -305,11 +260,9 @@ class Analytics_ApiService extends BaseApplicationComponent
 	 *
 	 * @return Google_Service_Analytics_RealtimeData
 	 */
-	private function getRealtimeDataGet($ids, $metrics, $optParams)
+	private function sendRealtimeReportRequest($ids, $metrics, $optParams)
 	{
-		$realtimeData = $this->getRealtimeData();
-
-		return $realtimeData->get($ids, $metrics, $optParams);
+		return $this->getGoogleAnalyticsService()->data_realtime->get($ids, $metrics, $optParams);
 	}
 
 	/**
@@ -439,35 +392,5 @@ class Analytics_ApiService extends BaseApplicationComponent
 		}
 
 		return $value;
-	}
-
-	/**
-	 * Get management web properties
-	 *
-	 * @return \Google_Service_Analytics_ManagementWebproperties_Resource
-	 */
-	private function getManagementWebproperties()
-	{
-		$api = $this->getGoogleAnalyticsService();
-
-		if($api)
-		{
-			return $api->management_webproperties;
-		}
-	}
-
-	/**
-	 * Get management profiles
-	 *
-	 * @return \Google_Service_Analytics_ManagementProfiles_Resource
-	 */
-	private function getManagementProfiles()
-	{
-		$api = $this->getGoogleAnalyticsService();
-
-		if($api)
-		{
-			return $api->management_profiles;
-		}
 	}
 }
