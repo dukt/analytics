@@ -105,6 +105,25 @@ class AnalyticsService extends BaseApplicationComponent
 	 */
 	public function sendRequest(Analytics_RequestCriteriaModel $criteria)
 	{
+		if($criteria->realtime)
+		{
+			$this->sendRealtimeRequest($criteria);
+		}
+		else
+		{
+			$this->sendReportRequest($criteria);
+		}
+	}
+
+	/**
+	 * Sends a request based on Analytics_RequestCriteriaModel to Google Analytics' API.
+	 *
+	 * @param Analytics_RequestCriteriaModel $criteria
+	 *
+	 * @return string
+	 */
+	public function sendReportRequest(Analytics_RequestCriteriaModel $criteria)
+	{
 		$this->populateCriteria($criteria);
 
 		return craft()->analytics_api->getReport(

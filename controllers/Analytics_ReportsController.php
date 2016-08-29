@@ -32,7 +32,7 @@ class Analytics_ReportsController extends BaseController
 				$criteria->metrics = 'ga:activeVisitors';
 				$criteria->optParams = array('dimensions' => 'ga:visitorType');
 
-				$response = craft()->analytics->sendRealtimeRequest($criteria);
+				$response = craft()->analytics->sendRequest($criteria);
 
 
 				// total
