@@ -266,7 +266,11 @@ class Analytics_ApiService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Transforms a GA Data object to an array
+	 * Parse Report Response
+	 * 
+	 * @param $data
+	 *
+	 * @return array
 	 */
 	private function parseReportResponse($data)
 	{
