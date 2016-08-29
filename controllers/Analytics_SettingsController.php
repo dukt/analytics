@@ -111,6 +111,7 @@ class Analytics_SettingsController extends BaseController
 		$profileId = null;
 		$accountId = null;
 		$internalWebPropertyId = null;
+		$currency = null;
 
 		if(!empty($settings['webPropertyId']))
 		{
@@ -126,12 +127,14 @@ class Analytics_SettingsController extends BaseController
 				$profileId = $profile['id'];
 				$accountId = $webProperty->accountId;
 				$internalWebPropertyId = $webProperty->internalWebPropertyId;
+				$currency = $profile['currency'];
 			}
 		}
 
 		$settings['profileId'] = $profileId;
 		$settings['accountId'] = $accountId;
 		$settings['internalWebPropertyId'] = $internalWebPropertyId;
+		$settings['currency'] = $currency;
 
 		if (craft()->plugins->savePluginSettings($plugin, $settings))
 		{
