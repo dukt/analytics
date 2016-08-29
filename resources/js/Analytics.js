@@ -393,6 +393,8 @@ Analytics.Utils = {
 	{
 		var localeDefinition = window['d3_locale'];
 
+		localeDefinition.currency = Analytics.currency;
+
 		return d3.locale(localeDefinition);
 	},
 };

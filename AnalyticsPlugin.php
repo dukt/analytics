@@ -27,10 +27,12 @@ class AnalyticsPlugin extends BasePlugin
 			$continents = craft()->analytics_metadata->getContinents();
 			$subContinents = craft()->analytics_metadata->getSubContinents();
 			$formats = ChartHelper::getFormats();
+			$currency = craft()->analytics->getD3LocaleDefinitionCurrency();
 
 			craft()->templates->includeJs('Analytics.continents = '.json_encode($continents));
 			craft()->templates->includeJs('Analytics.subContinents = '.json_encode($subContinents));
 			craft()->templates->includeJs('Analytics.formats = '.json_encode($formats));
+			craft()->templates->includeJs('Analytics.currency = '.json_encode($currency));
 		}
 	}
 

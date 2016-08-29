@@ -158,6 +158,54 @@ class AnalyticsService extends BaseApplicationComponent
 		return $uri;
 	}
 
+	public function getCurrency()
+	{
+		$plugin = craft()->plugins->getPlugin('analytics');
+		$settings = $plugin->getSettings();
+
+		if(!empty($settings['currency']))
+		{
+			return $settings['currency'];
+
+		}
+	}
+
+	/**
+	 * Returns D3 currency format locale definition.
+	 *
+	 * @return string
+	 */
+	public function getD3LocaleDefinitionCurrency()
+	{
+		$currency = craft()->analytics->getCurrency();
+
+		$currencySymbol = craft()->locale->getCurrencySymbol($currency);
+		$currencyFormat = craft()->locale->getCurrencyFormat();
+
+		if(strpos($currencyFormat, ";") > 0)
+		{
+			$currencyFormatArray = explode(";", $currencyFormat);
+			$currencyFormat = $currencyFormatArray[0];
+		}
+
+		$pattern = '/[#0,.]/';
+		$replacement = '';
+		$currencyFormat = preg_replace($pattern, $replacement, $currencyFormat);
+
+		if(strpos($currencyFormat, "¤") === 0)
+		{
+			// symbol at beginning
+			$currencyD3Format = [str_replace('¤', $currencySymbol, $currencyFormat), ''];
+		}
+		else
+		{
+			// symbol at the end
+			$currencyD3Format = ['', str_replace('¤', $currencySymbol, $currencyFormat)];
+		}
+
+		return $currencyD3Format;
+	}
+
 	// Private Methods
 	// =========================================================================
 

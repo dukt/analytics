@@ -62,6 +62,8 @@ class Analytics_TestsController extends BaseController
 	 */
 	public function actionFormatting(array $variables = array())
 	{
+		$variables['currency'] = craft()->analytics->getCurrency();
+
 		$this->renderTemplate('analytics/tests/_formatting', $variables);
 	}
 
