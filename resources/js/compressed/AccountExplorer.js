@@ -1,0 +1,1 @@
+Analytics.AccountExplorer=Garnish.Base.extend({init:function(t,n){this.setSettings(n,Analytics.AccountExplorer.defaults),console.log("hello container",t)}},{defaults:{}});

@@ -13,6 +13,41 @@
 		<li><a href="#profiles">Profiles</a></li>
 	</ul>
 
+	<h2>Account Explorer</h2>
+	<div id="account-explorer" class="account-explorer">
+
+		{{ forms.selectField({
+			label: "Account"|t,
+			name: 'account',
+			class: 'account disabled',
+			disabled: true,
+			options: {},
+		}) }}
+
+		{{ forms.selectField({
+			label: "Property"|t,
+			name: 'property',
+			class: 'property disabled',
+			disabled: true,
+			options: {},
+		}) }}
+
+		{{ forms.selectField({
+			label: "View"|t,
+			name: 'view',
+			class: 'view disabled',
+			disabled: true,
+			options: {},
+		}) }}
+
+	</div>
+
+	{% includeJsResource 'analytics/js/AccountExplorer.js' %}
+
+	{% includejs %}
+		var accountExplorer = new Analytics.AccountExplorer('#account-explorer');
+	{% endincludejs %}
+
 	<h2 id="accounts">{{ "Accounts"|t }}</h2>
 
 	<table class="data fullwidth">

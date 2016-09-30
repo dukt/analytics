@@ -48,6 +48,16 @@ class Analytics_ApiService extends BaseApplicationComponent
 	 *
 	 * @return bool
 	 */
+	public function getProperties()
+	{
+        return $this->getGoogleAnalyticsService()->management_webproperties->listManagementWebproperties("~all");
+	}
+
+	/**
+	 * Returns all web properties
+	 *
+	 * @return bool
+	 */
 	public function getWebProperties()
 	{
 		if(!$this->webProperties)
