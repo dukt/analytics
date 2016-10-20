@@ -95,14 +95,12 @@ Analytics.AccountExplorer = Garnish.Base.extend({
 
 	onAccountChange: function()
 	{
-		console.log('onAccountChange');
 		this.updatePropertyOptions();
 		this.updateViewOptions();
 	},
 
 	onPropertyChange: function()
 	{
-		console.log('onPropertyChange');
 		this.updateViewOptions();
 	},
 
