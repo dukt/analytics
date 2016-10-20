@@ -28,7 +28,6 @@ Analytics.AccountExplorer = Garnish.Base.extend({
 		this.addListener(this.$refreshViewsBtn, 'click', 'refreshViews');
 		this.addListener(this.$accountSelect, 'change', 'onAccountChange');
 		this.addListener(this.$propertySelect, 'change', 'onPropertyChange');
-		this.addListener(this.$viewSelect, 'change', 'onViewChange');
 
 		if(this.settings.forceRefresh)
 		{
@@ -102,12 +101,6 @@ Analytics.AccountExplorer = Garnish.Base.extend({
 	onPropertyChange: function()
 	{
 		this.updateViewOptions();
-	},
-
-	onViewChange: function()
-	{
-		console.log('onViewChange');
-		// nothing here for now
 	},
 
 	updateAccountOptions: function()
