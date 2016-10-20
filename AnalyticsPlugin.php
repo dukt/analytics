@@ -165,17 +165,17 @@ class AnalyticsPlugin extends BasePlugin
 	protected function defineSettings()
 	{
 		return array(
-            'accountId' => array(AttributeType::String),
-            'accountName' => array(AttributeType::String),
-            'webPropertyId' => array(AttributeType::String),
-            'webPropertyName' => array(AttributeType::String),
-			'internalWebPropertyId' => array(AttributeType::String),
-            'profileId' => array(AttributeType::String),
-            'profileName' => array(AttributeType::String),
-            'currency' => array(AttributeType::String),
+            'accountId' => AttributeType::String,
+            'accountName' => AttributeType::String,
+            'webPropertyId' => AttributeType::String,
+            'webPropertyName' => AttributeType::String,
+			'internalWebPropertyId' => AttributeType::String,
+            'profileId' => AttributeType::String,
+            'profileName' => AttributeType::String,
+            'currency' => AttributeType::String,
 			'realtimeRefreshInterval' => array(AttributeType::Number, 'default' => 60),
-			'enableRealtime' => array(AttributeType::Bool),
-			'tokenId' => array(AttributeType::Number),
+			'enableRealtime' => AttributeType::Bool,
+			'tokenId' => AttributeType::Number,
 		);
 	}
 }
