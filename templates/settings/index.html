@@ -14,7 +14,7 @@
 
 	{% if isOauthProviderConfigured %}
 
-		{% if not account %}
+		{% if not oauthAccount %}
 
 			<h2 class="first">{{ 'Google Analytics Account'|t }}</h2>
 
@@ -41,13 +41,13 @@
 			<p>{{'You are authenticated to Google Analytics with the following account'|t}} :</p>
 
 			<ul>
-				{% if account.uid is defined %}
-					<li><strong>{{ 'UID'|t }} : </strong> {{ account.uid }}</li>
-				{% elseif account.id is defined %}
-					<li><strong>{{ 'UID'|t }} : </strong> {{ account.id }}</li>
+				{% if oauthAccount.uid is defined %}
+					<li><strong>{{ 'UID'|t }} : </strong> {{ oauthAccount.uid }}</li>
+				{% elseif oauthAccount.id is defined %}
+					<li><strong>{{ 'UID'|t }} : </strong> {{ oauthAccount.id }}</li>
 				{% endif %}
 
-				<li><strong>{{ 'Name'|t }} : </strong> {{ account.name }}</li>
+				<li><strong>{{ 'Name'|t }} : </strong> {{ oauthAccount.name }}</li>
 			</ul>
 
 			<p><a class="btn small" href="{{ actionUrl('analytics/oauth/disconnect') }}">{{'Disconnect'|t}}</a></p>
@@ -63,17 +63,53 @@
 				<input type="hidden" name="redirect" value="analytics/settings">
 
 
+				<div id="account-explorer" class="account-explorer">
 
-				<h2 class="first">{{'Plugin Settings'|t}}</h2>
+					<h2 class="first">{{ "Google Analytics View"|t }}</h2>
 
-				{{ forms.selectField({
-					first: true,
-					label: "Web Property"|t,
-					instructions: "Select an Analytics web profile to associate with your Craft website"|t,
-					options: propertiesOpts,
-					name: 'settings[webPropertyId]',
-					value: settings.webPropertyId
-				}) }}
+					{{ forms.selectField({
+						label: "Account"|t,
+						name: 'settings[accountId]',
+						class: 'account',
+						options: { (settings.accountId): settings.accountName },
+						value: settings.accountId,
+					}) }}
+
+					{{ forms.selectField({
+						label: "Property"|t,
+						name: 'settings[webPropertyId]',
+						class: 'property',
+						options: { (settings.webPropertyId): settings.webPropertyName },
+						value: settings.webPropertyId,
+					}) }}
+
+					{{ forms.selectField({
+						label: "View"|t,
+						name: 'settings[profileId]',
+						class: 'view',
+						options: { (settings.profileId): settings.profileName },
+						value: settings.webPropertyId,
+					}) }}
+
+					<div class="buttons">
+						<div class="btn small refresh-views">Refresh</div> <div class="spinner hidden"></div>
+					</div>
+				</div>
+
+				{% includejs %}
+
+				{% if not settings.accountName or not settings.webPropertyName or not settings.profileName %}
+					var forceRefresh = true;
+				{% else %}
+					var forceRefresh = false;
+				{% endif %}
+
+				var accountExplorer = new Analytics.AccountExplorer('#account-explorer', { forceRefresh: forceRefresh });
+				{% endincludejs %}
+
+				<hr />
+
+				<h2>{{'Realtime'|t}}</h2>
 
 				{{ forms.checkboxField({
 					label: "Enable real-time"|t,

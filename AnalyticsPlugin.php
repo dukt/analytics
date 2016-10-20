@@ -165,11 +165,14 @@ class AnalyticsPlugin extends BasePlugin
 	protected function defineSettings()
 	{
 		return array(
-			'webPropertyId' => array(AttributeType::String),
-			'accountId' => array(AttributeType::String),
+            'accountId' => array(AttributeType::String),
+            'accountName' => array(AttributeType::String),
+            'webPropertyId' => array(AttributeType::String),
+            'webPropertyName' => array(AttributeType::String),
 			'internalWebPropertyId' => array(AttributeType::String),
-			'currency' => array(AttributeType::String),
-			'profileId' => array(AttributeType::String),
+            'profileId' => array(AttributeType::String),
+            'profileName' => array(AttributeType::String),
+            'currency' => array(AttributeType::String),
 			'realtimeRefreshInterval' => array(AttributeType::Number, 'default' => 60),
 			'enableRealtime' => array(AttributeType::Bool),
 			'tokenId' => array(AttributeType::Number),

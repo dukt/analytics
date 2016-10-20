@@ -27,7 +27,7 @@ class Analytics_SettingsController extends BaseController
 
 		if($variables['isOauthProviderConfigured'])
 		{
-			$variables['account'] = false;
+			$variables['oauthAccount'] = false;
 			$variables['errors'] = [];
 
 			$provider = craft()->oauth->getProvider('google');
@@ -38,28 +38,31 @@ class Analytics_SettingsController extends BaseController
 			{
 				try
 				{
-					$account = craft()->analytics_cache->get(['getAccount', $token]);
+					$oauthAccount = craft()->analytics_cache->get(['getAccount', $token]);
 
-					if(!$account)
+					if(!$oauthAccount)
 					{
-						$account = $provider->getAccount($token);
-						craft()->analytics_cache->set(['getAccount', $token], $account);
+						$oauthAccount = $provider->getAccount($token);
+						craft()->analytics_cache->set(['getAccount', $token], $oauthAccount);
 					}
 
-					$propertiesOpts = $this->_getPropertiesOpts();
-
-					if ($account)
+					if ($oauthAccount)
 					{
-						AnalyticsPlugin::log("Account:\r\n".print_r($account, true), LogLevel::Info);
+                        AnalyticsPlugin::log("Account:\r\n".print_r($oauthAccount, true), LogLevel::Info);
 
-						$variables['account'] = $account;
+                        craft()->templates->includeJsResource('analytics/js/AccountExplorer.js');
+                        craft()->templates->includeCssResource('analytics/css/AccountExplorer.css');
+
+                        $propertiesOpts = $this->_getPropertiesOpts();
+
+						$variables['oauthAccount'] = $oauthAccount;
 						$variables['propertiesOpts'] = $propertiesOpts;
 						$variables['settings'] = $plugin->getSettings();
 					}
 				}
 				catch(\Google_Service_Exception $e)
 				{
-					AnalyticsPlugin::log("Couldn’t get account: ".$e->getMessage(), LogLevel::Error);
+					AnalyticsPlugin::log("Couldn’t get OAuth account: ".$e->getMessage(), LogLevel::Error);
 
 					foreach($e->getErrors() as $error)
 					{
@@ -70,11 +73,11 @@ class Analytics_SettingsController extends BaseController
 				{
 					if(method_exists($e, 'getResponse'))
 					{
-						AnalyticsPlugin::log("Couldn’t get account: ".$e->getResponse(), LogLevel::Error);
+						AnalyticsPlugin::log("Couldn’t get OAuth account: ".$e->getResponse(), LogLevel::Error);
 					}
 					else
 					{
-						AnalyticsPlugin::log("Couldn’t get account: ".$e->getMessage(), LogLevel::Error);
+						AnalyticsPlugin::log("Couldn’t get OAuth account: ".$e->getMessage(), LogLevel::Error);
 					}
 
 					array_push($variables['errors'], $e->getMessage());
@@ -99,7 +102,7 @@ class Analytics_SettingsController extends BaseController
 		$this->requirePostRequest();
 
 		$pluginClass = craft()->request->getRequiredPost('pluginClass');
-		$settings = craft()->request->getPost('settings');
+        $settings = craft()->request->getPost('settings');
 
 		$plugin = craft()->plugins->getPlugin($pluginClass);
 
@@ -108,33 +111,31 @@ class Analytics_SettingsController extends BaseController
 			throw new Exception(Craft::t('No plugin exists with the class “{class}”', array('class' => $pluginClass)));
 		}
 
-		$profileId = null;
-		$accountId = null;
-		$internalWebPropertyId = null;
-		$currency = null;
+        if(!empty($settings['accountId']) && !empty($settings['webPropertyId']) && !empty($settings['profileId']))
+        {
+            $apiAccounts = craft()->analytics_api->getAccounts();
 
-		if(!empty($settings['webPropertyId']))
-		{
-			$webPropertyId = $settings['webPropertyId'];
-			$webProperty = craft()->analytics_api->getWebProperty($webPropertyId);
+            $account = null;
 
-			if($webProperty)
-			{
-				$profiles = craft()->analytics_api->getProfiles("~all", $webPropertyId);
+            foreach($apiAccounts as $apiAccount)
+            {
+                if($apiAccount->id == $settings['accountId'])
+                {
+                    $account = $apiAccount;
+                }
+            }
 
-				$profile = $profiles[0];
+            $property = craft()->analytics_api->getProperty($settings['accountId'], $settings['webPropertyId']);
+            $profile = craft()->analytics_api->getProfile($settings['accountId'], $settings['webPropertyId'], $settings['profileId']);
 
-				$profileId = $profile['id'];
-				$accountId = $webProperty->accountId;
-				$internalWebPropertyId = $webProperty->internalWebPropertyId;
-				$currency = $profile['currency'];
-			}
-		}
+            $settings['accountName'] = $account->name;
 
-		$settings['profileId'] = $profileId;
-		$settings['accountId'] = $accountId;
-		$settings['internalWebPropertyId'] = $internalWebPropertyId;
-		$settings['currency'] = $currency;
+            $settings['webPropertyName'] = $property->name;
+            $settings['internalWebPropertyId'] = $property->internalWebPropertyId;
+            $settings['currency'] = $property->currency;
+
+            $settings['profileName'] = $profile->name;
+        }
 
 		if (craft()->plugins->savePluginSettings($plugin, $settings))
 		{

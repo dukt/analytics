@@ -94,6 +94,20 @@ class Analytics_ApiService extends BaseApplicationComponent
 		}
 	}
 
+    /**
+     * Return a web property
+     *
+     * @param       $accountId
+     * @param       $webPropertyId
+     * @param array $optParams
+     *
+     * @return \Google_Service_Analytics_Webproperty
+     */
+    public function getProperty($accountId, $webPropertyId, $optParams = array())
+    {
+        return $this->getGoogleAnalyticsService()->management_webproperties->get($accountId, $webPropertyId, $optParams);
+    }
+
 	/**
 	 * Get profiles
 	 *
@@ -105,6 +119,22 @@ class Analytics_ApiService extends BaseApplicationComponent
 	public function getProfiles($accountId = '~all', $webPropertyId = '~all')
 	{
 		return $this->getGoogleAnalyticsService()->management_profiles->listManagementProfiles($accountId, $webPropertyId);
+	}
+
+
+    /**
+     * Get Profile
+     *
+     * @param       $accountId
+     * @param       $webPropertyId
+     * @param       $profileId
+     * @param array $optParams
+     *
+     * @return \Google_Service_Analytics_Profile
+     */
+    public function getProfile($accountId, $webPropertyId, $profileId, $optParams = array())
+	{
+		return $this->getGoogleAnalyticsService()->management_profiles->get($accountId, $webPropertyId, $profileId, $optParams);
 	}
 
 	/**

@@ -4,6 +4,7 @@
 Analytics.AccountExplorer = Garnish.Base.extend({
 
 	data: null,
+
 	$accountSelect: null,
 	$propertySelect: null,
 	$viewSelect: null,
@@ -14,37 +15,41 @@ Analytics.AccountExplorer = Garnish.Base.extend({
 
 		this.$container = $(container);
 
-		this.$account = $('.account', this.$container);
-		this.$property = $('.property', this.$container);
-		this.$view = $('.view', this.$container);
+		this.$refreshViewsBtn = $('.refresh-views', this.$container);
+		this.$spinner = $('.spinner', this.$container);
 
-		this.$accountSelect = $('> select', this.$account);
-		this.$propertySelect = $('> select', this.$property);
-		this.$viewSelect = $('> select', this.$view);
+		this.$accountSelect = $('.account > select', this.$container);
+		this.$propertySelect = $('.property > select', this.$container);
+		this.$viewSelect = $('.view > select', this.$container);
 
 
 		// Add listeners
 
+		this.addListener(this.$refreshViewsBtn, 'click', 'refreshViews');
 		this.addListener(this.$accountSelect, 'change', 'onAccountChange');
 		this.addListener(this.$propertySelect, 'change', 'onPropertyChange');
 		this.addListener(this.$viewSelect, 'change', 'onViewChange');
 
+		if(this.settings.forceRefresh)
+		{
+			this.refreshViews();
+		}
+	},
 
-		// Load data
-
-		this.$account.addClass('disabled');
-		this.$property.addClass('disabled');
-		this.$view.addClass('disabled');
-
-		this.$accountSelect.prop('disabled', true);
-		this.$propertySelect.prop('disabled', true);
-		this.$viewSelect.prop('disabled', true);
+	refreshViews: function()
+	{
+		this.$spinner.removeClass('hidden');
+		this.$refreshViewsBtn.addClass('disabled');
 
 		Craft.postActionRequest('analytics/tests/getAccountExplorerData', {}, $.proxy(function(response, textStatus)
 		{
 			if (textStatus == 'success')
 			{
 				this.data = response;
+
+				var currentAccountId = this.$accountSelect.val();
+				var currentPropertyId = this.$propertySelect.val();
+				var currentViewId = this.$viewSelect.val();
 
 
 				// Add account, property and view options
@@ -53,38 +58,50 @@ Analytics.AccountExplorer = Garnish.Base.extend({
 				this.updatePropertyOptions();
 				this.updateViewOptions();
 
+				if(currentAccountId)
+				{
+					this.$accountSelect.val(currentAccountId);
+					this.$accountSelect.trigger('change');
+				}
 
-				// Enable selects
+				if(currentPropertyId)
+				{
+					this.$propertySelect.val(currentPropertyId);
+					this.$propertySelect.trigger('change');
+				}
 
-				this.$account.removeClass('disabled');
-				this.$property.removeClass('disabled');
-				this.$view.removeClass('disabled');
+				if(currentViewId)
+				{
+					this.$viewSelect.val(currentViewId);
+					this.$viewSelect.trigger('change');
+				}
 
-				this.$accountSelect.prop('disabled', false);
-				this.$propertySelect.prop('disabled', false);
-				this.$viewSelect.prop('disabled', false);
+				this.$spinner.addClass('hidden');
+				this.$refreshViewsBtn.removeClass('disabled');
 			}
 			else
 			{
-				// error
-				console.log('error');
+				console.log('Couldn’t load account explorer data.');
 			}
 		}, this));
 	},
 
 	onAccountChange: function()
 	{
+		console.log('onAccountChange');
 		this.updatePropertyOptions();
 		this.updateViewOptions();
 	},
 
 	onPropertyChange: function()
 	{
+		console.log('onPropertyChange');
 		this.updateViewOptions();
 	},
 
 	onViewChange: function()
 	{
+		console.log('onViewChange');
 		// nothing here for now
 	},
 
@@ -118,7 +135,6 @@ Analytics.AccountExplorer = Garnish.Base.extend({
 		$('option', this.$viewSelect).remove();
 
 		$.each(this.data.views, $.proxy(function(key, view) {
-			console.log('compare', view.webPropertyId, this.$propertySelect.val());
 			if(view.webPropertyId == this.$propertySelect.val())
 			{
 				var $option = $('<option />').appendTo(this.$viewSelect);
