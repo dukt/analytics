@@ -45,35 +45,42 @@ Analytics.AccountExplorer = Garnish.Base.extend({
 		{
 			if (textStatus == 'success')
 			{
-				this.data = response;
-
-				var currentAccountId = this.$accountSelect.val();
-				var currentPropertyId = this.$propertySelect.val();
-				var currentViewId = this.$viewSelect.val();
-
-
-				// Add account, property and view options
-
-				this.updateAccountOptions();
-				this.updatePropertyOptions();
-				this.updateViewOptions();
-
-				if(currentAccountId)
+				if(response.error)
 				{
-					this.$accountSelect.val(currentAccountId);
-					this.$accountSelect.trigger('change');
+					alert(response.error);
 				}
-
-				if(currentPropertyId)
+				else
 				{
-					this.$propertySelect.val(currentPropertyId);
-					this.$propertySelect.trigger('change');
-				}
+					this.data = response;
 
-				if(currentViewId)
-				{
-					this.$viewSelect.val(currentViewId);
-					this.$viewSelect.trigger('change');
+					var currentAccountId = this.$accountSelect.val();
+					var currentPropertyId = this.$propertySelect.val();
+					var currentViewId = this.$viewSelect.val();
+
+
+					// Add account, property and view options
+
+					this.updateAccountOptions();
+					this.updatePropertyOptions();
+					this.updateViewOptions();
+
+					if(currentAccountId)
+					{
+						this.$accountSelect.val(currentAccountId);
+						this.$accountSelect.trigger('change');
+					}
+
+					if(currentPropertyId)
+					{
+						this.$propertySelect.val(currentPropertyId);
+						this.$propertySelect.trigger('change');
+					}
+
+					if(currentViewId)
+					{
+						this.$viewSelect.val(currentViewId);
+						this.$viewSelect.trigger('change');
+					}
 				}
 
 				this.$spinner.addClass('hidden');
@@ -81,7 +88,7 @@ Analytics.AccountExplorer = Garnish.Base.extend({
 			}
 			else
 			{
-				console.log('Couldn’t load account explorer data.');
+				alert('Couldn’t load account explorer data.');
 			}
 		}, this));
 	},

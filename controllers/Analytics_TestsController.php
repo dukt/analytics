@@ -34,24 +34,31 @@ class Analytics_TestsController extends BaseController
      */
     public function actionGetAccountExplorerData()
     {
-        // Accounts
-        $apiAccounts = craft()->analytics_api->getAccounts();
-        $accounts = $apiAccounts->toSimpleObject()->items;
+        try {
+            // Accounts
+            $apiAccounts = craft()->analytics_api->getAccounts();
+            $accounts = $apiAccounts->toSimpleObject()->items;
 
-        // Properties
-        $apiProperties = craft()->analytics_api->getProperties();
-        $properties = $apiProperties->toSimpleObject()->items;
+            // Properties
+            $apiProperties = craft()->analytics_api->getProperties();
+            $properties = $apiProperties->toSimpleObject()->items;
 
-        // Views
-        $apiViews = craft()->analytics_api->getProfiles();
-        $views = $apiViews->toSimpleObject()->items;
+            // Views
+            $apiViews = craft()->analytics_api->getProfiles();
+            $views = $apiViews->toSimpleObject()->items;
 
-        // Return JSON
-        $this->returnJson(array(
-            'accounts' => $accounts,
-            'properties' => $properties,
-            'views' => $views,
-        ));
+            // Return JSON
+            $this->returnJson(array(
+                'accounts' => $accounts,
+                'properties' => $properties,
+                'views' => $views,
+            ));
+        }
+        catch(\Exception $e)
+        {
+            $this->returnErrorJson($e->getMessage());
+        }
+
     }
 
 
