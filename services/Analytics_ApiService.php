@@ -27,7 +27,7 @@ class Analytics_ApiService extends BaseApplicationComponent
 	 */
 	public function getColumns()
 	{
-		return $this->getGoogleAnalyticsService()->metadata_columns->listMetadataColumns('ga');
+		return $this->googleAnalytics()->metadata_columns->listMetadataColumns('ga');
 	}
 
 	/**
@@ -39,7 +39,7 @@ class Analytics_ApiService extends BaseApplicationComponent
 	 */
 	public function getAccounts($optParams = array())
 	{
-		return $this->getGoogleAnalyticsService()->management_accounts->listManagementAccounts($optParams);
+		return $this->googleAnalytics()->management_accounts->listManagementAccounts($optParams);
 	}
 
 	/**
@@ -49,7 +49,7 @@ class Analytics_ApiService extends BaseApplicationComponent
 	 */
 	public function getWebProperties()
 	{
-        return $this->getGoogleAnalyticsService()->management_webproperties->listManagementWebproperties("~all");
+        return $this->googleAnalytics()->management_webproperties->listManagementWebproperties("~all");
 	}
 
     /**
@@ -63,7 +63,7 @@ class Analytics_ApiService extends BaseApplicationComponent
      */
     public function getWebProperty($accountId, $webPropertyId, $optParams = array())
     {
-        return $this->getGoogleAnalyticsService()->management_webproperties->get($accountId, $webPropertyId, $optParams);
+        return $this->googleAnalytics()->management_webproperties->get($accountId, $webPropertyId, $optParams);
     }
 
 	/**
@@ -76,7 +76,7 @@ class Analytics_ApiService extends BaseApplicationComponent
 	 */
 	public function getProfiles($accountId = '~all', $webPropertyId = '~all')
 	{
-		return $this->getGoogleAnalyticsService()->management_profiles->listManagementProfiles($accountId, $webPropertyId);
+		return $this->googleAnalytics()->management_profiles->listManagementProfiles($accountId, $webPropertyId);
 	}
 
 
@@ -92,7 +92,7 @@ class Analytics_ApiService extends BaseApplicationComponent
      */
     public function getProfile($accountId, $webPropertyId, $profileId, $optParams = array())
 	{
-		return $this->getGoogleAnalyticsService()->management_profiles->get($accountId, $webPropertyId, $profileId, $optParams);
+		return $this->googleAnalytics()->management_profiles->get($accountId, $webPropertyId, $profileId, $optParams);
 	}
 
 	/**
@@ -151,11 +151,11 @@ class Analytics_ApiService extends BaseApplicationComponent
 	// =========================================================================
 
 	/**
-	 * Returns a API object
+	 * Returns the Google Analytics API object
 	 *
 	 * @return bool|Google_Service_Analytics
 	 */
-	private function getGoogleAnalyticsService()
+	private function googleAnalytics()
 	{
 		$client = $this->getClient();
 
@@ -235,7 +235,7 @@ class Analytics_ApiService extends BaseApplicationComponent
 	 */
 	private function sendReportRequest($ids, $startDate, $endDate, $metrics, $optParams)
 	{
-		return $this->getGoogleAnalyticsService()->data_ga->get($ids, $startDate, $endDate, $metrics, $optParams);
+		return $this->googleAnalytics()->data_ga->get($ids, $startDate, $endDate, $metrics, $optParams);
 	}
 
 	/**
@@ -256,7 +256,7 @@ class Analytics_ApiService extends BaseApplicationComponent
 	 */
 	private function sendRealtimeReportRequest($ids, $metrics, $optParams)
 	{
-		return $this->getGoogleAnalyticsService()->data_realtime->get($ids, $metrics, $optParams);
+		return $this->googleAnalytics()->data_realtime->get($ids, $metrics, $optParams);
 	}
 
 	/**
