@@ -44,40 +44,17 @@ class Analytics_ApiService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Returns all web properties
-	 *
-	 * @return bool
-	 */
-	public function getProperties()
-	{
-        return $this->getGoogleAnalyticsService()->management_webproperties->listManagementWebproperties("~all");
-	}
-
-	/**
-	 * Returns all web properties
+	 * Returns web properties
 	 *
 	 * @return bool
 	 */
 	public function getWebProperties()
 	{
-		if(!$this->webProperties)
-		{
-			$response = $this->getGoogleAnalyticsService()->management_webproperties->listManagementWebproperties("~all");
-
-			if(!$response)
-			{
-				AnalyticsPlugin::log('Could not list management web properties', LogLevel::Error);
-				return false;
-			}
-
-			$this->webProperties = $response['items'];
-		}
-
-		return $this->webProperties;
+        return $this->getGoogleAnalyticsService()->management_webproperties->listManagementWebproperties("~all");
 	}
 
     /**
-     * Return a web property
+     * Returns a web property
      *
      * @param       $accountId
      * @param       $webPropertyId
@@ -91,7 +68,7 @@ class Analytics_ApiService extends BaseApplicationComponent
     }
 
 	/**
-	 * Get profiles
+	 * Returns profiles
 	 *
 	 * @param $accountId
 	 * @param $webPropertyId
