@@ -132,8 +132,8 @@ class Analytics_SettingsController extends BaseController
 
             $settings['webPropertyName'] = $property->name;
             $settings['internalWebPropertyId'] = $property->internalWebPropertyId;
-            $settings['currency'] = $property->currency;
 
+            $settings['profileCurrency'] = $profile->currency;
             $settings['profileName'] = $profile->name;
         }
 

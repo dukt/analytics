@@ -172,7 +172,7 @@ class AnalyticsPlugin extends BasePlugin
 			'internalWebPropertyId' => AttributeType::String,
             'profileId' => AttributeType::String,
             'profileName' => AttributeType::String,
-            'currency' => AttributeType::String,
+            'profileCurrency' => AttributeType::String,
 			'realtimeRefreshInterval' => array(AttributeType::Number, 'default' => 60),
 			'enableRealtime' => AttributeType::Bool,
 			'tokenId' => AttributeType::Number,
