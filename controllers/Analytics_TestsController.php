@@ -13,56 +13,6 @@ class Analytics_TestsController extends BaseController
 	// =========================================================================
 
 	/**
-	 * Account Explorer
-	 *
-	 * @return null
-	 */
-	public function actionAccountExplorer(array $variables = array())
-	{
-		$variables['accounts'] = craft()->analytics_api->getAccounts();
-		$variables['webProperties'] = craft()->analytics_api->getWebProperties();
-		$variables['profiles'] = craft()->analytics_api->getProfiles();
-
-
-		$this->renderTemplate('analytics/tests/_accountExplorer', $variables);
-	}
-
-    /**
-     * Get Account Explorer Data
-     *
-     * @return null
-     */
-    public function actionGetAccountExplorerData()
-    {
-        try {
-            // Accounts
-            $apiAccounts = craft()->analytics_api->getAccounts();
-            $accounts = $apiAccounts->toSimpleObject()->items;
-
-            // Properties
-            $apiProperties = craft()->analytics_api->getProperties();
-            $properties = $apiProperties->toSimpleObject()->items;
-
-            // Views
-            $apiViews = craft()->analytics_api->getProfiles();
-            $views = $apiViews->toSimpleObject()->items;
-
-            // Return JSON
-            $this->returnJson(array(
-                'accounts' => $accounts,
-                'properties' => $properties,
-                'views' => $views,
-            ));
-        }
-        catch(\Exception $e)
-        {
-            $this->returnErrorJson($e->getMessage());
-        }
-
-    }
-
-
-	/**
 	 * Data Types
 	 *
 	 * @return null
