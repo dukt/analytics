@@ -1,0 +1,43 @@
+{% extends "analytics/_layouts/tests" %}
+{% import "_includes/forms" as forms %}
+
+{% set selectedTab = 'templateVariables' %}
+
+{% set content %}
+
+	<h2 class="first">{{ "Request"|t }}</h2>
+
+	<pre><code>{{ "{% set response = craft.analytics.api({
+	startDate: date('-1 year')|date(\"Y-m-d\"),
+	endDate: 'today',
+	metrics: 'ga:sessions',
+	optParams:
+	{
+		'dimensions': 'ga:keyword',
+		'sort': '-ga:sessions',
+		'max-results': 10,
+		'filters': 'ga:keyword!=(not set);ga:keyword!=(not provided)'
+	}
+}).send() %}" }}</code></pre>
+	<hr>
+
+	<h2>{{ "Response"|t }}</h2>
+
+	{% set response = craft.analytics.api({
+		startDate: date('-1 year')|date("Y-m-d"),
+		endDate: 'today',
+		metrics: 'ga:sessions',
+		optParams:{
+		'dimensions': 'ga:keyword',
+		'sort': '-ga:sessions',
+		'max-results': 10,
+		'filters': 'ga:keyword!=(not set);ga:keyword!=(not provided)'
+		}
+	}).send() %}
+
+	<pre>
+		<code>{{ dump(response) }}</code>
+	</pre>
+
+
+{% endset %}
