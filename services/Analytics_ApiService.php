@@ -132,10 +132,6 @@ class Analytics_ApiService extends BaseApplicationComponent
 	 */
 	public function getRealtimeReport($ids, $metrics, $optParams = array())
 	{
-		$plugin = craft()->plugins->getPlugin('analytics');
-
-		$settings = $plugin->getSettings();
-
 		$cacheDuration = craft()->analytics->getRealtimeRefreshInterval();
 
 		$cacheId = ['api.apiGetGADataRealtime', $ids, $metrics, $optParams];
