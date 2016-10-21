@@ -125,13 +125,13 @@ class Analytics_SettingsController extends BaseController
                 }
             }
 
-            $property = craft()->analytics_api->getProperty($settings['accountId'], $settings['webPropertyId']);
+            $webProperty = craft()->analytics_api->getWebProperty($settings['accountId'], $settings['webPropertyId']);
             $profile = craft()->analytics_api->getProfile($settings['accountId'], $settings['webPropertyId'], $settings['profileId']);
 
             $settings['accountName'] = $account->name;
 
-            $settings['webPropertyName'] = $property->name;
-            $settings['internalWebPropertyId'] = $property->internalWebPropertyId;
+            $settings['webPropertyName'] = $webProperty->name;
+            $settings['internalWebPropertyId'] = $webProperty->internalWebPropertyId;
 
             $settings['profileCurrency'] = $profile->currency;
             $settings['profileName'] = $profile->name;

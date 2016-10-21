@@ -76,24 +76,6 @@ class Analytics_ApiService extends BaseApplicationComponent
 		return $this->webProperties;
 	}
 
-	/**
-	 * Returns the web property from its ID
-	 *
-	 * @param $webPropertyId
-	 *
-	 * @return mixed
-	 */
-	public function getWebProperty($webPropertyId)
-	{
-		foreach($this->getWebProperties() as $webProperty)
-		{
-			if($webProperty->id == $webPropertyId)
-			{
-				return $webProperty;
-			}
-		}
-	}
-
     /**
      * Return a web property
      *
@@ -103,7 +85,7 @@ class Analytics_ApiService extends BaseApplicationComponent
      *
      * @return \Google_Service_Analytics_Webproperty
      */
-    public function getProperty($accountId, $webPropertyId, $optParams = array())
+    public function getWebProperty($accountId, $webPropertyId, $optParams = array())
     {
         return $this->getGoogleAnalyticsService()->management_webproperties->get($accountId, $webPropertyId, $optParams);
     }
