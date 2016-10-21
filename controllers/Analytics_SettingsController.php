@@ -53,10 +53,7 @@ class Analytics_SettingsController extends BaseController
                         craft()->templates->includeJsResource('analytics/js/AccountExplorer.js');
                         craft()->templates->includeCssResource('analytics/css/AccountExplorer.css');
 
-                        $propertiesOpts = $this->_getPropertiesOpts();
-
 						$variables['oauthAccount'] = $oauthAccount;
-						$variables['propertiesOpts'] = $propertiesOpts;
 						$variables['settings'] = $plugin->getSettings();
 					}
 				}
@@ -152,36 +149,37 @@ class Analytics_SettingsController extends BaseController
 		));
 	}
 
-	// Private Methods
-	// =========================================================================
 
-	/**
-	 * Get Properties Opts
-	 *
-	 * @return array
-	 */
-	private function _getPropertiesOpts()
-	{
-		$properties = array("" => Craft::t("Select"));
+    /**
+     * Get Account Explorer Data
+     *
+     * @return null
+     */
+    public function actionGetAccountExplorerData()
+    {
+        try {
+            // Accounts
+            $apiAccounts = craft()->analytics_api->getAccounts();
+            $accounts = $apiAccounts->toSimpleObject()->items;
 
-		$items = craft()->analytics_api->getWebProperties();
+            // Properties
+            $apiProperties = craft()->analytics_api->getWebProperties();
+            $properties = $apiProperties->toSimpleObject()->items;
 
-		foreach($items as $item)
-		{
-			$name = $item['id'];
+            // Views
+            $apiViews = craft()->analytics_api->getProfiles();
+            $views = $apiViews->toSimpleObject()->items;
 
-			if(!empty($item['websiteUrl']))
-			{
-				$name .= ' - '.$item['websiteUrl'];
-			}
-			elseif(!empty($item['name']))
-			{
-				$name .= ' - '.$item['name'];
-			}
-
-			$properties[$item['id']] = $name;
-		}
-
-		return $properties;
-	}
+            // Return JSON
+            $this->returnJson(array(
+                'accounts' => $accounts,
+                'properties' => $properties,
+                'views' => $views,
+            ));
+        }
+        catch(\Exception $e)
+        {
+            $this->returnErrorJson($e->getMessage());
+        }
+    }
 }
