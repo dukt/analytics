@@ -49,30 +49,30 @@ class Analytics_ReportsController extends BaseController
 				{
 					$rows = $response['rows'];
 
-					if(!empty($rows[0][1]['v']))
+					if(!empty($rows[0][1]))
 					{
-						switch($rows[0][0]['v'])
+						switch($rows[0][0])
 						{
 							case "RETURNING":
-								$returningVisitor = $rows[0][1]['v'];
+								$returningVisitor = $rows[0][1];
 								break;
 
 							case "NEW":
-								$newVisitor = $rows[0][1]['v'];
+								$newVisitor = $rows[0][1];
 								break;
 						}
 					}
 
-					if(!empty($rows[1][1]['v']))
+					if(!empty($rows[1][1]))
 					{
-						switch($rows[1][0]['v'])
+						switch($rows[1][0])
 						{
 							case "RETURNING":
-								$returningVisitor = $rows[1][1]['v'];
+								$returningVisitor = $rows[1][1];
 								break;
 
 							case "NEW":
-								$newVisitor = $rows[1][1]['v'];
+								$newVisitor = $rows[1][1];
 								break;
 						}
 					}
