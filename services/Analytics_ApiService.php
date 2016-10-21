@@ -16,7 +16,6 @@ class Analytics_ApiService extends BaseApplicationComponent
 	// =========================================================================
 
 	private $oauthHandle = 'google';
-	private $webProperties;
 
 	// Public Methods
 	// =========================================================================
