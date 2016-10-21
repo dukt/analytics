@@ -13,7 +13,7 @@ trait AnalyticsTrait
 	// =========================================================================
 
 	/**
-	 * Checks plugin requirements (dependencies, configured OAuth provider, and token)
+	 * Checks plugin requirements (dependencies, configured OAuth provider, forceConnect, and token)
 	 *
 	 * @return bool
 	 */
@@ -23,21 +23,31 @@ trait AnalyticsTrait
 		{
 			if($this->isOauthProviderConfigured())
 			{
-				if($this->isTokenSet())
-				{
-					if($this->isGoogleAnalyticsAccountConfigured())
-					{
-						return true;
-					}
-					else
-					{
-						return false;
-					}
-				}
-				else
-				{
-					return false;
-				}
+                $plugin = craft()->plugins->getPlugin('analytics');
+                $settings = $plugin->getSettings();
+
+                if($settings['forceConnect'] === true)
+                {
+                    return false;
+                }
+                else
+                {
+                    if($this->isTokenSet())
+                    {
+                        if($this->isGoogleAnalyticsAccountConfigured())
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
 			}
 			else
 			{
