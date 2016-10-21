@@ -174,6 +174,7 @@ class AnalyticsPlugin extends BasePlugin
             'profileName' => AttributeType::String,
             'profileCurrency' => AttributeType::String,
 			'realtimeRefreshInterval' => array(AttributeType::Number, 'default' => 60),
+			'forceConnect' => array(AttributeType::Bool, 'default' => false),
 			'enableRealtime' => AttributeType::Bool,
 			'tokenId' => AttributeType::Number,
 		);

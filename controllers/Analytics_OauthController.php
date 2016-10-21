@@ -76,6 +76,18 @@ class Analytics_OauthController extends BaseController
 				// save token
 				craft()->analytics_oauth->saveToken($token);
 
+
+                // Reset forceConnect plugin setting
+
+                $plugin = craft()->plugins->getPlugin('analytics');
+                $settings = $plugin->getSettings();
+
+                if($settings['forceConnect'] === true)
+                {
+                    $settings['forceConnect'] = false;
+                    craft()->plugins->savePluginSettings($plugin, $settings);
+                }
+
 				if($token)
 				{
 					AnalyticsPlugin::log('Token: '."\r\n".print_r($token->getAttributes(), true), LogLevel::Info);
