@@ -17,7 +17,7 @@ class Analytics_ReportsController extends BaseController
 	 *
 	 * @return null
 	 */
-	public function actionGetRealtimeReport()
+	public function actionRealtimeWidget()
 	{
 		$newVisitor = 0;
 		$returningVisitor = 0;
@@ -32,7 +32,7 @@ class Analytics_ReportsController extends BaseController
 				$criteria->metrics = 'ga:activeVisitors';
 				$criteria->optParams = array('dimensions' => 'ga:visitorType');
 
-				$response = craft()->analytics->sendRequest($criteria);
+				$response = craft()->analytics_api->sendRequest($criteria);
 
 
 				// total
@@ -103,7 +103,7 @@ class Analytics_ReportsController extends BaseController
 	 *
 	 * @return null
 	 */
-	public function actionGetReport()
+	public function actionReportWidget()
 	{
 		try
 		{
@@ -154,7 +154,7 @@ class Analytics_ReportsController extends BaseController
 	 *
 	 * @return null
 	 */
-	public function actionGetElementReport(array $variables = array())
+	public function actionElement(array $variables = array())
 	{
 		try
 		{
@@ -191,7 +191,7 @@ class Analytics_ReportsController extends BaseController
 
 				if(!$response)
 				{
-					$response = craft()->analytics->sendRequest($criteria);
+					$response = craft()->analytics_api->sendRequest($criteria);
 
 					if($response)
 					{

@@ -26,7 +26,7 @@ class Analytics_RequestCriteriaModel extends BaseModel
 
 		try
 		{
-			$response['data'] = craft()->analytics->sendRequest($this);
+			$response['data'] = craft()->analytics_api->sendRequest($this);
 
 			if(!isset($options['format']) || (isset($options['format']) && $options['format'] != 'gaData'))
 			{

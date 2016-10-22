@@ -83,7 +83,7 @@ class Analytics_ReportsService extends BaseApplicationComponent
 			$criteria->optParams['filters'] = $dimension.'!=(not set);'.$dimension.'!=(not provided)';
 		}
 
-		$chartResponse = craft()->analytics->sendRequest($criteria);
+		$chartResponse = craft()->analytics_api->sendRequest($criteria);
 
 
 		// Total
@@ -100,7 +100,7 @@ class Analytics_ReportsService extends BaseApplicationComponent
 			$totalCriteria->optParams = array('filters' => $criteria->optParams['filters']);
 		}
 
-		$response = craft()->analytics->sendRequest($totalCriteria);
+		$response = craft()->analytics_api->sendRequest($totalCriteria);
 
 		if(!empty($response['rows'][0][0]['f']))
 		{
@@ -150,7 +150,7 @@ class Analytics_ReportsService extends BaseApplicationComponent
 			$criteria->optParams = $optParams;
 		}
 
-		$response = craft()->analytics->sendRequest($criteria);
+		$response = craft()->analytics_api->sendRequest($criteria);
 
 		if(!empty($response['rows'][0][0]))
 		{
@@ -208,7 +208,7 @@ class Analytics_ReportsService extends BaseApplicationComponent
 			'filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)'
 		);
 
-		$tableResponse = craft()->analytics->sendRequest($criteria);
+		$tableResponse = craft()->analytics_api->sendRequest($criteria);
 
 		return [
 			'type' => 'pie',
@@ -248,7 +248,7 @@ class Analytics_ReportsService extends BaseApplicationComponent
 			'filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)'
 		);
 
-		$tableResponse = craft()->analytics->sendRequest($criteria);
+		$tableResponse = craft()->analytics_api->sendRequest($criteria);
 
 		return [
 			'type' => 'table',
@@ -296,7 +296,7 @@ class Analytics_ReportsService extends BaseApplicationComponent
 			'filters' => $originDimension.'!=(not set);'.$originDimension.'!=(not provided)',
 		);
 
-		$tableResponse = craft()->analytics->sendRequest($criteria);
+		$tableResponse = craft()->analytics_api->sendRequest($criteria);
 
 		return [
 			'type' => 'geo',

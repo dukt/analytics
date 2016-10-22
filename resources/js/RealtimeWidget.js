@@ -85,7 +85,7 @@ Analytics.Realtime = Garnish.Base.extend(
 		this.$spinner.removeClass('body-loading');
 		this.$spinner.removeClass('hidden');
 
-		Craft.queueActionRequest('analytics/reports/getRealtimeReport', {}, $.proxy(function(response, textStatus)
+		Craft.queueActionRequest('analytics/reports/realtimeWidget', {}, $.proxy(function(response, textStatus)
 		{
 			if(textStatus == 'success' && typeof(response.error) == 'undefined')
 			{

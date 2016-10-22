@@ -15,11 +15,6 @@ class Analytics_ApiService extends BaseApplicationComponent
 	// Public Methods
 	// =========================================================================
 
-	private $oauthHandle = 'google';
-
-	// Public Methods
-	// =========================================================================
-
 	/**
 	 * Get columns
 	 *
@@ -35,7 +30,7 @@ class Analytics_ApiService extends BaseApplicationComponent
 	 *
 	 * @param $optParams
 	 *
-	 * @return array
+	 * @return \Google_Service_Analytics_Accounts
 	 */
 	public function getAccounts($optParams = array())
 	{
@@ -45,7 +40,7 @@ class Analytics_ApiService extends BaseApplicationComponent
 	/**
 	 * Returns web properties
 	 *
-	 * @return bool
+	 * @return \Google_Service_Analytics_Webproperties
 	 */
 	public function getWebProperties()
 	{
@@ -72,7 +67,7 @@ class Analytics_ApiService extends BaseApplicationComponent
 	 * @param $accountId
 	 * @param $webPropertyId
 	 *
-	 * @return array
+	 * @return \Google_Service_Analytics_Profiles
 	 */
 	public function getProfiles($accountId = '~all', $webPropertyId = '~all')
 	{
@@ -81,7 +76,7 @@ class Analytics_ApiService extends BaseApplicationComponent
 
 
     /**
-     * Get Profile
+     * Returns a profile
      *
      * @param       $accountId
      * @param       $webPropertyId
@@ -95,60 +90,132 @@ class Analytics_ApiService extends BaseApplicationComponent
 		return $this->googleAnalytics()->management_profiles->get($accountId, $webPropertyId, $profileId, $optParams);
 	}
 
-	/**
-	 * Get Report
-	 * @param       $ids
-	 * @param       $startDate
-	 * @param       $endDate
-	 * @param       $metrics
-	 * @param array $optParams
-	 * @param bool  $enableCache
-	 *
-	 * @return array
-	 */
-	public function getReport($ids, $startDate, $endDate, $metrics, $optParams = array(), $enableCache = true)
-	{
-		$request = [$ids, $startDate, $endDate, $metrics, $optParams];
-
-		$cacheId = ['api.apiGetGAData', $request];
-		$response = craft()->analytics_cache->get($cacheId);
-
-		if(!$response)
-		{
-			$response = $this->sendReportRequest($ids, $startDate, $endDate, $metrics, $optParams);
-			craft()->analytics_cache->set($cacheId, $response, null, null, $enableCache);
-		}
-
-		return $this->parseReportResponse($response);
-	}
-
-	/**
-	 * Get real-time report
-	 * @param       $ids
-	 * @param       $metrics
-	 * @param array $optParams
-	 *
-	 * @return array
-	 */
-	public function getRealtimeReport($ids, $metrics, $optParams = array())
-	{
-		$cacheDuration = craft()->analytics->getRealtimeRefreshInterval();
-
-		$cacheId = ['api.apiGetGADataRealtime', $ids, $metrics, $optParams];
-		$response = craft()->analytics_cache->get($cacheId);
-
-		if(!$response)
-		{
-			$response = $this->sendRealtimeReportRequest($ids, $metrics, $optParams);
-
-			craft()->analytics_cache->set($cacheId, $response, $cacheDuration);
-		}
-
-		return $this->parseReportResponse($response);
-	}
+    /**
+     * Sends a request based on Analytics_RequestCriteriaModel to Google Analytics' API.
+     *
+     * @param Analytics_RequestCriteriaModel $criteria
+     *
+     * @return string
+     */
+    public function sendRequest(Analytics_RequestCriteriaModel $criteria)
+    {
+        if($criteria->realtime)
+        {
+            return $this->getRealtimeReport($criteria);
+        }
+        else
+        {
+            return $this->getReport($criteria);
+        }
+    }
 
 	// Private Methods
 	// =========================================================================
+
+    /**
+     * Returns a GA Report from criteria
+     *
+     * @param Analytics_RequestCriteriaModel $criteria
+     *
+     * @return string
+     */
+    private function getReport(Analytics_RequestCriteriaModel $criteria)
+    {
+        $this->populateCriteria($criteria);
+
+        $ids = $criteria->ids;
+        $startDate = $criteria->startDate;
+        $endDate = $criteria->endDate;
+        $metrics = $criteria->metrics;
+        $optParams = $criteria->optParams;
+        $enableCache = $criteria->enableCache;
+
+        $request = [$ids, $startDate, $endDate, $metrics, $optParams];
+
+        $cacheId = ['api.apiGetGAData', $request];
+        $response = craft()->analytics_cache->get($cacheId);
+
+        if(!$response)
+        {
+            $response = $this->googleAnalytics()->data_ga->get($ids, $startDate, $endDate, $metrics, $optParams);
+            craft()->analytics_cache->set($cacheId, $response, null, null, $enableCache);
+        }
+
+        return $this->parseReportResponse($response);
+    }
+
+    /**
+     * Returns a Realtime Report from criteria
+     *
+     * @param Analytics_RequestCriteriaModel $criteria
+     *
+     * @return string
+     */
+    private function getRealtimeReport(Analytics_RequestCriteriaModel $criteria)
+    {
+        $this->populateCriteria($criteria);
+
+        $ids = $criteria->ids;
+        $metrics = $criteria->metrics;
+        $optParams = $criteria->optParams;
+
+        $cacheDuration = craft()->analytics->getRealtimeRefreshInterval();
+
+        $cacheId = ['api.apiGetGADataRealtime', $ids, $metrics, $optParams];
+        $response = craft()->analytics_cache->get($cacheId);
+
+        if(!$response)
+        {
+            $response = $this->googleAnalytics()->data_realtime->get($ids, $metrics, $optParams);
+
+            craft()->analytics_cache->set($cacheId, $response, $cacheDuration);
+        }
+
+        return $this->parseReportResponse($response);
+    }
+
+    /**
+     * Populate Criteria
+     *
+     * @param Analytics_RequestCriteriaModel $criteria
+     */
+    private function populateCriteria(Analytics_RequestCriteriaModel $criteria)
+    {
+        // Profile ID
+
+        $criteria->ids = craft()->analytics->getProfileId();
+
+
+        // Filters
+
+        $filters = [];
+
+        if(isset($criteria->optParams['filters']))
+        {
+            $filters = $criteria->optParams['filters'];
+
+            if(is_string($filters))
+            {
+                $filters = explode(";", $filters);
+            }
+        }
+
+        $configFilters = craft()->config->get('filters', 'analytics');
+
+        if($configFilters)
+        {
+            $filters = array_merge($filters, $configFilters);
+        }
+
+        if(count($filters) > 0)
+        {
+            $optParams = $criteria->optParams;
+
+            $optParams['filters'] = implode(";", $filters);
+
+            $criteria->optParams = $optParams;
+        }
+    }
 
 	/**
 	 * Returns the Google Analytics API object
@@ -169,9 +236,7 @@ class Analytics_ApiService extends BaseApplicationComponent
 	 */
 	private function getClient()
 	{
-		$handle = $this->oauthHandle;
-
-		$provider = craft()->oauth->getProvider($handle);
+		$provider = craft()->oauth->getProvider('google');
 
 		if($provider)
 		{
@@ -208,55 +273,6 @@ class Analytics_ApiService extends BaseApplicationComponent
 			AnalyticsPlugin::log('Couldn’t get connect provider', LogLevel::Error);
 			return false;
 		}
-	}
-
-
-	/**
-	 * Returns Analytics data for a view (profile). (ga.get)
-	 *
-	 * @param string $ids Unique table ID for retrieving Analytics data. Table ID is of the form ga:XXXX, where XXXX is the Analytics view (profile) ID.
-	 * @param string $startDate Start date for fetching Analytics data. Requests can specify a start date formatted as YYYY-MM-DD, or as a relative date (e.g., today, yesterday, or 7daysAgo). The default value is 7daysAgo.
-	 * @param string $endDate End date for fetching Analytics data. Request can should specify an end date formatted as YYYY-MM-DD, or as a relative date (e.g., today, yesterday, or 7daysAgo). The default value is yesterday.
-	 * @param string $metrics A comma-separated list of Analytics metrics. E.g., 'ga:sessions,ga:pageviews'. At least one metric must be specified.
-	 * @param array $optParams Optional parameters.
-	 *
-	 * @opt_param int max-results The maximum number of entries to include in this feed.
-	 * @opt_param string sort A comma-separated list of dimensions or metrics that determine the sort order for Analytics data.
-	 * @opt_param string dimensions A comma-separated list of Analytics dimensions. E.g., 'ga:browser,ga:city'.
-	 * @opt_param int start-index An index of the first entity to retrieve. Use this parameter as a pagination mechanism along with the max-results parameter.
-	 * @opt_param string segment An Analytics segment to be applied to data.
-	 * @opt_param string samplingLevel The desired sampling level.
-	 * @opt_param string filters A comma-separated list of dimension or metric filters to be applied to Analytics data.
-	 * @opt_param string output The selected format for the response. Default format is JSON.
-	 *
-	 * @param bool $enableCache Caches the API response when set to 'true'. Default value is 'true'.
-	 *
-	 * @return Google_Service_Analytics_GaData
-	 */
-	private function sendReportRequest($ids, $startDate, $endDate, $metrics, $optParams)
-	{
-		return $this->googleAnalytics()->data_ga->get($ids, $startDate, $endDate, $metrics, $optParams);
-	}
-
-	/**
-	 * Returns real time data for a view (profile).
-	 *
-	 * @param string $ids Unique table ID for retrieving real time data. Table ID is of the form ga:XXXX, where XXXX is the Analytics view (profile) ID.
-	 * @param string $p2 A comma-separated list of real time metrics. E.g., 'rt:activeUsers'. At least one metric must be specified.
-	 * @param array $optParams Optional parameters.
-	 *
-	 * @opt_param int max-results The maximum number of entries to include in this feed.
-	 * @opt_param string sort A comma-separated list of dimensions or metrics that determine the sort order for real time data.
-	 * @opt_param string dimensions A comma-separated list of real time dimensions. E.g., 'rt:medium,rt:city'.
-	 * @opt_param string filters A comma-separated list of dimension or metric filters to be applied to real time data.
-	 *
-	 * @param bool $enableCache Caches the API response when set to 'true'. Default value is 'true'.
-	 *
-	 * @return Google_Service_Analytics_RealtimeData
-	 */
-	private function sendRealtimeReportRequest($ids, $metrics, $optParams)
-	{
-		return $this->googleAnalytics()->data_realtime->get($ids, $metrics, $optParams);
 	}
 
 	/**

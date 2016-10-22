@@ -56,7 +56,7 @@ Analytics.ReportWidget = Garnish.Base.extend(
 
 		this.$error.addClass('hidden');
 
-		Craft.postActionRequest('analytics/reports/getReport', data, $.proxy(function(response, textStatus)
+		Craft.postActionRequest('analytics/reports/reportWidget', data, $.proxy(function(response, textStatus)
 		{
 			if(textStatus == 'success' && typeof(response.error) == 'undefined')
 			{

@@ -47,7 +47,7 @@
 			metric: this.metric
 		};
 
-		Craft.postActionRequest('analytics/reports/getElementReport', data, $.proxy(function(response, textStatus) {
+		Craft.postActionRequest('analytics/reports/element', data, $.proxy(function(response, textStatus) {
 			if(textStatus == 'success' && typeof(response.error) == 'undefined')
 			{
 				this.parseResponse(response);

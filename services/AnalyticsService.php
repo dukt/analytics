@@ -50,19 +50,6 @@ class AnalyticsService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Get data source from its class name
-	 *
-	 * @param string $className
-	 *
-	 * @return mixed
-	 */
-	public function getDataSource($className = 'GoogleAnalytics')
-	{
-		$nsClassName = "\\Dukt\\Analytics\\DataSources\\$className";
-		return new $nsClassName;
-	}
-
-	/**
 	 * Returns the Google Analytics Profile ID
 	 *
 	 * @return string|null
@@ -94,64 +81,6 @@ class AnalyticsService extends BaseApplicationComponent
 		}
 
 		return $this->tracking;
-	}
-
-	/**
-	 * Sends a request based on Analytics_RequestCriteriaModel to Google Analytics' API.
-	 *
-	 * @param Analytics_RequestCriteriaModel $criteria
-	 *
-	 * @return string
-	 */
-	public function sendRequest(Analytics_RequestCriteriaModel $criteria)
-	{
-		if($criteria->realtime)
-		{
-			return $this->sendRealtimeRequest($criteria);
-		}
-		else
-		{
-			return $this->sendReportRequest($criteria);
-		}
-	}
-
-	/**
-	 * Sends a request based on Analytics_RequestCriteriaModel to Google Analytics' API.
-	 *
-	 * @param Analytics_RequestCriteriaModel $criteria
-	 *
-	 * @return string
-	 */
-	public function sendReportRequest(Analytics_RequestCriteriaModel $criteria)
-	{
-		$this->populateCriteria($criteria);
-
-		return craft()->analytics_api->getReport(
-			$criteria->ids,
-			$criteria->startDate,
-			$criteria->endDate,
-			$criteria->metrics,
-			$criteria->optParams,
-			$criteria->enableCache
-		);
-	}
-
-	/**
-	 * Sends a request based on Analytics_RequestCriteriaModel to Google Analytics' Realtime API.
-	 *
-	 * @param Analytics_RequestCriteriaModel $criteria
-	 *
-	 * @return string
-	 */
-	public function sendRealtimeRequest(Analytics_RequestCriteriaModel $criteria)
-	{
-		$this->populateCriteria($criteria);
-
-		return craft()->analytics_api->getRealtimeReport(
-			$criteria->ids,
-			$criteria->metrics,
-			$criteria->optParams
-		);
 	}
 
 	/**
@@ -223,51 +152,5 @@ class AnalyticsService extends BaseApplicationComponent
 		}
 
 		return $currencyD3Format;
-	}
-
-	// Private Methods
-	// =========================================================================
-
-	/**
-	 * Populate Criteria
-	 *
-	 * @param Analytics_RequestCriteriaModel $criteria
-	 */
-	private function populateCriteria(Analytics_RequestCriteriaModel $criteria)
-	{
-		// Profile ID
-
-		$criteria->ids = craft()->analytics->getProfileId();
-
-
-		// Filters
-
-		$filters = [];
-
-		if(isset($criteria->optParams['filters']))
-		{
-			$filters = $criteria->optParams['filters'];
-
-			if(is_string($filters))
-			{
-				$filters = explode(";", $filters);
-			}
-		}
-
-		$configFilters = craft()->config->get('filters', 'analytics');
-
-		if($configFilters)
-		{
-			$filters = array_merge($filters, $configFilters);
-		}
-
-		if(count($filters) > 0)
-		{
-			$optParams = $criteria->optParams;
-
-			$optParams['filters'] = implode(";", $filters);
-
-			$criteria->optParams = $optParams;
-		}
 	}
 }
