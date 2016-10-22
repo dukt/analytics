@@ -66,24 +66,6 @@ class AnalyticsService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Send tracking data to Google Analytics.
-	 *
-	 * @param array $options
-	 *
-	 * @return AnalyticsTracking|null
-	 */
-	public function track($options)
-	{
-		if(!$this->tracking)
-		{
-			require_once(CRAFT_PLUGINS_PATH.'analytics/etc/craft/AnalyticsTracking.php');
-			$this->tracking = new AnalyticsTracking($options);
-		}
-
-		return $this->tracking;
-	}
-
-	/**
 	 * Get Element URL Path
 	 *
 	 * @param int           $elementId
@@ -153,4 +135,22 @@ class AnalyticsService extends BaseApplicationComponent
 
 		return $currencyD3Format;
 	}
+
+    /**
+     * Send tracking data to Google Analytics.
+     *
+     * @param array $options
+     *
+     * @return AnalyticsTracking|null
+     */
+    public function track($options)
+    {
+        if(!$this->tracking)
+        {
+            require_once(CRAFT_PLUGINS_PATH.'analytics/etc/craft/AnalyticsTracking.php');
+            $this->tracking = new AnalyticsTracking($options);
+        }
+
+        return $this->tracking;
+    }
 }
