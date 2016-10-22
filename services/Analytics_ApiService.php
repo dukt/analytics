@@ -15,80 +15,80 @@ class Analytics_ApiService extends BaseApplicationComponent
 	// Public Methods
 	// =========================================================================
 
-	/**
-	 * Get columns
-	 *
-	 * @return array
-	 */
-	public function getColumns()
-	{
-		return $this->googleAnalytics()->metadata_columns->listMetadataColumns('ga');
-	}
-
-	/**
-	 * Get accounts
-	 *
-	 * @param $optParams
-	 *
-	 * @return \Google_Service_Analytics_Accounts
-	 */
-	public function getAccounts($optParams = array())
-	{
-		return $this->googleAnalytics()->management_accounts->listManagementAccounts($optParams);
-	}
-
-	/**
-	 * Returns web properties
-	 *
-	 * @return \Google_Service_Analytics_Webproperties
-	 */
-	public function getWebProperties()
-	{
-        return $this->googleAnalytics()->management_webproperties->listManagementWebproperties("~all");
-	}
-
     /**
-     * Returns a web property
+     * Get columns
      *
-     * @param       $accountId
-     * @param       $webPropertyId
-     * @param array $optParams
-     *
-     * @return \Google_Service_Analytics_Webproperty
+     * @return array
      */
-    public function getWebProperty($accountId, $webPropertyId, $optParams = array())
+    public function getColumns()
     {
-        return $this->googleAnalytics()->management_webproperties->get($accountId, $webPropertyId, $optParams);
+        return $this->googleAnalytics()->metadata_columns->listMetadataColumns('ga');
     }
 
-	/**
-	 * Returns profiles
-	 *
-	 * @param $accountId
-	 * @param $webPropertyId
-	 *
-	 * @return \Google_Service_Analytics_Profiles
-	 */
-	public function getProfiles($accountId = '~all', $webPropertyId = '~all')
-	{
-		return $this->googleAnalytics()->management_profiles->listManagementProfiles($accountId, $webPropertyId);
-	}
+    /**
+     * Get Account Explorer Data
+     * 
+     * @return array
+     */
+    public function getAccountExplorerData()
+    {
+        // Accounts
+        $apiAccounts = $this->getAccounts();
+        $accounts = $apiAccounts->toSimpleObject()->items;
 
+        // Properties
+        $apiProperties = $this->getWebProperties();
+        $properties = $apiProperties->toSimpleObject()->items;
+
+        // Views
+        $apiViews = $this->getProfiles();
+        $views = $apiViews->toSimpleObject()->items;
+
+        // Return Data
+        return [
+            'accounts' => $accounts,
+            'properties' => $properties,
+            'views' => $views,
+        ];
+    }
 
     /**
-     * Returns a profile
+     * Populate Account Explorer Settings
      *
-     * @param       $accountId
-     * @param       $webPropertyId
-     * @param       $profileId
-     * @param array $optParams
+     * @param array $settings
      *
-     * @return \Google_Service_Analytics_Profile
+     * @return array
      */
-    public function getProfile($accountId, $webPropertyId, $profileId, $optParams = array())
-	{
-		return $this->googleAnalytics()->management_profiles->get($accountId, $webPropertyId, $profileId, $optParams);
-	}
+    public function populateAccountExplorerSettings($settings = array())
+    {
+        if(!empty($settings['accountId']) && !empty($settings['webPropertyId']) && !empty($settings['profileId']))
+        {
+            $apiAccounts = $this->getAccounts();
+
+            $account = null;
+
+            foreach($apiAccounts as $apiAccount)
+            {
+                if($apiAccount->id == $settings['accountId'])
+                {
+                    $account = $apiAccount;
+                }
+            }
+
+            $webProperty = $this->getWebProperty($settings['accountId'], $settings['webPropertyId']);
+            $profile = $this->getProfile($settings['accountId'], $settings['webPropertyId'], $settings['profileId']);
+
+            $settings['accountName'] = $account->name;
+
+            $settings['webPropertyName'] = $webProperty->name;
+            $settings['internalWebPropertyId'] = $webProperty->internalWebPropertyId;
+
+            $settings['profileCurrency'] = $profile->currency;
+            $settings['profileName'] = $profile->name;
+        }
+
+        return $settings;
+    }
 
     /**
      * Sends a request based on Analytics_RequestCriteriaModel to Google Analytics' API.
@@ -111,6 +111,71 @@ class Analytics_ApiService extends BaseApplicationComponent
 
 	// Private Methods
 	// =========================================================================
+
+    /**
+     * Get accounts
+     *
+     * @param $optParams
+     *
+     * @return \Google_Service_Analytics_Accounts
+     */
+    private function getAccounts($optParams = array())
+    {
+        return $this->googleAnalytics()->management_accounts->listManagementAccounts($optParams);
+    }
+
+    /**
+     * Returns web properties
+     *
+     * @return \Google_Service_Analytics_Webproperties
+     */
+    private function getWebProperties()
+    {
+        return $this->googleAnalytics()->management_webproperties->listManagementWebproperties("~all");
+    }
+
+    /**
+     * Returns a web property
+     *
+     * @param       $accountId
+     * @param       $webPropertyId
+     * @param array $optParams
+     *
+     * @return \Google_Service_Analytics_Webproperty
+     */
+    private function getWebProperty($accountId, $webPropertyId, $optParams = array())
+    {
+        return $this->googleAnalytics()->management_webproperties->get($accountId, $webPropertyId, $optParams);
+    }
+
+    /**
+     * Returns profiles
+     *
+     * @param $accountId
+     * @param $webPropertyId
+     *
+     * @return \Google_Service_Analytics_Profiles
+     */
+    private function getProfiles($accountId = '~all', $webPropertyId = '~all')
+    {
+        return $this->googleAnalytics()->management_profiles->listManagementProfiles($accountId, $webPropertyId);
+    }
+
+
+    /**
+     * Returns a profile
+     *
+     * @param       $accountId
+     * @param       $webPropertyId
+     * @param       $profileId
+     * @param array $optParams
+     *
+     * @return \Google_Service_Analytics_Profile
+     */
+    private function getProfile($accountId, $webPropertyId, $profileId, $optParams = array())
+    {
+        return $this->googleAnalytics()->management_profiles->get($accountId, $webPropertyId, $profileId, $optParams);
+    }
 
     /**
      * Returns a GA Report from criteria

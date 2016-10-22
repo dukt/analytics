@@ -108,31 +108,7 @@ class Analytics_SettingsController extends BaseController
 			throw new Exception(Craft::t('No plugin exists with the class “{class}”', array('class' => $pluginClass)));
 		}
 
-        if(!empty($settings['accountId']) && !empty($settings['webPropertyId']) && !empty($settings['profileId']))
-        {
-            $apiAccounts = craft()->analytics_api->getAccounts();
-
-            $account = null;
-
-            foreach($apiAccounts as $apiAccount)
-            {
-                if($apiAccount->id == $settings['accountId'])
-                {
-                    $account = $apiAccount;
-                }
-            }
-
-            $webProperty = craft()->analytics_api->getWebProperty($settings['accountId'], $settings['webPropertyId']);
-            $profile = craft()->analytics_api->getProfile($settings['accountId'], $settings['webPropertyId'], $settings['profileId']);
-
-            $settings['accountName'] = $account->name;
-
-            $settings['webPropertyName'] = $webProperty->name;
-            $settings['internalWebPropertyId'] = $webProperty->internalWebPropertyId;
-
-            $settings['profileCurrency'] = $profile->currency;
-            $settings['profileName'] = $profile->name;
-        }
+		$settings = craft()->analytics_api->populateAccountExplorerSettings($settings);
 
 		if (craft()->plugins->savePluginSettings($plugin, $settings))
 		{
@@ -157,25 +133,11 @@ class Analytics_SettingsController extends BaseController
      */
     public function actionGetAccountExplorerData()
     {
-        try {
-            // Accounts
-            $apiAccounts = craft()->analytics_api->getAccounts();
-            $accounts = $apiAccounts->toSimpleObject()->items;
+        try
+        {
+            $accountExplorerData = craft()->analytics_api->getAccountExplorerData();
 
-            // Properties
-            $apiProperties = craft()->analytics_api->getWebProperties();
-            $properties = $apiProperties->toSimpleObject()->items;
-
-            // Views
-            $apiViews = craft()->analytics_api->getProfiles();
-            $views = $apiViews->toSimpleObject()->items;
-
-            // Return JSON
-            $this->returnJson(array(
-                'accounts' => $accounts,
-                'properties' => $properties,
-                'views' => $views,
-            ));
+            $this->returnJson($accountExplorerData);
         }
         catch(\Exception $e)
         {
