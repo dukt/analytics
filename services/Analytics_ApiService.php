@@ -76,14 +76,11 @@ class Analytics_ApiService extends BaseApplicationComponent
             }
 
             $webProperty = $this->googleAnalytics()->management_webproperties->get($settings['accountId'], $settings['webPropertyId']);
-
             $profile = $this->googleAnalytics()->management_profiles->get($settings['accountId'], $settings['webPropertyId'], $settings['profileId']);
 
             $settings['accountName'] = $account->name;
-
             $settings['webPropertyName'] = $webProperty->name;
             $settings['internalWebPropertyId'] = $webProperty->internalWebPropertyId;
-
             $settings['profileCurrency'] = $profile->currency;
             $settings['profileName'] = $profile->name;
         }
@@ -112,6 +109,49 @@ class Analytics_ApiService extends BaseApplicationComponent
 
 	// Private Methods
 	// =========================================================================
+
+    /**
+     * Populate Criteria
+     *
+     * @param Analytics_RequestCriteriaModel $criteria
+     */
+    private function populateCriteria(Analytics_RequestCriteriaModel $criteria)
+    {
+        // Profile ID
+
+        $criteria->ids = craft()->analytics->getProfileId();
+
+
+        // Filters
+
+        $filters = [];
+
+        if(isset($criteria->optParams['filters']))
+        {
+            $filters = $criteria->optParams['filters'];
+
+            if(is_string($filters))
+            {
+                $filters = explode(";", $filters);
+            }
+        }
+
+        $configFilters = craft()->config->get('filters', 'analytics');
+
+        if($configFilters)
+        {
+            $filters = array_merge($filters, $configFilters);
+        }
+
+        if(count($filters) > 0)
+        {
+            $optParams = $criteria->optParams;
+
+            $optParams['filters'] = implode(";", $filters);
+
+            $criteria->optParams = $optParams;
+        }
+    }
 
     /**
      * Returns a GA Report from criteria
@@ -174,107 +214,6 @@ class Analytics_ApiService extends BaseApplicationComponent
 
         return $this->parseReportResponse($response);
     }
-
-    /**
-     * Populate Criteria
-     *
-     * @param Analytics_RequestCriteriaModel $criteria
-     */
-    private function populateCriteria(Analytics_RequestCriteriaModel $criteria)
-    {
-        // Profile ID
-
-        $criteria->ids = craft()->analytics->getProfileId();
-
-
-        // Filters
-
-        $filters = [];
-
-        if(isset($criteria->optParams['filters']))
-        {
-            $filters = $criteria->optParams['filters'];
-
-            if(is_string($filters))
-            {
-                $filters = explode(";", $filters);
-            }
-        }
-
-        $configFilters = craft()->config->get('filters', 'analytics');
-
-        if($configFilters)
-        {
-            $filters = array_merge($filters, $configFilters);
-        }
-
-        if(count($filters) > 0)
-        {
-            $optParams = $criteria->optParams;
-
-            $optParams['filters'] = implode(";", $filters);
-
-            $criteria->optParams = $optParams;
-        }
-    }
-
-	/**
-	 * Returns the Google Analytics API object
-	 *
-	 * @return bool|Google_Service_Analytics
-	 */
-	private function googleAnalytics()
-	{
-		$client = $this->getClient();
-
-		return new Google_Service_Analytics($client);
-	}
-
-	/**
-	 * Returns a Google client
-	 *
-	 * @return bool|Google_Client
-	 */
-	private function getClient()
-	{
-		$provider = craft()->oauth->getProvider('google');
-
-		if($provider)
-		{
-			$token = craft()->analytics_oauth->getToken();
-
-			if ($token)
-			{
-				// make token compatible with Google library
-				$arrayToken = array(
-					'created' => 0,
-					'access_token' => $token->accessToken,
-					'expires_in' => $token->endOfLife,
-				);
-
-				$arrayToken = json_encode($arrayToken);
-
-				$client = new Google_Client();
-				$client->setApplicationName('Google+ PHP Starter Application');
-				$client->setClientId('clientId');
-				$client->setClientSecret('clientSecret');
-				$client->setRedirectUri('redirectUri');
-				$client->setAccessToken($arrayToken);
-
-				return $client;
-			}
-			else
-			{
-				AnalyticsPlugin::log('Undefined token', LogLevel::Error);
-				return false;
-			}
-		}
-		else
-		{
-			AnalyticsPlugin::log('Couldn’t get connect provider', LogLevel::Error);
-			return false;
-		}
-	}
 
 	/**
 	 * Parse Report Response
@@ -408,4 +347,63 @@ class Analytics_ApiService extends BaseApplicationComponent
 
 		return $value;
 	}
+
+
+    /**
+     * Returns the Google Analytics API object
+     *
+     * @return bool|Google_Service_Analytics
+     */
+    private function googleAnalytics()
+    {
+        $client = $this->getClient();
+
+        return new Google_Service_Analytics($client);
+    }
+
+    /**
+     * Returns a Google client
+     *
+     * @return bool|Google_Client
+     */
+    private function getClient()
+    {
+        $provider = craft()->oauth->getProvider('google');
+
+        if($provider)
+        {
+            $token = craft()->analytics_oauth->getToken();
+
+            if ($token)
+            {
+                // make token compatible with Google library
+                $arrayToken = array(
+                    'created' => 0,
+                    'access_token' => $token->accessToken,
+                    'expires_in' => $token->endOfLife,
+                );
+
+                $arrayToken = json_encode($arrayToken);
+
+                $client = new Google_Client();
+                $client->setApplicationName('Google+ PHP Starter Application');
+                $client->setClientId('clientId');
+                $client->setClientSecret('clientSecret');
+                $client->setRedirectUri('redirectUri');
+                $client->setAccessToken($arrayToken);
+
+                return $client;
+            }
+            else
+            {
+                AnalyticsPlugin::log('Undefined token', LogLevel::Error);
+                return false;
+            }
+        }
+        else
+        {
+            AnalyticsPlugin::log('Couldn’t get connect provider', LogLevel::Error);
+            return false;
+        }
+    }
 }
