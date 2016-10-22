@@ -27,21 +27,21 @@ class Analytics_ApiService extends BaseApplicationComponent
 
     /**
      * Get Account Explorer Data
-     * 
+     *
      * @return array
      */
     public function getAccountExplorerData()
     {
         // Accounts
-        $apiAccounts = $this->getAccounts();
+        $apiAccounts = $this->googleAnalytics()->management_accounts->listManagementAccounts();
         $accounts = $apiAccounts->toSimpleObject()->items;
 
         // Properties
-        $apiProperties = $this->getWebProperties();
+        $apiProperties = $this->googleAnalytics()->management_webproperties->listManagementWebproperties('~all');;
         $properties = $apiProperties->toSimpleObject()->items;
 
         // Views
-        $apiViews = $this->getProfiles();
+        $apiViews = $this->googleAnalytics()->management_profiles->listManagementProfiles('~all', '~all');
         $views = $apiViews->toSimpleObject()->items;
 
         // Return Data
@@ -63,7 +63,7 @@ class Analytics_ApiService extends BaseApplicationComponent
     {
         if(!empty($settings['accountId']) && !empty($settings['webPropertyId']) && !empty($settings['profileId']))
         {
-            $apiAccounts = $this->getAccounts();
+            $apiAccounts = $this->googleAnalytics()->management_accounts->listManagementAccounts();
 
             $account = null;
 
@@ -75,8 +75,9 @@ class Analytics_ApiService extends BaseApplicationComponent
                 }
             }
 
-            $webProperty = $this->getWebProperty($settings['accountId'], $settings['webPropertyId']);
-            $profile = $this->getProfile($settings['accountId'], $settings['webPropertyId'], $settings['profileId']);
+            $webProperty = $this->googleAnalytics()->management_webproperties->get($settings['accountId'], $settings['webPropertyId']);
+
+            $profile = $this->googleAnalytics()->management_profiles->get($settings['accountId'], $settings['webPropertyId'], $settings['profileId']);
 
             $settings['accountName'] = $account->name;
 
@@ -111,71 +112,6 @@ class Analytics_ApiService extends BaseApplicationComponent
 
 	// Private Methods
 	// =========================================================================
-
-    /**
-     * Get accounts
-     *
-     * @param $optParams
-     *
-     * @return \Google_Service_Analytics_Accounts
-     */
-    private function getAccounts($optParams = array())
-    {
-        return $this->googleAnalytics()->management_accounts->listManagementAccounts($optParams);
-    }
-
-    /**
-     * Returns web properties
-     *
-     * @return \Google_Service_Analytics_Webproperties
-     */
-    private function getWebProperties()
-    {
-        return $this->googleAnalytics()->management_webproperties->listManagementWebproperties("~all");
-    }
-
-    /**
-     * Returns a web property
-     *
-     * @param       $accountId
-     * @param       $webPropertyId
-     * @param array $optParams
-     *
-     * @return \Google_Service_Analytics_Webproperty
-     */
-    private function getWebProperty($accountId, $webPropertyId, $optParams = array())
-    {
-        return $this->googleAnalytics()->management_webproperties->get($accountId, $webPropertyId, $optParams);
-    }
-
-    /**
-     * Returns profiles
-     *
-     * @param $accountId
-     * @param $webPropertyId
-     *
-     * @return \Google_Service_Analytics_Profiles
-     */
-    private function getProfiles($accountId = '~all', $webPropertyId = '~all')
-    {
-        return $this->googleAnalytics()->management_profiles->listManagementProfiles($accountId, $webPropertyId);
-    }
-
-
-    /**
-     * Returns a profile
-     *
-     * @param       $accountId
-     * @param       $webPropertyId
-     * @param       $profileId
-     * @param array $optParams
-     *
-     * @return \Google_Service_Analytics_Profile
-     */
-    private function getProfile($accountId, $webPropertyId, $profileId, $optParams = array())
-    {
-        return $this->googleAnalytics()->management_profiles->get($accountId, $webPropertyId, $profileId, $optParams);
-    }
 
     /**
      * Returns a GA Report from criteria
