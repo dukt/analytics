@@ -88,6 +88,11 @@ class AnalyticsService extends BaseApplicationComponent
 		return $uri;
 	}
 
+    /**
+     * Returns a currency
+     *
+     * @param string|null   $currency
+     */
 	public function getCurrency()
 	{
 		$plugin = craft()->plugins->getPlugin('analytics');
@@ -96,7 +101,6 @@ class AnalyticsService extends BaseApplicationComponent
 		if(!empty($settings['currency']))
 		{
 			return $settings['currency'];
-
 		}
 	}
 
