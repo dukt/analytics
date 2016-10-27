@@ -73,6 +73,7 @@ Analytics.ReportWidget = Garnish.Base.extend(
 
 				this.$error.html(msg);
 				this.$error.removeClass('hidden');
+				this.$spinner.addClass('hidden');
 			}
 
 			window.dashboard.grid.refreshCols(true);

@@ -78,10 +78,20 @@ class Analytics_ReportsController extends BaseController
 					}
 				}
 			}
-			catch(\Exception $e)
-			{
-				$this->returnErrorJson($e->getMessage());
-			}
+            catch(\Google_Service_Exception $e)
+            {
+                $errors = $e->getErrors();
+                $errorMsg = $e->getMessage();
+
+                if(isset($errors[0]['message']))
+                {
+                    $errorMsg = $errors[0]['message'];
+                }
+
+                AnalyticsPlugin::log('Couldn’t get realtime widget data: '.$errorMsg."\r\n".print_r($errors, true), LogLevel::Error);
+
+                $this->returnErrorJson($errorMsg);
+            }
 		}
 		else
 		{
@@ -131,19 +141,19 @@ class Analytics_ReportsController extends BaseController
 
 			$this->returnJson($response);
 		}
-		catch(\Exception $e)
+		catch(\Google_Service_Exception $e)
 		{
-			if(method_exists($e, 'getErrors'))
-			{
-				$errors = $e->getErrors();
+            $errors = $e->getErrors();
+            $errorMsg = $e->getMessage();
 
-				if(isset($errors[0]['message']))
-				{
-					$this->returnErrorJson(Craft::t($errors[0]['message']));
-				}
-			}
+            if(isset($errors[0]['message']))
+            {
+                $errorMsg = $errors[0]['message'];
+            }
 
-			$this->returnErrorJson($e->getMessage());
+            AnalyticsPlugin::log('Couldn’t get report widget data: '.$errorMsg."\r\n".print_r($errors, true), LogLevel::Error);
+
+            $this->returnErrorJson($errorMsg);
 		}
 	}
 
