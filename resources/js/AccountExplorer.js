@@ -140,61 +140,6 @@ Analytics.AccountExplorer = Garnish.Base.extend({
 				$option.text(view.name);
 			}
 		}, this));
-	},
-
-	initData: function()
-	{
-		this.data = {
-			accounts: [
-				{
-					id: '1547168',
-					name: "Dukt Network",
-				},
-				{
-					id: '67133596',
-					name: "Gumroad Dukt",
-				}
-			],
-
-			properties: [
-				{
-					id: 'UA-1547168-20',
-					accountId: '1547168',
-					name: 'https://dukt.net/',
-				},
-				{
-					id: 'UA-1547168-27',
-					accountId: '1547168',
-					name: 'plugins.dev',
-				},
-				{
-					id: 'UA-67133596-1',
-					accountId: '67133596',
-					name: 'Gumroad Dukt',
-				},
-			],
-
-			views: [
-				{
-					id: '107887337',
-					accountId: '67133596',
-					propertyId: 'UA-67133596-1',
-					name: 'All Web Site Data',
-				},
-				{
-					id: '42395806',
-					accountId: '1547168',
-					propertyId: 'UA-1547168-20',
-					name: 'dukt.net',
-				},
-				{
-					id: '82988457',
-					accountId: '1547168',
-					propertyId: 'UA-1547168-27',
-					name: 'plugins.dev',
-				},
-			]
-		};
 	}
 }, {
 	defaults: {
