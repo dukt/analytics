@@ -92,6 +92,12 @@ class Analytics_ReportsController extends BaseController
 
                 $this->returnErrorJson($errorMsg);
             }
+            catch(\Exception $e)
+            {
+                $errorMsg = $e->getMessage();
+                AnalyticsPlugin::log('Couldn’t get element data: '.$errorMsg, LogLevel::Error);
+                $this->returnErrorJson($errorMsg);
+            }
 		}
 		else
 		{
@@ -155,6 +161,12 @@ class Analytics_ReportsController extends BaseController
 
             $this->returnErrorJson($errorMsg);
 		}
+        catch(\Exception $e)
+        {
+            $errorMsg = $e->getMessage();
+            AnalyticsPlugin::log('Couldn’t get element data: '.$errorMsg, LogLevel::Error);
+            $this->returnErrorJson($errorMsg);
+        }
 	}
 
 	/**
@@ -219,9 +231,25 @@ class Analytics_ReportsController extends BaseController
 			   throw new Exception("Element doesn't support URLs.", 1);
 			}
 		}
+        catch(\Google_Service_Exception $e)
+        {
+            $errors = $e->getErrors();
+            $errorMsg = $e->getMessage();
+
+            if(isset($errors[0]['message']))
+            {
+                $errorMsg = $errors[0]['message'];
+            }
+
+            AnalyticsPlugin::log('Couldn’t get element data: '.$errorMsg."\r\n".print_r($errors, true), LogLevel::Error);
+
+            $this->returnErrorJson($errorMsg);
+        }
 		catch(\Exception $e)
 		{
-			$this->returnErrorJson($e->getMessage());
+            $errorMsg = $e->getMessage();
+            AnalyticsPlugin::log('Couldn’t get element data: '.$errorMsg, LogLevel::Error);
+			$this->returnErrorJson($errorMsg);
 		}
 	}
 }
