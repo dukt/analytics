@@ -137,6 +137,13 @@ class Analytics_SettingsController extends BaseController
         {
             $accountExplorerData = craft()->analytics_api->getAccountExplorerData();
 
+            $plugin = craft()->plugins->getPlugin('analytics');
+            $settings = $plugin->getSettings();
+
+            $settings['accountExplorerData'] = $accountExplorerData;
+
+            craft()->plugins->savePluginSettings($plugin, $settings);
+
             $this->returnJson($accountExplorerData);
         }
         catch(\Exception $e)

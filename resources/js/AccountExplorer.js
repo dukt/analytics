@@ -29,6 +29,8 @@ Analytics.AccountExplorer = Garnish.Base.extend({
 		this.addListener(this.$accountSelect, 'change', 'onAccountChange');
 		this.addListener(this.$propertySelect, 'change', 'onPropertyChange');
 
+		this.parseAccountExplorerData(this.settings.data);
+
 		if(this.settings.forceRefresh)
 		{
 			this.refreshViews();
@@ -50,36 +52,7 @@ Analytics.AccountExplorer = Garnish.Base.extend({
 				}
 				else
 				{
-					this.data = response;
-
-					var currentAccountId = this.$accountSelect.val();
-					var currentPropertyId = this.$propertySelect.val();
-					var currentViewId = this.$viewSelect.val();
-
-
-					// Add account, property and view options
-
-					this.updateAccountOptions();
-					this.updatePropertyOptions();
-					this.updateViewOptions();
-
-					if(currentAccountId)
-					{
-						this.$accountSelect.val(currentAccountId);
-						this.$accountSelect.trigger('change');
-					}
-
-					if(currentPropertyId)
-					{
-						this.$propertySelect.val(currentPropertyId);
-						this.$propertySelect.trigger('change');
-					}
-
-					if(currentViewId)
-					{
-						this.$viewSelect.val(currentViewId);
-						this.$viewSelect.trigger('change');
-					}
+					this.parseAccountExplorerData(response);
 				}
 
 				this.$spinner.addClass('hidden');
@@ -90,6 +63,40 @@ Analytics.AccountExplorer = Garnish.Base.extend({
 				alert('Couldn’t load account explorer data.');
 			}
 		}, this));
+	},
+
+	parseAccountExplorerData: function(data)
+	{
+		this.data = data;
+
+		var currentAccountId = this.$accountSelect.val();
+		var currentPropertyId = this.$propertySelect.val();
+		var currentViewId = this.$viewSelect.val();
+
+
+		// Add account, property and view options
+
+		this.updateAccountOptions();
+		this.updatePropertyOptions();
+		this.updateViewOptions();
+
+		if(currentAccountId)
+		{
+			this.$accountSelect.val(currentAccountId);
+			this.$accountSelect.trigger('change');
+		}
+
+		if(currentPropertyId)
+		{
+			this.$propertySelect.val(currentPropertyId);
+			this.$propertySelect.trigger('change');
+		}
+
+		if(currentViewId)
+		{
+			this.$viewSelect.val(currentViewId);
+			this.$viewSelect.trigger('change');
+		}
 	},
 
 	onAccountChange: function()
@@ -107,39 +114,49 @@ Analytics.AccountExplorer = Garnish.Base.extend({
 	{
 		$('option', this.$accountSelect).remove();
 
-		$.each(this.data.accounts, $.proxy(function(key, account) {
-			var $option = $('<option />').appendTo(this.$accountSelect);
-			$option.attr('value', account.id);
-			$option.text(account.name);
-		}, this));
+		if(this.data)
+		{
+			$.each(this.data.accounts, $.proxy(function(key, account) {
+				var $option = $('<option />').appendTo(this.$accountSelect);
+				$option.attr('value', account.id);
+				$option.text(account.name);
+			}, this));
+		}
 	},
 
 	updatePropertyOptions: function()
 	{
 		$('option', this.$propertySelect).remove();
 
-		$.each(this.data.properties, $.proxy(function(key, property) {
-			if(property.accountId == this.$accountSelect.val())
-			{
-				var $option = $('<option />').appendTo(this.$propertySelect);
-				$option.attr('value', property.id);
-				$option.text(property.name);
-			}
-		}, this));
+		if(this.data)
+		{
+			$.each(this.data.properties, $.proxy(function(key, property) {
+				if(property.accountId == this.$accountSelect.val())
+				{
+					var $option = $('<option />').appendTo(this.$propertySelect);
+					$option.attr('value', property.id);
+					$option.text(property.name);
+				}
+			}, this));
+		}
 	},
 
 	updateViewOptions: function()
 	{
 		$('option', this.$viewSelect).remove();
 
-		$.each(this.data.views, $.proxy(function(key, view) {
-			if(view.webPropertyId == this.$propertySelect.val())
-			{
-				var $option = $('<option />').appendTo(this.$viewSelect);
-				$option.attr('value', view.id);
-				$option.text(view.name);
-			}
-		}, this));
+		if(this.data)
+		{
+
+			$.each(this.data.views, $.proxy(function(key, view) {
+				if(view.webPropertyId == this.$propertySelect.val())
+				{
+					var $option = $('<option />').appendTo(this.$viewSelect);
+					$option.attr('value', view.id);
+					$option.text(view.name);
+				}
+			}, this));
+		}
 	}
 }, {
 	defaults: {

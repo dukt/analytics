@@ -176,6 +176,7 @@ class AnalyticsPlugin extends BasePlugin
 			'forceConnect' => array(AttributeType::Bool, 'default' => false),
 			'enableRealtime' => AttributeType::Bool,
 			'tokenId' => AttributeType::Number,
+			'accountExplorerData' => AttributeType::Mixed,
 		);
 	}
 }

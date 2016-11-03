@@ -66,32 +66,57 @@
 					<input type="hidden" name="pluginClass" value="Analytics">
 					<input type="hidden" name="redirect" value="analytics/settings">
 
-
 					<div id="account-explorer" class="account-explorer">
 
 						<h2 class="first">{{ "Google Analytics View (Profile)"|t }}</h2>
 
+						{% set accountOptions = [] %}
+						{% set propertyOptions = [] %}
+						{% set viewOptions = [] %}
+
+						{% if settings.accountExplorerData %}
+							{% for account in settings.accountExplorerData.accounts %}
+								{% set accountOptions = accountOptions|merge([{ label: account.name|t, value: account.id }]) %}
+							{% endfor %}
+
+
+							{% for property in settings.accountExplorerData.properties %}
+								{% if property.accountId == settings.accountId %}
+									{% set propertyOptions = propertyOptions|merge([{ label: property.name|t, value: property.id }]) %}
+								{% endif %}
+							{% endfor %}
+
+							{% for view in settings.accountExplorerData.views %}
+								{% if view.webPropertyId == settings.webPropertyId %}
+									{% set viewOptions = viewOptions|merge([{ label: view.name|t, value: view.id }]) %}
+								{% endif %}
+							{% endfor %}
+
+						{% endif %}
+						
 						{{ forms.selectField({
 							label: "Account"|t,
 							name: 'settings[accountId]',
 							class: 'account',
-							options: { (settings.accountId): settings.accountName },
+							options: accountOptions,
 							value: settings.accountId,
 						}) }}
+
 
 						{{ forms.selectField({
 							label: "Property"|t,
 							name: 'settings[webPropertyId]',
 							class: 'property',
-							options: { (settings.webPropertyId): settings.webPropertyName },
+							options: propertyOptions,
 							value: settings.webPropertyId,
 						}) }}
+
 
 						{{ forms.selectField({
 							label: "View"|t,
 							name: 'settings[profileId]',
 							class: 'view',
-							options: { (settings.profileId): settings.profileName },
+							options: viewOptions,
 							value: settings.webPropertyId,
 						}) }}
 
@@ -102,13 +127,16 @@
 
 					{% includejs %}
 
-					{% if not settings.accountName or not settings.webPropertyName or not settings.profileName %}
-						var forceRefresh = true;
-					{% else %}
+
+
+
+					{% if settings.accountExplorerData %}
 						var forceRefresh = false;
+					{% else %}
+						var forceRefresh = true;
 					{% endif %}
 
-					var accountExplorer = new Analytics.AccountExplorer('#account-explorer', { forceRefresh: forceRefresh });
+					var accountExplorer = new Analytics.AccountExplorer('#account-explorer', { forceRefresh: forceRefresh, data: {{ settings.accountExplorerData|json_encode|raw }}  });
 					{% endincludejs %}
 
 					<hr />
