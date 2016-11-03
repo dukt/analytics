@@ -33,7 +33,7 @@ Analytics.Utils = {
 
 			data.addColumn({
 				type: type,
-				label: column.label + '('+column.type+')',
+				label: column.label,
 				id: column.id,
 			});
 		});
