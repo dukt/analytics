@@ -113,7 +113,7 @@ Analytics.ChartOptions = Garnish.Base.extend({}, {
 		area: {
 			theme: 'maximized',
 			legend: 'none',
-			backgroundColor: '#FFF',
+			backgroundColor: 'transparent',
 			colors: ['#058DC7'],
 			areaOpacity: 0.1,
 			pointSize: 7,

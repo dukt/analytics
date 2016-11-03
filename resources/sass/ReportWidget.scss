@@ -17,7 +17,7 @@
 	.spinner { position: absolute; top: 50%; left: 50%; margin-left: -14px; margin-top: -14px; }
 
 	.report .chart { overflow: hidden;  }
-	.report .chart.area { min-height: 150px; }
+	.report .chart.area { min-height: 150px; margin: 14px -24px -24px -24px; }
 	.report .chart.pie { min-height: 260px; padding: 14px 0; }
 	.report .chart.counter { padding: 12px 0; text-align: center; }
 	.report .chart.counter .value { font-size: 5em; line-height: 1em; margin-bottom: 0.1em; }
