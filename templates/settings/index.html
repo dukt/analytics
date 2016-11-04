@@ -70,29 +70,16 @@
 
 						<h2 class="first">{{ "Google Analytics View (Profile)"|t }}</h2>
 
-						{% set accountOptions = [] %}
-						{% set propertyOptions = [] %}
-						{% set viewOptions = [] %}
-
-						{% if settings.accountExplorerData %}
+						{% if settings.accountExplorerData.accounts is defined %}
+							{% set accountOptions = [] %}
 							{% for account in settings.accountExplorerData.accounts %}
 								{% set accountOptions = accountOptions|merge([{ label: account.name|t, value: account.id }]) %}
 							{% endfor %}
-
-
-							{% for property in settings.accountExplorerData.properties %}
-								{% if property.accountId == settings.accountId %}
-									{% set propertyOptions = propertyOptions|merge([{ label: property.name|t, value: property.id }]) %}
-								{% endif %}
-							{% endfor %}
-
-							{% for view in settings.accountExplorerData.views %}
-								{% if view.webPropertyId == settings.webPropertyId %}
-									{% set viewOptions = viewOptions|merge([{ label: view.name|t, value: view.id }]) %}
-								{% endif %}
-							{% endfor %}
-
+						{% else %}
+							{% set accountOptions = { (settings.accountId): settings.accountName } %}
 						{% endif %}
+
+
 						
 						{{ forms.selectField({
 							label: "Account"|t,
@@ -103,6 +90,17 @@
 						}) }}
 
 
+						{% if settings.accountExplorerData.properties is defined %}
+							{% set propertyOptions = [] %}
+							{% for property in settings.accountExplorerData.properties %}
+								{% if property.accountId == settings.accountId %}
+									{% set propertyOptions = propertyOptions|merge([{ label: property.name|t, value: property.id }]) %}
+								{% endif %}
+							{% endfor %}
+						{% else %}
+							{% set propertyOptions = { (settings.webPropertyId): settings.webPropertyName } %}
+						{% endif %}
+
 						{{ forms.selectField({
 							label: "Property"|t,
 							name: 'settings[webPropertyId]',
@@ -111,13 +109,24 @@
 							value: settings.webPropertyId,
 						}) }}
 
+						{% if settings.accountExplorerData.views is defined %}
+							{% set viewOptions = [] %}
+
+							{% for view in settings.accountExplorerData.views %}
+								{% if view.webPropertyId == settings.webPropertyId %}
+									{% set viewOptions = viewOptions|merge([{ label: view.name|t, value: view.id }]) %}
+								{% endif %}
+							{% endfor %}
+						{% else %}
+							{% set viewOptions = { (settings.profileId): settings.profileName } %}
+						{% endif %}
 
 						{{ forms.selectField({
 							label: "View"|t,
 							name: 'settings[profileId]',
 							class: 'view',
 							options: viewOptions,
-							value: settings.webPropertyId,
+							value: settings.profileId,
 						}) }}
 
 						<div class="buttons">
@@ -127,16 +136,14 @@
 
 					{% includejs %}
 
+						{% if settings.accountExplorerData %}
+							var forceRefresh = false;
+						{% else %}
+							var forceRefresh = true;
+						{% endif %}
 
+						var accountExplorer = new Analytics.AccountExplorer('#account-explorer', { forceRefresh: forceRefresh, data: {{ settings.accountExplorerData|json_encode|raw }}  });
 
-
-					{% if settings.accountExplorerData %}
-						var forceRefresh = false;
-					{% else %}
-						var forceRefresh = true;
-					{% endif %}
-
-					var accountExplorer = new Analytics.AccountExplorer('#account-explorer', { forceRefresh: forceRefresh, data: {{ settings.accountExplorerData|json_encode|raw }}  });
 					{% endincludejs %}
 
 					<hr />

@@ -29,11 +29,15 @@ Analytics.AccountExplorer = Garnish.Base.extend({
 		this.addListener(this.$accountSelect, 'change', 'onAccountChange');
 		this.addListener(this.$propertySelect, 'change', 'onPropertyChange');
 
-		this.parseAccountExplorerData(this.settings.data);
+
 
 		if(this.settings.forceRefresh)
 		{
 			this.refreshViews();
+		}
+		else
+		{
+			this.parseAccountExplorerData(this.settings.data);
 		}
 	},
 

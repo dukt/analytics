@@ -130,6 +130,13 @@ class Analytics_OauthController extends BaseController
 	{
 		if (craft()->analytics_oauth->deleteToken())
 		{
+            $plugin = craft()->plugins->getPlugin('analytics');
+            $settings = $plugin->getSettings();
+
+            $settings->accountExplorerData = null;
+
+            craft()->plugins->savePluginSettings($plugin, $settings);
+
 			craft()->userSession->setNotice(Craft::t("Disconnected from Google Analytics."));
 		}
 		else
