@@ -75,6 +75,7 @@
 	parseResponse: function(response)
 	{
 		Garnish.requestAnimationFrame($.proxy(function() {
+            response.chartOptions = Analytics.ChartOptions.field();
 			this.chart = new Analytics.reports.Area(this.$chart, response);
 		}, this));
 	}
