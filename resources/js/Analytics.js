@@ -86,7 +86,6 @@ Analytics.ChartOptions = Garnish.Base.extend({}, {
 			backgroundColor: '#fdfdfd',
 			colors: ['#058DC7'],
 			areaOpacity: 0.1,
-			pointSize: 0,
 			lineWidth: 4,
 			height: 120,
 			hAxis: {
