@@ -73,9 +73,6 @@ class Analytics_SettingsController extends BaseController
                             $accountOptions[] = ['label' => $settings->accountName, 'value' => $settings->accountId];
                         }
 
-                        $variables['accountOptions'] = $accountOptions;
-                        $variables['accountId'] = $settings->accountId;
-
 
                         // Web Properties
 
@@ -92,9 +89,6 @@ class Analytics_SettingsController extends BaseController
                         {
                             $webPropertyOptions[] = ['label' => $settings->webPropertyName, 'value' => $settings->webPropertyId];
                         }
-
-                        $variables['webPropertyOptions'] = $webPropertyOptions;
-                        $variables['webPropertyId'] = $settings->webPropertyId;
 
 
                         // Views
@@ -113,6 +107,10 @@ class Analytics_SettingsController extends BaseController
                             $viewOptions[] = ['label' => $settings->profileName, 'value' => $settings->profileId];
                         }
 
+                        $variables['accountOptions'] = $accountOptions;
+                        $variables['accountId'] = $settings->accountId;
+                        $variables['webPropertyOptions'] = $webPropertyOptions;
+                        $variables['webPropertyId'] = $settings->webPropertyId;
                         $variables['viewOptions'] = $viewOptions;
                         $variables['viewId'] = $settings->profileId;
 
