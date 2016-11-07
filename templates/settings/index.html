@@ -78,8 +78,6 @@
 						{% else %}
 							{% set accountOptions = { (settings.accountId): settings.accountName } %}
 						{% endif %}
-
-
 						
 						{{ forms.selectField({
 							label: "Account"|t,
@@ -108,6 +106,7 @@
 							options: propertyOptions,
 							value: settings.webPropertyId,
 						}) }}
+
 
 						{% if settings.accountExplorerData.views is defined %}
 							{% set viewOptions = [] %}

@@ -125,7 +125,6 @@ class Analytics_SettingsController extends BaseController
 		));
 	}
 
-
     /**
      * Get Account Explorer Data
      *
