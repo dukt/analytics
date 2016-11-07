@@ -53,8 +53,72 @@ class Analytics_SettingsController extends BaseController
                         craft()->templates->includeJsResource('analytics/js/AccountExplorer.js');
                         craft()->templates->includeCssResource('analytics/css/AccountExplorer.css');
 
-						$variables['oauthAccount'] = $oauthAccount;
-						$variables['settings'] = $plugin->getSettings();
+
+						$settings = $plugin->getSettings();
+
+
+                        // Account
+
+                        $accountOptions = [];
+
+                        if(isset($settings->accountExplorerData['accounts']))
+                        {
+                            foreach($settings->accountExplorerData['accounts'] as $account)
+                            {
+                                $accountOptions[] = ['label' => $account['name'], 'value' => $account['id']];
+                            }
+                        }
+                        else
+                        {
+                            $accountOptions[] = ['label' => $settings->accountName, 'value' => $settings->accountId];
+                        }
+
+                        $variables['accountOptions'] = $accountOptions;
+                        $variables['accountId'] = $settings->accountId;
+
+
+                        // Web Properties
+
+                        $webPropertyOptions = [];
+
+                        if(isset($settings->accountExplorerData['properties']))
+                        {
+                            foreach($settings->accountExplorerData['properties'] as $webProperty)
+                            {
+                                $webPropertyOptions[] = ['label' => $webProperty['name'], 'value' => $webProperty['id']];
+                            }
+                        }
+                        else
+                        {
+                            $webPropertyOptions[] = ['label' => $settings->webPropertyName, 'value' => $settings->webPropertyId];
+                        }
+
+                        $variables['webPropertyOptions'] = $webPropertyOptions;
+                        $variables['webPropertyId'] = $settings->webPropertyId;
+
+
+                        // Views
+
+                        $viewOptions = [];
+
+                        if(isset($settings->accountExplorerData['views']))
+                        {
+                            foreach($settings->accountExplorerData['views'] as $view)
+                            {
+                                $viewOptions[] = ['label' => $view['name'], 'value' => $view['id']];
+                            }
+                        }
+                        else
+                        {
+                            $viewOptions[] = ['label' => $settings->profileName, 'value' => $settings->profileId];
+                        }
+
+                        $variables['viewOptions'] = $viewOptions;
+                        $variables['viewId'] = $settings->profileId;
+
+
+                        $variables['settings'] = $settings;
+                        $variables['oauthAccount'] = $oauthAccount;
 					}
 				}
 				catch(\Google_Service_Exception $e)
