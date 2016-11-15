@@ -238,7 +238,6 @@ trait AnalyticsTrait
 	private function getPluginDependency($dependency)
 	{
 		$isMissing = true;
-		$isInstalled = true;
 
 		$plugin = craft()->plugins->getPlugin($dependency['handle'], false);
 
