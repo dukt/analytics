@@ -14,7 +14,7 @@ class AnalyticsPlugin extends BasePlugin
 
 	public function init()
 	{
-		require_once(CRAFT_PLUGINS_PATH.'analytics/vendor/autoload.php');
+		require_once(CRAFT_PLUGINS_PATH.'analytics/vendor/1.0.0/autoload.php');
 
 		parent::init();
 
