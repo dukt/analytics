@@ -4,7 +4,7 @@ namespace Craft;
 /**
  * The class name is the UTC timestamp in the format of mYYMMDD_HHMMSS_pluginHandle_migrationName
  */
-class m161021_000001_force_connect extends BaseMigration
+class m161117_000001_remove_account_explorer_data_setting extends BaseMigration
 {
     /**
      * Any migration code in here is wrapped inside of a transaction.
