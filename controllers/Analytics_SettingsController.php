@@ -59,11 +59,13 @@ class Analytics_SettingsController extends BaseController
 
                         // Account
 
+                        $accountExplorerData = craft()->analytics_cache->get(['accountExplorerData']);
+
                         $accountOptions = [];
 
-                        if(isset($settings->accountExplorerData['accounts']))
+                        if(isset($accountExplorerData['accounts']))
                         {
-                            foreach($settings->accountExplorerData['accounts'] as $account)
+                            foreach($accountExplorerData['accounts'] as $account)
                             {
                                 $accountOptions[] = ['label' => $account['name'], 'value' => $account['id']];
                             }
@@ -78,9 +80,9 @@ class Analytics_SettingsController extends BaseController
 
                         $webPropertyOptions = [];
 
-                        if(isset($settings->accountExplorerData['properties']))
+                        if(isset($accountExplorerData['properties']))
                         {
-                            foreach($settings->accountExplorerData['properties'] as $webProperty)
+                            foreach($accountExplorerData['properties'] as $webProperty)
                             {
                                 $webPropertyOptions[] = ['label' => $webProperty['name'], 'value' => $webProperty['id']];
                             }
@@ -95,9 +97,9 @@ class Analytics_SettingsController extends BaseController
 
                         $viewOptions = [];
 
-                        if(isset($settings->accountExplorerData['views']))
+                        if(isset($accountExplorerData['views']))
                         {
-                            foreach($settings->accountExplorerData['views'] as $view)
+                            foreach($accountExplorerData['views'] as $view)
                             {
                                 $viewOptions[] = ['label' => $view['name'], 'value' => $view['id']];
                             }
@@ -115,6 +117,7 @@ class Analytics_SettingsController extends BaseController
                         $variables['viewId'] = $settings->profileId;
 
 
+                        $variables['accountExplorerData'] = $accountExplorerData;
                         $variables['settings'] = $settings;
                         $variables['oauthAccount'] = $oauthAccount;
 					}
@@ -198,12 +201,7 @@ class Analytics_SettingsController extends BaseController
         {
             $accountExplorerData = craft()->analytics_api->getAccountExplorerData();
 
-            $plugin = craft()->plugins->getPlugin('analytics');
-            $settings = $plugin->getSettings();
-
-            $settings['accountExplorerData'] = $accountExplorerData;
-
-            craft()->plugins->savePluginSettings($plugin, $settings);
+            craft()->analytics_cache->set(['accountExplorerData'], $accountExplorerData);
 
             $this->returnJson($accountExplorerData);
         }

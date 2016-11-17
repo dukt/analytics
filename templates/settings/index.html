@@ -101,13 +101,14 @@
 
 					{% includejs %}
 
-						{% if settings.accountExplorerData %}
+
+						{% if accountExplorerData %}
 							var forceRefresh = false;
 						{% else %}
 							var forceRefresh = true;
 						{% endif %}
 
-						var accountExplorer = new Analytics.AccountExplorer('#account-explorer', { forceRefresh: forceRefresh, data: {{ settings.accountExplorerData|json_encode|raw }}  });
+						var accountExplorer = new Analytics.AccountExplorer('#account-explorer', { forceRefresh: forceRefresh, data: {{ accountExplorerData|json_encode|raw }}  });
 
 					{% endincludejs %}
 

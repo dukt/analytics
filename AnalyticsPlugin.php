@@ -57,7 +57,7 @@ class AnalyticsPlugin extends BasePlugin
 	 */
 	public function getVersion()
 	{
-		return '3.4.2';
+		return '3.4.3';
 	}
 
 	/**
@@ -176,7 +176,6 @@ class AnalyticsPlugin extends BasePlugin
 			'forceConnect' => array(AttributeType::Bool, 'default' => false),
 			'enableRealtime' => AttributeType::Bool,
 			'tokenId' => AttributeType::Number,
-			'accountExplorerData' => AttributeType::Mixed,
 		);
 	}
 }

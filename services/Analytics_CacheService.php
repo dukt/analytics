@@ -60,6 +60,20 @@ class Analytics_CacheService extends CacheService
 		}
 	}
 
+    /**
+     * Deletes a value with the specified key from cache.
+     *
+     * @param string $id The key of the value to be deleted.
+     *
+     * @return bool If no error happens during deletion.
+     */
+	public function delete($id)
+    {
+        $cacheKey = $this->getCacheKey($id);
+
+        return parent::delete($cacheKey);
+    }
+
 	// Private Methods
 	// =========================================================================
 
