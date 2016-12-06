@@ -1,0 +1,22 @@
+.oauth-account {
+  display: inline-block;
+  background: #fbfbfb;
+  border: 1px solid #eee;
+  padding: 14px;
+  border-radius: 4px; }
+
+.oauth-account .account-box {
+  display: flex; }
+
+.oauth-account .account-box .image {
+  margin-right: 14px; }
+
+.oauth-account .account-box .image img {
+  position: relative;
+  top: 3px; }
+
+.oauth-account .account-box .buttons {
+  margin-top: 14px;
+  margin-left: 24px;
+  margin-right: 3px;
+  min-height: auto; }

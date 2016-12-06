@@ -40,21 +40,32 @@
 			<h2 class="first">{{'Google Analytics Account'|t}}</h2>
 			<p>{{'You are authenticated to Google Analytics with the following account'|t}} :</p>
 
-			<ul>
-				{% if oauthAccount.uid is defined %}
-					<li><strong>{{ 'UID'|t }} : </strong> {{ oauthAccount.uid }}</li>
-				{% elseif oauthAccount.id is defined %}
-					<li><strong>{{ 'UID'|t }} : </strong> {{ oauthAccount.id }}</li>
-				{% endif %}
+			<div class="oauth-account">
+				<div class="account-box">
+					<div class="image">
+						<img src="{{ provider.getIconUrl() }}" height="30" alt="{{ provider.name }} OAuth provider">
+					</div>
+					<div class="details">
+						<ul>
+							<li><strong>{{ 'Name'|t }} : </strong> {{ oauthAccount.name }}</li>
 
-				<li><strong>{{ 'Name'|t }} : </strong> {{ oauthAccount.name }}</li>
-			</ul>
+							{% if oauthAccount.uid is defined %}
+								<li><strong>{{ 'UID'|t }} : </strong> {{ oauthAccount.uid }}</li>
+							{% elseif oauthAccount.id is defined %}
+								<li><strong>{{ 'UID'|t }} : </strong> {{ oauthAccount.id }}</li>
+							{% endif %}
+						</ul>
+					</div>
+
+					<div class="buttons">
+						<a class="icon delete" href="{{ actionUrl('analytics/oauth/disconnect') }}"></a>
+					</div>
+				</div>
+			</div>
 
 			{% if settings.forceConnect %}
 				<p><a class="btn submit" href="{{ actionUrl('analytics/oauth/connect') }}">{{"Please connect again to Google Analytics"|t}}</a></p>
 			{% else %}
-
-				<p><a class="btn small" href="{{ actionUrl('analytics/oauth/disconnect') }}">{{'Disconnect'|t}}</a></p>
 
 				<hr />
 

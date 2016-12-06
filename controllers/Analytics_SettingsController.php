@@ -149,8 +149,8 @@ class Analytics_SettingsController extends BaseController
 			$variables['token'] = $token;
 			$variables['provider'] = $provider;
 		}
-
-		$this->renderTemplate('analytics/settings', $variables);
+        craft()->templates->includeCssResource('analytics/css/settings.css');
+		$this->renderTemplate('analytics/settings/_index', $variables);
 	}
 
 	/**
