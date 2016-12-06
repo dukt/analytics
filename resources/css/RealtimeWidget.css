@@ -22,15 +22,17 @@
 .analytics_realtime .progress {
   color: #fff;
   margin: 2em 0;
-  text-align: center; }
+  text-align: center;
+  display: flex; }
 
 .analytics_realtime .progress .progress-bar {
-  float: left; }
+  display: block; }
 
 .analytics_realtime .progress .progress-bar span {
-  display: block;
-  padding: 0 0.5em;
-  line-height: 1.5em; }
+  position: relative;
+  padding: 0 3px;
+  line-height: 1.5em;
+  white-space: nowrap; }
 
 .analytics_realtime .progress .progress-bar.new-visitors {
   background: #058DC7; }

@@ -3,6 +3,10 @@
  */
 Analytics.Realtime = Garnish.Base.extend(
 {
+	calcTotal: null,
+	calcNewVisitor: null,
+	calcReturningVisitor: null,
+
 	$element: null,
 	$title: null,
 	$body: null,
@@ -57,6 +61,29 @@ Analytics.Realtime = Garnish.Base.extend(
 			}
 
 		}, this), 1000);
+
+		this.addListener(Garnish.$win, 'resize', '_handleWindowResize');
+	},
+
+	_handleWindowResize: function()
+	{
+		if(this.$newVisitorsValue.innerWidth() > this.$newVisitorsProgress.width())
+		{
+			this.$newVisitorsValue.addClass('hidden');
+		}
+		else
+		{
+			this.$newVisitorsValue.removeClass('hidden');
+		}
+
+		if(this.$returningVisitorsValue.innerWidth() > this.$returningVisitorsProgress.width())
+		{
+			this.$returningVisitorsValue.addClass('hidden');
+		}
+		else
+		{
+			this.$returningVisitorsValue.removeClass('hidden');
+		}
 	},
 
 	start: function()
@@ -117,11 +144,11 @@ Analytics.Realtime = Garnish.Base.extend(
 		var newVisitor = response.newVisitor;
 		var returningVisitor = response.returningVisitor;
 
-		var calcTotal = ((returningVisitor * 1) + (newVisitor * 1));
+		this.calcTotal = ((returningVisitor * 1) + (newVisitor * 1));
 
-		this.$activeVisitorsCount.text(calcTotal);
+		this.$activeVisitorsCount.text(this.calcTotal);
 
-		if (calcTotal > 0)
+		if (this.calcTotal > 0)
 		{
 			this.$progress.removeClass('hidden');
 			this.$legend.removeClass('hidden');
@@ -132,24 +159,30 @@ Analytics.Realtime = Garnish.Base.extend(
 			this.$legend.addClass('hidden');
 		}
 
-		if(calcTotal > 0)
+		if(this.calcTotal > 0)
 		{
-			var calcNewVisitor = Math.round(100 * newVisitor / calcTotal);
+			this.calcNewVisitor = Math.round(100 * newVisitor / this.calcTotal);
 		}
 		else
 		{
-			var calcNewVisitor = 100;
+			this.calcNewVisitor = 100;
 		}
 
-		var calcReturningVisitor = 100 - calcNewVisitor;
+		this.calcReturningVisitor = 100 - this.calcNewVisitor;
 
 
 		// new-visitor
 
-		this.$newVisitorsProgress.css('width', calcNewVisitor+'%');
-		this.$newVisitorsValue.text(calcNewVisitor+'%');
+		this.$newVisitorsProgress.css('width', this.calcNewVisitor+'%');
+		this.$newVisitorsProgress.attr('title', this.calcNewVisitor+'%');
+		this.$newVisitorsValue.text(this.calcNewVisitor+'%');
 
-		if(calcNewVisitor > 0)
+		if(this.$newVisitorsValue.innerWidth() > this.$newVisitorsProgress.width())
+		{
+			this.$newVisitorsValue.addClass('hidden');
+		}
+
+		if(this.calcNewVisitor > 0)
 		{
 			this.$newVisitorsProgress.removeClass('hidden');
 		}
@@ -161,10 +194,16 @@ Analytics.Realtime = Garnish.Base.extend(
 
 		// returning-visitor
 
-		this.$returningVisitorsProgress.css('width', calcReturningVisitor+'%');
-		this.$returningVisitorsValue.text(calcReturningVisitor+'%');
+		this.$returningVisitorsProgress.css('width', this.calcReturningVisitor+'%');
+		this.$returningVisitorsProgress.attr('title', this.calcReturningVisitor+'%');
+		this.$returningVisitorsValue.text(this.calcReturningVisitor+'%');
 
-		if(calcReturningVisitor > 0)
+		if(this.$returningVisitorsValue.innerWidth() > this.$returningVisitorsProgress.width())
+		{
+			this.$returningVisitorsValue.addClass('hidden');
+		}
+
+		if(this.calcReturningVisitor > 0)
 		{
 			this.$returningVisitorsProgress.removeClass('hidden');
 		}

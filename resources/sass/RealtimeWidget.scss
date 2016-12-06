@@ -14,9 +14,9 @@ $green: #50B431;
 	.active-visitors .currently { font-size: 1.5em; }
 	.active-visitors .count { display: block; font-size: 10em; line-height: 1.2em; }
 
-	.progress { color:#fff; margin: 2em 0; text-align: center; }
-	.progress .progress-bar { float: left; }
-	.progress .progress-bar span { display: block; padding:0 0.5em; line-height: 1.5em; }
+	.progress { color:#fff; margin: 2em 0; text-align: center; display: flex; }
+	.progress .progress-bar {display: block; }
+	.progress .progress-bar span { position: relative; padding:0 3px; line-height: 1.5em; white-space: nowrap; }
 	.progress .progress-bar.new-visitors { background: $blue; }
 	.progress .progress-bar.returning-visitors { background: $green; }
 
