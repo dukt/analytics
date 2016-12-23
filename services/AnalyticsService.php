@@ -85,6 +85,11 @@ class AnalyticsService extends BaseApplicationComponent
 			$uri = $components['path'];
 		}
 
+        if(craft()->config->get('addTrailingSlashesToUrls'))
+        {
+            $uri .= '/';
+        }
+
 		return $uri;
 	}
 
