@@ -5,9 +5,14 @@
  * @license   https://dukt.net/craft/analytics/docs/license
  */
 
-namespace Craft;
+namespace dukt\analytics\fields;
 
-class Analytics_ReportFieldType extends BaseFieldType
+use Craft;
+use craft\base\Field;
+use dukt\analytics\models\RequestCriteria;
+use dukt\analytics\web\assets\reportfield\ReportFieldAsset;
+
+class Report extends Field
 {
 	// Public Methods
 	// =========================================================================
@@ -35,8 +40,10 @@ class Analytics_ReportFieldType extends BaseFieldType
 	/**
 	 * Show field
 	 */
-	public function getInputHtml($name, $value)
+	public function getInputHtml($value, \craft\base\ElementInterface $element = NULL): string
 	{
+        $name = $this->handle;
+
 		if(\dukt\analytics\Plugin::getInstance()->analytics->checkPluginRequirements())
 		{
 			if(Craft::$app->config->get('enableFieldtype', 'analytics'))
@@ -51,9 +58,9 @@ class Analytics_ReportFieldType extends BaseFieldType
 
 				$variables = array();
 
-				if($this->element->uri)
+				if($element->uri)
 				{
-					$uri = \dukt\analytics\Plugin::getInstance()->analytics->getElementUrlPath($this->element->id, $this->element->locale);
+					$uri = \dukt\analytics\Plugin::getInstance()->analytics->getElementUrlPath($element->id, $element->locale);
 
 					$ids = \dukt\analytics\Plugin::getInstance()->analytics->getProfileId();
 
@@ -67,7 +74,7 @@ class Analytics_ReportFieldType extends BaseFieldType
 						'filters' => "ga:pagePath==".$uri
 					);
 
-					$criteria = new Analytics_RequestCriteriaModel;
+					$criteria = new RequestCriteria;
 					$criteria->startDate = $startDate;
 					$criteria->endDate = $endDate;
 					$criteria->metrics = $metrics;
@@ -92,9 +99,11 @@ class Analytics_ReportFieldType extends BaseFieldType
 
 					$jsonOptions = json_encode($options);
 
-					Craft::$app->getView()->registerJsFile('analytics/js/jsapi.js', true);
+					/*Craft::$app->getView()->registerJsFile('analytics/js/jsapi.js', true);
 					Craft::$app->getView()->registerJsFile('analytics/js/ReportField.js');
-					Craft::$app->getView()->registerCssFile('analytics/css/ReportField.css');
+					Craft::$app->getView()->registerCssFile('analytics/css/ReportField.css');*/
+
+                    Craft::$app->getView()->registerAssetBundle(ReportFieldAsset::class);
 
 					Craft::$app->getView()->registerJs('var AnalyticsChartLanguage = "'.Craft::t('app', 'analyticsChartLanguage').'";');
 					Craft::$app->getView()->registerJs('new AnalyticsReportField("'.$namespacedId.'-field", '.$jsonOptions.');');
@@ -106,11 +115,11 @@ class Analytics_ReportFieldType extends BaseFieldType
 						'uri'     => $uri,
 						'name'    => $name,
 						'value'   => $value,
-						'model'   => $this->model,
-						'element' => $this->element
+						'model'   => $this,
+						'element' => $element
 					);
 				}
-				elseif(!$this->element->id)
+				elseif(!$element->id)
 				{
 					$variables = array(
 						'hasUrl' => false,
@@ -125,16 +134,16 @@ class Analytics_ReportFieldType extends BaseFieldType
 					);
 				}
 
-				return Craft::$app->getView()->render('analytics/_components/fieldtypes/Report/input', $variables);
+				return Craft::$app->getView()->renderTemplate('analytics/_components/fieldtypes/Report/input', $variables);
 			}
 			else
 			{
-				return Craft::$app->getView()->render('analytics/_components/fieldtypes/Report/disabled');
+				return Craft::$app->getView()->renderTemplate('analytics/_components/fieldtypes/Report/disabled');
 			}
 		}
 		else
 		{
-			return Craft::$app->getView()->render('analytics/_special/plugin-not-configured');
+			return Craft::$app->getView()->renderTemplate('analytics/_special/plugin-not-configured');
 		}
 	}
 }

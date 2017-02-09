@@ -1,10 +1,4 @@
 /**
- * Analytics
- */
-
-
-
-/**
  * Chart Options
  */
 Analytics.ChartOptions = Garnish.Base.extend({}, {
@@ -385,10 +379,6 @@ Analytics.Utils = {
 
 	getD3Locale: function()
 	{
-/*        window.d3FormatLocaleDefinition
-        window.d3TimeFormatLocaleDefinition
-        window.d3Formats*/
-
         var localeDefinition = window['d3FormatLocaleDefinition'];
 
 		localeDefinition.currency = Analytics.currency;

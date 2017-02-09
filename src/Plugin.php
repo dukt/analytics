@@ -17,6 +17,8 @@ use craft\services\Dashboard;
 use craft\events\RegisterComponentTypesEvent;
 use dukt\analytics\widgets\RealtimeWidget;
 use dukt\analytics\widgets\ReportWidget;
+use craft\services\Fields;
+use dukt\analytics\fields\Report as ReportField;
 
 class Plugin extends \craft\base\Plugin
 {
@@ -40,11 +42,15 @@ class Plugin extends \craft\base\Plugin
 
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, [$this, 'registerCpUrlRules']);
 
-
         Event::on(Dashboard::class, Dashboard::EVENT_REGISTER_WIDGET_TYPES, function(RegisterComponentTypesEvent $event) {
             $event->types[] = RealtimeWidget::class;
             $event->types[] = ReportWidget::class;
         });
+
+        Event::on(Fields::class, Fields::EVENT_REGISTER_FIELD_TYPES, function(RegisterComponentTypesEvent $event) {
+            $event->types[] = ReportField::class;
+        });
+
 
 		// Global JS variables
 

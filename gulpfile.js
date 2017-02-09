@@ -8,15 +8,14 @@ var gulp = require('gulp'),
     concat = require('gulp-concat');
 
 var paths = {
-    sass: './resources/sass',
-    css: './resources/css',
-    js: './resources/js',
-    jsCompressed: './resources/js/compressed'
+    sass: './src/resources/sass',
+    css: './src/resources/css',
+    js: './src/resources/js',
+    jsCompressed: './src/resources/js/compressed'
 };
 
 var globs = {
     concatJs: [
-        paths.js + '/Analytics/Base*.js',
         paths.js + '/Analytics/*.js',
         paths.js + '/Analytics/reports/Base*.js',
         paths.js + '/Analytics/reports/*.js',

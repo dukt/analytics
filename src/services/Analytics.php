@@ -75,7 +75,8 @@ class Analytics extends Component
 	 */
 	public function getElementUrlPath($elementId, $localeId)
 	{
-		$element = Craft::$app->elements->getElementById($elementId, null, $localeId);
+		// $element = Craft::$app->elements->getElementById($elementId, null, $localeId);
+        $element = Craft::$app->elements->getElementById($elementId);
 
 		$uri = $element->uri;
 		$url = $element->url;
