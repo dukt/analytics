@@ -19,7 +19,7 @@
 		</thead>
 	</table>
 
-	{% includejs %}
+	{% registerJs %}
 		var formats = Analytics.formats;
 		var tests = [
 			{
@@ -70,7 +70,7 @@
 			$test.appendTo($tests);
 		});
 
-	{% endincludejs %}
+	{% endregisterJs %}
 
 	<h2>D3 Number formatting</h2>
 
@@ -84,7 +84,7 @@
 		</thead>
 	</table>
 
-	{% includejs %}
+	{% registerJs %}
 
 	var localeDefinition = window['d3_locale'];
 	var locale = d3.locale(localeDefinition);
@@ -137,7 +137,7 @@
 		$tr.appendTo($table);
 	});
 
-	{% endincludejs %}
+	{% endregisterJs %}
 
 	<h2>Currency for the selected view</h2>
 

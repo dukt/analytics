@@ -15,13 +15,13 @@
 
 	{{ _self.widgetMock(id) }}
 
-	{% includejs %}
+	{% registerJs %}
 
 		var reportWidget = new Analytics.ReportWidget("{{ id }}", {
 			request: {{ request|json_encode|raw }},
 		});
 
-	{% endincludejs %}
+	{% endregisterJs %}
 
 {% endmacro %}
 

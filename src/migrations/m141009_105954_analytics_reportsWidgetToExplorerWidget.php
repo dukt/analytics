@@ -14,7 +14,7 @@ class m141009_105954_analytics_reportsWidgetToExplorerWidget extends BaseMigrati
 	public function safeUp()
 	{
 
-		$rows = craft()->db->createCommand()
+		$rows = Craft::$app->db->createCommand()
 			->select('*')
 			->from('widgets')
 			->where('type=:type', array(':type'=>'Analytics_Reports'))
@@ -118,7 +118,7 @@ class m141009_105954_analytics_reportsWidgetToExplorerWidget extends BaseMigrati
 
 					$newSettings = JsonHelper::encode($newSettings);
 
-					$updateCmd = craft()->db->createCommand()
+					$updateCmd = Craft::$app->db->createCommand()
 						->update('widgets', array('type' => 'Analytics_Explorer', 'settings' => $newSettings), 'id=:id', array('id' => $row['id']));
 				}
 			}

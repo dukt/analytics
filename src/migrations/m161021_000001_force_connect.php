@@ -15,7 +15,7 @@ class m161021_000001_force_connect extends BaseMigration
     {
         // set forceConnect setting to true
 
-        $row = craft()->db->createCommand()
+        $row = Craft::$app->db->createCommand()
             ->select('*')
             ->from('plugins')
             ->where('class=:class', array(':class'=>'Analytics'))
@@ -30,7 +30,7 @@ class m161021_000001_force_connect extends BaseMigration
 
             $settingsJson = JsonHelper::encode($settings);
 
-            craft()->db->createCommand()
+            Craft::$app->db->createCommand()
                 ->update('plugins', array('settings' => $settingsJson), 'id=:id', array('id' => $row['id']));
         }
 

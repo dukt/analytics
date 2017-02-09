@@ -13,7 +13,7 @@ class m150921_000001_explorer_widget_to_realtime_and_reports extends BaseMigrati
 	 */
 	public function safeUp()
 	{
-		$rows = craft()->db->createCommand()
+		$rows = Craft::$app->db->createCommand()
 			->select('*')
 			->from('widgets')
 			->where('type=:type', array(':type'=>'Analytics_Explorer'))
@@ -67,7 +67,7 @@ class m150921_000001_explorer_widget_to_realtime_and_reports extends BaseMigrati
 
 				$newSettings = JsonHelper::encode($newSettings);
 
-				$updateCmd = craft()->db->createCommand()
+				$updateCmd = Craft::$app->db->createCommand()
 					->update('widgets', array('type' => $type, 'settings' => $newSettings), 'id=:id', array('id' => $row['id']));
 			}
 		}

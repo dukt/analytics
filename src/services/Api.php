@@ -5,12 +5,15 @@
  * @license   https://dukt.net/craft/analytics/docs/license
  */
 
-namespace Craft;
+namespace dukt\analytics\services;
 
+use Craft;
+use yii\base\Component;
 use \Google_Client;
 use \Google_Service_Analytics;
+use dukt\analytics\models\RequestCriteria;
 
-class Analytics_ApiService extends BaseApplicationComponent
+class Api extends Component
 {
 	// Public Methods
 	// =========================================================================
@@ -89,13 +92,13 @@ class Analytics_ApiService extends BaseApplicationComponent
     }
 
     /**
-     * Sends a request based on Analytics_RequestCriteriaModel to Google Analytics' API.
+     * Sends a request based on RequestCriteria to Google Analytics' API.
      *
-     * @param Analytics_RequestCriteriaModel $criteria
+     * @param RequestCriteria $criteria
      *
      * @return string
      */
-    public function sendRequest(Analytics_RequestCriteriaModel $criteria)
+    public function sendRequest(RequestCriteria $criteria)
     {
         if($criteria->realtime)
         {
@@ -113,13 +116,13 @@ class Analytics_ApiService extends BaseApplicationComponent
     /**
      * Populate Criteria
      *
-     * @param Analytics_RequestCriteriaModel $criteria
+     * @param RequestCriteria $criteria
      */
-    private function populateCriteria(Analytics_RequestCriteriaModel $criteria)
+    private function populateCriteria(RequestCriteria $criteria)
     {
         // Profile ID
 
-        $criteria->ids = craft()->analytics->getProfileId();
+        $criteria->ids = \dukt\analytics\Plugin::getInstance()->analytics->getProfileId();
 
 
         // Filters
@@ -136,7 +139,7 @@ class Analytics_ApiService extends BaseApplicationComponent
             }
         }
 
-        $configFilters = craft()->config->get('filters', 'analytics');
+        $configFilters = Craft::$app->config->get('filters', 'analytics');
 
         if($configFilters)
         {
@@ -156,11 +159,11 @@ class Analytics_ApiService extends BaseApplicationComponent
     /**
      * Returns a GA Report from criteria
      *
-     * @param Analytics_RequestCriteriaModel $criteria
+     * @param RequestCriteria $criteria
      *
      * @return string
      */
-    private function getReport(Analytics_RequestCriteriaModel $criteria)
+    private function getReport(RequestCriteria $criteria)
     {
         $this->populateCriteria($criteria);
 
@@ -174,12 +177,17 @@ class Analytics_ApiService extends BaseApplicationComponent
         $request = [$ids, $startDate, $endDate, $metrics, $optParams];
 
         $cacheId = ['api.apiGetGAData', $request];
-        $response = craft()->analytics_cache->get($cacheId);
+        $response = \dukt\analytics\Plugin::getInstance()->analytics_cache->get($cacheId);
 
         if(!$response)
         {
+            if(!$optParams)
+            {
+                $optParams = [];
+            }
+
             $response = $this->googleAnalytics()->data_ga->get($ids, $startDate, $endDate, $metrics, $optParams);
-            craft()->analytics_cache->set($cacheId, $response, null, null, $enableCache);
+            \dukt\analytics\Plugin::getInstance()->analytics_cache->set($cacheId, $response, null, null, $enableCache);
         }
 
         return $this->parseReportResponse($response);
@@ -188,11 +196,11 @@ class Analytics_ApiService extends BaseApplicationComponent
     /**
      * Returns a Realtime Report from criteria
      *
-     * @param Analytics_RequestCriteriaModel $criteria
+     * @param RequestCriteria $criteria
      *
      * @return string
      */
-    private function getRealtimeReport(Analytics_RequestCriteriaModel $criteria)
+    private function getRealtimeReport(RequestCriteria $criteria)
     {
         $this->populateCriteria($criteria);
 
@@ -200,16 +208,16 @@ class Analytics_ApiService extends BaseApplicationComponent
         $metrics = $criteria->metrics;
         $optParams = $criteria->optParams;
 
-        $cacheDuration = craft()->analytics->getRealtimeRefreshInterval();
+        $cacheDuration = \dukt\analytics\Plugin::getInstance()->analytics->getRealtimeRefreshInterval();
 
         $cacheId = ['api.apiGetGADataRealtime', $ids, $metrics, $optParams];
-        $response = craft()->analytics_cache->get($cacheId);
+        $response = \dukt\analytics\Plugin::getInstance()->analytics_cache->get($cacheId);
 
         if(!$response)
         {
             $response = $this->googleAnalytics()->data_realtime->get($ids, $metrics, $optParams);
 
-            craft()->analytics_cache->set($cacheId, $response, $cacheDuration);
+            \dukt\analytics\Plugin::getInstance()->analytics_cache->set($cacheId, $response, $cacheDuration);
         }
 
         return $this->parseReportResponse($response);
@@ -232,7 +240,7 @@ class Analytics_ApiService extends BaseApplicationComponent
 		{
 			$dataType = $col->dataType;
 			$id = $col->name;
-			$label = craft()->analytics_metadata->getDimMet($col->name);
+			$label = \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDimMet($col->name);
 			$type = strtolower($dataType);
 
 			switch($col->name)
@@ -259,7 +267,7 @@ class Analytics_ApiService extends BaseApplicationComponent
 				'type' => $type,
 				'dataType' => $dataType,
 				'id' => $id,
-				'label' => Craft::t($label),
+				'label' => Craft::t('app', $label),
 			);
 		}
 
@@ -282,12 +290,12 @@ class Analytics_ApiService extends BaseApplicationComponent
 
 					if($col['id'] == 'ga:continent')
 					{
-						$value = craft()->analytics_metadata->getContinentCode($value);
+						$value = \dukt\analytics\Plugin::getInstance()->analytics_metadata->getContinentCode($value);
 					}
 
 					if($col['id'] == 'ga:subContinent')
 					{
-						$value = craft()->analytics_metadata->getSubContinentCode($value);
+						$value = \dukt\analytics\Plugin::getInstance()->analytics_metadata->getSubContinentCode($value);
 					}
 
 
@@ -305,7 +313,7 @@ class Analytics_ApiService extends BaseApplicationComponent
 						case 'ga:mobileInputSelector':
 						case 'ga:channelGrouping':
 						case 'ga:medium':
-							$value = Craft::t($value);
+							$value = Craft::t('app', $value);
 							break;
 					}
 
@@ -368,11 +376,11 @@ class Analytics_ApiService extends BaseApplicationComponent
      */
     private function getClient()
     {
-        $provider = craft()->oauth->getProvider('google');
+        $provider = \dukt\oauth\Plugin::getInstance()->oauth->getProvider('google');
 
         if($provider)
         {
-            $token = craft()->analytics_oauth->getToken();
+            $token = \dukt\analytics\Plugin::getInstance()->analytics_oauth->getToken();
 
             if ($token)
             {
@@ -396,13 +404,13 @@ class Analytics_ApiService extends BaseApplicationComponent
             }
             else
             {
-                AnalyticsPlugin::log('Undefined token', LogLevel::Error);
+                // \dukt\analytics\Plugin::log('Undefined token', LogLevel::Error);
                 return false;
             }
         }
         else
         {
-            AnalyticsPlugin::log('Couldn’t get connect provider', LogLevel::Error);
+            // \dukt\analytics\Plugin::log('Couldn’t get connect provider', LogLevel::Error);
             return false;
         }
     }

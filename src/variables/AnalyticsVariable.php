@@ -33,11 +33,11 @@ class AnalyticsVariable
 	 */
 	public function track($options = null)
 	{
-		return craft()->analytics->track($options);
+		return \dukt\analytics\Plugin::getInstance()->analytics->track($options);
 	}
 
 	public function getProfileId()
 	{
-		return craft()->analytics->getProfileId();
+		return \dukt\analytics\Plugin::getInstance()->analytics->getProfileId();
 	}
 }

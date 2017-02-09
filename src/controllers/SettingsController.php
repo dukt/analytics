@@ -5,9 +5,13 @@
  * @license   https://dukt.net/craft/analytics/docs/license
  */
 
-namespace Craft;
+namespace dukt\analytics\controllers;
 
-class Analytics_SettingsController extends BaseController
+use Craft;
+use craft\web\Controller;
+use dukt\analytics\web\assets\analytics\AnalyticsAsset;
+
+class SettingsController extends Controller
 {
 	// Public Methods
 	// =========================================================================
@@ -19,39 +23,39 @@ class Analytics_SettingsController extends BaseController
 	 */
 	public function actionIndex()
 	{
-		craft()->analytics->requireDependencies();
+		\dukt\analytics\Plugin::getInstance()->analytics->requireDependencies();
 
 		$variables = array();
 
-		$variables['isOauthProviderConfigured'] = craft()->analytics->isOauthProviderConfigured();
+		$variables['isOauthProviderConfigured'] = \dukt\analytics\Plugin::getInstance()->analytics->isOauthProviderConfigured();
 
 		if($variables['isOauthProviderConfigured'])
 		{
 			$variables['oauthAccount'] = false;
 			$variables['errors'] = [];
 
-			$provider = craft()->oauth->getProvider('google');
-			$plugin = craft()->plugins->getPlugin('analytics');
-			$token = craft()->analytics_oauth->getToken();
+			$provider = \dukt\oauth\Plugin::getInstance()->oauth->getProvider('google');
+			$plugin = Craft::$app->plugins->getPlugin('analytics');
+			$token = \dukt\analytics\Plugin::getInstance()->analytics_oauth->getToken();
 
 			if ($token)
 			{
-				try
-				{
-					$oauthAccount = craft()->analytics_cache->get(['getAccount', $token]);
+/*				try
+				{*/
+					$oauthAccount = \dukt\analytics\Plugin::getInstance()->analytics_cache->get(['getAccount', $token]);
 
 					if(!$oauthAccount)
 					{
 						$oauthAccount = $provider->getAccount($token);
-						craft()->analytics_cache->set(['getAccount', $token], $oauthAccount);
+						\dukt\analytics\Plugin::getInstance()->analytics_cache->set(['getAccount', $token], $oauthAccount);
 					}
 
 					if ($oauthAccount)
 					{
-                        AnalyticsPlugin::log("Account:\r\n".print_r($oauthAccount, true), LogLevel::Info);
+                        // \dukt\analytics\Plugin::log("Account:\r\n".print_r($oauthAccount, true), LogLevel::Info);
 
-                        craft()->templates->includeJsResource('analytics/js/AccountExplorer.js');
-                        craft()->templates->includeCssResource('analytics/css/AccountExplorer.css');
+/*                        Craft::$app->getView()->registerJsFile('analytics/js/AccountExplorer.js');
+                        Craft::$app->getView()->registerCssFile('analytics/css/AccountExplorer.css');*/
 
 
 						$settings = $plugin->getSettings();
@@ -59,7 +63,7 @@ class Analytics_SettingsController extends BaseController
 
                         // Account
 
-                        $accountExplorerData = craft()->analytics_cache->get(['accountExplorerData']);
+                        $accountExplorerData = \dukt\analytics\Plugin::getInstance()->analytics_cache->get(['accountExplorerData']);
 
                         $accountOptions = [];
 
@@ -121,10 +125,10 @@ class Analytics_SettingsController extends BaseController
                         $variables['settings'] = $settings;
                         $variables['oauthAccount'] = $oauthAccount;
 					}
-				}
+/*				}
 				catch(\Google_Service_Exception $e)
 				{
-					AnalyticsPlugin::log("Couldn’t get OAuth account: ".$e->getMessage(), LogLevel::Error);
+					// \dukt\analytics\Plugin::log("Couldn’t get OAuth account: ".$e->getMessage(), LogLevel::Error);
 
 					foreach($e->getErrors() as $error)
 					{
@@ -135,22 +139,23 @@ class Analytics_SettingsController extends BaseController
 				{
 					if(method_exists($e, 'getResponse'))
 					{
-						AnalyticsPlugin::log("Couldn’t get OAuth account: ".$e->getResponse(), LogLevel::Error);
+						// \dukt\analytics\Plugin::log("Couldn’t get OAuth account: ".$e->getResponse(), LogLevel::Error);
 					}
 					else
 					{
-						AnalyticsPlugin::log("Couldn’t get OAuth account: ".$e->getMessage(), LogLevel::Error);
+						// \dukt\analytics\Plugin::log("Couldn’t get OAuth account: ".$e->getMessage(), LogLevel::Error);
 					}
 
 					array_push($variables['errors'], $e->getMessage());
-				}
+				}*/
 			}
 
 			$variables['token'] = $token;
 			$variables['provider'] = $provider;
 		}
-        craft()->templates->includeCssResource('analytics/css/settings.css');
-		$this->renderTemplate('analytics/settings/_index', $variables);
+        /*Craft::$app->getView()->registerCssFile('analytics/css/settings.css');*/
+        Craft::$app->getView()->registerAssetBundle(AnalyticsAsset::class);
+		return $this->renderTemplate('analytics/settings/_index', $variables);
 	}
 
 	/**
@@ -163,29 +168,29 @@ class Analytics_SettingsController extends BaseController
 	{
 		$this->requirePostRequest();
 
-		$pluginClass = craft()->request->getRequiredPost('pluginClass');
-        $settings = craft()->request->getPost('settings');
+		$pluginClass = Craft::$app->request->getRequiredBodyParam('pluginClass');
+        $settings = Craft::$app->request->getBodyParam('settings');
 
-		$plugin = craft()->plugins->getPlugin($pluginClass);
+		$plugin = Craft::$app->plugins->getPlugin($pluginClass);
 
 		if (!$plugin)
 		{
-			throw new Exception(Craft::t('No plugin exists with the class “{class}”', array('class' => $pluginClass)));
+			throw new Exception(Craft::t('app', 'No plugin exists with the class “{class}”', array('class' => $pluginClass)));
 		}
 
-		$settings = craft()->analytics_api->populateAccountExplorerSettings($settings);
+		$settings = \dukt\analytics\Plugin::getInstance()->analytics_api->populateAccountExplorerSettings($settings);
 
-		if (craft()->plugins->savePluginSettings($plugin, $settings))
+		if (Craft::$app->plugins->savePluginSettings($plugin, $settings))
 		{
-			craft()->userSession->setNotice(Craft::t('Plugin settings saved.'));
+			Craft::$app->getSession()->setNotice(Craft::t('app', 'Plugin settings saved.'));
 
-			$this->redirectToPostedUrl();
+			return $this->redirectToPostedUrl();
 		}
 
-		craft()->userSession->setError(Craft::t('Couldn’t save plugin settings.'));
+		Craft::$app->getSession()->setError(Craft::t('app', 'Couldn’t save plugin settings.'));
 
 		// Send the plugin back to the template
-		craft()->urlManager->setRouteVariables(array(
+		Craft::$app->urlManager->setRouteVariables(array(
 			'plugin' => $plugin
 		));
 	}
@@ -199,15 +204,15 @@ class Analytics_SettingsController extends BaseController
     {
         try
         {
-            $accountExplorerData = craft()->analytics_api->getAccountExplorerData();
+            $accountExplorerData = \dukt\analytics\Plugin::getInstance()->analytics_api->getAccountExplorerData();
 
-            craft()->analytics_cache->set(['accountExplorerData'], $accountExplorerData);
+            \dukt\analytics\Plugin::getInstance()->analytics_cache->set(['accountExplorerData'], $accountExplorerData);
 
-            $this->returnJson($accountExplorerData);
+            return $this->asJson($accountExplorerData);
         }
         catch(\Exception $e)
         {
-            $this->returnErrorJson($e->getMessage());
+            return $this->asErrorJson($e->getMessage());
         }
     }
 }

@@ -5,9 +5,11 @@
  * @license   https://dukt.net/craft/analytics/docs/license
  */
 
-namespace Craft;
+namespace dukt\analytics\base;
 
-trait AnalyticsTrait
+use Craft;
+
+trait RequirementsTrait
 {
 	// Public Methods
 	// =========================================================================
@@ -23,7 +25,7 @@ trait AnalyticsTrait
 		{
 			if($this->isOauthProviderConfigured())
 			{
-                $plugin = craft()->plugins->getPlugin('analytics');
+                $plugin = Craft::$app->plugins->getPlugin('analytics');
                 $settings = $plugin->getSettings();
 
                 if($settings['forceConnect'] === true)
@@ -67,9 +69,9 @@ trait AnalyticsTrait
 	 */
 	public function isOauthProviderConfigured()
 	{
-		if(isset(craft()->oauth))
+		if(isset(\dukt\oauth\Plugin::getInstance()->oauth))
 		{
-			$provider = craft()->oauth->getProvider('google');
+			$provider = \dukt\oauth\Plugin::getInstance()->oauth->getProvider('google');
 
 			if($provider && $provider->isConfigured())
 			{
@@ -96,7 +98,7 @@ trait AnalyticsTrait
 		if ($this->areDependenciesMissing())
 		{
 			$url = UrlHelper::getUrl('analytics/install');
-			craft()->request->redirect($url);
+			Craft::$app->request->redirect($url);
 			return false;
 		}
 		else
@@ -134,7 +136,7 @@ trait AnalyticsTrait
 
 			// check if profile id is set up
 
-			$plugin = craft()->plugins->getPlugin('analytics');
+			$plugin = Craft::$app->plugins->getPlugin('analytics');
 
 			$settings = $plugin->getSettings();
 
@@ -143,7 +145,7 @@ trait AnalyticsTrait
 
 			if(!$profileId)
 			{
-				AnalyticsPlugin::log('Analytics profileId not found', LogLevel::Info, true);
+				// \dukt\analytics\Plugin::log('Analytics profileId not found', LogLevel::Info, true);
 				return false;
 			}
 
@@ -164,7 +166,7 @@ trait AnalyticsTrait
 	{
 		if($this->isOauthProviderConfigured())
 		{
-			$token = craft()->analytics_oauth->getToken();
+			$token = \dukt\analytics\Plugin::getInstance()->analytics_oauth->getToken();
 
 			if ($token)
 			{
@@ -207,7 +209,7 @@ trait AnalyticsTrait
 	{
 		$dependencies = array();
 
-		$plugin = craft()->plugins->getPlugin('analytics');
+		$plugin = Craft::$app->plugins->getPlugin('analytics');
 		$plugins = $plugin->getRequiredPlugins();
 
 		foreach($plugins as $key => $plugin)
@@ -230,37 +232,41 @@ trait AnalyticsTrait
 		return $dependencies;
 	}
 
-	/**
-	 * Get dependency
-	 *
-	 * @return array
-	 */
-	private function getPluginDependency($dependency)
-	{
-		$isMissing = true;
+    /**
+     * Get dependency
+     *
+     * @return array
+     */
+    private function getPluginDependency($dependency)
+    {
+        $isMissing = true;
 
-		$plugin = craft()->plugins->getPlugin($dependency['handle'], false);
+        $plugin = Craft::$app->plugins->getPlugin($dependency['handle'], false);
 
-		if($plugin)
-		{
-			$currentVersion = $plugin->version;
+        if($plugin)
+        {
+            $currentVersion = $plugin->version;
 
+            if(version_compare($currentVersion, $dependency['version']) >= 0)
+            {
+                $allPluginInfo = Craft::$app->plugins->getAllPluginInfo();
 
-			// requires update ?
+                if(isset($allPluginInfo[$dependency['handle']]))
+                {
+                    $pluginInfos = $allPluginInfo[$dependency['handle']];
 
-			if(version_compare($currentVersion, $dependency['version']) >= 0)
-			{
-				if($plugin->isInstalled && $plugin->isEnabled)
-				{
-					$isMissing = false;
-				}
-			}
-		}
+                    if($pluginInfos['isInstalled'] && $pluginInfos['isEnabled'])
+                    {
+                        $isMissing = false;
+                    }
+                }
+            }
+        }
 
-		$dependency['isMissing'] = $isMissing;
-		$dependency['plugin'] = $plugin;
-		$dependency['pluginLink'] = 'https://dukt.net/craft/'.$dependency['handle'];
+        $dependency['isMissing'] = $isMissing;
+        $dependency['plugin'] = $plugin;
+        $dependency['pluginLink'] = 'https://dukt.net/craft/'.$dependency['handle'];
 
-		return $dependency;
-	}
+        return $dependency;
+    }
 }

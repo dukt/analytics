@@ -5,10 +5,21 @@
  * @license   https://dukt.net/craft/analytics/docs/license
  */
 
-namespace Craft;
+namespace dukt\analytics\models;
 
-class Analytics_RequestCriteriaModel extends BaseModel
+use craft\base\Model;
+
+class RequestCriteria extends Model
 {
+    public $ids;
+    public $startDate;
+    public $endDate;
+    public $metrics;
+    public $optParams;
+    public $format;
+    public $realtime;
+    public $enableCache;
+
 	// Public Methods
 	// =========================================================================
 
@@ -26,7 +37,7 @@ class Analytics_RequestCriteriaModel extends BaseModel
 
 		try
 		{
-			$response['data'] = craft()->analytics_api->sendRequest($this);
+			$response['data'] = \dukt\analytics\Plugin::getInstance()->analytics_api->sendRequest($this);
 
 			if(!isset($options['format']) || (isset($options['format']) && $options['format'] != 'gaData'))
 			{

@@ -5,9 +5,11 @@
  * @license   https://dukt.net/craft/analytics/docs/license
  */
 
-namespace Craft;
+namespace dukt\analytics\controllers;
 
-class Analytics_InstallController extends BaseController
+use craft\web\Controller;
+
+class InstallController extends Controller
 {
 	// Public Methods
 	// =========================================================================
@@ -19,7 +21,7 @@ class Analytics_InstallController extends BaseController
 	 */
 	public function actionIndex()
 	{
-		$missingDependencies = craft()->analytics->getMissingDependencies();
+		$missingDependencies = \dukt\analytics\Plugin::getInstance()->analytics->getMissingDependencies();
 
 		if (count($missingDependencies) > 0)
 		{

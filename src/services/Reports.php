@@ -5,9 +5,13 @@
  * @license   https://dukt.net/craft/analytics/docs/license
  */
 
-namespace Craft;
+namespace dukt\analytics\services;
 
-class Analytics_ReportsService extends BaseApplicationComponent
+use Craft;
+use yii\base\Component;
+use dukt\analytics\models\RequestCriteria;
+
+class Reports extends Component
 {
 	// Public Methods
 	// =========================================================================
@@ -68,7 +72,7 @@ class Analytics_ReportsService extends BaseApplicationComponent
 
 		// Chart
 
-		$criteria = new Analytics_RequestCriteriaModel;
+		$criteria = new RequestCriteria;
 		$criteria->startDate = $start;
 		$criteria->endDate = $end;
 		$criteria->metrics = $metric;
@@ -83,14 +87,14 @@ class Analytics_ReportsService extends BaseApplicationComponent
 			$criteria->optParams['filters'] = $dimension.'!=(not set);'.$dimension.'!=(not provided)';
 		}
 
-		$chartResponse = craft()->analytics_api->sendRequest($criteria);
+		$chartResponse = \dukt\analytics\Plugin::getInstance()->analytics_api->sendRequest($criteria);
 
 
 		// Total
 
 		$total = 0;
 
-		$totalCriteria = new Analytics_RequestCriteriaModel;
+		$totalCriteria = new RequestCriteria;
 		$totalCriteria->startDate = $start;
 		$totalCriteria->endDate = $end;
 		$totalCriteria->metrics = $metric;
@@ -100,7 +104,7 @@ class Analytics_ReportsService extends BaseApplicationComponent
 			$totalCriteria->optParams = array('filters' => $criteria->optParams['filters']);
 		}
 
-		$response = craft()->analytics_api->sendRequest($totalCriteria);
+		$response = \dukt\analytics\Plugin::getInstance()->analytics_api->sendRequest($totalCriteria);
 
 		if(!empty($response['rows'][0][0]['f']))
 		{
@@ -114,9 +118,9 @@ class Analytics_ReportsService extends BaseApplicationComponent
 			'type' => 'area',
 			'chart' => $chartResponse,
 			'total' => $total,
-			'metric' => Craft::t(craft()->analytics_metadata->getDimMet($metric)),
+			'metric' => Craft::t('app', \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDimMet($metric)),
 			'period' => $period,
-			'periodLabel' => Craft::t('This '.$period)
+			'periodLabel' => Craft::t('app', 'This '.$period)
 		];
 	}
 
@@ -139,7 +143,7 @@ class Analytics_ReportsService extends BaseApplicationComponent
 
 		// Counter
 
-		$criteria = new Analytics_RequestCriteriaModel;
+		$criteria = new RequestCriteria;
 		$criteria->startDate = $start;
 		$criteria->endDate = $end;
 		$criteria->metrics = $metric;
@@ -150,7 +154,7 @@ class Analytics_ReportsService extends BaseApplicationComponent
 			$criteria->optParams = $optParams;
 		}
 
-		$response = craft()->analytics_api->sendRequest($criteria);
+		$response = \dukt\analytics\Plugin::getInstance()->analytics_api->sendRequest($criteria);
 
 		if(!empty($response['rows'][0][0]))
 		{
@@ -164,7 +168,7 @@ class Analytics_ReportsService extends BaseApplicationComponent
 		$counter = array(
 			'type' => $response['cols'][0]['type'],
 			'value' => $count,
-			'label' => StringHelper::toLowerCase(Craft::t(craft()->analytics_metadata->getDimMet($metric)))
+			'label' => StringHelper::toLowerCase(Craft::t('app', \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDimMet($metric)))
 		);
 
 
@@ -174,9 +178,9 @@ class Analytics_ReportsService extends BaseApplicationComponent
 			'type' => 'counter',
 			'counter' => $counter,
 			'response' => $response,
-			'metric' => Craft::t(craft()->analytics_metadata->getDimMet($metric)),
+			'metric' => Craft::t('app', \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDimMet($metric)),
 			'period' => $period,
-			'periodLabel' => Craft::t('this '.$period)
+			'periodLabel' => Craft::t('app', 'this '.$period)
 		];
 	}
 
@@ -196,7 +200,7 @@ class Analytics_ReportsService extends BaseApplicationComponent
 		$start = date('Y-m-d', strtotime('-1 '.$period));
 		$end = date('Y-m-d');
 
-		$criteria = new Analytics_RequestCriteriaModel;
+		$criteria = new RequestCriteria;
 		$criteria->startDate = $start;
 		$criteria->endDate = $end;
 		$criteria->metrics = $metric;
@@ -208,15 +212,15 @@ class Analytics_ReportsService extends BaseApplicationComponent
 			'filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)'
 		);
 
-		$tableResponse = craft()->analytics_api->sendRequest($criteria);
+		$tableResponse = \dukt\analytics\Plugin::getInstance()->analytics_api->sendRequest($criteria);
 
 		return [
 			'type' => 'pie',
 			'chart' => $tableResponse,
-			'dimension' => Craft::t(craft()->analytics_metadata->getDimMet($dimension)),
-			'metric' => Craft::t(craft()->analytics_metadata->getDimMet($metric)),
+			'dimension' => Craft::t('app', \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDimMet($dimension)),
+			'metric' => Craft::t('app', \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDimMet($metric)),
 			'period' => $period,
-			'periodLabel' => Craft::t('this '.$period)
+			'periodLabel' => Craft::t('app', 'this '.$period)
 		];
 	}
 
@@ -236,7 +240,7 @@ class Analytics_ReportsService extends BaseApplicationComponent
 		$start = date('Y-m-d', strtotime('-1 '.$period));
 		$end = date('Y-m-d');
 
-		$criteria = new Analytics_RequestCriteriaModel;
+		$criteria = new RequestCriteria;
 		$criteria->startDate = $start;
 		$criteria->endDate = $end;
 		$criteria->metrics = $metric;
@@ -248,15 +252,15 @@ class Analytics_ReportsService extends BaseApplicationComponent
 			'filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)'
 		);
 
-		$tableResponse = craft()->analytics_api->sendRequest($criteria);
+		$tableResponse = \dukt\analytics\Plugin::getInstance()->analytics_api->sendRequest($criteria);
 
 		return [
 			'type' => 'table',
 			'chart' => $tableResponse,
-			'dimension' => Craft::t(craft()->analytics_metadata->getDimMet($dimension)),
-			'metric' => Craft::t(craft()->analytics_metadata->getDimMet($metric)),
+			'dimension' => Craft::t('app', \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDimMet($dimension)),
+			'metric' => Craft::t('app', \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDimMet($metric)),
 			'period' => $period,
-			'periodLabel' => Craft::t('this '.$period)
+			'periodLabel' => Craft::t('app', 'this '.$period)
 		];
 	}
 
@@ -284,7 +288,7 @@ class Analytics_ReportsService extends BaseApplicationComponent
 		}
 
 
-		$criteria = new Analytics_RequestCriteriaModel;
+		$criteria = new RequestCriteria;
 		$criteria->metrics = $metric;
 
 		$criteria->startDate = $start;
@@ -296,16 +300,16 @@ class Analytics_ReportsService extends BaseApplicationComponent
 			'filters' => $originDimension.'!=(not set);'.$originDimension.'!=(not provided)',
 		);
 
-		$tableResponse = craft()->analytics_api->sendRequest($criteria);
+		$tableResponse = \dukt\analytics\Plugin::getInstance()->analytics_api->sendRequest($criteria);
 
 		return [
 			'type' => 'geo',
 			'chart' => $tableResponse,
 			'dimensionRaw' => $originDimension,
-			'dimension' => Craft::t(craft()->analytics_metadata->getDimMet($originDimension)),
-			'metric' => Craft::t(craft()->analytics_metadata->getDimMet($metric)),
+			'dimension' => Craft::t('app', \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDimMet($originDimension)),
+			'metric' => Craft::t('app', \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDimMet($metric)),
 			'period' => $period,
-			'periodLabel' => Craft::t('this '.$period)
+			'periodLabel' => Craft::t('app', 'this '.$period)
 		];
 	}
 

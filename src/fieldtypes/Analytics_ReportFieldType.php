@@ -19,7 +19,7 @@ class Analytics_ReportFieldType extends BaseFieldType
 	 */
 	public function getName()
 	{
-		return Craft::t('Analytics Report');
+		return Craft::t('app', 'Analytics Report');
 	}
 
 	/**
@@ -37,25 +37,25 @@ class Analytics_ReportFieldType extends BaseFieldType
 	 */
 	public function getInputHtml($name, $value)
 	{
-		if(craft()->analytics->checkPluginRequirements())
+		if(\dukt\analytics\Plugin::getInstance()->analytics->checkPluginRequirements())
 		{
-			if(craft()->config->get('enableFieldtype', 'analytics'))
+			if(Craft::$app->config->get('enableFieldtype', 'analytics'))
 			{
-				$plugin = craft()->plugins->getPlugin('analytics');
+				$plugin = Craft::$app->plugins->getPlugin('analytics');
 
 				// Reformat the input name into something that looks more like an ID
-				$id = craft()->templates->formatInputId($name);
+				$id = Craft::$app->getView()->formatInputId($name);
 
 				// Figure out what that ID is going to look like once it has been namespaced
-				$namespacedId = craft()->templates->namespaceInputId($id);
+				$namespacedId = Craft::$app->getView()->namespaceInputId($id);
 
 				$variables = array();
 
 				if($this->element->uri)
 				{
-					$uri = craft()->analytics->getElementUrlPath($this->element->id, $this->element->locale);
+					$uri = \dukt\analytics\Plugin::getInstance()->analytics->getElementUrlPath($this->element->id, $this->element->locale);
 
-					$ids = craft()->analytics->getProfileId();
+					$ids = \dukt\analytics\Plugin::getInstance()->analytics->getProfileId();
 
 					$startDate = date('Y-m-d', strtotime('-1 month'));
 					$endDate = date('Y-m-d');
@@ -76,7 +76,7 @@ class Analytics_ReportFieldType extends BaseFieldType
 					$options = [];
 
 					$cacheId = ['ReportsController.actionGetElementReport', $criteria->getAttributes()];
-					$response = craft()->analytics_cache->get($cacheId);
+					$response = \dukt\analytics\Plugin::getInstance()->analytics_cache->get($cacheId);
 
 					if($response)
 					{
@@ -92,12 +92,12 @@ class Analytics_ReportFieldType extends BaseFieldType
 
 					$jsonOptions = json_encode($options);
 
-					craft()->templates->includeJsResource('analytics/js/jsapi.js', true);
-					craft()->templates->includeJsResource('analytics/js/ReportField.js');
-					craft()->templates->includeCssResource('analytics/css/ReportField.css');
+					Craft::$app->getView()->registerJsFile('analytics/js/jsapi.js', true);
+					Craft::$app->getView()->registerJsFile('analytics/js/ReportField.js');
+					Craft::$app->getView()->registerCssFile('analytics/css/ReportField.css');
 
-					craft()->templates->includeJs('var AnalyticsChartLanguage = "'.Craft::t('analyticsChartLanguage').'";');
-					craft()->templates->includeJs('new AnalyticsReportField("'.$namespacedId.'-field", '.$jsonOptions.');');
+					Craft::$app->getView()->registerJs('var AnalyticsChartLanguage = "'.Craft::t('app', 'analyticsChartLanguage').'";');
+					Craft::$app->getView()->registerJs('new AnalyticsReportField("'.$namespacedId.'-field", '.$jsonOptions.');');
 
 					$variables = array(
 						'isNew'   => false,
@@ -125,16 +125,16 @@ class Analytics_ReportFieldType extends BaseFieldType
 					);
 				}
 
-				return craft()->templates->render('analytics/_components/fieldtypes/Report/input', $variables);
+				return Craft::$app->getView()->render('analytics/_components/fieldtypes/Report/input', $variables);
 			}
 			else
 			{
-				return craft()->templates->render('analytics/_components/fieldtypes/Report/disabled');
+				return Craft::$app->getView()->render('analytics/_components/fieldtypes/Report/disabled');
 			}
 		}
 		else
 		{
-			return craft()->templates->render('analytics/_special/plugin-not-configured');
+			return Craft::$app->getView()->render('analytics/_special/plugin-not-configured');
 		}
 	}
 }

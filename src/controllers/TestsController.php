@@ -5,9 +5,11 @@
  * @license   https://dukt.net/craft/analytics/docs/license
  */
 
-namespace Craft;
+namespace dukt\analytics\controllers;
 
-class Analytics_TestsController extends BaseController
+use craft\web\Controller;
+
+class TestsController extends Controller
 {
 	// Public Methods
 	// =========================================================================
@@ -19,8 +21,8 @@ class Analytics_TestsController extends BaseController
 	 */
 	public function actionDataTypes(array $variables = array())
 	{
-		$variables['googleAnalyticsDataTypes'] = craft()->analytics_metadata->getGoogleAnalyticsDataTypes();
-		$variables['dataTypes'] = craft()->analytics_metadata->getDataTypes();
+		$variables['googleAnalyticsDataTypes'] = \dukt\analytics\Plugin::getInstance()->analytics_metadata->getGoogleAnalyticsDataTypes();
+		$variables['dataTypes'] = \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDataTypes();
 
 		$this->renderTemplate('analytics/tests/_dataTypes', $variables);
 	}
@@ -32,11 +34,11 @@ class Analytics_TestsController extends BaseController
 	 */
 	public function actionReportWidgets(array $variables = array())
 	{
-		craft()->templates->includeJsResource('analytics/js/jsapi.js', true);
+		Craft::$app->getView()->registerJsFile('analytics/js/jsapi.js', true);
 
-		craft()->templates->includeJsResource('analytics/js/ReportWidget.js');
-		craft()->templates->includeCssResource('analytics/css/ReportWidget.css');
-		craft()->templates->includeCssResource('analytics/css/tests.css');
+		Craft::$app->getView()->registerJsFile('analytics/js/ReportWidget.js');
+		Craft::$app->getView()->registerCssFile('analytics/css/ReportWidget.css');
+		Craft::$app->getView()->registerCssFile('analytics/css/tests.css');
 
 		$this->renderTemplate('analytics/tests/_reportWidgets', $variables);
 	}
@@ -48,7 +50,7 @@ class Analytics_TestsController extends BaseController
 	 */
 	public function actionFormatting(array $variables = array())
 	{
-		$variables['currency'] = craft()->analytics->getCurrency();
+		$variables['currency'] = \dukt\analytics\Plugin::getInstance()->analytics->getCurrency();
 
 		$this->renderTemplate('analytics/tests/_formatting', $variables);
 	}
@@ -60,7 +62,7 @@ class Analytics_TestsController extends BaseController
 	 */
 	public function actionColumns(array $variables = array())
 	{
-		$variables['columns'] = craft()->analytics_metadata->getColumns();
+		$variables['columns'] = \dukt\analytics\Plugin::getInstance()->analytics_metadata->getColumns();
 
 		$this->renderTemplate('analytics/tests/_columns', $variables);
 	}
@@ -72,7 +74,7 @@ class Analytics_TestsController extends BaseController
 	 */
 	public function actionColumnGroups(array $variables = array())
 	{
-		$variables['columnGroups'] = craft()->analytics_metadata->getColumnGroups();
+		$variables['columnGroups'] = \dukt\analytics\Plugin::getInstance()->analytics_metadata->getColumnGroups();
 
 		$this->renderTemplate('analytics/tests/_columnGroups', $variables);
 	}

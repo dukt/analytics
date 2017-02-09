@@ -5,10 +5,22 @@
  * @license   https://dukt.net/craft/analytics/docs/license
  */
 
-namespace Craft;
+namespace dukt\analytics\models;
 
-class Analytics_ColumnModel extends BaseModel
+use craft\base\Model;
+
+class Column extends Model
 {
+    public $id;
+    public $type;
+    public $dataType;
+    public $group;
+    public $status;
+    public $uiName;
+    public $description;
+    public $allowInSegments;
+    public $addedInApiVersion;
+
 	// Protected Methods
 	// =========================================================================
 

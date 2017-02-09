@@ -2,11 +2,6 @@
  * Analytics
  */
 
-var Analytics = {
-	GoogleVisualizationCalled: false,
-	GoogleVisualizationReady: false,
-	reports: {}
-};
 
 
 /**
@@ -362,7 +357,7 @@ Analytics.Utils = {
 
 	formatCurrency: function(value)
 	{
-		return this.getD3Locale().numberFormat(Analytics.formats.currencyFormat)(value);
+		return this.getD3Locale().format(Analytics.formats.currencyFormat)(value);
 	},
 
 	formatDuration: function(_seconds)
@@ -380,21 +375,25 @@ Analytics.Utils = {
 
 	formatInteger: function(value)
 	{
-		return this.getD3Locale().numberFormat(",")(value);
+		return this.getD3Locale().format(",")(value);
 	},
 
 	formatPercent: function(value)
 	{
-		return this.getD3Locale().numberFormat(Analytics.formats.percentFormat)(value / 100);
+		return this.getD3Locale().format(Analytics.formats.percentFormat)(value / 100);
 	},
 
 	getD3Locale: function()
 	{
-		var localeDefinition = window['d3_locale'];
+/*        window.d3FormatLocaleDefinition
+        window.d3TimeFormatLocaleDefinition
+        window.d3Formats*/
+
+        var localeDefinition = window['d3FormatLocaleDefinition'];
 
 		localeDefinition.currency = Analytics.currency;
 
-		return d3.locale(localeDefinition);
+		return d3.formatLocale(localeDefinition);
 	},
 };
 

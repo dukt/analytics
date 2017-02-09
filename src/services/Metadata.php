@@ -5,9 +5,14 @@
  * @license   https://dukt.net/craft/analytics/docs/license
  */
 
-namespace Craft;
+namespace dukt\analytics\services;
 
-class Analytics_MetadataService extends BaseApplicationComponent
+use Craft;
+use yii\base\Component;
+use craft\helpers\Json;
+use dukt\analytics\models\Column;
+
+class Metadata extends Component
 {
 	// Properties
 	// =========================================================================
@@ -29,7 +34,7 @@ class Analytics_MetadataService extends BaseApplicationComponent
 	 */
 	public function dimmetsFileExists()
 	{
-		$path = craft()->analytics_metadata->getDimmetsFilePath();
+		$path = \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDimmetsFilePath();
 
 		if(IOHelper::fileExists($path, false))
 		{
@@ -364,13 +369,13 @@ class Analytics_MetadataService extends BaseApplicationComponent
 
 		foreach($this->getColumnGroups($type) as $group)
 		{
-			$options[]['optgroup'] = Craft::t($group);
+			$options[]['optgroup'] = Craft::t('app', $group);
 
 			foreach($this->getColumns($type) as $column)
 			{
 				if($column->group == $group)
 				{
-					$options[$column->id] = Craft::t($column->uiName);
+					$options[$column->id] = Craft::t('app', $column->uiName);
 				}
 			}
 		}
@@ -437,7 +442,7 @@ class Analytics_MetadataService extends BaseApplicationComponent
 	 */
 	public function getDimmetsFilePath()
 	{
-		return CRAFT_PLUGINS_PATH.'analytics/etc/data/dimensions-metrics.json';
+	    return Craft::getAlias('@plugins/analytics/src/etc/data/dimensions-metrics.json');
 	}
 
 	// Private Methods
@@ -452,17 +457,18 @@ class Analytics_MetadataService extends BaseApplicationComponent
 	{
 		$cols = [];
 
-		$path = craft()->analytics_metadata->getDimmetsFilePath();
+		$path = \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDimmetsFilePath();
 
 
-		$json = IOHelper::getFileContents($path);
-		$columnsResponse = JsonHelper::decode($json);
+		$contents = file_get_contents($path);
+
+		$columnsResponse = Json::decode($contents);
 
 		if($columnsResponse)
 		{
 			foreach($columnsResponse as $columnResponse)
 			{
-				$cols[$columnResponse['id']] = new Analytics_ColumnModel($columnResponse);
+				$cols[$columnResponse['id']] = new Column($columnResponse);
 
 				if($columnResponse['id'] == 'ga:countryIsoCode')
 				{
@@ -481,7 +487,7 @@ class Analytics_MetadataService extends BaseApplicationComponent
 	 */
 	private function _getData($name)
 	{
-		$jsonData = file_get_contents(CRAFT_PLUGINS_PATH.'analytics/etc/data/'.$name.'.json');
+		$jsonData = file_get_contents(Craft::getAlias('@plugins/analytics/src/etc/data/'.$name.'.json'));
 		$data = json_decode($jsonData, true);
 
 		return $data;

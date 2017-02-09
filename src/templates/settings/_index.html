@@ -3,7 +3,7 @@
 {% import "_includes/forms" as forms %}
 
 {% macro configWarning(setting, file) -%}
-	{{ "This is being overridden by the {setting} config setting."|t({
+	{{ "This is being overridden by the {setting} config setting."|t('app', {
 		setting: '<strong>'~setting~'</strong>'
 	})|raw }}
 {%- endmacro %}
@@ -16,7 +16,7 @@
 
 		{% if not oauthAccount %}
 
-			<h2 class="first">{{ 'Google Analytics Account'|t }}</h2>
+			<h2 class="first">{{ 'Google Analytics Account'|t('app') }}</h2>
 
 			{% if errors|length > 0 %}
 				<ul class="error">
@@ -31,7 +31,7 @@
 			{% if token %}
 				<p><a class="btn small" href="{{ actionUrl('analytics/oauth/disconnect') }}">{{'Disconnect'|t}}</a></p>
 			{% else %}
-				<p>{{"Getting errors trying to connect ?"|t}} <a href="{{url('oauth/providers/google')}}">{{"Check Google API key & secret in OAuth settings"|t}}</a>.</p>
+				<p>{{"Getting errors trying to connect ?"|t}} <a href="{{url('oauth/providers/google') }}">{{"Check Google API key & secret in OAuth settings"|t}}</a>.</p>
 				<p><a class="btn submit" href="{{ actionUrl('analytics/oauth/connect') }}">{{"Connect to Google Analytics"|t}}</a></p>
 			{% endif %}
 
@@ -47,12 +47,12 @@
 					</div>
 					<div class="details">
 						<ul>
-							<li><strong>{{ 'Name'|t }} : </strong> {{ oauthAccount.name }}</li>
+							<li><strong>{{ 'Name'|t('app') }} : </strong> {{ oauthAccount.name }}</li>
 
 							{% if oauthAccount.uid is defined %}
-								<li><strong>{{ 'UID'|t }} : </strong> {{ oauthAccount.uid }}</li>
+								<li><strong>{{ 'UID'|t('app') }} : </strong> {{ oauthAccount.uid }}</li>
 							{% elseif oauthAccount.id is defined %}
-								<li><strong>{{ 'UID'|t }} : </strong> {{ oauthAccount.id }}</li>
+								<li><strong>{{ 'UID'|t('app') }} : </strong> {{ oauthAccount.id }}</li>
 							{% endif %}
 						</ul>
 					</div>
@@ -73,13 +73,13 @@
 
 					{{ getCsrfInput() }}
 
-					<input type="hidden" name="action" value="analytics/settings/saveSettings">
+					<input type="hidden" name="action" value="analytics/settings/save-settings">
 					<input type="hidden" name="pluginClass" value="Analytics">
-					<input type="hidden" name="redirect" value="analytics/settings">
+					<input type="hidden" name="redirect" value="{{ 'analytics/settings'|hash }}">
 
 					<div id="account-explorer" class="account-explorer">
 
-						<h2 class="first">{{ "Google Analytics View (Profile)"|t }}</h2>
+						<h2 class="first">{{ "Google Analytics View (Profile)"|t('app') }}</h2>
 
 						{{ forms.selectField({
 							label: "Account"|t,
@@ -110,7 +110,7 @@
 						</div>
 					</div>
 
-					{% includejs %}
+					{% js %}
 
 
 						{% if accountExplorerData %}
@@ -121,7 +121,7 @@
 
 						var accountExplorer = new Analytics.AccountExplorer('#account-explorer', { forceRefresh: forceRefresh, data: {{ accountExplorerData|json_encode|raw }}  });
 
-					{% endincludejs %}
+					{% endjs %}
 
 					<hr />
 
@@ -160,7 +160,7 @@
 
 		<h2 class="first">{{'Google provider not configured'|t}}</h2>
 		<p>{{'Please fill API client id & secret for Analytics provider.'|t}}</p>
-		<p><a class="btn" href="{{url('oauth/providers/google')}}">{{'Google OAuth settings'|t}}</a></p>
+		<p><a class="btn" href="{{url('oauth/providers/google') }}">{{'Google OAuth settings'|t}}</a></p>
 
 	{% endif %}
 

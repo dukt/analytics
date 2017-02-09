@@ -1,9 +1,31 @@
 {
-	"config": {
-		"vendor-dir": "vendor/1.0.0"
+	"name": "dukt/craft-analytics",
+	"description": "Customizable statistics widgets and entry tracking for Google Analytics.",
+	"type": "craft-plugin",
+	"extra": {
+		"name": "Analytics",
+		"handle": "analytics",
+		"developer": "Dukt",
+		"developerUrl": "https://dukt.net/",
+		"documentationUrl": "https://dukt.net/craft/analytics/docs",
+		"class": "dukt\\analytics\\Plugin",
+		"version": "4.0.0",
+		"schemaVersion": "1.0.2",
+		"changelogUrl": "https://dukt.net/craft/analytics/updates.json"
 	},
 	"require": {
+		"composer/installers": "~1.0",
+		"dukt/craft-oauth": "3.x-dev",
 		"google/apiclient": "v2.1.0",
 		"ins0/google-measurement-php-client": "v2.0.1"
+	},
+	"autoload": {
+		"psr-4": {
+			"dukt\\analytics\\": "src/"
+		}
+	},
+	"scripts": {
+		"post-update-cmd": ["echo [WARNING] Delete all .git dirs", "rm -rf vendor/nojimage/**/**/.git"],
+		"post-install-cmd": ["echo [WARNING] Delete all .git dirs", "rm -rf vendor/nojimage/**/**/.git"]
 	}
 }

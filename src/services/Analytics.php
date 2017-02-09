@@ -5,16 +5,18 @@
  * @license   https://dukt.net/craft/analytics/docs/license
  */
 
-namespace Craft;
+namespace dukt\analytics\services;
 
-require_once(CRAFT_PLUGINS_PATH.'analytics/base/AnalyticsTrait.php');
+use Craft;
+use yii\base\Component;
+use dukt\analytics\base\RequirementsTrait;
 
-class AnalyticsService extends BaseApplicationComponent
+class Analytics extends Component
 {
 	// Traits
 	// =========================================================================
 
-	use AnalyticsTrait;
+	use RequirementsTrait;
 
 	// Properties
 	// =========================================================================
@@ -31,7 +33,7 @@ class AnalyticsService extends BaseApplicationComponent
 	 */
 	public function getRealtimeRefreshInterval()
 	{
-		$interval = craft()->config->get('realtimeRefreshInterval', 'analytics');
+		$interval = Craft::$app->config->get('realtimeRefreshInterval', 'analytics');
 
 		if($interval)
 		{
@@ -39,7 +41,7 @@ class AnalyticsService extends BaseApplicationComponent
 		}
 		else
 		{
-			$plugin = craft()->plugins->getPlugin('analytics');
+			$plugin = Craft::$app->plugins->getPlugin('analytics');
 			$settings = $plugin->getSettings();
 
 			if(!empty($settings['realtimeRefreshInterval']))
@@ -56,7 +58,7 @@ class AnalyticsService extends BaseApplicationComponent
 	 */
 	public function getProfileId()
 	{
-		$plugin = craft()->plugins->getPlugin('analytics');
+		$plugin = Craft::$app->plugins->getPlugin('analytics');
 		$settings = $plugin->getSettings();
 
 		if(!empty($settings['profileId']))
@@ -73,7 +75,7 @@ class AnalyticsService extends BaseApplicationComponent
 	 */
 	public function getElementUrlPath($elementId, $localeId)
 	{
-		$element = craft()->elements->getElementById($elementId, null, $localeId);
+		$element = Craft::$app->elements->getElementById($elementId, null, $localeId);
 
 		$uri = $element->uri;
 		$url = $element->url;
@@ -85,7 +87,7 @@ class AnalyticsService extends BaseApplicationComponent
 			$uri = $components['path'];
 		}
 
-        if(craft()->config->get('addTrailingSlashesToUrls'))
+        if(Craft::$app->config->get('addTrailingSlashesToUrls'))
         {
             $uri .= '/';
         }
@@ -100,7 +102,8 @@ class AnalyticsService extends BaseApplicationComponent
      */
 	public function getCurrency()
 	{
-		$plugin = craft()->plugins->getPlugin('analytics');
+		$plugin = Craft::$app->plugins->getPlugin('analytics');
+
 		$settings = $plugin->getSettings();
 
 		if(!empty($settings['currency']))
@@ -116,10 +119,11 @@ class AnalyticsService extends BaseApplicationComponent
 	 */
 	public function getD3LocaleDefinitionCurrency()
 	{
-		$currency = craft()->analytics->getCurrency();
+		$currency = $this->getCurrency();
 
-		$currencySymbol = craft()->locale->getCurrencySymbol($currency);
-		$currencyFormat = craft()->locale->getCurrencyFormat();
+		$currencySymbol = ($currency ? Craft::$app->locale->getCurrencySymbol($currency) : '$');
+		// $currencyFormat = Craft::$app->locale->getCurrencyFormat();
+		$currencyFormat = '$,.2f';
 
 		if(strpos($currencyFormat, ";") > 0)
 		{

@@ -186,7 +186,7 @@ class AnalyticsTracking
 		}
 		catch(\Exception $e)
 		{
-			AnalyticsPlugin::log('Couldn’t send tracking: '.$e->getMessage(), LogLevel::Error);
+			// \dukt\analytics\Plugin::log('Couldn’t send tracking: '.$e->getMessage(), LogLevel::Error);
 		}
 	}
 

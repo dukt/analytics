@@ -15,7 +15,7 @@ class m161117_000001_remove_account_explorer_data_setting extends BaseMigration
     {
         // set forceConnect setting to true
 
-        $row = craft()->db->createCommand()
+        $row = Craft::$app->db->createCommand()
             ->select('*')
             ->from('plugins')
             ->where('class=:class', array(':class'=>'Analytics'))
@@ -34,7 +34,7 @@ class m161117_000001_remove_account_explorer_data_setting extends BaseMigration
 
             $settingsJson = JsonHelper::encode($settings);
 
-            craft()->db->createCommand()
+            Craft::$app->db->createCommand()
                 ->update('plugins', array('settings' => $settingsJson), 'id=:id', array('id' => $row['id']));
         }
 

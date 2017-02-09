@@ -29,13 +29,13 @@
 {% elseif isNew %}
 
 	<div class="analytics-field analytics-error disable-icon">
-		<div class="error">{{ "Report will appear when the element is saved."|t }}</div>
+		<div class="error">{{ "Report will appear when the element is saved."|t('app') }}</div>
 	</div>
 
 {% else %}
 
 	<div class="analytics-field analytics-error">
-		<div class="error">{{ "This element doesn't support urls."|t }}</div>
+		<div class="error">{{ "This element doesn't support urls."|t('app') }}</div>
 	</div>
 
 {% endif %}

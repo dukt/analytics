@@ -6,12 +6,12 @@
 
 {% set content %}
 
-	{% includejs %}
+	{% registerJs %}
 		window.csrfTokenName = "{{ craft.config.csrfTokenName|e('js') }}";
 		window.csrfTokenValue = "{{ craft.request.csrfToken|e('js') }}";
 
-		var AnalyticsChartLanguage = "{{ "analyticsChartLanguage"|t }}";
-	{% endincludejs %}
+		var AnalyticsChartLanguage = "{{ "analyticsChartLanguage"|t('app') }}";
+	{% endregisterJs %}
 
 	{{ macros.testReportWidget("Area", {
 		chart: 'area',

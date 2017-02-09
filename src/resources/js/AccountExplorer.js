@@ -46,7 +46,7 @@ Analytics.AccountExplorer = Garnish.Base.extend({
 		this.$spinner.removeClass('hidden');
 		this.$refreshViewsBtn.addClass('disabled');
 
-		Craft.postActionRequest('analytics/settings/getAccountExplorerData', {}, $.proxy(function(response, textStatus)
+		Craft.postActionRequest('analytics/settings/get-account-explorer-data', {}, $.proxy(function(response, textStatus)
 		{
 			if (textStatus == 'success')
 			{

@@ -5,9 +5,11 @@
  * @license   https://dukt.net/craft/analytics/docs/license
  */
 
-namespace Craft;
+namespace dukt\analytics\controllers;
 
-class Analytics_UtilsController extends BaseController
+use craft\web\Controller;
+
+class UtilsController extends Controller
 {
 	// Properties
 	// =========================================================================
@@ -19,21 +21,21 @@ class Analytics_UtilsController extends BaseController
 
 	public function actionMetadata(array $variables = array())
 	{
-		$variables['dimensions'] = craft()->analytics_metadata->getDimensions();
-		$variables['metrics'] = craft()->analytics_metadata->getMetrics();
+		$variables['dimensions'] = \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDimensions();
+		$variables['metrics'] = \dukt\analytics\Plugin::getInstance()->analytics_metadata->getMetrics();
 
-		$variables['dimmetsFileExists'] = craft()->analytics_metadata->dimmetsFileExists();
+		$variables['dimmetsFileExists'] = \dukt\analytics\Plugin::getInstance()->analytics_metadata->dimmetsFileExists();
 
 		$this->renderTemplate('analytics/utils/metadata/_index', $variables);
 	}
 
 	public function actionSearchMetadata()
 	{
-		$q = craft()->request->getParam('q');
-		$columns = craft()->analytics_metadata->searchColumns($q);
+		$q = Craft::$app->request->getParam('q');
+		$columns = \dukt\analytics\Plugin::getInstance()->analytics_metadata->searchColumns($q);
 
 		// Send the source back to the template
-		craft()->urlManager->setRouteVariables(array(
+		Craft::$app->urlManager->setRouteVariables(array(
 			'q' => $q,
 			'columns' => $columns,
 		));
@@ -44,9 +46,9 @@ class Analytics_UtilsController extends BaseController
 		$this->_deleteMetadata();
 		$this->_importMetadata();
 
-		craft()->userSession->setNotice(Craft::t("Metadata loaded."));
+		Craft::$app->getSession()->setNotice(Craft::t('app', "Metadata loaded."));
 
-		$referer = craft()->request->getUrlReferrer();
+		$referer = Craft::$app->request->referrer;
 		$this->redirect($referer);
 	}
 
@@ -55,7 +57,7 @@ class Analytics_UtilsController extends BaseController
 
 	private function _deleteMetadata()
 	{
-		$path = craft()->analytics_metadata->getDimmetsFilePath();
+		$path = \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDimmetsFilePath();
 
 		IOHelper::deleteFile($path);
 	}
@@ -64,7 +66,7 @@ class Analytics_UtilsController extends BaseController
 	{
 		$columns = [];
 
-		$items = craft()->analytics_api->getColumns();
+		$items = \dukt\analytics\Plugin::getInstance()->analytics_api->getColumns();
 
 		if($items)
 		{
@@ -106,7 +108,7 @@ class Analytics_UtilsController extends BaseController
 
 		$contents = json_encode($columns);
 
-		$path = craft()->analytics_metadata->getDimmetsFilePath();
+		$path = \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDimmetsFilePath();
 
 		$res = IOHelper::writeToFile($path, $contents);
 	}

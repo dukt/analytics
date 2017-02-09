@@ -5,9 +5,11 @@
  * @license   https://dukt.net/craft/analytics/docs/license
  */
 
-namespace Craft;
+namespace dukt\analytics\controllers;
 
-class AnalyticsController extends BaseController
+use craft\web\Controller;
+
+class AnalyticsController extends Controller
 {
 	// Public Methods
 	// =========================================================================
@@ -19,13 +21,13 @@ class AnalyticsController extends BaseController
 	 */
 	public function actionSaveWidgetState()
 	{
-		$widgetId = craft()->request->getPost('id');
+		$widgetId = Craft::$app->request->getPost('id');
 
-		$formerWidget = craft()->dashboard->getUserWidgetById($widgetId);
+		$formerWidget = Craft::$app->dashboard->getUserWidgetById($widgetId);
 
 		if($formerWidget)
 		{
-			$postSettings = craft()->request->getPost('settings');
+			$postSettings = Craft::$app->request->getPost('settings');
 
 			$widgetSettings = [
 				'chart' => $postSettings['chart'],
@@ -42,7 +44,7 @@ class AnalyticsController extends BaseController
 			$widget->type = $formerWidget->type;
 			$widget->settings = $widgetSettings;
 
-			if (craft()->dashboard->saveUserWidget($widget))
+			if (Craft::$app->dashboard->saveUserWidget($widget))
 			{
 				$this->returnJson(true);
 			}

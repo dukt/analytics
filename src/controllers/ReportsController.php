@@ -5,9 +5,12 @@
  * @license   https://dukt.net/craft/analytics/docs/license
  */
 
-namespace Craft;
+namespace dukt\analytics\controllers;
 
-class Analytics_ReportsController extends BaseController
+use Craft;
+use craft\web\Controller;
+
+class ReportsController extends Controller
 {
 	// Public Methods
 	// =========================================================================
@@ -23,16 +26,16 @@ class Analytics_ReportsController extends BaseController
 		$returningVisitor = 0;
 		$total = 0;
 
-		if(!craft()->config->get('demoMode', 'analytics'))
+		if(!Craft::$app->config->get('demoMode', 'analytics'))
 		{
 			try
 			{
-				$criteria = new Analytics_RequestCriteriaModel;
+				$criteria = new RequestCriteria;
 				$criteria->realtime = true;
 				$criteria->metrics = 'ga:activeVisitors';
 				$criteria->optParams = array('dimensions' => 'ga:visitorType');
 
-				$response = craft()->analytics_api->sendRequest($criteria);
+				$response = \dukt\analytics\Plugin::getInstance()->analytics_api->sendRequest($criteria);
 
 
 				// total
@@ -88,15 +91,15 @@ class Analytics_ReportsController extends BaseController
                     $errorMsg = $errors[0]['message'];
                 }
 
-                AnalyticsPlugin::log('Couldn’t get realtime widget data: '.$errorMsg."\r\n".print_r($errors, true), LogLevel::Error);
+                // \dukt\analytics\Plugin::log('Couldn’t get realtime widget data: '.$errorMsg."\r\n".print_r($errors, true), LogLevel::Error);
 
-                $this->returnErrorJson($errorMsg);
+                return $this->asErrorJson($errorMsg);
             }
             catch(\Exception $e)
             {
                 $errorMsg = $e->getMessage();
-                AnalyticsPlugin::log('Couldn’t get element data: '.$errorMsg, LogLevel::Error);
-                $this->returnErrorJson($errorMsg);
+                // \dukt\analytics\Plugin::log('Couldn’t get element data: '.$errorMsg, LogLevel::Error);
+                return $this->asErrorJson($errorMsg);
             }
 		}
 		else
@@ -107,7 +110,7 @@ class Analytics_ReportsController extends BaseController
 			$total = ($newVisitor + $returningVisitor);
 		}
 
-		$this->returnJson(array(
+		return $this->asJson(array(
 			'total' => $total,
 			'newVisitor' => $newVisitor,
 			'returningVisitor' => $returningVisitor
@@ -121,32 +124,32 @@ class Analytics_ReportsController extends BaseController
 	 */
 	public function actionReportWidget()
 	{
-		try
-		{
-			$profileId = craft()->analytics->getProfileId();
+/*		try
+		{*/
+			$profileId = \dukt\analytics\Plugin::getInstance()->analytics->getProfileId();
 
 			$request = [
-				'chart' => craft()->request->getPost('chart'),
-				'period' => craft()->request->getPost('period'),
-				'options' => craft()->request->getPost('options'),
+				'chart' => Craft::$app->request->getBodyParam('chart'),
+				'period' => Craft::$app->request->getBodyParam('period'),
+				'options' => Craft::$app->request->getBodyParam('options'),
 			];
 
 			$cacheId = ['getReport', $request, $profileId];
 
-			$response = craft()->analytics_cache->get($cacheId);
+			$response = \dukt\analytics\Plugin::getInstance()->analytics_cache->get($cacheId);
 
 			if(!$response)
 			{
-				$response = craft()->analytics_reports->getReport($request);
+				$response = \dukt\analytics\Plugin::getInstance()->analytics_reports->getReport($request);
 
 				if($response)
 				{
-					craft()->analytics_cache->set($cacheId, $response);
+					\dukt\analytics\Plugin::getInstance()->analytics_cache->set($cacheId, $response);
 				}
 			}
 
-			$this->returnJson($response);
-		}
+			return $this->asJson($response);
+/*		}
 		catch(\Google_Service_Exception $e)
 		{
             $errors = $e->getErrors();
@@ -157,16 +160,16 @@ class Analytics_ReportsController extends BaseController
                 $errorMsg = $errors[0]['message'];
             }
 
-            AnalyticsPlugin::log('Couldn’t get report widget data: '.$errorMsg."\r\n".print_r($errors, true), LogLevel::Error);
+            // \dukt\analytics\Plugin::log('Couldn’t get report widget data: '.$errorMsg."\r\n".print_r($errors, true), LogLevel::Error);
 
-            $this->returnErrorJson($errorMsg);
+            return $this->asErrorJson($errorMsg);
 		}
         catch(\Exception $e)
         {
             $errorMsg = $e->getMessage();
-            AnalyticsPlugin::log('Couldn’t get element data: '.$errorMsg, LogLevel::Error);
-            $this->returnErrorJson($errorMsg);
-        }
+            // \dukt\analytics\Plugin::log('Couldn’t get element data: '.$errorMsg, LogLevel::Error);
+            return $this->asErrorJson($errorMsg);
+        }*/
 	}
 
 	/**
@@ -180,11 +183,11 @@ class Analytics_ReportsController extends BaseController
 	{
 		try
 		{
-			$elementId = craft()->request->getRequiredParam('elementId');
-			$locale = craft()->request->getRequiredParam('locale');
-			$metric = craft()->request->getRequiredParam('metric');
+			$elementId = Craft::$app->request->getRequiredParam('elementId');
+			$locale = Craft::$app->request->getRequiredParam('locale');
+			$metric = Craft::$app->request->getRequiredParam('metric');
 
-			$uri = craft()->analytics->getElementUrlPath($elementId, $locale);
+			$uri = \dukt\analytics\Plugin::getInstance()->analytics->getElementUrlPath($elementId, $locale);
 
 			if($uri)
 			{
@@ -202,26 +205,26 @@ class Analytics_ReportsController extends BaseController
 					'filters' => "ga:pagePath==".$uri
 				);
 
-				$criteria = new Analytics_RequestCriteriaModel;
+				$criteria = new RequestCriteria;
 				$criteria->startDate = $start;
 				$criteria->endDate = $end;
 				$criteria->metrics = $metric;
 				$criteria->optParams = $optParams;
 
 				$cacheId = ['ReportsController.actionGetElementReport', $criteria->getAttributes()];
-				$response = craft()->analytics_cache->get($cacheId);
+				$response = \dukt\analytics\Plugin::getInstance()->analytics_cache->get($cacheId);
 
 				if(!$response)
 				{
-					$response = craft()->analytics_api->sendRequest($criteria);
+					$response = \dukt\analytics\Plugin::getInstance()->analytics_api->sendRequest($criteria);
 
 					if($response)
 					{
-						craft()->analytics_cache->set($cacheId, $response);
+						\dukt\analytics\Plugin::getInstance()->analytics_cache->set($cacheId, $response);
 					}
 				}
 
-				$this->returnJson([
+				return $this->asJson([
 					'type' => 'area',
 					'chart' => $response
 				]);
@@ -241,15 +244,15 @@ class Analytics_ReportsController extends BaseController
                 $errorMsg = $errors[0]['message'];
             }
 
-            AnalyticsPlugin::log('Couldn’t get element data: '.$errorMsg."\r\n".print_r($errors, true), LogLevel::Error);
+            // \dukt\analytics\Plugin::log('Couldn’t get element data: '.$errorMsg."\r\n".print_r($errors, true), LogLevel::Error);
 
-            $this->returnErrorJson($errorMsg);
+            return $this->asErrorJson($errorMsg);
         }
 		catch(\Exception $e)
 		{
             $errorMsg = $e->getMessage();
-            AnalyticsPlugin::log('Couldn’t get element data: '.$errorMsg, LogLevel::Error);
-			$this->returnErrorJson($errorMsg);
+            // \dukt\analytics\Plugin::log('Couldn’t get element data: '.$errorMsg, LogLevel::Error);
+			return $this->asErrorJson($errorMsg);
 		}
 	}
 }

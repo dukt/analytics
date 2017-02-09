@@ -5,9 +5,13 @@
  * @license   https://dukt.net/craft/analytics/docs/license
  */
 
-namespace Craft;
+namespace dukt\analytics\services;
 
-class Analytics_CacheService extends CacheService
+use Craft;
+use craft\helpers\DateTimeHelper;
+use yii\base\Component;
+
+class Cache extends Component
 {
 	// Public Methods
 	// =========================================================================
@@ -21,11 +25,11 @@ class Analytics_CacheService extends CacheService
 	 */
 	public function get($id)
 	{
-		if(craft()->config->get('enableCache', 'analytics') == true)
+		if(Craft::$app->config->get('enableCache', 'analytics') == true)
 		{
 			$cacheKey = $this->getCacheKey($id);
 
-			return parent::get($cacheKey);
+			return Craft::$app->getCache()->get($cacheKey);
 		}
 	}
 
@@ -44,7 +48,7 @@ class Analytics_CacheService extends CacheService
 	{
 		if(is_null($enableCache))
 		{
-			$enableCache = craft()->config->get('enableCache', 'analytics');
+			$enableCache = Craft::$app->config->get('enableCache', 'analytics');
 		}
 
 		if($enableCache)
@@ -56,7 +60,7 @@ class Analytics_CacheService extends CacheService
 				$expire = $this->getCacheDuration();
 			}
 
-			return parent::set($cacheKey, $value, $expire, $dependency);
+			return Craft::$app->getCache()->set($cacheKey, $value, $expire, $dependency);
 		}
 	}
 
@@ -71,7 +75,7 @@ class Analytics_CacheService extends CacheService
     {
         $cacheKey = $this->getCacheKey($id);
 
-        return parent::delete($cacheKey);
+        return Craft::$app->getCache()->delete($cacheKey);
     }
 
 	// Private Methods
@@ -84,7 +88,7 @@ class Analytics_CacheService extends CacheService
 	 */
 	private function getCacheDuration()
 	{
-		$duration = craft()->config->get('cacheDuration', 'analytics');
+		$duration = Craft::$app->config->get('cacheDuration', 'analytics');
 		return DateTimeHelper::timeFormatToSeconds($duration);
 	}
 
