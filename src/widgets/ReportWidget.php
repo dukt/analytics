@@ -11,6 +11,7 @@ use Craft;
 use craft\helpers\StringHelper;
 use craft\helpers\Json;
 use dukt\analytics\web\assets\reportwidget\ReportWidgetAsset;
+use dukt\social\Plugin as Social;
 
 class ReportWidget extends \craft\base\Widget
 {
@@ -66,13 +67,13 @@ class ReportWidget extends \craft\base\Widget
 	 */
 	public function getBodyHtml()
 	{
-		if(\dukt\analytics\Plugin::getInstance()->analytics->checkPluginRequirements())
+		if(Social::$plugin->analytics->checkPluginRequirements())
 		{
 			if(Craft::$app->config->get('enableWidgets', 'analytics'))
 			{
 				$settings = $this->settings;
 
-				$profileId = \dukt\analytics\Plugin::getInstance()->analytics->getProfileId();
+				$profileId = Social::$plugin->analytics->getProfileId();
 
 				if($profileId)
 				{
@@ -99,7 +100,7 @@ class ReportWidget extends \craft\base\Widget
 					{
 						$cacheId = ['getReport', $request, $profileId];
 
-						$cachedResponse = \dukt\analytics\Plugin::getInstance()->analytics_cache->get($cacheId);
+						$cachedResponse = Social::$plugin->analytics_cache->get($cacheId);
 					}
 
 
@@ -113,7 +114,7 @@ class ReportWidget extends \craft\base\Widget
 					];
 
 					$jsTemplate = 'window.csrfTokenName = "{{ craft.config.csrfTokenName|e(\'js\') }}";';
-					$jsTemplate .= 'window.csrfTokenValue = "{{ craft.request.csrfToken|e(\'js\') }}";';
+					$jsTemplate .= 'window.csrfTokenValue = "{{ craft.app.request.csrfToken|e(\'js\') }}";';
 					$js = Craft::$app->getView()->renderString($jsTemplate);
 					Craft::$app->getView()->registerJs($js);
 					Craft::$app->getView()->registerJs('var AnalyticsChartLanguage = "'.Craft::t('app', 'analyticsChartLanguage').'";');
@@ -209,7 +210,7 @@ class ReportWidget extends \craft\base\Widget
 			case 'area':
 
 				$options = [
-					'metrics' => \dukt\analytics\Plugin::getInstance()->analytics_metadata->getSelectMetricOptions()
+					'metrics' => Social::$plugin->analytics_metadata->getSelectMetricOptions()
 				];
 
 				break;
@@ -217,7 +218,7 @@ class ReportWidget extends \craft\base\Widget
 			case 'counter':
 
 				$options = [
-					'metrics' => \dukt\analytics\Plugin::getInstance()->analytics_metadata->getSelectMetricOptions()
+					'metrics' => Social::$plugin->analytics_metadata->getSelectMetricOptions()
 				];
 
 				break;
@@ -225,8 +226,8 @@ class ReportWidget extends \craft\base\Widget
 			case 'geo':
 
 				$options = [
-					'dimensions' => \dukt\analytics\Plugin::getInstance()->analytics_metadata->getSelectDimensionOptions(['ga:city', 'ga:country', 'ga:continent', 'ga:subContinent']),
-					'metrics' => \dukt\analytics\Plugin::getInstance()->analytics_metadata->getSelectMetricOptions()
+					'dimensions' => Social::$plugin->analytics_metadata->getSelectDimensionOptions(['ga:city', 'ga:country', 'ga:continent', 'ga:subContinent']),
+					'metrics' => Social::$plugin->analytics_metadata->getSelectMetricOptions()
 				];
 
 				break;
@@ -234,8 +235,8 @@ class ReportWidget extends \craft\base\Widget
 			default:
 
 				$options = [
-					'dimensions' => \dukt\analytics\Plugin::getInstance()->analytics_metadata->getSelectDimensionOptions(),
-					'metrics' => \dukt\analytics\Plugin::getInstance()->analytics_metadata->getSelectMetricOptions()
+					'dimensions' => Social::$plugin->analytics_metadata->getSelectDimensionOptions(),
+					'metrics' => Social::$plugin->analytics_metadata->getSelectMetricOptions()
 				];
 		}
 
@@ -260,12 +261,12 @@ class ReportWidget extends \craft\base\Widget
 
 				if(!empty($options['dimension']))
 				{
-					$name[] = Craft::t('app', \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDimMet($options['dimension']));
+					$name[] = Craft::t('app', Social::$plugin->analytics_metadata->getDimMet($options['dimension']));
 				}
 
 				if(!empty($options['metric']))
 				{
-					$name[] = Craft::t('app', \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDimMet($options['metric']));
+					$name[] = Craft::t('app', Social::$plugin->analytics_metadata->getDimMet($options['metric']));
 				}
 			}
 

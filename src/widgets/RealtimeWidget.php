@@ -8,6 +8,7 @@
 namespace dukt\analytics\widgets;
 
 use Craft;
+use dukt\social\Plugin as Social;
 
 class RealtimeWidget extends \craft\base\Widget
 {
@@ -61,11 +62,11 @@ class RealtimeWidget extends \craft\base\Widget
 	 */
 	public function getBodyHtml()
 	{
-		if(\dukt\analytics\Plugin::getInstance()->analytics->checkPluginRequirements())
+		if(Social::$plugin->analytics->checkPluginRequirements())
 		{
 			if(Craft::$app->config->get('enableWidgets', 'analytics'))
 			{
-				$profileId = \dukt\analytics\Plugin::getInstance()->analytics->getProfileId();
+				$profileId = Social::$plugin->analytics->getProfileId();
 
 				if($profileId)
 				{
@@ -74,7 +75,7 @@ class RealtimeWidget extends \craft\base\Widget
 
 					if(!empty($settings['enableRealtime']))
 					{
-						$realtimeRefreshInterval = \dukt\analytics\Plugin::getInstance()->analytics->getRealtimeRefreshInterval();
+						$realtimeRefreshInterval = Social::$plugin->analytics->getRealtimeRefreshInterval();
 
 						$widgetId = $this->model->id;
 

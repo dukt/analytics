@@ -21,7 +21,7 @@ class InstallController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$missingDependencies = \dukt\analytics\Plugin::getInstance()->analytics->getMissingDependencies();
+		$missingDependencies = Social::$plugin->analytics->getMissingDependencies();
 
 		if (count($missingDependencies) > 0)
 		{

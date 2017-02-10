@@ -11,6 +11,7 @@ use Craft;
 use yii\base\Component;
 use craft\helpers\Json;
 use dukt\analytics\models\Column;
+use dukt\social\Plugin as Social;
 
 class Metadata extends Component
 {
@@ -34,7 +35,7 @@ class Metadata extends Component
 	 */
 	public function dimmetsFileExists()
 	{
-		$path = \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDimmetsFilePath();
+		$path = Social::$plugin->analytics_metadata->getDimmetsFilePath();
 
 		if(IOHelper::fileExists($path, false))
 		{
@@ -457,7 +458,7 @@ class Metadata extends Component
 	{
 		$cols = [];
 
-		$path = \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDimmetsFilePath();
+		$path = Social::$plugin->analytics_metadata->getDimmetsFilePath();
 
 
 		$contents = file_get_contents($path);

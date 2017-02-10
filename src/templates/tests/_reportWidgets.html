@@ -8,7 +8,7 @@
 
 	{% registerJs %}
 		window.csrfTokenName = "{{ craft.config.csrfTokenName|e('js') }}";
-		window.csrfTokenValue = "{{ craft.request.csrfToken|e('js') }}";
+		window.csrfTokenValue = "{{ craft.app.request.csrfToken|e('js') }}";
 
 		var AnalyticsChartLanguage = "{{ "analyticsChartLanguage"|t('app') }}";
 	{% endregisterJs %}

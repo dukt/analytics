@@ -8,6 +8,7 @@
 namespace dukt\analytics\controllers;
 
 use craft\web\Controller;
+use dukt\social\Plugin as Social;
 
 class UtilsController extends Controller
 {
@@ -21,10 +22,10 @@ class UtilsController extends Controller
 
 	public function actionMetadata(array $variables = array())
 	{
-		$variables['dimensions'] = \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDimensions();
-		$variables['metrics'] = \dukt\analytics\Plugin::getInstance()->analytics_metadata->getMetrics();
+		$variables['dimensions'] = Social::$plugin->analytics_metadata->getDimensions();
+		$variables['metrics'] = Social::$plugin->analytics_metadata->getMetrics();
 
-		$variables['dimmetsFileExists'] = \dukt\analytics\Plugin::getInstance()->analytics_metadata->dimmetsFileExists();
+		$variables['dimmetsFileExists'] = Social::$plugin->analytics_metadata->dimmetsFileExists();
 
 		$this->renderTemplate('analytics/utils/metadata/_index', $variables);
 	}
@@ -32,7 +33,7 @@ class UtilsController extends Controller
 	public function actionSearchMetadata()
 	{
 		$q = Craft::$app->request->getParam('q');
-		$columns = \dukt\analytics\Plugin::getInstance()->analytics_metadata->searchColumns($q);
+		$columns = Social::$plugin->analytics_metadata->searchColumns($q);
 
 		// Send the source back to the template
 		Craft::$app->urlManager->setRouteVariables(array(
@@ -57,7 +58,7 @@ class UtilsController extends Controller
 
 	private function _deleteMetadata()
 	{
-		$path = \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDimmetsFilePath();
+		$path = Social::$plugin->analytics_metadata->getDimmetsFilePath();
 
 		IOHelper::deleteFile($path);
 	}
@@ -66,7 +67,7 @@ class UtilsController extends Controller
 	{
 		$columns = [];
 
-		$items = \dukt\analytics\Plugin::getInstance()->analytics_api->getColumns();
+		$items = Social::$plugin->analytics_api->getColumns();
 
 		if($items)
 		{
@@ -108,7 +109,7 @@ class UtilsController extends Controller
 
 		$contents = json_encode($columns);
 
-		$path = \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDimmetsFilePath();
+		$path = Social::$plugin->analytics_metadata->getDimmetsFilePath();
 
 		$res = IOHelper::writeToFile($path, $contents);
 	}

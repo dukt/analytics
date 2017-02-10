@@ -10,6 +10,7 @@ namespace dukt\analytics\controllers;
 use Craft;
 use craft\web\Controller;
 use dukt\analytics\web\assets\analytics\AnalyticsAsset;
+use dukt\social\Plugin as Social;
 
 class SettingsController extends Controller
 {
@@ -23,11 +24,11 @@ class SettingsController extends Controller
 	 */
 	public function actionIndex()
 	{
-		\dukt\analytics\Plugin::getInstance()->analytics->requireDependencies();
+		Social::$plugin->analytics->requireDependencies();
 
 		$variables = array();
 
-		$variables['isOauthProviderConfigured'] = \dukt\analytics\Plugin::getInstance()->analytics->isOauthProviderConfigured();
+		$variables['isOauthProviderConfigured'] = Social::$plugin->analytics->isOauthProviderConfigured();
 
 		if($variables['isOauthProviderConfigured'])
 		{
@@ -36,18 +37,18 @@ class SettingsController extends Controller
 
 			$provider = \dukt\oauth\Plugin::getInstance()->oauth->getProvider('google');
 			$plugin = Craft::$app->plugins->getPlugin('analytics');
-			$token = \dukt\analytics\Plugin::getInstance()->analytics_oauth->getToken();
+			$token = Social::$plugin->analytics_oauth->getToken();
 
 			if ($token)
 			{
 /*				try
 				{*/
-					$oauthAccount = \dukt\analytics\Plugin::getInstance()->analytics_cache->get(['getAccount', $token]);
+					$oauthAccount = Social::$plugin->analytics_cache->get(['getAccount', $token]);
 
 					if(!$oauthAccount)
 					{
 						$oauthAccount = $provider->getAccount($token);
-						\dukt\analytics\Plugin::getInstance()->analytics_cache->set(['getAccount', $token], $oauthAccount);
+						Social::$plugin->analytics_cache->set(['getAccount', $token], $oauthAccount);
 					}
 
 					if ($oauthAccount)
@@ -63,7 +64,7 @@ class SettingsController extends Controller
 
                         // Account
 
-                        $accountExplorerData = \dukt\analytics\Plugin::getInstance()->analytics_cache->get(['accountExplorerData']);
+                        $accountExplorerData = Social::$plugin->analytics_cache->get(['accountExplorerData']);
 
                         $accountOptions = [];
 
@@ -178,7 +179,7 @@ class SettingsController extends Controller
 			throw new Exception(Craft::t('app', 'No plugin exists with the class “{class}”', array('class' => $pluginClass)));
 		}
 
-		$settings = \dukt\analytics\Plugin::getInstance()->analytics_api->populateAccountExplorerSettings($settings);
+		$settings = Social::$plugin->analytics_api->populateAccountExplorerSettings($settings);
 
 		if (Craft::$app->plugins->savePluginSettings($plugin, $settings))
 		{
@@ -204,9 +205,9 @@ class SettingsController extends Controller
     {
         try
         {
-            $accountExplorerData = \dukt\analytics\Plugin::getInstance()->analytics_api->getAccountExplorerData();
+            $accountExplorerData = Social::$plugin->analytics_api->getAccountExplorerData();
 
-            \dukt\analytics\Plugin::getInstance()->analytics_cache->set(['accountExplorerData'], $accountExplorerData);
+            Social::$plugin->analytics_cache->set(['accountExplorerData'], $accountExplorerData);
 
             return $this->asJson($accountExplorerData);
         }

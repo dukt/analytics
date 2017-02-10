@@ -7,6 +7,8 @@
 
 namespace Craft;
 
+use dukt\social\Plugin as Social;
+
 class AnalyticsVariable
 {
 	// Public Methods
@@ -33,11 +35,11 @@ class AnalyticsVariable
 	 */
 	public function track($options = null)
 	{
-		return \dukt\analytics\Plugin::getInstance()->analytics->track($options);
+		return Social::$plugin->analytics->track($options);
 	}
 
 	public function getProfileId()
 	{
-		return \dukt\analytics\Plugin::getInstance()->analytics->getProfileId();
+		return Social::$plugin->analytics->getProfileId();
 	}
 }

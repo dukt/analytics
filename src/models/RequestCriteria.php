@@ -8,6 +8,7 @@
 namespace dukt\analytics\models;
 
 use craft\base\Model;
+use dukt\social\Plugin as Social;
 
 class RequestCriteria extends Model
 {
@@ -37,7 +38,7 @@ class RequestCriteria extends Model
 
 		try
 		{
-			$response['data'] = \dukt\analytics\Plugin::getInstance()->analytics_api->sendRequest($this);
+			$response['data'] = Social::$plugin->analytics_api->sendRequest($this);
 
 			if(!isset($options['format']) || (isset($options['format']) && $options['format'] != 'gaData'))
 			{

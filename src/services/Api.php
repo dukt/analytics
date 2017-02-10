@@ -12,6 +12,7 @@ use yii\base\Component;
 use \Google_Client;
 use \Google_Service_Analytics;
 use dukt\analytics\models\RequestCriteria;
+use dukt\social\Plugin as Social;
 
 class Api extends Component
 {
@@ -122,7 +123,7 @@ class Api extends Component
     {
         // Profile ID
 
-        $criteria->ids = \dukt\analytics\Plugin::getInstance()->analytics->getProfileId();
+        $criteria->ids = Social::$plugin->analytics->getProfileId();
 
 
         // Filters
@@ -177,7 +178,7 @@ class Api extends Component
         $request = [$ids, $startDate, $endDate, $metrics, $optParams];
 
         $cacheId = ['api.apiGetGAData', $request];
-        $response = \dukt\analytics\Plugin::getInstance()->analytics_cache->get($cacheId);
+        $response = Social::$plugin->analytics_cache->get($cacheId);
 
         if(!$response)
         {
@@ -187,7 +188,7 @@ class Api extends Component
             }
 
             $response = $this->googleAnalytics()->data_ga->get($ids, $startDate, $endDate, $metrics, $optParams);
-            \dukt\analytics\Plugin::getInstance()->analytics_cache->set($cacheId, $response, null, null, $enableCache);
+            Social::$plugin->analytics_cache->set($cacheId, $response, null, null, $enableCache);
         }
 
         return $this->parseReportResponse($response);
@@ -208,16 +209,16 @@ class Api extends Component
         $metrics = $criteria->metrics;
         $optParams = $criteria->optParams;
 
-        $cacheDuration = \dukt\analytics\Plugin::getInstance()->analytics->getRealtimeRefreshInterval();
+        $cacheDuration = Social::$plugin->analytics->getRealtimeRefreshInterval();
 
         $cacheId = ['api.apiGetGADataRealtime', $ids, $metrics, $optParams];
-        $response = \dukt\analytics\Plugin::getInstance()->analytics_cache->get($cacheId);
+        $response = Social::$plugin->analytics_cache->get($cacheId);
 
         if(!$response)
         {
             $response = $this->googleAnalytics()->data_realtime->get($ids, $metrics, $optParams);
 
-            \dukt\analytics\Plugin::getInstance()->analytics_cache->set($cacheId, $response, $cacheDuration);
+            Social::$plugin->analytics_cache->set($cacheId, $response, $cacheDuration);
         }
 
         return $this->parseReportResponse($response);
@@ -240,7 +241,7 @@ class Api extends Component
 		{
 			$dataType = $col->dataType;
 			$id = $col->name;
-			$label = \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDimMet($col->name);
+			$label = Social::$plugin->analytics_metadata->getDimMet($col->name);
 			$type = strtolower($dataType);
 
 			switch($col->name)
@@ -290,12 +291,12 @@ class Api extends Component
 
 					if($col['id'] == 'ga:continent')
 					{
-						$value = \dukt\analytics\Plugin::getInstance()->analytics_metadata->getContinentCode($value);
+						$value = Social::$plugin->analytics_metadata->getContinentCode($value);
 					}
 
 					if($col['id'] == 'ga:subContinent')
 					{
-						$value = \dukt\analytics\Plugin::getInstance()->analytics_metadata->getSubContinentCode($value);
+						$value = Social::$plugin->analytics_metadata->getSubContinentCode($value);
 					}
 
 
@@ -380,7 +381,7 @@ class Api extends Component
 
         if($provider)
         {
-            $token = \dukt\analytics\Plugin::getInstance()->analytics_oauth->getToken();
+            $token = Social::$plugin->analytics_oauth->getToken();
 
             if ($token)
             {

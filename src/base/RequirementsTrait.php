@@ -8,6 +8,7 @@
 namespace dukt\analytics\base;
 
 use Craft;
+use dukt\social\Plugin as Social;
 
 trait RequirementsTrait
 {
@@ -166,7 +167,7 @@ trait RequirementsTrait
 	{
 		if($this->isOauthProviderConfigured())
 		{
-			$token = \dukt\analytics\Plugin::getInstance()->analytics_oauth->getToken();
+			$token = Social::$plugin->analytics_oauth->getToken();
 
 			if ($token)
 			{

@@ -11,6 +11,7 @@ use Craft;
 use craft\base\Field;
 use dukt\analytics\models\RequestCriteria;
 use dukt\analytics\web\assets\reportfield\ReportFieldAsset;
+use dukt\social\Plugin as Social;
 
 class Report extends Field
 {
@@ -44,7 +45,7 @@ class Report extends Field
 	{
         $name = $this->handle;
 
-		if(\dukt\analytics\Plugin::getInstance()->analytics->checkPluginRequirements())
+		if(Social::$plugin->analytics->checkPluginRequirements())
 		{
 			if(Craft::$app->config->get('enableFieldtype', 'analytics'))
 			{
@@ -60,9 +61,9 @@ class Report extends Field
 
 				if($element->uri)
 				{
-					$uri = \dukt\analytics\Plugin::getInstance()->analytics->getElementUrlPath($element->id, $element->locale);
+					$uri = Social::$plugin->analytics->getElementUrlPath($element->id, $element->locale);
 
-					$ids = \dukt\analytics\Plugin::getInstance()->analytics->getProfileId();
+					$ids = Social::$plugin->analytics->getProfileId();
 
 					$startDate = date('Y-m-d', strtotime('-1 month'));
 					$endDate = date('Y-m-d');
@@ -83,7 +84,7 @@ class Report extends Field
 					$options = [];
 
 					$cacheId = ['ReportsController.actionGetElementReport', $criteria->getAttributes()];
-					$response = \dukt\analytics\Plugin::getInstance()->analytics_cache->get($cacheId);
+					$response = Social::$plugin->analytics_cache->get($cacheId);
 
 					if($response)
 					{

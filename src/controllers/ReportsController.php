@@ -10,6 +10,7 @@ namespace dukt\analytics\controllers;
 use Craft;
 use craft\web\Controller;
 use dukt\analytics\models\RequestCriteria;
+use dukt\social\Plugin as Social;
 
 class ReportsController extends Controller
 {
@@ -36,7 +37,7 @@ class ReportsController extends Controller
 				$criteria->metrics = 'ga:activeVisitors';
 				$criteria->optParams = array('dimensions' => 'ga:visitorType');
 
-				$response = \dukt\analytics\Plugin::getInstance()->analytics_api->sendRequest($criteria);
+				$response = Social::$plugin->analytics_api->sendRequest($criteria);
 
 
 				// total
@@ -127,7 +128,7 @@ class ReportsController extends Controller
 	{
 /*		try
 		{*/
-			$profileId = \dukt\analytics\Plugin::getInstance()->analytics->getProfileId();
+			$profileId = Social::$plugin->analytics->getProfileId();
 
 			$request = [
 				'chart' => Craft::$app->request->getBodyParam('chart'),
@@ -137,15 +138,15 @@ class ReportsController extends Controller
 
 			$cacheId = ['getReport', $request, $profileId];
 
-			$response = \dukt\analytics\Plugin::getInstance()->analytics_cache->get($cacheId);
+			$response = Social::$plugin->analytics_cache->get($cacheId);
 
 			if(!$response)
 			{
-				$response = \dukt\analytics\Plugin::getInstance()->analytics_reports->getReport($request);
+				$response = Social::$plugin->analytics_reports->getReport($request);
 
 				if($response)
 				{
-					\dukt\analytics\Plugin::getInstance()->analytics_cache->set($cacheId, $response);
+					Social::$plugin->analytics_cache->set($cacheId, $response);
 				}
 			}
 
@@ -188,7 +189,7 @@ class ReportsController extends Controller
 			$locale = Craft::$app->request->getRequiredParam('locale');
 			$metric = Craft::$app->request->getRequiredParam('metric');
 
-			$uri = \dukt\analytics\Plugin::getInstance()->analytics->getElementUrlPath($elementId, $locale);
+			$uri = Social::$plugin->analytics->getElementUrlPath($elementId, $locale);
 
 			if($uri)
 			{
@@ -213,15 +214,15 @@ class ReportsController extends Controller
 				$criteria->optParams = $optParams;
 
 				$cacheId = ['ReportsController.actionGetElementReport', $criteria->getAttributes()];
-				$response = \dukt\analytics\Plugin::getInstance()->analytics_cache->get($cacheId);
+				$response = Social::$plugin->analytics_cache->get($cacheId);
 
 				if(!$response)
 				{
-					$response = \dukt\analytics\Plugin::getInstance()->analytics_api->sendRequest($criteria);
+					$response = Social::$plugin->analytics_api->sendRequest($criteria);
 
 					if($response)
 					{
-						\dukt\analytics\Plugin::getInstance()->analytics_cache->set($cacheId, $response);
+						Social::$plugin->analytics_cache->set($cacheId, $response);
 					}
 				}
 

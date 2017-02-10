@@ -8,6 +8,7 @@
 namespace dukt\analytics\controllers;
 
 use craft\web\Controller;
+use dukt\social\Plugin as Social;
 
 class TestsController extends Controller
 {
@@ -21,8 +22,8 @@ class TestsController extends Controller
 	 */
 	public function actionDataTypes(array $variables = array())
 	{
-		$variables['googleAnalyticsDataTypes'] = \dukt\analytics\Plugin::getInstance()->analytics_metadata->getGoogleAnalyticsDataTypes();
-		$variables['dataTypes'] = \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDataTypes();
+		$variables['googleAnalyticsDataTypes'] = Social::$plugin->analytics_metadata->getGoogleAnalyticsDataTypes();
+		$variables['dataTypes'] = Social::$plugin->analytics_metadata->getDataTypes();
 
 		$this->renderTemplate('analytics/tests/_dataTypes', $variables);
 	}
@@ -50,7 +51,7 @@ class TestsController extends Controller
 	 */
 	public function actionFormatting(array $variables = array())
 	{
-		$variables['currency'] = \dukt\analytics\Plugin::getInstance()->analytics->getCurrency();
+		$variables['currency'] = Social::$plugin->analytics->getCurrency();
 
 		$this->renderTemplate('analytics/tests/_formatting', $variables);
 	}
@@ -62,7 +63,7 @@ class TestsController extends Controller
 	 */
 	public function actionColumns(array $variables = array())
 	{
-		$variables['columns'] = \dukt\analytics\Plugin::getInstance()->analytics_metadata->getColumns();
+		$variables['columns'] = Social::$plugin->analytics_metadata->getColumns();
 
 		$this->renderTemplate('analytics/tests/_columns', $variables);
 	}
@@ -74,7 +75,7 @@ class TestsController extends Controller
 	 */
 	public function actionColumnGroups(array $variables = array())
 	{
-		$variables['columnGroups'] = \dukt\analytics\Plugin::getInstance()->analytics_metadata->getColumnGroups();
+		$variables['columnGroups'] = Social::$plugin->analytics_metadata->getColumnGroups();
 
 		$this->renderTemplate('analytics/tests/_columnGroups', $variables);
 	}

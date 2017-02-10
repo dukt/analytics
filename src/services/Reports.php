@@ -10,6 +10,7 @@ namespace dukt\analytics\services;
 use Craft;
 use yii\base\Component;
 use dukt\analytics\models\RequestCriteria;
+use dukt\social\Plugin as Social;
 
 class Reports extends Component
 {
@@ -87,7 +88,7 @@ class Reports extends Component
 			$criteria->optParams['filters'] = $dimension.'!=(not set);'.$dimension.'!=(not provided)';
 		}
 
-		$chartResponse = \dukt\analytics\Plugin::getInstance()->analytics_api->sendRequest($criteria);
+		$chartResponse = Social::$plugin->analytics_api->sendRequest($criteria);
 
 
 		// Total
@@ -104,7 +105,7 @@ class Reports extends Component
 			$totalCriteria->optParams = array('filters' => $criteria->optParams['filters']);
 		}
 
-		$response = \dukt\analytics\Plugin::getInstance()->analytics_api->sendRequest($totalCriteria);
+		$response = Social::$plugin->analytics_api->sendRequest($totalCriteria);
 
 		if(!empty($response['rows'][0][0]['f']))
 		{
@@ -118,7 +119,7 @@ class Reports extends Component
 			'type' => 'area',
 			'chart' => $chartResponse,
 			'total' => $total,
-			'metric' => Craft::t('app', \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDimMet($metric)),
+			'metric' => Craft::t('app', Social::$plugin->analytics_metadata->getDimMet($metric)),
 			'period' => $period,
 			'periodLabel' => Craft::t('app', 'This '.$period)
 		];
@@ -154,7 +155,7 @@ class Reports extends Component
 			$criteria->optParams = $optParams;
 		}
 
-		$response = \dukt\analytics\Plugin::getInstance()->analytics_api->sendRequest($criteria);
+		$response = Social::$plugin->analytics_api->sendRequest($criteria);
 
 		if(!empty($response['rows'][0][0]))
 		{
@@ -168,7 +169,7 @@ class Reports extends Component
 		$counter = array(
 			'type' => $response['cols'][0]['type'],
 			'value' => $count,
-			'label' => StringHelper::toLowerCase(Craft::t('app', \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDimMet($metric)))
+			'label' => StringHelper::toLowerCase(Craft::t('app', Social::$plugin->analytics_metadata->getDimMet($metric)))
 		);
 
 
@@ -178,7 +179,7 @@ class Reports extends Component
 			'type' => 'counter',
 			'counter' => $counter,
 			'response' => $response,
-			'metric' => Craft::t('app', \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDimMet($metric)),
+			'metric' => Craft::t('app', Social::$plugin->analytics_metadata->getDimMet($metric)),
 			'period' => $period,
 			'periodLabel' => Craft::t('app', 'this '.$period)
 		];
@@ -212,13 +213,13 @@ class Reports extends Component
 			'filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)'
 		);
 
-		$tableResponse = \dukt\analytics\Plugin::getInstance()->analytics_api->sendRequest($criteria);
+		$tableResponse = Social::$plugin->analytics_api->sendRequest($criteria);
 
 		return [
 			'type' => 'pie',
 			'chart' => $tableResponse,
-			'dimension' => Craft::t('app', \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDimMet($dimension)),
-			'metric' => Craft::t('app', \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDimMet($metric)),
+			'dimension' => Craft::t('app', Social::$plugin->analytics_metadata->getDimMet($dimension)),
+			'metric' => Craft::t('app', Social::$plugin->analytics_metadata->getDimMet($metric)),
 			'period' => $period,
 			'periodLabel' => Craft::t('app', 'this '.$period)
 		];
@@ -252,13 +253,13 @@ class Reports extends Component
 			'filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)'
 		);
 
-		$tableResponse = \dukt\analytics\Plugin::getInstance()->analytics_api->sendRequest($criteria);
+		$tableResponse = Social::$plugin->analytics_api->sendRequest($criteria);
 
 		return [
 			'type' => 'table',
 			'chart' => $tableResponse,
-			'dimension' => Craft::t('app', \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDimMet($dimension)),
-			'metric' => Craft::t('app', \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDimMet($metric)),
+			'dimension' => Craft::t('app', Social::$plugin->analytics_metadata->getDimMet($dimension)),
+			'metric' => Craft::t('app', Social::$plugin->analytics_metadata->getDimMet($metric)),
 			'period' => $period,
 			'periodLabel' => Craft::t('app', 'this '.$period)
 		];
@@ -300,14 +301,14 @@ class Reports extends Component
 			'filters' => $originDimension.'!=(not set);'.$originDimension.'!=(not provided)',
 		);
 
-		$tableResponse = \dukt\analytics\Plugin::getInstance()->analytics_api->sendRequest($criteria);
+		$tableResponse = Social::$plugin->analytics_api->sendRequest($criteria);
 
 		return [
 			'type' => 'geo',
 			'chart' => $tableResponse,
 			'dimensionRaw' => $originDimension,
-			'dimension' => Craft::t('app', \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDimMet($originDimension)),
-			'metric' => Craft::t('app', \dukt\analytics\Plugin::getInstance()->analytics_metadata->getDimMet($metric)),
+			'dimension' => Craft::t('app', Social::$plugin->analytics_metadata->getDimMet($originDimension)),
+			'metric' => Craft::t('app', Social::$plugin->analytics_metadata->getDimMet($metric)),
 			'period' => $period,
 			'periodLabel' => Craft::t('app', 'this '.$period)
 		];
