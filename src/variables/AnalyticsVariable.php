@@ -5,8 +5,10 @@
  * @license   https://dukt.net/craft/analytics/docs/license
  */
 
-namespace Craft;
+namespace dukt\analytics\variables;
 
+use dukt\analytics\models\RequestCriteria;
+use dukt\etc\craft\AnalyticsTracking;
 use dukt\analytics\Plugin as Analytics;
 
 class AnalyticsVariable
@@ -19,11 +21,11 @@ class AnalyticsVariable
 	 *
 	 * @param array $attributes
 	 *
-	 * @return Analytics_RequestCriteriaModel
+	 * @return RequestCriteria
 	 */
 	public function api($attributes = null)
 	{
-		return new Analytics_RequestCriteriaModel($attributes);
+		return new RequestCriteria($attributes);
 	}
 
 	/**
