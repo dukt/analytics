@@ -10,7 +10,7 @@ namespace dukt\analytics\controllers;
 use Craft;
 use craft\web\Controller;
 use dukt\analytics\web\assets\analytics\AnalyticsAsset;
-use dukt\social\Plugin as Social;
+use dukt\analytics\Plugin as Analytics;
 
 class SettingsController extends Controller
 {
@@ -24,11 +24,11 @@ class SettingsController extends Controller
 	 */
 	public function actionIndex()
 	{
-		Social::$plugin->analytics->requireDependencies();
+		Analytics::$plugin->analytics->requireDependencies();
 
 		$variables = array();
 
-		$variables['isOauthProviderConfigured'] = Social::$plugin->analytics->isOauthProviderConfigured();
+		$variables['isOauthProviderConfigured'] = Analytics::$plugin->analytics->isOauthProviderConfigured();
 
 		if($variables['isOauthProviderConfigured'])
 		{
@@ -37,18 +37,18 @@ class SettingsController extends Controller
 
 			$provider = \dukt\oauth\Plugin::getInstance()->oauth->getProvider('google');
 			$plugin = Craft::$app->plugins->getPlugin('analytics');
-			$token = Social::$plugin->analytics_oauth->getToken();
+			$token = Analytics::$plugin->analytics_oauth->getToken();
 
 			if ($token)
 			{
 /*				try
 				{*/
-					$oauthAccount = Social::$plugin->analytics_cache->get(['getAccount', $token]);
+					$oauthAccount = Analytics::$plugin->analytics_cache->get(['getAccount', $token]);
 
 					if(!$oauthAccount)
 					{
 						$oauthAccount = $provider->getAccount($token);
-						Social::$plugin->analytics_cache->set(['getAccount', $token], $oauthAccount);
+						Analytics::$plugin->analytics_cache->set(['getAccount', $token], $oauthAccount);
 					}
 
 					if ($oauthAccount)
@@ -64,7 +64,7 @@ class SettingsController extends Controller
 
                         // Account
 
-                        $accountExplorerData = Social::$plugin->analytics_cache->get(['accountExplorerData']);
+                        $accountExplorerData = Analytics::$plugin->analytics_cache->get(['accountExplorerData']);
 
                         $accountOptions = [];
 
@@ -179,7 +179,7 @@ class SettingsController extends Controller
 			throw new Exception(Craft::t('app', 'No plugin exists with the class “{class}”', array('class' => $pluginClass)));
 		}
 
-		$settings = Social::$plugin->analytics_api->populateAccountExplorerSettings($settings);
+		$settings = Analytics::$plugin->analytics_api->populateAccountExplorerSettings($settings);
 
 		if (Craft::$app->plugins->savePluginSettings($plugin, $settings))
 		{
@@ -205,9 +205,9 @@ class SettingsController extends Controller
     {
         try
         {
-            $accountExplorerData = Social::$plugin->analytics_api->getAccountExplorerData();
+            $accountExplorerData = Analytics::$plugin->analytics_api->getAccountExplorerData();
 
-            Social::$plugin->analytics_cache->set(['accountExplorerData'], $accountExplorerData);
+            Analytics::$plugin->analytics_cache->set(['accountExplorerData'], $accountExplorerData);
 
             return $this->asJson($accountExplorerData);
         }

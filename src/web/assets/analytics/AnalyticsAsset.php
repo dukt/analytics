@@ -6,7 +6,7 @@ use craft\web\assets\cp\CpAsset;
 use craft\helpers\ChartHelper;
 use craft\web\View;
 use craft\helpers\Json;
-use dukt\social\Plugin as Social;
+use dukt\analytics\Plugin as Analytics;
 
 class AnalyticsAsset extends AssetBundle
 {
@@ -39,10 +39,10 @@ class AnalyticsAsset extends AssetBundle
     {
         parent::registerAssetFiles($view);
 
-        $continents = Social::$plugin->analytics_metadata->getContinents();
-        $subContinents = Social::$plugin->analytics_metadata->getSubContinents();
+        $continents = Analytics::$plugin->analytics_metadata->getContinents();
+        $subContinents = Analytics::$plugin->analytics_metadata->getSubContinents();
         $formats = ChartHelper::formats();
-        $currency = Social::$plugin->analytics->getD3LocaleDefinitionCurrency();
+        $currency = Analytics::$plugin->analytics->getD3LocaleDefinitionCurrency();
 
         $js = 'var Analytics = {};';
 

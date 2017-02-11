@@ -21,7 +21,7 @@ class InstallController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$missingDependencies = Social::$plugin->analytics->getMissingDependencies();
+		$missingDependencies = Analytics::$plugin->analytics->getMissingDependencies();
 
 		if (count($missingDependencies) > 0)
 		{

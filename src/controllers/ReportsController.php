@@ -10,7 +10,7 @@ namespace dukt\analytics\controllers;
 use Craft;
 use craft\web\Controller;
 use dukt\analytics\models\RequestCriteria;
-use dukt\social\Plugin as Social;
+use dukt\analytics\Plugin as Analytics;
 
 class ReportsController extends Controller
 {
@@ -37,7 +37,7 @@ class ReportsController extends Controller
 				$criteria->metrics = 'ga:activeVisitors';
 				$criteria->optParams = array('dimensions' => 'ga:visitorType');
 
-				$response = Social::$plugin->analytics_api->sendRequest($criteria);
+				$response = Analytics::$plugin->analytics_api->sendRequest($criteria);
 
 
 				// total
@@ -128,7 +128,7 @@ class ReportsController extends Controller
 	{
 /*		try
 		{*/
-			$profileId = Social::$plugin->analytics->getProfileId();
+			$profileId = Analytics::$plugin->analytics->getProfileId();
 
 			$request = [
 				'chart' => Craft::$app->request->getBodyParam('chart'),
@@ -138,15 +138,15 @@ class ReportsController extends Controller
 
 			$cacheId = ['getReport', $request, $profileId];
 
-			$response = Social::$plugin->analytics_cache->get($cacheId);
+			$response = Analytics::$plugin->analytics_cache->get($cacheId);
 
 			if(!$response)
 			{
-				$response = Social::$plugin->analytics_reports->getReport($request);
+				$response = Analytics::$plugin->analytics_reports->getReport($request);
 
 				if($response)
 				{
-					Social::$plugin->analytics_cache->set($cacheId, $response);
+					Analytics::$plugin->analytics_cache->set($cacheId, $response);
 				}
 			}
 
@@ -189,7 +189,7 @@ class ReportsController extends Controller
 			$locale = Craft::$app->request->getRequiredParam('locale');
 			$metric = Craft::$app->request->getRequiredParam('metric');
 
-			$uri = Social::$plugin->analytics->getElementUrlPath($elementId, $locale);
+			$uri = Analytics::$plugin->analytics->getElementUrlPath($elementId, $locale);
 
 			if($uri)
 			{
@@ -214,15 +214,15 @@ class ReportsController extends Controller
 				$criteria->optParams = $optParams;
 
 				$cacheId = ['ReportsController.actionGetElementReport', $criteria->getAttributes()];
-				$response = Social::$plugin->analytics_cache->get($cacheId);
+				$response = Analytics::$plugin->analytics_cache->get($cacheId);
 
 				if(!$response)
 				{
-					$response = Social::$plugin->analytics_api->sendRequest($criteria);
+					$response = Analytics::$plugin->analytics_api->sendRequest($criteria);
 
 					if($response)
 					{
-						Social::$plugin->analytics_cache->set($cacheId, $response);
+						Analytics::$plugin->analytics_cache->set($cacheId, $response);
 					}
 				}
 

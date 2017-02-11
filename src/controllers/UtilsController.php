@@ -8,7 +8,7 @@
 namespace dukt\analytics\controllers;
 
 use craft\web\Controller;
-use dukt\social\Plugin as Social;
+use dukt\analytics\Plugin as Analytics;
 
 class UtilsController extends Controller
 {
@@ -22,10 +22,10 @@ class UtilsController extends Controller
 
 	public function actionMetadata(array $variables = array())
 	{
-		$variables['dimensions'] = Social::$plugin->analytics_metadata->getDimensions();
-		$variables['metrics'] = Social::$plugin->analytics_metadata->getMetrics();
+		$variables['dimensions'] = Analytics::$plugin->analytics_metadata->getDimensions();
+		$variables['metrics'] = Analytics::$plugin->analytics_metadata->getMetrics();
 
-		$variables['dimmetsFileExists'] = Social::$plugin->analytics_metadata->dimmetsFileExists();
+		$variables['dimmetsFileExists'] = Analytics::$plugin->analytics_metadata->dimmetsFileExists();
 
 		$this->renderTemplate('analytics/utils/metadata/_index', $variables);
 	}
@@ -33,7 +33,7 @@ class UtilsController extends Controller
 	public function actionSearchMetadata()
 	{
 		$q = Craft::$app->request->getParam('q');
-		$columns = Social::$plugin->analytics_metadata->searchColumns($q);
+		$columns = Analytics::$plugin->analytics_metadata->searchColumns($q);
 
 		// Send the source back to the template
 		Craft::$app->urlManager->setRouteVariables(array(
@@ -58,7 +58,7 @@ class UtilsController extends Controller
 
 	private function _deleteMetadata()
 	{
-		$path = Social::$plugin->analytics_metadata->getDimmetsFilePath();
+		$path = Analytics::$plugin->analytics_metadata->getDimmetsFilePath();
 
 		IOHelper::deleteFile($path);
 	}
@@ -67,7 +67,7 @@ class UtilsController extends Controller
 	{
 		$columns = [];
 
-		$items = Social::$plugin->analytics_api->getColumns();
+		$items = Analytics::$plugin->analytics_api->getColumns();
 
 		if($items)
 		{
@@ -109,7 +109,7 @@ class UtilsController extends Controller
 
 		$contents = json_encode($columns);
 
-		$path = Social::$plugin->analytics_metadata->getDimmetsFilePath();
+		$path = Analytics::$plugin->analytics_metadata->getDimmetsFilePath();
 
 		$res = IOHelper::writeToFile($path, $contents);
 	}

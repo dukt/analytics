@@ -11,7 +11,7 @@ use Craft;
 use craft\helpers\StringHelper;
 use craft\helpers\Json;
 use dukt\analytics\web\assets\reportwidget\ReportWidgetAsset;
-use dukt\social\Plugin as Social;
+use dukt\analytics\Plugin as Analytics;
 
 class ReportWidget extends \craft\base\Widget
 {
@@ -67,13 +67,13 @@ class ReportWidget extends \craft\base\Widget
 	 */
 	public function getBodyHtml()
 	{
-		if(Social::$plugin->analytics->checkPluginRequirements())
+		if(Analytics::$plugin->analytics->checkPluginRequirements())
 		{
 			if(Craft::$app->config->get('enableWidgets', 'analytics'))
 			{
 				$settings = $this->settings;
 
-				$profileId = Social::$plugin->analytics->getProfileId();
+				$profileId = Analytics::$plugin->analytics->getProfileId();
 
 				if($profileId)
 				{
@@ -100,7 +100,7 @@ class ReportWidget extends \craft\base\Widget
 					{
 						$cacheId = ['getReport', $request, $profileId];
 
-						$cachedResponse = Social::$plugin->analytics_cache->get($cacheId);
+						$cachedResponse = Analytics::$plugin->analytics_cache->get($cacheId);
 					}
 
 
@@ -210,7 +210,7 @@ class ReportWidget extends \craft\base\Widget
 			case 'area':
 
 				$options = [
-					'metrics' => Social::$plugin->analytics_metadata->getSelectMetricOptions()
+					'metrics' => Analytics::$plugin->analytics_metadata->getSelectMetricOptions()
 				];
 
 				break;
@@ -218,7 +218,7 @@ class ReportWidget extends \craft\base\Widget
 			case 'counter':
 
 				$options = [
-					'metrics' => Social::$plugin->analytics_metadata->getSelectMetricOptions()
+					'metrics' => Analytics::$plugin->analytics_metadata->getSelectMetricOptions()
 				];
 
 				break;
@@ -226,8 +226,8 @@ class ReportWidget extends \craft\base\Widget
 			case 'geo':
 
 				$options = [
-					'dimensions' => Social::$plugin->analytics_metadata->getSelectDimensionOptions(['ga:city', 'ga:country', 'ga:continent', 'ga:subContinent']),
-					'metrics' => Social::$plugin->analytics_metadata->getSelectMetricOptions()
+					'dimensions' => Analytics::$plugin->analytics_metadata->getSelectDimensionOptions(['ga:city', 'ga:country', 'ga:continent', 'ga:subContinent']),
+					'metrics' => Analytics::$plugin->analytics_metadata->getSelectMetricOptions()
 				];
 
 				break;
@@ -235,8 +235,8 @@ class ReportWidget extends \craft\base\Widget
 			default:
 
 				$options = [
-					'dimensions' => Social::$plugin->analytics_metadata->getSelectDimensionOptions(),
-					'metrics' => Social::$plugin->analytics_metadata->getSelectMetricOptions()
+					'dimensions' => Analytics::$plugin->analytics_metadata->getSelectDimensionOptions(),
+					'metrics' => Analytics::$plugin->analytics_metadata->getSelectMetricOptions()
 				];
 		}
 
@@ -261,12 +261,12 @@ class ReportWidget extends \craft\base\Widget
 
 				if(!empty($options['dimension']))
 				{
-					$name[] = Craft::t('app', Social::$plugin->analytics_metadata->getDimMet($options['dimension']));
+					$name[] = Craft::t('app', Analytics::$plugin->analytics_metadata->getDimMet($options['dimension']));
 				}
 
 				if(!empty($options['metric']))
 				{
-					$name[] = Craft::t('app', Social::$plugin->analytics_metadata->getDimMet($options['metric']));
+					$name[] = Craft::t('app', Analytics::$plugin->analytics_metadata->getDimMet($options['metric']));
 				}
 			}
 

@@ -9,7 +9,7 @@ namespace dukt\analytics\controllers;
 
 use Craft;
 use craft\web\Controller;
-use dukt\social\Plugin as Social;
+use dukt\analytics\Plugin as Analytics;
 
 class OauthController extends Controller
 {
@@ -83,7 +83,7 @@ class OauthController extends Controller
 				$token = $response['token'];
 
 				// save token
-				Social::$plugin->analytics_oauth->saveToken($token);
+				Analytics::$plugin->analytics_oauth->saveToken($token);
 
 
                 // Reset forceConnect plugin setting
@@ -137,9 +137,9 @@ class OauthController extends Controller
 	 */
 	public function actionDisconnect()
 	{
-		if (Social::$plugin->analytics_oauth->deleteToken())
+		if (Analytics::$plugin->analytics_oauth->deleteToken())
 		{
-            Social::$plugin->analytics_cache->delete(['accountExplorerData']);
+            Analytics::$plugin->analytics_cache->delete(['accountExplorerData']);
 
 			Craft::$app->getSession()->setNotice(Craft::t('app', "Disconnected from Google Analytics."));
 		}
