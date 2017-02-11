@@ -19,6 +19,7 @@ use dukt\analytics\widgets\RealtimeWidget;
 use dukt\analytics\widgets\ReportWidget;
 use craft\services\Fields;
 use dukt\analytics\fields\Report as ReportField;
+use dukt\oauth\Plugin as Oauth;
 
 class Plugin extends \craft\base\Plugin
 {
@@ -113,9 +114,9 @@ class Plugin extends \craft\base\Plugin
 	 */
 	public function onBeforeUninstall()
 	{
-		if(isset(\dukt\oauth\Plugin::getInstance()->oauth))
+		if(isset(Oauth::$plugin->oauth))
 		{
-			\dukt\oauth\Plugin::getInstance()->oauth->deleteTokensByPlugin('analytics');
+			Oauth::$plugin->oauth->deleteTokensByPlugin('analytics');
 		}
 	}
 

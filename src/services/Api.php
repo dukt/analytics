@@ -13,6 +13,7 @@ use \Google_Client;
 use \Google_Service_Analytics;
 use dukt\analytics\models\RequestCriteria;
 use dukt\analytics\Plugin as Analytics;
+use dukt\oauth\Plugin as Oauth;
 
 class Api extends Component
 {
@@ -377,7 +378,7 @@ class Api extends Component
      */
     private function getClient()
     {
-        $provider = \dukt\oauth\Plugin::getInstance()->oauth->getProvider('google');
+        $provider = Oauth::$plugin->oauth->getProvider('google');
 
         if($provider)
         {

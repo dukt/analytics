@@ -10,6 +10,7 @@ namespace dukt\analytics\controllers;
 use Craft;
 use craft\web\Controller;
 use dukt\analytics\Plugin as Analytics;
+use dukt\oauth\Plugin as Oauth;
 
 class OauthController extends Controller
 {
@@ -65,7 +66,7 @@ class OauthController extends Controller
 
 		// connect
 
-		if ($response = \dukt\oauth\Plugin::getInstance()->oauth->connect(array(
+		if ($response = Oauth::$plugin->oauth->connect(array(
 			'plugin'   => 'analytics',
 			'provider' => $this->handle,
 			'scope'   => $this->scope,

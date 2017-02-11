@@ -28,7 +28,7 @@ class Oauth extends Component
 	 */
 	public function requireOauth()
 	{
-		$provider = \dukt\oauth\Plugin::getInstance()->oauth->getProvider('google');
+		$provider = \dukt\oauth\Plugin::$plugin->oauth->getProvider('google');
 
 		if ($provider && $provider->isConfigured())
 		{
@@ -58,7 +58,7 @@ class Oauth extends Component
 
         // do we have an existing token ?
 
-        $existingToken = \dukt\oauth\Plugin::getInstance()->oauth->getTokenById($settings->tokenId);
+        $existingToken = \dukt\oauth\Plugin::$plugin->oauth->getTokenById($settings->tokenId);
 
         if($existingToken)
         {
@@ -66,7 +66,7 @@ class Oauth extends Component
         }
 
         // save token
-        \dukt\oauth\Plugin::getInstance()->oauth->saveToken($token);
+        \dukt\oauth\Plugin::$plugin->oauth->saveToken($token);
 
         // set token ID
         $settings->tokenId = $token->id;
@@ -98,7 +98,7 @@ class Oauth extends Component
 			$tokenId = $settings->tokenId;
 
 			// get token
-			$token = \dukt\oauth\Plugin::getInstance()->oauth->getTokenById($tokenId);
+			$token = \dukt\oauth\Plugin::$plugin->oauth->getTokenById($tokenId);
 
 			return $token;
 		}
@@ -119,11 +119,11 @@ class Oauth extends Component
 
 		if($settings->tokenId)
 		{
-			$token = \dukt\oauth\Plugin::getInstance()->oauth->getTokenById($settings->tokenId);
+			$token = \dukt\oauth\Plugin::$plugin->oauth->getTokenById($settings->tokenId);
 
 			if($token)
 			{
-				if(\dukt\oauth\Plugin::getInstance()->oauth->deleteToken($token))
+				if(\dukt\oauth\Plugin::$plugin->oauth->deleteToken($token))
 				{
 					$settings->tokenId = null;
 

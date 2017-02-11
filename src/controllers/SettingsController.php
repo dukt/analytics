@@ -11,6 +11,7 @@ use Craft;
 use craft\web\Controller;
 use dukt\analytics\web\assets\analytics\AnalyticsAsset;
 use dukt\analytics\Plugin as Analytics;
+use dukt\oauth\Plugin as Oauth;
 
 class SettingsController extends Controller
 {
@@ -35,7 +36,7 @@ class SettingsController extends Controller
 			$variables['oauthAccount'] = false;
 			$variables['errors'] = [];
 
-			$provider = \dukt\oauth\Plugin::getInstance()->oauth->getProvider('google');
+			$provider = Oauth::$plugin->oauth->getProvider('google');
 			$plugin = Craft::$app->plugins->getPlugin('analytics');
 			$token = Analytics::$plugin->analytics_oauth->getToken();
 

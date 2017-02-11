@@ -9,6 +9,7 @@ namespace dukt\analytics\base;
 
 use Craft;
 use dukt\analytics\Plugin as Analytics;
+use dukt\oauth\Plugin as Oauth;
 
 trait RequirementsTrait
 {
@@ -70,9 +71,9 @@ trait RequirementsTrait
 	 */
 	public function isOauthProviderConfigured()
 	{
-		if(isset(\dukt\oauth\Plugin::getInstance()->oauth))
+		if(isset(Oauth::$plugin->oauth))
 		{
-			$provider = \dukt\oauth\Plugin::getInstance()->oauth->getProvider('google');
+			$provider = Oauth::$plugin->oauth->getProvider('google');
 
 			if($provider && $provider->isConfigured())
 			{
