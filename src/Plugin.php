@@ -152,28 +152,4 @@ class Plugin extends \craft\base\Plugin
 
         return '';
     }
-
-	// Protected Methods
-	// =========================================================================
-
-	/**
-	 * Defined Settings
-	 */
-	protected function defineSettings()
-	{
-		return array(
-            'accountId' => AttributeType::String,
-            'accountName' => AttributeType::String,
-            'webPropertyId' => AttributeType::String,
-            'webPropertyName' => AttributeType::String,
-			'internalWebPropertyId' => AttributeType::String,
-            'profileId' => AttributeType::String,
-            'profileName' => AttributeType::String,
-            'profileCurrency' => AttributeType::String,
-			'realtimeRefreshInterval' => array(AttributeType::Number, 'default' => 60),
-			'forceConnect' => array(AttributeType::Bool, 'default' => false),
-			'enableRealtime' => AttributeType::Bool,
-			'tokenId' => AttributeType::Number,
-		);
-	}
 }
