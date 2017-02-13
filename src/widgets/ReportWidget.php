@@ -15,6 +15,9 @@ use dukt\analytics\Plugin as Analytics;
 
 class ReportWidget extends \craft\base\Widget
 {
+    // Properties
+    // =========================================================================
+
     public $realtime;
     public $chart;
     public $period;

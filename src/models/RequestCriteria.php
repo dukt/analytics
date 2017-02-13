@@ -12,6 +12,9 @@ use dukt\analytics\Plugin as Analytics;
 
 class RequestCriteria extends Model
 {
+    // Properties
+    // =========================================================================
+
     public $ids;
     public $startDate;
     public $endDate;

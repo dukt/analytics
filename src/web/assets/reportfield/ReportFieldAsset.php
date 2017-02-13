@@ -1,11 +1,26 @@
 <?php
+/**
+ * @link      https://dukt.net/craft/analytics/
+ * @copyright Copyright (c) 2017, Dukt
+ * @license   https://dukt.net/craft/analytics/docs/license
+ */
+
 namespace dukt\analytics\web\assets\reportfield;
 
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
 
+/**
+ * Report field asset bundle.
+ */
 class ReportFieldAsset extends AssetBundle
 {
+    // Public Methods
+    // =========================================================================
+
+    /**
+     * @inheritdoc
+     */
     public function init()
     {
         // define the path that your publishable resources live

@@ -11,6 +11,9 @@ use craft\base\Model;
 
 class Column extends Model
 {
+    // Properties
+    // =========================================================================
+
     public $id;
     public $type;
     public $dataType;

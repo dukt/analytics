@@ -14,7 +14,10 @@ use dukt\analytics\web\assets\realtimereportwidget\RealtimeReportWidgetAsset;
 
 class RealtimeWidget extends \craft\base\Widget
 {
-	/**
+    // Properties
+    // =========================================================================
+
+    /**
 	 * Whether users should be able to select more than one of this widget type.
 	 *
 	 * @var bool

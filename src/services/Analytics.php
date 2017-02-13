@@ -28,7 +28,7 @@ class Analytics extends Component
 	// =========================================================================
 
 	/**
-	 * Get realtime refresh intervall
+	 * Get real time refresh interval
 	 *
 	 * @return int|null
 	 */
