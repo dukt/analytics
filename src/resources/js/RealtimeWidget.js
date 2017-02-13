@@ -23,9 +23,12 @@ Analytics.Realtime = Garnish.Base.extend(
 	$returningVisitorsValue: null,
 
 	timer: null,
+	settings: null,
 
-	init: function(element)
+	init: function(element, settings)
 	{
+		this.setSettings(settings);
+
 		this.$element = $('#'+element);
 		this.$title = $('.title', this.$element);
 		this.$body = $('.body', this.$element);
@@ -95,11 +98,13 @@ Analytics.Realtime = Garnish.Base.extend(
 
 		this.request();
 
+		console.log('refreshInterval', this.settings.refreshInterval);
+
 		this.timer = setInterval($.proxy(function()
 		{
 			this.request();
 
-		}, this), AnalyticsRealtimeInterval * 1000);
+		}, this), this.settings.refreshInterval * 1000);
 	},
 
 	stop: function()
@@ -112,7 +117,7 @@ Analytics.Realtime = Garnish.Base.extend(
 		this.$spinner.removeClass('body-loading');
 		this.$spinner.removeClass('hidden');
 
-		Craft.queueActionRequest('analytics/reports/realtimeWidget', {}, $.proxy(function(response, textStatus)
+		Craft.queueActionRequest('analytics/reports/realtime-widget', {}, $.proxy(function(response, textStatus)
 		{
 			if(textStatus == 'success' && typeof(response.error) == 'undefined')
 			{
@@ -212,4 +217,8 @@ Analytics.Realtime = Garnish.Base.extend(
 			this.$returningVisitorsProgress.addClass('hidden');
 		}
 	},
+}, {
+	defaults: {
+		refreshInterval: 15,
+	}
 });

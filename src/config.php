@@ -3,9 +3,16 @@
 return array(
 
 	/**
-	 * Interval at which the realtime widget should refresh its data (in seconds)
+     * Interval at which the realtime widget should refresh its data (in seconds). If set, it will
+     * take precedence of the Real-Time Refresh Interval setting in Settings → Analytics. The refresh
+     * interval defaults to `15` seconds when `realtimeRefreshInterval` is null.
 	 */
-	'realtimeRefreshInterval' => 15,
+    'realtimeRefreshInterval' => null,
+
+    /**
+     * Default real-time refresh interval in seconds.
+     */
+    'defaultRealtimeRefreshInterval' => 15,
 
 	/**
 	 * The amount of time cache should last

@@ -8,7 +8,9 @@
 namespace dukt\analytics\widgets;
 
 use Craft;
+use craft\helpers\Json;
 use dukt\analytics\Plugin as Analytics;
+use dukt\analytics\web\assets\realtimereportwidget\RealtimeReportWidgetAsset;
 
 class RealtimeWidget extends \craft\base\Widget
 {
@@ -77,36 +79,38 @@ class RealtimeWidget extends \craft\base\Widget
 					{
 						$realtimeRefreshInterval = Analytics::$plugin->analytics->getRealtimeRefreshInterval();
 
-						$widgetId = $this->model->id;
+						$widgetId = $this->id;
+                        $widgetOptions = [
+                            'refreshInterval' => $realtimeRefreshInterval,
+                        ];
 
-						Craft::$app->getView()->registerJsFile('analytics/js/RealtimeWidget.js');
-						Craft::$app->getView()->registerCssFile('analytics/css/RealtimeWidget.css');
+                        Craft::$app->getView()->registerAssetBundle(RealtimeReportWidgetAsset::class);
 
 						Craft::$app->getView()->registerJs('var AnalyticsChartLanguage = "'.Craft::$app->language.'";', true);
 						Craft::$app->getView()->registerJs('var AnalyticsRealtimeInterval = "'.$realtimeRefreshInterval.'";', true);
 
-						Craft::$app->getView()->registerJs('new Analytics.Realtime("widget'.$widgetId.'");');
+						Craft::$app->getView()->registerJs('new Analytics.Realtime("widget'.$widgetId.'", '.Json::encode($widgetOptions).');');
 
-						return Craft::$app->getView()->render('analytics/_components/widgets/Realtime/body');
+						return Craft::$app->getView()->renderTemplate('analytics/_components/widgets/Realtime/body');
 					}
 					else
 					{
-						return Craft::$app->getView()->render('analytics/_components/widgets/Realtime/disabled');
+						return Craft::$app->getView()->renderTemplate('analytics/_components/widgets/Realtime/disabled');
 					}
 				}
 				else
 				{
-					return Craft::$app->getView()->render('analytics/_special/plugin-not-configured');
+					return Craft::$app->getView()->renderTemplate('analytics/_special/plugin-not-configured');
 				}
 			}
 			else
 			{
-				return Craft::$app->getView()->render('analytics/_components/widgets/Realtime/disabled');
+				return Craft::$app->getView()->renderTemplate('analytics/_components/widgets/Realtime/disabled');
 			}
 		}
 		else
 		{
-			return Craft::$app->getView()->render('analytics/_special/plugin-not-configured');
+			return Craft::$app->getView()->renderTemplate('analytics/_special/plugin-not-configured');
 		}
 	}
 

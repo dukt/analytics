@@ -50,6 +50,8 @@ class Analytics extends Component
 				return $settings['realtimeRefreshInterval'];
 			}
 		}
+
+		return Craft::$app->config->get('defaultRealtimeRefreshInterval', 'analytics');
 	}
 
 	/**

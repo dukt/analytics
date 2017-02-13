@@ -1,54 +1,54 @@
 /* realtime visitors */
-.analytics_realtime .spinner {
+.dukt\\analytics\\widgets\\realtimewidget .spinner {
   position: absolute;
   top: 24px;
   right: 24px; }
 
-.analytics_realtime .analytics-realtime-visitors {
+.dukt\\analytics\\widgets\\realtimewidget .analytics-realtime-visitors {
   padding: 14px 0; }
 
-.analytics_realtime .active-visitors {
+.dukt\\analytics\\widgets\\realtimewidget .active-visitors {
   text-align: center;
   margin-bottom: 1em; }
 
-.analytics_realtime .active-visitors .currently {
+.dukt\\analytics\\widgets\\realtimewidget .active-visitors .currently {
   font-size: 1.5em; }
 
-.analytics_realtime .active-visitors .count {
+.dukt\\analytics\\widgets\\realtimewidget .active-visitors .count {
   display: block;
   font-size: 10em;
   line-height: 1.2em; }
 
-.analytics_realtime .progress {
+.dukt\\analytics\\widgets\\realtimewidget .progress {
   color: #fff;
   margin: 2em 0;
   text-align: center;
   display: flex; }
 
-.analytics_realtime .progress .progress-bar {
+.dukt\\analytics\\widgets\\realtimewidget .progress .progress-bar {
   display: block; }
 
-.analytics_realtime .progress .progress-bar span {
+.dukt\\analytics\\widgets\\realtimewidget .progress .progress-bar span {
   position: relative;
   padding: 0 3px;
   line-height: 1.5em;
   white-space: nowrap; }
 
-.analytics_realtime .progress .progress-bar.new-visitors {
+.dukt\\analytics\\widgets\\realtimewidget .progress .progress-bar.new-visitors {
   background: #058DC7; }
 
-.analytics_realtime .progress .progress-bar.returning-visitors {
+.dukt\\analytics\\widgets\\realtimewidget .progress .progress-bar.returning-visitors {
   background: #50B431; }
 
-.analytics_realtime .legend {
+.dukt\\analytics\\widgets\\realtimewidget .legend {
   text-align: center; }
 
-.analytics_realtime .legend li {
+.dukt\\analytics\\widgets\\realtimewidget .legend li {
   clear: left;
   display: inline-block;
   margin-right: 1em; }
 
-.analytics_realtime .legend li strong {
+.dukt\\analytics\\widgets\\realtimewidget .legend li strong {
   margin-top: 2px;
   background: #eee;
   width: 12px;
@@ -59,13 +59,13 @@
   margin-right: 0.3em;
   text-indent: -3000px; }
 
-.analytics_realtime .legend li span.status {
+.dukt\\analytics\\widgets\\realtimewidget .legend li span.status {
   border: 0;
   width: 10px;
   height: 10px; }
 
-.analytics_realtime .legend li.new-visitors span.status {
+.dukt\\analytics\\widgets\\realtimewidget .legend li.new-visitors span.status {
   background: #058DC7; }
 
-.analytics_realtime .legend li.returning-visitors span.status {
+.dukt\\analytics\\widgets\\realtimewidget .legend li.returning-visitors span.status {
   background: #50B431; }
