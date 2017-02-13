@@ -8,6 +8,7 @@
 namespace dukt\analytics\controllers;
 
 use craft\web\Controller;
+use dukt\analytics\Plugin as Analytics;
 
 class InstallController extends Controller
 {

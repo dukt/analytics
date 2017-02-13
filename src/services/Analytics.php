@@ -10,6 +10,7 @@ namespace dukt\analytics\services;
 use Craft;
 use yii\base\Component;
 use dukt\analytics\base\RequirementsTrait;
+use dukt\analytics\etc\craft\AnalyticsTracking;
 
 class Analytics extends Component
 {
@@ -161,7 +162,6 @@ class Analytics extends Component
     {
         if(!$this->tracking)
         {
-            require_once(CRAFT_PLUGINS_PATH.'analytics/etc/craft/AnalyticsTracking.php');
             $this->tracking = new AnalyticsTracking($options);
         }
 

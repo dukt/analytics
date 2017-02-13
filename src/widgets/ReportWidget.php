@@ -77,16 +77,6 @@ class ReportWidget extends \craft\base\Widget
 
 				if($profileId)
 				{
-					/*Craft::$app->getView()->registerJsFile('analytics/js/jsapi.js');
-
-					Craft::$app->getView()->registerJsFile('analytics/js/ReportWidgetSettings.js');
-					Craft::$app->getView()->registerJsFile('analytics/js/ReportWidget.js');*/
-
-/*					Craft::$app->getView()->registerCssFile('analytics/css/ReportWidget.css');
-					Craft::$app->getView()->registerCssFile('analytics/css/ReportWidgetSettings.css');*/
-
-                    Craft::$app->getView()->registerAssetBundle(ReportWidgetAsset::class);
-
 					$request = [
 						'chart' => (isset($settings['chart']) ? $settings['chart'] : null),
 						'period' => (isset($settings['period']) ? $settings['period'] : null),
@@ -113,9 +103,12 @@ class ReportWidget extends \craft\base\Widget
 						'cachedResponse' => isset($cachedResponse) ? $cachedResponse : null,
 					];
 
-					$jsTemplate = 'window.csrfTokenName = "{{ craft.config.csrfTokenName|e(\'js\') }}";';
+                    Craft::$app->getView()->registerAssetBundle(ReportWidgetAsset::class);
+
+                    $jsTemplate = 'window.csrfTokenName = "{{ craft.config.csrfTokenName|e(\'js\') }}";';
 					$jsTemplate .= 'window.csrfTokenValue = "{{ craft.app.request.csrfToken|e(\'js\') }}";';
 					$js = Craft::$app->getView()->renderString($jsTemplate);
+
 					Craft::$app->getView()->registerJs($js);
 					Craft::$app->getView()->registerJs('var AnalyticsChartLanguage = "'.Craft::t('app', 'analyticsChartLanguage').'";');
 					Craft::$app->getView()->registerJs('new Analytics.ReportWidget("widget'.$widgetId.'", '.Json::encode($widgetOptions).');');
@@ -147,15 +140,13 @@ class ReportWidget extends \craft\base\Widget
 	{
         Craft::$app->getView()->registerAssetBundle(ReportWidgetAsset::class);
 
-		/*Craft::$app->getView()->registerJsFile('analytics/js/ReportWidgetSettings.js');
-		Craft::$app->getView()->registerCssFile('analytics/css/ReportWidgetSettings.css');*/
-
 		$id = 'analytics-settings-'.StringHelper::randomString();
 		$namespaceId = Craft::$app->getView()->namespaceInputId($id);
 
 		Craft::$app->getView()->registerJs("new Analytics.ReportWidgetSettings('".$namespaceId."');");
 
 		$settings = $this->getSettings();
+
 
 		// select options
 

@@ -8,21 +8,25 @@
 namespace dukt\analytics;
 
 use Craft;
+use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
+use craft\helpers\UrlHelper;
+use craft\services\Dashboard;
+use craft\services\Fields;
 use craft\web\UrlManager;
-use yii\base\Event;
+use dukt\analytics\fields\Report as ReportField;
 use dukt\analytics\models\Settings;
 use dukt\analytics\web\assets\analytics\AnalyticsAsset;
-use craft\services\Dashboard;
-use craft\events\RegisterComponentTypesEvent;
 use dukt\analytics\widgets\RealtimeWidget;
 use dukt\analytics\widgets\ReportWidget;
-use craft\services\Fields;
-use dukt\analytics\fields\Report as ReportField;
 use dukt\oauth\Plugin as Oauth;
+use yii\base\Event;
 
 class Plugin extends \craft\base\Plugin
 {
+    // Properties
+    // =========================================================================
+
     public $hasSettings = true;
 
     public static $plugin;
@@ -131,7 +135,7 @@ class Plugin extends \craft\base\Plugin
     /**
      * Creates and returns the model used to store the plugin’s settings.
      *
-     * @return \craft\base\Model|null
+     * @return Settings
      */
     protected function createSettingsModel()
     {
@@ -146,9 +150,9 @@ class Plugin extends \craft\base\Plugin
      */
     public function getSettingsResponse()
     {
-        $url = \craft\helpers\UrlHelper::cpUrl('analytics/settings');
+        $url = UrlHelper::cpUrl('analytics/settings');
 
-        \Craft::$app->controller->redirect($url);
+        Craft::$app->controller->redirect($url);
 
         return '';
     }

@@ -5,7 +5,7 @@
  * @license   https://dukt.net/craft/analytics/docs/license
  */
 
-namespace dukt\etc\craft;
+namespace dukt\analytics\etc\craft;
 
 class AnalyticsTracking
 {

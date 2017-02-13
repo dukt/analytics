@@ -3,9 +3,6 @@ namespace dukt\analytics\web\assets\reportfield;
 
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
-use craft\helpers\ChartHelper;
-use craft\web\View;
-use craft\helpers\Json;
 
 class ReportFieldAsset extends AssetBundle
 {
