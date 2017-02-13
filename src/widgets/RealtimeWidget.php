@@ -87,7 +87,6 @@ class RealtimeWidget extends \craft\base\Widget
                         Craft::$app->getView()->registerAssetBundle(RealtimeReportWidgetAsset::class);
 
 						Craft::$app->getView()->registerJs('var AnalyticsChartLanguage = "'.Craft::$app->language.'";', true);
-						Craft::$app->getView()->registerJs('var AnalyticsRealtimeInterval = "'.$realtimeRefreshInterval.'";', true);
 
 						Craft::$app->getView()->registerJs('new Analytics.Realtime("widget'.$widgetId.'", '.Json::encode($widgetOptions).');');
 
