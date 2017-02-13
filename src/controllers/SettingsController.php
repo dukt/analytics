@@ -173,11 +173,6 @@ class SettingsController extends Controller
 		$pluginClass = Craft::$app->request->getRequiredBodyParam('pluginClass');
         $settings = Craft::$app->request->getBodyParam('settings');
 
-        if(empty($settings['realtimeRefreshInterval']))
-        {
-            $settings['realtimeRefreshInterval'] = '';
-        }
-
 		$plugin = Craft::$app->plugins->getPlugin($pluginClass);
 
 		if (!$plugin)
