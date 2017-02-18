@@ -43,7 +43,7 @@ class Plugin extends \craft\base\Plugin
             'cache' => \dukt\analytics\services\Cache::class,
             'metadata' => \dukt\analytics\services\Metadata::class,
             'oauth' => \dukt\analytics\services\Oauth::class,
-            'analytics_reports' => \dukt\analytics\services\Reports::class,
+            'reports' => \dukt\analytics\services\Reports::class,
         ]);
 
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, [$this, 'registerCpUrlRules']);
