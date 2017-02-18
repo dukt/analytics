@@ -179,7 +179,7 @@ class Api extends Component
         $request = [$ids, $startDate, $endDate, $metrics, $optParams];
 
         $cacheId = ['api.apiGetGAData', $request];
-        $response = Analytics::$plugin->analytics_cache->get($cacheId);
+        $response = Analytics::$plugin->cache->get($cacheId);
 
         if(!$response)
         {
@@ -189,7 +189,7 @@ class Api extends Component
             }
 
             $response = $this->googleAnalytics()->data_ga->get($ids, $startDate, $endDate, $metrics, $optParams);
-            Analytics::$plugin->analytics_cache->set($cacheId, $response, null, null, $enableCache);
+            Analytics::$plugin->cache->set($cacheId, $response, null, null, $enableCache);
         }
 
         return $this->parseReportResponse($response);
@@ -213,13 +213,13 @@ class Api extends Component
         $cacheDuration = Analytics::$plugin->analytics->getRealtimeRefreshInterval();
 
         $cacheId = ['api.apiGetGADataRealtime', $ids, $metrics, $optParams];
-        $response = Analytics::$plugin->analytics_cache->get($cacheId);
+        $response = Analytics::$plugin->cache->get($cacheId);
 
         if(!$response)
         {
             $response = $this->googleAnalytics()->data_realtime->get($ids, $metrics, $optParams);
 
-            Analytics::$plugin->analytics_cache->set($cacheId, $response, $cacheDuration);
+            Analytics::$plugin->cache->set($cacheId, $response, $cacheDuration);
         }
 
         return $this->parseReportResponse($response);
@@ -242,7 +242,7 @@ class Api extends Component
 		{
 			$dataType = $col->dataType;
 			$id = $col->name;
-			$label = Analytics::$plugin->analytics_metadata->getDimMet($col->name);
+			$label = Analytics::$plugin->metadata->getDimMet($col->name);
 			$type = strtolower($dataType);
 
 			switch($col->name)
@@ -292,12 +292,12 @@ class Api extends Component
 
 					if($col['id'] == 'ga:continent')
 					{
-						$value = Analytics::$plugin->analytics_metadata->getContinentCode($value);
+						$value = Analytics::$plugin->metadata->getContinentCode($value);
 					}
 
 					if($col['id'] == 'ga:subContinent')
 					{
-						$value = Analytics::$plugin->analytics_metadata->getSubContinentCode($value);
+						$value = Analytics::$plugin->metadata->getSubContinentCode($value);
 					}
 
 
@@ -378,7 +378,7 @@ class Api extends Component
      */
     private function getClient()
     {
-        $token = Analytics::$plugin->analytics_oauth->getToken();
+        $token = Analytics::$plugin->oauth->getToken();
 
         if ($token)
         {

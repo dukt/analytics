@@ -37,7 +37,7 @@ class ReportsController extends Controller
 				$criteria->metrics = 'ga:activeVisitors';
 				$criteria->optParams = array('dimensions' => 'ga:visitorType');
 
-				$response = Analytics::$plugin->analytics_api->sendRequest($criteria);
+				$response = Analytics::$plugin->api->sendRequest($criteria);
 
 
 				// total
@@ -138,15 +138,15 @@ class ReportsController extends Controller
 
 			$cacheId = ['getReport', $request, $profileId];
 
-			$response = Analytics::$plugin->analytics_cache->get($cacheId);
+			$response = Analytics::$plugin->cache->get($cacheId);
 
 			if(!$response)
 			{
-				$response = Analytics::$plugin->analytics_reports->getReport($request);
+				$response = Analytics::$plugin->reports->getReport($request);
 
 				if($response)
 				{
-					Analytics::$plugin->analytics_cache->set($cacheId, $response);
+					Analytics::$plugin->cache->set($cacheId, $response);
 				}
 			}
 
@@ -214,15 +214,15 @@ class ReportsController extends Controller
 				$criteria->optParams = $optParams;
 
 				$cacheId = ['ReportsController.actionGetElementReport', $criteria->getAttributes()];
-				$response = Analytics::$plugin->analytics_cache->get($cacheId);
+				$response = Analytics::$plugin->cache->get($cacheId);
 
 				if(!$response)
 				{
-					$response = Analytics::$plugin->analytics_api->sendRequest($criteria);
+					$response = Analytics::$plugin->api->sendRequest($criteria);
 
 					if($response)
 					{
-						Analytics::$plugin->analytics_cache->set($cacheId, $response);
+						Analytics::$plugin->cache->set($cacheId, $response);
 					}
 				}
 

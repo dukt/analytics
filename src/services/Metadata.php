@@ -35,7 +35,7 @@ class Metadata extends Component
 	 */
 	public function dimmetsFileExists()
 	{
-		$path = Analytics::$plugin->analytics_metadata->getDimmetsFilePath();
+		$path = Analytics::$plugin->metadata->getDimmetsFilePath();
 
 		if(IOHelper::fileExists($path, false))
 		{
@@ -458,7 +458,7 @@ class Metadata extends Component
 	{
 		$cols = [];
 
-		$path = Analytics::$plugin->analytics_metadata->getDimmetsFilePath();
+		$path = Analytics::$plugin->metadata->getDimmetsFilePath();
 
 
 		$contents = file_get_contents($path);

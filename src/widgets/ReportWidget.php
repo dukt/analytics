@@ -70,61 +70,68 @@ class ReportWidget extends \craft\base\Widget
 	 */
 	public function getBodyHtml()
 	{
-        if(Craft::$app->config->get('enableWidgets', 'analytics'))
-        {
-            $settings = $this->settings;
+		if(Analytics::$plugin->analytics->checkPluginRequirements())
+		{
+			if(Craft::$app->config->get('enableWidgets', 'analytics'))
+			{
+				$settings = $this->settings;
 
-            $profileId = Analytics::$plugin->analytics->getProfileId();
+				$profileId = Analytics::$plugin->analytics->getProfileId();
 
-            if($profileId)
-            {
-                $request = [
-                    'chart' => (isset($settings['chart']) ? $settings['chart'] : null),
-                    'period' => (isset($settings['period']) ? $settings['period'] : null),
-                    'options' => (isset($settings['options'][$settings['chart']]) ? $settings['options'][$settings['chart']] : null),
-                ];
-
-
-                // use cached response if available
-
-                if(Craft::$app->config->get('enableCache', 'analytics') === true)
-                {
-                    $cacheId = ['getReport', $request, $profileId];
-
-                    $cachedResponse = Analytics::$plugin->analytics_cache->get($cacheId);
-                }
+				if($profileId)
+				{
+					$request = [
+						'chart' => (isset($settings['chart']) ? $settings['chart'] : null),
+						'period' => (isset($settings['period']) ? $settings['period'] : null),
+						'options' => (isset($settings['options'][$settings['chart']]) ? $settings['options'][$settings['chart']] : null),
+					];
 
 
-                // render
+					// use cached response if available
 
-                $widgetId = $this->id;
+					if(Craft::$app->config->get('enableCache', 'analytics') === true)
+					{
+						$cacheId = ['getReport', $request, $profileId];
 
-                $widgetOptions = [
-                    'request' => $request,
-                    'cachedResponse' => isset($cachedResponse) ? $cachedResponse : null,
-                ];
+						$cachedResponse = Analytics::$plugin->cache->get($cacheId);
+					}
 
-                Craft::$app->getView()->registerAssetBundle(ReportWidgetAsset::class);
 
-                $jsTemplate = 'window.csrfTokenName = "{{ craft.config.csrfTokenName|e(\'js\') }}";';
-                $jsTemplate .= 'window.csrfTokenValue = "{{ craft.app.request.csrfToken|e(\'js\') }}";';
-                $js = Craft::$app->getView()->renderString($jsTemplate);
+					// render
 
-                Craft::$app->getView()->registerJs($js);
-                Craft::$app->getView()->registerJs('var AnalyticsChartLanguage = "'.Craft::t('app', 'analyticsChartLanguage').'";');
-                Craft::$app->getView()->registerJs('new Analytics.ReportWidget("widget'.$widgetId.'", '.Json::encode($widgetOptions).');');
+					$widgetId = $this->id;
 
-                return Craft::$app->getView()->renderTemplate('analytics/_components/widgets/Report/body');
-            }
-            else
-            {
-                return Craft::$app->getView()->renderTemplate('analytics/_special/plugin-not-configured');
-            }
-        }
-        else
-        {
-            return Craft::$app->getView()->renderTemplate('analytics/_components/widgets/Report/disabled');
-        }
+					$widgetOptions = [
+						'request' => $request,
+						'cachedResponse' => isset($cachedResponse) ? $cachedResponse : null,
+					];
+
+                    Craft::$app->getView()->registerAssetBundle(ReportWidgetAsset::class);
+
+                    $jsTemplate = 'window.csrfTokenName = "{{ craft.config.csrfTokenName|e(\'js\') }}";';
+					$jsTemplate .= 'window.csrfTokenValue = "{{ craft.app.request.csrfToken|e(\'js\') }}";';
+					$js = Craft::$app->getView()->renderString($jsTemplate);
+
+					Craft::$app->getView()->registerJs($js);
+					Craft::$app->getView()->registerJs('var AnalyticsChartLanguage = "'.Craft::t('app', 'analyticsChartLanguage').'";');
+					Craft::$app->getView()->registerJs('new Analytics.ReportWidget("widget'.$widgetId.'", '.Json::encode($widgetOptions).');');
+
+					return Craft::$app->getView()->renderTemplate('analytics/_components/widgets/Report/body');
+				}
+				else
+				{
+					return Craft::$app->getView()->renderTemplate('analytics/_special/plugin-not-configured');
+				}
+			}
+			else
+			{
+				return Craft::$app->getView()->renderTemplate('analytics/_components/widgets/Report/disabled');
+			}
+		}
+		else
+		{
+			return Craft::$app->getView()->renderTemplate('analytics/_special/plugin-not-configured');
+		}
 	}
 
 	/**
@@ -197,7 +204,7 @@ class ReportWidget extends \craft\base\Widget
 			case 'area':
 
 				$options = [
-					'metrics' => Analytics::$plugin->analytics_metadata->getSelectMetricOptions()
+					'metrics' => Analytics::$plugin->metadata->getSelectMetricOptions()
 				];
 
 				break;
@@ -205,7 +212,7 @@ class ReportWidget extends \craft\base\Widget
 			case 'counter':
 
 				$options = [
-					'metrics' => Analytics::$plugin->analytics_metadata->getSelectMetricOptions()
+					'metrics' => Analytics::$plugin->metadata->getSelectMetricOptions()
 				];
 
 				break;
@@ -213,8 +220,8 @@ class ReportWidget extends \craft\base\Widget
 			case 'geo':
 
 				$options = [
-					'dimensions' => Analytics::$plugin->analytics_metadata->getSelectDimensionOptions(['ga:city', 'ga:country', 'ga:continent', 'ga:subContinent']),
-					'metrics' => Analytics::$plugin->analytics_metadata->getSelectMetricOptions()
+					'dimensions' => Analytics::$plugin->metadata->getSelectDimensionOptions(['ga:city', 'ga:country', 'ga:continent', 'ga:subContinent']),
+					'metrics' => Analytics::$plugin->metadata->getSelectMetricOptions()
 				];
 
 				break;
@@ -222,8 +229,8 @@ class ReportWidget extends \craft\base\Widget
 			default:
 
 				$options = [
-					'dimensions' => Analytics::$plugin->analytics_metadata->getSelectDimensionOptions(),
-					'metrics' => Analytics::$plugin->analytics_metadata->getSelectMetricOptions()
+					'dimensions' => Analytics::$plugin->metadata->getSelectDimensionOptions(),
+					'metrics' => Analytics::$plugin->metadata->getSelectMetricOptions()
 				];
 		}
 
@@ -248,12 +255,12 @@ class ReportWidget extends \craft\base\Widget
 
 				if(!empty($options['dimension']))
 				{
-					$name[] = Craft::t('app', Analytics::$plugin->analytics_metadata->getDimMet($options['dimension']));
+					$name[] = Craft::t('app', Analytics::$plugin->metadata->getDimMet($options['dimension']));
 				}
 
 				if(!empty($options['metric']))
 				{
-					$name[] = Craft::t('app', Analytics::$plugin->analytics_metadata->getDimMet($options['metric']));
+					$name[] = Craft::t('app', Analytics::$plugin->metadata->getDimMet($options['metric']));
 				}
 			}
 

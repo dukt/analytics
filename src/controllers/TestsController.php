@@ -22,8 +22,8 @@ class TestsController extends Controller
 	 */
 	public function actionDataTypes(array $variables = array())
 	{
-		$variables['googleAnalyticsDataTypes'] = Analytics::$plugin->analytics_metadata->getGoogleAnalyticsDataTypes();
-		$variables['dataTypes'] = Analytics::$plugin->analytics_metadata->getDataTypes();
+		$variables['googleAnalyticsDataTypes'] = Analytics::$plugin->metadata->getGoogleAnalyticsDataTypes();
+		$variables['dataTypes'] = Analytics::$plugin->metadata->getDataTypes();
 
 		$this->renderTemplate('analytics/tests/_dataTypes', $variables);
 	}
@@ -63,7 +63,7 @@ class TestsController extends Controller
 	 */
 	public function actionColumns(array $variables = array())
 	{
-		$variables['columns'] = Analytics::$plugin->analytics_metadata->getColumns();
+		$variables['columns'] = Analytics::$plugin->metadata->getColumns();
 
 		$this->renderTemplate('analytics/tests/_columns', $variables);
 	}
@@ -75,7 +75,7 @@ class TestsController extends Controller
 	 */
 	public function actionColumnGroups(array $variables = array())
 	{
-		$variables['columnGroups'] = Analytics::$plugin->analytics_metadata->getColumnGroups();
+		$variables['columnGroups'] = Analytics::$plugin->metadata->getColumnGroups();
 
 		$this->renderTemplate('analytics/tests/_columnGroups', $variables);
 	}

@@ -39,8 +39,8 @@ class AnalyticsAsset extends AssetBundle
     {
         parent::registerAssetFiles($view);
 
-        $continents = Analytics::$plugin->analytics_metadata->getContinents();
-        $subContinents = Analytics::$plugin->analytics_metadata->getSubContinents();
+        $continents = Analytics::$plugin->metadata->getContinents();
+        $subContinents = Analytics::$plugin->metadata->getSubContinents();
         $formats = ChartHelper::formats();
         $currency = Analytics::$plugin->analytics->getD3LocaleDefinitionCurrency();
 

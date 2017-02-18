@@ -41,7 +41,7 @@ class RequestCriteria extends Model
 
 		try
 		{
-			$response['data'] = Analytics::$plugin->analytics_api->sendRequest($this);
+			$response['data'] = Analytics::$plugin->api->sendRequest($this);
 
 			if(!isset($options['format']) || (isset($options['format']) && $options['format'] != 'gaData'))
 			{

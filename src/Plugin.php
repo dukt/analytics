@@ -39,10 +39,10 @@ class Plugin extends \craft\base\Plugin
 
         $this->setComponents([
             'analytics' => \dukt\analytics\services\Analytics::class,
-            'analytics_api' => \dukt\analytics\services\Api::class,
-            'analytics_cache' => \dukt\analytics\services\Cache::class,
-            'analytics_metadata' => \dukt\analytics\services\Metadata::class,
-            'analytics_oauth' => \dukt\analytics\services\Oauth::class,
+            'api' => \dukt\analytics\services\Api::class,
+            'cache' => \dukt\analytics\services\Cache::class,
+            'metadata' => \dukt\analytics\services\Metadata::class,
+            'oauth' => \dukt\analytics\services\Oauth::class,
             'analytics_reports' => \dukt\analytics\services\Reports::class,
         ]);
 
@@ -66,8 +66,8 @@ class Plugin extends \craft\base\Plugin
 
 /*			Craft::$app->getView()->registerJsFile('analytics/js/Analytics.js');
 
-			$continents = $this->analytics_metadata->getContinents();
-			$subContinents = $this->analytics_metadata->getSubContinents();
+			$continents = $this->metadata->getContinents();
+			$subContinents = $this->metadata->getSubContinents();
 			$formats = ChartHelper::formats();
 			$currency = $this->analytics->getD3LocaleDefinitionCurrency();
 

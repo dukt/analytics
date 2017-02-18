@@ -88,7 +88,7 @@ class Reports extends Component
 			$criteria->optParams['filters'] = $dimension.'!=(not set);'.$dimension.'!=(not provided)';
 		}
 
-		$chartResponse = Analytics::$plugin->analytics_api->sendRequest($criteria);
+		$chartResponse = Analytics::$plugin->api->sendRequest($criteria);
 
 
 		// Total
@@ -105,7 +105,7 @@ class Reports extends Component
 			$totalCriteria->optParams = array('filters' => $criteria->optParams['filters']);
 		}
 
-		$response = Analytics::$plugin->analytics_api->sendRequest($totalCriteria);
+		$response = Analytics::$plugin->api->sendRequest($totalCriteria);
 
 		if(!empty($response['rows'][0][0]['f']))
 		{
@@ -119,7 +119,7 @@ class Reports extends Component
 			'type' => 'area',
 			'chart' => $chartResponse,
 			'total' => $total,
-			'metric' => Craft::t('app', Analytics::$plugin->analytics_metadata->getDimMet($metric)),
+			'metric' => Craft::t('app', Analytics::$plugin->metadata->getDimMet($metric)),
 			'period' => $period,
 			'periodLabel' => Craft::t('app', 'This '.$period)
 		];
@@ -155,7 +155,7 @@ class Reports extends Component
 			$criteria->optParams = $optParams;
 		}
 
-		$response = Analytics::$plugin->analytics_api->sendRequest($criteria);
+		$response = Analytics::$plugin->api->sendRequest($criteria);
 
 		if(!empty($response['rows'][0][0]))
 		{
@@ -169,7 +169,7 @@ class Reports extends Component
 		$counter = array(
 			'type' => $response['cols'][0]['type'],
 			'value' => $count,
-			'label' => StringHelper::toLowerCase(Craft::t('app', Analytics::$plugin->analytics_metadata->getDimMet($metric)))
+			'label' => StringHelper::toLowerCase(Craft::t('app', Analytics::$plugin->metadata->getDimMet($metric)))
 		);
 
 
@@ -179,7 +179,7 @@ class Reports extends Component
 			'type' => 'counter',
 			'counter' => $counter,
 			'response' => $response,
-			'metric' => Craft::t('app', Analytics::$plugin->analytics_metadata->getDimMet($metric)),
+			'metric' => Craft::t('app', Analytics::$plugin->metadata->getDimMet($metric)),
 			'period' => $period,
 			'periodLabel' => Craft::t('app', 'this '.$period)
 		];
@@ -213,13 +213,13 @@ class Reports extends Component
 			'filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)'
 		);
 
-		$tableResponse = Analytics::$plugin->analytics_api->sendRequest($criteria);
+		$tableResponse = Analytics::$plugin->api->sendRequest($criteria);
 
 		return [
 			'type' => 'pie',
 			'chart' => $tableResponse,
-			'dimension' => Craft::t('app', Analytics::$plugin->analytics_metadata->getDimMet($dimension)),
-			'metric' => Craft::t('app', Analytics::$plugin->analytics_metadata->getDimMet($metric)),
+			'dimension' => Craft::t('app', Analytics::$plugin->metadata->getDimMet($dimension)),
+			'metric' => Craft::t('app', Analytics::$plugin->metadata->getDimMet($metric)),
 			'period' => $period,
 			'periodLabel' => Craft::t('app', 'this '.$period)
 		];
@@ -253,13 +253,13 @@ class Reports extends Component
 			'filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)'
 		);
 
-		$tableResponse = Analytics::$plugin->analytics_api->sendRequest($criteria);
+		$tableResponse = Analytics::$plugin->api->sendRequest($criteria);
 
 		return [
 			'type' => 'table',
 			'chart' => $tableResponse,
-			'dimension' => Craft::t('app', Analytics::$plugin->analytics_metadata->getDimMet($dimension)),
-			'metric' => Craft::t('app', Analytics::$plugin->analytics_metadata->getDimMet($metric)),
+			'dimension' => Craft::t('app', Analytics::$plugin->metadata->getDimMet($dimension)),
+			'metric' => Craft::t('app', Analytics::$plugin->metadata->getDimMet($metric)),
 			'period' => $period,
 			'periodLabel' => Craft::t('app', 'this '.$period)
 		];
@@ -301,14 +301,14 @@ class Reports extends Component
 			'filters' => $originDimension.'!=(not set);'.$originDimension.'!=(not provided)',
 		);
 
-		$tableResponse = Analytics::$plugin->analytics_api->sendRequest($criteria);
+		$tableResponse = Analytics::$plugin->api->sendRequest($criteria);
 
 		return [
 			'type' => 'geo',
 			'chart' => $tableResponse,
 			'dimensionRaw' => $originDimension,
-			'dimension' => Craft::t('app', Analytics::$plugin->analytics_metadata->getDimMet($originDimension)),
-			'metric' => Craft::t('app', Analytics::$plugin->analytics_metadata->getDimMet($metric)),
+			'dimension' => Craft::t('app', Analytics::$plugin->metadata->getDimMet($originDimension)),
+			'metric' => Craft::t('app', Analytics::$plugin->metadata->getDimMet($metric)),
 			'period' => $period,
 			'periodLabel' => Craft::t('app', 'this '.$period)
 		];

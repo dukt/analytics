@@ -33,20 +33,20 @@ class SettingsController extends Controller
 			$variables['oauthAccount'] = false;
 			$variables['errors'] = [];
 
-            $provider = Analytics::$plugin->analytics_oauth->getOauthProvider();
+            $provider = Analytics::$plugin->oauth->getOauthProvider();
 			$plugin = Craft::$app->plugins->getPlugin('analytics');
-			$token = Analytics::$plugin->analytics_oauth->getToken();
+			$token = Analytics::$plugin->oauth->getToken();
 
 			if ($token)
 			{
 				try
 				{
-					$oauthAccount = Analytics::$plugin->analytics_cache->get(['getAccount', $token]);
+					$oauthAccount = Analytics::$plugin->cache->get(['getAccount', $token]);
 
 					if(!$oauthAccount)
 					{
 						$oauthAccount = $provider->getResourceOwner($token);
-						Analytics::$plugin->analytics_cache->set(['getAccount', $token], $oauthAccount);
+						Analytics::$plugin->cache->set(['getAccount', $token], $oauthAccount);
 					}
 
 					if ($oauthAccount)
@@ -58,7 +58,7 @@ class SettingsController extends Controller
 
                         // Account
 
-                        $accountExplorerData = Analytics::$plugin->analytics_cache->get(['accountExplorerData']);
+                        $accountExplorerData = Analytics::$plugin->cache->get(['accountExplorerData']);
 
                         $accountOptions = [];
 
@@ -180,7 +180,7 @@ class SettingsController extends Controller
 			throw new Exception(Craft::t('app', 'No plugin exists with the class “{class}”', array('class' => $pluginClass)));
 		}
 
-		$settings = Analytics::$plugin->analytics_api->populateAccountExplorerSettings($settings);
+		$settings = Analytics::$plugin->api->populateAccountExplorerSettings($settings);
 
 		if (Craft::$app->plugins->savePluginSettings($plugin, $settings))
 		{
@@ -206,9 +206,9 @@ class SettingsController extends Controller
     {
         try
         {
-            $accountExplorerData = Analytics::$plugin->analytics_api->getAccountExplorerData();
+            $accountExplorerData = Analytics::$plugin->api->getAccountExplorerData();
 
-            Analytics::$plugin->analytics_cache->set(['accountExplorerData'], $accountExplorerData);
+            Analytics::$plugin->cache->set(['accountExplorerData'], $accountExplorerData);
 
             return $this->asJson($accountExplorerData);
         }

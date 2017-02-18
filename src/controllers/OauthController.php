@@ -23,7 +23,7 @@ class OauthController extends Controller
      */
     public function actionConnect()
     {
-        $provider = Analytics::$plugin->analytics_oauth->getOauthProvider();
+        $provider = Analytics::$plugin->oauth->getOauthProvider();
 
         Craft::$app->getSession()->set('analytics.oauthState', $provider->getState());
 
@@ -48,9 +48,9 @@ class OauthController extends Controller
 	 */
 	public function actionDisconnect()
 	{
-		if (Analytics::$plugin->analytics_oauth->deleteToken())
+		if (Analytics::$plugin->oauth->deleteToken())
 		{
-            Analytics::$plugin->analytics_cache->delete(['accountExplorerData']);
+            Analytics::$plugin->cache->delete(['accountExplorerData']);
 
 			Craft::$app->getSession()->setNotice(Craft::t('app', "Disconnected from Google Analytics."));
 		}
@@ -74,7 +74,7 @@ class OauthController extends Controller
      */
     public function actionCallback()
     {
-        $provider = Analytics::$plugin->analytics_oauth->getOauthProvider();
+        $provider = Analytics::$plugin->oauth->getOauthProvider();
 
         $code = Craft::$app->request->getParam('code');
 
@@ -85,7 +85,7 @@ class OauthController extends Controller
             ]);
 
             // Save token
-            Analytics::$plugin->analytics_oauth->saveToken($token);
+            Analytics::$plugin->oauth->saveToken($token);
 
             // Reset session variables
 
