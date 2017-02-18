@@ -378,41 +378,31 @@ class Api extends Component
      */
     private function getClient()
     {
-        $provider = Oauth::$plugin->oauth->getProvider('google');
+        $token = Analytics::$plugin->analytics_oauth->getToken();
 
-        if($provider)
+        if ($token)
         {
-            $token = Analytics::$plugin->analytics_oauth->getToken();
+            // make token compatible with Google library
+            $arrayToken = array(
+                'created' => 0,
+                'access_token' => $token->getToken(),
+                'expires_in' => $token->getExpires(),
+            );
 
-            if ($token)
-            {
-                // make token compatible with Google library
-                $arrayToken = array(
-                    'created' => 0,
-                    'access_token' => $token->accessToken,
-                    'expires_in' => $token->endOfLife,
-                );
+            $arrayToken = json_encode($arrayToken);
 
-                $arrayToken = json_encode($arrayToken);
+            $client = new Google_Client();
+            $client->setApplicationName('Google+ PHP Starter Application');
+            $client->setClientId('clientId');
+            $client->setClientSecret('clientSecret');
+            $client->setRedirectUri('redirectUri');
+            $client->setAccessToken($arrayToken);
 
-                $client = new Google_Client();
-                $client->setApplicationName('Google+ PHP Starter Application');
-                $client->setClientId('clientId');
-                $client->setClientSecret('clientSecret');
-                $client->setRedirectUri('redirectUri');
-                $client->setAccessToken($arrayToken);
-
-                return $client;
-            }
-            else
-            {
-                // \dukt\analytics\Plugin::log('Undefined token', LogLevel::Error);
-                return false;
-            }
+            return $client;
         }
         else
         {
-            // \dukt\analytics\Plugin::log('Couldn’t get connect provider', LogLevel::Error);
+            // \dukt\analytics\Plugin::log('Undefined token', LogLevel::Error);
             return false;
         }
     }

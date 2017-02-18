@@ -45,106 +45,99 @@ class Report extends Field
 	{
         $name = $this->handle;
 
-		if(Analytics::$plugin->analytics->checkPluginRequirements())
-		{
-			if(Craft::$app->config->get('enableFieldtype', 'analytics'))
-			{
-				$plugin = Craft::$app->plugins->getPlugin('analytics');
+        if(Craft::$app->config->get('enableFieldtype', 'analytics'))
+        {
+            $plugin = Craft::$app->plugins->getPlugin('analytics');
 
-				// Reformat the input name into something that looks more like an ID
-				$id = Craft::$app->getView()->formatInputId($name);
+            // Reformat the input name into something that looks more like an ID
+            $id = Craft::$app->getView()->formatInputId($name);
 
-				// Figure out what that ID is going to look like once it has been namespaced
-				$namespacedId = Craft::$app->getView()->namespaceInputId($id);
+            // Figure out what that ID is going to look like once it has been namespaced
+            $namespacedId = Craft::$app->getView()->namespaceInputId($id);
 
-				$variables = array();
+            $variables = array();
 
-				if($element->uri)
-				{
-					$uri = Analytics::$plugin->analytics->getElementUrlPath($element->id, $element->locale);
+            if($element->uri)
+            {
+                $uri = Analytics::$plugin->analytics->getElementUrlPath($element->id, $element->locale);
 
-					$ids = Analytics::$plugin->analytics->getProfileId();
+                $ids = Analytics::$plugin->analytics->getProfileId();
 
-					$startDate = date('Y-m-d', strtotime('-1 month'));
-					$endDate = date('Y-m-d');
-					$metrics = 'ga:pageviews';
-					$dimensions = 'ga:date';
+                $startDate = date('Y-m-d', strtotime('-1 month'));
+                $endDate = date('Y-m-d');
+                $metrics = 'ga:pageviews';
+                $dimensions = 'ga:date';
 
-					$optParams = array(
-						'dimensions' => $dimensions,
-						'filters' => "ga:pagePath==".$uri
-					);
+                $optParams = array(
+                    'dimensions' => $dimensions,
+                    'filters' => "ga:pagePath==".$uri
+                );
 
-					$criteria = new RequestCriteria;
-					$criteria->startDate = $startDate;
-					$criteria->endDate = $endDate;
-					$criteria->metrics = $metrics;
-					$criteria->optParams = $optParams;
+                $criteria = new RequestCriteria;
+                $criteria->startDate = $startDate;
+                $criteria->endDate = $endDate;
+                $criteria->metrics = $metrics;
+                $criteria->optParams = $optParams;
 
-					$options = [];
+                $options = [];
 
-					$cacheId = ['ReportsController.actionGetElementReport', $criteria->getAttributes()];
-					$response = Analytics::$plugin->analytics_cache->get($cacheId);
+                $cacheId = ['ReportsController.actionGetElementReport', $criteria->getAttributes()];
+                $response = Analytics::$plugin->analytics_cache->get($cacheId);
 
-					if($response)
-					{
-						$response = [
-							'type' => 'area',
-							'chart' => $response
-						];
+                if($response)
+                {
+                    $response = [
+                        'type' => 'area',
+                        'chart' => $response
+                    ];
 
-						$options = [
-							'cachedResponse' => $response
-						];
-					}
+                    $options = [
+                        'cachedResponse' => $response
+                    ];
+                }
 
-					$jsonOptions = json_encode($options);
+                $jsonOptions = json_encode($options);
 
-					/*Craft::$app->getView()->registerJsFile('analytics/js/jsapi.js', true);
-					Craft::$app->getView()->registerJsFile('analytics/js/ReportField.js');
-					Craft::$app->getView()->registerCssFile('analytics/css/ReportField.css');*/
+                /*Craft::$app->getView()->registerJsFile('analytics/js/jsapi.js', true);
+                Craft::$app->getView()->registerJsFile('analytics/js/ReportField.js');
+                Craft::$app->getView()->registerCssFile('analytics/css/ReportField.css');*/
 
-                    Craft::$app->getView()->registerAssetBundle(ReportFieldAsset::class);
+                Craft::$app->getView()->registerAssetBundle(ReportFieldAsset::class);
 
-					Craft::$app->getView()->registerJs('var AnalyticsChartLanguage = "'.Craft::t('app', 'analyticsChartLanguage').'";');
-					Craft::$app->getView()->registerJs('new AnalyticsReportField("'.$namespacedId.'-field", '.$jsonOptions.');');
+                Craft::$app->getView()->registerJs('var AnalyticsChartLanguage = "'.Craft::t('app', 'analyticsChartLanguage').'";');
+                Craft::$app->getView()->registerJs('new AnalyticsReportField("'.$namespacedId.'-field", '.$jsonOptions.');');
 
-					$variables = array(
-						'isNew'   => false,
-						'hasUrl'  => true,
-						'id'      => $id,
-						'uri'     => $uri,
-						'name'    => $name,
-						'value'   => $value,
-						'model'   => $this,
-						'element' => $element
-					);
-				}
-				elseif(!$element->id)
-				{
-					$variables = array(
-						'hasUrl' => false,
-						'isNew' => true,
-					);
-				}
-				else
-				{
-					$variables = array(
-						'hasUrl' => false,
-						'isNew' => false,
-					);
-				}
+                $variables = array(
+                    'isNew'   => false,
+                    'hasUrl'  => true,
+                    'id'      => $id,
+                    'uri'     => $uri,
+                    'name'    => $name,
+                    'value'   => $value,
+                    'model'   => $this,
+                    'element' => $element
+                );
+            }
+            elseif(!$element->id)
+            {
+                $variables = array(
+                    'hasUrl' => false,
+                    'isNew' => true,
+                );
+            }
+            else
+            {
+                $variables = array(
+                    'hasUrl' => false,
+                    'isNew' => false,
+                );
+            }
 
-				return Craft::$app->getView()->renderTemplate('analytics/_components/fieldtypes/Report/input', $variables);
-			}
-			else
-			{
-				return Craft::$app->getView()->renderTemplate('analytics/_components/fieldtypes/Report/disabled');
-			}
-		}
-		else
-		{
-			return Craft::$app->getView()->renderTemplate('analytics/_special/plugin-not-configured');
-		}
+            return Craft::$app->getView()->renderTemplate('analytics/_components/fieldtypes/Report/input', $variables);
+        }
+        else
+        {
+            return Craft::$app->getView()->renderTemplate('analytics/_components/fieldtypes/Report/disabled');
+        }
 	}
 }

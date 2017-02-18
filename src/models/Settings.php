@@ -19,15 +19,15 @@ class Settings extends Model
     public $realtimeRefreshInterval;
     public $forceConnect;
     public $enableRealtime;
-    public $tokenId;
+    public $token;
 
     // Public Methods
     // =========================================================================
 
-    public function rules()
+    /*public function rules()
     {
         return [
             [['tokenId'], 'number', 'integerOnly' => true],
         ];
-    }
+    }*/
 }

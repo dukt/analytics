@@ -9,16 +9,10 @@ namespace dukt\analytics\services;
 
 use Craft;
 use yii\base\Component;
-use dukt\analytics\base\RequirementsTrait;
 use dukt\analytics\etc\craft\AnalyticsTracking;
 
 class Analytics extends Component
 {
-	// Traits
-	// =========================================================================
-
-	use RequirementsTrait;
-
 	// Properties
 	// =========================================================================
 

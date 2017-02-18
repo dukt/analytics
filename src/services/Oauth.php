@@ -9,7 +9,9 @@ namespace dukt\analytics\services;
 
 use Craft;
 use yii\base\Component;
-use dukt\oauth\models\Token;
+use League\OAuth2\Client\Token\AccessToken;
+use Dukt\OAuth2\Client\Provider\Google;
+use craft\helpers\UrlHelper;
 
 class Oauth extends Component
 {
@@ -21,119 +23,112 @@ class Oauth extends Component
 	// Public Methods
 	// =========================================================================
 
-	/**
-	 * Require OAuth with configured provider
-	 *
-	 * @return bool
-	 */
-	public function requireOauth()
-	{
-		$provider = \dukt\oauth\Plugin::$plugin->oauth->getProvider('google');
 
-		if ($provider && $provider->isConfigured())
-		{
-			return true;
-		}
-		else
-		{
-			$url = UrlHelper::getUrl('analytics/install');
-			Craft::$app->request->redirect($url);
-			return false;
-		}
-	}
-
-	/**
-	 * Save Token
-	 *
-	 * @param Token $token
-	 */
-    public function saveToken(Token $token)
+    /**
+     * Save Token
+     *
+     * @param AccessToken $token
+     */
+    public function saveToken(AccessToken $token)
     {
-        // get plugin
+        // Save token and token secret in the plugin's settings
+
         $plugin = Craft::$app->plugins->getPlugin('analytics');
 
-        // get settings
         $settings = $plugin->getSettings();
 
+        $token = [
+            'accessToken' => $token->getToken(),
+            'expires' => $token->getExpires(),
+            'refreshToken' => $token->getRefreshToken(),
+            'resourceOwnerId' => $token->getResourceOwnerId(),
+            'values' => $token->getValues(),
+        ];
 
-        // do we have an existing token ?
+        $settings->token = $token;
 
-        $existingToken = \dukt\oauth\Plugin::$plugin->oauth->getTokenById($settings->tokenId);
-
-        if($existingToken)
-        {
-            $token->id = $existingToken->id;
-        }
-
-        // save token
-        \dukt\oauth\Plugin::$plugin->oauth->saveToken($token);
-
-        // set token ID
-        $settings->tokenId = $token->id;
-
-        // save plugin settings
         Craft::$app->plugins->savePluginSettings($plugin, $settings->getAttributes());
     }
 
-	/**
-	 * Get OAuth Token
-	 *
-	 * @return mixed
-	 */
-	public function getToken()
-	{
-		if($this->token)
-		{
-			return $this->token;
-		}
-		else
-		{
-			// get plugin
-			$plugin = Craft::$app->plugins->getPlugin('analytics');
+    /**
+     * Get OAuth Token
+     *
+     * @return AccessToken|null
+     */
+    public function getToken()
+    {
+        if($this->token)
+        {
+            return $this->token;
+        }
+        else
+        {
+            $plugin = Craft::$app->plugins->getPlugin('analytics');
+            $settings = $plugin->getSettings();
 
-			// get settings
-			$settings = $plugin->getSettings();
+            if($settings->token) {
 
-			// get tokenId
-			$tokenId = $settings->tokenId;
+                $token = new AccessToken([
+                    'access_token' => (isset($settings->token['accessToken']) ? $settings->token['accessToken'] : null),
+                    'expires' => (isset($settings->token['expires']) ? $settings->token['expires'] : null),
+                    'refresh_token' => (isset($settings->token['refreshToken']) ? $settings->token['refreshToken'] : null),
+                    'resource_owner_id' => (isset($settings->token['resourceOwnerId']) ? $settings->token['resourceOwnerId'] : null),
+                    'values' => (isset($settings->token['values']) ? $settings->token['values'] : null),
+                ]);
 
-			// get token
-			$token = \dukt\oauth\Plugin::$plugin->oauth->getTokenById($tokenId);
+                if($token->hasExpired())
+                {
+                    $provider = $this->getOauthProvider();
+                    $grant = new \League\OAuth2\Client\Grant\RefreshToken();
+                    $newToken = $provider->getAccessToken($grant, ['refresh_token' => $token->getRefreshToken()]);
 
-			return $token;
-		}
-	}
+                    $token = new AccessToken([
+                        'access_token' => $token->getToken(),
+                        'expires' => $token->getExpires(),
+                        'refresh_token' => $settings->token['refreshToken'],
+                        'resource_owner_id' => $token->getResourceOwnerId(),
+                        'values' => $token->getValues(),
+                    ]);
 
-	/**
-	 * Delete Token
-	 *
-	 * @return bool
-	 */
-	public function deleteToken()
-	{
-		// get plugin
-		$plugin = Craft::$app->plugins->getPlugin('analytics');
+                    $this->saveToken($token);
+                }
 
-		// get settings
-		$settings = $plugin->getSettings();
+                return $token;
+            }
 
-		if($settings->tokenId)
-		{
-			$token = \dukt\oauth\Plugin::$plugin->oauth->getTokenById($settings->tokenId);
+        }
+    }
 
-			if($token)
-			{
-				if(\dukt\oauth\Plugin::$plugin->oauth->deleteToken($token))
-				{
-					$settings->tokenId = null;
+    /**
+     * Delete Token
+     *
+     * @return bool
+     */
+    public function deleteToken()
+    {
+        $plugin = Craft::$app->plugins->getPlugin('analytics');
 
-					Craft::$app->plugins->savePluginSettings($plugin, $settings);
+        $settings = $plugin->getSettings();
+        $settings->token = null;
+        Craft::$app->plugins->savePluginSettings($plugin, $settings->getAttributes());
 
-					return true;
-				}
-			}
-		}
+        return true;
+    }
 
-		return false;
-	}
+    /**
+     * Returns a Twitter provider (server) object.
+     *
+     * @return Google
+     */
+    public function getOauthProvider()
+    {
+        $options = Craft::$app->config->get('oauthProviderOptions', 'analytics');
+
+        if(!isset($options['redirectUri']))
+        {
+            $options['redirectUri'] = UrlHelper::actionUrl('analytics/oauth/callback');
+        }
+
+        return new Google($options);
+    }
 }

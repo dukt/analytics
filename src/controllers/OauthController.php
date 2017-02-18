@@ -10,126 +10,36 @@ namespace dukt\analytics\controllers;
 use Craft;
 use craft\web\Controller;
 use dukt\analytics\Plugin as Analytics;
-use dukt\oauth\Plugin as Oauth;
 
 class OauthController extends Controller
 {
-	// Properties
-	// =========================================================================
-
-	/**
-	 * @var string
-	 */
-	private $handle = 'google';
-
-	/**
-	 * @var array
-	 */
-	private $scope = array(
-		'https://www.googleapis.com/auth/userinfo.profile',
-		'https://www.googleapis.com/auth/userinfo.email',
-		'https://www.googleapis.com/auth/analytics',
-		'https://www.googleapis.com/auth/analytics.edit',
-	);
-
-	/**
-	 * @var array
-	 */
-	private $authorizationOptions = array(
-		'access_type' => 'offline',
-		'approval_prompt' => 'force'
-	);
-
 	// Public Methods
 	// =========================================================================
 
-	/**
-	 * Connect
-	 *
-	 * @return null
-	 */
-	public function actionConnect()
-	{
-		// referer
+    /**
+     * Connect
+     *
+     * @return null
+     */
+    public function actionConnect()
+    {
+        $provider = Analytics::$plugin->analytics_oauth->getOauthProvider();
 
-		$referer = Craft::$app->getSession()->get('analytics.referer');
+        Craft::$app->getSession()->set('analytics.oauthState', $provider->getState());
 
-		if (!$referer)
-		{
-			$referer = Craft::$app->request->referrer;
+        $authorizationUrl = $provider->getAuthorizationUrl([
+            'scope' => [
+                'https://www.googleapis.com/auth/userinfo.profile',
+                'https://www.googleapis.com/auth/userinfo.email',
+                'https://www.googleapis.com/auth/analytics',
+                'https://www.googleapis.com/auth/analytics.edit',
+            ],
+            'access_type' => 'offline',
+            'approval_prompt' => 'force'
+        ]);
 
-			Craft::$app->getSession()->set('analytics.referer', $referer);
-
-			// \dukt\analytics\Plugin::log('OAuth Connect Referer: '.$referer, LogLevel::Info);
-		}
-
-
-		// connect
-
-		if ($response = Oauth::$plugin->oauth->connect(array(
-			'plugin'   => 'analytics',
-			'provider' => $this->handle,
-			'scope'   => $this->scope,
-			'authorizationOptions'   => $this->authorizationOptions
-		)))
-		{
-            if($response && is_object($response) && !$response->data)
-            {
-                return $response;
-            }
-
-			if ($response['success'])
-			{
-				// token
-				$token = $response['token'];
-
-				// save token
-				Analytics::$plugin->analytics_oauth->saveToken($token);
-
-
-                // Reset forceConnect plugin setting
-
-                $plugin = Craft::$app->plugins->getPlugin('analytics');
-                $settings = $plugin->getSettings();
-
-/*                if($settings['forceConnect'] === true)
-                {
-                    $settings['forceConnect'] = false;
-                    Craft::$app->plugins->savePluginSettings($plugin, $settings);
-                }*/
-
-				if($token)
-				{
-					// \dukt\analytics\Plugin::log('Token: '."\r\n".print_r($token->getAttributes(), true), LogLevel::Info);
-				}
-				else
-				{
-					// \dukt\analytics\Plugin::log('Couldn’t get token', LogLevel::Error);
-				}
-
-				// session notice
-				Craft::$app->getSession()->setNotice(Craft::t('app', "Connected to Google Analytics."));
-			}
-			else
-			{
-				// session error
-				Craft::$app->getSession()->setError(Craft::t('app', $response['errorMsg']));
-			}
-		}
-		else
-		{
-			// session error
-			Craft::$app->getSession()->setError(Craft::t('app', "Couldn’t connect"));
-		}
-
-		// OAuth Step 5
-
-		// redirect
-
-		Craft::$app->getSession()->remove('analytics.referer');
-
-		return $this->redirect($referer);
-	}
+        return $this->redirect($authorizationUrl);
+    }
 
 	/**
 	 * Disconnect
@@ -156,4 +66,37 @@ class OauthController extends Controller
 
 		return $this->redirect($redirect);
 	}
+
+    /**
+     * Callback
+     *
+     * @return null
+     */
+    public function actionCallback()
+    {
+        $provider = Analytics::$plugin->analytics_oauth->getOauthProvider();
+
+        $code = Craft::$app->request->getParam('code');
+
+        try {
+            // Try to get an access token (using the authorization code grant)
+            $token = $provider->getAccessToken('authorization_code', [
+                'code' => $code
+            ]);
+
+            // Save token
+            Analytics::$plugin->analytics_oauth->saveToken($token);
+
+            // Reset session variables
+
+            // Redirect
+            Craft::$app->getSession()->setNotice(Craft::t('analytics', "Connected to Google Analytics."));
+
+        } catch (Exception $e) {
+            // Failed to get the token credentials or user details.
+            Craft::$app->getSession()->setError($e->getMessage());
+        }
+
+        return $this->redirect('analytics/settings');
+    }
 }

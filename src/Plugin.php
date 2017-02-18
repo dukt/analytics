@@ -19,7 +19,6 @@ use dukt\analytics\models\Settings;
 use dukt\analytics\web\assets\analytics\AnalyticsAsset;
 use dukt\analytics\widgets\RealtimeWidget;
 use dukt\analytics\widgets\ReportWidget;
-use dukt\oauth\Plugin as Oauth;
 use yii\base\Event;
 
 class Plugin extends \craft\base\Plugin
@@ -28,7 +27,6 @@ class Plugin extends \craft\base\Plugin
     // =========================================================================
 
     public $hasSettings = true;
-
     public static $plugin;
 
 	// Public Methods
@@ -96,40 +94,6 @@ class Plugin extends \craft\base\Plugin
         ];
 
         $event->rules = array_merge($event->rules, $rules);
-    }
-
-	/**
-	 * Get Required Plugins
-	 */
-	public function getRequiredPlugins()
-	{
-		return array(
-			array(
-				'name' => "OAuth",
-				'handle' => 'oauth',
-				'url' => 'https://dukt.net/craft/oauth',
-				'version' => '1.0.0'
-			)
-		);
-	}
-
-	/**
-	 * On Before Uninstall
-	 */
-	public function onBeforeUninstall()
-	{
-		if(isset(Oauth::$plugin->oauth))
-		{
-			Oauth::$plugin->oauth->deleteTokensByPlugin('analytics');
-		}
-	}
-
-    /**
-     * Get Settings URL
-     */
-    public function getSettingsUrl()
-    {
-        return 'analytics/settings';
     }
 
     /**

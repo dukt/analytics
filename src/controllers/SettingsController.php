@@ -11,7 +11,6 @@ use Craft;
 use craft\web\Controller;
 use dukt\analytics\web\assets\analytics\AnalyticsAsset;
 use dukt\analytics\Plugin as Analytics;
-use dukt\oauth\Plugin as Oauth;
 
 class SettingsController extends Controller
 {
@@ -25,40 +24,34 @@ class SettingsController extends Controller
 	 */
 	public function actionIndex()
 	{
-		Analytics::$plugin->analytics->requireDependencies();
-
 		$variables = array();
 
-		$variables['isOauthProviderConfigured'] = Analytics::$plugin->analytics->isOauthProviderConfigured();
+		$variables['isOauthProviderConfigured'] = $this->isOauthProviderConfigured();
 
 		if($variables['isOauthProviderConfigured'])
 		{
 			$variables['oauthAccount'] = false;
 			$variables['errors'] = [];
 
-			$provider = Oauth::$plugin->oauth->getProvider('google');
+            $provider = Analytics::$plugin->analytics_oauth->getOauthProvider();
 			$plugin = Craft::$app->plugins->getPlugin('analytics');
 			$token = Analytics::$plugin->analytics_oauth->getToken();
 
 			if ($token)
 			{
-/*				try
-				{*/
+				try
+				{
 					$oauthAccount = Analytics::$plugin->analytics_cache->get(['getAccount', $token]);
 
 					if(!$oauthAccount)
 					{
-						$oauthAccount = $provider->getAccount($token);
+						$oauthAccount = $provider->getResourceOwner($token);
 						Analytics::$plugin->analytics_cache->set(['getAccount', $token], $oauthAccount);
 					}
 
 					if ($oauthAccount)
 					{
                         // \dukt\analytics\Plugin::log("Account:\r\n".print_r($oauthAccount, true), LogLevel::Info);
-
-/*                        Craft::$app->getView()->registerJsFile('analytics/js/AccountExplorer.js');
-                        Craft::$app->getView()->registerCssFile('analytics/css/AccountExplorer.css');*/
-
 
 						$settings = $plugin->getSettings();
 
@@ -127,7 +120,7 @@ class SettingsController extends Controller
                         $variables['settings'] = $settings;
                         $variables['oauthAccount'] = $oauthAccount;
 					}
-/*				}
+				}
 				catch(\Google_Service_Exception $e)
 				{
 					// \dukt\analytics\Plugin::log("Couldn’t get OAuth account: ".$e->getMessage(), LogLevel::Error);
@@ -149,13 +142,19 @@ class SettingsController extends Controller
 					}
 
 					array_push($variables['errors'], $e->getMessage());
-				}*/
+				}
 			}
 
 			$variables['token'] = $token;
 			$variables['provider'] = $provider;
 		}
-        /*Craft::$app->getView()->registerCssFile('analytics/css/settings.css');*/
+
+        /*
+        Craft::$app->getView()->registerCssFile('analytics/css/settings.css');
+        Craft::$app->getView()->registerJsFile('analytics/js/AccountExplorer.js');
+        Craft::$app->getView()->registerCssFile('analytics/css/AccountExplorer.css');
+        */
+
         Craft::$app->getView()->registerAssetBundle(AnalyticsAsset::class);
 		return $this->renderTemplate('analytics/settings/_index', $variables);
 	}
@@ -216,5 +215,25 @@ class SettingsController extends Controller
         {
             return $this->asErrorJson($e->getMessage());
         }
+    }
+
+    // Private Methods
+    // =========================================================================
+
+    /**
+     * Checks if the OAuth provider is configured
+     *
+     * @return bool
+     */
+    public function isOauthProviderConfigured()
+    {
+        $options = Craft::$app->config->get('oauthProviderOptions', 'analytics');
+
+        if(!empty($options['clientId']) && !empty($options['clientSecret']))
+        {
+            return true;
+        }
+
+        return false;
     }
 }
