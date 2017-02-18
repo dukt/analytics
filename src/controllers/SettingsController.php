@@ -26,7 +26,7 @@ class SettingsController extends Controller
 	{
 		$variables = array();
 
-		$variables['isOauthProviderConfigured'] = $this->isOauthProviderConfigured();
+		$variables['isOauthProviderConfigured'] = Analytics::$plugin->analytics->isOauthProviderConfigured();
 
 		if($variables['isOauthProviderConfigured'])
 		{
@@ -216,25 +216,5 @@ class SettingsController extends Controller
         {
             return $this->asErrorJson($e->getMessage());
         }
-    }
-
-    // Private Methods
-    // =========================================================================
-
-    /**
-     * Checks if the OAuth provider is configured
-     *
-     * @return bool
-     */
-    public function isOauthProviderConfigured()
-    {
-        $options = Craft::$app->config->get('oauthProviderOptions', 'analytics');
-
-        if(!empty($options['clientId']) && !empty($options['clientSecret']))
-        {
-            return true;
-        }
-
-        return false;
     }
 }

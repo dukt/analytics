@@ -10,6 +10,7 @@ namespace dukt\analytics\services;
 use Craft;
 use yii\base\Component;
 use dukt\analytics\etc\craft\AnalyticsTracking;
+use dukt\Analytics\Plugin as AnalyticsPlugin;
 
 class Analytics extends Component
 {
@@ -162,5 +163,87 @@ class Analytics extends Component
         }
 
         return $this->tracking;
+    }
+
+    /**
+     * Checks if the OAuth provider is configured
+     *
+     * @return bool
+     */
+    public function isOauthProviderConfigured()
+    {
+        $options = Craft::$app->config->get('oauthProviderOptions', 'analytics');
+
+        if(!empty($options['clientId']) && !empty($options['clientSecret']))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks plugin requirements (dependencies, configured OAuth provider, and token)
+     *
+     * @return bool
+     */
+    public function checkPluginRequirements()
+    {
+        if($this->isOauthProviderConfigured())
+        {
+            if($this->isTokenSet())
+            {
+                if($this->isGoogleAnalyticsAccountConfigured())
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private function isTokenSet()
+    {
+        $token = AnalyticsPlugin::$plugin->oauth->getToken();
+
+        if ($token)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private function isGoogleAnalyticsAccountConfigured()
+    {
+        if(!$this->isTokenSet())
+        {
+            return false;
+        }
+
+        // check if profile id is set up
+        $plugin = Craft::$app->plugins->getPlugin('analytics');
+        $settings = $plugin->getSettings();
+        $profileId = $settings['profileId'];
+
+        if(!$profileId)
+        {
+            // AnalyticsPlugin::log('Analytics profileId not found', LogLevel::Info, true);
+            return false;
+        }
+        return true;
     }
 }
