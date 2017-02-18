@@ -155,6 +155,7 @@ class SettingsController extends Controller
         Craft::$app->getView()->registerCssFile('analytics/css/AccountExplorer.css');
         */
 
+        $variables['googleIconUrl'] = Craft::$app->assetManager->getPublishedUrl('@dukt/analytics/icons/google.svg', true);
         Craft::$app->getView()->registerAssetBundle(AnalyticsAsset::class);
 		return $this->renderTemplate('analytics/settings/_index', $variables);
 	}
