@@ -32,7 +32,7 @@ class UtilsController extends Controller
 
     public function actionSearchMetadata()
     {
-        $q = Craft::$app->request->getParam('q');
+        $q = Craft::$app->getRequest()->getParam('q');
         $columns = Analytics::$plugin->metadata->searchColumns($q);
 
         // Send the source back to the template
@@ -49,7 +49,7 @@ class UtilsController extends Controller
 
         Craft::$app->getSession()->setNotice(Craft::t('app', "Metadata loaded."));
 
-        $referer = Craft::$app->request->referrer;
+        $referer = Craft::$app->getRequest()->referrer;
         $this->redirect($referer);
     }
 
@@ -67,7 +67,7 @@ class UtilsController extends Controller
     {
         $columns = [];
 
-        $items = Analytics::$plugin->api->getColumns();
+        $items = Analytics::$plugin->getApi()->getColumns();
 
         if($items)
         {

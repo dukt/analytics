@@ -51,7 +51,7 @@ class TestsController extends Controller
      */
     public function actionFormatting(array $variables = array())
     {
-        $variables['currency'] = Analytics::$plugin->analytics->getCurrency();
+        $variables['currency'] = Analytics::$plugin->getAnalytics()->getCurrency();
 
         $this->renderTemplate('analytics/tests/_formatting', $variables);
     }

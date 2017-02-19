@@ -37,11 +37,16 @@ class AnalyticsVariable
      */
     public function track($options = null)
     {
-        return Analytics::$plugin->analytics->track($options);
+        return Analytics::$plugin->getAnalytics()->track($options);
     }
 
+    /**
+     * Get Profile ID
+     *
+     * @return string|null
+     */
     public function getProfileId()
     {
-        return Analytics::$plugin->analytics->getProfileId();
+        return Analytics::$plugin->getAnalytics()->getProfileId();
     }
 }

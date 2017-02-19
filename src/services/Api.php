@@ -124,7 +124,7 @@ class Api extends Component
     {
         // Profile ID
 
-        $criteria->ids = Analytics::$plugin->analytics->getProfileId();
+        $criteria->ids = Analytics::$plugin->getAnalytics()->getProfileId();
 
 
         // Filters
@@ -141,7 +141,7 @@ class Api extends Component
             }
         }
 
-        $configFilters = Craft::$app->config->get('filters', 'analytics');
+        $configFilters = Craft::$app->getConfig()->get('filters', 'analytics');
 
         if($configFilters)
         {
@@ -210,7 +210,7 @@ class Api extends Component
         $metrics = $criteria->metrics;
         $optParams = $criteria->optParams;
 
-        $cacheDuration = Analytics::$plugin->analytics->getRealtimeRefreshInterval();
+        $cacheDuration = Analytics::$plugin->getAnalytics()->getRealtimeRefreshInterval();
 
         $cacheId = ['api.apiGetGADataRealtime', $ids, $metrics, $optParams];
         $response = Analytics::$plugin->cache->get($cacheId);

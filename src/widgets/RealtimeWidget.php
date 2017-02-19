@@ -29,7 +29,7 @@ class RealtimeWidget extends \craft\base\Widget
 
     public static function isSelectable(): bool
     {
-        $plugin = Craft::$app->plugins->getPlugin('analytics');
+        $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
         $settings = $plugin->getSettings();
 
         if(empty($settings['enableRealtime']))
@@ -63,16 +63,16 @@ class RealtimeWidget extends \craft\base\Widget
      */
     public function getBodyHtml()
     {
-        if(Analytics::$plugin->analytics->checkPluginRequirements()) {
-            if (Craft::$app->config->get('enableWidgets', 'analytics')) {
-                $profileId = Analytics::$plugin->analytics->getProfileId();
+        if(Analytics::$plugin->getAnalytics()->checkPluginRequirements()) {
+            if (Craft::$app->getConfig()->get('enableWidgets', 'analytics')) {
+                $profileId = Analytics::$plugin->getAnalytics()->getProfileId();
 
                 if ($profileId) {
-                    $plugin = Craft::$app->plugins->getPlugin('analytics');
+                    $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
                     $settings = $plugin->getSettings();
 
                     if (!empty($settings['enableRealtime'])) {
-                        $realtimeRefreshInterval = Analytics::$plugin->analytics->getRealtimeRefreshInterval();
+                        $realtimeRefreshInterval = Analytics::$plugin->getAnalytics()->getRealtimeRefreshInterval();
 
                         $widgetId = $this->id;
                         $widgetOptions = [

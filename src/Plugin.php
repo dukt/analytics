@@ -14,6 +14,7 @@ use craft\helpers\UrlHelper;
 use craft\services\Dashboard;
 use craft\services\Fields;
 use craft\web\UrlManager;
+use dukt\analytics\base\PluginTrait;
 use dukt\analytics\fields\Report as ReportField;
 use dukt\analytics\models\Settings;
 use dukt\analytics\web\assets\analytics\AnalyticsAsset;
@@ -23,10 +24,19 @@ use yii\base\Event;
 
 class Plugin extends \craft\base\Plugin
 {
+    // Traits
+    // =========================================================================
+
+    use PluginTrait;
+
     // Properties
     // =========================================================================
 
     public $hasSettings = true;
+
+    /**
+     * @var \dukt\analytics\Plugin The plugin instance.
+     */
     public static $plugin;
 
     // Public Methods
@@ -57,24 +67,9 @@ class Plugin extends \craft\base\Plugin
             $event->types[] = ReportField::class;
         });
 
-
-        // Global JS variables
-
-        if (Craft::$app->request->getIsCpRequest())
+        if (Craft::$app->getRequest()->getIsCpRequest())
         {
             Craft::$app->getView()->registerAssetBundle(AnalyticsAsset::class);
-
-/*			Craft::$app->getView()->registerJsFile('analytics/js/Analytics.js');
-
-            $continents = $this->metadata->getContinents();
-            $subContinents = $this->metadata->getSubContinents();
-            $formats = ChartHelper::formats();
-            $currency = $this->analytics->getD3LocaleDefinitionCurrency();
-
-            Craft::$app->getView()->registerJs('Analytics.continents = '.json_encode($continents));
-            Craft::$app->getView()->registerJs('Analytics.subContinents = '.json_encode($subContinents));
-            Craft::$app->getView()->registerJs('Analytics.formats = '.json_encode($formats));
-            Craft::$app->getView()->registerJs('Analytics.currency = '.json_encode($currency));*/
         }
     }
 

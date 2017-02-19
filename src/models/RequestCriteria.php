@@ -41,7 +41,7 @@ class RequestCriteria extends Model
 
         try
         {
-            $response['data'] = Analytics::$plugin->api->sendRequest($this);
+            $response['data'] = Analytics::$plugin->getApi()->sendRequest($this);
 
             if(!isset($options['format']) || (isset($options['format']) && $options['format'] != 'gaData'))
             {
@@ -59,27 +59,5 @@ class RequestCriteria extends Model
         }
 
         return $response;
-    }
-
-    // Protected Methods
-    // =========================================================================
-
-    /**
-     * @inheritDoc BaseModel::defineAttributes()
-     *
-     * @return array
-     */
-    protected function defineAttributes()
-    {
-        return array(
-            'ids' => AttributeType::String,
-            'startDate' => AttributeType::String,
-            'endDate' => AttributeType::String,
-            'metrics' => AttributeType::String,
-            'optParams' => array(AttributeType::Mixed, 'default' => array()),
-            'format' => AttributeType::String,
-            'realtime' => array(AttributeType::Bool, 'default' => false),
-            'enableCache' => array(AttributeType::Bool, 'default' => true),
-        );
     }
 }

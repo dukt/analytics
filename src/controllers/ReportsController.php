@@ -28,7 +28,7 @@ class ReportsController extends Controller
         $returningVisitor = 0;
         $total = 0;
 
-        if(!Craft::$app->config->get('demoMode', 'analytics'))
+        if(!Craft::$app->getConfig()->get('demoMode', 'analytics'))
         {
             try
             {
@@ -37,7 +37,7 @@ class ReportsController extends Controller
                 $criteria->metrics = 'ga:activeVisitors';
                 $criteria->optParams = array('dimensions' => 'ga:visitorType');
 
-                $response = Analytics::$plugin->api->sendRequest($criteria);
+                $response = Analytics::$plugin->getApi()->sendRequest($criteria);
 
 
                 // total
@@ -128,12 +128,12 @@ class ReportsController extends Controller
     {
 		try
         {
-            $profileId = Analytics::$plugin->analytics->getProfileId();
+            $profileId = Analytics::$plugin->getAnalytics()->getProfileId();
 
             $request = [
-                'chart' => Craft::$app->request->getBodyParam('chart'),
-                'period' => Craft::$app->request->getBodyParam('period'),
-                'options' => Craft::$app->request->getBodyParam('options'),
+                'chart' => Craft::$app->getRequest()->getBodyParam('chart'),
+                'period' => Craft::$app->getRequest()->getBodyParam('period'),
+                'options' => Craft::$app->getRequest()->getBodyParam('options'),
             ];
 
             $cacheId = ['getReport', $request, $profileId];
@@ -185,11 +185,11 @@ class ReportsController extends Controller
     {
         try
         {
-            $elementId = Craft::$app->request->getRequiredParam('elementId');
-            $locale = Craft::$app->request->getRequiredParam('locale');
-            $metric = Craft::$app->request->getRequiredParam('metric');
+            $elementId = Craft::$app->getRequest()->getRequiredParam('elementId');
+            $locale = Craft::$app->getRequest()->getRequiredParam('locale');
+            $metric = Craft::$app->getRequest()->getRequiredParam('metric');
 
-            $uri = Analytics::$plugin->analytics->getElementUrlPath($elementId, $locale);
+            $uri = Analytics::$plugin->getAnalytics()->getElementUrlPath($elementId, $locale);
 
             if($uri)
             {
@@ -218,7 +218,7 @@ class ReportsController extends Controller
 
                 if(!$response)
                 {
-                    $response = Analytics::$plugin->api->sendRequest($criteria);
+                    $response = Analytics::$plugin->getApi()->sendRequest($criteria);
 
                     if($response)
                     {

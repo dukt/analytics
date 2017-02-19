@@ -26,7 +26,7 @@ class SettingsController extends Controller
     {
         $variables = array();
 
-        $variables['isOauthProviderConfigured'] = Analytics::$plugin->analytics->isOauthProviderConfigured();
+        $variables['isOauthProviderConfigured'] = Analytics::$plugin->getAnalytics()->isOauthProviderConfigured();
 
         if($variables['isOauthProviderConfigured'])
         {
@@ -34,7 +34,7 @@ class SettingsController extends Controller
             $variables['errors'] = [];
 
             $provider = Analytics::$plugin->oauth->getOauthProvider();
-            $plugin = Craft::$app->plugins->getPlugin('analytics');
+            $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
             $token = Analytics::$plugin->oauth->getToken();
 
             if ($token)
@@ -151,7 +151,7 @@ class SettingsController extends Controller
 
         $variables['javascriptOrigin'] = Analytics::$plugin->oauth->getJavascriptOrigin();
         $variables['redirectUri'] = Analytics::$plugin->oauth->getRedirectUri();
-        $variables['oauthProviderOptions'] = Craft::$app->config->get('oauthProviderOptions', 'analytics');
+        $variables['oauthProviderOptions'] = Craft::$app->getConfig()->get('oauthProviderOptions', 'analytics');
         $variables['googleIconUrl'] = Craft::$app->assetManager->getPublishedUrl('@dukt/analytics/icons/google.svg', true);
 
         Craft::$app->getView()->registerAssetBundle(SettingsAsset::class);
@@ -169,19 +169,19 @@ class SettingsController extends Controller
     {
         $this->requirePostRequest();
 
-        $pluginClass = Craft::$app->request->getRequiredBodyParam('pluginClass');
-        $settings = Craft::$app->request->getBodyParam('settings');
+        $pluginClass = Craft::$app->getRequest()->getRequiredBodyParam('pluginClass');
+        $settings = Craft::$app->getRequest()->getBodyParam('settings');
 
-        $plugin = Craft::$app->plugins->getPlugin($pluginClass);
+        $plugin = Craft::$app->getPlugins()->getPlugin($pluginClass);
 
         if (!$plugin)
         {
             throw new Exception(Craft::t('app', 'No plugin exists with the class “{class}”', array('class' => $pluginClass)));
         }
 
-        $settings = Analytics::$plugin->api->populateAccountExplorerSettings($settings);
+        $settings = Analytics::$plugin->getApi()->populateAccountExplorerSettings($settings);
 
-        if (Craft::$app->plugins->savePluginSettings($plugin, $settings))
+        if (Craft::$app->getPlugins()->savePluginSettings($plugin, $settings))
         {
             Craft::$app->getSession()->setNotice(Craft::t('app', 'Plugin settings saved.'));
 
@@ -205,7 +205,7 @@ class SettingsController extends Controller
     {
         try
         {
-            $accountExplorerData = Analytics::$plugin->api->getAccountExplorerData();
+            $accountExplorerData = Analytics::$plugin->getApi()->getAccountExplorerData();
 
             Analytics::$plugin->cache->set(['accountExplorerData'], $accountExplorerData);
 

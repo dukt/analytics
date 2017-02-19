@@ -1,4 +1,10 @@
 <?php
+/**
+ * @link      https://dukt.net/craft/analytics/
+ * @copyright Copyright (c) 2017, Dukt
+ * @license   https://dukt.net/craft/analytics/docs/license
+ */
+
 namespace dukt\analytics\web\assets\analytics;
 
 use craft\web\AssetBundle;
@@ -36,7 +42,7 @@ class AnalyticsAsset extends AssetBundle
         $continents = Analytics::$plugin->metadata->getContinents();
         $subContinents = Analytics::$plugin->metadata->getSubContinents();
         $formats = ChartHelper::formats();
-        $currency = Analytics::$plugin->analytics->getD3LocaleDefinitionCurrency();
+        $currency = Analytics::$plugin->getAnalytics()->getD3LocaleDefinitionCurrency();
 
         $js = "if(typeof Analytics == 'undefined') {";
 

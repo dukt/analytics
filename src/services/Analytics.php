@@ -29,7 +29,7 @@ class Analytics extends Component
      */
     public function getRealtimeRefreshInterval()
     {
-        $interval = Craft::$app->config->get('realtimeRefreshInterval', 'analytics');
+        $interval = Craft::$app->getConfig()->get('realtimeRefreshInterval', 'analytics');
 
         if($interval)
         {
@@ -37,7 +37,7 @@ class Analytics extends Component
         }
         else
         {
-            $plugin = Craft::$app->plugins->getPlugin('analytics');
+            $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
             $settings = $plugin->getSettings();
 
             if(!empty($settings['realtimeRefreshInterval']))
@@ -46,7 +46,7 @@ class Analytics extends Component
             }
         }
 
-        return Craft::$app->config->get('defaultRealtimeRefreshInterval', 'analytics');
+        return Craft::$app->getConfig()->get('defaultRealtimeRefreshInterval', 'analytics');
     }
 
     /**
@@ -56,7 +56,7 @@ class Analytics extends Component
      */
     public function getProfileId()
     {
-        $plugin = Craft::$app->plugins->getPlugin('analytics');
+        $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
         $settings = $plugin->getSettings();
 
         if(!empty($settings['profileId']))
@@ -86,7 +86,7 @@ class Analytics extends Component
             $uri = $components['path'];
         }
 
-        if(Craft::$app->config->get('addTrailingSlashesToUrls'))
+        if(Craft::$app->getConfig()->get('addTrailingSlashesToUrls'))
         {
             $uri .= '/';
         }
@@ -101,7 +101,7 @@ class Analytics extends Component
      */
     public function getCurrency()
     {
-        $plugin = Craft::$app->plugins->getPlugin('analytics');
+        $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
 
         $settings = $plugin->getSettings();
 
@@ -172,7 +172,7 @@ class Analytics extends Component
      */
     public function isOauthProviderConfigured()
     {
-        $options = Craft::$app->config->get('oauthProviderOptions', 'analytics');
+        $options = Craft::$app->getConfig()->get('oauthProviderOptions', 'analytics');
 
         if(!empty($options['clientId']) && !empty($options['clientSecret']))
         {
@@ -235,7 +235,7 @@ class Analytics extends Component
         }
 
         // check if profile id is set up
-        $plugin = Craft::$app->plugins->getPlugin('analytics');
+        $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
         $settings = $plugin->getSettings();
         $profileId = $settings['profileId'];
 

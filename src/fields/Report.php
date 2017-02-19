@@ -45,11 +45,11 @@ class Report extends Field
     {
         $name = $this->handle;
 
-        if(Analytics::$plugin->analytics->checkPluginRequirements())
+        if(Analytics::$plugin->getAnalytics()->checkPluginRequirements())
         {
-            if(Craft::$app->config->get('enableFieldtype', 'analytics'))
+            if(Craft::$app->getConfig()->get('enableFieldtype', 'analytics'))
             {
-                $plugin = Craft::$app->plugins->getPlugin('analytics');
+                $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
 
                 // Reformat the input name into something that looks more like an ID
                 $id = Craft::$app->getView()->formatInputId($name);
@@ -61,9 +61,9 @@ class Report extends Field
 
                 if($element->uri)
                 {
-                    $uri = Analytics::$plugin->analytics->getElementUrlPath($element->id, $element->locale);
+                    $uri = Analytics::$plugin->getAnalytics()->getElementUrlPath($element->id, $element->locale);
 
-                    $ids = Analytics::$plugin->analytics->getProfileId();
+                    $ids = Analytics::$plugin->getAnalytics()->getProfileId();
 
                     $startDate = date('Y-m-d', strtotime('-1 month'));
                     $endDate = date('Y-m-d');
@@ -99,10 +99,6 @@ class Report extends Field
                     }
 
                     $jsonOptions = json_encode($options);
-
-                    /*Craft::$app->getView()->registerJsFile('analytics/js/jsapi.js', true);
-                    Craft::$app->getView()->registerJsFile('analytics/js/ReportField.js');
-                    Craft::$app->getView()->registerCssFile('analytics/css/ReportField.css');*/
 
                     Craft::$app->getView()->registerAssetBundle(ReportFieldAsset::class);
 

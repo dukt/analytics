@@ -88,7 +88,7 @@ class Reports extends Component
             $criteria->optParams['filters'] = $dimension.'!=(not set);'.$dimension.'!=(not provided)';
         }
 
-        $chartResponse = Analytics::$plugin->api->sendRequest($criteria);
+        $chartResponse = Analytics::$plugin->getApi()->sendRequest($criteria);
 
 
         // Total
@@ -105,7 +105,7 @@ class Reports extends Component
             $totalCriteria->optParams = array('filters' => $criteria->optParams['filters']);
         }
 
-        $response = Analytics::$plugin->api->sendRequest($totalCriteria);
+        $response = Analytics::$plugin->getApi()->sendRequest($totalCriteria);
 
         if(!empty($response['rows'][0][0]['f']))
         {
@@ -155,7 +155,7 @@ class Reports extends Component
             $criteria->optParams = $optParams;
         }
 
-        $response = Analytics::$plugin->api->sendRequest($criteria);
+        $response = Analytics::$plugin->getApi()->sendRequest($criteria);
 
         if(!empty($response['rows'][0][0]))
         {
@@ -213,7 +213,7 @@ class Reports extends Component
             'filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)'
         );
 
-        $tableResponse = Analytics::$plugin->api->sendRequest($criteria);
+        $tableResponse = Analytics::$plugin->getApi()->sendRequest($criteria);
 
         return [
             'type' => 'pie',
@@ -253,7 +253,7 @@ class Reports extends Component
             'filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)'
         );
 
-        $tableResponse = Analytics::$plugin->api->sendRequest($criteria);
+        $tableResponse = Analytics::$plugin->getApi()->sendRequest($criteria);
 
         return [
             'type' => 'table',
@@ -301,7 +301,7 @@ class Reports extends Component
             'filters' => $originDimension.'!=(not set);'.$originDimension.'!=(not provided)',
         );
 
-        $tableResponse = Analytics::$plugin->api->sendRequest($criteria);
+        $tableResponse = Analytics::$plugin->getApi()->sendRequest($criteria);
 
         return [
             'type' => 'geo',

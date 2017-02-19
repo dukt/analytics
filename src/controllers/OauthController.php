@@ -62,7 +62,7 @@ class OauthController extends Controller
 
         // redirect
 
-        $redirect = Craft::$app->request->referrer;
+        $redirect = Craft::$app->getRequest()->referrer;
 
         return $this->redirect($redirect);
     }
@@ -76,7 +76,7 @@ class OauthController extends Controller
     {
         $provider = Analytics::$plugin->oauth->getOauthProvider();
 
-        $code = Craft::$app->request->getParam('code');
+        $code = Craft::$app->getRequest()->getParam('code');
 
         try {
             // Try to get an access token (using the authorization code grant)
