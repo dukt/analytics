@@ -23,7 +23,6 @@ class Oauth extends Component
 	// Public Methods
 	// =========================================================================
 
-
     /**
      * Save Token
      *
@@ -95,7 +94,6 @@ class Oauth extends Component
 
                 return $token;
             }
-
         }
     }
 
