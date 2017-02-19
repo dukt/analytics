@@ -24,62 +24,62 @@ class RequestCriteria extends Model
     public $realtime;
     public $enableCache;
 
-	// Public Methods
-	// =========================================================================
+    // Public Methods
+    // =========================================================================
 
-	/**
-	 * Sends the request
-	 *
-	 * @return array
-	 */
-	public function send()
-	{
-		$response = array(
-			'success' => false,
-			'error' => false
-		);
+    /**
+     * Sends the request
+     *
+     * @return array
+     */
+    public function send()
+    {
+        $response = array(
+            'success' => false,
+            'error' => false
+        );
 
-		try
-		{
-			$response['data'] = Analytics::$plugin->api->sendRequest($this);
+        try
+        {
+            $response['data'] = Analytics::$plugin->api->sendRequest($this);
 
-			if(!isset($options['format']) || (isset($options['format']) && $options['format'] != 'gaData'))
-			{
+            if(!isset($options['format']) || (isset($options['format']) && $options['format'] != 'gaData'))
+            {
 
-				$response['cols'] = $response['data']['cols'];
-				$response['rows'] = $response['data']['rows'];
-			}
+                $response['cols'] = $response['data']['cols'];
+                $response['rows'] = $response['data']['rows'];
+            }
 
-			$response['success'] = true;
-		}
-		catch(\Exception $e)
-		{
-			$response['error'] = true;
-			$response['errorMessage'] = $e->getMessage();
-		}
+            $response['success'] = true;
+        }
+        catch(\Exception $e)
+        {
+            $response['error'] = true;
+            $response['errorMessage'] = $e->getMessage();
+        }
 
-		return $response;
-	}
+        return $response;
+    }
 
-	// Protected Methods
-	// =========================================================================
+    // Protected Methods
+    // =========================================================================
 
-	/**
-	 * @inheritDoc BaseModel::defineAttributes()
-	 *
-	 * @return array
-	 */
-	protected function defineAttributes()
-	{
-		return array(
-			'ids' => AttributeType::String,
-			'startDate' => AttributeType::String,
-			'endDate' => AttributeType::String,
-			'metrics' => AttributeType::String,
-			'optParams' => array(AttributeType::Mixed, 'default' => array()),
-			'format' => AttributeType::String,
-			'realtime' => array(AttributeType::Bool, 'default' => false),
-			'enableCache' => array(AttributeType::Bool, 'default' => true),
-		);
-	}
+    /**
+     * @inheritDoc BaseModel::defineAttributes()
+     *
+     * @return array
+     */
+    protected function defineAttributes()
+    {
+        return array(
+            'ids' => AttributeType::String,
+            'startDate' => AttributeType::String,
+            'endDate' => AttributeType::String,
+            'metrics' => AttributeType::String,
+            'optParams' => array(AttributeType::Mixed, 'default' => array()),
+            'format' => AttributeType::String,
+            'realtime' => array(AttributeType::Bool, 'default' => false),
+            'enableCache' => array(AttributeType::Bool, 'default' => true),
+        );
+    }
 }

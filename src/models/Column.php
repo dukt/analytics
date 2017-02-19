@@ -24,26 +24,26 @@ class Column extends Model
     public $allowInSegments;
     public $addedInApiVersion;
 
-	// Protected Methods
-	// =========================================================================
+    // Protected Methods
+    // =========================================================================
 
-	/**
-	 * @inheritDoc BaseModel::defineAttributes()
-	 *
-	 * @return array
-	 */
-	protected function defineAttributes()
-	{
-		return array(
-			'id' => AttributeType::String,
-			'type' => AttributeType::String,
-			'dataType' => AttributeType::String,
-			'group' => AttributeType::String,
-			'status' => AttributeType::String,
-			'uiName' => AttributeType::String,
-			'description' => AttributeType::String,
-			'allowInSegments' => AttributeType::Bool,
-			'addedInApiVersion' => AttributeType::Number,
-		);
-	}
+    /**
+     * @inheritDoc BaseModel::defineAttributes()
+     *
+     * @return array
+     */
+    protected function defineAttributes()
+    {
+        return array(
+            'id' => AttributeType::String,
+            'type' => AttributeType::String,
+            'dataType' => AttributeType::String,
+            'group' => AttributeType::String,
+            'status' => AttributeType::String,
+            'uiName' => AttributeType::String,
+            'description' => AttributeType::String,
+            'allowInSegments' => AttributeType::Bool,
+            'addedInApiVersion' => AttributeType::Number,
+        );
+    }
 }

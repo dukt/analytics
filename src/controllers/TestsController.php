@@ -12,71 +12,71 @@ use dukt\analytics\Plugin as Analytics;
 
 class TestsController extends Controller
 {
-	// Public Methods
-	// =========================================================================
+    // Public Methods
+    // =========================================================================
 
-	/**
-	 * Data Types
-	 *
-	 * @return null
-	 */
-	public function actionDataTypes(array $variables = array())
-	{
-		$variables['googleAnalyticsDataTypes'] = Analytics::$plugin->metadata->getGoogleAnalyticsDataTypes();
-		$variables['dataTypes'] = Analytics::$plugin->metadata->getDataTypes();
+    /**
+     * Data Types
+     *
+     * @return null
+     */
+    public function actionDataTypes(array $variables = array())
+    {
+        $variables['googleAnalyticsDataTypes'] = Analytics::$plugin->metadata->getGoogleAnalyticsDataTypes();
+        $variables['dataTypes'] = Analytics::$plugin->metadata->getDataTypes();
 
-		$this->renderTemplate('analytics/tests/_dataTypes', $variables);
-	}
+        $this->renderTemplate('analytics/tests/_dataTypes', $variables);
+    }
 
-	/**
-	 * Charts
-	 *
-	 * @return null
-	 */
-	public function actionReportWidgets(array $variables = array())
-	{
-		Craft::$app->getView()->registerJsFile('analytics/js/jsapi.js', true);
+    /**
+     * Charts
+     *
+     * @return null
+     */
+    public function actionReportWidgets(array $variables = array())
+    {
+        Craft::$app->getView()->registerJsFile('analytics/js/jsapi.js', true);
 
-		Craft::$app->getView()->registerJsFile('analytics/js/ReportWidget.js');
-		Craft::$app->getView()->registerCssFile('analytics/css/ReportWidget.css');
-		Craft::$app->getView()->registerCssFile('analytics/css/tests.css');
+        Craft::$app->getView()->registerJsFile('analytics/js/ReportWidget.js');
+        Craft::$app->getView()->registerCssFile('analytics/css/ReportWidget.css');
+        Craft::$app->getView()->registerCssFile('analytics/css/tests.css');
 
-		$this->renderTemplate('analytics/tests/_reportWidgets', $variables);
-	}
+        $this->renderTemplate('analytics/tests/_reportWidgets', $variables);
+    }
 
-	/**
-	 * Tests
-	 *
-	 * @return null
-	 */
-	public function actionFormatting(array $variables = array())
-	{
-		$variables['currency'] = Analytics::$plugin->analytics->getCurrency();
+    /**
+     * Tests
+     *
+     * @return null
+     */
+    public function actionFormatting(array $variables = array())
+    {
+        $variables['currency'] = Analytics::$plugin->analytics->getCurrency();
 
-		$this->renderTemplate('analytics/tests/_formatting', $variables);
-	}
+        $this->renderTemplate('analytics/tests/_formatting', $variables);
+    }
 
-	/**
-	 * Columns
-	 *
-	 * @return null
-	 */
-	public function actionColumns(array $variables = array())
-	{
-		$variables['columns'] = Analytics::$plugin->metadata->getColumns();
+    /**
+     * Columns
+     *
+     * @return null
+     */
+    public function actionColumns(array $variables = array())
+    {
+        $variables['columns'] = Analytics::$plugin->metadata->getColumns();
 
-		$this->renderTemplate('analytics/tests/_columns', $variables);
-	}
+        $this->renderTemplate('analytics/tests/_columns', $variables);
+    }
 
-	/**
-	 * Groups
-	 *
-	 * @return null
-	 */
-	public function actionColumnGroups(array $variables = array())
-	{
-		$variables['columnGroups'] = Analytics::$plugin->metadata->getColumnGroups();
+    /**
+     * Groups
+     *
+     * @return null
+     */
+    public function actionColumnGroups(array $variables = array())
+    {
+        $variables['columnGroups'] = Analytics::$plugin->metadata->getColumnGroups();
 
-		$this->renderTemplate('analytics/tests/_columnGroups', $variables);
-	}
+        $this->renderTemplate('analytics/tests/_columnGroups', $variables);
+    }
 }

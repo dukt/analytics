@@ -6,25 +6,25 @@ $green: #50B431;
 
 .dukt\\analytics\\widgets\\realtimewidget {
 
-	.spinner { position: absolute; top: 24px; right: 24px; }
+    .spinner { position: absolute; top: 24px; right: 24px; }
 
-	.analytics-realtime-visitors { padding: 14px 0; }
+    .analytics-realtime-visitors { padding: 14px 0; }
 
-	.active-visitors { text-align: center; margin-bottom: 1em;}
-	.active-visitors .currently { font-size: 1.5em; }
-	.active-visitors .count { display: block; font-size: 10em; line-height: 1.2em; }
+    .active-visitors { text-align: center; margin-bottom: 1em;}
+    .active-visitors .currently { font-size: 1.5em; }
+    .active-visitors .count { display: block; font-size: 10em; line-height: 1.2em; }
 
-	.progress { color:#fff; margin: 2em 0; text-align: center; display: flex; }
-	.progress .progress-bar {display: block; }
-	.progress .progress-bar span { position: relative; padding:0 3px; line-height: 1.5em; white-space: nowrap; }
-	.progress .progress-bar.new-visitors { background: $blue; }
-	.progress .progress-bar.returning-visitors { background: $green; }
+    .progress { color:#fff; margin: 2em 0; text-align: center; display: flex; }
+    .progress .progress-bar {display: block; }
+    .progress .progress-bar span { position: relative; padding:0 3px; line-height: 1.5em; white-space: nowrap; }
+    .progress .progress-bar.new-visitors { background: $blue; }
+    .progress .progress-bar.returning-visitors { background: $green; }
 
-	.legend { text-align: center; }
+    .legend { text-align: center; }
 
-	.legend li { clear: left; display: inline-block; margin-right: 1em; }
-	.legend li strong { margin-top:2px; background: #eee; width: 12px; height: 12px; border-radius: 12px; display: block; float: left; margin-right: 0.3em; text-indent: -3000px; }
-	.legend li span.status { border: 0; width: 10px; height: 10px; }
-	.legend li.new-visitors span.status { background: $blue; }
-	.legend li.returning-visitors span.status { background: $green; }
+    .legend li { clear: left; display: inline-block; margin-right: 1em; }
+    .legend li strong { margin-top:2px; background: #eee; width: 12px; height: 12px; border-radius: 12px; display: block; float: left; margin-right: 0.3em; text-indent: -3000px; }
+    .legend li span.status { border: 0; width: 10px; height: 10px; }
+    .legend li.new-visitors span.status { background: $blue; }
+    .legend li.returning-visitors span.status { background: $green; }
 }

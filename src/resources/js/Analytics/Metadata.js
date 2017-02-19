@@ -1,43 +1,43 @@
 
 Analytics.Metadata = {
 
-	getContinentByCode: function(code)
-	{
-		var continent;
+    getContinentByCode: function(code)
+    {
+        var continent;
 
-		$.each(Analytics.continents, function(key, _continent)
-		{
-			if(code == _continent.code)
-			{
-				continent = _continent.label;
-			}
-		});
+        $.each(Analytics.continents, function(key, _continent)
+        {
+            if(code == _continent.code)
+            {
+                continent = _continent.label;
+            }
+        });
 
-		if(continent)
-		{
-			return continent;
-		}
+        if(continent)
+        {
+            return continent;
+        }
 
-		return code;
-	},
+        return code;
+    },
 
-	getSubContinentByCode: function(code)
-	{
-		var continent;
+    getSubContinentByCode: function(code)
+    {
+        var continent;
 
-		$.each(Analytics.subContinents, function(key, _continent)
-		{
-			if(code == _continent.code)
-			{
-				continent = _continent.label;
-			}
-		});
+        $.each(Analytics.subContinents, function(key, _continent)
+        {
+            if(code == _continent.code)
+            {
+                continent = _continent.label;
+            }
+        });
 
-		if(continent)
-		{
-			return continent;
-		}
+        if(continent)
+        {
+            return continent;
+        }
 
-		return code;
-	}
+        return code;
+    }
 };

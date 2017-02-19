@@ -17,8 +17,8 @@ use dukt\oauth\Plugin as Oauth;
 
 class Api extends Component
 {
-	// Public Methods
-	// =========================================================================
+    // Public Methods
+    // =========================================================================
 
     /**
      * Get columns
@@ -112,8 +112,8 @@ class Api extends Component
         }
     }
 
-	// Private Methods
-	// =========================================================================
+    // Private Methods
+    // =========================================================================
 
     /**
      * Populate Criteria
@@ -225,138 +225,138 @@ class Api extends Component
         return $this->parseReportResponse($response);
     }
 
-	/**
-	 * Parse Report Response
-	 * 
-	 * @param $data
-	 *
-	 * @return array
-	 */
-	private function parseReportResponse($data)
-	{
-		// Columns
+    /**
+     * Parse Report Response
+     *
+     * @param $data
+     *
+     * @return array
+     */
+    private function parseReportResponse($data)
+    {
+        // Columns
 
-		$cols = [];
+        $cols = [];
 
-		foreach($data->columnHeaders as $col)
-		{
-			$dataType = $col->dataType;
-			$id = $col->name;
-			$label = Analytics::$plugin->metadata->getDimMet($col->name);
-			$type = strtolower($dataType);
+        foreach($data->columnHeaders as $col)
+        {
+            $dataType = $col->dataType;
+            $id = $col->name;
+            $label = Analytics::$plugin->metadata->getDimMet($col->name);
+            $type = strtolower($dataType);
 
-			switch($col->name)
-			{
-				case 'ga:date':
-				case 'ga:yearMonth':
-					$type = 'date';
-					break;
+            switch($col->name)
+            {
+                case 'ga:date':
+                case 'ga:yearMonth':
+                    $type = 'date';
+                    break;
 
-				case 'ga:continent':
-					$type = 'continent';
-					break;
-				case 'ga:subContinent':
-					$type = 'subContinent';
-					break;
+                case 'ga:continent':
+                    $type = 'continent';
+                    break;
+                case 'ga:subContinent':
+                    $type = 'subContinent';
+                    break;
 
-				case 'ga:latitude':
-				case 'ga:longitude':
-					$type = 'float';
-					break;
-			}
+                case 'ga:latitude':
+                case 'ga:longitude':
+                    $type = 'float';
+                    break;
+            }
 
-			$cols[] = array(
-				'type' => $type,
-				'dataType' => $dataType,
-				'id' => $id,
-				'label' => Craft::t('app', $label),
-			);
-		}
-
-
-		// Rows
-
-		$rows = [];
-
-		if($data->rows)
-		{
-			$rows = $data->rows;
-
-			foreach($rows as $kRow => $row)
-			{
-				foreach($row as $_valueKey => $_value)
-				{
-					$col = $cols[$_valueKey];
-
-					$value = $this->formatRawValue($col['type'], $_value);
-
-					if($col['id'] == 'ga:continent')
-					{
-						$value = Analytics::$plugin->metadata->getContinentCode($value);
-					}
-
-					if($col['id'] == 'ga:subContinent')
-					{
-						$value = Analytics::$plugin->metadata->getSubContinentCode($value);
-					}
+            $cols[] = array(
+                'type' => $type,
+                'dataType' => $dataType,
+                'id' => $id,
+                'label' => Craft::t('app', $label),
+            );
+        }
 
 
-					// translate values
+        // Rows
 
-					switch($col['id'])
-					{
-						case 'ga:country':
-						case 'ga:city':
-						// case 'ga:continent':
-						// case 'ga:subContinent':
-						case 'ga:userType':
-						case 'ga:javaEnabled':
-						case 'ga:deviceCategory':
-						case 'ga:mobileInputSelector':
-						case 'ga:channelGrouping':
-						case 'ga:medium':
-							$value = Craft::t('app', $value);
-							break;
-					}
+        $rows = [];
+
+        if($data->rows)
+        {
+            $rows = $data->rows;
+
+            foreach($rows as $kRow => $row)
+            {
+                foreach($row as $_valueKey => $_value)
+                {
+                    $col = $cols[$_valueKey];
+
+                    $value = $this->formatRawValue($col['type'], $_value);
+
+                    if($col['id'] == 'ga:continent')
+                    {
+                        $value = Analytics::$plugin->metadata->getContinentCode($value);
+                    }
+
+                    if($col['id'] == 'ga:subContinent')
+                    {
+                        $value = Analytics::$plugin->metadata->getSubContinentCode($value);
+                    }
 
 
-					// update cell
+                    // translate values
 
-					$rows[$kRow][$_valueKey] = $value;
-				}
-			}
-		}
+                    switch($col['id'])
+                    {
+                        case 'ga:country':
+                        case 'ga:city':
+                        // case 'ga:continent':
+                        // case 'ga:subContinent':
+                        case 'ga:userType':
+                        case 'ga:javaEnabled':
+                        case 'ga:deviceCategory':
+                        case 'ga:mobileInputSelector':
+                        case 'ga:channelGrouping':
+                        case 'ga:medium':
+                            $value = Craft::t('app', $value);
+                            break;
+                    }
 
-		return array(
-			'cols' => $cols,
-			'rows' => $rows
-		);
-	}
 
-	/**
-	 * Format RAW value
-	 *
-	 * @param string $type
-	 * @param string $value
-	 */
-	private function formatRawValue($type, $value)
-	{
-		switch($type)
-		{
-			case 'integer':
-			case 'currency':
-			case 'float':
-			case 'time':
-			case 'percent':
-				$value = (float) $value;
-				break;
+                    // update cell
 
-			default:
-				$value = (string) $value;
-		}
+                    $rows[$kRow][$_valueKey] = $value;
+                }
+            }
+        }
 
-		return $value;
-	}
+        return array(
+            'cols' => $cols,
+            'rows' => $rows
+        );
+    }
+
+    /**
+     * Format RAW value
+     *
+     * @param string $type
+     * @param string $value
+     */
+    private function formatRawValue($type, $value)
+    {
+        switch($type)
+        {
+            case 'integer':
+            case 'currency':
+            case 'float':
+            case 'time':
+            case 'percent':
+                $value = (float) $value;
+                break;
+
+            default:
+                $value = (string) $value;
+        }
+
+        return $value;
+    }
 
 
     /**

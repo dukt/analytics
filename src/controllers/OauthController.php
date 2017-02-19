@@ -13,8 +13,8 @@ use dukt\analytics\Plugin as Analytics;
 
 class OauthController extends Controller
 {
-	// Public Methods
-	// =========================================================================
+    // Public Methods
+    // =========================================================================
 
     /**
      * Connect
@@ -41,31 +41,31 @@ class OauthController extends Controller
         return $this->redirect($authorizationUrl);
     }
 
-	/**
-	 * Disconnect
-	 *
-	 * @return null
-	 */
-	public function actionDisconnect()
-	{
-		if (Analytics::$plugin->oauth->deleteToken())
-		{
+    /**
+     * Disconnect
+     *
+     * @return null
+     */
+    public function actionDisconnect()
+    {
+        if (Analytics::$plugin->oauth->deleteToken())
+        {
             Analytics::$plugin->cache->delete(['accountExplorerData']);
 
-			Craft::$app->getSession()->setNotice(Craft::t('app', "Disconnected from Google Analytics."));
-		}
-		else
-		{
-			Craft::$app->getSession()->setError(Craft::t('app', "Couldn’t disconnect from Google Analytics"));
-		}
+            Craft::$app->getSession()->setNotice(Craft::t('app', "Disconnected from Google Analytics."));
+        }
+        else
+        {
+            Craft::$app->getSession()->setError(Craft::t('app', "Couldn’t disconnect from Google Analytics"));
+        }
 
 
-		// redirect
+        // redirect
 
         $redirect = Craft::$app->request->referrer;
 
-		return $this->redirect($redirect);
-	}
+        return $this->redirect($redirect);
+    }
 
     /**
      * Callback

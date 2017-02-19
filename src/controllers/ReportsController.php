@@ -14,75 +14,75 @@ use dukt\analytics\Plugin as Analytics;
 
 class ReportsController extends Controller
 {
-	// Public Methods
-	// =========================================================================
+    // Public Methods
+    // =========================================================================
 
-	/**
-	 * Get Real-Time Report
-	 *
-	 * @return null
-	 */
-	public function actionRealtimeWidget()
-	{
-		$newVisitor = 0;
-		$returningVisitor = 0;
-		$total = 0;
+    /**
+     * Get Real-Time Report
+     *
+     * @return null
+     */
+    public function actionRealtimeWidget()
+    {
+        $newVisitor = 0;
+        $returningVisitor = 0;
+        $total = 0;
 
-		if(!Craft::$app->config->get('demoMode', 'analytics'))
-		{
-			try
-			{
-				$criteria = new RequestCriteria;
-				$criteria->realtime = true;
-				$criteria->metrics = 'ga:activeVisitors';
-				$criteria->optParams = array('dimensions' => 'ga:visitorType');
+        if(!Craft::$app->config->get('demoMode', 'analytics'))
+        {
+            try
+            {
+                $criteria = new RequestCriteria;
+                $criteria->realtime = true;
+                $criteria->metrics = 'ga:activeVisitors';
+                $criteria->optParams = array('dimensions' => 'ga:visitorType');
 
-				$response = Analytics::$plugin->api->sendRequest($criteria);
-
-
-				// total
-
-				if(!empty($response['totalResults']))
-				{
-					$total = $response['totalResults'];
-				}
+                $response = Analytics::$plugin->api->sendRequest($criteria);
 
 
-				// new & returning visitors
+                // total
 
-				if(!empty($response['rows']))
-				{
-					$rows = $response['rows'];
+                if(!empty($response['totalResults']))
+                {
+                    $total = $response['totalResults'];
+                }
 
-					if(!empty($rows[0][1]))
-					{
-						switch($rows[0][0])
-						{
-							case "RETURNING":
-								$returningVisitor = $rows[0][1];
-								break;
 
-							case "NEW":
-								$newVisitor = $rows[0][1];
-								break;
-						}
-					}
+                // new & returning visitors
 
-					if(!empty($rows[1][1]))
-					{
-						switch($rows[1][0])
-						{
-							case "RETURNING":
-								$returningVisitor = $rows[1][1];
-								break;
+                if(!empty($response['rows']))
+                {
+                    $rows = $response['rows'];
 
-							case "NEW":
-								$newVisitor = $rows[1][1];
-								break;
-						}
-					}
-				}
-			}
+                    if(!empty($rows[0][1]))
+                    {
+                        switch($rows[0][0])
+                        {
+                            case "RETURNING":
+                                $returningVisitor = $rows[0][1];
+                                break;
+
+                            case "NEW":
+                                $newVisitor = $rows[0][1];
+                                break;
+                        }
+                    }
+
+                    if(!empty($rows[1][1]))
+                    {
+                        switch($rows[1][0])
+                        {
+                            case "RETURNING":
+                                $returningVisitor = $rows[1][1];
+                                break;
+
+                            case "NEW":
+                                $newVisitor = $rows[1][1];
+                                break;
+                        }
+                    }
+                }
+            }
             catch(\Google_Service_Exception $e)
             {
                 $errors = $e->getErrors();
@@ -103,57 +103,57 @@ class ReportsController extends Controller
                 // \dukt\analytics\Plugin::log('Couldn’t get element data: '.$errorMsg, LogLevel::Error);
                 return $this->asErrorJson($errorMsg);
             }
-		}
-		else
-		{
-			// Demo Mode
-			$newVisitor = 5;
-			$returningVisitor = 7;
-			$total = ($newVisitor + $returningVisitor);
-		}
+        }
+        else
+        {
+            // Demo Mode
+            $newVisitor = 5;
+            $returningVisitor = 7;
+            $total = ($newVisitor + $returningVisitor);
+        }
 
-		return $this->asJson(array(
-			'total' => $total,
-			'newVisitor' => $newVisitor,
-			'returningVisitor' => $returningVisitor
-		));
-	}
+        return $this->asJson(array(
+            'total' => $total,
+            'newVisitor' => $newVisitor,
+            'returningVisitor' => $returningVisitor
+        ));
+    }
 
-	/**
-	 * Get report
-	 *
-	 * @return null
-	 */
-	public function actionReportWidget()
-	{
+    /**
+     * Get report
+     *
+     * @return null
+     */
+    public function actionReportWidget()
+    {
 /*		try
-		{*/
-			$profileId = Analytics::$plugin->analytics->getProfileId();
+        {*/
+            $profileId = Analytics::$plugin->analytics->getProfileId();
 
-			$request = [
-				'chart' => Craft::$app->request->getBodyParam('chart'),
-				'period' => Craft::$app->request->getBodyParam('period'),
-				'options' => Craft::$app->request->getBodyParam('options'),
-			];
+            $request = [
+                'chart' => Craft::$app->request->getBodyParam('chart'),
+                'period' => Craft::$app->request->getBodyParam('period'),
+                'options' => Craft::$app->request->getBodyParam('options'),
+            ];
 
-			$cacheId = ['getReport', $request, $profileId];
+            $cacheId = ['getReport', $request, $profileId];
 
-			$response = Analytics::$plugin->cache->get($cacheId);
+            $response = Analytics::$plugin->cache->get($cacheId);
 
-			if(!$response)
-			{
-				$response = Analytics::$plugin->reports->getReport($request);
+            if(!$response)
+            {
+                $response = Analytics::$plugin->reports->getReport($request);
 
-				if($response)
-				{
-					Analytics::$plugin->cache->set($cacheId, $response);
-				}
-			}
+                if($response)
+                {
+                    Analytics::$plugin->cache->set($cacheId, $response);
+                }
+            }
 
-			return $this->asJson($response);
+            return $this->asJson($response);
 /*		}
-		catch(\Google_Service_Exception $e)
-		{
+        catch(\Google_Service_Exception $e)
+        {
             $errors = $e->getErrors();
             $errorMsg = $e->getMessage();
 
@@ -165,77 +165,77 @@ class ReportsController extends Controller
             // \dukt\analytics\Plugin::log('Couldn’t get report widget data: '.$errorMsg."\r\n".print_r($errors, true), LogLevel::Error);
 
             return $this->asErrorJson($errorMsg);
-		}
+        }
         catch(\Exception $e)
         {
             $errorMsg = $e->getMessage();
             // \dukt\analytics\Plugin::log('Couldn’t get element data: '.$errorMsg, LogLevel::Error);
             return $this->asErrorJson($errorMsg);
         }*/
-	}
+    }
 
-	/**
-	 * Get Element Report
-	 *
-	 * @param array $variables
-	 *
-	 * @return null
-	 */
-	public function actionElement(array $variables = array())
-	{
-		try
-		{
-			$elementId = Craft::$app->request->getRequiredParam('elementId');
-			$locale = Craft::$app->request->getRequiredParam('locale');
-			$metric = Craft::$app->request->getRequiredParam('metric');
+    /**
+     * Get Element Report
+     *
+     * @param array $variables
+     *
+     * @return null
+     */
+    public function actionElement(array $variables = array())
+    {
+        try
+        {
+            $elementId = Craft::$app->request->getRequiredParam('elementId');
+            $locale = Craft::$app->request->getRequiredParam('locale');
+            $metric = Craft::$app->request->getRequiredParam('metric');
 
-			$uri = Analytics::$plugin->analytics->getElementUrlPath($elementId, $locale);
+            $uri = Analytics::$plugin->analytics->getElementUrlPath($elementId, $locale);
 
-			if($uri)
-			{
-				if($uri == '__home__')
-				{
-					$uri = '';
-				}
+            if($uri)
+            {
+                if($uri == '__home__')
+                {
+                    $uri = '';
+                }
 
-				$start = date('Y-m-d', strtotime('-1 month'));
-				$end = date('Y-m-d');
-				$dimensions = 'ga:date';
+                $start = date('Y-m-d', strtotime('-1 month'));
+                $end = date('Y-m-d');
+                $dimensions = 'ga:date';
 
-				$optParams = array(
-					'dimensions' => $dimensions,
-					'filters' => "ga:pagePath==".$uri
-				);
+                $optParams = array(
+                    'dimensions' => $dimensions,
+                    'filters' => "ga:pagePath==".$uri
+                );
 
-				$criteria = new RequestCriteria;
-				$criteria->startDate = $start;
-				$criteria->endDate = $end;
-				$criteria->metrics = $metric;
-				$criteria->optParams = $optParams;
+                $criteria = new RequestCriteria;
+                $criteria->startDate = $start;
+                $criteria->endDate = $end;
+                $criteria->metrics = $metric;
+                $criteria->optParams = $optParams;
 
-				$cacheId = ['ReportsController.actionGetElementReport', $criteria->getAttributes()];
-				$response = Analytics::$plugin->cache->get($cacheId);
+                $cacheId = ['ReportsController.actionGetElementReport', $criteria->getAttributes()];
+                $response = Analytics::$plugin->cache->get($cacheId);
 
-				if(!$response)
-				{
-					$response = Analytics::$plugin->api->sendRequest($criteria);
+                if(!$response)
+                {
+                    $response = Analytics::$plugin->api->sendRequest($criteria);
 
-					if($response)
-					{
-						Analytics::$plugin->cache->set($cacheId, $response);
-					}
-				}
+                    if($response)
+                    {
+                        Analytics::$plugin->cache->set($cacheId, $response);
+                    }
+                }
 
-				return $this->asJson([
-					'type' => 'area',
-					'chart' => $response
-				]);
-			}
-			else
-			{
-			   throw new Exception("Element doesn't support URLs.", 1);
-			}
-		}
+                return $this->asJson([
+                    'type' => 'area',
+                    'chart' => $response
+                ]);
+            }
+            else
+            {
+               throw new Exception("Element doesn't support URLs.", 1);
+            }
+        }
         catch(\Google_Service_Exception $e)
         {
             $errors = $e->getErrors();
@@ -250,11 +250,11 @@ class ReportsController extends Controller
 
             return $this->asErrorJson($errorMsg);
         }
-		catch(\Exception $e)
-		{
+        catch(\Exception $e)
+        {
             $errorMsg = $e->getMessage();
             // \dukt\analytics\Plugin::log('Couldn’t get element data: '.$errorMsg, LogLevel::Error);
-			return $this->asErrorJson($errorMsg);
-		}
-	}
+            return $this->asErrorJson($errorMsg);
+        }
+    }
 }
