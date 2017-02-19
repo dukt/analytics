@@ -126,7 +126,7 @@ class ReportsController extends Controller
      */
     public function actionReportWidget()
     {
-		try
+        try
         {
             $profileId = Analytics::$plugin->getAnalytics()->getProfileId();
 
@@ -151,7 +151,7 @@ class ReportsController extends Controller
             }
 
             return $this->asJson($response);
-		}
+        }
         catch(\Google_Service_Exception $e)
         {
             $errors = $e->getErrors();
