@@ -24,11 +24,9 @@ class AnalyticsAsset extends AssetBundle
         // when this asset bundle is registered
         $this->js = [
             'js/Analytics.js',
-            'js/AccountExplorer.js',
         ];
 
         $this->css = [
-            'css/AccountExplorer.css',
             'css/settings.css',
         ];
 

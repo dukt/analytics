@@ -9,7 +9,7 @@ namespace dukt\analytics\controllers;
 
 use Craft;
 use craft\web\Controller;
-use dukt\analytics\web\assets\analytics\AnalyticsAsset;
+use dukt\analytics\web\assets\settings\SettingsAsset;
 use dukt\analytics\Plugin as Analytics;
 
 class SettingsController extends Controller
@@ -156,7 +156,7 @@ class SettingsController extends Controller
         */
 
         $variables['googleIconUrl'] = Craft::$app->assetManager->getPublishedUrl('@dukt/analytics/icons/google.svg', true);
-        Craft::$app->getView()->registerAssetBundle(AnalyticsAsset::class);
+        Craft::$app->getView()->registerAssetBundle(SettingsAsset::class);
         return $this->renderTemplate('analytics/settings/_index', $variables);
     }
 

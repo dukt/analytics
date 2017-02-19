@@ -5,16 +5,16 @@
  * @license   https://dukt.net/craft/analytics/docs/license
  */
 
-namespace dukt\analytics\web\assets\reportwidget;
+namespace dukt\analytics\web\assets\settings;
 
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
 use dukt\analytics\web\assets\analytics\AnalyticsAsset;
 
 /**
- * Report widget asset bundle.
+ * Settings asset bundle.
  */
-class ReportWidgetAsset extends AssetBundle
+class SettingsAsset extends AssetBundle
 {
     // Public Methods
     // =========================================================================
@@ -36,14 +36,11 @@ class ReportWidgetAsset extends AssetBundle
         // define the relative path to CSS/JS files that should be registered with the page
         // when this asset bundle is registered
         $this->js = [
-            'js/ReportWidgetSettings.js',
-            'js/ReportWidget.js',
-            'js/jsapi.js',
+            'js/AccountExplorer.js',
         ];
 
         $this->css = [
-            'css/ReportWidget.css',
-            'css/ReportWidgetSettings.css',
+            'css/AccountExplorer.css',
         ];
 
         parent::init();

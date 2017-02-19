@@ -9,6 +9,7 @@ namespace dukt\analytics\web\assets\realtimereportwidget;
 
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
+use dukt\analytics\web\assets\analytics\AnalyticsAsset;
 
 /**
  * Realtime report widget asset bundle.
@@ -29,7 +30,7 @@ class RealtimeReportWidgetAsset extends AssetBundle
         // define the dependencies
         $this->depends = [
             CpAsset::class,
-            \dukt\analytics\web\assets\analytics\AnalyticsAsset::class,
+            AnalyticsAsset::class,
         ];
 
         // define the relative path to CSS/JS files that should be registered with the page
