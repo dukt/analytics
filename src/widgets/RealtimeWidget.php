@@ -40,25 +40,21 @@ class RealtimeWidget extends \craft\base\Widget
 		return parent::isSelectable();
 	}
 
-	/**
-	 * @inheritDoc IWidget::getTitle()
-	 *
-	 * @return string
-	 */
-	public function getName()
-	{
-		return Craft::t('app', 'Analytics Real-Time');
-	}
+    /**
+     * @inheritdoc
+     */
+    public static function displayName(): string
+    {
+        return Craft::t('analytics', 'Analytics Real-time');
+    }
 
-	/**
-	 * @inheritDoc IWidget::getIconPath()
-	 *
-	 * @return string
-	 */
-	public function getIconPath()
-	{
-		return Craft::$app->resources->getResourcePath('analytics/images/widgets/realtime.svg');
-	}
+    /**
+     * @inheritdoc
+     */
+    public static function iconPath()
+    {
+        return Craft::getAlias('@dukt/analytics/icons/realtime-report.svg');
+    }
 
 	/**
 	 * @inheritDoc IWidget::getBodyHtml()

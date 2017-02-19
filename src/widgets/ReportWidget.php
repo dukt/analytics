@@ -26,15 +26,13 @@ class ReportWidget extends \craft\base\Widget
 	// Public Methods
 	// =========================================================================
 
-	/**
-	 * @inheritDoc IComponentType::getName()
-	 *
-	 * @return string
-	 */
-	public function getName()
-	{
-		return Craft::t('app', 'Analytics Report');
-	}
+    /**
+     * @inheritdoc
+     */
+    public static function displayName(): string
+    {
+        return Craft::t('analytics', 'Analytics Report');
+    }
 
 	/**
 	 * @inheritDoc IWidget::getTitle()
@@ -50,18 +48,16 @@ class ReportWidget extends \craft\base\Widget
 			return $reportTitle;
 		}
 
-		return Craft::t('app', 'Analytics Report');
+		return Craft::t('analytics', 'Analytics Report');
 	}
 
-	/**
-	 * @inheritDoc IWidget::getIconPath()
-	 *
-	 * @return string
-	 */
-	public function getIconPath()
-	{
-		return Craft::$app->resources->getResourcePath('analytics/images/widgets/stats.svg');
-	}
+    /**
+     * @inheritdoc
+     */
+    public static function iconPath()
+    {
+        return Craft::getAlias('@dukt/analytics/icons/report.svg');
+    }
 
 	/**
 	 * @inheritDoc IWidget::getBodyHtml()
