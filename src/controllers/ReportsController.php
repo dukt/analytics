@@ -126,8 +126,8 @@ class ReportsController extends Controller
      */
     public function actionReportWidget()
     {
-/*		try
-        {*/
+		try
+        {
             $profileId = Analytics::$plugin->analytics->getProfileId();
 
             $request = [
@@ -151,7 +151,7 @@ class ReportsController extends Controller
             }
 
             return $this->asJson($response);
-/*		}
+		}
         catch(\Google_Service_Exception $e)
         {
             $errors = $e->getErrors();
@@ -171,7 +171,7 @@ class ReportsController extends Controller
             $errorMsg = $e->getMessage();
             // \dukt\analytics\Plugin::log('Couldn’t get element data: '.$errorMsg, LogLevel::Error);
             return $this->asErrorJson($errorMsg);
-        }*/
+        }
     }
 
     /**
