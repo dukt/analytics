@@ -44,16 +44,18 @@ class AnalyticsAsset extends AssetBundle
         $formats = ChartHelper::formats();
         $currency = Analytics::$plugin->analytics->getD3LocaleDefinitionCurrency();
 
-        $js = 'var Analytics = {};';
+        $js = "if(typeof Analytics == 'undefined') {";
 
+        $js .= 'var Analytics = {};';
         $js .= 'Analytics.GoogleVisualizationCalled = false;';
         $js .= 'Analytics.GoogleVisualizationReady = false;';
         $js .= 'Analytics.reports = {};';
-
         $js .= 'Analytics.continents = '.Json::encode($continents).';';
         $js .= 'Analytics.subContinents = '.Json::encode($subContinents).';';
         $js .= 'Analytics.formats = '.Json::encode($formats).';';
         $js .= 'Analytics.currency = '.Json::encode($currency).';';
+
+        $js .= '}';
 
         $view->registerJs($js, View::POS_BEGIN);
     }

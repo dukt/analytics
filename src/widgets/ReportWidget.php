@@ -66,6 +66,8 @@ class ReportWidget extends \craft\base\Widget
 	 */
 	public function getBodyHtml()
 	{
+        $view = Craft::$app->getView();
+
 		if(Analytics::$plugin->analytics->checkPluginRequirements())
 		{
 			if(Craft::$app->config->get('enableWidgets', 'analytics'))
@@ -102,32 +104,34 @@ class ReportWidget extends \craft\base\Widget
 						'cachedResponse' => isset($cachedResponse) ? $cachedResponse : null,
 					];
 
-                    Craft::$app->getView()->registerAssetBundle(ReportWidgetAsset::class);
+                    $view->registerAssetBundle(ReportWidgetAsset::class);
 
                     $jsTemplate = 'window.csrfTokenName = "{{ craft.app.config.get(\'csrfTokenName\')|e(\'js\') }}";';
 					$jsTemplate .= 'window.csrfTokenValue = "{{ craft.app.request.csrfToken|e(\'js\') }}";';
-					$js = Craft::$app->getView()->renderString($jsTemplate);
+					$js = $view->renderString($jsTemplate);
 
-					Craft::$app->getView()->registerJs($js);
-					Craft::$app->getView()->registerJs('var AnalyticsChartLanguage = "'.Craft::t('app', 'analyticsChartLanguage').'";');
-					Craft::$app->getView()->registerJs('new Analytics.ReportWidget("widget'.$widgetId.'", '.Json::encode($widgetOptions).');');
+					$view->registerJs($js);
+					$view->registerJs('var AnalyticsChartLanguage = "'.Craft::t('app', 'analyticsChartLanguage').'";');
+					$view->registerJs('console.log(Analytics); new Analytics.ReportWidget("widget'.$widgetId.'", '.Json::encode($widgetOptions).');');
 
-					return Craft::$app->getView()->renderTemplate('analytics/_components/widgets/Report/body');
+					$html = $view->renderTemplate('analytics/_components/widgets/Report/body');
 				}
 				else
 				{
-					return Craft::$app->getView()->renderTemplate('analytics/_special/plugin-not-configured');
+					$html = $view->renderTemplate('analytics/_special/plugin-not-configured');
 				}
 			}
 			else
 			{
-				return Craft::$app->getView()->renderTemplate('analytics/_components/widgets/Report/disabled');
+				$html = $view->renderTemplate('analytics/_components/widgets/Report/disabled');
 			}
 		}
 		else
 		{
-			return Craft::$app->getView()->renderTemplate('analytics/_special/plugin-not-configured');
+			$html = $view->renderTemplate('analytics/_special/plugin-not-configured');
 		}
+
+		return $html;
 	}
 
 	/**
