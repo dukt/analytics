@@ -124,9 +124,19 @@ class Oauth extends Component
 
         if(!isset($options['redirectUri']))
         {
-            $options['redirectUri'] = UrlHelper::actionUrl('analytics/oauth/callback');
+            $options['redirectUri'] = $this->getRedirectUri();
         }
 
         return new Google($options);
+    }
+
+    public function getJavascriptOrigin()
+    {
+        return UrlHelper::baseUrl();
+    }
+
+    public function getRedirectUri()
+    {
+        return UrlHelper::actionUrl('analytics/oauth/callback');
     }
 }

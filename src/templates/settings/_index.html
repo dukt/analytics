@@ -16,22 +16,52 @@
 
 		{% if not oauthAccount %}
 
-			<h2 class="first">{{ 'Google Analytics Account'|t('app') }}</h2>
 
 			{% if errors|length > 0 %}
+				<h2 class="first">{{ 'Error'|t('app') }}</h2>
 				<ul class="error">
 					{% for error in errors %}
 						<li>{{ error }}</li>
 					{% endfor %}
 				</ul>
-			{% else %}
-				<p>{{'You need to connect Craft to a Google account in order to get started.'|t}}</p>
+				<hr>
 			{% endif %}
 
 			{% if token %}
 				<p><a class="btn small" href="{{ actionUrl('analytics/oauth/disconnect') }}">{{'Disconnect'|t}}</a></p>
 			{% else %}
-				<p>{{"Getting errors trying to connect ?"|t}} <a href="{{url('oauth/providers/google') }}">{{"Check Google API key & secret in OAuth settings"|t}}</a>.</p>
+
+				<h2>{{ 'Client ID & Secret' }}</h2>
+
+				<p>{{ ("Copy the client ID & secret from <a href=\"https://code.google.com/apis/console/\">"~'Google Console → API Manager → Credentials'|t('analytics')~"</a> and paste them in <code>craft/config/analytics.php</code>.")|raw }}</p>
+				{{ forms.textField({
+					readonly: true,
+					label: "Client ID",
+					value: oauthProviderOptions.clientId
+				}) }}
+
+				{{ forms.textField({
+					readonly: true,
+					label: "Client Secret",
+					value: oauthProviderOptions.clientSecret
+				}) }}
+
+				<h2>{{ 'Javascript Origin & Redirect URLs' }}</h2>
+
+				<p>{{ 'Copy the Javascript Origin & Redirect URLs below to {link}.'|t('analytics', {link: '<a href="https://code.google.com/apis/console/">'~'Google Console → API Manager → Credentials'|t('analytics')~'</a>' })|raw }}</p>
+
+				{{ forms.textField({
+					readonly: true,
+					label: "Javascript Origin",
+					value: javascriptOrigin
+				}) }}
+
+				{{ forms.textField({
+					readonly: true,
+					label: "Redirect URI",
+					value: redirectUri
+				}) }}
+
 				<p><a class="btn submit" href="{{ actionUrl('analytics/oauth/connect') }}">{{"Connect to Google Analytics"|t}}</a></p>
 			{% endif %}
 

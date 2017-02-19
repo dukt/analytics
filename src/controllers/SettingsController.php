@@ -149,14 +149,13 @@ class SettingsController extends Controller
             $variables['provider'] = $provider;
         }
 
-        /*
-        Craft::$app->getView()->registerCssFile('analytics/css/settings.css');
-        Craft::$app->getView()->registerJsFile('analytics/js/AccountExplorer.js');
-        Craft::$app->getView()->registerCssFile('analytics/css/AccountExplorer.css');
-        */
-
+        $variables['javascriptOrigin'] = Analytics::$plugin->oauth->getJavascriptOrigin();
+        $variables['redirectUri'] = Analytics::$plugin->oauth->getRedirectUri();
+        $variables['oauthProviderOptions'] = Craft::$app->config->get('oauthProviderOptions', 'analytics');
         $variables['googleIconUrl'] = Craft::$app->assetManager->getPublishedUrl('@dukt/analytics/icons/google.svg', true);
+
         Craft::$app->getView()->registerAssetBundle(SettingsAsset::class);
+
         return $this->renderTemplate('analytics/settings/_index', $variables);
     }
 
