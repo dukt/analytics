@@ -77,7 +77,6 @@ class Plugin extends \craft\base\Plugin
     {
         $rules = [
             'analytics/settings' => 'analytics/settings/index',
-            'analytics/install' => 'analytics/install/index',
             'analytics/utils' => 'analytics/utils/metadata',
             'analytics/utils/metadata' => 'analytics/utils/metadata',
             'analytics/tests/dataTypes' => 'analytics/tests/dataTypes',
