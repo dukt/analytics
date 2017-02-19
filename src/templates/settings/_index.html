@@ -129,7 +129,7 @@
 
 					{{ forms.checkboxField({
 						label: "Enable real-time"|t,
-						warning: (craft.config.get('enableRealtime', 'analytics') ? configWarning('enableRealtime')),
+						warning: (craft.app.config.get('enableRealtime', 'analytics') ? configWarning('enableRealtime')),
 						name: 'settings[enableRealtime]',
 						checked: (settings.enableRealtime ? settings.enableRealtime : false),
 						toggle: 'enableRealtime'
@@ -139,7 +139,7 @@
 
 						{{ forms.textField({
 							label: "Real-Time Refresh Interval"|t,
-							warning: (craft.config.get('realtimeRefreshInterval', 'analytics') ? configWarning('realtimeRefreshInterval')),
+							warning: (craft.app.config.get('realtimeRefreshInterval', 'analytics') ? configWarning('realtimeRefreshInterval')),
 							instructions: "Interval in seconds between requests to real-time API."|t,
 							placeholder: craft.app.config.get('defaultRealtimeRefreshInterval', 'analytics'),
 							name: 'settings[realtimeRefreshInterval]',
