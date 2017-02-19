@@ -31,24 +31,11 @@
 				<p><a class="btn small" href="{{ actionUrl('analytics/oauth/disconnect') }}">{{'Disconnect'|t}}</a></p>
 			{% else %}
 
-				<h2>{{ 'Client ID & Secret' }}</h2>
+				<h2>{{ 'Create the OAuth application'|t('analytics') }}</h2>
 
-				<p>{{ ("Copy the client ID & secret from <a href=\"https://code.google.com/apis/console/\">"~'Google Console → API Manager → Credentials'|t('analytics')~"</a> and paste them in <code>craft/config/analytics.php</code>.")|raw }}</p>
-				{{ forms.textField({
-					readonly: true,
-					label: "Client ID",
-					value: oauthProviderOptions.clientId
-				}) }}
+				<p>{{ "Create an OAuth 2.0 application and enable associated providers in the {link} under API Manager → Credentials."|t('analytics', {link: '<a href="https://code.google.com/apis/console/">'~'Google API Console'|t('analytics')~'</a>'})|raw }}</p>
 
-				{{ forms.textField({
-					readonly: true,
-					label: "Client Secret",
-					value: oauthProviderOptions.clientSecret
-				}) }}
-
-				<h2>{{ 'Javascript Origin & Redirect URLs' }}</h2>
-
-				<p>{{ 'Copy the Javascript Origin & Redirect URLs below to {link}.'|t('analytics', {link: '<a href="https://code.google.com/apis/console/">'~'Google Console → API Manager → Credentials'|t('analytics')~'</a>' })|raw }}</p>
+				<p>{{ "Once created, configure the application using the following javascript origin and redirect urls."|t('analytics') }}</p>
 
 				{{ forms.textField({
 					readonly: true,
@@ -61,6 +48,23 @@
 					label: "Redirect URI",
 					value: redirectUri
 				}) }}
+
+				<h2>{{ 'Configure the OAuth client'|t('analytics') }}</h2>
+
+				<p>{{ ("Copy the client ID & secret from the <a href=\"https://code.google.com/apis/console/\">"~'Google Api Console'|t('analytics')~"</a> under API Manager → Credentials, and paste them in <code>craft/config/analytics.php</code>.")|raw }}</p>
+
+				{{ forms.textField({
+					readonly: true,
+					label: "Client ID",
+					value: oauthProviderOptions.clientId
+				}) }}
+
+				{{ forms.textField({
+					readonly: true,
+					label: "Client Secret",
+					value: oauthProviderOptions.clientSecret
+				}) }}
+
 
 				<p><a class="btn submit" href="{{ actionUrl('analytics/oauth/connect') }}">{{"Connect to Google Analytics"|t}}</a></p>
 			{% endif %}
