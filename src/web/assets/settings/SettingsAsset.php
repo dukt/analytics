@@ -41,6 +41,7 @@ class SettingsAsset extends AssetBundle
 
         $this->css = [
             'css/AccountExplorer.css',
+            'css/settings.css',
         ];
 
         parent::init();
