@@ -23,8 +23,8 @@ class ReportWidget extends \craft\base\Widget
     public $period;
     public $options;
 
-	// Public Methods
-	// =========================================================================
+    // Public Methods
+    // =========================================================================
 
     /**
      * @inheritdoc
@@ -34,22 +34,22 @@ class ReportWidget extends \craft\base\Widget
         return Craft::t('analytics', 'Analytics Report');
     }
 
-	/**
-	 * @inheritDoc IWidget::getTitle()
-	 *
-	 * @return string
-	 */
-	public function getTitle(): string
-	{
-		$reportTitle = $this->_getReportTitle();
+    /**
+     * @inheritDoc IWidget::getTitle()
+     *
+     * @return string
+     */
+    public function getTitle(): string
+    {
+        $reportTitle = $this->_getReportTitle();
 
-		if($reportTitle)
-		{
-			return $reportTitle;
-		}
+        if($reportTitle)
+        {
+            return $reportTitle;
+        }
 
-		return Craft::t('analytics', 'Analytics Report');
-	}
+        return Craft::t('analytics', 'Analytics Report');
+    }
 
     /**
      * @inheritdoc
@@ -59,224 +59,224 @@ class ReportWidget extends \craft\base\Widget
         return Craft::getAlias('@dukt/analytics/icons/report.svg');
     }
 
-	/**
-	 * @inheritDoc IWidget::getBodyHtml()
-	 *
-	 * @return string|false
-	 */
-	public function getBodyHtml()
-	{
+    /**
+     * @inheritDoc IWidget::getBodyHtml()
+     *
+     * @return string|false
+     */
+    public function getBodyHtml()
+    {
         $view = Craft::$app->getView();
 
-		if(Analytics::$plugin->analytics->checkPluginRequirements())
-		{
-			if(Craft::$app->config->get('enableWidgets', 'analytics'))
-			{
-				$settings = $this->settings;
+        if(Analytics::$plugin->analytics->checkPluginRequirements())
+        {
+            if(Craft::$app->config->get('enableWidgets', 'analytics'))
+            {
+                $settings = $this->settings;
 
-				$profileId = Analytics::$plugin->analytics->getProfileId();
+                $profileId = Analytics::$plugin->analytics->getProfileId();
 
-				if($profileId)
-				{
-					$request = [
-						'chart' => (isset($settings['chart']) ? $settings['chart'] : null),
-						'period' => (isset($settings['period']) ? $settings['period'] : null),
-						'options' => (isset($settings['options'][$settings['chart']]) ? $settings['options'][$settings['chart']] : null),
-					];
-
-
-					// use cached response if available
-
-					if(Craft::$app->config->get('enableCache', 'analytics') === true)
-					{
-						$cacheId = ['getReport', $request, $profileId];
-
-						$cachedResponse = Analytics::$plugin->cache->get($cacheId);
-					}
+                if($profileId)
+                {
+                    $request = [
+                        'chart' => (isset($settings['chart']) ? $settings['chart'] : null),
+                        'period' => (isset($settings['period']) ? $settings['period'] : null),
+                        'options' => (isset($settings['options'][$settings['chart']]) ? $settings['options'][$settings['chart']] : null),
+                    ];
 
 
-					// render
+                    // use cached response if available
 
-					$widgetId = $this->id;
+                    if(Craft::$app->config->get('enableCache', 'analytics') === true)
+                    {
+                        $cacheId = ['getReport', $request, $profileId];
 
-					$widgetOptions = [
-						'request' => $request,
-						'cachedResponse' => isset($cachedResponse) ? $cachedResponse : null,
-					];
+                        $cachedResponse = Analytics::$plugin->cache->get($cacheId);
+                    }
+
+
+                    // render
+
+                    $widgetId = $this->id;
+
+                    $widgetOptions = [
+                        'request' => $request,
+                        'cachedResponse' => isset($cachedResponse) ? $cachedResponse : null,
+                    ];
 
                     $view->registerAssetBundle(ReportWidgetAsset::class);
 
                     $jsTemplate = 'window.csrfTokenName = "{{ craft.app.config.get(\'csrfTokenName\')|e(\'js\') }}";';
-					$jsTemplate .= 'window.csrfTokenValue = "{{ craft.app.request.csrfToken|e(\'js\') }}";';
-					$js = $view->renderString($jsTemplate);
+                    $jsTemplate .= 'window.csrfTokenValue = "{{ craft.app.request.csrfToken|e(\'js\') }}";';
+                    $js = $view->renderString($jsTemplate);
 
-					$view->registerJs($js);
-					$view->registerJs('var AnalyticsChartLanguage = "'.Craft::t('app', 'analyticsChartLanguage').'";');
-					$view->registerJs('new Analytics.ReportWidget("widget'.$widgetId.'", '.Json::encode($widgetOptions).');');
+                    $view->registerJs($js);
+                    $view->registerJs('var AnalyticsChartLanguage = "'.Craft::t('app', 'analyticsChartLanguage').'";');
+                    $view->registerJs('new Analytics.ReportWidget("widget'.$widgetId.'", '.Json::encode($widgetOptions).');');
 
-					$html = $view->renderTemplate('analytics/_components/widgets/Report/body');
-				}
-				else
-				{
-					$html = $view->renderTemplate('analytics/_special/plugin-not-configured');
-				}
-			}
-			else
-			{
-				$html = $view->renderTemplate('analytics/_components/widgets/Report/disabled');
-			}
-		}
-		else
-		{
-			$html = $view->renderTemplate('analytics/_special/plugin-not-configured');
-		}
+                    $html = $view->renderTemplate('analytics/_components/widgets/Report/body');
+                }
+                else
+                {
+                    $html = $view->renderTemplate('analytics/_special/plugin-not-configured');
+                }
+            }
+            else
+            {
+                $html = $view->renderTemplate('analytics/_components/widgets/Report/disabled');
+            }
+        }
+        else
+        {
+            $html = $view->renderTemplate('analytics/_special/plugin-not-configured');
+        }
 
-		return $html;
-	}
+        return $html;
+    }
 
-	/**
-	 * @inheritDoc ISavableComponentType::getSettingsHtml()
-	 *
-	 * @return string
-	 */
-	public function getSettingsHtml()
-	{
+    /**
+     * @inheritDoc ISavableComponentType::getSettingsHtml()
+     *
+     * @return string
+     */
+    public function getSettingsHtml()
+    {
         Craft::$app->getView()->registerAssetBundle(ReportWidgetAsset::class);
 
-		$id = 'analytics-settings-'.StringHelper::randomString();
-		$namespaceId = Craft::$app->getView()->namespaceInputId($id);
+        $id = 'analytics-settings-'.StringHelper::randomString();
+        $namespaceId = Craft::$app->getView()->namespaceInputId($id);
 
-		Craft::$app->getView()->registerJs("new Analytics.ReportWidgetSettings('".$namespaceId."');");
+        Craft::$app->getView()->registerJs("new Analytics.ReportWidgetSettings('".$namespaceId."');");
 
-		$settings = $this->getSettings();
+        $settings = $this->getSettings();
 
 
-		// select options
+        // select options
 
-		$chartTypes = ['area', 'counter', 'pie', 'table', 'geo'];
+        $chartTypes = ['area', 'counter', 'pie', 'table', 'geo'];
 
-		$selectOptions = [];
+        $selectOptions = [];
 
-		foreach($chartTypes as $chartType)
-		{
-			$selectOptions[$chartType] = $this->_geSelectOptionsByChartType($chartType);
-		}
+        foreach($chartTypes as $chartType)
+        {
+            $selectOptions[$chartType] = $this->_geSelectOptionsByChartType($chartType);
+        }
 
-		return Craft::$app->getView()->renderTemplate('analytics/_components/widgets/Report/settings', array(
-		   'id' => $id,
-		   'settings' => $settings,
-		   'selectOptions' => $selectOptions,
-		));
-	}
+        return Craft::$app->getView()->renderTemplate('analytics/_components/widgets/Report/settings', array(
+           'id' => $id,
+           'settings' => $settings,
+           'selectOptions' => $selectOptions,
+        ));
+    }
 
-	// Protected Methods
-	// =========================================================================
+    // Protected Methods
+    // =========================================================================
 
-	/**
-	 * @inheritDoc BaseSavableComponentType::defineSettings()
-	 *
-	 * @return array
-	 */
-	protected function defineSettings()
-	{
-		return array(
-			'realtime' => array(AttributeType::Bool),
-			'chart' => array(AttributeType::String),
-			'period' => array(AttributeType::String),
-			'options' => array(AttributeType::Mixed),
-		);
-	}
-	
-	// Private Methods
-	// =========================================================================
+    /**
+     * @inheritDoc BaseSavableComponentType::defineSettings()
+     *
+     * @return array
+     */
+    protected function defineSettings()
+    {
+        return array(
+            'realtime' => array(AttributeType::Bool),
+            'chart' => array(AttributeType::String),
+            'period' => array(AttributeType::String),
+            'options' => array(AttributeType::Mixed),
+        );
+    }
 
-	/**
-	 * Returns the dimension & metrics options for a given chart type
-	 *
-	 * @param $chartType
-	 *
-	 * @return array
-	 */
-	private function _geSelectOptionsByChartType($chartType)
-	{
-		switch($chartType)
-		{
-			case 'area':
+    // Private Methods
+    // =========================================================================
 
-				$options = [
-					'metrics' => Analytics::$plugin->metadata->getSelectMetricOptions()
-				];
+    /**
+     * Returns the dimension & metrics options for a given chart type
+     *
+     * @param $chartType
+     *
+     * @return array
+     */
+    private function _geSelectOptionsByChartType($chartType)
+    {
+        switch($chartType)
+        {
+            case 'area':
 
-				break;
+                $options = [
+                    'metrics' => Analytics::$plugin->metadata->getSelectMetricOptions()
+                ];
 
-			case 'counter':
+                break;
 
-				$options = [
-					'metrics' => Analytics::$plugin->metadata->getSelectMetricOptions()
-				];
+            case 'counter':
 
-				break;
+                $options = [
+                    'metrics' => Analytics::$plugin->metadata->getSelectMetricOptions()
+                ];
 
-			case 'geo':
+                break;
 
-				$options = [
-					'dimensions' => Analytics::$plugin->metadata->getSelectDimensionOptions(['ga:city', 'ga:country', 'ga:continent', 'ga:subContinent']),
-					'metrics' => Analytics::$plugin->metadata->getSelectMetricOptions()
-				];
+            case 'geo':
 
-				break;
+                $options = [
+                    'dimensions' => Analytics::$plugin->metadata->getSelectDimensionOptions(['ga:city', 'ga:country', 'ga:continent', 'ga:subContinent']),
+                    'metrics' => Analytics::$plugin->metadata->getSelectMetricOptions()
+                ];
 
-			default:
+                break;
 
-				$options = [
-					'dimensions' => Analytics::$plugin->metadata->getSelectDimensionOptions(),
-					'metrics' => Analytics::$plugin->metadata->getSelectMetricOptions()
-				];
-		}
+            default:
 
-		return $options;
-	}
+                $options = [
+                    'dimensions' => Analytics::$plugin->metadata->getSelectDimensionOptions(),
+                    'metrics' => Analytics::$plugin->metadata->getSelectMetricOptions()
+                ];
+        }
 
-	/**
-	 * Returns the title of the report
-	 *
-	 * @return string|null
-	 */
-	private function _getReportTitle()
-	{
-		try
-		{
-			$name = [];
-			$chartType = $this->settings['chart'];
+        return $options;
+    }
 
-			if(isset($this->settings['options'][$chartType]))
-			{
-				$options = $this->settings['options'][$chartType];
+    /**
+     * Returns the title of the report
+     *
+     * @return string|null
+     */
+    private function _getReportTitle()
+    {
+        try
+        {
+            $name = [];
+            $chartType = $this->settings['chart'];
 
-				if(!empty($options['dimension']))
-				{
-					$name[] = Craft::t('app', Analytics::$plugin->metadata->getDimMet($options['dimension']));
-				}
+            if(isset($this->settings['options'][$chartType]))
+            {
+                $options = $this->settings['options'][$chartType];
 
-				if(!empty($options['metric']))
-				{
-					$name[] = Craft::t('app', Analytics::$plugin->metadata->getDimMet($options['metric']));
-				}
-			}
+                if(!empty($options['dimension']))
+                {
+                    $name[] = Craft::t('app', Analytics::$plugin->metadata->getDimMet($options['dimension']));
+                }
 
-			if(!empty($this->settings['period']))
-			{
-				$name[] = Craft::t('app', ucfirst($this->settings['period']));
-			}
+                if(!empty($options['metric']))
+                {
+                    $name[] = Craft::t('app', Analytics::$plugin->metadata->getDimMet($options['metric']));
+                }
+            }
 
-			if(count($name) > 0)
-			{
-				return implode(" - ", $name);
-			}
-		}
-		catch(\Exception $e)
-		{
-			// \dukt\analytics\Plugin::log('Couldn’t get Analytics Report’s title: '.$e->getMessage(), LogLevel::Error);
-		}
-	}
+            if(!empty($this->settings['period']))
+            {
+                $name[] = Craft::t('app', ucfirst($this->settings['period']));
+            }
+
+            if(count($name) > 0)
+            {
+                return implode(" - ", $name);
+            }
+        }
+        catch(\Exception $e)
+        {
+            // \dukt\analytics\Plugin::log('Couldn’t get Analytics Report’s title: '.$e->getMessage(), LogLevel::Error);
+        }
+    }
 }

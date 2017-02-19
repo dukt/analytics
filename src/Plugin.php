@@ -29,12 +29,12 @@ class Plugin extends \craft\base\Plugin
     public $hasSettings = true;
     public static $plugin;
 
-	// Public Methods
-	// =========================================================================
+    // Public Methods
+    // =========================================================================
 
-	public function init()
-	{
-		parent::init();
+    public function init()
+    {
+        parent::init();
         self::$plugin = $this;
 
         $this->setComponents([
@@ -58,25 +58,25 @@ class Plugin extends \craft\base\Plugin
         });
 
 
-		// Global JS variables
+        // Global JS variables
 
-		if (Craft::$app->request->getIsCpRequest())
-		{
+        if (Craft::$app->request->getIsCpRequest())
+        {
             Craft::$app->getView()->registerAssetBundle(AnalyticsAsset::class);
 
 /*			Craft::$app->getView()->registerJsFile('analytics/js/Analytics.js');
 
-			$continents = $this->metadata->getContinents();
-			$subContinents = $this->metadata->getSubContinents();
-			$formats = ChartHelper::formats();
-			$currency = $this->analytics->getD3LocaleDefinitionCurrency();
+            $continents = $this->metadata->getContinents();
+            $subContinents = $this->metadata->getSubContinents();
+            $formats = ChartHelper::formats();
+            $currency = $this->analytics->getD3LocaleDefinitionCurrency();
 
-			Craft::$app->getView()->registerJs('Analytics.continents = '.json_encode($continents));
-			Craft::$app->getView()->registerJs('Analytics.subContinents = '.json_encode($subContinents));
-			Craft::$app->getView()->registerJs('Analytics.formats = '.json_encode($formats));
-			Craft::$app->getView()->registerJs('Analytics.currency = '.json_encode($currency));*/
-		}
-	}
+            Craft::$app->getView()->registerJs('Analytics.continents = '.json_encode($continents));
+            Craft::$app->getView()->registerJs('Analytics.subContinents = '.json_encode($subContinents));
+            Craft::$app->getView()->registerJs('Analytics.formats = '.json_encode($formats));
+            Craft::$app->getView()->registerJs('Analytics.currency = '.json_encode($currency));*/
+        }
+    }
 
     public function registerCpUrlRules(RegisterUrlRulesEvent $event)
     {

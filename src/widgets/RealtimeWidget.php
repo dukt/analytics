@@ -18,27 +18,27 @@ class RealtimeWidget extends \craft\base\Widget
     // =========================================================================
 
     /**
-	 * Whether users should be able to select more than one of this widget type.
-	 *
-	 * @var bool
-	 */
-	protected $multi = false;
+     * Whether users should be able to select more than one of this widget type.
+     *
+     * @var bool
+     */
+    protected $multi = false;
 
-	// Public Methods
-	// =========================================================================
+    // Public Methods
+    // =========================================================================
 
-	public static function isSelectable(): bool
-	{
-		$plugin = Craft::$app->plugins->getPlugin('analytics');
-		$settings = $plugin->getSettings();
+    public static function isSelectable(): bool
+    {
+        $plugin = Craft::$app->plugins->getPlugin('analytics');
+        $settings = $plugin->getSettings();
 
-		if(empty($settings['enableRealtime']))
-		{
-			return false;
-		}
+        if(empty($settings['enableRealtime']))
+        {
+            return false;
+        }
 
-		return parent::isSelectable();
-	}
+        return parent::isSelectable();
+    }
 
     /**
      * @inheritdoc
@@ -56,14 +56,14 @@ class RealtimeWidget extends \craft\base\Widget
         return Craft::getAlias('@dukt/analytics/icons/realtime-report.svg');
     }
 
-	/**
-	 * @inheritDoc IWidget::getBodyHtml()
-	 *
-	 * @return string|false
-	 */
-	public function getBodyHtml()
-	{
-		if(Analytics::$plugin->analytics->checkPluginRequirements()) {
+    /**
+     * @inheritDoc IWidget::getBodyHtml()
+     *
+     * @return string|false
+     */
+    public function getBodyHtml()
+    {
+        if(Analytics::$plugin->analytics->checkPluginRequirements()) {
             if (Craft::$app->config->get('enableWidgets', 'analytics')) {
                 $profileId = Analytics::$plugin->analytics->getProfileId();
 
@@ -96,15 +96,15 @@ class RealtimeWidget extends \craft\base\Widget
                 return Craft::$app->getView()->renderTemplate('analytics/_components/widgets/Realtime/disabled');
             }
         }
-	}
+    }
 
-	/**
-	 * @inheritDoc IWidget::getColspan()
-	 *
-	 * @return int
-	 */
-	public function getColSpan()
-	{
-		return 1;
-	}
+    /**
+     * @inheritDoc IWidget::getColspan()
+     *
+     * @return int
+     */
+    public function getColSpan()
+    {
+        return 1;
+    }
 }

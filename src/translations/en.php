@@ -6,5 +6,5 @@
  */
 
 return array(
-	'analyticsChartLanguage' => 'en',
+    'analyticsChartLanguage' => 'en',
 );
