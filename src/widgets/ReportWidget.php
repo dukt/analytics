@@ -112,7 +112,7 @@ class ReportWidget extends \craft\base\Widget
 
 					$view->registerJs($js);
 					$view->registerJs('var AnalyticsChartLanguage = "'.Craft::t('app', 'analyticsChartLanguage').'";');
-					$view->registerJs('console.log(Analytics); new Analytics.ReportWidget("widget'.$widgetId.'", '.Json::encode($widgetOptions).');');
+					$view->registerJs('new Analytics.ReportWidget("widget'.$widgetId.'", '.Json::encode($widgetOptions).');');
 
 					$html = $view->renderTemplate('analytics/_components/widgets/Report/body');
 				}
