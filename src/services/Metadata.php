@@ -443,7 +443,7 @@ class Metadata extends Component
      */
     public function getDimmetsFilePath()
     {
-        return Craft::getAlias('@plugins/analytics/src/etc/data/dimensions-metrics.json');
+        return Craft::getAlias('@dukt/analytics/etc/data/dimensions-metrics.json');
     }
 
     // Private Methods
@@ -488,7 +488,7 @@ class Metadata extends Component
      */
     private function _getData($name)
     {
-        $jsonData = file_get_contents(Craft::getAlias('@plugins/analytics/src/etc/data/'.$name.'.json'));
+        $jsonData = file_get_contents(Craft::getAlias('@dukt/analytics/etc/data/'.$name.'.json'));
         $data = json_decode($jsonData, true);
 
         return $data;
