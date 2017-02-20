@@ -32,6 +32,9 @@ class Plugin extends \craft\base\Plugin
     // Properties
     // =========================================================================
 
+    /**
+     * @var bool
+     */
     public $hasSettings = true;
 
     /**
@@ -42,6 +45,9 @@ class Plugin extends \craft\base\Plugin
     // Public Methods
     // =========================================================================
 
+    /**
+     * @inheritdoc
+     */
     public function init()
     {
         parent::init();
@@ -73,6 +79,11 @@ class Plugin extends \craft\base\Plugin
         }
     }
 
+    /**
+     * Register CP rules.
+     *
+     * @param RegisterUrlRulesEvent $event
+     */
     public function registerCpUrlRules(RegisterUrlRulesEvent $event)
     {
         $rules = [
