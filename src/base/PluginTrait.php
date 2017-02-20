@@ -14,7 +14,7 @@ trait PluginTrait
     /**
      * Returns the analytics service.
      *
-     * @return \dukt\analytics\services\Analytics The config service
+     * @return \dukt\analytics\services\Analytics The analytics service
      */
     public function getAnalytics()
     {
@@ -25,7 +25,7 @@ trait PluginTrait
     /**
      * Returns the api service.
      *
-     * @return \dukt\analytics\services\Api The config service
+     * @return \dukt\analytics\services\Api The api service
      */
     public function getApi()
     {
@@ -36,7 +36,7 @@ trait PluginTrait
     /**
      * Returns the cache service.
      *
-     * @return \dukt\analytics\services\Cache The config service
+     * @return \dukt\analytics\services\Cache The cache service
      */
     public function getCache()
     {
@@ -47,7 +47,7 @@ trait PluginTrait
     /**
      * Returns the metadata service.
      *
-     * @return \dukt\analytics\services\Metadata The config service
+     * @return \dukt\analytics\services\Metadata The metadata service
      */
     public function getMetadata()
     {
@@ -58,7 +58,7 @@ trait PluginTrait
     /**
      * Returns the oauth service.
      *
-     * @return \dukt\analytics\services\Oauth The config service
+     * @return \dukt\analytics\services\Oauth The oauth service
      */
     public function getOauth()
     {
@@ -69,7 +69,7 @@ trait PluginTrait
     /**
      * Returns the reports service.
      *
-     * @return \dukt\analytics\services\Reports The config service
+     * @return \dukt\analytics\services\Reports The reports service
      */
     public function getReports()
     {
