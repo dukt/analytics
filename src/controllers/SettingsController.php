@@ -51,7 +51,7 @@ class SettingsController extends Controller
 
                     if ($oauthAccount)
                     {
-                        // \dukt\analytics\Plugin::log("Account:\r\n".print_r($oauthAccount, true), LogLevel::Info);
+                        Craft::trace("Account:\r\n".print_r($oauthAccount, true), __METHOD__);
 
                         $settings = $plugin->getSettings();
 
@@ -123,7 +123,7 @@ class SettingsController extends Controller
                 }
                 catch(\Google_Service_Exception $e)
                 {
-                    // \dukt\analytics\Plugin::log("Couldn’t get OAuth account: ".$e->getMessage(), LogLevel::Error);
+                    Craft::trace("Couldn’t get OAuth account: ".$e->getMessage(), __METHOD__);
 
                     foreach($e->getErrors() as $error)
                     {
@@ -134,11 +134,11 @@ class SettingsController extends Controller
                 {
                     if(method_exists($e, 'getResponse'))
                     {
-                        // \dukt\analytics\Plugin::log("Couldn’t get OAuth account: ".$e->getResponse(), LogLevel::Error);
+                        Craft::trace("Couldn’t get OAuth account: ".$e->getResponse(), __METHOD__);
                     }
                     else
                     {
-                        // \dukt\analytics\Plugin::log("Couldn’t get OAuth account: ".$e->getMessage(), LogLevel::Error);
+                        Craft::trace("Couldn’t get OAuth account: ".$e->getMessage(), __METHOD__);
                     }
 
                     array_push($variables['errors'], $e->getMessage());

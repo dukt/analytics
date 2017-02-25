@@ -241,7 +241,7 @@ class Analytics extends Component
 
         if(!$profileId)
         {
-            // AnalyticsPlugin::log('Analytics profileId not found', LogLevel::Info, true);
+            Craft::trace('Analytics profileId not found', __METHOD__);
             return false;
         }
         return true;

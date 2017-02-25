@@ -13,7 +13,6 @@ use \Google_Client;
 use \Google_Service_Analytics;
 use dukt\analytics\models\RequestCriteria;
 use dukt\analytics\Plugin as Analytics;
-use dukt\oauth\Plugin as Oauth;
 
 class Api extends Component
 {
@@ -402,7 +401,7 @@ class Api extends Component
         }
         else
         {
-            // \dukt\analytics\Plugin::log('Undefined token', LogLevel::Error);
+            Craft::trace('Undefined token', __METHOD__);
             return false;
         }
     }

@@ -7,6 +7,8 @@
 
 namespace dukt\analytics\etc\craft;
 
+use Craft;
+
 class AnalyticsTracking
 {
     // Properties
@@ -169,7 +171,7 @@ class AnalyticsTracking
         }
         catch(\Exception $e)
         {
-            // \dukt\analytics\Plugin::log('Couldn’t send tracking: '.$e->getMessage(), LogLevel::Error);
+            Craft::trace('Couldn’t send tracking: '.$e->getMessage(), __METHOD__);
         }
     }
 

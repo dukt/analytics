@@ -276,7 +276,7 @@ class ReportWidget extends \craft\base\Widget
         }
         catch(\Exception $e)
         {
-            // \dukt\analytics\Plugin::log('Couldn’t get Analytics Report’s title: '.$e->getMessage(), LogLevel::Error);
+            Craft::trace('Couldn’t get Analytics Report’s title: '.$e->getMessage(), __METHOD__);
         }
     }
 }
