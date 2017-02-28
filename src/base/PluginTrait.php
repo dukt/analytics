@@ -10,7 +10,7 @@ namespace dukt\analytics\base;
 use dukt\analytics\Plugin as Analytics;
 
 /**
- * PluginTrait
+ * PluginTrait implements the common methods and properties for plugin classes.
  *
  * @property \dukt\analytics\services\Analytics     $analytics      The analytics service
  * @property \dukt\analytics\services\Api           $api            The api service
