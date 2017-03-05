@@ -1,19 +1,22 @@
 {
     "name": "dukt/craft-analytics",
     "description": "Customizable statistics widgets and entry tracking for Google Analytics.",
+    "version": "4.0.0-beta.1",
     "type": "craft-plugin",
-    "extra": {
-        "name": "Analytics",
-        "handle": "analytics",
-        "developer": "Dukt",
-        "developerUrl": "https://dukt.net/",
-        "documentationUrl": "https://dukt.net/craft/analytics/docs",
-        "class": "dukt\\analytics\\Plugin",
-        "version": "4.0.0",
-        "schemaVersion": "1.0.2",
-        "changelogUrl": "https://dukt.net/craft/analytics/updates.json"
-    },
+    "keywords": [
+        "google",
+        "analytics",
+        "google analytics",
+        "craftcms"
+    ],
+    "authors": [
+        {
+            "name": "Dukt",
+            "homepage": "https://dukt.net/"
+        }
+    ],
     "require": {
+        "craftcms/cms": "~3.0.0-beta.1",
         "league/oauth2-client": "^2.2",
         "dukt/oauth2-google": "^2.0",
         "google/apiclient": "v2.1.0",
@@ -23,6 +26,13 @@
         "psr-4": {
             "dukt\\analytics\\": "src/"
         }
+    },
+    "extra": {
+        "name": "Analytics",
+        "handle": "analytics",
+        "schemaVersion": "1.0.2",
+        "documentationUrl": "https://dukt.net/analytics/docs",
+        "changelogUrl": "https://dukt.net/analytics/changelog.md?craft=3"
     },
     "scripts": {
         "post-update-cmd": ["echo [WARNING] Delete all .git dirs", "rm -rf vendor/nojimage/**/**/.git"],
