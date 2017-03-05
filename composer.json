@@ -33,9 +33,5 @@
         "schemaVersion": "1.0.2",
         "documentationUrl": "https://dukt.net/analytics/docs",
         "changelogUrl": "https://dukt.net/analytics/changelog.md?craft=3"
-    },
-    "scripts": {
-        "post-update-cmd": ["echo [WARNING] Delete all .git dirs", "rm -rf vendor/nojimage/**/**/.git"],
-        "post-install-cmd": ["echo [WARNING] Delete all .git dirs", "rm -rf vendor/nojimage/**/**/.git"]
     }
 }
