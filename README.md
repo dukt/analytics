@@ -24,7 +24,7 @@ To install the plugin, follow these instructions.
 
 ## Learn more
 
-- [Analytics Plugin Overview](https://dukt.net/craft/analytics/)
-- [Analytics Documentation](https://dukt.net/craft/analytics/docs)
+- [Plugin Overview](https://dukt.net/analytics)
+- [Documentation](https://dukt.net/analytics/docs)
 
 [Dukt.net](https://dukt.net/) © 2017 - All rights reserved
