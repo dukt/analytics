@@ -68,70 +68,62 @@ class ReportWidget extends \craft\base\Widget
     {
         $view = Craft::$app->getView();
 
-        if(Analytics::$plugin->getAnalytics()->checkPluginRequirements())
-        {
-            if(Craft::$app->getConfig()->get('enableWidgets', 'analytics'))
-            {
-                $settings = $this->settings;
+        try {
+            if (Analytics::$plugin->getAnalytics()->checkPluginRequirements()) {
+                if (Craft::$app->getConfig()->get('enableWidgets', 'analytics')) {
+                    $settings = $this->settings;
 
-                $profileId = Analytics::$plugin->getAnalytics()->getProfileId();
+                    $profileId = Analytics::$plugin->getAnalytics()->getProfileId();
 
-                if($profileId)
-                {
-                    $request = [
-                        'chart' => (isset($settings['chart']) ? $settings['chart'] : null),
-                        'period' => (isset($settings['period']) ? $settings['period'] : null),
-                        'options' => (isset($settings['options'][$settings['chart']]) ? $settings['options'][$settings['chart']] : null),
-                    ];
+                    if ($profileId) {
+                        $request = [
+                            'chart' => (isset($settings['chart']) ? $settings['chart'] : null),
+                            'period' => (isset($settings['period']) ? $settings['period'] : null),
+                            'options' => (isset($settings['options'][$settings['chart']]) ? $settings['options'][$settings['chart']] : null),
+                        ];
 
 
-                    // use cached response if available
+                        // use cached response if available
 
-                    if(Craft::$app->getConfig()->get('enableCache', 'analytics') === true)
-                    {
-                        $cacheId = ['getReport', $request, $profileId];
+                        if (Craft::$app->getConfig()->get('enableCache', 'analytics') === true) {
+                            $cacheId = ['getReport', $request, $profileId];
 
-                        $cachedResponse = Analytics::$plugin->cache->get($cacheId);
+                            $cachedResponse = Analytics::$plugin->cache->get($cacheId);
+                        }
+
+
+                        // render
+
+                        $widgetId = $this->id;
+
+                        $widgetOptions = [
+                            'request' => $request,
+                            'cachedResponse' => isset($cachedResponse) ? $cachedResponse : null,
+                        ];
+
+                        $view->registerAssetBundle(ReportWidgetAsset::class);
+
+                        $jsTemplate = 'window.csrfTokenName = "{{ craft.app.config.get(\'csrfTokenName\')|e(\'js\') }}";';
+                        $jsTemplate .= 'window.csrfTokenValue = "{{ craft.app.request.csrfToken|e(\'js\') }}";';
+                        $js = $view->renderString($jsTemplate);
+
+                        $view->registerJs($js);
+                        $view->registerJs('var AnalyticsChartLanguage = "'.Craft::t('analytics', 'analyticsChartLanguage').'";');
+                        $view->registerJs('new Analytics.ReportWidget("widget'.$widgetId.'", '.Json::encode($widgetOptions).');');
+
+                        return $view->renderTemplate('analytics/_components/widgets/Report/body');
+                    } else {
+                        return $view->renderTemplate('analytics/_special/plugin-not-configured');
                     }
-
-
-                    // render
-
-                    $widgetId = $this->id;
-
-                    $widgetOptions = [
-                        'request' => $request,
-                        'cachedResponse' => isset($cachedResponse) ? $cachedResponse : null,
-                    ];
-
-                    $view->registerAssetBundle(ReportWidgetAsset::class);
-
-                    $jsTemplate = 'window.csrfTokenName = "{{ craft.app.config.get(\'csrfTokenName\')|e(\'js\') }}";';
-                    $jsTemplate .= 'window.csrfTokenValue = "{{ craft.app.request.csrfToken|e(\'js\') }}";';
-                    $js = $view->renderString($jsTemplate);
-
-                    $view->registerJs($js);
-                    $view->registerJs('var AnalyticsChartLanguage = "'.Craft::t('analytics', 'analyticsChartLanguage').'";');
-                    $view->registerJs('new Analytics.ReportWidget("widget'.$widgetId.'", '.Json::encode($widgetOptions).');');
-
-                    $html = $view->renderTemplate('analytics/_components/widgets/Report/body');
+                } else {
+                    return $view->renderTemplate('analytics/_components/widgets/Report/disabled');
                 }
-                else
-                {
-                    $html = $view->renderTemplate('analytics/_special/plugin-not-configured');
-                }
+            } else {
+                return $view->renderTemplate('analytics/_special/plugin-not-configured');
             }
-            else
-            {
-                $html = $view->renderTemplate('analytics/_components/widgets/Report/disabled');
-            }
+        } catch(\Exception $e) {
+            return $view->renderTemplate('analytics/_special/plugin-not-configured');
         }
-        else
-        {
-            $html = $view->renderTemplate('analytics/_special/plugin-not-configured');
-        }
-
-        return $html;
     }
 
     /**
