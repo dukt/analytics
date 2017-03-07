@@ -215,7 +215,7 @@ class Analytics extends Component
 
     private function isTokenSet()
     {
-        $token = AnalyticsPlugin::$plugin->oauth->getToken();
+        $token = AnalyticsPlugin::$plugin->getOauth()->getToken();
 
         if ($token)
         {
