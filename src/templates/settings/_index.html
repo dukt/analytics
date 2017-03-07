@@ -17,7 +17,8 @@
 		{% if not oauthAccount %}
 
 			{% if errors|length > 0 %}
-				<h2 class="first">{{ 'Error'|t('app') }}</h2>
+				<h2 class="first">{{'Google Analytics Account'|t}}</h2>
+				<p>{{ 'An error occurred while trying to retrieve account informations:'|t('analytics') }}</p>
 				<ul class="error">
 					{% for error in errors %}
 						<li>{{ error }}</li>
