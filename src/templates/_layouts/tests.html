@@ -1,12 +1,12 @@
 {% extends "_layouts/cp" %}
 
 {% set tabs = {
-	columns: { label: "All Columns"|t, url: url('analytics/tests/columns') },
-	columnGroups: { label: "Column Groups"|t, url: url('analytics/tests/columnGroups') },
-	dataTypes: { label: "Data Types"|t, url: url('analytics/tests/dataTypes') },
-	formatting: { label: "Formatting"|t, url: url('analytics/tests/formatting') },
-	reportWidgets: { label: "Report Widgets"|t, url: url('analytics/tests/reportWidgets') },
-	templateVariables: { label: "Template Variables"|t, url: url('analytics/tests/templateVariables') },
+	columns: { label: "All Columns"|t('analytics'), url: url('analytics/tests/columns') },
+	columnGroups: { label: "Column Groups"|t('analytics'), url: url('analytics/tests/columnGroups') },
+	dataTypes: { label: "Data Types"|t('analytics'), url: url('analytics/tests/dataTypes') },
+	formatting: { label: "Formatting"|t('analytics'), url: url('analytics/tests/formatting') },
+	reportWidgets: { label: "Report Widgets"|t('analytics'), url: url('analytics/tests/reportWidgets') },
+	templateVariables: { label: "Template Variables"|t('analytics'), url: url('analytics/tests/templateVariables') },
 } %}
 
-{% set title = 'Analytics Tests'|t('app')%}
+{% set title = 'Analytics Tests'|t('analytics')%}

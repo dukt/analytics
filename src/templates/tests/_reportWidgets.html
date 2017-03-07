@@ -10,7 +10,7 @@
 		window.csrfTokenName = "{{ craft.app.config.get('csrfTokenName')|e('js') }}";
 		window.csrfTokenValue = "{{ craft.app.request.csrfToken|e('js') }}";
 
-		var AnalyticsChartLanguage = "{{ "analyticsChartLanguage"|t('app') }}";
+		var AnalyticsChartLanguage = "{{ "analyticsChartLanguage"|t('analytics') }}";
 	{% endregisterJs %}
 
 	{{ macros.testReportWidget("Area", {

@@ -25,7 +25,7 @@ class Report extends Field
      */
     public function getName()
     {
-        return Craft::t('app', 'Analytics Report');
+        return Craft::t('analytics', 'Analytics Report');
     }
 
     /**
@@ -102,7 +102,7 @@ class Report extends Field
 
                     Craft::$app->getView()->registerAssetBundle(ReportFieldAsset::class);
 
-                    Craft::$app->getView()->registerJs('var AnalyticsChartLanguage = "'.Craft::t('app', 'analyticsChartLanguage').'";');
+                    Craft::$app->getView()->registerJs('var AnalyticsChartLanguage = "'.Craft::t('analytics', 'analyticsChartLanguage').'";');
                     Craft::$app->getView()->registerJs('new AnalyticsReportField("'.$namespacedId.'-field", '.$jsonOptions.');');
 
                     $variables = array(

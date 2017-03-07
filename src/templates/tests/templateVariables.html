@@ -5,7 +5,7 @@
 
 {% set content %}
 
-	<h2 class="first">{{ "Request"|t('app') }}</h2>
+	<h2 class="first">{{ "Request"|t('analytics') }}</h2>
 
 	<pre><code>{{ "{% set response = craft.analytics.api({
 	startDate: date('-1 year')|date(\"Y-m-d\"),
@@ -21,7 +21,7 @@
 }).send() %}" }}</code></pre>
 	<hr>
 
-	<h2>{{ "Response"|t('app') }}</h2>
+	<h2>{{ "Response"|t('analytics') }}</h2>
 
 	{% set response = craft.analytics.api({
 		startDate: date('-1 year')|date("Y-m-d"),

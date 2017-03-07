@@ -370,13 +370,13 @@ class Metadata extends Component
 
         foreach($this->getColumnGroups($type) as $group)
         {
-            $options[]['optgroup'] = Craft::t('app', $group);
+            $options[]['optgroup'] = Craft::t('analytics', $group);
 
             foreach($this->getColumns($type) as $column)
             {
                 if($column->group == $group)
                 {
-                    $options[$column->id] = Craft::t('app', $column->uiName);
+                    $options[$column->id] = Craft::t('analytics', $column->uiName);
                 }
             }
         }

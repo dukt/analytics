@@ -2,17 +2,17 @@
 	{% import "_includes/forms" as forms %}
 
 	{% set chartTypes = {
-			area: "Area"|t,
-			counter: "Counter"|t,
-			pie: "Pie"|t,
-			table: "Table"|t,
-			geo: "Geo"|t,
+			area: "Area"|t('analytics'),
+			counter: "Counter"|t('analytics'),
+			pie: "Pie"|t('analytics'),
+			table: "Table"|t('analytics'),
+			geo: "Geo"|t('analytics'),
 	} %}
 
 	{% spaceless %}
 		<div class="chart-picker">
 			{{ forms.selectField({
-				label: "Chart"|t,
+				label: "Chart"|t('analytics'),
 				class: 'chart-select',
 				name: 'chart',
 				options: chartTypes,
@@ -30,13 +30,13 @@
 	{% endspaceless %}
 
 	{{ forms.selectField({
-		label: "Period"|t,
+		label: "Period"|t('analytics'),
 		name: 'period',
 		class: 'period',
 		options: {
-			week: "Week"|t,
-			month: "Month"|t,
-			year: "Year"|t,
+			week: "Week"|t('analytics'),
+			month: "Month"|t('analytics'),
+			year: "Year"|t('analytics'),
 		},
 		value: settings.period
 	}) }}

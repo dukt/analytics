@@ -2,9 +2,9 @@
 
 {% set content %}
 
-	<h2 class="first">{{'Google provider not configured'|t}}</h2>
-	<p>{{'Please fill API client id & secret for Analytics provider.'|t}}</p>
-	<p><a class="btn" href="{{url('oauth/providers/google') }}">{{'Google OAuth settings'|t}}</a></p>
+	<h2 class="first">{{ 'Google provider not configured'|t('analytics') }}</h2>
+	<p>{{ 'Please fill API client id & secret for Analytics provider.'|t('analytics') }}</p>
+	<p><a class="btn" href="{{url('oauth/providers/google') }}">{{ 'Google OAuth settings'|t('analytics') }}</a></p>
 
 {% endset %}
 

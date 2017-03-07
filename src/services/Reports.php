@@ -119,9 +119,9 @@ class Reports extends Component
             'type' => 'area',
             'chart' => $chartResponse,
             'total' => $total,
-            'metric' => Craft::t('app', Analytics::$plugin->metadata->getDimMet($metric)),
+            'metric' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($metric)),
             'period' => $period,
-            'periodLabel' => Craft::t('app', 'This '.$period)
+            'periodLabel' => Craft::t('analytics', 'This '.$period)
         ];
     }
 
@@ -169,7 +169,7 @@ class Reports extends Component
         $counter = array(
             'type' => $response['cols'][0]['type'],
             'value' => $count,
-            'label' => StringHelper::toLowerCase(Craft::t('app', Analytics::$plugin->metadata->getDimMet($metric)))
+            'label' => StringHelper::toLowerCase(Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($metric)))
         );
 
 
@@ -179,9 +179,9 @@ class Reports extends Component
             'type' => 'counter',
             'counter' => $counter,
             'response' => $response,
-            'metric' => Craft::t('app', Analytics::$plugin->metadata->getDimMet($metric)),
+            'metric' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($metric)),
             'period' => $period,
-            'periodLabel' => Craft::t('app', 'this '.$period)
+            'periodLabel' => Craft::t('analytics', 'this '.$period)
         ];
     }
 
@@ -218,10 +218,10 @@ class Reports extends Component
         return [
             'type' => 'pie',
             'chart' => $tableResponse,
-            'dimension' => Craft::t('app', Analytics::$plugin->metadata->getDimMet($dimension)),
-            'metric' => Craft::t('app', Analytics::$plugin->metadata->getDimMet($metric)),
+            'dimension' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($dimension)),
+            'metric' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($metric)),
             'period' => $period,
-            'periodLabel' => Craft::t('app', 'this '.$period)
+            'periodLabel' => Craft::t('analytics', 'this '.$period)
         ];
     }
 
@@ -258,10 +258,10 @@ class Reports extends Component
         return [
             'type' => 'table',
             'chart' => $tableResponse,
-            'dimension' => Craft::t('app', Analytics::$plugin->metadata->getDimMet($dimension)),
-            'metric' => Craft::t('app', Analytics::$plugin->metadata->getDimMet($metric)),
+            'dimension' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($dimension)),
+            'metric' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($metric)),
             'period' => $period,
-            'periodLabel' => Craft::t('app', 'this '.$period)
+            'periodLabel' => Craft::t('analytics', 'this '.$period)
         ];
     }
 
@@ -307,10 +307,10 @@ class Reports extends Component
             'type' => 'geo',
             'chart' => $tableResponse,
             'dimensionRaw' => $originDimension,
-            'dimension' => Craft::t('app', Analytics::$plugin->metadata->getDimMet($originDimension)),
-            'metric' => Craft::t('app', Analytics::$plugin->metadata->getDimMet($metric)),
+            'dimension' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($originDimension)),
+            'metric' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($metric)),
             'period' => $period,
-            'periodLabel' => Craft::t('app', 'this '.$period)
+            'periodLabel' => Craft::t('analytics', 'this '.$period)
         ];
     }
 

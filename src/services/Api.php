@@ -268,7 +268,7 @@ class Api extends Component
                 'type' => $type,
                 'dataType' => $dataType,
                 'id' => $id,
-                'label' => Craft::t('app', $label),
+                'label' => Craft::t('analytics', $label),
             );
         }
 
@@ -314,7 +314,7 @@ class Api extends Component
                         case 'ga:mobileInputSelector':
                         case 'ga:channelGrouping':
                         case 'ga:medium':
-                            $value = Craft::t('app', $value);
+                            $value = Craft::t('analytics', $value);
                             break;
                     }
 

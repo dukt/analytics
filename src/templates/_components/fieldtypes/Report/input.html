@@ -7,11 +7,11 @@
 		<span class="uri light right">&nbsp; URI: {{ uri }}</span>
 
 		{% set metricOpts = {
-			'ga:pageviews':'Pageviews'|t,
-			'ga:sessions':'Sessions'|t,
-			'ga:bounceRate':'Bounce Rate'|t,
-			'ga:avgTimeOnPage':'Avg. time on page'|t,
-			'ga:exitRate':'% Exit'|t,
+			'ga:pageviews':'Pageviews'|t('analytics'),
+			'ga:sessions':'Sessions'|t('analytics'),
+			'ga:bounceRate':'Bounce Rate'|t('analytics'),
+			'ga:avgTimeOnPage':'Avg. time on page'|t('analytics'),
+			'ga:exitRate':'% Exit'|t('analytics'),
 		} %}
 
 		{{ forms.select({
@@ -29,13 +29,13 @@
 {% elseif isNew %}
 
 	<div class="analytics-field analytics-error disable-icon">
-		<div class="error">{{ "Report will appear when the element is saved."|t('app') }}</div>
+		<div class="error">{{ "Report will appear when the element is saved."|t('analytics') }}</div>
 	</div>
 
 {% else %}
 
 	<div class="analytics-field analytics-error">
-		<div class="error">{{ "This element doesn't support urls."|t('app') }}</div>
+		<div class="error">{{ "This element doesn't support urls."|t('analytics') }}</div>
 	</div>
 
 {% endif %}

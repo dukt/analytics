@@ -52,11 +52,11 @@ class OauthController extends Controller
         {
             Analytics::$plugin->cache->delete(['accountExplorerData']);
 
-            Craft::$app->getSession()->setNotice(Craft::t('app', "Disconnected from Google Analytics."));
+            Craft::$app->getSession()->setNotice(Craft::t('analytics', "Disconnected from Google Analytics."));
         }
         else
         {
-            Craft::$app->getSession()->setError(Craft::t('app', "Couldn’t disconnect from Google Analytics"));
+            Craft::$app->getSession()->setError(Craft::t('analytics', "Couldn’t disconnect from Google Analytics"));
         }
 
 

@@ -176,19 +176,19 @@ class SettingsController extends Controller
 
         if (!$plugin)
         {
-            throw new Exception(Craft::t('app', 'No plugin exists with the class “{class}”', array('class' => $pluginClass)));
+            throw new Exception(Craft::t('analytics', 'No plugin exists with the class “{class}”', array('class' => $pluginClass)));
         }
 
         $settings = Analytics::$plugin->getApi()->populateAccountExplorerSettings($settings);
 
         if (Craft::$app->getPlugins()->savePluginSettings($plugin, $settings))
         {
-            Craft::$app->getSession()->setNotice(Craft::t('app', 'Plugin settings saved.'));
+            Craft::$app->getSession()->setNotice(Craft::t('analytics', 'Plugin settings saved.'));
 
             return $this->redirectToPostedUrl();
         }
 
-        Craft::$app->getSession()->setError(Craft::t('app', 'Couldn’t save plugin settings.'));
+        Craft::$app->getSession()->setError(Craft::t('analytics', 'Couldn’t save plugin settings.'));
 
         // Send the plugin back to the template
         Craft::$app->urlManager->setRouteVariables(array(

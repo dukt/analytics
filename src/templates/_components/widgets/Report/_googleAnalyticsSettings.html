@@ -3,7 +3,7 @@
 <div id="chartarea"{% if settings.chart != 'area' and settings.chart is not null %} class="hidden"{% endif %}>
 
 	{{ forms.selectField({
-		label: "Metric"|t,
+		label: "Metric"|t('analytics'),
 		name: 'options[area][metric]',
 		class: 'selectize metric',
 		options: selectOptions.area.metrics,
@@ -15,7 +15,7 @@
 <div id="chartcounter"{% if settings.chart != 'counter' %} class="hidden"{% endif %}>
 
 	{{ forms.selectField({
-		label: "Metric"|t,
+		label: "Metric"|t('analytics'),
 		name: 'options[counter][metric]',
 		class: 'selectize metric',
 		options: selectOptions.counter.metrics,
@@ -27,7 +27,7 @@
 <div id="chartpie"{% if settings.chart != 'pie' %} class="hidden"{% endif %}>
 
 	{{ forms.selectField({
-		label: "Dimension"|t,
+		label: "Dimension"|t('analytics'),
 		name: 'options[pie][dimension]',
 		class: 'selectize dimension',
 		options: selectOptions.pie.dimensions,
@@ -35,7 +35,7 @@
 	}) }}
 
 	{{ forms.selectField({
-		label: "Metric"|t,
+		label: "Metric"|t('analytics'),
 		name: 'options[pie][metric]',
 		class: 'selectize metric',
 		options: selectOptions.pie.metrics,
@@ -46,7 +46,7 @@
 
 <div id="charttable"{% if settings.chart != 'table' %} class="hidden"{% endif %}>
 	{{ forms.selectField({
-		label: "Dimension"|t,
+		label: "Dimension"|t('analytics'),
 		name: 'options[table][dimension]',
 		class: 'selectize dimension',
 		options: selectOptions.table.dimensions,
@@ -54,7 +54,7 @@
 	}) }}
 
 	{{ forms.selectField({
-		label: "Metric"|t,
+		label: "Metric"|t('analytics'),
 		name: 'options[table][metric]',
 		class: 'selectize metric',
 		options: selectOptions.table.metrics,
@@ -65,7 +65,7 @@
 <div id="chartgeo"{% if settings.chart != 'geo' %} class="hidden"{% endif %}>
 
 	{{ forms.selectField({
-		label: "Dimension"|t,
+		label: "Dimension"|t('analytics'),
 		name: 'options[geo][dimension]',
 		class: 'selectize dimension',
 		options: selectOptions.geo.dimensions,
@@ -73,7 +73,7 @@
 	}) }}
 
 	{{ forms.selectField({
-		label: "Metric"|t,
+		label: "Metric"|t('analytics'),
 		name: 'options[geo][metric]',
 		class: 'selectize metric',
 		options: selectOptions.geo.metrics,

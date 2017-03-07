@@ -111,7 +111,7 @@ class ReportWidget extends \craft\base\Widget
                     $js = $view->renderString($jsTemplate);
 
                     $view->registerJs($js);
-                    $view->registerJs('var AnalyticsChartLanguage = "'.Craft::t('app', 'analyticsChartLanguage').'";');
+                    $view->registerJs('var AnalyticsChartLanguage = "'.Craft::t('analytics', 'analyticsChartLanguage').'";');
                     $view->registerJs('new Analytics.ReportWidget("widget'.$widgetId.'", '.Json::encode($widgetOptions).');');
 
                     $html = $view->renderTemplate('analytics/_components/widgets/Report/body');
@@ -255,18 +255,18 @@ class ReportWidget extends \craft\base\Widget
 
                 if(!empty($options['dimension']))
                 {
-                    $name[] = Craft::t('app', Analytics::$plugin->metadata->getDimMet($options['dimension']));
+                    $name[] = Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($options['dimension']));
                 }
 
                 if(!empty($options['metric']))
                 {
-                    $name[] = Craft::t('app', Analytics::$plugin->metadata->getDimMet($options['metric']));
+                    $name[] = Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($options['metric']));
                 }
             }
 
             if(!empty($this->settings['period']))
             {
-                $name[] = Craft::t('app', ucfirst($this->settings['period']));
+                $name[] = Craft::t('analytics', ucfirst($this->settings['period']));
             }
 
             if(count($name) > 0)
