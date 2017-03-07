@@ -28,29 +28,25 @@ class SettingsController extends Controller
 
         $variables['isOauthProviderConfigured'] = Analytics::$plugin->getAnalytics()->isOauthProviderConfigured();
 
-        if($variables['isOauthProviderConfigured'])
-        {
+        if($variables['isOauthProviderConfigured']) {
             $variables['oauthAccount'] = false;
             $variables['errors'] = [];
 
-            $provider = Analytics::$plugin->oauth->getOauthProvider();
-            $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
-            $token = Analytics::$plugin->oauth->getToken();
 
-            if ($token)
-            {
-                try
-                {
+            try {
+                $provider = Analytics::$plugin->oauth->getOauthProvider();
+                $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
+                $token = Analytics::$plugin->oauth->getToken();
+
+                if ($token) {
                     $oauthAccount = Analytics::$plugin->cache->get(['getAccount', $token]);
 
-                    if(!$oauthAccount)
-                    {
+                    if (!$oauthAccount) {
                         $oauthAccount = $provider->getResourceOwner($token);
                         Analytics::$plugin->cache->set(['getAccount', $token], $oauthAccount);
                     }
 
-                    if ($oauthAccount)
-                    {
+                    if ($oauthAccount) {
                         Craft::trace("Account:\r\n".print_r($oauthAccount, true), __METHOD__);
 
                         $settings = $plugin->getSettings();
@@ -62,15 +58,11 @@ class SettingsController extends Controller
 
                         $accountOptions = [];
 
-                        if(isset($accountExplorerData['accounts']))
-                        {
-                            foreach($accountExplorerData['accounts'] as $account)
-                            {
+                        if (isset($accountExplorerData['accounts'])) {
+                            foreach ($accountExplorerData['accounts'] as $account) {
                                 $accountOptions[] = ['label' => $account['name'], 'value' => $account['id']];
                             }
-                        }
-                        else
-                        {
+                        } else {
                             $accountOptions[] = ['label' => $settings->accountName, 'value' => $settings->accountId];
                         }
 
@@ -79,15 +71,11 @@ class SettingsController extends Controller
 
                         $webPropertyOptions = [];
 
-                        if(isset($accountExplorerData['properties']))
-                        {
-                            foreach($accountExplorerData['properties'] as $webProperty)
-                            {
+                        if (isset($accountExplorerData['properties'])) {
+                            foreach ($accountExplorerData['properties'] as $webProperty) {
                                 $webPropertyOptions[] = ['label' => $webProperty['name'], 'value' => $webProperty['id']];
                             }
-                        }
-                        else
-                        {
+                        } else {
                             $webPropertyOptions[] = ['label' => $settings->webPropertyName, 'value' => $settings->webPropertyId];
                         }
 
@@ -96,15 +84,11 @@ class SettingsController extends Controller
 
                         $viewOptions = [];
 
-                        if(isset($accountExplorerData['views']))
-                        {
-                            foreach($accountExplorerData['views'] as $view)
-                            {
+                        if (isset($accountExplorerData['views'])) {
+                            foreach ($accountExplorerData['views'] as $view) {
                                 $viewOptions[] = ['label' => $view['name'], 'value' => $view['id']];
                             }
-                        }
-                        else
-                        {
+                        } else {
                             $viewOptions[] = ['label' => $settings->profileName, 'value' => $settings->profileId];
                         }
 
@@ -121,34 +105,26 @@ class SettingsController extends Controller
                         $variables['oauthAccount'] = $oauthAccount;
                     }
                 }
-                catch(\Google_Service_Exception $e)
-                {
+
+                $variables['provider'] = $provider;
+            } catch (\Google_Service_Exception $e) {
+                Craft::trace("Couldn’t get OAuth account: ".$e->getMessage(), __METHOD__);
+
+                foreach ($e->getErrors() as $error) {
+                    array_push($variables['errors'], $error['message']);
+                }
+            } catch (\Exception $e) {
+                if (method_exists($e, 'getResponse')) {
+                    Craft::trace("Couldn’t get OAuth account: ".$e->getResponse(), __METHOD__);
+                } else {
                     Craft::trace("Couldn’t get OAuth account: ".$e->getMessage(), __METHOD__);
-
-                    foreach($e->getErrors() as $error)
-                    {
-                        array_push($variables['errors'], $error['message']);
-                    }
                 }
-                catch(\Exception $e)
-                {
-                    if(method_exists($e, 'getResponse'))
-                    {
-                        Craft::trace("Couldn’t get OAuth account: ".$e->getResponse(), __METHOD__);
-                    }
-                    else
-                    {
-                        Craft::trace("Couldn’t get OAuth account: ".$e->getMessage(), __METHOD__);
-                    }
 
-                    array_push($variables['errors'], $e->getMessage());
-                }
+                array_push($variables['errors'], $e->getMessage());
             }
-
-            $variables['token'] = $token;
-            $variables['provider'] = $provider;
         }
 
+        $variables['token'] = (isset($token) ? $token : null);
         $variables['javascriptOrigin'] = Analytics::$plugin->oauth->getJavascriptOrigin();
         $variables['redirectUri'] = Analytics::$plugin->oauth->getRedirectUri();
         $variables['oauthProviderOptions'] = Craft::$app->getConfig()->get('oauthProviderOptions', 'analytics');
