@@ -241,7 +241,7 @@ class Analytics extends Component
 
         if(!$profileId)
         {
-            Craft::trace('Analytics profileId not found', __METHOD__);
+            Craft::info('Analytics profileId not found', __METHOD__);
             return false;
         }
         return true;

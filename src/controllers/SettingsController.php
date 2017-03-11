@@ -47,7 +47,7 @@ class SettingsController extends Controller
                     }
 
                     if ($oauthAccount) {
-                        Craft::trace("Account:\r\n".print_r($oauthAccount, true), __METHOD__);
+                        Craft::info("Account:\r\n".print_r($oauthAccount, true), __METHOD__);
 
                         $settings = $plugin->getSettings();
 
@@ -108,16 +108,16 @@ class SettingsController extends Controller
 
                 $variables['provider'] = $provider;
             } catch (\Google_Service_Exception $e) {
-                Craft::trace("Couldn’t get OAuth account: ".$e->getMessage(), __METHOD__);
+                Craft::info("Couldn’t get OAuth account: ".$e->getMessage(), __METHOD__);
 
                 foreach ($e->getErrors() as $error) {
                     array_push($variables['errors'], $error['message']);
                 }
             } catch (\Exception $e) {
                 if (method_exists($e, 'getResponse')) {
-                    Craft::trace("Couldn’t get OAuth account: ".$e->getResponse(), __METHOD__);
+                    Craft::info("Couldn’t get OAuth account: ".$e->getResponse(), __METHOD__);
                 } else {
-                    Craft::trace("Couldn’t get OAuth account: ".$e->getMessage(), __METHOD__);
+                    Craft::info("Couldn’t get OAuth account: ".$e->getMessage(), __METHOD__);
                 }
 
                 array_push($variables['errors'], $e->getMessage());

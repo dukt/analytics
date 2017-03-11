@@ -93,14 +93,14 @@ class ReportsController extends Controller
                     $errorMsg = $errors[0]['message'];
                 }
 
-                Craft::trace('Couldn’t get realtime widget data: '.$errorMsg."\r\n".print_r($errors, true), __METHOD__);
+                Craft::info('Couldn’t get realtime widget data: '.$errorMsg."\r\n".print_r($errors, true), __METHOD__);
 
                 return $this->asErrorJson($errorMsg);
             }
             catch(\Exception $e)
             {
                 $errorMsg = $e->getMessage();
-                Craft::trace('Couldn’t get element data: '.$errorMsg, __METHOD__);
+                Craft::info('Couldn’t get element data: '.$errorMsg, __METHOD__);
                 return $this->asErrorJson($errorMsg);
             }
         }
@@ -162,14 +162,14 @@ class ReportsController extends Controller
                 $errorMsg = $errors[0]['message'];
             }
 
-            Craft::trace('Couldn’t get report widget data: '.$errorMsg."\r\n".print_r($errors, true), __METHOD__);
+            Craft::info('Couldn’t get report widget data: '.$errorMsg."\r\n".print_r($errors, true), __METHOD__);
 
             return $this->asErrorJson($errorMsg);
         }
         catch(\Exception $e)
         {
             $errorMsg = $e->getMessage();
-            Craft::trace('Couldn’t get element data: '.$errorMsg, __METHOD__);
+            Craft::info('Couldn’t get element data: '.$errorMsg, __METHOD__);
             return $this->asErrorJson($errorMsg);
         }
     }
@@ -246,14 +246,14 @@ class ReportsController extends Controller
                 $errorMsg = $errors[0]['message'];
             }
 
-            Craft::trace('Couldn’t get element data: '.$errorMsg."\r\n".print_r($errors, true), __METHOD__);
+            Craft::info('Couldn’t get element data: '.$errorMsg."\r\n".print_r($errors, true), __METHOD__);
 
             return $this->asErrorJson($errorMsg);
         }
         catch(\Exception $e)
         {
             $errorMsg = $e->getMessage();
-            Craft::trace('Couldn’t get element data: '.$errorMsg, __METHOD__);
+            Craft::info('Couldn’t get element data: '.$errorMsg, __METHOD__);
             return $this->asErrorJson($errorMsg);
         }
     }

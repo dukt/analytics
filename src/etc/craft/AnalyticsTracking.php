@@ -171,7 +171,7 @@ class AnalyticsTracking
         }
         catch(\Exception $e)
         {
-            Craft::trace('Couldn’t send tracking: '.$e->getMessage(), __METHOD__);
+            Craft::info('Couldn’t send tracking: '.$e->getMessage(), __METHOD__);
         }
     }
 

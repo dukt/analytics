@@ -268,7 +268,7 @@ class ReportWidget extends \craft\base\Widget
         }
         catch(\Exception $e)
         {
-            Craft::trace('Couldn’t get Analytics Report’s title: '.$e->getMessage(), __METHOD__);
+            Craft::info('Couldn’t get Analytics Report’s title: '.$e->getMessage(), __METHOD__);
         }
     }
 }

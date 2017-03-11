@@ -401,7 +401,7 @@ class Api extends Component
         }
         else
         {
-            Craft::trace('Undefined token', __METHOD__);
+            Craft::info('Undefined token', __METHOD__);
             return false;
         }
     }
