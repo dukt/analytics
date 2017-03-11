@@ -49,8 +49,8 @@ class UtilsController extends Controller
 
         Craft::$app->getSession()->setNotice(Craft::t('analytics', "Metadata loaded."));
 
-        $referer = Craft::$app->getRequest()->referrer;
-        $this->redirect($referer);
+        $referrer = Craft::$app->getRequest()->referrer;
+        $this->redirect($referrer);
     }
 
     // Private Methods
