@@ -19,7 +19,7 @@ class AnalyticsAsset extends AssetBundle
     public function init()
     {
         // define the path that your publishable resources live
-        $this->sourcePath = '@dukt/analytics/resources';
+        $this->sourcePath = __DIR__.'/dist';
 
         // define the dependencies
         $this->depends = [
