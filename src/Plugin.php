@@ -17,6 +17,7 @@ use craft\web\UrlManager;
 use dukt\analytics\base\PluginTrait;
 use dukt\analytics\fields\Report as ReportField;
 use dukt\analytics\models\Settings;
+use dukt\analytics\web\twig\variables\AnalyticsVariable;
 use dukt\analytics\web\assets\analytics\AnalyticsAsset;
 use dukt\analytics\widgets\RealtimeWidget;
 use dukt\analytics\widgets\ReportWidget;
@@ -99,6 +100,14 @@ class Plugin extends \craft\base\Plugin
         ];
 
         $event->rules = array_merge($event->rules, $rules);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function defineTemplateComponent()
+    {
+        return AnalyticsVariable::class;
     }
 
     /**

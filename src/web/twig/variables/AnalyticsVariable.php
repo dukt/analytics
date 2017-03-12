@@ -5,10 +5,10 @@
  * @license   https://dukt.net/craft/analytics/docs/license
  */
 
-namespace dukt\analytics\variables;
+namespace dukt\analytics\web\twig\variables;
 
 use dukt\analytics\models\RequestCriteria;
-use dukt\etc\craft\AnalyticsTracking;
+use dukt\analytics\etc\craft\AnalyticsTracking;
 use dukt\analytics\Plugin as Analytics;
 
 class AnalyticsVariable
