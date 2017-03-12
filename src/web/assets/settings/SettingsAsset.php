@@ -25,7 +25,7 @@ class SettingsAsset extends AssetBundle
     public function init()
     {
         // define the path that your publishable resources live
-        $this->sourcePath = '@dukt/analytics/resources';
+        $this->sourcePath = __DIR__.'/dist';
 
         // define the dependencies
         $this->depends = [
@@ -36,12 +36,12 @@ class SettingsAsset extends AssetBundle
         // define the relative path to CSS/JS files that should be registered with the page
         // when this asset bundle is registered
         $this->js = [
-            'js/AccountExplorer.js',
+            'AccountExplorer.js',
         ];
 
         $this->css = [
-            'css/AccountExplorer.css',
-            'css/settings.css',
+            'AccountExplorer.css',
+            'settings.css',
         ];
 
         parent::init();

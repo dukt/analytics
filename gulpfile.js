@@ -1,50 +1,9 @@
 var gulp = require('gulp'),
     sass = require('gulp-sass'),
-    livereload = require('gulp-livereload'),
-    del = require('del'),
     uglify = require('gulp-uglify'),
     rename = require('gulp-rename'),
     plumber = require('gulp-plumber'),
     concat = require('gulp-concat');
-
-var paths = {
-    sass: './src/resources/sass',
-    css: './src/resources/css',
-    js: './src/resources/js',
-    jsCompressed: './src/resources/js/compressed'
-};
-
-var globs = {
-    concatJs: [
-        paths.js + '/Analytics/*.js',
-        paths.js + '/Analytics/reports/Base*.js',
-        paths.js + '/Analytics/reports/*.js',
-    ],
-
-    compressJs: [
-        paths.js+'/*.js'
-    ],
-
-    watchJs: [
-        paths.js+'/*.js',
-        paths.js+'/Analytics/*.js',
-        paths.js+'/Analytics/**/*.js'
-    ],
-
-    watchSass: [
-        paths.sass+'/*.scss'
-    ],
-
-    watchChange: [
-        paths.css+'/**',
-        paths.jsCompressed
-    ],
-
-    clean: [
-        paths.css,
-        paths.jsCompressed
-    ],
-};
 
 var plumberErrorHandler = function(err) {
 
@@ -63,46 +22,49 @@ var plumberErrorHandler = function(err) {
 /* Tasks */
 
 gulp.task('sass', function () {
-  return gulp.src(paths.sass+'/*.scss')
+  return gulp.src('./src/web/assets/**/*.scss')
     .pipe(plumber({ errorHandler: plumberErrorHandler }))
     .pipe(sass().on('error', sass.logError))
-    .pipe(gulp.dest(paths.css));
+    .pipe(gulp.dest('./src/web/assets/'));
 });
 
 gulp.task('concatJs', function() {
-    return gulp.src(globs.concatJs)
+    return gulp.src([
+            './src/web/assets/analytics/src/Analytics/*.js',
+            './src/web/assets/analytics/src/Analytics/reports/Base*.js',
+            './src/web/assets/analytics/src/Analytics/reports/*.js',
+        ])
         .pipe(plumber({ errorHandler: plumberErrorHandler }))
         .pipe(concat('Analytics.js'))
-        .pipe(gulp.dest( paths.js ));
+        .pipe(gulp.dest( './src/web/assets/analytics/dist/' ));
 });
 
 gulp.task('compressJs', ['concatJs'], function() {
-    return gulp.src(globs.compressJs)
+    return gulp.src([
+            './src/web/assets/**/*.js',
+            '!./src/web/assets/**/*.min.js',
+        ])
         .pipe(plumber({ errorHandler: plumberErrorHandler }))
         .pipe(uglify())
-        .pipe(gulp.dest(paths.jsCompressed));
+        .pipe(rename({ suffix: '.min' }))
+        .pipe(gulp.dest('./src/web/assets/'));
 });
 
 gulp.task('js', ['concatJs', 'compressJs']);
 
-gulp.task('clean', function(cb) {
-    del(globs.clean, cb)
-});
 
-
-gulp.task('build', ['clean'], function() {
+gulp.task('build', function() {
     gulp.start('sass', 'js');
 });
 
 gulp.task('watch', function() {
-
-    gulp.watch(globs.watchSass, ['sass']);
-    gulp.watch(globs.watchJs, ['js']);
-
-    // livereload.listen();
-
-    // gulp.watch(globs.watchChange).on('change', livereload.changed);
-
+    gulp.watch([
+        './src/web/assets/**/*.scss'
+    ], ['sass']);
+    gulp.watch([
+        './src/web/assets/**/*.js',
+        '!./src/web/assets/**/*.min.js',
+    ], ['js']);
 });
 
-gulp.task('default', ['build', 'watch']);
+gulp.task('default', ['build']);

@@ -25,7 +25,7 @@ class RealtimeReportWidgetAsset extends AssetBundle
     public function init()
     {
         // define the path that your publishable resources live
-        $this->sourcePath = '@dukt/analytics/resources';
+        $this->sourcePath = __DIR__.'/dist';
 
         // define the dependencies
         $this->depends = [
@@ -36,11 +36,11 @@ class RealtimeReportWidgetAsset extends AssetBundle
         // define the relative path to CSS/JS files that should be registered with the page
         // when this asset bundle is registered
         $this->js = [
-            'js/RealtimeWidget.js',
+            'RealtimeWidget.js',
         ];
 
         $this->css = [
-            'css/RealtimeWidget.css',
+            'RealtimeWidget.css',
         ];
 
         parent::init();
