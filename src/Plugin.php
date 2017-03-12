@@ -90,12 +90,12 @@ class Plugin extends \craft\base\Plugin
             'analytics/settings' => 'analytics/settings/index',
             'analytics/utils' => 'analytics/utils/metadata',
             'analytics/utils/metadata' => 'analytics/utils/metadata',
-            'analytics/tests/dataTypes' => 'analytics/tests/dataTypes',
+            'analytics/tests/data-types' => 'analytics/tests/data-types',
             'analytics/tests' => 'analytics/tests/columns',
             'analytics/tests/columns' => 'analytics/tests/columns',
-            'analytics/tests/columnGroups' => 'analytics/tests/columnGroups',
+            'analytics/tests/column-groups' => 'analytics/tests/column-groups',
             'analytics/tests/formatting' => 'analytics/tests/formatting',
-            'analytics/tests/reportWidgets' => 'analytics/tests/reportWidgets',
+            'analytics/tests/report-widgets' => 'analytics/tests/report-widgets',
         ];
 
         $event->rules = array_merge($event->rules, $rules);

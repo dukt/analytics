@@ -7,6 +7,7 @@
 
 namespace dukt\analytics\controllers;
 
+use Craft;
 use craft\web\Controller;
 use dukt\analytics\Plugin as Analytics;
 
@@ -35,11 +36,11 @@ class TestsController extends Controller
      */
     public function actionReportWidgets(array $variables = array())
     {
-        Craft::$app->getView()->registerJsFile('analytics/js/jsapi.js', true);
+/*        Craft::$app->getView()->registerJsFile('analytics/js/jsapi.js', true);
 
         Craft::$app->getView()->registerJsFile('analytics/js/ReportWidget.js');
         Craft::$app->getView()->registerCssFile('analytics/css/ReportWidget.css');
-        Craft::$app->getView()->registerCssFile('analytics/css/tests.css');
+        Craft::$app->getView()->registerCssFile('analytics/css/tests.css');*/
 
         $this->renderTemplate('analytics/tests/_reportWidgets', $variables);
     }

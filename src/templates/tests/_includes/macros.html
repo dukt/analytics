@@ -1,31 +1,3 @@
-{% macro testReportWidget(name, request) %}
-
-	<div class="test-report-widget">
-		<h2>{{ name }} Report Widget</h2>
-
-		{{ _self.reportWidget(request) }}
-	</div>
-
-{% endmacro %}
-
-
-{% macro reportWidget(request) %}
-
-	{% set id = 'widget-'~random() %}
-
-	{{ _self.widgetMock(id) }}
-
-	{% registerJs %}
-
-		var reportWidget = new Analytics.ReportWidget("{{ id }}", {
-			request: {{ request|json_encode|raw }},
-		});
-
-	{% endregisterJs %}
-
-{% endmacro %}
-
-
 {% macro widgetMock(id) %}
 
 	<div id="{{ id }}" class="mock-widget analytics_report">
@@ -35,3 +7,37 @@
 	</div>
 
 {% endmacro %}
+
+
+
+{% macro reportWidget(request) %}
+
+	{% from _self import widgetMock %}
+
+	{% set id = 'widget-'~random() %}
+
+	{{ widgetMock(id) }}
+
+	{% js %}
+
+	var reportWidget = new Analytics.ReportWidget("{{ id }}", {
+	request: {{ request|json_encode|raw }},
+	});
+
+	{% endjs %}
+
+{% endmacro %}
+
+{% macro testReportWidget(name, request) %}
+
+	{% from _self import reportWidget %}
+
+	<div class="test-report-widget">
+		<h2>{{ name }} Report Widget</h2>
+
+		{{ reportWidget(request) }}
+	</div>
+
+{% endmacro %}
+
+
