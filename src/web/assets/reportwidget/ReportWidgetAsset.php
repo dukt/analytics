@@ -36,14 +36,13 @@ class ReportWidgetAsset extends AssetBundle
         // define the relative path to CSS/JS files that should be registered with the page
         // when this asset bundle is registered
         $this->js = [
-            'ReportWidgetSettings.js',
-            'ReportWidget.js',
-            'jsapi.js',
+            'js/ReportWidgetSettings.js',
+            'js/ReportWidget.js',
         ];
 
         $this->css = [
-            'ReportWidget.css',
-            'ReportWidgetSettings.css',
+            'css/ReportWidget.css',
+            'js/ReportWidgetSettings.css',
         ];
 
         parent::init();

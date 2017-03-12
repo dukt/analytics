@@ -36,12 +36,11 @@ class ReportFieldAsset extends AssetBundle
         // define the relative path to CSS/JS files that should be registered with the page
         // when this asset bundle is registered
         $this->js = [
-            'ReportField.js',
-            'jsapi.js',
+            'js/ReportField.js',
         ];
 
         $this->css = [
-            'ReportField.css'
+            'css/ReportField.css'
         ];
 
         parent::init();
