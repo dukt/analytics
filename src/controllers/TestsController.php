@@ -10,6 +10,7 @@ namespace dukt\analytics\controllers;
 use Craft;
 use craft\web\Controller;
 use dukt\analytics\Plugin as Analytics;
+use dukt\analytics\web\assets\tests\TestsAsset;
 
 class TestsController extends Controller
 {
@@ -41,6 +42,7 @@ class TestsController extends Controller
         Craft::$app->getView()->registerJsFile('analytics/js/ReportWidget.js');
         Craft::$app->getView()->registerCssFile('analytics/css/ReportWidget.css');
         Craft::$app->getView()->registerCssFile('analytics/css/tests.css');*/
+        Craft::$app->getView()->registerAssetBundle(TestsAsset::class);
 
         $this->renderTemplate('analytics/tests/_reportWidgets', $variables);
     }
