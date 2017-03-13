@@ -105,9 +105,9 @@ class Analytics extends Component
 
         $settings = $plugin->getSettings();
 
-        if(!empty($settings['currency']))
+        if(!empty($settings['profileCurrency']))
         {
-            return $settings['currency'];
+            return $settings['profileCurrency'];
         }
     }
 

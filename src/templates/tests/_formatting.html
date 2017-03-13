@@ -20,7 +20,7 @@
 	</table>
 
 	{% js %}
-		var formats = Analytics.formats;
+		var formats = Craft.charts.BaseChart.defaults.formats;
 		var tests = [
 			{
 				type: 'string',
@@ -86,8 +86,8 @@
 
 	{% js %}
 
-	var localeDefinition = window['d3_locale'];
-	var locale = d3.locale(localeDefinition);
+	var localeDefinition = window['d3FormatLocaleDefinition'];
+	var locale = d3.formatLocale(localeDefinition);
 
 	var tests = [
 		{
@@ -112,7 +112,7 @@
 		{
 			label: "decimalFormat",
 			value: 1902345.3412344,
-			format: formats.decimalFormat,
+			format: formats.numberFormat,
 		}
 	];
 
@@ -127,7 +127,7 @@
 			value = test.valueModifier(value);
 		}
 
-		var formattedValue = locale.numberFormat(test.format)(value);
+		var formattedValue = locale.format(test.format)(value);
 
 		$tr = $('<tr></tr>');
 		$('<td>'+ test.label +'</td>').appendTo($tr);
