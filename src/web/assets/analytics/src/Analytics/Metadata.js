@@ -1,1 +1,43 @@
-Analytics.Metadata={getContinentByCode:function(n){var t;return $.each(Analytics.continents,function(e,a){n==a.code&&(t=a.label)}),t?t:n},getSubContinentByCode:function(n){var t;return $.each(Analytics.subContinents,function(e,a){n==a.code&&(t=a.label)}),t?t:n}};
+
+Analytics.Metadata = {
+
+    getContinentByCode: function(code)
+    {
+        var continent;
+
+        $.each(Analytics.continents, function(key, _continent)
+        {
+            if(code == _continent.code)
+            {
+                continent = _continent.label;
+            }
+        });
+
+        if(continent)
+        {
+            return continent;
+        }
+
+        return code;
+    },
+
+    getSubContinentByCode: function(code)
+    {
+        var continent;
+
+        $.each(Analytics.subContinents, function(key, _continent)
+        {
+            if(code == _continent.code)
+            {
+                continent = _continent.label;
+            }
+        });
+
+        if(continent)
+        {
+            return continent;
+        }
+
+        return code;
+    }
+};

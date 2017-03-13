@@ -41,8 +41,8 @@ gulp.task('concatJs', function() {
 
 gulp.task('compressJs', ['concatJs'], function() {
     return gulp.src([
-            './src/web/assets/**/*.js',
-            '!./src/web/assets/**/*.min.js',
+            './src/web/assets/**/dist/**/*.js',
+            '!./src/web/assets/**/dist/**/*.min.js',
         ])
         .pipe(plumber({ errorHandler: plumberErrorHandler }))
         .pipe(uglify())
