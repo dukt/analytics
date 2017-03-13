@@ -42,7 +42,7 @@ class ReportWidgetAsset extends AssetBundle
 
         $this->css = [
             'css/ReportWidget.css',
-            'js/ReportWidgetSettings.css',
+            'css/ReportWidgetSettings.css',
         ];
 
         parent::init();
