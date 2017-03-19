@@ -7,6 +7,8 @@
 
 namespace dukt\analytics\controllers;
 
+use Craft;
+use craft\helpers\FileHelper;
 use craft\web\Controller;
 use dukt\analytics\Plugin as Analytics;
 
@@ -15,6 +17,7 @@ class UtilsController extends Controller
     // Properties
     // =========================================================================
 
+    protected $allowAnonymous = true;
     private $addedInApiVersion = 3;
 
     // Public Methods
@@ -42,7 +45,7 @@ class UtilsController extends Controller
         ));
     }
 
-    public function actionloadMetadata()
+    public function actionLoadMetadata()
     {
         $this->_deleteMetadata();
         $this->_importMetadata();
@@ -50,7 +53,7 @@ class UtilsController extends Controller
         Craft::$app->getSession()->setNotice(Craft::t('analytics', "Metadata loaded."));
 
         $referrer = Craft::$app->getRequest()->referrer;
-        $this->redirect($referrer);
+        return $this->redirect($referrer);
     }
 
     // Private Methods
@@ -60,7 +63,7 @@ class UtilsController extends Controller
     {
         $path = Analytics::$plugin->metadata->getDimmetsFilePath();
 
-        IOHelper::deleteFile($path);
+        FileHelper::removeFile($path);
     }
 
     private function _importMetadata()
@@ -111,7 +114,7 @@ class UtilsController extends Controller
 
         $path = Analytics::$plugin->metadata->getDimmetsFilePath();
 
-        $res = IOHelper::writeToFile($path, $contents);
+        FileHelper::writeToFile($path, $contents);
     }
 
     private function populateColumnAttributes($column, $item)

@@ -15,14 +15,14 @@
 		</ul>
 
 		<div class="buttons">
-			<a href="{{ actionUrl('analytics/utils/loadMetadata') }}" class="btn">{{ "Refresh Metadata"|t('analytics') }}</a>
+			<a href="{{ actionUrl('analytics/utils/load-metadata') }}" class="btn">{{ "Refresh Metadata"|t('analytics') }}</a>
 		</div>
 	{% else %}
 
 		<p>{{ "Metadata file doesn’t exist"|t('analytics') }}</p>
 
 		<div class="buttons">
-			<a href="{{ actionUrl('analytics/utils/loadMetadata') }}" class="btn">{{ "Load Metadata"|t('analytics') }}</a>
+			<a href="{{ actionUrl('analytics/utils/load-metadata') }}" class="btn">{{ "Load Metadata"|t('analytics') }}</a>
 		</div>
 	{% endif %}
 

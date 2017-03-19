@@ -37,7 +37,7 @@ class Metadata extends Component
     {
         $path = Analytics::$plugin->metadata->getDimmetsFilePath();
 
-        if(IOHelper::fileExists($path, false))
+        if(file_exists($path))
         {
             return true;
         }
