@@ -99,11 +99,9 @@ class RealtimeWidget extends \craft\base\Widget
     }
 
     /**
-     * @inheritDoc IWidget::getColspan()
-     *
-     * @return int
+     * @inheritdoc
      */
-    public function getColSpan()
+    public static function maxColspan()
     {
         return 1;
     }
