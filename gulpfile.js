@@ -8,7 +8,7 @@ var gulp = require('gulp'),
 var plumberErrorHandler = function(err) {
 
     notify.onError({
-        title: "Garnish",
+        title: "Analytics",
         message:  "Error: <%= error.message %>",
         sound:    "Beep"
     })(err);
