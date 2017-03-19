@@ -16,18 +16,18 @@ class Settings extends Model
     public $profileId;
     public $profileName;
     public $profileCurrency;
-    public $realtimeRefreshInterval;
-    public $forceConnect;
+    public $realtimeRefreshInterval = 60;
+    public $forceConnect = false;
     public $enableRealtime;
     public $token;
 
     // Public Methods
     // =========================================================================
 
-    /*public function rules()
+    public function rules()
     {
         return [
-            [['tokenId'], 'number', 'integerOnly' => true],
+            [['realtimeRefreshInterval'], 'number', 'integerOnly' => true],
         ];
-    }*/
+    }
 }
