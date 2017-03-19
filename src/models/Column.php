@@ -23,4 +23,16 @@ class Column extends Model
     public $description;
     public $allowInSegments;
     public $addedInApiVersion;
+    // Public Methods
+    // =========================================================================
+
+    /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+            [['addedInApiVersion'], 'number', 'integerOnly' => true],
+        ];
+    }
 }
