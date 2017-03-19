@@ -10,19 +10,55 @@ namespace dukt\analytics\models;
 use craft\base\Model;
 use dukt\analytics\Plugin as Analytics;
 
+/**
+ * Class RequestCriteria
+ *
+ * @package dukt\analytics\models
+ */
 class RequestCriteria extends Model
 {
     // Properties
     // =========================================================================
 
+    /**
+     * @var string IDs
+     */
     public $ids;
+
+    /**
+     * @var string Start date
+     */
     public $startDate;
+
+    /**
+     * @var string End date
+     */
     public $endDate;
+
+    /**
+     * @var string Metrics
+     */
     public $metrics;
-    public $optParams;
+
+    /**
+     * @var array Option parameters
+     */
+    public $optParams = [];
+
+    /**
+     * @var string Format
+     */
     public $format;
-    public $realtime;
-    public $enableCache;
+
+    /**
+     * @var bool Realtime
+     */
+    public $realtime = false;
+
+    /**
+     * @var bool Enable cache
+     */
+    public $enableCache = true;
 
     // Public Methods
     // =========================================================================
