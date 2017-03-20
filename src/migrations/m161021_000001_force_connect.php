@@ -1,10 +1,14 @@
 <?php
-namespace Craft;
+namespace dukt\analytics\migrations;
+
+use craft\db\Migration;
+use craft\db\Query;
+use craft\helpers\Json;
 
 /**
  * The class name is the UTC timestamp in the format of mYYMMDD_HHMMSS_pluginHandle_migrationName
  */
-class m161021_000001_force_connect extends BaseMigration
+class m161021_000001_force_connect extends Migration
 {
     /**
      * Any migration code in here is wrapped inside of a transaction.
@@ -14,26 +18,34 @@ class m161021_000001_force_connect extends BaseMigration
     public function safeUp()
     {
         // set forceConnect setting to true
-
-        $row = Craft::$app->db->createCommand()
+        $row = (new Query())
             ->select('*')
-            ->from('plugins')
-            ->where('class=:class', array(':class'=>'Analytics'))
-            ->queryRow();
+            ->from(['{{%plugins}}'])
+            ->where(['plugins.handle' => 'analytics'])
+            ->one();
 
         if($row)
         {
             $settingsJson = $row['settings'];
 
-            $settings = JsonHelper::decode($settingsJson);
+            $settings = Json::decode($settingsJson);
             $settings['forceConnect'] = true;
 
-            $settingsJson = JsonHelper::encode($settings);
+            $settingsJson = Json::encode($settings);
 
-            Craft::$app->db->createCommand()
-                ->update('plugins', array('settings' => $settingsJson), 'id=:id', array('id' => $row['id']));
+            $this->update('{{%plugins}}', ['settings' => $settingsJson], ['id' => $row['id']]);
         }
 
         return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function safeDown()
+    {
+        echo "m161021_000001_force_connect cannot be reverted.\n";
+
+        return false;
     }
 }

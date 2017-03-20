@@ -1,10 +1,14 @@
 <?php
-namespace Craft;
+namespace dukt\analytics\migrations;
+
+use craft\db\Migration;
+use craft\db\Query;
+use craft\helpers\Json;
 
 /**
  * The class name is the UTC timestamp in the format of mYYMMDD_HHMMSS_pluginHandle_migrationName
  */
-class m150921_000001_explorer_widget_to_realtime_and_reports extends BaseMigration
+class m150921_000001_explorer_widget_to_realtime_and_reports extends Migration
 {
     /**
      * Any migration code in here is wrapped inside of a transaction.
@@ -13,20 +17,20 @@ class m150921_000001_explorer_widget_to_realtime_and_reports extends BaseMigrati
      */
     public function safeUp()
     {
-        $rows = Craft::$app->db->createCommand()
+        $widgetResults = (new Query())
             ->select('*')
-            ->from('widgets')
-            ->where('type=:type', array(':type'=>'Analytics_Explorer'))
-            ->queryAll();
+            ->from(['{{%widgets}}'])
+            ->where(['widgets.type' => 'Analytics_Explorer'])
+            ->all();
 
-        if($rows)
+        if($widgetResults)
         {
-            foreach($rows as $row)
+            foreach($widgetResults as $result)
             {
-                $oldSettings = JsonHelper::decode($row['settings']);
+                $oldSettings = Json::decode($result['settings']);
 
 
-                // old to new
+                // Old to new
 
                 $newSettings = [];
 
@@ -63,15 +67,24 @@ class m150921_000001_explorer_widget_to_realtime_and_reports extends BaseMigrati
                 }
 
 
-                // update row
+                // Update row
 
-                $newSettings = JsonHelper::encode($newSettings);
+                $newSettings = Json::encode($newSettings);
 
-                $updateCmd = Craft::$app->db->createCommand()
-                    ->update('widgets', array('type' => $type, 'settings' => $newSettings), 'id=:id', array('id' => $row['id']));
+                $this->update('{{%widgets}}', ['type' => $type, 'settings' => $newSettings], ['id' => $result['id']]);
             }
         }
 
         return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function safeDown()
+    {
+        echo "m150921_000001_explorer_widget_to_realtime_and_reports cannot be reverted.\n";
+
+        return false;
     }
 }

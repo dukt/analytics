@@ -1,10 +1,14 @@
 <?php
-namespace Craft;
+namespace dukt\analytics\migrations;
+
+use craft\db\Migration;
+use craft\db\Query;
+use craft\helpers\Json;
 
 /**
  * The class name is the UTC timestamp in the format of mYYMMDD_HHMMSS_pluginHandle_migrationName
  */
-class m141009_105954_analytics_reportsWidgetToExplorerWidget extends BaseMigration
+class m141009_105954_analytics_reportsWidgetToExplorerWidget extends Migration
 {
     /**
      * Any migration code in here is wrapped inside of a transaction.
@@ -13,117 +17,123 @@ class m141009_105954_analytics_reportsWidgetToExplorerWidget extends BaseMigrati
      */
     public function safeUp()
     {
-
-        $rows = Craft::$app->db->createCommand()
+        $widgetResults = (new Query())
             ->select('*')
-            ->from('widgets')
-            ->where('type=:type', array(':type'=>'Analytics_Reports'))
-            ->queryAll();
+            ->from(['{{%widgets}}'])
+            ->where(['widgets.type' => 'Analytics_Reports'])
+            ->all();
 
-        if($rows)
-        {
-            foreach($rows as $row)
-            {
-                $settings = JsonHelper::decode($row['settings']);
+        if (!empty($widgets)) {
 
-                if(!empty($settings['type']))
-                {
-                    switch($settings['type'])
-                    {
+            foreach ($widgetResults as $result) {
+                $settings = Json::decode($result['settings']);
+                $newSettings = [];
+
+                if(!empty($settings['type'])) {
+                    switch ($settings['type']) {
                         case 'visits':
-                            $newSettings = array(
+                            $newSettings = [
                                 'menu' => "audienceOverview",
                                 'dimension' => "",
                                 'metric' => 'ga:sessions',
                                 'chart' => "area",
                                 'period' => "month",
-                            );
+                            ];
                             break;
 
                         case 'geo':
-                            $newSettings = array(
+                            $newSettings = [
                                 "menu" => "location",
                                 "dimension" => "ga:country",
                                 "metric" => "ga:pageviewsPerSession",
                                 "chart" => "geo",
                                 "period" => "month",
-                            );
+                            ];
                             break;
 
                         case 'mobile':
-                            $newSettings = array(
+                            $newSettings = [
                                 "menu" => "mobile",
                                 "dimension" => "ga:deviceCategory",
                                 "metric" => "ga:sessions",
                                 "chart" => "pie",
                                 "period" => "week",
-                            );
+                            ];
                             break;
 
                         case 'pages':
-                            $newSettings = array(
+                            $newSettings = [
                                 "menu" => "allPages",
                                 "dimension" => "ga:pagePath",
                                 "metric" => "ga:pageviews",
                                 "chart" => "table",
                                 "period" => "week",
-                            );
+                            ];
                             break;
 
                         case 'acquisition':
-                            $newSettings = array(
+                            $newSettings = [
                                 "menu" => "allChannels",
                                 "dimension" => "ga:channelGrouping",
                                 "metric" => "ga:sessions",
                                 "chart" => "table",
                                 "period" => "week",
-                            );
+                            ];
                             break;
 
                         case 'technology':
-                            $newSettings = array(
+                            $newSettings = [
                                 "menu" => "browserOs",
                                 "dimension" => "ga:browser",
                                 "metric" => "ga:sessions",
                                 "chart" => "pie",
                                 "period" => "week",
-                            );
+                            ];
                             break;
 
                         case 'conversions':
-                            $newSettings = array(
+                            $newSettings = [
                                 "menu" => "goals",
                                 "dimension" => "ga:goalCompletionLocation",
                                 "metric" => "ga:goalCompletionsAll",
                                 "chart" => "area",
                                 "period" => "week",
-                            );
+                            ];
                             break;
 
                         case 'counts':
                         case 'custom':
                         case 'realtime':
-                            $newSettings = array(
+                            $newSettings = [
                                 'menu' => "audienceOverview",
                                 'dimension' => "",
                                 'metric' => 'ga:sessions',
                                 'chart' => "area",
                                 'period' => "month",
-                            );
+                            ];
                             break;
                     }
 
 
-                    // update rows
+                    // Update rows
 
-                    $newSettings = JsonHelper::encode($newSettings);
+                    $newSettings = Json::encode($newSettings);
 
-                    $updateCmd = Craft::$app->db->createCommand()
-                        ->update('widgets', array('type' => 'Analytics_Explorer', 'settings' => $newSettings), 'id=:id', array('id' => $row['id']));
+                    $this->update('{{%widgets}}', ['type' => 'Analytics_Explorer', 'settings' => $newSettings], ['id' => $result['id']]);
                 }
             }
         }
 
         return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function safeDown()
+    {
+        echo "m141009_105954_analytics_reportsWidgetToExplorerWidget cannot be reverted.\n";
+
+        return false;
     }
 }
