@@ -28,7 +28,7 @@ class ReportsController extends Controller
         $returningVisitor = 0;
         $total = 0;
 
-        if(!Craft::$app->getConfig()->get('demoMode', 'analytics'))
+        if(!Analytics::$plugin->getSettings()->demoMode)
         {
             try
             {

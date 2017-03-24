@@ -10,6 +10,8 @@ namespace dukt\analytics\services;
 use Craft;
 use craft\helpers\DateTimeHelper;
 use yii\base\Component;
+use dukt\analytics\Plugin as Analytics;
+use DateInterval;
 
 class Cache extends Component
 {
@@ -25,7 +27,7 @@ class Cache extends Component
      */
     public function get($id)
     {
-        if(Craft::$app->getConfig()->get('enableCache', 'analytics') == true)
+        if(Analytics::$plugin->getSettings()->enableCache == true)
         {
             $cacheKey = $this->getCacheKey($id);
 
@@ -48,7 +50,7 @@ class Cache extends Component
     {
         if(is_null($enableCache))
         {
-            $enableCache = Craft::$app->getConfig()->get('enableCache', 'analytics');
+            $enableCache = Analytics::$plugin->getSettings()->enableCache;
         }
 
         if($enableCache)
@@ -88,8 +90,9 @@ class Cache extends Component
      */
     private function getCacheDuration()
     {
-        $duration = Craft::$app->getConfig()->get('cacheDuration', 'analytics');
-        return DateTimeHelper::timeFormatToSeconds($duration);
+        $duration = Analytics::$plugin->getSettings()->cacheDuration;
+
+        return DateTimeHelper::intervalToSeconds(new DateInterval($duration));
     }
 
     /**

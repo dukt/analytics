@@ -12,7 +12,7 @@ use craft\helpers\Json;
 use dukt\analytics\Plugin as Analytics;
 use dukt\analytics\web\assets\realtimereportwidget\RealtimeReportWidgetAsset;
 
-class RealtimeWidget extends \craft\base\Widget
+class Realtime extends \craft\base\Widget
 {
     // Properties
     // =========================================================================
@@ -64,7 +64,7 @@ class RealtimeWidget extends \craft\base\Widget
     public function getBodyHtml()
     {
         if(Analytics::$plugin->getAnalytics()->checkPluginRequirements()) {
-            if (Craft::$app->getConfig()->get('enableWidgets', 'analytics')) {
+            if (Analytics::$plugin->getSettings()->enableWidgets) {
                 $profileId = Analytics::$plugin->getAnalytics()->getProfileId();
 
                 if ($profileId) {

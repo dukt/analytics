@@ -29,7 +29,7 @@ class Analytics extends Component
      */
     public function getRealtimeRefreshInterval()
     {
-        $interval = Craft::$app->getConfig()->get('realtimeRefreshInterval', 'analytics');
+        $interval = AnalyticsPlugin::$plugin->getSettings()->realtimeRefreshInterval;
 
         if($interval)
         {
@@ -46,7 +46,7 @@ class Analytics extends Component
             }
         }
 
-        return Craft::$app->getConfig()->get('defaultRealtimeRefreshInterval', 'analytics');
+        return null;
     }
 
     /**
@@ -86,7 +86,7 @@ class Analytics extends Component
             $uri = $components['path'];
         }
 
-        if(Craft::$app->getConfig()->get('addTrailingSlashesToUrls'))
+        if(AnalyticsPlugin::$plugin->getSettings()->addTrailingSlashesToUrls)
         {
             $uri .= '/';
         }
@@ -172,7 +172,7 @@ class Analytics extends Component
      */
     public function isOauthProviderConfigured()
     {
-        $options = Craft::$app->getConfig()->get('oauthProviderOptions', 'analytics');
+        $options = AnalyticsPlugin::$plugin->getSettings()->oauthProviderOptions;
 
         if(!empty($options['clientId']) && !empty($options['clientSecret']))
         {
