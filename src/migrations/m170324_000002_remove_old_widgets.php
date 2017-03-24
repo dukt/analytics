@@ -29,7 +29,7 @@ class m170324_000002_remove_old_widgets extends Migration
      */
     public function safeDown()
     {
-        echo "m170324_000002_remove_old_widget cannot be reverted.\n";
+        echo "m170324_000002_remove_old_widgets cannot be reverted.\n";
 
         return false;
     }
