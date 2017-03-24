@@ -103,7 +103,7 @@ class Report extends \craft\base\Widget
 
                         $view->registerAssetBundle(ReportWidgetAsset::class);
 
-                        $jsTemplate = 'window.csrfTokenName = "{{ craft.app.config.get(\'csrfTokenName\')|e(\'js\') }}";';
+                        $jsTemplate = 'window.csrfTokenName = "{{ craft.app.config.general.csrfTokenName|e(\'js\') }}";';
                         $jsTemplate .= 'window.csrfTokenValue = "{{ craft.app.request.csrfToken|e(\'js\') }}";';
                         $js = $view->renderString($jsTemplate);
 
