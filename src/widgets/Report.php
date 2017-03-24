@@ -13,7 +13,7 @@ use craft\helpers\Json;
 use dukt\analytics\web\assets\reportwidget\ReportWidgetAsset;
 use dukt\analytics\Plugin as Analytics;
 
-class ReportWidget extends \craft\base\Widget
+class Report extends \craft\base\Widget
 {
     // Properties
     // =========================================================================
