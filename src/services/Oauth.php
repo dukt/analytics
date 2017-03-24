@@ -12,6 +12,7 @@ use yii\base\Component;
 use League\OAuth2\Client\Token\AccessToken;
 use Dukt\OAuth2\Client\Provider\Google;
 use craft\helpers\UrlHelper;
+use dukt\analytics\Plugin as Analytics;
 
 class Oauth extends Component
 {
@@ -120,7 +121,7 @@ class Oauth extends Component
      */
     public function getOauthProvider()
     {
-        $options = Craft::$app->getConfig()->get('oauthProviderOptions', 'analytics');
+        $options = Analytics::$plugin->getSettings()->oauthProviderOptions;
 
         if(!isset($options['redirectUri']))
         {

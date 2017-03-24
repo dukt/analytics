@@ -47,7 +47,7 @@ class Report extends Field
 
         if(Analytics::$plugin->getAnalytics()->checkPluginRequirements())
         {
-            if(Craft::$app->getConfig()->get('enableFieldtype', 'analytics'))
+            if(Analytics::$plugin->getSettings()->enableFieldtype)
             {
                 $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
 

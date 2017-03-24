@@ -22,7 +22,7 @@ class SettingsController extends Controller
      *
      * @return null
      */
-    public function actionIndex()
+    public function actionIndex($plugin = null)
     {
         $variables = array();
 
@@ -34,8 +34,10 @@ class SettingsController extends Controller
 
 
             try {
+                if(!$plugin) {
+                    $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
+                }
                 $provider = Analytics::$plugin->oauth->getOauthProvider();
-                $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
                 $token = Analytics::$plugin->oauth->getToken();
 
                 if ($token) {
@@ -127,7 +129,7 @@ class SettingsController extends Controller
         $variables['token'] = (isset($token) ? $token : null);
         $variables['javascriptOrigin'] = Analytics::$plugin->oauth->getJavascriptOrigin();
         $variables['redirectUri'] = Analytics::$plugin->oauth->getRedirectUri();
-        $variables['oauthProviderOptions'] = Craft::$app->getConfig()->get('oauthProviderOptions', 'analytics');
+        $variables['oauthProviderOptions'] = Analytics::$plugin->getSettings()->oauthProviderOptions;
         $variables['googleIconUrl'] = Craft::$app->assetManager->getPublishedUrl('@dukt/analytics/icons/google.svg', true);
 
         Craft::$app->getView()->registerAssetBundle(SettingsAsset::class);
@@ -167,9 +169,11 @@ class SettingsController extends Controller
         Craft::$app->getSession()->setError(Craft::t('analytics', 'Couldn’t save plugin settings.'));
 
         // Send the plugin back to the template
-        Craft::$app->urlManager->setRouteVariables(array(
+        Craft::$app->getUrlManager()->setRouteParams([
             'plugin' => $plugin
-        ));
+        ]);
+
+        return null;
     }
 
     /**

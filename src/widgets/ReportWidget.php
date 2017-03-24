@@ -70,7 +70,7 @@ class ReportWidget extends \craft\base\Widget
 
         try {
             if (Analytics::$plugin->getAnalytics()->checkPluginRequirements()) {
-                if (Craft::$app->getConfig()->get('enableWidgets', 'analytics')) {
+                if (Analytics::$plugin->getSettings()->enableWidgets) {
                     $settings = $this->settings;
 
                     $profileId = Analytics::$plugin->getAnalytics()->getProfileId();
@@ -85,7 +85,7 @@ class ReportWidget extends \craft\base\Widget
 
                         // use cached response if available
 
-                        if (Craft::$app->getConfig()->get('enableCache', 'analytics') === true) {
+                        if (Analytics::$plugin->getSettings()->enableCache === true) {
                             $cacheId = ['getReport', $request, $profileId];
 
                             $cachedResponse = Analytics::$plugin->cache->get($cacheId);

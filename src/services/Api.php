@@ -140,7 +140,7 @@ class Api extends Component
             }
         }
 
-        $configFilters = Craft::$app->getConfig()->get('filters', 'analytics');
+        $configFilters = Analytics::$plugin->getSettings()->filters;
 
         if($configFilters)
         {

@@ -69,9 +69,41 @@ class Settings extends Model
     public $enableRealtime = false;
 
     /**
-     * @var string
+     * @var string The amount of time cache should last.
+     *
+     * @see http://www.php.net/manual/en/dateinterval.construct.php
+     */
+    public $cacheDuration = 'PT10M';
+
+    /**
+     * @var bool Whether request to APIs should be cached or not
+     */
+    public $enableCache = true;
+
+    /**
+     * @var bool Whether Analytics widgets are enabled or disabled
+     */
+    public $enableWidgets = true;
+
+    /**
+     * @var bool Whether Analytics fieldtype is enabled or not
+     */
+    public $enableFieldtype = true;
+
+    /**
+     * @var array Defines global filters applied to every request to the Core Reporting API
+     */
+    public $filters = [];
+
+    /**
+     * @var string OAuth token
      */
     public $token;
+
+    /**
+     * @var array OAuth provider options
+     */
+    public $oauthProviderOptions = [];
 
     // Public Methods
     // =========================================================================
@@ -83,6 +115,7 @@ class Settings extends Model
     {
         return [
             [['realtimeRefreshInterval'], 'number', 'integerOnly' => true],
+            [['realtimeRefreshInterval'], 'required'],
         ];
     }
 }
