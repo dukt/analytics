@@ -12,7 +12,7 @@ use craft\helpers\Json;
 use dukt\analytics\Plugin as Analytics;
 use dukt\analytics\web\assets\realtimereportwidget\RealtimeReportWidgetAsset;
 
-class RealtimeWidget extends \craft\base\Widget
+class Realtime extends \craft\base\Widget
 {
     // Properties
     // =========================================================================
