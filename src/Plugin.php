@@ -19,8 +19,8 @@ use dukt\analytics\fields\Report as ReportField;
 use dukt\analytics\models\Settings;
 use dukt\analytics\web\twig\variables\AnalyticsVariable;
 use dukt\analytics\web\assets\analytics\AnalyticsAsset;
-use dukt\analytics\widgets\RealtimeWidget;
-use dukt\analytics\widgets\ReportWidget;
+use dukt\analytics\widgets\Realtime;
+use dukt\analytics\widgets\Report;
 use yii\base\Event;
 
 class Plugin extends \craft\base\Plugin
@@ -66,8 +66,8 @@ class Plugin extends \craft\base\Plugin
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, [$this, 'registerCpUrlRules']);
 
         Event::on(Dashboard::class, Dashboard::EVENT_REGISTER_WIDGET_TYPES, function(RegisterComponentTypesEvent $event) {
-            $event->types[] = RealtimeWidget::class;
-            $event->types[] = ReportWidget::class;
+            $event->types[] = Realtime::class;
+            $event->types[] = Report::class;
         });
 
         Event::on(Fields::class, Fields::EVENT_REGISTER_FIELD_TYPES, function(RegisterComponentTypesEvent $event) {
