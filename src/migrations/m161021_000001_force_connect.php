@@ -21,7 +21,7 @@ class m161021_000001_force_connect extends Migration
         $row = (new Query())
             ->select('*')
             ->from(['{{%plugins}}'])
-            ->where(['plugins.handle' => 'analytics'])
+            ->where(['handle' => 'analytics'])
             ->one();
 
         if($row)

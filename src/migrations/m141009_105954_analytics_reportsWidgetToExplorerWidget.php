@@ -20,10 +20,10 @@ class m141009_105954_analytics_reportsWidgetToExplorerWidget extends Migration
         $widgetResults = (new Query())
             ->select('*')
             ->from(['{{%widgets}}'])
-            ->where(['widgets.type' => 'Analytics_Reports'])
+            ->where(['type' => 'Analytics_Reports'])
             ->all();
 
-        if (!empty($widgets)) {
+        if (!empty($widgetResults)) {
 
             foreach ($widgetResults as $result) {
                 $settings = Json::decode($result['settings']);

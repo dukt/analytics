@@ -20,7 +20,7 @@ class m150921_000001_explorer_widget_to_realtime_and_reports extends Migration
         $widgetResults = (new Query())
             ->select('*')
             ->from(['{{%widgets}}'])
-            ->where(['widgets.type' => 'Analytics_Explorer'])
+            ->where(['type' => 'Analytics_Explorer'])
             ->all();
 
         if($widgetResults)

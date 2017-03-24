@@ -22,7 +22,7 @@ class m161117_000001_remove_account_explorer_data_setting extends Migration
         $row = (new Query())
             ->select('*')
             ->from(['{{%plugins}}'])
-            ->where(['plugins.handle' => 'analytics'])
+            ->where(['handle' => 'analytics'])
             ->one();
 
         if($row)
