@@ -89,6 +89,13 @@ class OauthController extends Controller
 
             // Todo: Reset session variables
 
+            $pluginSettings = Analytics::$plugin->getSettings();
+
+            if($pluginSettings->forceConnect === true) {
+                $pluginSettings->forceConnect = false;
+                Craft::$app->getPlugins()->savePluginSettings(Analytics::$plugin, $pluginSettings->getAttributes());
+            }
+
             // Redirect
             Craft::$app->getSession()->setNotice(Craft::t('analytics', "Connected to Google Analytics."));
 
