@@ -98,8 +98,6 @@ Analytics.Realtime = Garnish.Base.extend(
 
         this.request();
 
-        console.log('refreshInterval', this.settings.refreshInterval);
-
         this.timer = setInterval($.proxy(function()
         {
             this.request();
