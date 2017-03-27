@@ -105,6 +105,11 @@ class Settings extends Model
      */
     public $oauthProviderOptions = [];
 
+    /**
+     * @var bool Demo mode
+     */
+    public $demoMode = false;
+
     // Public Methods
     // =========================================================================
 
