@@ -23,6 +23,11 @@ use dukt\analytics\widgets\Realtime;
 use dukt\analytics\widgets\Report;
 use yii\base\Event;
 
+/**
+ * Class Plugin
+ *
+ * @package dukt\analytics
+ */
 class Plugin extends \craft\base\Plugin
 {
     // Traits
