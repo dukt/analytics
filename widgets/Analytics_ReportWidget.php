@@ -66,7 +66,9 @@ class Analytics_ReportWidget extends BaseWidget
 
 				if($profileId)
 				{
-					craft()->templates->includeJsResource('analytics/js/jsapi.js', true);
+                    $apiKey = craft()->config->get('apiKey', 'analytics');
+
+					craft()->templates->includeJsFile('https://www.google.com/jsapi'.($apiKey ? '?key='.$apiKey : '' ), true);
 
 					craft()->templates->includeJsResource('analytics/js/ReportWidgetSettings.js');
 					craft()->templates->includeJsResource('analytics/js/ReportWidget.js');

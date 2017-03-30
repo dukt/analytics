@@ -32,7 +32,9 @@ class Analytics_TestsController extends BaseController
 	 */
 	public function actionReportWidgets(array $variables = array())
 	{
-		craft()->templates->includeJsResource('analytics/js/jsapi.js', true);
+        $apiKey = craft()->config->get('apiKey', 'analytics');
+
+        craft()->templates->includeJsFile('https://www.google.com/jsapi'.($apiKey ? '?key='.$apiKey : '' ), true);
 
 		craft()->templates->includeJsResource('analytics/js/ReportWidget.js');
 		craft()->templates->includeCssResource('analytics/css/ReportWidget.css');
