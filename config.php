@@ -3,6 +3,11 @@
 return array(
 
 	/**
+	 * Google API key
+	 */
+	'apiKey' => 'MY_API_KEY',
+
+	/**
 	 * Interval at which the realtime widget should refresh its data (in seconds)
 	 */
 	'realtimeRefreshInterval' => 15,
