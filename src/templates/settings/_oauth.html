@@ -1,0 +1,61 @@
+{% extends "_layouts/cp" %}
+
+{% set crumbs = [
+{ label: "Settings"|t('analytics'), url: url('settings') },
+{ label: "Plugins"|t('analytics'), url: url('settings/plugins') },
+{ label: "Analytics"|t('analytics'), url: url('analytics/settings') }
+] %}
+
+{% set title = "OAuth Settings"|t('analytics')%}
+
+{% import "_includes/forms" as forms %}
+
+{% set content %}
+
+	<form method="post" accept-charset="UTF-8" data-saveshortcut>
+
+		{{ csrfInput() }}
+
+		<input type="hidden" name="action" value="analytics/settings/save-settings">
+		<input type="hidden" name="pluginClass" value="Analytics">
+		<input type="hidden" name="redirect" value="{{ 'analytics/settings'|hash }}">
+
+		<h2 class="first">{{ 'Create the OAuth application'|t('analytics') }}</h2>
+		<p>{{ 'Go to the {link} and create a new project or use an existing one.'|t('analytics', {link: '<a href="https://console.developers.google.com/">'~'Google API Console'|t('analytics')~'</a>'})|raw }}</p>
+		<p>{{ "In API Manager → Library, search for “analytics”  and enable the “Analytics API”."|t('analytics') }}</p>
+		<p>{{ "In API Manager → Credentials, click the “Create credential” button and create a new “OAuth client ID” of type “Web Application”."|t('analytics', {link: '<a href="https://console.developers.google.com/">'~'Google API Console'|t('analytics')~'</a>'})|raw }}</p>
+		<p>{{ "Configure the client using the following javascript origin and redirect urls."|t('analytics') }}</p>
+
+		{{ forms.textField({
+			readonly: true,
+			label: "Javascript Origin",
+			value: javascriptOrigin
+		}) }}
+
+		{{ forms.textField({
+			readonly: true,
+			label: "Redirect URI",
+			value: redirectUri
+		}) }}
+
+		<h2>{{ 'Configure the OAuth client'|t('analytics') }}</h2>
+		<p>{{ 'Once the OAuth client is created, Google will provide you with a client ID and secret.'|t('analytics') }}</p>
+		<p>{{ ("Copy the client ID & secret from the <a href=\"https://console.developers.google.com/\">"~'Google Api Console'|t('analytics')~"</a> under the API Manager → Credentials tab, and paste them in the <code>craft/config/analytics.php</code> config file.")|raw }}</p>
+
+		{{ forms.textField({
+			label: "Client ID",
+			name: 'settings[oauthClientId]',
+			value: settings.oauthClientId
+		}) }}
+
+		{{ forms.textField({
+			label: "Client Secret",
+			name: 'settings[oauthClientSecret]',
+			value: settings.oauthClientSecret
+		}) }}
+
+		<div class="buttons">
+			<input type="submit" class="btn submit force" value="{{ 'Save'|t('analytics') }}">
+		</div>
+	</form>
+{% endset %}

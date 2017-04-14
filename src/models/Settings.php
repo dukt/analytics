@@ -106,6 +106,16 @@ class Settings extends Model
     public $oauthProviderOptions = [];
 
     /**
+     * @var string OAuth client ID
+     */
+    public $oauthClientId;
+
+    /**
+     * @var string OAuth client ID
+     */
+    public $oauthClientSecret;
+
+    /**
      * @var bool Demo mode
      */
     public $demoMode = false;

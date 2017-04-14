@@ -121,7 +121,12 @@ class Oauth extends Component
      */
     public function getOauthProvider()
     {
-        $options = Analytics::$plugin->getSettings()->oauthProviderOptions;
+        $options = [
+            'clientId' => Analytics::$plugin->getSettings()->oauthClientId,
+            'clientSecret' => Analytics::$plugin->getSettings()->oauthClientSecret
+        ];
+
+        $options = array_merge($options, Analytics::$plugin->getSettings()->oauthProviderOptions);
 
         if(!isset($options['redirectUri']))
         {

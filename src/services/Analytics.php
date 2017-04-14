@@ -172,9 +172,10 @@ class Analytics extends Component
      */
     public function isOauthProviderConfigured()
     {
-        $options = AnalyticsPlugin::$plugin->getSettings()->oauthProviderOptions;
+        $oauthClientId = AnalyticsPlugin::$plugin->getSettings()->oauthClientId;
+        $oauthClientSecret = AnalyticsPlugin::$plugin->getSettings()->oauthClientSecret;
 
-        if(!empty($options['clientId']) && !empty($options['clientSecret']))
+        if(!empty($oauthClientId) && !empty($oauthClientSecret))
         {
             return true;
         }

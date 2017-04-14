@@ -24,19 +24,17 @@ class SettingsController extends Controller
      */
     public function actionIndex($plugin = null)
     {
-        $variables = array();
+        $isOauthProviderConfigured = Analytics::$plugin->getAnalytics()->isOauthProviderConfigured();
 
-        $variables['isOauthProviderConfigured'] = Analytics::$plugin->getAnalytics()->isOauthProviderConfigured();
-
-        if($variables['isOauthProviderConfigured']) {
-            $variables['oauthAccount'] = false;
-            $variables['errors'] = [];
+        if($isOauthProviderConfigured) {
+            $errors = [];
 
 
             try {
                 if(!$plugin) {
                     $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
                 }
+
                 $provider = Analytics::$plugin->oauth->getOauthProvider();
                 $token = Analytics::$plugin->oauth->getToken();
 
@@ -94,26 +92,16 @@ class SettingsController extends Controller
                             $viewOptions[] = ['label' => $settings->profileName, 'value' => $settings->profileId];
                         }
 
-                        $variables['accountOptions'] = $accountOptions;
-                        $variables['accountId'] = $settings->accountId;
-                        $variables['webPropertyOptions'] = $webPropertyOptions;
-                        $variables['webPropertyId'] = $settings->webPropertyId;
-                        $variables['viewOptions'] = $viewOptions;
-                        $variables['viewId'] = $settings->profileId;
-
-
-                        $variables['accountExplorerData'] = $accountExplorerData;
-                        $variables['settings'] = $settings;
-                        $variables['oauthAccount'] = $oauthAccount;
+                        $accountId = $settings->accountId;
+                        $webPropertyId = $settings->webPropertyId;
+                        $viewId = $settings->profileId;
                     }
                 }
-
-                $variables['provider'] = $provider;
             } catch (\Google_Service_Exception $e) {
                 Craft::info("Couldn’t get OAuth account: ".$e->getMessage(), __METHOD__);
 
                 foreach ($e->getErrors() as $error) {
-                    array_push($variables['errors'], $error['message']);
+                    array_push($errors, $error['message']);
                 }
             } catch (\Exception $e) {
                 if (method_exists($e, 'getResponse')) {
@@ -122,19 +110,49 @@ class SettingsController extends Controller
                     Craft::info("Couldn’t get OAuth account: ".$e->getMessage(), __METHOD__);
                 }
 
-                array_push($variables['errors'], $e->getMessage());
+                array_push($errors, $e->getMessage());
             }
         }
 
-        $variables['token'] = (isset($token) ? $token : null);
-        $variables['javascriptOrigin'] = Analytics::$plugin->oauth->getJavascriptOrigin();
-        $variables['redirectUri'] = Analytics::$plugin->oauth->getRedirectUri();
-        $variables['oauthProviderOptions'] = Analytics::$plugin->getSettings()->oauthProviderOptions;
-        $variables['googleIconUrl'] = Craft::$app->assetManager->getPublishedUrl('@dukt/analytics/icons/google.svg', true);
+        $token = (isset($token) ? $token : null);
 
         Craft::$app->getView()->registerAssetBundle(SettingsAsset::class);
 
-        return $this->renderTemplate('analytics/settings/_index', $variables);
+        return $this->renderTemplate('analytics/settings/_index', [
+            'isOauthProviderConfigured' => $isOauthProviderConfigured,
+
+            'accountExplorerData' => (isset($accountExplorerData) ? $accountExplorerData : null),
+            'accountId' => (isset($accountId) ? $accountId : null),
+            'accountOptions' => (isset($accountOptions) ? $accountOptions : null),
+            'errors' => (isset($errors) ? $errors : null),
+            'oauthAccount' => (isset($oauthAccount) ? $oauthAccount : null),
+            'provider' => (isset($provider) ? $provider : null),
+            'settings' => (isset($settings) ? $settings : null),
+            'token' => (isset($token) ? $token : null),
+            'viewId' => (isset($viewId) ? $viewId : null),
+            'viewOptions' => (isset($viewOptions) ? $viewOptions : null),
+            'webPropertyId' => (isset($webPropertyId) ? $webPropertyId : null),
+            'webPropertyOptions' => (isset($webPropertyOptions) ? $webPropertyOptions : null),
+
+            'javascriptOrigin' => Analytics::$plugin->oauth->getJavascriptOrigin(),
+            'redirectUri' => Analytics::$plugin->oauth->getRedirectUri(),
+            'googleIconUrl' => Craft::$app->assetManager->getPublishedUrl('@dukt/analytics/icons/google.svg', true),
+        ]);
+    }
+
+    /**
+     * OAuth Settings
+     *
+     * @return \yii\web\Response
+     */
+    public function actionOauth()
+    {
+        return $this->renderTemplate('analytics/settings/_oauth', [
+            'javascriptOrigin' => Analytics::$plugin->oauth->getJavascriptOrigin(),
+            'redirectUri' => Analytics::$plugin->oauth->getRedirectUri(),
+            'googleIconUrl' => Craft::$app->assetManager->getPublishedUrl('@dukt/analytics/icons/google.svg', true),
+            'settings' => Analytics::$plugin->getSettings(),
+        ]);
     }
 
     /**
