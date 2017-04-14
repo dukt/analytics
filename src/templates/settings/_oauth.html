@@ -24,19 +24,12 @@
 		<p>{{ 'Go to the {link} and create a new project or use an existing one.'|t('analytics', {link: '<a href="https://console.developers.google.com/">'~'Google API Console'|t('analytics')~'</a>'})|raw }}</p>
 		<p>{{ "In API Manager → Library, search for “analytics”  and enable the “Analytics API”."|t('analytics') }}</p>
 		<p>{{ "In API Manager → Credentials, click the “Create credential” button and create a new “OAuth client ID” of type “Web Application”."|t('analytics', {link: '<a href="https://console.developers.google.com/">'~'Google API Console'|t('analytics')~'</a>'})|raw }}</p>
-		<p>{{ "Configure the client using the following javascript origin and redirect urls."|t('analytics') }}</p>
+		<p>{{ "Configure the client with the following javascript origin and redirect urls."|t('analytics') }}</p>
 
-		{{ forms.textField({
-			readonly: true,
-			label: "Javascript Origin",
-			value: javascriptOrigin
-		}) }}
-
-		{{ forms.textField({
-			readonly: true,
-			label: "Redirect URI",
-			value: redirectUri
-		}) }}
+		<ul class="bullets">
+			<li><strong>Javascript Origin:</strong> <code>{{ javascriptOrigin }}</code></li>
+			<li><strong>Redirect URI:</strong> <code>{{ redirectUri }}</code></li>
+		</ul>
 
 		<h2>{{ 'Configure the OAuth client'|t('analytics') }}</h2>
 		<p>{{ 'Once the OAuth client is created, Google will provide you with a client ID and secret.'|t('analytics') }}</p>

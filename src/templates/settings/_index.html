@@ -6,25 +6,24 @@
 
 	<h2 class="first">{{ 'Google Analytics Account'|t('analytics') }}</h2>
 
-	{% if not oauthAccount %}
+	{% if not oauthAccount or settings.forceConnect %}
 
-		{% if errors is defined and errors|length > 0 %}
-			<p>{{ 'An error occurred while trying to retrieve account informations:'|t('analytics') }}</p>
-			<ul class="error">
-				{% for error in errors %}
-					<li>{{ error }}</li>
-				{% endfor %}
-			</ul>
-		{% endif %}
+		{% if isOauthProviderConfigured %}
+			<p>{{ 'Gettings errors trying to connect? Check your {link}.'|t('analytics', { link: '<a href="'~url('analytics/settings/oauth')~'">OAuth settings</a>' })|raw }}</p>
 
-		<p>{{ 'Check your {link} before trying to connect.'|t('analytics', { link: '<a href="'~url('analytics/settings/oauth')~'">OAuth settings</a>' })|raw }}</p>
+			{% if errors is defined and errors|length > 0 %}
+				<ul class="error">
+					{% for error in errors %}
+						<li>{{ error }}</li>
+					{% endfor %}
+				</ul>
+			{% endif %}
 
-		{% if token %}
-			<p><a class="btn small" href="{{ actionUrl('analytics/oauth/disconnect') }}">{{ 'Disconnect'|t('analytics') }}</a></p>
-		{% else %}
 			<p><a class="btn submit" href="{{ actionUrl('analytics/oauth/connect') }}">{{"Connect"|t('analytics') }}</a></p>
+		{% else %}
+			<p>{{ 'To get started, go to the OAuth settings and configure your Google application’s client ID & secret.'|t('analytics') }}</p>
+			<p><a class="btn" href="{{ url('analytics/settings/oauth') }}">{{"OAuth Settings"|t('analytics') }}</a></p>
 		{% endif %}
-
 	{% else %}
 
 		<p>{{ 'You are authenticated to Google Analytics with the following account'|t('analytics') }} :</p>
@@ -52,94 +51,88 @@
 			</div>
 		</div>
 
-		{% if settings.forceConnect %}
-			<p><a class="btn submit" href="{{ actionUrl('analytics/oauth/connect') }}">{{"Please connect again to Google Analytics"|t('analytics') }}</a></p>
-		{% else %}
+		<hr />
+
+		<form method="post" accept-charset="UTF-8" data-saveshortcut>
+
+			{{ csrfInput() }}
+
+			<input type="hidden" name="action" value="analytics/settings/save-settings">
+			<input type="hidden" name="pluginClass" value="Analytics">
+			<input type="hidden" name="redirect" value="{{ 'analytics/settings'|hash }}">
+
+			<div id="account-explorer" class="account-explorer">
+
+				<h2 class="first">{{ "Google Analytics View (Profile)"|t('analytics') }}</h2>
+
+				{{ forms.selectField({
+					label: "Account"|t('analytics'),
+					name: 'settings[accountId]',
+					class: 'account',
+					options: accountOptions,
+					value: accountId,
+				}) }}
+
+				{{ forms.selectField({
+					label: "Property"|t('analytics'),
+					name: 'settings[webPropertyId]',
+					class: 'property',
+					options: webPropertyOptions,
+					value: webPropertyId,
+				}) }}
+
+				{{ forms.selectField({
+					label: "View"|t('analytics'),
+					name: 'settings[profileId]',
+					class: 'view',
+					options: viewOptions,
+					value: viewId,
+				}) }}
+
+				<div class="buttons">
+					<div class="btn small refresh-views">Refresh</div> <div class="spinner hidden"></div>
+				</div>
+			</div>
+
+			{% js %}
+
+			{% if accountExplorerData %}
+				var forceRefresh = false;
+			{% else %}
+				var forceRefresh = true;
+			{% endif %}
+
+			var accountExplorer = new Analytics.AccountExplorer('#account-explorer', { forceRefresh: forceRefresh, data: {{ accountExplorerData|json_encode|raw }}  });
+
+			{% endjs %}
 
 			<hr />
 
-			<form method="post" accept-charset="UTF-8" data-saveshortcut>
+			<h2>{{ 'Realtime'|t('analytics') }}</h2>
 
-				{{ csrfInput() }}
+			{{ forms.checkboxField({
+				label: "Enable real-time"|t('analytics'),
+				name: 'settings[enableRealtime]',
+				checked: (settings.enableRealtime ? settings.enableRealtime : false),
+				toggle: 'enableRealtime'
+			}) }}
 
-				<input type="hidden" name="action" value="analytics/settings/save-settings">
-				<input type="hidden" name="pluginClass" value="Analytics">
-				<input type="hidden" name="redirect" value="{{ 'analytics/settings'|hash }}">
+			<div id="enableRealtime"{% if not settings.enableRealtime %} class="hidden"{% endif %}>
 
-				<div id="account-explorer" class="account-explorer">
-
-					<h2 class="first">{{ "Google Analytics View (Profile)"|t('analytics') }}</h2>
-
-					{{ forms.selectField({
-						label: "Account"|t('analytics'),
-						name: 'settings[accountId]',
-						class: 'account',
-						options: accountOptions,
-						value: accountId,
-					}) }}
-
-					{{ forms.selectField({
-						label: "Property"|t('analytics'),
-						name: 'settings[webPropertyId]',
-						class: 'property',
-						options: webPropertyOptions,
-						value: webPropertyId,
-					}) }}
-
-					{{ forms.selectField({
-						label: "View"|t('analytics'),
-						name: 'settings[profileId]',
-						class: 'view',
-						options: viewOptions,
-						value: viewId,
-					}) }}
-
-					<div class="buttons">
-						<div class="btn small refresh-views">Refresh</div> <div class="spinner hidden"></div>
-					</div>
-				</div>
-
-				{% js %}
-
-					{% if accountExplorerData %}
-						var forceRefresh = false;
-					{% else %}
-						var forceRefresh = true;
-					{% endif %}
-
-					var accountExplorer = new Analytics.AccountExplorer('#account-explorer', { forceRefresh: forceRefresh, data: {{ accountExplorerData|json_encode|raw }}  });
-
-				{% endjs %}
-
-				<hr />
-
-				<h2>{{ 'Realtime'|t('analytics') }}</h2>
-
-				{{ forms.checkboxField({
-					label: "Enable real-time"|t('analytics'),
-					name: 'settings[enableRealtime]',
-					checked: (settings.enableRealtime ? settings.enableRealtime : false),
-					toggle: 'enableRealtime'
+				{{ forms.textField({
+					label: "Real-Time Refresh Interval"|t('analytics'),
+					instructions: "Interval in seconds between requests to real-time API."|t('analytics'),
+					name: 'settings[realtimeRefreshInterval]',
+					value: (settings.realtimeRefreshInterval ? settings.realtimeRefreshInterval : ''),
+					errors: settings.getErrors('realtimeRefreshInterval'),
+					size: 4
 				}) }}
+			</div>
 
-				<div id="enableRealtime"{% if not settings.enableRealtime %} class="hidden"{% endif %}>
-
-					{{ forms.textField({
-						label: "Real-Time Refresh Interval"|t('analytics'),
-						instructions: "Interval in seconds between requests to real-time API."|t('analytics'),
-						name: 'settings[realtimeRefreshInterval]',
-						value: (settings.realtimeRefreshInterval ? settings.realtimeRefreshInterval : ''),
-						errors: settings.getErrors('realtimeRefreshInterval'),
-						size: 4
-					}) }}
-				</div>
-
-				<div class="buttons">
-					<input type="submit" class="btn submit force" value="{{ 'Save'|t('analytics') }}">
-				</div>
-			</form>
-
-		{% endif %}
+			<div class="buttons">
+				<input type="submit" class="btn submit force" value="{{ 'Save'|t('analytics') }}">
+			</div>
+		</form>
 	{% endif %}
 
 {% endset %}
