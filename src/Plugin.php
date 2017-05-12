@@ -62,6 +62,7 @@ class Plugin extends \craft\base\Plugin
         $this->setComponents([
             'analytics' => \dukt\analytics\services\Analytics::class,
             'api' => \dukt\analytics\services\Api::class,
+            'api4' => \dukt\analytics\services\Api4::class,
             'cache' => \dukt\analytics\services\Cache::class,
             'metadata' => \dukt\analytics\services\Metadata::class,
             'oauth' => \dukt\analytics\services\Oauth::class,
@@ -103,6 +104,7 @@ class Plugin extends \craft\base\Plugin
             'analytics/tests/column-groups' => 'analytics/tests/column-groups',
             'analytics/tests/formatting' => 'analytics/tests/formatting',
             'analytics/tests/report-widgets' => 'analytics/tests/report-widgets',
+            'analytics/api4' => 'analytics/api4',
         ];
 
         $event->rules = array_merge($event->rules, $rules);
