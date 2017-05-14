@@ -126,8 +126,8 @@ class ReportsController extends Controller
      */
     public function actionReportWidget()
     {
-        try
-        {
+/*        try
+        {*/
             $profileId = Analytics::$plugin->getAnalytics()->getProfileId();
 
             $request = [
@@ -151,7 +151,7 @@ class ReportsController extends Controller
             }
 
             return $this->asJson($response);
-        }
+/*        }
         catch(\Google_Service_Exception $e)
         {
             $errors = $e->getErrors();
@@ -171,7 +171,7 @@ class ReportsController extends Controller
             $errorMsg = $e->getMessage();
             Craft::info('Couldn’t get element data: '.$errorMsg, __METHOD__);
             return $this->asErrorJson($errorMsg);
-        }
+        }*/
     }
 
     /**

@@ -12,7 +12,9 @@ Analytics.reports.Area = Analytics.reports.BaseChart.extend(
             $title.html(this.data.metric);
             $period.html(this.data.periodLabel);
 
-            this.dataTable = Analytics.Utils.responseToDataTable(this.data.chart);
+            console.log('chart data', this.data);
+            // this.dataTable = Analytics.Utils.responseToDataTable(this.data.chart);
+            this.dataTable = Analytics.Utils.responseToDataTableV4(this.data.chart);
             this.chartOptions = Analytics.ChartOptions.area(this.data.period);
 
             if(typeof(this.data.chartOptions) != 'undefined')

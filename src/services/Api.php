@@ -11,8 +11,10 @@ use Craft;
 use yii\base\Component;
 use \Google_Client;
 use \Google_Service_Analytics;
+use \Google_Service_AnalyticsReporting;
 use dukt\analytics\models\RequestCriteria;
 use dukt\analytics\Plugin as Analytics;
+use \Google_Service_AnalyticsReporting_ReportRequest;
 
 class Api extends Component
 {
@@ -115,7 +117,7 @@ class Api extends Component
     // =========================================================================
 
     /**
-     * Populate Criteria
+     * Populates criteria’s ids, optParams.filters attributes with default profileId and filters
      *
      * @param RequestCriteria $criteria
      */
@@ -194,6 +196,49 @@ class Api extends Component
         return $this->parseReportResponse($response);
     }
 
+    public function getReportNew(RequestCriteria $criteria)
+    {
+        // $this->populateCriteria($criteria);
+
+
+        $startDate = Craft::$app->getRequest()->getParam('startDate');
+        $endDate = Craft::$app->getRequest()->getParam('endDate');
+        $_metrics = Craft::$app->getRequest()->getParam('metrics');
+        $_dimensions = Craft::$app->getRequest()->getParam('dimensions');
+
+        $viewId = Analytics::$plugin->getAnalytics()->getProfileId();
+
+        $dateRange = Analytics::$plugin->getApi4()->getAnalyticsReportingDateRange($startDate, $endDate);
+        $metrics = Analytics::$plugin->getApi4()->getMetricsFromString($_metrics);
+        $dimensions = Analytics::$plugin->getApi4()->getDimensionsFromString($_dimensions);
+
+        // Request
+        // $request = Analytics::$plugin->getApi4()->getAnalyticsReportingReportRequest($viewId, $dateRange, $metrics, $dimensions);
+        $request = new Google_Service_AnalyticsReporting_ReportRequest();
+        $request->setViewId($viewId);
+        $request->setDateRanges($dateRange);
+        $request->setMetrics($metrics);
+        $request->setDimensions($dimensions);
+        $request->setOrderBys([
+            [
+                "fieldName" => $metrics[0],
+                "orderType" => 'VALUE',
+                "sortOrder" => 'DESCENDING',
+            ]
+        ]);
+        $request->setPageSize(20);
+        $request->setFiltersExpression($dimensions[0].'!=(not set);'.$dimensions[0].'!=(not provided)');
+
+        $requests = Analytics::$plugin->getApi4()->getAnalyticsReportingGetReportsRequest(array($request));
+        $response = Analytics::$plugin->getApi4()->getAnalyticsReporting()->reports->batchGet($requests);
+        $reports = Analytics::$plugin->getApi4()->parseResponse($response);
+
+        Craft::$app->getUrlManager()->setRouteParams([
+            'response' => $response,
+            'reports' => $reports,
+        ]);
+    }
+
     /**
      * Returns a Realtime Report from criteria
      *
@@ -231,7 +276,115 @@ class Api extends Component
      *
      * @return array
      */
-    private function parseReportResponse($data)
+    public function parseReportResponse($data)
+    {
+        // Columns
+
+        $cols = [];
+
+        foreach($data['cols'] as $col)
+        {
+            $dataType = $col->dataType;
+            $id = $col->name;
+            $label = Analytics::$plugin->metadata->getDimMet($col->name);
+            $type = strtolower($dataType);
+
+            switch($col->name)
+            {
+                case 'ga:date':
+                case 'ga:yearMonth':
+                    $type = 'date';
+                    break;
+
+                case 'ga:continent':
+                    $type = 'continent';
+                    break;
+                case 'ga:subContinent':
+                    $type = 'subContinent';
+                    break;
+
+                case 'ga:latitude':
+                case 'ga:longitude':
+                    $type = 'float';
+                    break;
+            }
+
+            $cols[] = array(
+                'type' => $type,
+                'dataType' => $dataType,
+                'id' => $id,
+                'label' => Craft::t('analytics', $label),
+            );
+        }
+
+
+        // Rows
+
+        $rows = [];
+
+        if($data['rows'])
+        {
+            $rows = $data->rows;
+
+            foreach($rows as $kRow => $row)
+            {
+                foreach($row as $_valueKey => $_value)
+                {
+                    $col = $cols[$_valueKey];
+
+                    $value = $this->formatRawValue($col['type'], $_value);
+
+                    if($col['id'] == 'ga:continent')
+                    {
+                        $value = Analytics::$plugin->metadata->getContinentCode($value);
+                    }
+
+                    if($col['id'] == 'ga:subContinent')
+                    {
+                        $value = Analytics::$plugin->metadata->getSubContinentCode($value);
+                    }
+
+
+                    // translate values
+
+                    switch($col['id'])
+                    {
+                        case 'ga:country':
+                        case 'ga:city':
+                            // case 'ga:continent':
+                            // case 'ga:subContinent':
+                        case 'ga:userType':
+                        case 'ga:javaEnabled':
+                        case 'ga:deviceCategory':
+                        case 'ga:mobileInputSelector':
+                        case 'ga:channelGrouping':
+                        case 'ga:medium':
+                            $value = Craft::t('analytics', $value);
+                            break;
+                    }
+
+
+                    // update cell
+
+                    $rows[$kRow][$_valueKey] = $value;
+                }
+            }
+        }
+
+        return array(
+            'cols' => $cols,
+            'rows' => $rows
+        );
+    }
+
+    /**
+     * Parse Report Response
+     *
+     * @param $data
+     *
+     * @return array
+     */
+    public function parseReportResponseOld($data)
     {
         // Columns
 
@@ -359,7 +512,7 @@ class Api extends Component
 
 
     /**
-     * Returns the Google Analytics API object
+     * Returns the Google Analytics API object (API v3)
      *
      * @return bool|Google_Service_Analytics
      */
@@ -368,6 +521,18 @@ class Api extends Component
         $client = $this->getClient();
 
         return new Google_Service_Analytics($client);
+    }
+
+    /**
+     * Returns the Google Analytics Reporting API object (API v4)
+     *
+     * @return bool|Google_Service_Analytics
+     */
+    public function googleAnalyticsReporting()
+    {
+        $client = $this->getClient();
+
+        return new Google_Service_AnalyticsReporting($client);
     }
 
     /**

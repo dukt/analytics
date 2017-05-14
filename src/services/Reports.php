@@ -53,6 +53,65 @@ class Reports extends Component
     private function getAreaReport($requestData)
     {
         $period = (isset($requestData['period']) ? $requestData['period'] : null);
+        $metricString = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
+
+        switch($period)
+        {
+            case 'year':
+                $dimensionString = 'ga:yearMonth';
+                $startDate = date('Y-m-01', strtotime('-1 '.$period));
+                $endDate = date('Y-m-d');
+                break;
+
+            default:
+                $dimensionString = 'ga:date';
+                $startDate = date('Y-m-d', strtotime('-1 '.$period));
+                $endDate = date('Y-m-d');
+        }
+
+        // Prepare report request
+        $viewId = Analytics::$plugin->getAnalytics()->getProfileId();
+        $dateRange = Analytics::$plugin->getApi4()->getAnalyticsReportingDateRange($startDate, $endDate);
+        $dimensions = Analytics::$plugin->getApi4()->getDimensionsFromString($dimensionString);
+        $metrics = Analytics::$plugin->getApi4()->getMetricsFromString($metricString);
+
+        // Report request
+        $request = new \Google_Service_AnalyticsReporting_ReportRequest();
+        $request->setViewId($viewId);
+        $request->setDateRanges($dateRange);
+        $request->setMetrics($metrics);
+        $request->setDimensions($dimensions);
+        $request->setOrderBys([
+            ["fieldName" => $dimensionString, "orderType" => 'VALUE', "sortOrder" => 'ASCENDING']
+        ]);
+
+        $requests = Analytics::$plugin->getApi4()->getAnalyticsReportingGetReportsRequest(array($request));
+        $response = Analytics::$plugin->getApi4()->getAnalyticsReporting()->reports->batchGet($requests);
+
+        $reports = Analytics::$plugin->getApi4()->parseReportsResponse($response);
+
+        $report = $reports[0];
+
+        return [
+            'type' => 'area',
+            'chart' => $report,
+            'total' => 0,
+            'metric' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($metricString)),
+            'period' => $period,
+            'periodLabel' => Craft::t('analytics', 'This '.$period)
+        ];
+    }
+
+    /**
+     * Returns an area report
+     *
+     * @param array $requestData
+     *
+     * @return array
+     */
+    private function getAreaReportOld($requestData)
+    {
+        $period = (isset($requestData['period']) ? $requestData['period'] : null);
         $dimension = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
         $metric = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
 
@@ -313,5 +372,9 @@ class Reports extends Component
             'periodLabel' => Craft::t('analytics', 'this '.$period)
         ];
     }
+
+    /**
+     * Deprecated
+     */
 
 }

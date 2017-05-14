@@ -24,46 +24,40 @@ class Api4 extends Component
     public function parseResponse($response)
     {
         $class = get_class($response);
-        switch($class)
-        {
+        switch ($class) {
             case 'Google_Service_AnalyticsReporting_GetReportsResponse';
                 return $this->parseReportsResponse($response);
                 break;
         }
     }
 
-    public function parseReportsResponse(Google_Service_AnalyticsReporting_GetReportsResponse $response)
+    public function parseReportsResponseOld(Google_Service_AnalyticsReporting_GetReportsResponse $response)
     {
         $_reports = [];
         $reports = $response->getReports();
-        foreach($reports as $report)
-        {
+
+        foreach ($reports as $report) {
             $_rows = [];
             $header = $report->getColumnHeader();
             $dimensionHeaders = $header->getDimensions();
             $metricHeaders = $header->getMetricHeader()->getMetricHeaderEntries();
             $rows = $report->getData()->getRows();
             $_cols = [];
-            foreach($rows as $index => $row)
-            {
+            foreach ($rows as $index => $row) {
                 $_row = [];
                 $dimensions = $row->getDimensions();
                 $metrics = $row->getMetrics();
-                foreach($dimensionHeaders as $key => $dimensionHeader)
-                {
+                foreach ($dimensionHeaders as $key => $dimensionHeader) {
                     $_row[$dimensionHeader] = $dimensions[$key];
-                    if($index == 0)
-                    {
+                    if ($index == 0) {
                         $_cols[] = $dimensionHeader;
                     }
                 }
-                foreach($metricHeaders as $key => $entry)
-                {
+                foreach ($metricHeaders as $key => $entry) {
                     $entryName = $entry->getName();
                     $values = $metrics[0]->getValues();
                     $_row[$entryName] = $values[$key];
-                    if($index == 0)
-                    {
+                    if ($index == 0) {
                         $_cols[] = $entryName;
                     }
                 }
@@ -75,13 +69,63 @@ class Api4 extends Component
             ];
             array_push($_reports, $_report);
         }
+
         return $_reports;
+    }
+
+    public function parseReportsResponse(Google_Service_AnalyticsReporting_GetReportsResponse $response)
+    {
+        $reports = [];
+
+        foreach ($response->getReports() as $_report) {
+            $rows = [];
+
+            $columnHeader = $_report->getColumnHeader();
+            $columnHeaderDimensions = $columnHeader->getDimensions();
+            $metricHeaderEntries = $columnHeader->getMetricHeader()->getMetricHeaderEntries();
+
+            foreach($_report->getData()->getRows() as $_row) {
+
+                $metrics = [];
+
+                foreach($_row->getMetrics() as $_metric) {
+                    $metric = [
+                        'pivotValueRegions' => $_metric->getPivotValueRegions(),
+                        'values' => $_metric->getValues(),
+                    ];
+
+                    array_push($metrics, $metric);
+                }
+
+                $row = [
+                    'dimensions' => $_row->getDimensions(),
+                    'metrics' => $metrics,
+                ];
+
+                array_push($rows, $row);
+            }
+
+            $report = [
+                'columnHeader' => [
+                    'dimensions' => $columnHeaderDimensions,
+                    'metricHeader' => $metricHeaderEntries,
+                ],
+                'data' => [
+                    'rows' => $rows
+                ],
+            ];
+
+            array_push($reports, $report);
+        }
+
+        return $reports;
     }
 
     public function getAnalyticsReportingGetReportsRequest($requests)
     {
         $body = new Google_Service_AnalyticsReporting_GetReportsRequest();
-        $body->setReportRequests( $requests );
+        $body->setReportRequests($requests);
+
         return $body;
     }
 
@@ -92,6 +136,7 @@ class Api4 extends Component
         $request->setDateRanges($dateRanges);
         $request->setMetrics($metrics);
         $request->setDimensions($dimensions);
+
         return $request;
     }
 
@@ -99,12 +144,12 @@ class Api4 extends Component
     {
         $dimensions = [];
         $_dimensions = explode(",", $string);
-        foreach($_dimensions as $_dimension)
-        {
+        foreach ($_dimensions as $_dimension) {
             $dimension = new Google_Service_AnalyticsReporting_Dimension();
             $dimension->setName($_dimension);
             array_push($dimensions, $dimension);
         }
+
         return $dimensions;
     }
 
@@ -112,12 +157,12 @@ class Api4 extends Component
     {
         $metrics = [];
         $_metrics = explode(",", $string);
-        foreach($_metrics as $_metric)
-        {
+        foreach ($_metrics as $_metric) {
             $metric = new Google_Service_AnalyticsReporting_Metric();
             $metric->setExpression($_metric);
             array_push($metrics, $metric);
         }
+
         return $metrics;
     }
 
@@ -126,12 +171,14 @@ class Api4 extends Component
         $dateRange = new Google_Service_AnalyticsReporting_DateRange();
         $dateRange->setStartDate($startDate);
         $dateRange->setEndDate($endDate);
+
         return $dateRange;
     }
 
     public function getAnalyticsReporting()
     {
         $client = $this->getClient();
+
         return new Google_Service_AnalyticsReporting($client);
     }
 
@@ -139,8 +186,7 @@ class Api4 extends Component
     {
         $token = Plugin::$plugin->getOauth()->getToken();
 
-        if ($token)
-        {
+        if ($token) {
             // make token compatible with Google library
             $arrayToken = [
                 'created' => 0,

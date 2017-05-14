@@ -68,6 +68,107 @@ Analytics.Utils = {
         return data;
     },
 
+    responseToDataTableV4: function(response)
+    {
+        var dataTable = new google.visualization.DataTable();
+
+
+        // Columns
+
+        $.each(response.columnHeader.dimensions, function(key, dimension) {
+            var type;
+
+            switch(dimension) {
+                case 'ga:date':
+                case 'ga:yearMonth':
+                    type = 'date';
+                    break;
+                default:
+                    type = 'string';
+            }
+
+            dataTable.addColumn({
+                type: type,
+                label: dimension,
+                id: 'col-'+dimension,
+            });
+        });
+
+        $.each(response.columnHeader.metricHeader, function(key, metricHeaderEntry) {
+            var type;
+
+            switch(metricHeaderEntry.type) {
+                case 'INTEGER':
+                case 'PERCENT':
+                case 'TIME':
+                    type = 'number';
+                    break;
+                default:
+                    type = 'string';
+            }
+            dataTable.addColumn({
+                type: type,
+                label: metricHeaderEntry.name,
+                id: 'col-'+metricHeaderEntry.name,
+            });
+        });
+
+
+        // Rows
+
+        $.each(response.data.rows, function(keyRow, row) {
+
+            var dataTableRow = [];
+            var dataTableRowIndex = 0;
+
+            $.each(response.columnHeader.dimensions, function(key, dimension) {
+                var value;
+
+                switch(dimension) {
+                    case 'ga:date':
+                    case 'ga:yearMonth':
+                        value = Analytics.Utils.formatByType('date', row.dimensions[key]);
+                        break;
+                    default:
+                        value = row.dimensions[key];
+                }
+
+                dataTableRow[dataTableRowIndex] = value;
+                dataTableRowIndex++;
+            });
+
+            $.each(response.columnHeader.metricHeader, function(key, metricHeaderEntry) {
+                var value = row.metrics[key].values[0];
+
+                switch(metricHeaderEntry.type) {
+                    case 'INTEGER':
+                        dataTableRow[dataTableRowIndex] = +value;
+                        break;
+                    case 'PERCENT':
+                        dataTableRow[dataTableRowIndex] = {
+                            v: +value,
+                            f: Analytics.Utils.formatByType('percent', +value)
+                        };
+                        break;
+                    case 'TIME':
+                        dataTableRow[dataTableRowIndex] = {
+                            v: +value,
+                            f: Analytics.Utils.formatByType('time', +value)
+                        };
+                        break;
+                    default:
+                        dataTableRow[dataTableRowIndex] = value;
+                }
+
+                dataTableRowIndex++;
+            });
+
+            dataTable.addRow(dataTableRow);
+        });
+
+        return dataTable;
+    },
+
     formatByType: function(type, value)
     {
         switch (type)
