@@ -76,8 +76,26 @@ Analytics.Utils = {
         // Columns
 
         $.each(response.cols, function(key, column) {
+            var dataTableColumnType;
+
+            switch(column.type) {
+                case 'date':
+                    dataTableColumnType = 'date';
+                    break;
+                case 'percent':
+                case 'time':
+                case 'integer':
+                case 'currency':
+                case 'float':
+                    dataTableColumnType = 'number';
+                    break;
+
+                default:
+                    dataTableColumnType = 'string';
+            }
+
             dataTable.addColumn({
-                type: column.dataType,
+                type: dataTableColumnType,
                 label: column.label,
                 id: column.id,
             });
@@ -86,43 +104,55 @@ Analytics.Utils = {
 
         // Rows
 
-        $.each(response.rows, function(keyRow, row) {
+        $.each(response.rows, $.proxy(function(keyRow, row) {
 
             var dataTableRow = [];
 
-            $.each(response.cols, function(keyColumn, column) {
-                var value;
-
+            $.each(response.cols, $.proxy(function(keyColumn, column) {
                 switch(column.type) {
                     case 'date':
-                        value = Analytics.Utils.formatByType('date', row[keyColumn]);
+                    case 'continent':
+                    case 'subContinent':
+                        dataTableRow[keyColumn] = Analytics.Utils.formatByType(column.type, row[keyColumn]);
                         break;
-                    case 'INTEGER':
-                        value = +value;
-                        break;
-                    case 'PERCENT':
-                        value = {
-                            v: +row[keyColumn],
-                            f: Analytics.Utils.formatByType('percent', +row[keyColumn])
-                        };
-                        break;
-                    case 'TIME':
-                        value = {
-                            v: +row[keyColumn],
-                            f: Analytics.Utils.formatByType('time', +row[keyColumn])
-                        };
-                        break;
-                    default:
-                        value = row[keyColumn];
-                }
 
-                dataTableRow[keyColumn] = value;
-            });
+                    case 'integer':
+                    case 'currency':
+                    case 'percent':
+                    case 'time':
+                    case 'float':
+                        dataTableRow[keyColumn] = {
+                            v: Analytics.Utils.formatRawValueByType(column.type, row[keyColumn]),
+                            f: Analytics.Utils.formatByType(column.type, row[keyColumn])
+                        };
+                        break;
+
+                    default:
+                        dataTableRow[keyColumn] = value;
+                }
+            }, this));
 
             dataTable.addRow(dataTableRow);
-        });
+
+        }, this));
 
         return dataTable;
+    },
+
+    formatRawValueByType: function(type, value)
+    {
+        switch(type) {
+            case 'integer':
+            case 'currency':
+            case 'percent':
+            case 'time':
+            case 'float':
+                return +value;
+                break;
+
+            default:
+                return value;
+        }
     },
 
     formatByType: function(type, value)
@@ -132,30 +162,35 @@ Analytics.Utils = {
             case 'continent':
                 return Analytics.Metadata.getContinentByCode(value);
                 break;
+
             case 'subContinent':
                 return Analytics.Metadata.getSubContinentByCode(value);
                 break;
+
             case 'currency':
-                return Analytics.Utils.formatCurrency(value);
+                return Analytics.Utils.formatCurrency(+value);
+                break;
+
+            case 'float':
+                return +value;
                 break;
 
             case 'integer':
-                return Analytics.Utils.formatInteger(value);
+                return Analytics.Utils.formatInteger(+value);
                 break;
 
             case 'time':
-                return Analytics.Utils.formatDuration(value);
+                return Analytics.Utils.formatDuration(+value);
                 break;
 
             case 'percent':
-                return Analytics.Utils.formatPercent(value);
+                return Analytics.Utils.formatPercent(+value);
                 break;
 
             case 'date':
                 $dateString = value;
 
-                if($dateString.length == 8)
-                {
+                if($dateString.length == 8) {
                     // 20150101
 
                     $year = eval($dateString.substr(0, 4));
@@ -165,9 +200,7 @@ Analytics.Utils = {
                     $date = new Date($year, $month, $day);
 
                     return $date;
-                }
-                else if($dateString.length == 6)
-                {
+                } else if($dateString.length == 6) {
                     // 201501
 
                     $year = eval($dateString.substr(0, 4));

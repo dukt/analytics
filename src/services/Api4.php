@@ -99,32 +99,26 @@ class Api4 extends Component
                     case 'ga:date':
                     case 'ga:yearMonth':
                         $type = 'date';
-                        $dataType = 'date';
                         break;
 
                     case 'ga:continent':
                         $type = 'continent';
-                        $dataType = 'string';
                         break;
                     case 'ga:subContinent':
                         $type = 'subContinent';
-                        $dataType = 'string';
                         break;
 
                     case 'ga:latitude':
                     case 'ga:longitude':
                         $type = 'float';
-                        $dataType = 'number';
                         break;
 
                     default:
                         $type = 'string';
-                        $dataType = 'string';
                 }
 
                 $col = [
                     'type' => $type,
-                    'dataType' => $dataType,
                     'label' => Craft::t('analytics', $label),
                     'id' => $id,
                 ];
@@ -133,28 +127,10 @@ class Api4 extends Component
             }
 
             foreach($metricHeaderEntries as $metricHeaderEntry) {
-                switch($metricHeaderEntry['type'])
-                {
-                    case 'percent':
-                    case 'PERCENT':
-                    case 'time':
-                    case 'TIME':
-                    case 'integer':
-                    case 'INTEGER':
-                    case 'currency':
-                    case 'float':
-                        $dataType = 'number';
-                        break;
-                    default:
-                        $dataType = 'string';
-                        break;
-                }
-
                 $col = [
-                    'type' => $metricHeaderEntry['type'],
-                    'dataType' => $dataType,
+                    'type' => strtolower($metricHeaderEntry['type']),
                     'label' => Craft::t('analytics', $metricHeaderEntry['name']),
-                    'id' => 'col-'.$metricHeaderEntry['name'],
+                    'id' => $metricHeaderEntry['name'],
                 ];
 
                 array_push($cols, $col);
