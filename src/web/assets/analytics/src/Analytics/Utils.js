@@ -75,92 +75,48 @@ Analytics.Utils = {
 
         // Columns
 
-        $.each(response.columnHeader.dimensions, function(key, dimension) {
-            var type;
-
-            switch(dimension) {
-                case 'ga:date':
-                case 'ga:yearMonth':
-                    type = 'date';
-                    break;
-                default:
-                    type = 'string';
-            }
-
+        $.each(response.cols, function(key, column) {
             dataTable.addColumn({
-                type: type,
-                label: dimension,
-                id: 'col-'+dimension,
-            });
-        });
-
-        $.each(response.columnHeader.metricHeader, function(key, metricHeaderEntry) {
-            var type;
-
-            switch(metricHeaderEntry.type) {
-                case 'INTEGER':
-                case 'PERCENT':
-                case 'TIME':
-                    type = 'number';
-                    break;
-                default:
-                    type = 'string';
-            }
-            dataTable.addColumn({
-                type: type,
-                label: metricHeaderEntry.name,
-                id: 'col-'+metricHeaderEntry.name,
+                type: column.dataType,
+                label: column.label,
+                id: column.id,
             });
         });
 
 
         // Rows
 
-        $.each(response.data.rows, function(keyRow, row) {
+        $.each(response.rows, function(keyRow, row) {
 
             var dataTableRow = [];
-            var dataTableRowIndex = 0;
 
-            $.each(response.columnHeader.dimensions, function(key, dimension) {
+            $.each(response.cols, function(keyColumn, column) {
                 var value;
 
-                switch(dimension) {
-                    case 'ga:date':
-                    case 'ga:yearMonth':
-                        value = Analytics.Utils.formatByType('date', row.dimensions[key]);
+                switch(column.type) {
+                    case 'date':
+                        value = Analytics.Utils.formatByType('date', row[keyColumn]);
                         break;
-                    default:
-                        value = row.dimensions[key];
-                }
-
-                dataTableRow[dataTableRowIndex] = value;
-                dataTableRowIndex++;
-            });
-
-            $.each(response.columnHeader.metricHeader, function(key, metricHeaderEntry) {
-                var value = row.metrics[key].values[0];
-
-                switch(metricHeaderEntry.type) {
                     case 'INTEGER':
-                        dataTableRow[dataTableRowIndex] = +value;
+                        value = +value;
                         break;
                     case 'PERCENT':
-                        dataTableRow[dataTableRowIndex] = {
-                            v: +value,
-                            f: Analytics.Utils.formatByType('percent', +value)
+                        value = {
+                            v: +row[keyColumn],
+                            f: Analytics.Utils.formatByType('percent', +row[keyColumn])
                         };
                         break;
                     case 'TIME':
-                        dataTableRow[dataTableRowIndex] = {
-                            v: +value,
-                            f: Analytics.Utils.formatByType('time', +value)
+                        value = {
+                            v: +row[keyColumn],
+                            f: Analytics.Utils.formatByType('time', +row[keyColumn])
                         };
                         break;
                     default:
-                        dataTableRow[dataTableRowIndex] = value;
+                        value = row[keyColumn];
                 }
 
-                dataTableRowIndex++;
+                dataTableRow[keyColumn] = value;
             });
 
             dataTable.addRow(dataTableRow);

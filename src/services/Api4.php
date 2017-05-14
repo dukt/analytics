@@ -78,41 +78,110 @@ class Api4 extends Component
         $reports = [];
 
         foreach ($response->getReports() as $_report) {
-            $rows = [];
+
 
             $columnHeader = $_report->getColumnHeader();
             $columnHeaderDimensions = $columnHeader->getDimensions();
             $metricHeaderEntries = $columnHeader->getMetricHeader()->getMetricHeaderEntries();
 
-            foreach($_report->getData()->getRows() as $_row) {
 
-                $metrics = [];
+            // Columns
 
-                foreach($_row->getMetrics() as $_metric) {
-                    $metric = [
-                        'pivotValueRegions' => $_metric->getPivotValueRegions(),
-                        'values' => $_metric->getValues(),
-                    ];
+            $cols = [];
 
-                    array_push($metrics, $metric);
+            foreach($columnHeaderDimensions as $columnHeaderDimension) {
+
+                $id = $columnHeaderDimension;
+                $label = Plugin::$plugin->metadata->getDimMet($columnHeaderDimension);
+
+                switch($columnHeaderDimension)
+                {
+                    case 'ga:date':
+                    case 'ga:yearMonth':
+                        $type = 'date';
+                        $dataType = 'date';
+                        break;
+
+                    case 'ga:continent':
+                        $type = 'continent';
+                        $dataType = 'string';
+                        break;
+                    case 'ga:subContinent':
+                        $type = 'subContinent';
+                        $dataType = 'string';
+                        break;
+
+                    case 'ga:latitude':
+                    case 'ga:longitude':
+                        $type = 'float';
+                        $dataType = 'number';
+                        break;
+
+                    default:
+                        $type = 'string';
+                        $dataType = 'string';
                 }
 
-                $row = [
-                    'dimensions' => $_row->getDimensions(),
-                    'metrics' => $metrics,
+                $col = [
+                    'type' => $type,
+                    'dataType' => $dataType,
+                    'label' => Craft::t('analytics', $label),
+                    'id' => $id,
                 ];
+
+                array_push($cols, $col);
+            }
+
+            foreach($metricHeaderEntries as $metricHeaderEntry) {
+                switch($metricHeaderEntry['type'])
+                {
+                    case 'percent':
+                    case 'PERCENT':
+                    case 'time':
+                    case 'TIME':
+                    case 'integer':
+                    case 'INTEGER':
+                    case 'currency':
+                    case 'float':
+                        $dataType = 'number';
+                        break;
+                    default:
+                        $dataType = 'string';
+                        break;
+                }
+
+                $col = [
+                    'type' => $metricHeaderEntry['type'],
+                    'dataType' => $dataType,
+                    'label' => Craft::t('analytics', $metricHeaderEntry['name']),
+                    'id' => 'col-'.$metricHeaderEntry['name'],
+                ];
+
+                array_push($cols, $col);
+            }
+
+            // Rows
+
+            $rows = [];
+
+            foreach($_report->getData()->getRows() as $_row) {
+
+                $row = [];
+
+                foreach($_row->getDimensions() as $_dimension) {
+                    array_push($row, $_dimension);
+                }
+
+                foreach($_row->getMetrics() as $_metric) {
+                    array_push($row, $_metric->getValues()[0]);
+                }
 
                 array_push($rows, $row);
             }
 
             $report = [
-                'columnHeader' => [
-                    'dimensions' => $columnHeaderDimensions,
-                    'metricHeader' => $metricHeaderEntries,
-                ],
-                'data' => [
-                    'rows' => $rows
-                ],
+                'cols' => $cols,
+                'rows' => $rows,
             ];
 
             array_push($reports, $report);
