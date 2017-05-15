@@ -155,9 +155,12 @@ class Api4 extends Component
                 array_push($rows, $row);
             }
 
+            $totals = $_report->getData()->getTotals()[0]->getValues();
+
             $report = [
                 'cols' => $cols,
                 'rows' => $rows,
+                'totals' => $totals
             ];
 
             array_push($reports, $report);

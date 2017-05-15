@@ -91,11 +91,12 @@ class Reports extends Component
         $reports = Analytics::$plugin->getApi4()->parseReportsResponse($response);
 
         $report = $reports[0];
+        $total = $report['totals'][0];
 
         return [
             'type' => 'area',
             'chart' => $report,
-            'total' => 0,
+            'total' => $total,
             'metric' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($metricString)),
             'period' => $period,
             'periodLabel' => Craft::t('analytics', 'This '.$period)
