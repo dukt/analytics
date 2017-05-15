@@ -8,6 +8,7 @@
 namespace dukt\analytics\services;
 
 use Craft;
+use craft\helpers\StringHelper;
 use yii\base\Component;
 use dukt\analytics\models\RequestCriteria;
 use dukt\analytics\Plugin as Analytics;
@@ -112,41 +113,38 @@ class Reports extends Component
     private function getCounterReport($requestData)
     {
         $period = (isset($requestData['period']) ? $requestData['period'] : null);
-        $dimension = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
-        $metric = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
-
-        $start = date('Y-m-d', strtotime('-1 '.$period));
-        $end = date('Y-m-d');
+        $metricString = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
+        $startDate = date('Y-m-d', strtotime('-1 '.$period));
+        $endDate = date('Y-m-d');
 
 
-        // Counter
+        // Prepare report request
+        $viewId = Analytics::$plugin->getAnalytics()->getProfileId();
+        $dateRange = Analytics::$plugin->getApi4()->getAnalyticsReportingDateRange($startDate, $endDate);
+        $metrics = Analytics::$plugin->getApi4()->getMetricsFromString($metricString);
 
-        $criteria = new RequestCriteria;
-        $criteria->startDate = $start;
-        $criteria->endDate = $end;
-        $criteria->metrics = $metric;
 
-        if($dimension)
-        {
-            $optParams = array('filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)');
-            $criteria->optParams = $optParams;
-        }
+        // Report request
+        $request = new \Google_Service_AnalyticsReporting_ReportRequest();
+        $request->setViewId($viewId);
+        $request->setDateRanges($dateRange);
+        $request->setMetrics($metrics);
 
-        $response = Analytics::$plugin->getApi()->sendRequest($criteria);
+        $requests = Analytics::$plugin->getApi4()->getAnalyticsReportingGetReportsRequest(array($request));
+        $response = Analytics::$plugin->getApi4()->getAnalyticsReporting()->reports->batchGet($requests);
+        $reports = Analytics::$plugin->getApi4()->parseReportsResponse($response);
 
-        if(!empty($response['rows'][0][0]))
-        {
-            $count = $response['rows'][0][0];
-        }
-        else
-        {
-            $count = 0;
+        $report = $reports[0];
+        $total = 0;
+
+        if(!empty($report['totals'][0])) {
+            $total = $report['totals'][0];
         }
 
         $counter = array(
-            'type' => $response['cols'][0]['type'],
-            'value' => $count,
-            'label' => StringHelper::toLowerCase(Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($metric)))
+            'type' => $report['cols'][0]['type'],
+            'value' => $total,
+            'label' => StringHelper::toLowerCase(Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($metricString)))
         );
 
 
@@ -155,8 +153,8 @@ class Reports extends Component
         return [
             'type' => 'counter',
             'counter' => $counter,
-            'response' => $response,
-            'metric' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($metric)),
+            'response' => $report,
+            'metric' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($metricString)),
             'period' => $period,
             'periodLabel' => Craft::t('analytics', 'this '.$period)
         ];
