@@ -31,48 +31,6 @@ class Api4 extends Component
         }
     }
 
-    public function parseReportsResponseOld(Google_Service_AnalyticsReporting_GetReportsResponse $response)
-    {
-        $_reports = [];
-        $reports = $response->getReports();
-
-        foreach ($reports as $report) {
-            $_rows = [];
-            $header = $report->getColumnHeader();
-            $dimensionHeaders = $header->getDimensions();
-            $metricHeaders = $header->getMetricHeader()->getMetricHeaderEntries();
-            $rows = $report->getData()->getRows();
-            $_cols = [];
-            foreach ($rows as $index => $row) {
-                $_row = [];
-                $dimensions = $row->getDimensions();
-                $metrics = $row->getMetrics();
-                foreach ($dimensionHeaders as $key => $dimensionHeader) {
-                    $_row[$dimensionHeader] = $dimensions[$key];
-                    if ($index == 0) {
-                        $_cols[] = $dimensionHeader;
-                    }
-                }
-                foreach ($metricHeaders as $key => $entry) {
-                    $entryName = $entry->getName();
-                    $values = $metrics[0]->getValues();
-                    $_row[$entryName] = $values[$key];
-                    if ($index == 0) {
-                        $_cols[] = $entryName;
-                    }
-                }
-                array_push($_rows, $_row);
-            }
-            $_report = [
-                'rows' => $_rows,
-                'cols' => $_cols,
-            ];
-            array_push($_reports, $_report);
-        }
-
-        return $_reports;
-    }
-
     public function parseReportsResponse(Google_Service_AnalyticsReporting_GetReportsResponse $response)
     {
         $reports = [];
