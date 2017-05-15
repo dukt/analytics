@@ -170,31 +170,37 @@ class Reports extends Component
     private function getPieReport($requestData)
     {
         $period = (isset($requestData['period']) ? $requestData['period'] : null);
-        $dimension = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
-        $metric = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
+        $dimensionString = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
+        $metricString = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
+        $startDate = date('Y-m-d', strtotime('-1 '.$period));
+        $endDate = date('Y-m-d');
 
-        $start = date('Y-m-d', strtotime('-1 '.$period));
-        $end = date('Y-m-d');
 
-        $criteria = new RequestCriteria;
-        $criteria->startDate = $start;
-        $criteria->endDate = $end;
-        $criteria->metrics = $metric;
+        // Prepare report request
+        $viewId = Analytics::$plugin->getAnalytics()->getProfileId();
+        $dateRange = Analytics::$plugin->getApi4()->getAnalyticsReportingDateRange($startDate, $endDate);
+        $dimensions = Analytics::$plugin->getApi4()->getDimensionsFromString($dimensionString);
+        $metrics = Analytics::$plugin->getApi4()->getMetricsFromString($metricString);
 
-        $criteria->optParams = array(
-            'dimensions' => $dimension,
-            'sort' => '-'.$metric,
-            'max-results' => 20,
-            'filters' => $dimension.'!=(not set);'.$dimension.'!=(not provided)'
-        );
 
-        $tableResponse = Analytics::$plugin->getApi()->sendRequest($criteria);
+        // Report request
+        $request = new \Google_Service_AnalyticsReporting_ReportRequest();
+        $request->setViewId($viewId);
+        $request->setDateRanges($dateRange);
+        $request->setDimensions($dimensions);
+        $request->setMetrics($metrics);
+
+        $requests = Analytics::$plugin->getApi4()->getAnalyticsReportingGetReportsRequest(array($request));
+        $response = Analytics::$plugin->getApi4()->getAnalyticsReporting()->reports->batchGet($requests);
+        $reports = Analytics::$plugin->getApi4()->parseReportsResponse($response);
+
+        $report = $reports[0];
 
         return [
             'type' => 'pie',
-            'chart' => $tableResponse,
-            'dimension' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($dimension)),
-            'metric' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($metric)),
+            'chart' => $report,
+            'dimension' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($dimensionString)),
+            'metric' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($metricString)),
             'period' => $period,
             'periodLabel' => Craft::t('analytics', 'this '.$period)
         ];
