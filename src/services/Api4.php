@@ -47,41 +47,42 @@ class Api4 extends Component
 
             $cols = [];
 
-            foreach($columnHeaderDimensions as $columnHeaderDimension) {
+            if($columnHeaderDimensions) {
+                foreach ($columnHeaderDimensions as $columnHeaderDimension) {
 
-                $id = $columnHeaderDimension;
-                $label = Plugin::$plugin->metadata->getDimMet($columnHeaderDimension);
+                    $id = $columnHeaderDimension;
+                    $label = Plugin::$plugin->metadata->getDimMet($columnHeaderDimension);
 
-                switch($columnHeaderDimension)
-                {
-                    case 'ga:date':
-                    case 'ga:yearMonth':
-                        $type = 'date';
-                        break;
+                    switch ($columnHeaderDimension) {
+                        case 'ga:date':
+                        case 'ga:yearMonth':
+                            $type = 'date';
+                            break;
 
-                    case 'ga:continent':
-                        $type = 'continent';
-                        break;
-                    case 'ga:subContinent':
-                        $type = 'subContinent';
-                        break;
+                        case 'ga:continent':
+                            $type = 'continent';
+                            break;
+                        case 'ga:subContinent':
+                            $type = 'subContinent';
+                            break;
 
-                    case 'ga:latitude':
-                    case 'ga:longitude':
-                        $type = 'float';
-                        break;
+                        case 'ga:latitude':
+                        case 'ga:longitude':
+                            $type = 'float';
+                            break;
 
-                    default:
-                        $type = 'string';
+                        default:
+                            $type = 'string';
+                    }
+
+                    $col = [
+                        'type' => $type,
+                        'label' => Craft::t('analytics', $label),
+                        'id' => $id,
+                    ];
+
+                    array_push($cols, $col);
                 }
-
-                $col = [
-                    'type' => $type,
-                    'label' => Craft::t('analytics', $label),
-                    'id' => $id,
-                ];
-
-                array_push($cols, $col);
             }
 
             foreach($metricHeaderEntries as $metricHeaderEntry) {
@@ -102,8 +103,12 @@ class Api4 extends Component
 
                 $row = [];
 
-                foreach($_row->getDimensions() as $_dimension) {
-                    array_push($row, $_dimension);
+                $dimensions = $_row->getDimensions();
+
+                if($dimensions) {
+                    foreach ($dimensions as $_dimension) {
+                        array_push($row, $_dimension);
+                    }
                 }
 
                 foreach($_row->getMetrics() as $_metric) {
