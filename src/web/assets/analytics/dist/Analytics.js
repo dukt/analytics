@@ -349,7 +349,7 @@ Analytics.Utils = {
                         break;
 
                     default:
-                        dataTableRow[keyColumn] = value;
+                        dataTableRow[keyColumn] = row[keyColumn];
                 }
             }, this));
 
@@ -649,40 +649,38 @@ Analytics.reports.BaseChart = Garnish.Base.extend(
  * Area
  */
 Analytics.reports.Area = Analytics.reports.BaseChart.extend(
+{
+    initChart: function()
     {
-        initChart: function()
+        this.base();
+
+        $period = $('<div class="period" />').prependTo(this.$chart);
+        $title = $('<div class="title" />').prependTo(this.$chart);
+        $title.html(this.data.metric);
+        $period.html(this.data.periodLabel);
+
+        this.dataTable = Analytics.Utils.responseToDataTableV4(this.data.chart);
+        this.chartOptions = Analytics.ChartOptions.area(this.data.period);
+
+        if(typeof(this.data.chartOptions) != 'undefined')
         {
-            this.base();
-
-            $period = $('<div class="period" />').prependTo(this.$chart);
-            $title = $('<div class="title" />').prependTo(this.$chart);
-            $title.html(this.data.metric);
-            $period.html(this.data.periodLabel);
-
-            console.log('chart data', this.data);
-            // this.dataTable = Analytics.Utils.responseToDataTable(this.data.chart);
-            this.dataTable = Analytics.Utils.responseToDataTableV4(this.data.chart);
-            this.chartOptions = Analytics.ChartOptions.area(this.data.period);
-
-            if(typeof(this.data.chartOptions) != 'undefined')
-            {
-                $.extend(this.chartOptions, this.data.chartOptions);
-            }
-
-            if(this.data.period == 'year')
-            {
-                var dateFormatter = new google.visualization.DateFormat({
-                    pattern: "MMMM yyyy"
-                });
-
-                dateFormatter.format(this.dataTable, 0);
-            }
-
-            this.chart = new google.visualization.AreaChart(this.$graph.get(0));
-
-            this.addChartReadyListener();
+            $.extend(this.chartOptions, this.data.chartOptions);
         }
-    });
+
+        if(this.data.period == 'year')
+        {
+            var dateFormatter = new google.visualization.DateFormat({
+                pattern: "MMMM yyyy"
+            });
+
+            dateFormatter.format(this.dataTable, 0);
+        }
+
+        this.chart = new google.visualization.AreaChart(this.$graph.get(0));
+
+        this.addChartReadyListener();
+    }
+});
 
 /**
  * Counter
@@ -767,7 +765,7 @@ Analytics.reports.Table = Analytics.reports.BaseChart.extend(
         $title.html(this.data.metric);
         $period.html(this.data.periodLabel);
 
-        this.dataTable = Analytics.Utils.responseToDataTable(this.data.chart);
+        this.dataTable = Analytics.Utils.responseToDataTableV4(this.data.chart);
         this.chartOptions = Analytics.ChartOptions.table();
         this.chart = new google.visualization.Table(this.$graph.get(0));
 
