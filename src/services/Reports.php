@@ -87,7 +87,6 @@ class Reports extends Component
 
         $requests = Analytics::$plugin->getApi4()->getAnalyticsReportingGetReportsRequest(array($request));
         $response = Analytics::$plugin->getApi4()->getAnalyticsReporting()->reports->batchGet($requests);
-
         $reports = Analytics::$plugin->getApi4()->parseReportsResponse($response);
 
         $report = $reports[0];
