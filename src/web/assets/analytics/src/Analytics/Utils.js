@@ -128,7 +128,7 @@ Analytics.Utils = {
                         break;
 
                     default:
-                        dataTableRow[keyColumn] = value;
+                        dataTableRow[keyColumn] = row[keyColumn];
                 }
             }, this));
 
