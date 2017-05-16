@@ -101,18 +101,39 @@ class Api4 extends Component
 
             foreach($_report->getData()->getRows() as $_row) {
 
+                $colIndex = 0;
                 $row = [];
 
                 $dimensions = $_row->getDimensions();
 
                 if($dimensions) {
                     foreach ($dimensions as $_dimension) {
-                        array_push($row, $_dimension);
+
+                        $value = $_dimension;
+
+                        if($columnHeaderDimensions) {
+                            if(isset($columnHeaderDimensions[$colIndex])) {
+                                switch($columnHeaderDimensions[$colIndex])
+                                {
+                                    case 'ga:continent':
+                                        $value = Plugin::$plugin->metadata->getContinentCode($value);
+                                        break;
+                                    case 'ga:subContinent':
+                                        $value = Plugin::$plugin->metadata->getSubContinentCode($value);
+                                        break;
+                                }
+                            }
+                        }
+
+                        array_push($row, $value);
+
+                        $colIndex++;
                     }
                 }
 
                 foreach($_row->getMetrics() as $_metric) {
                     array_push($row, $_metric->getValues()[0]);
+                    $colIndex++;
                 }
 
                 array_push($rows, $row);

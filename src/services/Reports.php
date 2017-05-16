@@ -260,6 +260,51 @@ class Reports extends Component
      */
     private function getGeoReport($requestData)
     {
+
+        $period = (isset($requestData['period']) ? $requestData['period'] : null);
+        $dimensionString = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
+        $metricString = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
+        $startDate = date('Y-m-d', strtotime('-1 '.$period));
+        $endDate = date('Y-m-d');
+
+        // Prepare report request
+        $viewId = Analytics::$plugin->getAnalytics()->getProfileId();
+        $dateRange = Analytics::$plugin->getApi4()->getAnalyticsReportingDateRange($startDate, $endDate);
+        $dimensions = Analytics::$plugin->getApi4()->getDimensionsFromString($dimensionString);
+        $metrics = Analytics::$plugin->getApi4()->getMetricsFromString($metricString);
+
+
+        // Report request
+        $request = new \Google_Service_AnalyticsReporting_ReportRequest();
+        $request->setViewId($viewId);
+        $request->setDateRanges($dateRange);
+        $request->setDimensions($dimensions);
+        $request->setMetrics($metrics);
+
+        $requests = Analytics::$plugin->getApi4()->getAnalyticsReportingGetReportsRequest(array($request));
+        $response = Analytics::$plugin->getApi4()->getAnalyticsReporting()->reports->batchGet($requests);
+        $reports = Analytics::$plugin->getApi4()->parseReportsResponse($response);
+
+        $report = $reports[0];
+
+
+        return [
+            'type' => 'geo',
+            'chart' => $report,
+            'dimensionRaw' => $dimensionString,
+            'dimension' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($dimensionString)),
+            'metric' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($metricString)),
+            'period' => $period,
+            'periodLabel' => Craft::t('analytics', 'this '.$period)
+        ];
+    }
+
+    /**
+     * Deprecated
+     */
+
+    private function getGeoReportOld($requestData)
+    {
         $period = (isset($requestData['period']) ? $requestData['period'] : null);
         $dimension = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
         $metric = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
@@ -299,9 +344,5 @@ class Reports extends Component
             'periodLabel' => Craft::t('analytics', 'this '.$period)
         ];
     }
-
-    /**
-     * Deprecated
-     */
 
 }

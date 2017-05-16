@@ -111,8 +111,6 @@ Analytics.Utils = {
             $.each(response.cols, $.proxy(function(keyColumn, column) {
                 switch(column.type) {
                     case 'date':
-                    case 'continent':
-                    case 'subContinent':
                         dataTableRow[keyColumn] = Analytics.Utils.formatByType(column.type, row[keyColumn]);
                         break;
 
@@ -121,6 +119,8 @@ Analytics.Utils = {
                     case 'percent':
                     case 'time':
                     case 'float':
+                    case 'continent':
+                    case 'subContinent':
                         dataTableRow[keyColumn] = {
                             v: Analytics.Utils.formatRawValueByType(column.type, row[keyColumn]),
                             f: Analytics.Utils.formatByType(column.type, row[keyColumn])

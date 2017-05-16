@@ -332,8 +332,6 @@ Analytics.Utils = {
             $.each(response.cols, $.proxy(function(keyColumn, column) {
                 switch(column.type) {
                     case 'date':
-                    case 'continent':
-                    case 'subContinent':
                         dataTableRow[keyColumn] = Analytics.Utils.formatByType(column.type, row[keyColumn]);
                         break;
 
@@ -342,6 +340,8 @@ Analytics.Utils = {
                     case 'percent':
                     case 'time':
                     case 'float':
+                    case 'continent':
+                    case 'subContinent':
                         dataTableRow[keyColumn] = {
                             v: Analytics.Utils.formatRawValueByType(column.type, row[keyColumn]),
                             f: Analytics.Utils.formatByType(column.type, row[keyColumn])
@@ -719,7 +719,7 @@ Analytics.reports.Geo = Analytics.reports.BaseChart.extend(
         $title.html(this.data.metric);
         $period.html(this.data.periodLabel);
 
-        this.dataTable = Analytics.Utils.responseToDataTable(this.data.chart);
+        this.dataTable = Analytics.Utils.responseToDataTableV4(this.data.chart);
         this.chartOptions = Analytics.ChartOptions.geo(this.data.dimensionRaw);
         this.chart = new google.visualization.GeoChart(this.$graph.get(0));
 
