@@ -260,12 +260,18 @@ class Reports extends Component
      */
     private function getGeoReport($requestData)
     {
-
         $period = (isset($requestData['period']) ? $requestData['period'] : null);
         $dimensionString = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
         $metricString = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
         $startDate = date('Y-m-d', strtotime('-1 '.$period));
         $endDate = date('Y-m-d');
+
+        $originDimension = $dimensionString;
+
+        if($dimensionString == 'ga:city')
+        {
+            $dimensionString = 'ga:latitude,ga:longitude,'.$dimensionString;
+        }
 
         // Prepare report request
         $viewId = Analytics::$plugin->getAnalytics()->getProfileId();
@@ -280,6 +286,10 @@ class Reports extends Component
         $request->setDateRanges($dateRange);
         $request->setDimensions($dimensions);
         $request->setMetrics($metrics);
+        $request->setOrderBys([
+            ["fieldName" => $metricString, "orderType" => 'VALUE', "sortOrder" => 'DESCENDING']
+        ]);
+        $request->setPageSize(20);
 
         $requests = Analytics::$plugin->getApi4()->getAnalyticsReportingGetReportsRequest(array($request));
         $response = Analytics::$plugin->getApi4()->getAnalyticsReporting()->reports->batchGet($requests);
@@ -291,8 +301,8 @@ class Reports extends Component
         return [
             'type' => 'geo',
             'chart' => $report,
-            'dimensionRaw' => $dimensionString,
-            'dimension' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($dimensionString)),
+            'dimensionRaw' => $originDimension,
+            'dimension' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($originDimension)),
             'metric' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($metricString)),
             'period' => $period,
             'periodLabel' => Craft::t('analytics', 'this '.$period)
