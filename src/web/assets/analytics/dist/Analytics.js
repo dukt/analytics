@@ -335,11 +335,14 @@ Analytics.Utils = {
                         dataTableRow[keyColumn] = Analytics.Utils.formatByType(column.type, row[keyColumn]);
                         break;
 
+                    case 'float':
+                        dataTableRow[keyColumn] = +row[keyColumn];
+                        break;
+
                     case 'integer':
                     case 'currency':
                     case 'percent':
                     case 'time':
-                    case 'float':
                     case 'continent':
                     case 'subContinent':
                         dataTableRow[keyColumn] = {
