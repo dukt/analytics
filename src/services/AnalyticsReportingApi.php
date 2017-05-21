@@ -25,46 +25,6 @@ class AnalyticsReportingApi extends Component
     // Public Methods
     // =========================================================================
 
-    public function getReportNew(RequestCriteria $criteria)
-    {
-        $startDate = Craft::$app->getRequest()->getParam('startDate');
-        $endDate = Craft::$app->getRequest()->getParam('endDate');
-        $_metrics = Craft::$app->getRequest()->getParam('metrics');
-        $_dimensions = Craft::$app->getRequest()->getParam('dimensions');
-
-        $viewId = Analytics::$plugin->getAnalytics()->getProfileId();
-
-        $dateRange = Analytics::$plugin->getAnalyticsReportingApi()->getAnalyticsReportingDateRange($startDate, $endDate);
-        $metrics = Analytics::$plugin->getAnalyticsReportingApi()->getMetricsFromString($_metrics);
-        $dimensions = Analytics::$plugin->getAnalyticsReportingApi()->getDimensionsFromString($_dimensions);
-
-        // Request
-        // $request = Analytics::$plugin->getAnalyticsReportingApi()->getAnalyticsReportingReportRequest($viewId, $dateRange, $metrics, $dimensions);
-        $request = new Google_Service_AnalyticsReporting_ReportRequest();
-        $request->setViewId($viewId);
-        $request->setDateRanges($dateRange);
-        $request->setMetrics($metrics);
-        $request->setDimensions($dimensions);
-        $request->setOrderBys([
-            [
-                "fieldName" => $metrics[0],
-                "orderType" => 'VALUE',
-                "sortOrder" => 'DESCENDING',
-            ]
-        ]);
-        $request->setPageSize(20);
-        $request->setFiltersExpression($dimensions[0].'!=(not set);'.$dimensions[0].'!=(not provided)');
-
-        $requests = Analytics::$plugin->getAnalyticsReportingApi()->getAnalyticsReportingGetReportsRequest(array($request));
-        $response = Analytics::$plugin->getAnalyticsReportingApi()->getAnalyticsReporting()->reports->batchGet($requests);
-        $reports = Analytics::$plugin->getAnalyticsReportingApi()->parseReportsResponseApi($response);
-
-        Craft::$app->getUrlManager()->setRouteParams([
-            'response' => $response,
-            'reports' => $reports,
-        ]);
-    }
-
     public function parseReportsResponseApi(Google_Service_AnalyticsReporting_GetReportsResponse $response)
     {
         $reports = [];
