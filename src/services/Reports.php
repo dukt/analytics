@@ -10,7 +10,6 @@ namespace dukt\analytics\services;
 use Craft;
 use craft\helpers\StringHelper;
 use yii\base\Component;
-use dukt\analytics\models\RequestCriteria;
 use dukt\analytics\Plugin as Analytics;
 
 class Reports extends Component
@@ -72,9 +71,9 @@ class Reports extends Component
 
         // Prepare report request
         $viewId = Analytics::$plugin->getAnalytics()->getProfileId();
-        $dateRange = Analytics::$plugin->getApi4()->getAnalyticsReportingDateRange($startDate, $endDate);
-        $dimensions = Analytics::$plugin->getApi4()->getDimensionsFromString($dimensionString);
-        $metrics = Analytics::$plugin->getApi4()->getMetricsFromString($metricString);
+        $dateRange = Analytics::$plugin->getApi()->getAnalyticsReportingDateRange($startDate, $endDate);
+        $dimensions = Analytics::$plugin->getApi()->getDimensionsFromString($dimensionString);
+        $metrics = Analytics::$plugin->getApi()->getMetricsFromString($metricString);
 
         // Report request
         $request = new \Google_Service_AnalyticsReporting_ReportRequest();
@@ -86,9 +85,9 @@ class Reports extends Component
             ["fieldName" => $dimensionString, "orderType" => 'VALUE', "sortOrder" => 'ASCENDING']
         ]);
 
-        $requests = Analytics::$plugin->getApi4()->getAnalyticsReportingGetReportsRequest(array($request));
-        $response = Analytics::$plugin->getApi4()->getAnalyticsReporting()->reports->batchGet($requests);
-        $reports = Analytics::$plugin->getApi4()->parseReportsResponse($response);
+        $requests = Analytics::$plugin->getApi()->getAnalyticsReportingGetReportsRequest(array($request));
+        $response = Analytics::$plugin->getApi()->getAnalyticsReporting()->reports->batchGet($requests);
+        $reports = Analytics::$plugin->getApi()->parseReportsResponseApiV4($response);
 
         $report = $reports[0];
         $total = $report['totals'][0];
@@ -120,8 +119,8 @@ class Reports extends Component
 
         // Prepare report request
         $viewId = Analytics::$plugin->getAnalytics()->getProfileId();
-        $dateRange = Analytics::$plugin->getApi4()->getAnalyticsReportingDateRange($startDate, $endDate);
-        $metrics = Analytics::$plugin->getApi4()->getMetricsFromString($metricString);
+        $dateRange = Analytics::$plugin->getApi()->getAnalyticsReportingDateRange($startDate, $endDate);
+        $metrics = Analytics::$plugin->getApi()->getMetricsFromString($metricString);
 
 
         // Report request
@@ -130,9 +129,9 @@ class Reports extends Component
         $request->setDateRanges($dateRange);
         $request->setMetrics($metrics);
 
-        $requests = Analytics::$plugin->getApi4()->getAnalyticsReportingGetReportsRequest(array($request));
-        $response = Analytics::$plugin->getApi4()->getAnalyticsReporting()->reports->batchGet($requests);
-        $reports = Analytics::$plugin->getApi4()->parseReportsResponse($response);
+        $requests = Analytics::$plugin->getApi()->getAnalyticsReportingGetReportsRequest(array($request));
+        $response = Analytics::$plugin->getApi()->getAnalyticsReporting()->reports->batchGet($requests);
+        $reports = Analytics::$plugin->getApi()->parseReportsResponseApiV4($response);
 
         $report = $reports[0];
         $total = 0;
@@ -178,9 +177,9 @@ class Reports extends Component
 
         // Prepare report request
         $viewId = Analytics::$plugin->getAnalytics()->getProfileId();
-        $dateRange = Analytics::$plugin->getApi4()->getAnalyticsReportingDateRange($startDate, $endDate);
-        $dimensions = Analytics::$plugin->getApi4()->getDimensionsFromString($dimensionString);
-        $metrics = Analytics::$plugin->getApi4()->getMetricsFromString($metricString);
+        $dateRange = Analytics::$plugin->getApi()->getAnalyticsReportingDateRange($startDate, $endDate);
+        $dimensions = Analytics::$plugin->getApi()->getDimensionsFromString($dimensionString);
+        $metrics = Analytics::$plugin->getApi()->getMetricsFromString($metricString);
 
 
         // Report request
@@ -190,9 +189,9 @@ class Reports extends Component
         $request->setDimensions($dimensions);
         $request->setMetrics($metrics);
 
-        $requests = Analytics::$plugin->getApi4()->getAnalyticsReportingGetReportsRequest(array($request));
-        $response = Analytics::$plugin->getApi4()->getAnalyticsReporting()->reports->batchGet($requests);
-        $reports = Analytics::$plugin->getApi4()->parseReportsResponse($response);
+        $requests = Analytics::$plugin->getApi()->getAnalyticsReportingGetReportsRequest(array($request));
+        $response = Analytics::$plugin->getApi()->getAnalyticsReporting()->reports->batchGet($requests);
+        $reports = Analytics::$plugin->getApi()->parseReportsResponseApiV4($response);
 
         $report = $reports[0];
 
@@ -223,9 +222,9 @@ class Reports extends Component
 
         // Prepare report request
         $viewId = Analytics::$plugin->getAnalytics()->getProfileId();
-        $dateRange = Analytics::$plugin->getApi4()->getAnalyticsReportingDateRange($startDate, $endDate);
-        $dimensions = Analytics::$plugin->getApi4()->getDimensionsFromString($dimensionString);
-        $metrics = Analytics::$plugin->getApi4()->getMetricsFromString($metricString);
+        $dateRange = Analytics::$plugin->getApi()->getAnalyticsReportingDateRange($startDate, $endDate);
+        $dimensions = Analytics::$plugin->getApi()->getDimensionsFromString($dimensionString);
+        $metrics = Analytics::$plugin->getApi()->getMetricsFromString($metricString);
 
 
         // Report request
@@ -235,9 +234,9 @@ class Reports extends Component
         $request->setDimensions($dimensions);
         $request->setMetrics($metrics);
 
-        $requests = Analytics::$plugin->getApi4()->getAnalyticsReportingGetReportsRequest(array($request));
-        $response = Analytics::$plugin->getApi4()->getAnalyticsReporting()->reports->batchGet($requests);
-        $reports = Analytics::$plugin->getApi4()->parseReportsResponse($response);
+        $requests = Analytics::$plugin->getApi()->getAnalyticsReportingGetReportsRequest(array($request));
+        $response = Analytics::$plugin->getApi()->getAnalyticsReporting()->reports->batchGet($requests);
+        $reports = Analytics::$plugin->getApi()->parseReportsResponseApiV4($response);
 
         $report = $reports[0];
 
@@ -275,9 +274,9 @@ class Reports extends Component
 
         // Prepare report request
         $viewId = Analytics::$plugin->getAnalytics()->getProfileId();
-        $dateRange = Analytics::$plugin->getApi4()->getAnalyticsReportingDateRange($startDate, $endDate);
-        $dimensions = Analytics::$plugin->getApi4()->getDimensionsFromString($dimensionString);
-        $metrics = Analytics::$plugin->getApi4()->getMetricsFromString($metricString);
+        $dateRange = Analytics::$plugin->getApi()->getAnalyticsReportingDateRange($startDate, $endDate);
+        $dimensions = Analytics::$plugin->getApi()->getDimensionsFromString($dimensionString);
+        $metrics = Analytics::$plugin->getApi()->getMetricsFromString($metricString);
 
 
         // Report request
@@ -291,9 +290,9 @@ class Reports extends Component
         ]);
         $request->setPageSize(20);
 
-        $requests = Analytics::$plugin->getApi4()->getAnalyticsReportingGetReportsRequest(array($request));
-        $response = Analytics::$plugin->getApi4()->getAnalyticsReporting()->reports->batchGet($requests);
-        $reports = Analytics::$plugin->getApi4()->parseReportsResponse($response);
+        $requests = Analytics::$plugin->getApi()->getAnalyticsReportingGetReportsRequest(array($request));
+        $response = Analytics::$plugin->getApi()->getAnalyticsReporting()->reports->batchGet($requests);
+        $reports = Analytics::$plugin->getApi()->parseReportsResponseApiV4($response);
 
         $report = $reports[0];
 
@@ -308,51 +307,4 @@ class Reports extends Component
             'periodLabel' => Craft::t('analytics', 'this '.$period)
         ];
     }
-
-    /**
-     * Deprecated
-     */
-
-    private function getGeoReportOld($requestData)
-    {
-        $period = (isset($requestData['period']) ? $requestData['period'] : null);
-        $dimension = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
-        $metric = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
-
-        $start = date('Y-m-d', strtotime('-1 '.$period));
-        $end = date('Y-m-d');
-
-        $originDimension = $dimension;
-
-        if($dimension == 'ga:city')
-        {
-            $dimension = 'ga:latitude, ga:longitude,'.$dimension;
-        }
-
-
-        $criteria = new RequestCriteria;
-        $criteria->metrics = $metric;
-
-        $criteria->startDate = $start;
-        $criteria->endDate = $end;
-        $criteria->optParams = array(
-            'dimensions' => $dimension,
-            'sort' => '-'.$metric,
-            'max-results' => 20,
-            'filters' => $originDimension.'!=(not set);'.$originDimension.'!=(not provided)',
-        );
-
-        $tableResponse = Analytics::$plugin->getApi()->sendRequest($criteria);
-
-        return [
-            'type' => 'geo',
-            'chart' => $tableResponse,
-            'dimensionRaw' => $originDimension,
-            'dimension' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($originDimension)),
-            'metric' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($metric)),
-            'period' => $period,
-            'periodLabel' => Craft::t('analytics', 'this '.$period)
-        ];
-    }
-
 }

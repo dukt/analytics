@@ -15,6 +15,11 @@ use \Google_Service_AnalyticsReporting;
 use dukt\analytics\models\RequestCriteria;
 use dukt\analytics\Plugin as Analytics;
 use \Google_Service_AnalyticsReporting_ReportRequest;
+use \Google_Service_AnalyticsReporting_DateRange;
+use \Google_Service_AnalyticsReporting_Metric;
+use \Google_Service_AnalyticsReporting_Dimension;
+use \Google_Service_AnalyticsReporting_GetReportsRequest;
+use \Google_Service_AnalyticsReporting_GetReportsResponse;
 
 class Api extends Component
 {
@@ -105,95 +110,12 @@ class Api extends Component
     {
         if($criteria->realtime)
         {
-            return $this->getRealtimeReport($criteria);
+            return $this->getRealtimeReportFromCriteria($criteria);
         }
         else
         {
-            return $this->getReport($criteria);
+            return $this->getReportFromCriteria($criteria);
         }
-    }
-
-    // Private Methods
-    // =========================================================================
-
-    /**
-     * Populates criteria’s ids, optParams.filters attributes with default profileId and filters
-     *
-     * @param RequestCriteria $criteria
-     */
-    private function populateCriteria(RequestCriteria $criteria)
-    {
-        // Profile ID
-
-        $criteria->ids = Analytics::$plugin->getAnalytics()->getProfileId();
-
-
-        // Filters
-
-        $filters = [];
-
-        if(isset($criteria->optParams['filters']))
-        {
-            $filters = $criteria->optParams['filters'];
-
-            if(is_string($filters))
-            {
-                $filters = explode(";", $filters);
-            }
-        }
-
-        $configFilters = Analytics::$plugin->getSettings()->filters;
-
-        if($configFilters)
-        {
-            $filters = array_merge($filters, $configFilters);
-        }
-
-        if(count($filters) > 0)
-        {
-            $optParams = $criteria->optParams;
-
-            $optParams['filters'] = implode(";", $filters);
-
-            $criteria->optParams = $optParams;
-        }
-    }
-
-    /**
-     * Returns a GA Report from criteria
-     *
-     * @param RequestCriteria $criteria
-     *
-     * @return string
-     */
-    private function getReport(RequestCriteria $criteria)
-    {
-        $this->populateCriteria($criteria);
-
-        $ids = $criteria->ids;
-        $startDate = $criteria->startDate;
-        $endDate = $criteria->endDate;
-        $metrics = $criteria->metrics;
-        $optParams = $criteria->optParams;
-        $enableCache = $criteria->enableCache;
-
-        $request = [$ids, $startDate, $endDate, $metrics, $optParams];
-
-        $cacheId = ['api.apiGetGAData', $request];
-        $response = Analytics::$plugin->cache->get($cacheId);
-
-        if(!$response)
-        {
-            if(!$optParams)
-            {
-                $optParams = [];
-            }
-
-            $response = $this->googleAnalytics()->data_ga->get($ids, $startDate, $endDate, $metrics, $optParams);
-            Analytics::$plugin->cache->set($cacheId, $response, null, null, $enableCache);
-        }
-
-        return $this->parseReportResponse($response);
     }
 
     public function getReportNew(RequestCriteria $criteria)
@@ -208,12 +130,12 @@ class Api extends Component
 
         $viewId = Analytics::$plugin->getAnalytics()->getProfileId();
 
-        $dateRange = Analytics::$plugin->getApi4()->getAnalyticsReportingDateRange($startDate, $endDate);
-        $metrics = Analytics::$plugin->getApi4()->getMetricsFromString($_metrics);
-        $dimensions = Analytics::$plugin->getApi4()->getDimensionsFromString($_dimensions);
+        $dateRange = Analytics::$plugin->getApi()->getAnalyticsReportingDateRange($startDate, $endDate);
+        $metrics = Analytics::$plugin->getApi()->getMetricsFromString($_metrics);
+        $dimensions = Analytics::$plugin->getApi()->getDimensionsFromString($_dimensions);
 
         // Request
-        // $request = Analytics::$plugin->getApi4()->getAnalyticsReportingReportRequest($viewId, $dateRange, $metrics, $dimensions);
+        // $request = Analytics::$plugin->getApi()->getAnalyticsReportingReportRequest($viewId, $dateRange, $metrics, $dimensions);
         $request = new Google_Service_AnalyticsReporting_ReportRequest();
         $request->setViewId($viewId);
         $request->setDateRanges($dateRange);
@@ -229,9 +151,9 @@ class Api extends Component
         $request->setPageSize(20);
         $request->setFiltersExpression($dimensions[0].'!=(not set);'.$dimensions[0].'!=(not provided)');
 
-        $requests = Analytics::$plugin->getApi4()->getAnalyticsReportingGetReportsRequest(array($request));
-        $response = Analytics::$plugin->getApi4()->getAnalyticsReporting()->reports->batchGet($requests);
-        $reports = Analytics::$plugin->getApi4()->parseResponse($response);
+        $requests = Analytics::$plugin->getApi()->getAnalyticsReportingGetReportsRequest(array($request));
+        $response = Analytics::$plugin->getApi()->getAnalyticsReporting()->reports->batchGet($requests);
+        $reports = Analytics::$plugin->getApi()->parseReportsResponseApiV4($response);
 
         Craft::$app->getUrlManager()->setRouteParams([
             'response' => $response,
@@ -239,35 +161,6 @@ class Api extends Component
         ]);
     }
 
-    /**
-     * Returns a Realtime Report from criteria
-     *
-     * @param RequestCriteria $criteria
-     *
-     * @return string
-     */
-    private function getRealtimeReport(RequestCriteria $criteria)
-    {
-        $this->populateCriteria($criteria);
-
-        $ids = $criteria->ids;
-        $metrics = $criteria->metrics;
-        $optParams = $criteria->optParams;
-
-        $cacheDuration = Analytics::$plugin->getAnalytics()->getRealtimeRefreshInterval();
-
-        $cacheId = ['api.apiGetGADataRealtime', $ids, $metrics, $optParams];
-        $response = Analytics::$plugin->cache->get($cacheId);
-
-        if(!$response)
-        {
-            $response = $this->googleAnalytics()->data_realtime->get($ids, $metrics, $optParams);
-
-            Analytics::$plugin->cache->set($cacheId, $response, $cacheDuration);
-        }
-
-        return $this->parseReportResponse($response);
-    }
 
     /**
      * Parse Report Response
@@ -276,13 +169,13 @@ class Api extends Component
      *
      * @return array
      */
-    public function parseReportResponse($data)
+    public function parseReportResponseApiV3($data)
     {
         // Columns
 
         $cols = [];
 
-        foreach($data['cols'] as $col)
+        foreach($data['columnHeaders'] as $col)
         {
             $dataType = $col->dataType;
             $id = $col->name;
@@ -377,112 +270,320 @@ class Api extends Component
         );
     }
 
+    public function parseReportsResponseApiV4(Google_Service_AnalyticsReporting_GetReportsResponse $response)
+    {
+        $reports = [];
+
+        foreach ($response->getReports() as $_report) {
+
+
+            $columnHeader = $_report->getColumnHeader();
+            $columnHeaderDimensions = $columnHeader->getDimensions();
+            $metricHeaderEntries = $columnHeader->getMetricHeader()->getMetricHeaderEntries();
+
+
+            // Columns
+
+            $cols = [];
+
+            if($columnHeaderDimensions) {
+                foreach ($columnHeaderDimensions as $columnHeaderDimension) {
+
+                    $id = $columnHeaderDimension;
+                    $label = Analytics::$plugin->metadata->getDimMet($columnHeaderDimension);
+
+                    switch ($columnHeaderDimension) {
+                        case 'ga:date':
+                        case 'ga:yearMonth':
+                            $type = 'date';
+                            break;
+
+                        case 'ga:continent':
+                            $type = 'continent';
+                            break;
+                        case 'ga:subContinent':
+                            $type = 'subContinent';
+                            break;
+
+                        case 'ga:latitude':
+                        case 'ga:longitude':
+                            $type = 'float';
+                            break;
+
+                        default:
+                            $type = 'string';
+                    }
+
+                    $col = [
+                        'type' => $type,
+                        'label' => Craft::t('analytics', $label),
+                        'id' => $id,
+                    ];
+
+                    array_push($cols, $col);
+                }
+            }
+
+            foreach($metricHeaderEntries as $metricHeaderEntry) {
+                $label = Analytics::$plugin->metadata->getDimMet($metricHeaderEntry['name']);
+
+                $col = [
+                    'type' => strtolower($metricHeaderEntry['type']),
+                    'label' => Craft::t('analytics', $label),
+                    'id' => $metricHeaderEntry['name'],
+                ];
+
+                array_push($cols, $col);
+            }
+
+
+            // Rows
+
+            $rows = [];
+
+            foreach($_report->getData()->getRows() as $_row) {
+
+                $colIndex = 0;
+                $row = [];
+
+                $dimensions = $_row->getDimensions();
+
+                if($dimensions) {
+                    foreach ($dimensions as $_dimension) {
+
+                        $value = $_dimension;
+
+                        if($columnHeaderDimensions) {
+                            if(isset($columnHeaderDimensions[$colIndex])) {
+                                switch($columnHeaderDimensions[$colIndex])
+                                {
+                                    case 'ga:continent':
+                                        $value = Analytics::$plugin->metadata->getContinentCode($value);
+                                        break;
+                                    case 'ga:subContinent':
+                                        $value = Analytics::$plugin->metadata->getSubContinentCode($value);
+                                        break;
+                                }
+                            }
+                        }
+
+                        array_push($row, $value);
+
+                        $colIndex++;
+                    }
+                }
+
+                foreach($_row->getMetrics() as $_metric) {
+                    array_push($row, $_metric->getValues()[0]);
+                    $colIndex++;
+                }
+
+                array_push($rows, $row);
+            }
+
+            $totals = $_report->getData()->getTotals()[0]->getValues();
+
+            $report = [
+                'cols' => $cols,
+                'rows' => $rows,
+                'totals' => $totals
+            ];
+
+            array_push($reports, $report);
+        }
+
+        return $reports;
+    }
+
+    public function getAnalyticsReportingGetReportsRequest($requests)
+    {
+        $body = new Google_Service_AnalyticsReporting_GetReportsRequest();
+        $body->setReportRequests($requests);
+
+        return $body;
+    }
+
+    public function getAnalyticsReportingReportRequest($viewId, $dateRanges, $metrics, $dimensions)
+    {
+        $request = new Google_Service_AnalyticsReporting_ReportRequest();
+        $request->setViewId($viewId);
+        $request->setDateRanges($dateRanges);
+        $request->setMetrics($metrics);
+        $request->setDimensions($dimensions);
+
+        return $request;
+    }
+
+    public function getDimensionsFromString($string)
+    {
+        $dimensions = [];
+        $_dimensions = explode(",", $string);
+        foreach ($_dimensions as $_dimension) {
+            $dimension = new Google_Service_AnalyticsReporting_Dimension();
+            $dimension->setName($_dimension);
+            array_push($dimensions, $dimension);
+        }
+
+        return $dimensions;
+    }
+
+    public function getMetricsFromString($string)
+    {
+        $metrics = [];
+        $_metrics = explode(",", $string);
+        foreach ($_metrics as $_metric) {
+            $metric = new Google_Service_AnalyticsReporting_Metric();
+            $metric->setExpression($_metric);
+            array_push($metrics, $metric);
+        }
+
+        return $metrics;
+    }
+
+    public function getAnalyticsReportingDateRange($startDate, $endDate)
+    {
+        $dateRange = new Google_Service_AnalyticsReporting_DateRange();
+        $dateRange->setStartDate($startDate);
+        $dateRange->setEndDate($endDate);
+
+        return $dateRange;
+    }
+
     /**
-     * Parse Report Response
+     * Returns the Google Analytics API object (API v3)
      *
-     * @param $data
+     * @return bool|Google_Service_Analytics
+     */
+    public function googleAnalytics()
+    {
+        $client = $this->getClient();
+
+        return new Google_Service_Analytics($client);
+    }
+    
+    /**
+     * Returns the Google Analytics Reporting API object (API v4)
+     *
+     * @return bool|Google_Service_AnalyticsReporting
+     */
+    public function getAnalyticsReporting()
+    {
+        $client = $this->getClient();
+
+        return new Google_Service_AnalyticsReporting($client);
+    }
+
+    // Private Methods
+    // =========================================================================
+
+    /**
+     * Populates criteria’s ids, optParams.filters attributes with default profileId and filters
+     *
+     * @param RequestCriteria $criteria
+     */
+    private function populateCriteria(RequestCriteria $criteria)
+    {
+        // Profile ID
+
+        $criteria->ids = Analytics::$plugin->getAnalytics()->getProfileId();
+
+
+        // Filters
+
+        $filters = [];
+
+        if(isset($criteria->optParams['filters']))
+        {
+            $filters = $criteria->optParams['filters'];
+
+            if(is_string($filters))
+            {
+                $filters = explode(";", $filters);
+            }
+        }
+
+        $configFilters = Analytics::$plugin->getSettings()->filters;
+
+        if($configFilters)
+        {
+            $filters = array_merge($filters, $configFilters);
+        }
+
+        if(count($filters) > 0)
+        {
+            $optParams = $criteria->optParams;
+
+            $optParams['filters'] = implode(";", $filters);
+
+            $criteria->optParams = $optParams;
+        }
+    }
+
+    /**
+     * Returns a GA Report from criteria
+     *
+     * @param RequestCriteria $criteria
      *
      * @return array
      */
-    public function parseReportResponseOld($data)
+    private function getReportFromCriteria(RequestCriteria $criteria)
     {
-        // Columns
+        $this->populateCriteria($criteria);
 
-        $cols = [];
+        $ids = $criteria->ids;
+        $startDate = $criteria->startDate;
+        $endDate = $criteria->endDate;
+        $metrics = $criteria->metrics;
+        $optParams = $criteria->optParams;
+        $enableCache = $criteria->enableCache;
 
-        foreach($data->columnHeaders as $col)
+        $request = [$ids, $startDate, $endDate, $metrics, $optParams];
+
+        $cacheId = ['api.apiGetGAData', $request];
+        $response = Analytics::$plugin->cache->get($cacheId);
+
+        if(!$response)
         {
-            $dataType = $col->dataType;
-            $id = $col->name;
-            $label = Analytics::$plugin->metadata->getDimMet($col->name);
-            $type = strtolower($dataType);
-
-            switch($col->name)
+            if(!$optParams)
             {
-                case 'ga:date':
-                case 'ga:yearMonth':
-                    $type = 'date';
-                    break;
-
-                case 'ga:continent':
-                    $type = 'continent';
-                    break;
-                case 'ga:subContinent':
-                    $type = 'subContinent';
-                    break;
-
-                case 'ga:latitude':
-                case 'ga:longitude':
-                    $type = 'float';
-                    break;
+                $optParams = [];
             }
 
-            $cols[] = array(
-                'type' => $type,
-                'dataType' => $dataType,
-                'id' => $id,
-                'label' => Craft::t('analytics', $label),
-            );
+            $response = $this->googleAnalytics()->data_ga->get($ids, $startDate, $endDate, $metrics, $optParams);
+            Analytics::$plugin->cache->set($cacheId, $response, null, null, $enableCache);
         }
 
+        return $this->parseReportResponseApiV3($response);
+    }
 
-        // Rows
+    /**
+     * Returns a Realtime Report from criteria
+     *
+     * @param RequestCriteria $criteria
+     *
+     * @return array
+     */
+    private function getRealtimeReportFromCriteria(RequestCriteria $criteria)
+    {
+        $this->populateCriteria($criteria);
 
-        $rows = [];
+        $ids = $criteria->ids;
+        $metrics = $criteria->metrics;
+        $optParams = $criteria->optParams;
 
-        if($data->rows)
+        $cacheDuration = Analytics::$plugin->getAnalytics()->getRealtimeRefreshInterval();
+
+        $cacheId = ['api.apiGetGADataRealtime', $ids, $metrics, $optParams];
+        $response = Analytics::$plugin->cache->get($cacheId);
+
+        if(!$response)
         {
-            $rows = $data->rows;
+            $response = $this->googleAnalytics()->data_realtime->get($ids, $metrics, $optParams);
 
-            foreach($rows as $kRow => $row)
-            {
-                foreach($row as $_valueKey => $_value)
-                {
-                    $col = $cols[$_valueKey];
-
-                    $value = $this->formatRawValue($col['type'], $_value);
-
-                    if($col['id'] == 'ga:continent')
-                    {
-                        $value = Analytics::$plugin->metadata->getContinentCode($value);
-                    }
-
-                    if($col['id'] == 'ga:subContinent')
-                    {
-                        $value = Analytics::$plugin->metadata->getSubContinentCode($value);
-                    }
-
-
-                    // translate values
-
-                    switch($col['id'])
-                    {
-                        case 'ga:country':
-                        case 'ga:city':
-                        // case 'ga:continent':
-                        // case 'ga:subContinent':
-                        case 'ga:userType':
-                        case 'ga:javaEnabled':
-                        case 'ga:deviceCategory':
-                        case 'ga:mobileInputSelector':
-                        case 'ga:channelGrouping':
-                        case 'ga:medium':
-                            $value = Craft::t('analytics', $value);
-                            break;
-                    }
-
-
-                    // update cell
-
-                    $rows[$kRow][$_valueKey] = $value;
-                }
-            }
+            Analytics::$plugin->cache->set($cacheId, $response, $cacheDuration);
         }
 
-        return array(
-            'cols' => $cols,
-            'rows' => $rows
-        );
+        return $this->parseReportResponseApiV3($response);
     }
 
     /**
@@ -510,51 +611,26 @@ class Api extends Component
         return $value;
     }
 
-
-    /**
-     * Returns the Google Analytics API object (API v3)
-     *
-     * @return bool|Google_Service_Analytics
-     */
-    private function googleAnalytics()
-    {
-        $client = $this->getClient();
-
-        return new Google_Service_Analytics($client);
-    }
-
-    /**
-     * Returns the Google Analytics Reporting API object (API v4)
-     *
-     * @return bool|Google_Service_Analytics
-     */
-    public function googleAnalyticsReporting()
-    {
-        $client = $this->getClient();
-
-        return new Google_Service_AnalyticsReporting($client);
-    }
-
     /**
      * Returns a Google client
      *
-     * @return bool|Google_Client
+     * @return null|Google_Client
      */
     private function getClient()
     {
-        $token = Analytics::$plugin->oauth->getToken();
+        $token = Analytics::$plugin->getOauth()->getToken();
 
-        if ($token)
-        {
+        if ($token) {
             // make token compatible with Google library
-            $arrayToken = array(
+            $arrayToken = [
                 'created' => 0,
                 'access_token' => $token->getToken(),
                 'expires_in' => $token->getExpires(),
-            );
+            ];
 
             $arrayToken = json_encode($arrayToken);
 
+            // client
             $client = new Google_Client();
             $client->setApplicationName('Google+ PHP Starter Application');
             $client->setClientId('clientId');
@@ -563,11 +639,6 @@ class Api extends Component
             $client->setAccessToken($arrayToken);
 
             return $client;
-        }
-        else
-        {
-            Craft::info('Undefined token', __METHOD__);
-            return false;
         }
     }
 }
