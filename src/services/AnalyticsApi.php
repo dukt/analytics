@@ -20,9 +20,9 @@ class AnalyticsApi extends Component
     // =========================================================================
 
     /**
-     * Get columns
+     * Get columns.
      *
-     * @return array
+     * @return \Google_Service_Analytics_Columns
      */
     public function getColumns()
     {
@@ -30,7 +30,7 @@ class AnalyticsApi extends Component
     }
 
     /**
-     * Get Account Explorer Data
+     * Get account explorer data.
      *
      * @return array
      */
