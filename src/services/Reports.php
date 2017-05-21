@@ -38,6 +38,13 @@ class Reports extends Component
         return Analytics::$plugin->getAnalyticsApi()->parseReportResponse($response);
     }
 
+    /**
+     * Returns an element report.
+     *
+     * @param array $request
+     *
+     * @return array
+     */
     public function getElementReport(array $request)
     {
         $viewId = Analytics::$plugin->getAnalytics()->getProfileId();
