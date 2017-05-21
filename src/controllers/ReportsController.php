@@ -28,36 +28,30 @@ class ReportsController extends Controller
         $returningVisitor = 0;
         $total = 0;
 
-        if(!Analytics::$plugin->getSettings()->demoMode)
-        {
-            try
-            {
-                $criteria = new RequestCriteria;
-                $criteria->realtime = true;
-                $criteria->metrics = 'ga:activeVisitors';
-                $criteria->optParams = array('dimensions' => 'ga:visitorType');
+        if (!Analytics::$plugin->getSettings()->demoMode) {
+            try {
+                $request = [
+                    'metrics' => 'ga:activeVisitors',
+                    'optParams' => ['dimensions' => 'ga:visitorType']
+                ];
 
-                $response = Analytics::$plugin->getApi()->sendRequest($criteria);
+                $response = Analytics::$plugin->getReports()->getRealtimeReport($request);
 
 
                 // total
 
-                if(!empty($response['totalResults']))
-                {
+                if (!empty($response['totalResults'])) {
                     $total = $response['totalResults'];
                 }
 
 
                 // new & returning visitors
 
-                if(!empty($response['rows']))
-                {
+                if (!empty($response['rows'])) {
                     $rows = $response['rows'];
 
-                    if(!empty($rows[0][1]))
-                    {
-                        switch($rows[0][0])
-                        {
+                    if (!empty($rows[0][1])) {
+                        switch ($rows[0][0]) {
                             case "RETURNING":
                                 $returningVisitor = $rows[0][1];
                                 break;
@@ -68,10 +62,8 @@ class ReportsController extends Controller
                         }
                     }
 
-                    if(!empty($rows[1][1]))
-                    {
-                        switch($rows[1][0])
-                        {
+                    if (!empty($rows[1][1])) {
+                        switch ($rows[1][0]) {
                             case "RETURNING":
                                 $returningVisitor = $rows[1][1];
                                 break;
@@ -82,41 +74,35 @@ class ReportsController extends Controller
                         }
                     }
                 }
-            }
-            catch(\Google_Service_Exception $e)
-            {
+            } catch (\Google_Service_Exception $e) {
                 $errors = $e->getErrors();
                 $errorMsg = $e->getMessage();
 
-                if(isset($errors[0]['message']))
-                {
+                if (isset($errors[0]['message'])) {
                     $errorMsg = $errors[0]['message'];
                 }
 
                 Craft::info('Couldn’t get realtime widget data: '.$errorMsg."\r\n".print_r($errors, true), __METHOD__);
 
                 return $this->asErrorJson($errorMsg);
-            }
-            catch(\Exception $e)
-            {
+            } catch (\Exception $e) {
                 $errorMsg = $e->getMessage();
                 Craft::info('Couldn’t get element data: '.$errorMsg, __METHOD__);
+
                 return $this->asErrorJson($errorMsg);
             }
-        }
-        else
-        {
+        } else {
             // Demo Mode
             $newVisitor = 5;
             $returningVisitor = 7;
             $total = ($newVisitor + $returningVisitor);
         }
 
-        return $this->asJson(array(
+        return $this->asJson([
             'total' => $total,
             'newVisitor' => $newVisitor,
             'returningVisitor' => $returningVisitor
-        ));
+        ]);
     }
 
     /**
@@ -142,7 +128,7 @@ class ReportsController extends Controller
 
             if(!$response)
             {
-                $response = Analytics::$plugin->reports->getReport($request);
+                $response = Analytics::$plugin->getReports()->getReport($request);
 
                 if($response)
                 {

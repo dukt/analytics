@@ -18,6 +18,26 @@ class Reports extends Component
     // =========================================================================
 
     /**
+     * Returns a realtime report.
+     *
+     * @param array $request
+     *
+     * @return array
+     */
+    public function getRealtimeReport(array $request)
+    {
+        $viewId = Analytics::$plugin->getAnalytics()->getProfileId();
+
+        $ids = $viewId;
+        $metrics = $request['metrics'];
+        $optParams = $request['optParams'];
+
+        $response = Analytics::$plugin->getApi()->googleAnalytics()->data_realtime->get($ids, $metrics, $optParams);
+
+        return Analytics::$plugin->getApi()->parseReportResponseApiV3($response);
+    }
+
+    /**
      * Returns a report for any chart type (Area,  Counter,  Pie,  Table,  Geo)
      *
      * @param array $options
