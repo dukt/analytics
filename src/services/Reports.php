@@ -43,20 +43,25 @@ class Reports extends Component
      * @param array $options
      *
      * @return array
+     * @throws \Exception
      */
-    public function getReport($options)
+    public function getReport(array $options)
     {
         $chart = $options['chart'];
 
-        $methodName = 'get'.ucfirst($chart).'Report';
-
-        if(method_exists($this, $methodName))
-        {
-            return $this->{$methodName}($options);
-        }
-        else
-        {
-            throw new Exception("Chart type `".$chart."` not supported.");
+        switch($chart) {
+            case 'area':
+                return $this->getAreaReport($options);
+            case 'counter':
+                return $this->getCounterReport($options);
+            case 'pie':
+                return $this->getPieReport($options);
+            case 'table':
+                return $this->getTableReport($options);
+            case 'geo':
+                return $this->getGeoReport($options);
+            default:
+                throw new \Exception("Chart type `".$chart."` not supported.");
         }
     }
 
