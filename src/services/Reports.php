@@ -140,9 +140,8 @@ class Reports extends Component
             ["fieldName" => $dimensionString, "orderType" => 'VALUE', "sortOrder" => 'ASCENDING']
         ];
 
-        $reports = Analytics::$plugin->getAnalyticsReportingApi()->sendReportRequest($criteria);
+        $report = Analytics::$plugin->getAnalyticsReportingApi()->sendReportRequest($criteria);
 
-        $report = $reports[0];
         $total = $report['totals'][0];
 
         return [
@@ -174,9 +173,8 @@ class Reports extends Component
         $criteria->endDate = $endDate;
         $criteria->metrics = $metricString;
 
-        $reports = Analytics::$plugin->getAnalyticsReportingApi()->sendReportRequest($criteria);
+        $report = Analytics::$plugin->getAnalyticsReportingApi()->sendReportRequest($criteria);
 
-        $report = $reports[0];
         $total = 0;
 
         if(!empty($report['totals'][0])) {
@@ -220,8 +218,7 @@ class Reports extends Component
         $criteria->metrics = $metricString;
         $criteria->dimensions = $dimensionString;
 
-        $reports = Analytics::$plugin->getAnalyticsReportingApi()->sendReportRequest($criteria);
-        $report = $reports[0];
+        $report = Analytics::$plugin->getAnalyticsReportingApi()->sendReportRequest($criteria);
 
         return [
             'type' => 'pie',
@@ -252,9 +249,7 @@ class Reports extends Component
         $criteria->startDate = date('Y-m-d', strtotime('-1 '.$period));
         $criteria->endDate = date('Y-m-d');
 
-        $reports = Analytics::$plugin->getAnalyticsReportingApi()->sendReportRequest($criteria);
-
-        $report = $reports[0];
+        $report = Analytics::$plugin->getAnalyticsReportingApi()->sendReportRequest($criteria);
 
         return [
             'type' => 'table',
@@ -292,8 +287,7 @@ class Reports extends Component
         $criteria->startDate = date('Y-m-d', strtotime('-1 '.$period));
         $criteria->endDate = date('Y-m-d');
 
-        $reports = Analytics::$plugin->getAnalyticsReportingApi()->sendReportRequest($criteria);
-        $report = $reports[0];
+        $report = Analytics::$plugin->getAnalyticsReportingApi()->sendReportRequest($criteria);
 
         return [
             'type' => 'geo',

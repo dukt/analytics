@@ -34,6 +34,87 @@ class AnalyticsReportingApi extends Component
      */
     public function sendReportRequest(ReportingRequestCriteria $criteria)
     {
+        $request = $this->getReportRequest($criteria);
+        $requests = $this->getAnalyticsReportingGetReportsRequest(array($request));
+        $response = $this->getAnalyticsReporting()->reports->batchGet($requests);
+        $reports = $this->parseReportsResponse($response);
+
+        if(isset($reports[0]))
+        {
+            return $reports[0];
+        }
+    }
+
+    public function getAnalyticsReportingGetReportsRequest($requests)
+    {
+        $body = new Google_Service_AnalyticsReporting_GetReportsRequest();
+        $body->setReportRequests($requests);
+
+        return $body;
+    }
+
+    public function getAnalyticsReportingReportRequest($viewId, $dateRanges, $metrics, $dimensions)
+    {
+        $request = new Google_Service_AnalyticsReporting_ReportRequest();
+        $request->setViewId($viewId);
+        $request->setDateRanges($dateRanges);
+        $request->setMetrics($metrics);
+        $request->setDimensions($dimensions);
+
+        return $request;
+    }
+
+    public function getDimensionsFromString($string)
+    {
+        $dimensions = [];
+        $_dimensions = explode(",", $string);
+        foreach ($_dimensions as $_dimension) {
+            $dimension = new Google_Service_AnalyticsReporting_Dimension();
+            $dimension->setName($_dimension);
+            array_push($dimensions, $dimension);
+        }
+
+        return $dimensions;
+    }
+
+    public function getMetricsFromString($string)
+    {
+        $metrics = [];
+        $_metrics = explode(",", $string);
+        foreach ($_metrics as $_metric) {
+            $metric = new Google_Service_AnalyticsReporting_Metric();
+            $metric->setExpression($_metric);
+            array_push($metrics, $metric);
+        }
+
+        return $metrics;
+    }
+
+    public function getAnalyticsReportingDateRange($startDate, $endDate)
+    {
+        $dateRange = new Google_Service_AnalyticsReporting_DateRange();
+        $dateRange->setStartDate($startDate);
+        $dateRange->setEndDate($endDate);
+
+        return $dateRange;
+    }
+
+    /**
+     * Returns the Google Analytics Reporting API object (API v4)
+     *
+     * @return bool|Google_Service_AnalyticsReporting
+     */
+    public function getAnalyticsReporting()
+    {
+        $client = $this->getClient();
+
+        return new Google_Service_AnalyticsReporting($client);
+    }
+
+    // Private Methods
+    // =========================================================================
+    private function getReportRequest(ReportingRequestCriteria $criteria)
+    {
         $request = new \Google_Service_AnalyticsReporting_ReportRequest();
 
         $viewId = Analytics::$plugin->getAnalytics()->getProfileId();
@@ -62,13 +143,10 @@ class AnalyticsReportingApi extends Component
             $request->setPageSize($criteria->pageSize);
         }
 
-        $requests = $this->getAnalyticsReportingGetReportsRequest(array($request));
-        $response = $this->getAnalyticsReporting()->reports->batchGet($requests);
-
-        return $this->parseReportResponse($response);
+        return $request;
     }
 
-    public function parseReportResponse(Google_Service_AnalyticsReporting_GetReportsResponse $response)
+    private function parseReportsResponse(Google_Service_AnalyticsReporting_GetReportsResponse $response)
     {
         $reports = [];
 
@@ -192,75 +270,6 @@ class AnalyticsReportingApi extends Component
 
         return $reports;
     }
-
-    public function getAnalyticsReportingGetReportsRequest($requests)
-    {
-        $body = new Google_Service_AnalyticsReporting_GetReportsRequest();
-        $body->setReportRequests($requests);
-
-        return $body;
-    }
-
-    public function getAnalyticsReportingReportRequest($viewId, $dateRanges, $metrics, $dimensions)
-    {
-        $request = new Google_Service_AnalyticsReporting_ReportRequest();
-        $request->setViewId($viewId);
-        $request->setDateRanges($dateRanges);
-        $request->setMetrics($metrics);
-        $request->setDimensions($dimensions);
-
-        return $request;
-    }
-
-    public function getDimensionsFromString($string)
-    {
-        $dimensions = [];
-        $_dimensions = explode(",", $string);
-        foreach ($_dimensions as $_dimension) {
-            $dimension = new Google_Service_AnalyticsReporting_Dimension();
-            $dimension->setName($_dimension);
-            array_push($dimensions, $dimension);
-        }
-
-        return $dimensions;
-    }
-
-    public function getMetricsFromString($string)
-    {
-        $metrics = [];
-        $_metrics = explode(",", $string);
-        foreach ($_metrics as $_metric) {
-            $metric = new Google_Service_AnalyticsReporting_Metric();
-            $metric->setExpression($_metric);
-            array_push($metrics, $metric);
-        }
-
-        return $metrics;
-    }
-
-    public function getAnalyticsReportingDateRange($startDate, $endDate)
-    {
-        $dateRange = new Google_Service_AnalyticsReporting_DateRange();
-        $dateRange->setStartDate($startDate);
-        $dateRange->setEndDate($endDate);
-
-        return $dateRange;
-    }
-
-    /**
-     * Returns the Google Analytics Reporting API object (API v4)
-     *
-     * @return bool|Google_Service_AnalyticsReporting
-     */
-    public function getAnalyticsReporting()
-    {
-        $client = $this->getClient();
-
-        return new Google_Service_AnalyticsReporting($client);
-    }
-
-    // Private Methods
-    // =========================================================================
 
     /**
      * Returns a Google client
