@@ -44,7 +44,7 @@ class Api4Controller extends Controller
 
         $requests = Plugin::$plugin->getAnalyticsReportingApi()->getAnalyticsReportingGetReportsRequest(array($request));
         $response = Plugin::$plugin->getAnalyticsReportingApi()->getAnalyticsReporting()->reports->batchGet($requests);
-        $reports = Plugin::$plugin->getAnalyticsReportingApi()->parseReportsResponseApi($response);
+        $reports = Plugin::$plugin->getAnalyticsReportingApi()->parseReportsResponse($response);
 
         Craft::$app->getUrlManager()->setRouteParams([
             'response' => $response,

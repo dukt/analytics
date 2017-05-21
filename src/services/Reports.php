@@ -9,6 +9,7 @@ namespace dukt\analytics\services;
 
 use Craft;
 use craft\helpers\StringHelper;
+use dukt\analytics\models\ReportingRequestCriteria;
 use yii\base\Component;
 use dukt\analytics\Plugin as Analytics;
 
@@ -123,15 +124,16 @@ class Reports extends Component
                 $endDate = date('Y-m-d');
         }
 
-        $reports = $this->sendReportsRequest([
-            'startDate' => $startDate,
-            'endDate' => $endDate,
-            'metrics' => $metricString,
-            'dimensions' => $dimensionString,
-            'orderBys' => [
-                ["fieldName" => $dimensionString, "orderType" => 'VALUE', "sortOrder" => 'ASCENDING']
-            ]
-        ]);
+        $criteria = new ReportingRequestCriteria;
+        $criteria->startDate = $startDate;
+        $criteria->endDate = $endDate;
+        $criteria->metrics = $metricString;
+        $criteria->dimensions = $dimensionString;
+        $criteria->orderBys = [
+            ["fieldName" => $dimensionString, "orderType" => 'VALUE', "sortOrder" => 'ASCENDING']
+        ];
+
+        $reports = Analytics::$plugin->getAnalyticsReportingApi()->sendReportsRequest($criteria);
 
         $report = $reports[0];
         $total = $report['totals'][0];
@@ -160,11 +162,12 @@ class Reports extends Component
         $startDate = date('Y-m-d', strtotime('-1 '.$period));
         $endDate = date('Y-m-d');
 
-        $reports = $this->sendReportsRequest([
-            'startDate' => $startDate,
-            'endDate' => $endDate,
-            'metrics' => $metricString,
-        ]);
+        $criteria = new ReportingRequestCriteria;
+        $criteria->startDate = $startDate;
+        $criteria->endDate = $endDate;
+        $criteria->metrics = $metricString;
+
+        $reports = Analytics::$plugin->getAnalyticsReportingApi()->sendReportsRequest($criteria);
 
         $report = $reports[0];
         $total = 0;
@@ -204,13 +207,13 @@ class Reports extends Component
         $startDate = date('Y-m-d', strtotime('-1 '.$period));
         $endDate = date('Y-m-d');
 
-        $reports = $this->sendReportsRequest([
-            'startDate' => $startDate,
-            'endDate' => $endDate,
-            'metrics' => $metricString,
-            'dimensions' => $dimensionString,
-        ]);
+        $criteria = new ReportingRequestCriteria;
+        $criteria->startDate = $startDate;
+        $criteria->endDate = $endDate;
+        $criteria->metrics = $metricString;
+        $criteria->dimensions = $dimensionString;
 
+        $reports = Analytics::$plugin->getAnalyticsReportingApi()->sendReportsRequest($criteria);
         $report = $reports[0];
 
         return [
@@ -235,15 +238,14 @@ class Reports extends Component
         $period = (isset($requestData['period']) ? $requestData['period'] : null);
         $dimensionString = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
         $metricString = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
-        $startDate = date('Y-m-d', strtotime('-1 '.$period));
-        $endDate = date('Y-m-d');
 
-        $reports = $this->sendReportsRequest([
-            'startDate' => $startDate,
-            'endDate' => $endDate,
-            'metrics' => $metricString,
-            'dimensions' => $dimensionString,
-        ]);
+        $criteria = new ReportingRequestCriteria;
+        $criteria->dimensions = $dimensionString;
+        $criteria->metrics = $metricString;
+        $criteria->startDate = date('Y-m-d', strtotime('-1 '.$period));
+        $criteria->endDate = date('Y-m-d');
+
+        $reports = Analytics::$plugin->getAnalyticsReportingApi()->sendReportsRequest($criteria);
 
         $report = $reports[0];
 
@@ -269,8 +271,6 @@ class Reports extends Component
         $period = (isset($requestData['period']) ? $requestData['period'] : null);
         $dimensionString = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
         $metricString = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
-        $startDate = date('Y-m-d', strtotime('-1 '.$period));
-        $endDate = date('Y-m-d');
 
         $originDimension = $dimensionString;
 
@@ -279,17 +279,13 @@ class Reports extends Component
             $dimensionString = 'ga:latitude,ga:longitude,'.$dimensionString;
         }
 
-        $reports = $this->sendReportsRequest([
-            'startDate' => $startDate,
-            'endDate' => $endDate,
-            'metrics' => $metricString,
-            'dimensions' => $dimensionString,
-            'orderBys' => [
-                ["fieldName" => $metricString, "orderType" => 'VALUE', "sortOrder" => 'DESCENDING']
-            ],
-            'pageSize' => 20
-        ]);
+        $criteria = new ReportingRequestCriteria;
+        $criteria->dimensions = $dimensionString;
+        $criteria->metrics = $metricString;
+        $criteria->startDate = date('Y-m-d', strtotime('-1 '.$period));
+        $criteria->endDate = date('Y-m-d');
 
+        $reports = Analytics::$plugin->getAnalyticsReportingApi()->sendReportsRequest($criteria);
         $report = $reports[0];
 
         return [
@@ -301,48 +297,5 @@ class Reports extends Component
             'period' => $period,
             'periodLabel' => Craft::t('analytics', 'this '.$period)
         ];
-    }
-
-    /**
-     * Sends reports request.
-     *
-     * @param array $options
-     *
-     * @return array
-     */
-    private function sendReportsRequest($options = [])
-    {
-        $viewId = Analytics::$plugin->getAnalytics()->getProfileId();
-        $dateRange = Analytics::$plugin->getAnalyticsReportingApi()->getAnalyticsReportingDateRange($options['startDate'], $options['endDate']);
-
-        // Report request
-        $request = new \Google_Service_AnalyticsReporting_ReportRequest();
-        $request->setViewId($viewId);
-        $request->setDateRanges($dateRange);
-
-        if(isset($options['metrics'])) {
-            $metricString = $options['metrics'];
-            $metrics = Analytics::$plugin->getAnalyticsReportingApi()->getMetricsFromString($metricString);
-            $request->setMetrics($metrics);
-        }
-
-        if(isset($options['dimensions'])) {
-            $dimensionString = $options['dimensions'];
-            $dimensions = Analytics::$plugin->getAnalyticsReportingApi()->getDimensionsFromString($dimensionString);
-            $request->setDimensions($dimensions);
-        }
-
-        if(isset($options['orderBys'])) {
-            $request->setOrderBys($options['orderBys']);
-        }
-
-        if(isset($options['pageSize'])) {
-            $request->setPageSize($options['pageSize']);
-        }
-
-        $requests = Analytics::$plugin->getAnalyticsReportingApi()->getAnalyticsReportingGetReportsRequest(array($request));
-        $response = Analytics::$plugin->getAnalyticsReportingApi()->getAnalyticsReporting()->reports->batchGet($requests);
-
-        return Analytics::$plugin->getAnalyticsReportingApi()->parseReportsResponseApi($response);
     }
 }

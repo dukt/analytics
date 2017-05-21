@@ -8,6 +8,7 @@
 namespace dukt\analytics\services;
 
 use Craft;
+use dukt\analytics\models\ReportingRequestCriteria;
 use yii\base\Component;
 use \Google_Client;
 use \Google_Service_AnalyticsReporting;
@@ -25,7 +26,50 @@ class AnalyticsReportingApi extends Component
     // Public Methods
     // =========================================================================
 
-    public function parseReportsResponseApi(Google_Service_AnalyticsReporting_GetReportsResponse $response)
+    /**
+     * Sends reports request.
+     *
+     * @param array $options
+     *
+     * @return array
+     */
+    public function sendReportsRequest(ReportingRequestCriteria $criteria)
+    {
+        $request = new \Google_Service_AnalyticsReporting_ReportRequest();
+
+        $viewId = Analytics::$plugin->getAnalytics()->getProfileId();
+        $request->setViewId($viewId);
+
+        $dateRange = $this->getAnalyticsReportingDateRange($criteria->startDate, $criteria->endDate);
+        $request->setDateRanges($dateRange);
+
+        if($criteria->metrics) {
+            $metricString = $criteria->metrics;
+            $metrics = $this->getMetricsFromString($metricString);
+            $request->setMetrics($metrics);
+        }
+
+        if($criteria->dimensions) {
+            $dimensionString = $criteria->dimensions;
+            $dimensions = $this->getDimensionsFromString($dimensionString);
+            $request->setDimensions($dimensions);
+        }
+
+        if($criteria->orderBys) {
+            $request->setOrderBys($criteria->orderBys);
+        }
+
+        if($criteria->pageSize) {
+            $request->setPageSize($criteria->pageSize);
+        }
+
+        $requests = $this->getAnalyticsReportingGetReportsRequest(array($request));
+        $response = $this->getAnalyticsReporting()->reports->batchGet($requests);
+
+        return $this->parseReportsResponse($response);
+    }
+
+    public function parseReportsResponse(Google_Service_AnalyticsReporting_GetReportsResponse $response)
     {
         $reports = [];
 
