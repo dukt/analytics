@@ -37,14 +37,14 @@ class Api4Controller extends Controller
         $_dimensions = Craft::$app->getRequest()->getParam('dimensions');
 
         $viewId = Plugin::$plugin->getAnalytics()->getProfileId();
-        $dateRanges = Plugin::$plugin->getApi()->getAnalyticsReportingDateRange($startDate, $endDate);
-        $metrics = Plugin::$plugin->getApi()->getMetricsFromString($_metrics);
-        $dimensions = Plugin::$plugin->getApi()->getDimensionsFromString($_dimensions);
-        $request = Plugin::$plugin->getApi()->getAnalyticsReportingReportRequest($viewId, $dateRanges, $metrics, $dimensions);
+        $dateRanges = Plugin::$plugin->getAnalyticsReportingApi()->getAnalyticsReportingDateRange($startDate, $endDate);
+        $metrics = Plugin::$plugin->getAnalyticsReportingApi()->getMetricsFromString($_metrics);
+        $dimensions = Plugin::$plugin->getAnalyticsReportingApi()->getDimensionsFromString($_dimensions);
+        $request = Plugin::$plugin->getAnalyticsReportingApi()->getAnalyticsReportingReportRequest($viewId, $dateRanges, $metrics, $dimensions);
 
-        $requests = Plugin::$plugin->getApi()->getAnalyticsReportingGetReportsRequest(array($request));
-        $response = Plugin::$plugin->getApi()->getAnalyticsReporting()->reports->batchGet($requests);
-        $reports = Plugin::$plugin->getApi()->parseReportsResponseApiV4($response);
+        $requests = Plugin::$plugin->getAnalyticsReportingApi()->getAnalyticsReportingGetReportsRequest(array($request));
+        $response = Plugin::$plugin->getAnalyticsReportingApi()->getAnalyticsReporting()->reports->batchGet($requests);
+        $reports = Plugin::$plugin->getAnalyticsReportingApi()->parseReportsResponseApi($response);
 
         Craft::$app->getUrlManager()->setRouteParams([
             'response' => $response,
