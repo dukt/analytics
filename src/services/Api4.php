@@ -86,15 +86,18 @@ class Api4 extends Component
             }
 
             foreach($metricHeaderEntries as $metricHeaderEntry) {
+                $label = Plugin::$plugin->metadata->getDimMet($metricHeaderEntry['name']);
+
                 $col = [
                     'type' => strtolower($metricHeaderEntry['type']),
-                    'label' => Craft::t('analytics', $metricHeaderEntry['name']),
+                    'label' => Craft::t('analytics', $label),
                     'id' => $metricHeaderEntry['name'],
                 ];
 
                 array_push($cols, $col);
             }
 
+            
             // Rows
 
             $rows = [];
