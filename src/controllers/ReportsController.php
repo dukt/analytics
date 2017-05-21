@@ -18,7 +18,7 @@ class ReportsController extends Controller
     // =========================================================================
 
     /**
-     * Get Real-Time Report
+     * Get realtime report widget.
      *
      * @return null
      */
@@ -106,7 +106,7 @@ class ReportsController extends Controller
     }
 
     /**
-     * Get report
+     * Get report widget
      *
      * @return null
      */
@@ -115,10 +115,14 @@ class ReportsController extends Controller
         try {
             $profileId = Analytics::$plugin->getAnalytics()->getProfileId();
 
+            $chart = Craft::$app->getRequest()->getBodyParam('chart');
+            $period = Craft::$app->getRequest()->getBodyParam('period');
+            $options = Craft::$app->getRequest()->getBodyParam('options');
+
             $request = [
-                'chart' => Craft::$app->getRequest()->getBodyParam('chart'),
-                'period' => Craft::$app->getRequest()->getBodyParam('period'),
-                'options' => Craft::$app->getRequest()->getBodyParam('options'),
+                'chart' => $chart,
+                'period' => $period,
+                'options' => $options,
             ];
 
             $cacheId = ['getReport', $request, $profileId];
@@ -126,7 +130,25 @@ class ReportsController extends Controller
             $response = Analytics::$plugin->cache->get($cacheId);
 
             if (!$response) {
-                $response = Analytics::$plugin->getReports()->getReport($request);
+                switch($chart) {
+                    case 'area':
+                        $response = Analytics::$plugin->getReports()->getAreaReport($request);
+                        break;
+                    case 'counter':
+                        $response = Analytics::$plugin->getReports()->getCounterReport($request);
+                        break;
+                    case 'pie':
+                        $response = Analytics::$plugin->getReports()->getPieReport($request);
+                        break;
+                    case 'table':
+                        $response = Analytics::$plugin->getReports()->getTableReport($request);
+                        break;
+                    case 'geo':
+                        $response = Analytics::$plugin->getReports()->getGeoReport($request);
+                        break;
+                    default:
+                        throw new \Exception("Chart type `".$chart."` not supported.");
+                }
 
                 if ($response) {
                     Analytics::$plugin->cache->set($cacheId, $response);

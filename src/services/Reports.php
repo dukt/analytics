@@ -75,44 +75,13 @@ class Reports extends Component
     }
 
     /**
-     * Returns a report for any chart type (Area,  Counter,  Pie,  Table,  Geo).
-     *
-     * @param array $options
-     *
-     * @return array
-     * @throws \Exception
-     */
-    public function getReport(array $options)
-    {
-        $chart = $options['chart'];
-
-        switch($chart) {
-            case 'area':
-                return $this->getAreaReport($options);
-            case 'counter':
-                return $this->getCounterReport($options);
-            case 'pie':
-                return $this->getPieReport($options);
-            case 'table':
-                return $this->getTableReport($options);
-            case 'geo':
-                return $this->getGeoReport($options);
-            default:
-                throw new \Exception("Chart type `".$chart."` not supported.");
-        }
-    }
-
-    // Private Methods
-    // =========================================================================
-
-    /**
      * Returns an area report.
      *
      * @param array $requestData
      *
      * @return array
      */
-    private function getAreaReport($requestData)
+    public function getAreaReport($requestData)
     {
         $period = (isset($requestData['period']) ? $requestData['period'] : null);
         $metricString = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
@@ -161,7 +130,7 @@ class Reports extends Component
      *
      * @return array
      */
-    private function getCounterReport($requestData)
+    public function getCounterReport($requestData)
     {
         $period = (isset($requestData['period']) ? $requestData['period'] : null);
         $metricString = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
@@ -204,7 +173,7 @@ class Reports extends Component
      *
      * @return array
      */
-    private function getPieReport($requestData)
+    public function getPieReport($requestData)
     {
         $period = (isset($requestData['period']) ? $requestData['period'] : null);
         $dimensionString = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
@@ -237,7 +206,7 @@ class Reports extends Component
      *
      * @return array
      */
-    private function getTableReport($requestData)
+    public function getTableReport($requestData)
     {
         $period = (isset($requestData['period']) ? $requestData['period'] : null);
         $dimensionString = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
@@ -268,7 +237,7 @@ class Reports extends Component
      *
      * @return array
      */
-    private function getGeoReport($requestData)
+    public function getGeoReport($requestData)
     {
         $period = (isset($requestData['period']) ? $requestData['period'] : null);
         $dimensionString = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
