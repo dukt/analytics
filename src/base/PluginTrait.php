@@ -36,7 +36,7 @@ trait PluginTrait
     /**
      * Returns the api service.
      *
-     * @return \dukt\analytics\services\Api The api service
+     * @return \dukt\analytics\services\AnalyticsApi The api service
      */
     public function getAnalyticsApi()
     {
