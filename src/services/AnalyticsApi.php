@@ -93,22 +93,6 @@ class AnalyticsApi extends Component
     }
 
     /**
-     * Sends a request based on RequestCriteria to Google Analytics' API.
-     *
-     * @param RequestCriteria $criteria
-     *
-     * @return array
-     */
-    public function sendRequest(RequestCriteria $criteria)
-    {
-        if ($criteria->realtime) {
-            return $this->getRealtimeReport($criteria);
-        }
-        
-        return $this->getReport($criteria);
-    }
-
-    /**
      * Parse Report Response
      *
      * @param $data
@@ -226,6 +210,22 @@ class AnalyticsApi extends Component
         $client = $this->getClient();
 
         return new Google_Service_Analytics($client);
+    }
+
+    /**
+     * Sends a request based on RequestCriteria to Google Analytics' API.
+     *
+     * @param RequestCriteria $criteria
+     *
+     * @return array
+     */
+    public function sendRequest(RequestCriteria $criteria)
+    {
+        if ($criteria->realtime) {
+            return $this->getRealtimeReport($criteria);
+        }
+
+        return $this->getReport($criteria);
     }
 
     // Private Methods
