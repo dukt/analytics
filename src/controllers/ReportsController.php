@@ -9,7 +9,6 @@ namespace dukt\analytics\controllers;
 
 use Craft;
 use craft\web\Controller;
-use dukt\analytics\models\RequestCriteria;
 use dukt\analytics\Plugin as Analytics;
 
 class ReportsController extends Controller
