@@ -160,7 +160,7 @@ class ReportsController extends Controller
      *
      * @return null
      */
-    public function actionElement(array $variables = [])
+    public function actionElement()
     {
         try {
             $elementId = Craft::$app->getRequest()->getRequiredParam('elementId');
