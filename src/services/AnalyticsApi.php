@@ -63,18 +63,15 @@ class AnalyticsApi extends Component
      *
      * @return array
      */
-    public function populateAccountExplorerSettings($settings = array())
+    public function populateAccountExplorerSettings($settings = [])
     {
-        if(!empty($settings['accountId']) && !empty($settings['webPropertyId']) && !empty($settings['profileId']))
-        {
+        if (!empty($settings['accountId']) && !empty($settings['webPropertyId']) && !empty($settings['profileId'])) {
             $apiAccounts = $this->googleAnalytics()->management_accounts->listManagementAccounts();
 
             $account = null;
 
-            foreach($apiAccounts as $apiAccount)
-            {
-                if($apiAccount->id == $settings['accountId'])
-                {
+            foreach ($apiAccounts as $apiAccount) {
+                if ($apiAccount->id == $settings['accountId']) {
                     $account = $apiAccount;
                 }
             }
@@ -105,15 +102,13 @@ class AnalyticsApi extends Component
 
         $cols = [];
 
-        foreach($data['columnHeaders'] as $col)
-        {
+        foreach ($data['columnHeaders'] as $col) {
             $dataType = $col->dataType;
             $id = $col->name;
             $label = Analytics::$plugin->metadata->getDimMet($col->name);
             $type = strtolower($dataType);
 
-            switch($col->name)
-            {
+            switch ($col->name) {
                 case 'ga:date':
                 case 'ga:yearMonth':
                     $type = 'date';
@@ -132,12 +127,12 @@ class AnalyticsApi extends Component
                     break;
             }
 
-            $cols[] = array(
+            $cols[] = [
                 'type' => $type,
                 'dataType' => $dataType,
                 'id' => $id,
                 'label' => Craft::t('analytics', $label),
-            );
+            ];
         }
 
 
@@ -145,33 +140,27 @@ class AnalyticsApi extends Component
 
         $rows = [];
 
-        if($data['rows'])
-        {
+        if ($data['rows']) {
             $rows = $data->rows;
 
-            foreach($rows as $kRow => $row)
-            {
-                foreach($row as $_valueKey => $_value)
-                {
+            foreach ($rows as $kRow => $row) {
+                foreach ($row as $_valueKey => $_value) {
                     $col = $cols[$_valueKey];
 
                     $value = $this->formatRawValue($col['type'], $_value);
 
-                    if($col['id'] == 'ga:continent')
-                    {
+                    if ($col['id'] == 'ga:continent') {
                         $value = Analytics::$plugin->metadata->getContinentCode($value);
                     }
 
-                    if($col['id'] == 'ga:subContinent')
-                    {
+                    if ($col['id'] == 'ga:subContinent') {
                         $value = Analytics::$plugin->metadata->getSubContinentCode($value);
                     }
 
 
                     // translate values
 
-                    switch($col['id'])
-                    {
+                    switch ($col['id']) {
                         case 'ga:country':
                         case 'ga:city':
                             // case 'ga:continent':
@@ -194,10 +183,10 @@ class AnalyticsApi extends Component
             }
         }
 
-        return array(
+        return [
             'cols' => $cols,
             'rows' => $rows
-        );
+        ];
     }
 
     /**
@@ -247,25 +236,21 @@ class AnalyticsApi extends Component
 
         $filters = [];
 
-        if(isset($criteria->optParams['filters']))
-        {
+        if (isset($criteria->optParams['filters'])) {
             $filters = $criteria->optParams['filters'];
 
-            if(is_string($filters))
-            {
+            if (is_string($filters)) {
                 $filters = explode(";", $filters);
             }
         }
 
         $configFilters = Analytics::$plugin->getSettings()->filters;
 
-        if($configFilters)
-        {
+        if ($configFilters) {
             $filters = array_merge($filters, $configFilters);
         }
 
-        if(count($filters) > 0)
-        {
+        if (count($filters) > 0) {
             $optParams = $criteria->optParams;
 
             $optParams['filters'] = implode(";", $filters);
@@ -297,10 +282,8 @@ class AnalyticsApi extends Component
         $cacheId = ['api.apiGetGAData', $request];
         $response = Analytics::$plugin->cache->get($cacheId);
 
-        if(!$response)
-        {
-            if(!$optParams)
-            {
+        if (!$response) {
+            if (!$optParams) {
                 $optParams = [];
             }
 
@@ -331,8 +314,7 @@ class AnalyticsApi extends Component
         $cacheId = ['api.apiGetGADataRealtime', $ids, $metrics, $optParams];
         $response = Analytics::$plugin->cache->get($cacheId);
 
-        if(!$response)
-        {
+        if (!$response) {
             $response = $this->googleAnalytics()->data_realtime->get($ids, $metrics, $optParams);
 
             Analytics::$plugin->cache->set($cacheId, $response, $cacheDuration);
@@ -349,18 +331,17 @@ class AnalyticsApi extends Component
      */
     private function formatRawValue($type, $value)
     {
-        switch($type)
-        {
+        switch ($type) {
             case 'integer':
             case 'currency':
             case 'float':
             case 'time':
             case 'percent':
-                $value = (float) $value;
+                $value = (float)$value;
                 break;
 
             default:
-                $value = (string) $value;
+                $value = (string)$value;
         }
 
         return $value;
