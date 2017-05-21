@@ -175,7 +175,7 @@ class SettingsController extends Controller
             throw new Exception(Craft::t('analytics', 'No plugin exists with the class “{class}”', array('class' => $pluginClass)));
         }
 
-        $settings = Analytics::$plugin->getApi()->populateAccountExplorerSettings($settings);
+        $settings = Analytics::$plugin->getAnalyticsApi()->populateAccountExplorerSettings($settings);
 
         if (Craft::$app->getPlugins()->savePluginSettings($plugin, $settings))
         {
@@ -203,7 +203,7 @@ class SettingsController extends Controller
     {
         try
         {
-            $accountExplorerData = Analytics::$plugin->getApi()->getAccountExplorerData();
+            $accountExplorerData = Analytics::$plugin->getAnalyticsApi()->getAccountExplorerData();
 
             Analytics::$plugin->cache->set(['accountExplorerData'], $accountExplorerData);
 

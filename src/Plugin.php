@@ -62,7 +62,7 @@ class Plugin extends \craft\base\Plugin
         $this->setComponents([
             'analytics' => \dukt\analytics\services\Analytics::class,
             'analyticsReportingApi' => \dukt\analytics\services\AnalyticsReportingApi::class,
-            'api' => \dukt\analytics\services\Api::class,
+            'analyticsApi' => \dukt\analytics\services\AnalyticsApi::class,
             'cache' => \dukt\analytics\services\Cache::class,
             'metadata' => \dukt\analytics\services\Metadata::class,
             'oauth' => \dukt\analytics\services\Oauth::class,

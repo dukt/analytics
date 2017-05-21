@@ -193,7 +193,7 @@ class ReportsController extends Controller
                 $response = Analytics::$plugin->cache->get($cacheId);
 
                 if (!$response) {
-                    $response = Analytics::$plugin->getApi()->sendRequest($criteria);
+                    $response = Analytics::$plugin->getAnalyticsApi()->sendRequest($criteria);
 
                     if ($response) {
                         Analytics::$plugin->cache->set($cacheId, $response);

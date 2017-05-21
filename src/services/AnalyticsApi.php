@@ -14,7 +14,7 @@ use \Google_Service_Analytics;
 use dukt\analytics\models\RequestCriteria;
 use dukt\analytics\Plugin as Analytics;
 
-class Api extends Component
+class AnalyticsApi extends Component
 {
     // Public Methods
     // =========================================================================

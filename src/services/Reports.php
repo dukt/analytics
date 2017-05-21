@@ -32,9 +32,9 @@ class Reports extends Component
         $metrics = $request['metrics'];
         $optParams = $request['optParams'];
 
-        $response = Analytics::$plugin->getApi()->googleAnalytics()->data_realtime->get($ids, $metrics, $optParams);
+        $response = Analytics::$plugin->getAnalyticsApi()->googleAnalytics()->data_realtime->get($ids, $metrics, $optParams);
 
-        return Analytics::$plugin->getApi()->parseReportResponse($response);
+        return Analytics::$plugin->getAnalyticsApi()->parseReportResponse($response);
     }
 
     /**

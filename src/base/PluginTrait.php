@@ -14,7 +14,7 @@ use dukt\analytics\Plugin as Analytics;
  *
  * @property \dukt\analytics\services\Analytics                 $analytics                  The analytics service
  * @property \dukt\analytics\services\AnalyticsReportingApi     $analyticsReportingApi      The Analytics reporting api service
- * @property \dukt\analytics\services\Api                       $api                        The api service
+ * @property \dukt\analytics\services\AnalyticsApi              $analyticsApi               The api service
  * @property \dukt\analytics\services\Cache                     $cache                      The cache service
  * @property \dukt\analytics\services\Metadata                  $metadata                   The metadata service
  * @property \dukt\analytics\services\Oauth                     $oauth                      The oauth service
@@ -38,10 +38,10 @@ trait PluginTrait
      *
      * @return \dukt\analytics\services\Api The api service
      */
-    public function getApi()
+    public function getAnalyticsApi()
     {
         /** @var Analytics $this */
-        return $this->get('api');
+        return $this->get('analyticsApi');
     }
 
     /**
