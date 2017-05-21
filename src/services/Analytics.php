@@ -86,7 +86,7 @@ class Analytics extends Component
             $uri = $components['path'];
         }
 
-        if(AnalyticsPlugin::$plugin->getSettings()->addTrailingSlashesToUrls)
+        if(Craft::$app->getConfig()->getGeneral()->addTrailingSlashesToUrls)
         {
             $uri .= '/';
         }
