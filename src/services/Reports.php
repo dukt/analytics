@@ -77,14 +77,14 @@ class Reports extends Component
     /**
      * Returns an area report.
      *
-     * @param array $requestData
+     * @param array $request
      *
      * @return array
      */
-    public function getAreaReport($requestData)
+    public function getAreaReport(array $request)
     {
-        $period = (isset($requestData['period']) ? $requestData['period'] : null);
-        $metricString = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
+        $period = (isset($request['period']) ? $request['period'] : null);
+        $metricString = (isset($request['options']['metric']) ? $request['options']['metric'] : null);
 
         switch($period)
         {
@@ -126,14 +126,14 @@ class Reports extends Component
     /**
      * Returns a counter report.
      *
-     * @param array $requestData
+     * @param array $request
      *
      * @return array
      */
-    public function getCounterReport($requestData)
+    public function getCounterReport(array $request)
     {
-        $period = (isset($requestData['period']) ? $requestData['period'] : null);
-        $metricString = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
+        $period = (isset($request['period']) ? $request['period'] : null);
+        $metricString = (isset($request['options']['metric']) ? $request['options']['metric'] : null);
         $startDate = date('Y-m-d', strtotime('-1 '.$period));
         $endDate = date('Y-m-d');
 
@@ -169,15 +169,15 @@ class Reports extends Component
     /**
      * Returns a pie report.
      *
-     * @param array $requestData
+     * @param array $request
      *
      * @return array
      */
-    public function getPieReport($requestData)
+    public function getPieReport(array $request)
     {
-        $period = (isset($requestData['period']) ? $requestData['period'] : null);
-        $dimensionString = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
-        $metricString = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
+        $period = (isset($request['period']) ? $request['period'] : null);
+        $dimensionString = (isset($request['options']['dimension']) ? $request['options']['dimension'] : null);
+        $metricString = (isset($request['options']['metric']) ? $request['options']['metric'] : null);
         $startDate = date('Y-m-d', strtotime('-1 '.$period));
         $endDate = date('Y-m-d');
 
@@ -202,15 +202,15 @@ class Reports extends Component
     /**
      * Returns a table report.
      *
-     * @param array $requestData
+     * @param array $request
      *
      * @return array
      */
-    public function getTableReport($requestData)
+    public function getTableReport(array $request)
     {
-        $period = (isset($requestData['period']) ? $requestData['period'] : null);
-        $dimensionString = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
-        $metricString = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
+        $period = (isset($request['period']) ? $request['period'] : null);
+        $dimensionString = (isset($request['options']['dimension']) ? $request['options']['dimension'] : null);
+        $metricString = (isset($request['options']['metric']) ? $request['options']['metric'] : null);
 
         $criteria = new ReportingRequestCriteria;
         $criteria->dimensions = $dimensionString;
@@ -233,19 +233,19 @@ class Reports extends Component
     /**
      * Returns a geo report.
      *
-     * @param array $requestData
+     * @param array $request
      *
      * @return array
      */
-    public function getGeoReport($requestData)
+    public function getGeoReport(array $request)
     {
-        $period = (isset($requestData['period']) ? $requestData['period'] : null);
-        $dimensionString = (isset($requestData['options']['dimension']) ? $requestData['options']['dimension'] : null);
-        $metricString = (isset($requestData['options']['metric']) ? $requestData['options']['metric'] : null);
+        $period = (isset($request['period']) ? $request['period'] : null);
+        $dimensionString = (isset($request['options']['dimension']) ? $request['options']['dimension'] : null);
+        $metricString = (isset($request['options']['metric']) ? $request['options']['metric'] : null);
 
         $originDimension = $dimensionString;
 
-        if($dimensionString == 'ga:city')
+        if($dimensionString === 'ga:city')
         {
             $dimensionString = 'ga:latitude,ga:longitude,'.$dimensionString;
         }
