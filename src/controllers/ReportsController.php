@@ -112,8 +112,7 @@ class ReportsController extends Controller
      */
     public function actionReportWidget()
     {
-        try
-        {
+        try {
             $profileId = Analytics::$plugin->getAnalytics()->getProfileId();
 
             $request = [
@@ -126,36 +125,30 @@ class ReportsController extends Controller
 
             $response = Analytics::$plugin->cache->get($cacheId);
 
-            if(!$response)
-            {
+            if (!$response) {
                 $response = Analytics::$plugin->getReports()->getReport($request);
 
-                if($response)
-                {
+                if ($response) {
                     Analytics::$plugin->cache->set($cacheId, $response);
                 }
             }
 
             return $this->asJson($response);
-        }
-        catch(\Google_Service_Exception $e)
-        {
+        } catch (\Google_Service_Exception $e) {
             $errors = $e->getErrors();
             $errorMsg = $e->getMessage();
 
-            if(isset($errors[0]['message']))
-            {
+            if (isset($errors[0]['message'])) {
                 $errorMsg = $errors[0]['message'];
             }
 
             Craft::info('Couldn’t get report widget data: '.$errorMsg."\r\n".print_r($errors, true), __METHOD__);
 
             return $this->asErrorJson($errorMsg);
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             $errorMsg = $e->getMessage();
             Craft::info('Couldn’t get element data: '.$errorMsg, __METHOD__);
+
             return $this->asErrorJson($errorMsg);
         }
     }
@@ -167,20 +160,17 @@ class ReportsController extends Controller
      *
      * @return null
      */
-    public function actionElement(array $variables = array())
+    public function actionElement(array $variables = [])
     {
-        try
-        {
+        try {
             $elementId = Craft::$app->getRequest()->getRequiredParam('elementId');
             $locale = Craft::$app->getRequest()->getRequiredParam('locale');
             $metric = Craft::$app->getRequest()->getRequiredParam('metric');
 
             $uri = Analytics::$plugin->getAnalytics()->getElementUrlPath($elementId, $locale);
 
-            if($uri)
-            {
-                if($uri == '__home__')
-                {
+            if ($uri) {
+                if ($uri == '__home__') {
                     $uri = '';
                 }
 
@@ -188,10 +178,10 @@ class ReportsController extends Controller
                 $end = date('Y-m-d');
                 $dimensions = 'ga:date';
 
-                $optParams = array(
+                $optParams = [
                     'dimensions' => $dimensions,
                     'filters' => "ga:pagePath==".$uri
-                );
+                ];
 
                 $criteria = new RequestCriteria;
                 $criteria->startDate = $start;
@@ -202,12 +192,10 @@ class ReportsController extends Controller
                 $cacheId = ['ReportsController.actionGetElementReport', $criteria->getAttributes()];
                 $response = Analytics::$plugin->cache->get($cacheId);
 
-                if(!$response)
-                {
+                if (!$response) {
                     $response = Analytics::$plugin->getApi()->sendRequest($criteria);
 
-                    if($response)
-                    {
+                    if ($response) {
                         Analytics::$plugin->cache->set($cacheId, $response);
                     }
                 }
@@ -216,30 +204,24 @@ class ReportsController extends Controller
                     'type' => 'area',
                     'chart' => $response
                 ]);
+            } else {
+                throw new Exception("Element doesn't support URLs.", 1);
             }
-            else
-            {
-               throw new Exception("Element doesn't support URLs.", 1);
-            }
-        }
-        catch(\Google_Service_Exception $e)
-        {
+        } catch (\Google_Service_Exception $e) {
             $errors = $e->getErrors();
             $errorMsg = $e->getMessage();
 
-            if(isset($errors[0]['message']))
-            {
+            if (isset($errors[0]['message'])) {
                 $errorMsg = $errors[0]['message'];
             }
 
             Craft::info('Couldn’t get element data: '.$errorMsg."\r\n".print_r($errors, true), __METHOD__);
 
             return $this->asErrorJson($errorMsg);
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             $errorMsg = $e->getMessage();
             Craft::info('Couldn’t get element data: '.$errorMsg, __METHOD__);
+
             return $this->asErrorJson($errorMsg);
         }
     }
