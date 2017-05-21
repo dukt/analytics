@@ -97,18 +97,15 @@ class AnalyticsApi extends Component
      *
      * @param RequestCriteria $criteria
      *
-     * @return string
+     * @return array
      */
     public function sendRequest(RequestCriteria $criteria)
     {
-        if($criteria->realtime)
-        {
+        if ($criteria->realtime) {
             return $this->getRealtimeReport($criteria);
         }
-        else
-        {
-            return $this->getReport($criteria);
-        }
+        
+        return $this->getReport($criteria);
     }
 
     /**
