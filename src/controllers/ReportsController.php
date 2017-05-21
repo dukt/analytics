@@ -183,17 +183,18 @@ class ReportsController extends Controller
                     'filters' => "ga:pagePath==".$uri
                 ];
 
-                $criteria = new RequestCriteria;
-                $criteria->startDate = $start;
-                $criteria->endDate = $end;
-                $criteria->metrics = $metric;
-                $criteria->optParams = $optParams;
+                $request = [
+                    'startDate' => $start,
+                    'endDate' => $end,
+                    'metrics' => $metric,
+                    'optParams' => $optParams,
+                ];
 
-                $cacheId = ['ReportsController.actionGetElementReport', $criteria->getAttributes()];
+                $cacheId = ['ReportsController.actionGetElement', $request];
                 $response = Analytics::$plugin->cache->get($cacheId);
 
                 if (!$response) {
-                    $response = Analytics::$plugin->getAnalyticsApi()->sendRequest($criteria);
+                    $response = Analytics::$plugin->getReports()->getElementReport($request);
 
                     if ($response) {
                         Analytics::$plugin->cache->set($cacheId, $response);
@@ -205,7 +206,7 @@ class ReportsController extends Controller
                     'chart' => $response
                 ]);
             } else {
-                throw new Exception("Element doesn't support URLs.", 1);
+                throw new \Exception("Element doesn't support URLs.", 1);
             }
         } catch (\Google_Service_Exception $e) {
             $errors = $e->getErrors();

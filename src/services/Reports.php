@@ -37,6 +37,35 @@ class Reports extends Component
         return Analytics::$plugin->getAnalyticsApi()->parseReportResponse($response);
     }
 
+    public function getElementReport(array $request)
+    {
+        $viewId = Analytics::$plugin->getAnalytics()->getProfileId();
+
+        $ids = $viewId;
+        $startDate = $request['startDate'];
+        $endDate = $request['endDate'];
+        $metrics = $request['metrics'];
+        $optParams = $request['optParams'];
+        $enableCache = (isset($request['enableCache']) ? $request['enableCache'] : null);
+
+        $cacheId = ['api.apiGetGAData', [$ids, $startDate, $endDate, $metrics, $optParams]];
+        $response = Analytics::$plugin->cache->get($cacheId);
+
+        if(!$response)
+        {
+            if(!$optParams)
+            {
+                $optParams = [];
+            }
+
+            $response = Analytics::$plugin->getAnalyticsApi()->googleAnalytics()->data_ga->get($ids, $startDate, $endDate, $metrics, $optParams);
+
+            Analytics::$plugin->cache->set($cacheId, $response, null, null, $enableCache);
+        }
+
+        return Analytics::$plugin->getAnalyticsApi()->parseReportResponse($response);
+    }
+
     /**
      * Returns a report for any chart type (Area,  Counter,  Pie,  Table,  Geo)
      *
