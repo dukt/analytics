@@ -12,7 +12,6 @@ use dukt\analytics\models\ReportingRequestCriteria;
 use yii\base\Component;
 use \Google_Client;
 use \Google_Service_AnalyticsReporting;
-use dukt\analytics\models\RequestCriteria;
 use dukt\analytics\Plugin as Analytics;
 use \Google_Service_AnalyticsReporting_ReportRequest;
 use \Google_Service_AnalyticsReporting_DateRange;
@@ -33,7 +32,7 @@ class AnalyticsReportingApi extends Component
      *
      * @return array
      */
-    public function sendReportsRequest(ReportingRequestCriteria $criteria)
+    public function sendReportRequest(ReportingRequestCriteria $criteria)
     {
         $request = new \Google_Service_AnalyticsReporting_ReportRequest();
 
@@ -66,10 +65,10 @@ class AnalyticsReportingApi extends Component
         $requests = $this->getAnalyticsReportingGetReportsRequest(array($request));
         $response = $this->getAnalyticsReporting()->reports->batchGet($requests);
 
-        return $this->parseReportsResponse($response);
+        return $this->parseReportResponse($response);
     }
 
-    public function parseReportsResponse(Google_Service_AnalyticsReporting_GetReportsResponse $response)
+    public function parseReportResponse(Google_Service_AnalyticsReporting_GetReportsResponse $response)
     {
         $reports = [];
 
