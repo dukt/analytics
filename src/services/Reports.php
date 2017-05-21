@@ -75,7 +75,7 @@ class Reports extends Component
     }
 
     /**
-     * Returns a report for any chart type (Area,  Counter,  Pie,  Table,  Geo)
+     * Returns a report for any chart type (Area,  Counter,  Pie,  Table,  Geo).
      *
      * @param array $options
      *
@@ -106,7 +106,7 @@ class Reports extends Component
     // =========================================================================
 
     /**
-     * Returns an area report
+     * Returns an area report.
      *
      * @param array $requestData
      *
@@ -156,7 +156,7 @@ class Reports extends Component
     }
 
     /**
-     * Returns a counter report
+     * Returns a counter report.
      *
      * @param array $requestData
      *
@@ -200,7 +200,7 @@ class Reports extends Component
     }
 
     /**
-     * Returns a pie report
+     * Returns a pie report.
      *
      * @param array $requestData
      *
@@ -234,7 +234,7 @@ class Reports extends Component
     }
 
     /**
-     * Returns a table report
+     * Returns a table report.
      *
      * @param array $requestData
      *
@@ -267,7 +267,7 @@ class Reports extends Component
     }
 
     /**
-     * Returns a geo report
+     * Returns a geo report.
      *
      * @param array $requestData
      *
