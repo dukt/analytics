@@ -36,13 +36,16 @@ class AnalyticsReportingApi extends Component
     {
         $response = $this->getReports([$criteria]);
 
-        $reports = $this->parseReportingReportsResponse($response);
+        $reports = $this->parseReportsResponse($response);
 
         if(isset($reports[0]))
         {
             return $reports[0];
         }
     }
+
+    // Private Methods
+    // =========================================================================
 
     /**
      * Get reports.
@@ -51,7 +54,7 @@ class AnalyticsReportingApi extends Component
      *
      * @return Google_Service_AnalyticsReporting_GetReportsResponse
      */
-    public function getReports($criterias)
+    private function getReports($criterias)
     {
         $requests = [];
 
@@ -69,9 +72,6 @@ class AnalyticsReportingApi extends Component
         return $analyticsReportingApi->reports->batchGet($reportsRequest);
     }
 
-    // Private Methods
-    // =========================================================================
-
     /**
      * Parse reporting reports response.
      *
@@ -79,7 +79,7 @@ class AnalyticsReportingApi extends Component
      *
      * @return array
      */
-    private function parseReportingReportsResponse(Google_Service_AnalyticsReporting_GetReportsResponse $response)
+    private function parseReportsResponse(Google_Service_AnalyticsReporting_GetReportsResponse $response)
     {
         $reports = [];
 
