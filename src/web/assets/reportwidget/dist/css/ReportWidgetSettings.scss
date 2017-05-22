@@ -4,7 +4,7 @@
 .chart-picker ul.chart-types li:hover { background-color: #f7f7f7; cursor: pointer; }
 .chart-picker ul.chart-types li.active { background-color: #eee; }
 
-.chart-picker .chart-select { display: none; }
+.chart-picker .chart-select { display: none !important; }
 
 .chart-picker ul.chart-types li[data-chart-type="area"] { background-image: url(../images/charttypes/area-black.png); }
 .chart-picker ul.chart-types li[data-chart-type="counter"] { background-image: url(../images/charttypes/counter-black.png); }

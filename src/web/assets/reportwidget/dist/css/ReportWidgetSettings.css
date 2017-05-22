@@ -27,7 +27,7 @@
   background-color: #eee; }
 
 .chart-picker .chart-select {
-  display: none; }
+  display: none !important; }
 
 .chart-picker ul.chart-types li[data-chart-type="area"] {
   background-image: url(../images/charttypes/area-black.png); }
