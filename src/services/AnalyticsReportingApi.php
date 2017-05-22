@@ -30,9 +30,9 @@ class AnalyticsReportingApi extends Component
      *
      * @param array $options
      *
-     * @return array
+     * @return Google_Service_AnalyticsReporting_GetReportsResponse
      */
-    public function sendReportRequest(ReportingRequestCriteria $criteria)
+    public function getReports(ReportingRequestCriteria $criteria)
     {
         $request = $this->getReportRequest($criteria);
 
@@ -41,14 +41,8 @@ class AnalyticsReportingApi extends Component
 
         $client = $this->getClient();
         $analyticsReportingApi = new Google_Service_AnalyticsReporting($client);
-        $response = $analyticsReportingApi->reports->batchGet($requests);
 
-        $reports = $this->parseReportsResponse($response);
-
-        if(isset($reports[0]))
-        {
-            return $reports[0];
-        }
+        return $analyticsReportingApi->reports->batchGet($requests);
     }
 
     // Private Methods
@@ -113,129 +107,6 @@ class AnalyticsReportingApi extends Component
         }
 
         return $metrics;
-    }
-
-    private function parseReportsResponse(Google_Service_AnalyticsReporting_GetReportsResponse $response)
-    {
-        $reports = [];
-
-        foreach ($response->getReports() as $_report) {
-            $columnHeader = $_report->getColumnHeader();
-            $columnHeaderDimensions = $columnHeader->getDimensions();
-            $metricHeaderEntries = $columnHeader->getMetricHeader()->getMetricHeaderEntries();
-
-
-            // Columns
-
-            $cols = [];
-
-            if($columnHeaderDimensions) {
-                foreach ($columnHeaderDimensions as $columnHeaderDimension) {
-
-                    $id = $columnHeaderDimension;
-                    $label = Analytics::$plugin->metadata->getDimMet($columnHeaderDimension);
-
-                    switch ($columnHeaderDimension) {
-                        case 'ga:date':
-                        case 'ga:yearMonth':
-                            $type = 'date';
-                            break;
-
-                        case 'ga:continent':
-                            $type = 'continent';
-                            break;
-                        case 'ga:subContinent':
-                            $type = 'subContinent';
-                            break;
-
-                        case 'ga:latitude':
-                        case 'ga:longitude':
-                            $type = 'float';
-                            break;
-
-                        default:
-                            $type = 'string';
-                    }
-
-                    $col = [
-                        'type' => $type,
-                        'label' => Craft::t('analytics', $label),
-                        'id' => $id,
-                    ];
-
-                    array_push($cols, $col);
-                }
-            }
-
-            foreach($metricHeaderEntries as $metricHeaderEntry) {
-                $label = Analytics::$plugin->metadata->getDimMet($metricHeaderEntry['name']);
-
-                $col = [
-                    'type' => strtolower($metricHeaderEntry['type']),
-                    'label' => Craft::t('analytics', $label),
-                    'id' => $metricHeaderEntry['name'],
-                ];
-
-                array_push($cols, $col);
-            }
-
-
-            // Rows
-
-            $rows = [];
-
-            foreach($_report->getData()->getRows() as $_row) {
-
-                $colIndex = 0;
-                $row = [];
-
-                $dimensions = $_row->getDimensions();
-
-                if($dimensions) {
-                    foreach ($dimensions as $_dimension) {
-
-                        $value = $_dimension;
-
-                        if($columnHeaderDimensions) {
-                            if(isset($columnHeaderDimensions[$colIndex])) {
-                                switch($columnHeaderDimensions[$colIndex])
-                                {
-                                    case 'ga:continent':
-                                        $value = Analytics::$plugin->metadata->getContinentCode($value);
-                                        break;
-                                    case 'ga:subContinent':
-                                        $value = Analytics::$plugin->metadata->getSubContinentCode($value);
-                                        break;
-                                }
-                            }
-                        }
-
-                        array_push($row, $value);
-
-                        $colIndex++;
-                    }
-                }
-
-                foreach($_row->getMetrics() as $_metric) {
-                    array_push($row, $_metric->getValues()[0]);
-                    $colIndex++;
-                }
-
-                array_push($rows, $row);
-            }
-
-            $totals = $_report->getData()->getTotals()[0]->getValues();
-
-            $report = [
-                'cols' => $cols,
-                'rows' => $rows,
-                'totals' => $totals
-            ];
-
-            array_push($reports, $report);
-        }
-
-        return $reports;
     }
 
     /**
