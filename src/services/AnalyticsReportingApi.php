@@ -34,9 +34,9 @@ class AnalyticsReportingApi extends Component
      */
     public function getReport(ReportingRequestCriteria $criteria)
     {
-        $response = $this->getReports([$criteria]);
+        $response = $this->getReportingReports([$criteria]);
 
-        $reports = $this->parseReportsResponse($response);
+        $reports = $this->parseReportingReportsResponse($response);
 
         if(isset($reports[0]))
         {
@@ -54,12 +54,12 @@ class AnalyticsReportingApi extends Component
      *
      * @return Google_Service_AnalyticsReporting_GetReportsResponse
      */
-    private function getReports($criterias)
+    private function getReportingReports($criterias)
     {
         $requests = [];
 
         foreach($criterias as $criteria) {
-            $request = $this->getReportRequest($criteria);
+            $request = $this->getReportingReportRequest($criteria);
             array_push($requests, $request);
         }
 
@@ -79,7 +79,7 @@ class AnalyticsReportingApi extends Component
      *
      * @return array
      */
-    private function parseReportsResponse(Google_Service_AnalyticsReporting_GetReportsResponse $response)
+    private function parseReportingReportsResponse(Google_Service_AnalyticsReporting_GetReportsResponse $response)
     {
         $reports = [];
 
@@ -202,7 +202,12 @@ class AnalyticsReportingApi extends Component
         return $reports;
     }
 
-    private function getReportRequest(ReportingRequestCriteria $criteria)
+    /**
+     * @param ReportingRequestCriteria $criteria
+     *
+     * @return Google_Service_AnalyticsReporting_ReportRequest
+     */
+    private function getReportingReportRequest(ReportingRequestCriteria $criteria)
     {
         $request = new Google_Service_AnalyticsReporting_ReportRequest();
 
