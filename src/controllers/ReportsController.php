@@ -17,6 +17,95 @@ class ReportsController extends Controller
     // =========================================================================
 
     /**
+     * Get element report.
+     *
+     * @param array $variables
+     *
+     * @return null
+     */
+    public function actionElement()
+    {
+        try {
+            $elementId = Craft::$app->getRequest()->getRequiredParam('elementId');
+            $locale = Craft::$app->getRequest()->getRequiredParam('locale');
+            $metric = Craft::$app->getRequest()->getRequiredParam('metric');
+
+            $uri = Analytics::$plugin->getAnalytics()->getElementUrlPath($elementId, $locale);
+
+            if ($uri) {
+                if ($uri == '__home__') {
+                    $uri = '';
+                }
+
+                $start = date('Y-m-d', strtotime('-1 month'));
+                $end = date('Y-m-d');
+                $dimensions = 'ga:date';
+
+                $optParams = [
+                    'dimensions' => $dimensions,
+                    'filters' => "ga:pagePath==".$uri
+                ];
+
+                $request = [
+                    'startDate' => $start,
+                    'endDate' => $end,
+                    'metrics' => $metric,
+                    'optParams' => $optParams,
+                ];
+
+                $cacheId = ['ReportsController.actionGetElement', $request];
+                $response = Analytics::$plugin->cache->get($cacheId);
+
+                if (!$response) {
+                    $viewId = Analytics::$plugin->getAnalytics()->getProfileId();
+
+                    $ids = $viewId;
+                    $startDate = $request['startDate'];
+                    $endDate = $request['endDate'];
+                    $metrics = $request['metrics'];
+                    $optParams = $request['optParams'];
+
+                    if(!$optParams)
+                    {
+                        $optParams = [];
+                    }
+
+                    $dataGaResponse = Analytics::$plugin->getAnalyticsApi()->googleAnalytics()->data_ga->get($ids, $startDate, $endDate, $metrics, $optParams);
+
+                    $response = Analytics::$plugin->getAnalyticsApi()->parseReportResponse($dataGaResponse);
+
+                    if ($response) {
+                        Analytics::$plugin->cache->set($cacheId, $response);
+                    }
+                }
+
+                return $this->asJson([
+                    'type' => 'area',
+                    'chart' => $response
+                ]);
+            } else {
+                throw new \Exception("Element doesn't support URLs.", 1);
+            }
+        } catch (\Google_Service_Exception $e) {
+            $errors = $e->getErrors();
+            $errorMsg = $e->getMessage();
+
+            if (isset($errors[0]['message'])) {
+                $errorMsg = $errors[0]['message'];
+            }
+
+            Craft::info('Couldn’t get element data: '.$errorMsg."\r\n".print_r($errors, true), __METHOD__);
+
+            return $this->asErrorJson($errorMsg);
+        } catch (\Exception $e) {
+            $errorMsg = $e->getMessage();
+            Craft::info('Couldn’t get element data: '.$errorMsg, __METHOD__);
+
+            return $this->asErrorJson($errorMsg);
+        }
+    }
+
+    /**
      * Get realtime report widget.
      *
      * @return null
@@ -164,80 +253,6 @@ class ReportsController extends Controller
             }
 
             Craft::info('Couldn’t get report widget data: '.$errorMsg."\r\n".print_r($errors, true), __METHOD__);
-
-            return $this->asErrorJson($errorMsg);
-        } catch (\Exception $e) {
-            $errorMsg = $e->getMessage();
-            Craft::info('Couldn’t get element data: '.$errorMsg, __METHOD__);
-
-            return $this->asErrorJson($errorMsg);
-        }
-    }
-
-    /**
-     * Get Element Report
-     *
-     * @param array $variables
-     *
-     * @return null
-     */
-    public function actionElement()
-    {
-        try {
-            $elementId = Craft::$app->getRequest()->getRequiredParam('elementId');
-            $locale = Craft::$app->getRequest()->getRequiredParam('locale');
-            $metric = Craft::$app->getRequest()->getRequiredParam('metric');
-
-            $uri = Analytics::$plugin->getAnalytics()->getElementUrlPath($elementId, $locale);
-
-            if ($uri) {
-                if ($uri == '__home__') {
-                    $uri = '';
-                }
-
-                $start = date('Y-m-d', strtotime('-1 month'));
-                $end = date('Y-m-d');
-                $dimensions = 'ga:date';
-
-                $optParams = [
-                    'dimensions' => $dimensions,
-                    'filters' => "ga:pagePath==".$uri
-                ];
-
-                $request = [
-                    'startDate' => $start,
-                    'endDate' => $end,
-                    'metrics' => $metric,
-                    'optParams' => $optParams,
-                ];
-
-                $cacheId = ['ReportsController.actionGetElement', $request];
-                $response = Analytics::$plugin->cache->get($cacheId);
-
-                if (!$response) {
-                    $response = Analytics::$plugin->getReports()->getElementReport($request);
-
-                    if ($response) {
-                        Analytics::$plugin->cache->set($cacheId, $response);
-                    }
-                }
-
-                return $this->asJson([
-                    'type' => 'area',
-                    'chart' => $response
-                ]);
-            } else {
-                throw new \Exception("Element doesn't support URLs.", 1);
-            }
-        } catch (\Google_Service_Exception $e) {
-            $errors = $e->getErrors();
-            $errorMsg = $e->getMessage();
-
-            if (isset($errors[0]['message'])) {
-                $errorMsg = $errors[0]['message'];
-            }
-
-            Craft::info('Couldn’t get element data: '.$errorMsg."\r\n".print_r($errors, true), __METHOD__);
 
             return $this->asErrorJson($errorMsg);
         } catch (\Exception $e) {
