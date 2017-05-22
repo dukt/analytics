@@ -110,7 +110,7 @@ class Reports extends Component
             ["fieldName" => $dimensionString, "orderType" => 'VALUE', "sortOrder" => 'ASCENDING']
         ];
 
-        $report = $this->getReportingReport($criteria);
+        $report = Analytics::$plugin->getAnalyticsReportingApi()->getReport($criteria);
 
         $total = $report['totals'][0];
 
@@ -144,7 +144,7 @@ class Reports extends Component
         $criteria->metrics = $metricString;
 
 
-        $report = $this->getReportingReport($criteria);
+        $report = Analytics::$plugin->getAnalyticsReportingApi()->getReport($criteria);
 
         $total = 0;
 
@@ -189,7 +189,7 @@ class Reports extends Component
         $criteria->metrics = $metricString;
         $criteria->dimensions = $dimensionString;
 
-        $report = $this->getReportingReport($criteria);
+        $report = Analytics::$plugin->getAnalyticsReportingApi()->getReport($criteria);
 
         return [
             'type' => 'pie',
@@ -220,7 +220,7 @@ class Reports extends Component
         $criteria->startDate = date('Y-m-d', strtotime('-1 '.$period));
         $criteria->endDate = date('Y-m-d');
 
-        $report = $this->getReportingReport($criteria);
+        $report = Analytics::$plugin->getAnalyticsReportingApi()->getReport($criteria);
 
         return [
             'type' => 'table',
@@ -258,7 +258,7 @@ class Reports extends Component
         $criteria->startDate = date('Y-m-d', strtotime('-1 '.$period));
         $criteria->endDate = date('Y-m-d');
 
-        $report = $this->getReportingReport($criteria);
+        $report = Analytics::$plugin->getAnalyticsReportingApi()->getReport($criteria);
 
         return [
             'type' => 'geo',
@@ -269,157 +269,5 @@ class Reports extends Component
             'period' => $period,
             'periodLabel' => Craft::t('analytics', 'this '.$period)
         ];
-    }
-
-    // Private Methods
-    // =========================================================================
-
-    /**
-     * Get reporting report.
-     *
-     * @param ReportingRequestCriteria $criteria
-     *
-     * @return mixed
-     */
-    private function getReportingReport(ReportingRequestCriteria $criteria)
-    {
-        $response = Analytics::$plugin->getAnalyticsReportingApi()->getReports($criteria);
-
-        $reports = $this->parseReportingReportsResponse($response);
-
-        if(isset($reports[0]))
-        {
-            return $reports[0];
-        }
-    }
-
-    /**
-     * Parse reporting reports response.
-     *
-     * @param Google_Service_AnalyticsReporting_GetReportsResponse $response
-     *
-     * @return array
-     */
-    private function parseReportingReportsResponse(Google_Service_AnalyticsReporting_GetReportsResponse $response)
-    {
-        $reports = [];
-
-        foreach ($response->getReports() as $_report) {
-            $columnHeader = $_report->getColumnHeader();
-            $columnHeaderDimensions = $columnHeader->getDimensions();
-            $metricHeaderEntries = $columnHeader->getMetricHeader()->getMetricHeaderEntries();
-
-
-            // Columns
-
-            $cols = [];
-
-            if($columnHeaderDimensions) {
-                foreach ($columnHeaderDimensions as $columnHeaderDimension) {
-
-                    $id = $columnHeaderDimension;
-                    $label = Analytics::$plugin->metadata->getDimMet($columnHeaderDimension);
-
-                    switch ($columnHeaderDimension) {
-                        case 'ga:date':
-                        case 'ga:yearMonth':
-                            $type = 'date';
-                            break;
-
-                        case 'ga:continent':
-                            $type = 'continent';
-                            break;
-                        case 'ga:subContinent':
-                            $type = 'subContinent';
-                            break;
-
-                        case 'ga:latitude':
-                        case 'ga:longitude':
-                            $type = 'float';
-                            break;
-
-                        default:
-                            $type = 'string';
-                    }
-
-                    $col = [
-                        'type' => $type,
-                        'label' => Craft::t('analytics', $label),
-                        'id' => $id,
-                    ];
-
-                    array_push($cols, $col);
-                }
-            }
-
-            foreach($metricHeaderEntries as $metricHeaderEntry) {
-                $label = Analytics::$plugin->metadata->getDimMet($metricHeaderEntry['name']);
-
-                $col = [
-                    'type' => strtolower($metricHeaderEntry['type']),
-                    'label' => Craft::t('analytics', $label),
-                    'id' => $metricHeaderEntry['name'],
-                ];
-
-                array_push($cols, $col);
-            }
-
-
-            // Rows
-
-            $rows = [];
-
-            foreach($_report->getData()->getRows() as $_row) {
-
-                $colIndex = 0;
-                $row = [];
-
-                $dimensions = $_row->getDimensions();
-
-                if($dimensions) {
-                    foreach ($dimensions as $_dimension) {
-
-                        $value = $_dimension;
-
-                        if($columnHeaderDimensions) {
-                            if(isset($columnHeaderDimensions[$colIndex])) {
-                                switch($columnHeaderDimensions[$colIndex])
-                                {
-                                    case 'ga:continent':
-                                        $value = Analytics::$plugin->metadata->getContinentCode($value);
-                                        break;
-                                    case 'ga:subContinent':
-                                        $value = Analytics::$plugin->metadata->getSubContinentCode($value);
-                                        break;
-                                }
-                            }
-                        }
-
-                        array_push($row, $value);
-
-                        $colIndex++;
-                    }
-                }
-
-                foreach($_row->getMetrics() as $_metric) {
-                    array_push($row, $_metric->getValues()[0]);
-                    $colIndex++;
-                }
-
-                array_push($rows, $row);
-            }
-
-            $totals = $_report->getData()->getTotals()[0]->getValues();
-
-            $report = [
-                'cols' => $cols,
-                'rows' => $rows,
-                'totals' => $totals
-            ];
-
-            array_push($reports, $report);
-        }
-
-        return $reports;
     }
 }
