@@ -12,7 +12,7 @@ use craft\helpers\StringHelper;
 use dukt\analytics\models\ReportingRequestCriteria;
 use yii\base\Component;
 use dukt\analytics\Plugin as Analytics;
-use \Google_Service_AnalyticsReporting_GetReportsResponse;
+use \Google_Service_AnalyticsReporting_Report;
 
 class Reports extends Component
 {
@@ -110,7 +110,8 @@ class Reports extends Component
             ["fieldName" => $dimensionString, "orderType" => 'VALUE', "sortOrder" => 'ASCENDING']
         ];
 
-        $report = Analytics::$plugin->getAnalyticsReportingApi()->getReport($criteria);
+        $reportResponse = Analytics::$plugin->getAnalyticsReportingApi()->getReport($criteria);
+        $report = $this->parseReportingReport($reportResponse);
 
         $total = $report['totals'][0];
 
@@ -144,7 +145,8 @@ class Reports extends Component
         $criteria->metrics = $metricString;
 
 
-        $report = Analytics::$plugin->getAnalyticsReportingApi()->getReport($criteria);
+        $reportResponse = Analytics::$plugin->getAnalyticsReportingApi()->getReport($criteria);
+        $report = $this->parseReportingReport($reportResponse);
 
         $total = 0;
 
@@ -189,7 +191,8 @@ class Reports extends Component
         $criteria->metrics = $metricString;
         $criteria->dimensions = $dimensionString;
 
-        $report = Analytics::$plugin->getAnalyticsReportingApi()->getReport($criteria);
+        $reportResponse = Analytics::$plugin->getAnalyticsReportingApi()->getReport($criteria);
+        $report = $this->parseReportingReport($reportResponse);
 
         return [
             'type' => 'pie',
@@ -220,7 +223,8 @@ class Reports extends Component
         $criteria->startDate = date('Y-m-d', strtotime('-1 '.$period));
         $criteria->endDate = date('Y-m-d');
 
-        $report = Analytics::$plugin->getAnalyticsReportingApi()->getReport($criteria);
+        $reportResponse = Analytics::$plugin->getAnalyticsReportingApi()->getReport($criteria);
+        $report = $this->parseReportingReport($reportResponse);
 
         return [
             'type' => 'table',
@@ -258,7 +262,8 @@ class Reports extends Component
         $criteria->startDate = date('Y-m-d', strtotime('-1 '.$period));
         $criteria->endDate = date('Y-m-d');
 
-        $report = Analytics::$plugin->getAnalyticsReportingApi()->getReport($criteria);
+        $reportResponse = Analytics::$plugin->getAnalyticsReportingApi()->getReport($criteria);
+        $report = $this->parseReportingReport($reportResponse);
 
         return [
             'type' => 'geo',
@@ -268,6 +273,124 @@ class Reports extends Component
             'metric' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($metricString)),
             'period' => $period,
             'periodLabel' => Craft::t('analytics', 'this '.$period)
+        ];
+    }
+
+    // Private Methods
+    // =========================================================================
+
+    private function parseReportingReport(Google_Service_AnalyticsReporting_Report $_report)
+    {
+        $columnHeader = $_report->getColumnHeader();
+        $columnHeaderDimensions = $columnHeader->getDimensions();
+        $metricHeaderEntries = $columnHeader->getMetricHeader()->getMetricHeaderEntries();
+
+
+        // Columns
+
+        $cols = [];
+
+        if($columnHeaderDimensions) {
+            foreach ($columnHeaderDimensions as $columnHeaderDimension) {
+
+                $id = $columnHeaderDimension;
+                $label = Analytics::$plugin->metadata->getDimMet($columnHeaderDimension);
+
+                switch ($columnHeaderDimension) {
+                    case 'ga:date':
+                    case 'ga:yearMonth':
+                        $type = 'date';
+                        break;
+
+                    case 'ga:continent':
+                        $type = 'continent';
+                        break;
+                    case 'ga:subContinent':
+                        $type = 'subContinent';
+                        break;
+
+                    case 'ga:latitude':
+                    case 'ga:longitude':
+                        $type = 'float';
+                        break;
+
+                    default:
+                        $type = 'string';
+                }
+
+                $col = [
+                    'type' => $type,
+                    'label' => Craft::t('analytics', $label),
+                    'id' => $id,
+                ];
+
+                array_push($cols, $col);
+            }
+        }
+
+        foreach($metricHeaderEntries as $metricHeaderEntry) {
+            $label = Analytics::$plugin->metadata->getDimMet($metricHeaderEntry['name']);
+
+            $col = [
+                'type' => strtolower($metricHeaderEntry['type']),
+                'label' => Craft::t('analytics', $label),
+                'id' => $metricHeaderEntry['name'],
+            ];
+
+            array_push($cols, $col);
+        }
+
+
+        // Rows
+
+        $rows = [];
+
+        foreach($_report->getData()->getRows() as $_row) {
+
+            $colIndex = 0;
+            $row = [];
+
+            $dimensions = $_row->getDimensions();
+
+            if($dimensions) {
+                foreach ($dimensions as $_dimension) {
+
+                    $value = $_dimension;
+
+                    if($columnHeaderDimensions) {
+                        if(isset($columnHeaderDimensions[$colIndex])) {
+                            switch($columnHeaderDimensions[$colIndex])
+                            {
+                                case 'ga:continent':
+                                    $value = Analytics::$plugin->metadata->getContinentCode($value);
+                                    break;
+                                case 'ga:subContinent':
+                                    $value = Analytics::$plugin->metadata->getSubContinentCode($value);
+                                    break;
+                            }
+                        }
+                    }
+
+                    array_push($row, $value);
+
+                    $colIndex++;
+                }
+            }
+
+            foreach($_row->getMetrics() as $_metric) {
+                array_push($row, $_metric->getValues()[0]);
+                $colIndex++;
+            }
+
+            array_push($rows, $row);
+        }
+
+        $totals = $_report->getData()->getTotals()[0]->getValues();
+
+        return [
+            'cols' => $cols,
+            'rows' => $rows,
+            'totals' => $totals
         ];
     }
 }

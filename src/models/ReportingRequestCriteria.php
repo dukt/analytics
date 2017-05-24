@@ -72,7 +72,7 @@ class ReportingRequestCriteria extends Model
 
         try
         {
-            $response['data'] = Analytics::$plugin->getAnalyticsReportingApi()->sendRequest($this);
+            $response['data'] = Analytics::$plugin->getAnalyticsReportingApi()->getReport($this);
             $response['success'] = true;
         }
         catch(\Exception $e)
