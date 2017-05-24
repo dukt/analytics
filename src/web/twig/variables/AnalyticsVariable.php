@@ -8,6 +8,7 @@
 namespace dukt\analytics\web\twig\variables;
 
 use dukt\analytics\models\RequestCriteria;
+use dukt\analytics\models\ReportingRequestCriteria;
 use dukt\analytics\etc\craft\AnalyticsTracking;
 use dukt\analytics\Plugin as Analytics;
 
@@ -17,15 +18,15 @@ class AnalyticsVariable
     // =========================================================================
 
     /**
-     * Returns a Analytics_RequestCriteriaModel model that can be sent to request Google Analytics' API.
+     * Returns a ReportingRequestCriteria model that can be sent to request Google Analytics' API.
      *
      * @param array $attributes
      *
-     * @return RequestCriteria
+     * @return ReportingRequestCriteria
      */
     public function api($attributes = null)
     {
-        return new RequestCriteria($attributes);
+        return new ReportingRequestCriteria($attributes);
     }
 
     /**

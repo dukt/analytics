@@ -44,6 +44,18 @@ class AnalyticsReportingApi extends Component
         }
     }
 
+    public function sendRequest(ReportingRequestCriteria $criteria)
+    {
+        $reportsResponse = $this->getReportingReports([$criteria]);
+
+        $reports = $reportsResponse->getReports();
+
+        if(isset($reports[0]))
+        {
+            return $reports[0];
+        }
+    }
+
     // Private Methods
     // =========================================================================
 
