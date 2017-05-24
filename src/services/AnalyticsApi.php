@@ -11,8 +11,8 @@ use Craft;
 use dukt\analytics\base\Api;
 use dukt\analytics\models\RequestCriteria;
 use dukt\analytics\Plugin as Analytics;
-use \Google_Client;
 use \Google_Service_Analytics;
+use \Google_Service_Analytics_Columns;
 
 class AnalyticsApi extends Api
 {
@@ -22,7 +22,7 @@ class AnalyticsApi extends Api
     /**
      * Get columns.
      *
-     * @return \Google_Service_Analytics_Columns
+     * @return Google_Service_Analytics_Columns
      */
     public function getColumns()
     {
