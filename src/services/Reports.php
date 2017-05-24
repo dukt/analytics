@@ -60,10 +60,8 @@ class Reports extends Component
         $cacheId = ['api.apiGetGAData', [$ids, $startDate, $endDate, $metrics, $optParams]];
         $response = Analytics::$plugin->cache->get($cacheId);
 
-        if(!$response)
-        {
-            if(!$optParams)
-            {
+        if (!$response) {
+            if (!$optParams) {
                 $optParams = [];
             }
 
@@ -87,8 +85,7 @@ class Reports extends Component
         $period = (isset($request['period']) ? $request['period'] : null);
         $metricString = (isset($request['options']['metric']) ? $request['options']['metric'] : null);
 
-        switch($period)
-        {
+        switch ($period) {
             case 'year':
                 $dimensionString = 'ga:yearMonth';
                 $startDate = date('Y-m-01', strtotime('-1 '.$period));
@@ -150,15 +147,15 @@ class Reports extends Component
 
         $total = 0;
 
-        if(!empty($report['totals'][0])) {
+        if (!empty($report['totals'][0])) {
             $total = $report['totals'][0];
         }
 
-        $counter = array(
+        $counter = [
             'type' => $report['cols'][0]['type'],
             'value' => $total,
             'label' => StringHelper::toLowerCase(Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($metricString)))
-        );
+        ];
 
         return [
             'type' => 'counter',
@@ -251,8 +248,7 @@ class Reports extends Component
 
         $originDimension = $dimensionString;
 
-        if($dimensionString === 'ga:city')
-        {
+        if ($dimensionString === 'ga:city') {
             $dimensionString = 'ga:latitude,ga:longitude,'.$dimensionString;
         }
 
@@ -290,7 +286,7 @@ class Reports extends Component
 
         $cols = [];
 
-        if($columnHeaderDimensions) {
+        if ($columnHeaderDimensions) {
             foreach ($columnHeaderDimensions as $columnHeaderDimension) {
 
                 $id = $columnHeaderDimension;
@@ -328,7 +324,7 @@ class Reports extends Component
             }
         }
 
-        foreach($metricHeaderEntries as $metricHeaderEntry) {
+        foreach ($metricHeaderEntries as $metricHeaderEntry) {
             $label = Analytics::$plugin->metadata->getDimMet($metricHeaderEntry['name']);
 
             $col = [
@@ -345,22 +341,21 @@ class Reports extends Component
 
         $rows = [];
 
-        foreach($_report->getData()->getRows() as $_row) {
+        foreach ($_report->getData()->getRows() as $_row) {
 
             $colIndex = 0;
             $row = [];
 
             $dimensions = $_row->getDimensions();
 
-            if($dimensions) {
+            if ($dimensions) {
                 foreach ($dimensions as $_dimension) {
 
                     $value = $_dimension;
 
-                    if($columnHeaderDimensions) {
-                        if(isset($columnHeaderDimensions[$colIndex])) {
-                            switch($columnHeaderDimensions[$colIndex])
-                            {
+                    if ($columnHeaderDimensions) {
+                        if (isset($columnHeaderDimensions[$colIndex])) {
+                            switch ($columnHeaderDimensions[$colIndex]) {
                                 case 'ga:continent':
                                     $value = Analytics::$plugin->metadata->getContinentCode($value);
                                     break;
@@ -377,7 +372,7 @@ class Reports extends Component
                 }
             }
 
-            foreach($_row->getMetrics() as $_metric) {
+            foreach ($_row->getMetrics() as $_metric) {
                 array_push($row, $_metric->getValues()[0]);
                 $colIndex++;
             }

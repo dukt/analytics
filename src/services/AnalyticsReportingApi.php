@@ -53,8 +53,9 @@ class AnalyticsReportingApi extends Api
     {
         $reportsResponse = $this->getReportingReports($criterias);
 
-        if($toArray) {
-            $reportsResponseArray = (array) $reportsResponse->toSimpleObject();
+        if ($toArray) {
+            $reportsResponseArray = (array)$reportsResponse->toSimpleObject();
+
             return $reportsResponseArray['reports'];
         }
 
@@ -75,7 +76,7 @@ class AnalyticsReportingApi extends Api
     {
         $requests = [];
 
-        foreach($criterias as $criteria) {
+        foreach ($criterias as $criteria) {
             $request = $this->getReportingReportRequest($criteria);
             array_push($requests, $request);
         }
@@ -108,23 +109,23 @@ class AnalyticsReportingApi extends Api
         $dateRange->setEndDate($criteria->endDate);
         $request->setDateRanges($dateRange);
 
-        if($criteria->metrics) {
+        if ($criteria->metrics) {
             $metricString = $criteria->metrics;
             $metrics = $this->getMetricsFromString($metricString);
             $request->setMetrics($metrics);
         }
 
-        if($criteria->dimensions) {
+        if ($criteria->dimensions) {
             $dimensionString = $criteria->dimensions;
             $dimensions = $this->getDimensionsFromString($dimensionString);
             $request->setDimensions($dimensions);
         }
 
-        if($criteria->orderBys) {
+        if ($criteria->orderBys) {
             $request->setOrderBys($criteria->orderBys);
         }
 
-        if($criteria->pageSize) {
+        if ($criteria->pageSize) {
             $request->setPageSize($criteria->pageSize);
         }
 

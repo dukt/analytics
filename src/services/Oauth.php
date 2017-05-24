@@ -57,16 +57,13 @@ class Oauth extends Component
      */
     public function getToken()
     {
-        if($this->token)
-        {
+        if ($this->token) {
             return $this->token;
-        }
-        else
-        {
+        } else {
             $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
             $settings = $plugin->getSettings();
 
-            if($settings->token) {
+            if ($settings->token) {
 
                 $token = new AccessToken([
                     'access_token' => (isset($settings->token['accessToken']) ? $settings->token['accessToken'] : null),
@@ -76,8 +73,7 @@ class Oauth extends Component
                     'values' => (isset($settings->token['values']) ? $settings->token['values'] : null),
                 ]);
 
-                if($token->hasExpired())
-                {
+                if ($token->hasExpired()) {
                     $provider = $this->getOauthProvider();
                     $grant = new \League\OAuth2\Client\Grant\RefreshToken();
                     $newToken = $provider->getAccessToken($grant, ['refresh_token' => $token->getRefreshToken()]);
@@ -128,8 +124,7 @@ class Oauth extends Component
 
         $options = array_merge($options, Analytics::$plugin->getSettings()->oauthProviderOptions);
 
-        if(!isset($options['redirectUri']))
-        {
+        if (!isset($options['redirectUri'])) {
             $options['redirectUri'] = $this->getRedirectUri();
         }
 

@@ -80,8 +80,7 @@ class Plugin extends \craft\base\Plugin
             $event->types[] = ReportField::class;
         });
 
-        if (Craft::$app->getRequest()->getIsCpRequest())
-        {
+        if (Craft::$app->getRequest()->getIsCpRequest()) {
             Craft::$app->getView()->registerAssetBundle(AnalyticsAsset::class);
         }
     }

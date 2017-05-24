@@ -37,12 +37,9 @@ class Metadata extends Component
     {
         $path = Analytics::$plugin->metadata->getDimmetsFilePath();
 
-        if(file_exists($path))
-        {
+        if (file_exists($path)) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -58,10 +55,8 @@ class Metadata extends Component
 
         $dataTypes = [];
 
-        foreach($columns as $column)
-        {
-            if(!isset($dataTypes[$column->dataType]) && !empty($column->dataType))
-            {
+        foreach ($columns as $column) {
+            if (!isset($dataTypes[$column->dataType]) && !empty($column->dataType)) {
                 $dataTypes[$column->dataType] = $column->dataType;
             }
         }
@@ -106,10 +101,8 @@ class Metadata extends Component
     {
         $continents = $this->_getData('continents');
 
-        foreach($continents as $continent)
-        {
-            if($continent['label'] == $label)
-            {
+        foreach ($continents as $continent) {
+            if ($continent['label'] == $label) {
                 return $continent['code'];
             }
         }
@@ -124,10 +117,8 @@ class Metadata extends Component
     {
         $subContinents = $this->_getData('subContinents');
 
-        foreach($subContinents as $subContinent)
-        {
-            if($subContinent['label'] == $label)
-            {
+        foreach ($subContinents as $subContinent) {
+            if ($subContinent['label'] == $label) {
                 return $subContinent['code'];
             }
         }
@@ -142,8 +133,7 @@ class Metadata extends Component
     {
         $columns = $this->getColumns();
 
-        if(isset($columns[$id]))
-        {
+        if (isset($columns[$id])) {
             return $columns[$id]->uiName;
         }
     }
@@ -158,10 +148,8 @@ class Metadata extends Component
         $columns = $this->getColumns();
         $results = [];
 
-        foreach($columns as $column)
-        {
-            if(stripos($column->id, $q) !== false || stripos($column->uiName, $q) !== false)
-            {
+        foreach ($columns as $column) {
+            if (stripos($column->id, $q) !== false || stripos($column->uiName, $q) !== false) {
                 $results[] = $column;
             }
         }
@@ -178,27 +166,21 @@ class Metadata extends Component
      */
     public function getColumns($type = null)
     {
-        if(!$this->columns)
-        {
+        if (!$this->columns) {
             $this->columns = $this->_loadColumns();
         }
 
-        if($type)
-        {
+        if ($type) {
             $columns = [];
 
-            foreach($this->columns as $column)
-            {
-                if($column->type == $type)
-                {
+            foreach ($this->columns as $column) {
+                if ($column->type == $type) {
                     $columns[] = $column;
                 }
             }
 
             return $columns;
-        }
-        else
-        {
+        } else {
             return $this->columns;
         }
     }
@@ -210,8 +192,7 @@ class Metadata extends Component
      */
     public function getDimensions()
     {
-        if(!$this->dimensions)
-        {
+        if (!$this->dimensions) {
             $this->dimensions = $this->getColumns('DIMENSION');
         }
 
@@ -227,26 +208,20 @@ class Metadata extends Component
      */
     public function getColumnGroups($type = null)
     {
-        if($type && isset($this->groups[$type]))
-        {
+        if ($type && isset($this->groups[$type])) {
             return $this->groups[$type];
-        }
-        else
-        {
+        } else {
             $groups = [];
 
-            foreach($this->getColumns() as $column)
-            {
-                if(!$type || ($type && $column->type == $type))
-                {
+            foreach ($this->getColumns() as $column) {
+                if (!$type || ($type && $column->type == $type)) {
                     $groups[$column->group] = $column->group;
                 }
             }
 
             // ksort($groups);
 
-            if($type)
-            {
+            if ($type) {
                 $this->groups[$type] = $groups;
             }
 
@@ -263,30 +238,21 @@ class Metadata extends Component
      */
     public function getSelectDimensionOptions($filters = null)
     {
-        if(!$this->selectDimensionOptions)
-        {
+        if (!$this->selectDimensionOptions) {
             $this->selectDimensionOptions = $this->getSelectOptions('DIMENSION');
         }
 
-        if($filters && is_array($filters))
-        {
+        if ($filters && is_array($filters)) {
             $filteredOptions = [];
 
-            foreach($this->selectDimensionOptions as $id => $option)
-            {
-                if(isset($option['optgroup']))
-                {
+            foreach ($this->selectDimensionOptions as $id => $option) {
+                if (isset($option['optgroup'])) {
                     $optgroup = null;
                     $lastOptgroup = $option['optgroup'];
-                }
-                else
-                {
-                    foreach($filters as $filter)
-                    {
-                        if($id == $filter)
-                        {
-                            if(!$optgroup)
-                            {
+                } else {
+                    foreach ($filters as $filter) {
+                        if ($id == $filter) {
+                            if (!$optgroup) {
                                 $optgroup = $lastOptgroup;
                                 $filteredOptions[]['optgroup'] = $optgroup;
                             }
@@ -298,9 +264,7 @@ class Metadata extends Component
             }
 
             return $filteredOptions;
-        }
-        else
-        {
+        } else {
             return $this->selectDimensionOptions;
         }
     }
@@ -314,30 +278,21 @@ class Metadata extends Component
      */
     public function getSelectMetricOptions($filters = null)
     {
-        if(!$this->selectMetricOptions)
-        {
+        if (!$this->selectMetricOptions) {
             $this->selectMetricOptions = $this->getSelectOptions('METRIC');
         }
 
-        if($filters && is_array($filters))
-        {
+        if ($filters && is_array($filters)) {
             $filteredOptions = [];
 
-            foreach($this->selectMetricOptions as $id => $option)
-            {
-                if(isset($option['optgroup']))
-                {
+            foreach ($this->selectMetricOptions as $id => $option) {
+                if (isset($option['optgroup'])) {
                     $optgroup = null;
                     $lastOptgroup = $option['optgroup'];
-                }
-                else
-                {
-                    foreach($filters as $filter)
-                    {
-                        if($id == $filter)
-                        {
-                            if(!$optgroup)
-                            {
+                } else {
+                    foreach ($filters as $filter) {
+                        if ($id == $filter) {
+                            if (!$optgroup) {
                                 $optgroup = $lastOptgroup;
                                 $filteredOptions[]['optgroup'] = $optgroup;
                             }
@@ -349,9 +304,7 @@ class Metadata extends Component
             }
 
             return $filteredOptions;
-        }
-        else
-        {
+        } else {
             return $this->selectMetricOptions;
         }
     }
@@ -368,14 +321,11 @@ class Metadata extends Component
     {
         $options = [];
 
-        foreach($this->getColumnGroups($type) as $group)
-        {
+        foreach ($this->getColumnGroups($type) as $group) {
             $options[]['optgroup'] = Craft::t('analytics', $group);
 
-            foreach($this->getColumns($type) as $column)
-            {
-                if($column->group == $group)
-                {
+            foreach ($this->getColumns($type) as $column) {
+                if ($column->group == $group) {
                     $options[$column->id] = Craft::t('analytics', $column->uiName);
                 }
             }
@@ -384,25 +334,17 @@ class Metadata extends Component
 
         // filters
 
-        if($filters && is_array($filters))
-        {
+        if ($filters && is_array($filters)) {
             $filteredOptions = [];
 
-            foreach($options as $id => $option)
-            {
-                if(isset($option['optgroup']))
-                {
+            foreach ($options as $id => $option) {
+                if (isset($option['optgroup'])) {
                     $optgroup = null;
                     $lastOptgroup = $option['optgroup'];
-                }
-                else
-                {
-                    foreach($filters as $filter)
-                    {
-                        if($id == $filter)
-                        {
-                            if(!$optgroup)
-                            {
+                } else {
+                    foreach ($filters as $filter) {
+                        if ($id == $filter) {
+                            if (!$optgroup) {
                                 $optgroup = $lastOptgroup;
                                 $filteredOptions[]['optgroup'] = $optgroup;
                             }
@@ -414,9 +356,7 @@ class Metadata extends Component
             }
 
             return $filteredOptions;
-        }
-        else
-        {
+        } else {
             return $options;
         }
     }
@@ -428,8 +368,7 @@ class Metadata extends Component
      */
     public function getMetrics()
     {
-        if(!$this->metrics)
-        {
+        if (!$this->metrics) {
             $this->metrics = $this->getColumns('METRIC');
         }
 
@@ -465,14 +404,11 @@ class Metadata extends Component
 
         $columnsResponse = Json::decode($contents);
 
-        if($columnsResponse)
-        {
-            foreach($columnsResponse as $columnResponse)
-            {
+        if ($columnsResponse) {
+            foreach ($columnsResponse as $columnResponse) {
                 $cols[$columnResponse['id']] = new Column($columnResponse);
 
-                if($columnResponse['id'] == 'ga:countryIsoCode')
-                {
+                if ($columnResponse['id'] == 'ga:countryIsoCode') {
                     $cols[$columnResponse['id']]->uiName = 'Country';
                 }
             }

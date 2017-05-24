@@ -31,17 +31,13 @@ class Analytics extends Component
     {
         $interval = AnalyticsPlugin::$plugin->getSettings()->realtimeRefreshInterval;
 
-        if($interval)
-        {
+        if ($interval) {
             return $interval;
-        }
-        else
-        {
+        } else {
             $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
             $settings = $plugin->getSettings();
 
-            if(!empty($settings['realtimeRefreshInterval']))
-            {
+            if (!empty($settings['realtimeRefreshInterval'])) {
                 return $settings['realtimeRefreshInterval'];
             }
         }
@@ -59,8 +55,7 @@ class Analytics extends Component
         $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
         $settings = $plugin->getSettings();
 
-        if(!empty($settings['profileId']))
-        {
+        if (!empty($settings['profileId'])) {
             return 'ga:'.$settings['profileId'];
         }
     }
@@ -68,8 +63,8 @@ class Analytics extends Component
     /**
      * Get Element URL Path
      *
-     * @param int           $elementId
-     * @param string|null   $localeId
+     * @param int         $elementId
+     * @param string|null $localeId
      */
     public function getElementUrlPath($elementId, $localeId)
     {
@@ -81,13 +76,11 @@ class Analytics extends Component
 
         $components = parse_url($url);
 
-        if($components['path'])
-        {
+        if ($components['path']) {
             $uri = $components['path'];
         }
 
-        if(Craft::$app->getConfig()->getGeneral()->addTrailingSlashesToUrls)
-        {
+        if (Craft::$app->getConfig()->getGeneral()->addTrailingSlashesToUrls) {
             $uri .= '/';
         }
 
@@ -97,7 +90,7 @@ class Analytics extends Component
     /**
      * Returns a currency
      *
-     * @param string|null   $currency
+     * @param string|null $currency
      */
     public function getCurrency()
     {
@@ -105,8 +98,7 @@ class Analytics extends Component
 
         $settings = $plugin->getSettings();
 
-        if(!empty($settings['profileCurrency']))
-        {
+        if (!empty($settings['profileCurrency'])) {
             return $settings['profileCurrency'];
         }
     }
@@ -124,8 +116,7 @@ class Analytics extends Component
         // $currencyFormat = Craft::$app->locale->getCurrencyFormat();
         $currencyFormat = '$,.2f';
 
-        if(strpos($currencyFormat, ";") > 0)
-        {
+        if (strpos($currencyFormat, ";") > 0) {
             $currencyFormatArray = explode(";", $currencyFormat);
             $currencyFormat = $currencyFormatArray[0];
         }
@@ -134,13 +125,10 @@ class Analytics extends Component
         $replacement = '';
         $currencyFormat = preg_replace($pattern, $replacement, $currencyFormat);
 
-        if(strpos($currencyFormat, "¤") === 0)
-        {
+        if (strpos($currencyFormat, "¤") === 0) {
             // symbol at beginning
             $currencyD3Format = [str_replace('¤', $currencySymbol, $currencyFormat), ''];
-        }
-        else
-        {
+        } else {
             // symbol at the end
             $currencyD3Format = ['', str_replace('¤', $currencySymbol, $currencyFormat)];
         }
@@ -157,8 +145,7 @@ class Analytics extends Component
      */
     public function track($options)
     {
-        if(!$this->tracking)
-        {
+        if (!$this->tracking) {
             $this->tracking = new AnalyticsTracking($options);
         }
 
@@ -175,8 +162,7 @@ class Analytics extends Component
         $oauthClientId = AnalyticsPlugin::$plugin->getSettings()->oauthClientId;
         $oauthClientSecret = AnalyticsPlugin::$plugin->getSettings()->oauthClientSecret;
 
-        if(!empty($oauthClientId) && !empty($oauthClientSecret))
-        {
+        if (!empty($oauthClientId) && !empty($oauthClientSecret)) {
             return true;
         }
 
@@ -190,26 +176,17 @@ class Analytics extends Component
      */
     public function checkPluginRequirements()
     {
-        if($this->isOauthProviderConfigured())
-        {
-            if($this->isTokenSet())
-            {
-                if($this->isGoogleAnalyticsAccountConfigured())
-                {
+        if ($this->isOauthProviderConfigured()) {
+            if ($this->isTokenSet()) {
+                if ($this->isGoogleAnalyticsAccountConfigured()) {
                     return true;
-                }
-                else
-                {
+                } else {
                     return false;
                 }
-            }
-            else
-            {
+            } else {
                 return false;
             }
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -218,20 +195,16 @@ class Analytics extends Component
     {
         $token = AnalyticsPlugin::$plugin->getOauth()->getToken();
 
-        if ($token)
-        {
+        if ($token) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
 
     private function isGoogleAnalyticsAccountConfigured()
     {
-        if(!$this->isTokenSet())
-        {
+        if (!$this->isTokenSet()) {
             return false;
         }
 
@@ -240,11 +213,12 @@ class Analytics extends Component
         $settings = $plugin->getSettings();
         $profileId = $settings['profileId'];
 
-        if(!$profileId)
-        {
+        if (!$profileId) {
             Craft::info('Analytics profileId not found', __METHOD__);
+
             return false;
         }
+
         return true;
     }
 }

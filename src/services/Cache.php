@@ -27,8 +27,7 @@ class Cache extends Component
      */
     public function get($id)
     {
-        if(Analytics::$plugin->getSettings()->enableCache == true)
-        {
+        if (Analytics::$plugin->getSettings()->enableCache == true) {
             $cacheKey = $this->getCacheKey($id);
 
             return Craft::$app->getCache()->get($cacheKey);
@@ -48,17 +47,14 @@ class Cache extends Component
      */
     public function set($id, $value, $expire = null, $dependency = null, $enableCache = null)
     {
-        if(is_null($enableCache))
-        {
+        if (is_null($enableCache)) {
             $enableCache = Analytics::$plugin->getSettings()->enableCache;
         }
 
-        if($enableCache)
-        {
+        if ($enableCache) {
             $cacheKey = $this->getCacheKey($id);
 
-            if(!$expire)
-            {
+            if (!$expire) {
                 $expire = $this->getCacheDuration();
             }
 
