@@ -26,6 +26,14 @@ class AnalyticsReportingApi extends Component
     // Public Methods
     // =========================================================================
 
+    /**
+     * Get report.
+     *
+     * @param ReportingRequestCriteria $criteria
+     * @param bool                     $toArray
+     *
+     * @return array|Google_Service_AnalyticsReporting_Report
+     */
     public function getReport(ReportingRequestCriteria $criteria, bool $toArray = false)
     {
         $reports = $this->getReports([$criteria], $toArray);
@@ -35,6 +43,14 @@ class AnalyticsReportingApi extends Component
         }
     }
 
+    /**
+     * Get reports.
+     *
+     * @param array $criterias
+     * @param bool  $toArray
+     *
+     * @return array
+     */
     public function getReports(array $criterias, bool $toArray = false)
     {
         $reportsResponse = $this->getReportingReports($criterias);
@@ -47,12 +63,11 @@ class AnalyticsReportingApi extends Component
         return $reportsResponse->getReports();
     }
 
-
     // Private Methods
     // =========================================================================
 
     /**
-     * Get reports.
+     * Get reporting reports.
      *
      * @param array $criterias
      *
@@ -77,6 +92,8 @@ class AnalyticsReportingApi extends Component
     }
 
     /**
+     * Get reporting report request.
+     *
      * @param ReportingRequestCriteria $criteria
      *
      * @return Google_Service_AnalyticsReporting_ReportRequest
@@ -116,6 +133,13 @@ class AnalyticsReportingApi extends Component
         return $request;
     }
 
+    /**
+     * Get dimensions from string.
+     *
+     * @param $string
+     *
+     * @return array
+     */
     private function getDimensionsFromString($string)
     {
         $dimensions = [];
@@ -129,6 +153,13 @@ class AnalyticsReportingApi extends Component
         return $dimensions;
     }
 
+    /**
+     * Get metrics from string.
+     *
+     * @param $string
+     *
+     * @return array
+     */
     private function getMetricsFromString($string)
     {
         $metrics = [];
@@ -143,7 +174,7 @@ class AnalyticsReportingApi extends Component
     }
 
     /**
-     * Returns a Google client
+     * Returns a Google client.
      *
      * @return null|Google_Client
      */
