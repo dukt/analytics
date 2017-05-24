@@ -7,7 +7,6 @@
 
 namespace dukt\analytics\web\twig\variables;
 
-use dukt\analytics\models\RequestCriteria;
 use dukt\analytics\models\ReportingRequestCriteria;
 use dukt\analytics\etc\craft\AnalyticsTracking;
 use dukt\analytics\Plugin as Analytics;
