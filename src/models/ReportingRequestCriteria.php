@@ -63,7 +63,7 @@ class ReportingRequestCriteria extends Model
      *
      * @return array
      */
-    public function send()
+    public function send(bool $toArray = true)
     {
         $response = array(
             'success' => false,
@@ -72,7 +72,7 @@ class ReportingRequestCriteria extends Model
 
         try
         {
-            $response['data'] = Analytics::$plugin->getAnalyticsReportingApi()->getReport($this);
+            $response['data'] = Analytics::$plugin->getAnalyticsReportingApi()->getReport($this, $toArray);
             $response['success'] = true;
         }
         catch(\Exception $e)
