@@ -19,6 +19,7 @@ use \Google_Service_AnalyticsReporting_Metric;
 use \Google_Service_AnalyticsReporting_Dimension;
 use \Google_Service_AnalyticsReporting_GetReportsRequest;
 use \Google_Service_AnalyticsReporting_GetReportsResponse;
+use \Google_Service_AnalyticsReporting_Report;
 
 class AnalyticsReportingApi extends Component
 {
