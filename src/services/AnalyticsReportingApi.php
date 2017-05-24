@@ -7,21 +7,19 @@
 
 namespace dukt\analytics\services;
 
-use Craft;
+use dukt\analytics\base\Api;
 use dukt\analytics\models\ReportingRequestCriteria;
-use yii\base\Component;
-use \Google_Client;
-use \Google_Service_AnalyticsReporting;
 use dukt\analytics\Plugin as Analytics;
-use \Google_Service_AnalyticsReporting_ReportRequest;
+use \Google_Service_AnalyticsReporting;
 use \Google_Service_AnalyticsReporting_DateRange;
-use \Google_Service_AnalyticsReporting_Metric;
 use \Google_Service_AnalyticsReporting_Dimension;
 use \Google_Service_AnalyticsReporting_GetReportsRequest;
 use \Google_Service_AnalyticsReporting_GetReportsResponse;
+use \Google_Service_AnalyticsReporting_Metric;
 use \Google_Service_AnalyticsReporting_Report;
+use \Google_Service_AnalyticsReporting_ReportRequest;
 
-class AnalyticsReportingApi extends Component
+class AnalyticsReportingApi extends Api
 {
     // Public Methods
     // =========================================================================
@@ -171,36 +169,5 @@ class AnalyticsReportingApi extends Component
         }
 
         return $metrics;
-    }
-
-    /**
-     * Returns a Google client.
-     *
-     * @return null|Google_Client
-     */
-    private function getClient()
-    {
-        $token = Analytics::$plugin->getOauth()->getToken();
-
-        if ($token) {
-            // make token compatible with Google library
-            $arrayToken = [
-                'created' => 0,
-                'access_token' => $token->getToken(),
-                'expires_in' => $token->getExpires(),
-            ];
-
-            $arrayToken = json_encode($arrayToken);
-
-            // client
-            $client = new Google_Client();
-            $client->setApplicationName('Google+ PHP Starter Application');
-            $client->setClientId('clientId');
-            $client->setClientSecret('clientSecret');
-            $client->setRedirectUri('redirectUri');
-            $client->setAccessToken($arrayToken);
-
-            return $client;
-        }
     }
 }
