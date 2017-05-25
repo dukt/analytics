@@ -55,6 +55,11 @@ class ReportingRequestCriteria extends Model
      */
     public $pageSize;
 
+    /**
+     * @var string Filters expression
+     */
+    public $filtersExpression;
+
     // Public Methods
     // =========================================================================
 

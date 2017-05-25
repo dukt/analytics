@@ -129,6 +129,10 @@ class AnalyticsReportingApi extends Api
             $request->setPageSize($criteria->pageSize);
         }
 
+        if($criteria->filtersExpression) {
+            $request->setFiltersExpression($criteria->filtersExpression);
+        }
+
         return $request;
     }
 
