@@ -67,29 +67,28 @@ class Reports extends Component
         $metrics = $metric;
         $filters = "ga:pagePath==".$uri;
 
-        $optParams = [
-            'dimensions' => $dimensions,
-            'filters' => $filters,
-        ];
-
         $request = [
             'startDate' => $startDate,
             'endDate' => $endDate,
             'metrics' => $metrics,
-            'optParams' => $optParams,
+            'dimensions' => $dimensions,
+            'filters' => $filters
         ];
 
         $cacheId = ['reports.getElementReport', $request];
         $response = Analytics::$plugin->cache->get($cacheId);
 
         if (!$response) {
-            $viewId = Analytics::$plugin->getAnalytics()->getProfileId();
 
-            $ids = $viewId;
+            $criteria = new ReportingRequestCriteria;
+            $criteria->startDate = $startDate;
+            $criteria->endDate = $endDate;
+            $criteria->metrics = $metrics;
+            $criteria->dimensions = $dimensions;
+            $criteria->filtersExpression = $filters;
 
-            $dataGaResponse = Analytics::$plugin->getAnalyticsApi()->googleAnalytics()->data_ga->get($ids, $startDate, $endDate, $metrics, $optParams);
-
-            $response = Analytics::$plugin->getAnalyticsApi()->parseReportResponse($dataGaResponse);
+            $reportResponse = Analytics::$plugin->getAnalyticsReportingApi()->getReport($criteria);
+            $response = $this->parseReportingReport($reportResponse);
 
             if ($response) {
                 Analytics::$plugin->cache->set($cacheId, $response);

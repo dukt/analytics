@@ -57,18 +57,13 @@ class Report extends Field
                     $dimensions = 'ga:date';
                     $filters = "ga:pagePath==".$uri;
 
-                    $optParams = [
-                        'dimensions' => $dimensions,
-                        'filters' => $filters
-                    ];
-
                     $request = [
                         'startDate' => $startDate,
                         'endDate' => $endDate,
                         'metrics' => $metrics,
-                        'optParams' => $optParams,
+                        'dimensions' => $dimensions,
+                        'filters' => $filters
                     ];
-
 
                     // Check if there is a cached response and add it to JS options if so
 
