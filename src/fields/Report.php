@@ -55,10 +55,11 @@ class Report extends Field
                     $endDate = date('Y-m-d');
                     $metrics = 'ga:pageviews';
                     $dimensions = 'ga:date';
+                    $filters = "ga:pagePath==".$uri;
 
                     $optParams = [
                         'dimensions' => $dimensions,
-                        'filters' => "ga:pagePath==".$uri
+                        'filters' => $filters
                     ];
 
                     $request = [
