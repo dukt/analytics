@@ -19,9 +19,7 @@ class ReportsController extends Controller
     /**
      * Get element report.
      *
-     * @param array $variables
-     *
-     * @return null
+     * @return \yii\web\Response
      */
     public function actionElement()
     {
@@ -106,9 +104,9 @@ class ReportsController extends Controller
     }
 
     /**
-     * Get realtime report widget.
+     * Get realtime widget report.
      *
-     * @return null
+     * @return \yii\web\Response
      */
     public function actionRealtimeWidget()
     {
@@ -194,9 +192,9 @@ class ReportsController extends Controller
     }
 
     /**
-     * Get report widget
+     * Get report widget report.
      *
-     * @return null
+     * @return \yii\web\Response
      */
     public function actionReportWidget()
     {
