@@ -23,67 +23,17 @@ class ReportsController extends Controller
      */
     public function actionElement()
     {
+        $elementId = Craft::$app->getRequest()->getRequiredParam('elementId');
+        $locale = Craft::$app->getRequest()->getRequiredParam('locale');
+        $metric = Craft::$app->getRequest()->getRequiredParam('metric');
+
         try {
-            $elementId = Craft::$app->getRequest()->getRequiredParam('elementId');
-            $locale = Craft::$app->getRequest()->getRequiredParam('locale');
-            $metric = Craft::$app->getRequest()->getRequiredParam('metric');
+            $response = Analytics::$plugin->getReports()->getElementReport($elementId, $locale, $metric);
 
-            $uri = Analytics::$plugin->getAnalytics()->getElementUrlPath($elementId, $locale);
-
-            if ($uri) {
-                if ($uri == '__home__') {
-                    $uri = '';
-                }
-
-                $start = date('Y-m-d', strtotime('-1 month'));
-                $end = date('Y-m-d');
-                $dimensions = 'ga:date';
-
-                $optParams = [
-                    'dimensions' => $dimensions,
-                    'filters' => "ga:pagePath==".$uri
-                ];
-
-                $request = [
-                    'startDate' => $start,
-                    'endDate' => $end,
-                    'metrics' => $metric,
-                    'optParams' => $optParams,
-                ];
-
-                $cacheId = ['ReportsController.actionGetElement', $request];
-                $response = Analytics::$plugin->cache->get($cacheId);
-
-                if (!$response) {
-                    $viewId = Analytics::$plugin->getAnalytics()->getProfileId();
-
-                    $ids = $viewId;
-                    $startDate = $request['startDate'];
-                    $endDate = $request['endDate'];
-                    $metrics = $request['metrics'];
-                    $optParams = $request['optParams'];
-
-                    if(!$optParams)
-                    {
-                        $optParams = [];
-                    }
-
-                    $dataGaResponse = Analytics::$plugin->getAnalyticsApi()->googleAnalytics()->data_ga->get($ids, $startDate, $endDate, $metrics, $optParams);
-
-                    $response = Analytics::$plugin->getAnalyticsApi()->parseReportResponse($dataGaResponse);
-
-                    if ($response) {
-                        Analytics::$plugin->cache->set($cacheId, $response);
-                    }
-                }
-
-                return $this->asJson([
-                    'type' => 'area',
-                    'chart' => $response
-                ]);
-            } else {
-                throw new \Exception("Element doesn't support URLs.", 1);
-            }
+            return $this->asJson([
+                'type' => 'area',
+                'chart' => $response
+            ]);
         } catch (\Google_Service_Exception $e) {
             $errors = $e->getErrors();
             $errorMsg = $e->getMessage();
@@ -216,7 +166,7 @@ class ReportsController extends Controller
             $response = Analytics::$plugin->cache->get($cacheId);
 
             if (!$response) {
-                switch($chart) {
+                switch ($chart) {
                     case 'area':
                         $response = Analytics::$plugin->getReports()->getAreaReport($request);
                         break;

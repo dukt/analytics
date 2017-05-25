@@ -42,35 +42,61 @@ class Reports extends Component
     /**
      * Returns an element report.
      *
-     * @param array $request
+     * @param $elementId
+     * @param $locale
+     * @param $metric
      *
      * @return array
+     * @throws \Exception
      */
-    public function getElementReport(array $request)
+    public function getElementReport($elementId, $locale, $metric)
     {
-        $viewId = Analytics::$plugin->getAnalytics()->getProfileId();
+        $uri = Analytics::$plugin->getAnalytics()->getElementUrlPath($elementId, $locale);
 
-        $ids = $viewId;
-        $startDate = $request['startDate'];
-        $endDate = $request['endDate'];
-        $metrics = $request['metrics'];
-        $optParams = $request['optParams'];
-        $enableCache = (isset($request['enableCache']) ? $request['enableCache'] : null);
+        if (!$uri) {
+            throw new \Exception("Element doesn't support URLs.", 1);
+        }
 
-        $cacheId = ['api.apiGetGAData', [$ids, $startDate, $endDate, $metrics, $optParams]];
+        if ($uri === '__home__') {
+            $uri = '';
+        }
+
+        $startDate = date('Y-m-d', strtotime('-1 month'));
+        $endDate = date('Y-m-d');
+        $dimensions = 'ga:date';
+        $metrics = $metric;
+        $filters = "ga:pagePath==".$uri;
+
+        $optParams = [
+            'dimensions' => $dimensions,
+            'filters' => $filters,
+        ];
+
+        $request = [
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+            'metrics' => $metrics,
+            'optParams' => $optParams,
+        ];
+
+        $cacheId = ['reports.getElementReport', $request];
         $response = Analytics::$plugin->cache->get($cacheId);
 
         if (!$response) {
-            if (!$optParams) {
-                $optParams = [];
+            $viewId = Analytics::$plugin->getAnalytics()->getProfileId();
+
+            $ids = $viewId;
+
+            $dataGaResponse = Analytics::$plugin->getAnalyticsApi()->googleAnalytics()->data_ga->get($ids, $startDate, $endDate, $metrics, $optParams);
+
+            $response = Analytics::$plugin->getAnalyticsApi()->parseReportResponse($dataGaResponse);
+
+            if ($response) {
+                Analytics::$plugin->cache->set($cacheId, $response);
             }
-
-            $response = Analytics::$plugin->getAnalyticsApi()->googleAnalytics()->data_ga->get($ids, $startDate, $endDate, $metrics, $optParams);
-
-            Analytics::$plugin->cache->set($cacheId, $response, null, null, $enableCache);
         }
 
-        return Analytics::$plugin->getAnalyticsApi()->parseReportResponse($response);
+        return $response;
     }
 
     /**
