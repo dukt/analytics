@@ -9,46 +9,34 @@ namespace dukt\analytics\fields;
 
 use Craft;
 use craft\base\Field;
-use dukt\analytics\models\RequestCriteria;
 use dukt\analytics\web\assets\reportfield\ReportFieldAsset;
 use dukt\analytics\Plugin as Analytics;
 
 class Report extends Field
 {
-    // Public Methods
+    // Static
     // =========================================================================
 
     /**
-     * @inheritDoc IComponentType::getName()
-     *
-     * @return string
+     * @inheritdoc
      */
-    public function getName()
+    public static function displayName(): string
     {
         return Craft::t('analytics', 'Analytics Report');
     }
 
-    /**
-     * @inheritDoc IFieldType::defineContentAttribute()
-     *
-     * @return mixed
-     */
-    public function defineContentAttribute()
-    {
-        return AttributeType::String;
-    }
+    // Public Methods
+    // =========================================================================
 
     /**
-     * Show field
+     * @inheritdoc
      */
-    public function getInputHtml($value, \craft\base\ElementInterface $element = NULL): string
+    public function getInputHtml($value, \craft\base\ElementInterface $element = null): string
     {
         $name = $this->handle;
 
-        if(Analytics::$plugin->getAnalytics()->checkPluginRequirements())
-        {
-            if(Analytics::$plugin->getSettings()->enableFieldtype)
-            {
+        if (Analytics::$plugin->getAnalytics()->checkPluginRequirements()) {
+            if (Analytics::$plugin->getSettings()->enableFieldtype) {
                 $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
 
                 // Reformat the input name into something that looks more like an ID
@@ -57,10 +45,7 @@ class Report extends Field
                 // Figure out what that ID is going to look like once it has been namespaced
                 $namespacedId = Craft::$app->getView()->namespaceInputId($id);
 
-                $variables = array();
-
-                if($element->uri)
-                {
+                if ($element->uri) {
                     $uri = Analytics::$plugin->getAnalytics()->getElementUrlPath($element->id, $element->locale);
 
                     $ids = Analytics::$plugin->getAnalytics()->getProfileId();
@@ -70,24 +55,27 @@ class Report extends Field
                     $metrics = 'ga:pageviews';
                     $dimensions = 'ga:date';
 
-                    $optParams = array(
+                    $optParams = [
                         'dimensions' => $dimensions,
                         'filters' => "ga:pagePath==".$uri
-                    );
+                    ];
 
-                    $criteria = new RequestCriteria;
-                    $criteria->startDate = $startDate;
-                    $criteria->endDate = $endDate;
-                    $criteria->metrics = $metrics;
-                    $criteria->optParams = $optParams;
+                    $request = [
+                        'startDate' => $startDate,
+                        'endDate' => $endDate,
+                        'metrics' => $metrics,
+                        'optParams' => $optParams,
+                    ];
+
+
+                    // Check if there is a cached response and add it to JS options if so
+
+                    $cacheId = ['reports.getElementReport', $request];
+                    $response = Analytics::$plugin->cache->get($cacheId);
 
                     $options = [];
 
-                    $cacheId = ['ReportsController.actionGetElementReport', $criteria->getAttributes()];
-                    $response = Analytics::$plugin->cache->get($cacheId);
-
-                    if($response)
-                    {
+                    if ($response) {
                         $response = [
                             'type' => 'area',
                             'chart' => $response
@@ -105,42 +93,34 @@ class Report extends Field
                     Craft::$app->getView()->registerJs('var AnalyticsChartLanguage = "'.Craft::t('analytics', 'analyticsChartLanguage').'";');
                     Craft::$app->getView()->registerJs('new AnalyticsReportField("'.$namespacedId.'-field", '.$jsonOptions.');');
 
-                    $variables = array(
-                        'isNew'   => false,
-                        'hasUrl'  => true,
-                        'id'      => $id,
-                        'uri'     => $uri,
-                        'name'    => $name,
-                        'value'   => $value,
-                        'model'   => $this,
+                    $variables = [
+                        'isNew' => false,
+                        'hasUrl' => true,
+                        'id' => $id,
+                        'uri' => $uri,
+                        'name' => $name,
+                        'value' => $value,
+                        'model' => $this,
                         'element' => $element
-                    );
-                }
-                elseif(!$element->id)
-                {
-                    $variables = array(
+                    ];
+                } elseif (!$element->id) {
+                    $variables = [
                         'hasUrl' => false,
                         'isNew' => true,
-                    );
-                }
-                else
-                {
-                    $variables = array(
+                    ];
+                } else {
+                    $variables = [
                         'hasUrl' => false,
                         'isNew' => false,
-                    );
+                    ];
                 }
 
                 return Craft::$app->getView()->renderTemplate('analytics/_components/fieldtypes/Report/input', $variables);
             }
-            else
-            {
-                return Craft::$app->getView()->renderTemplate('analytics/_components/fieldtypes/Report/disabled');
-            }
+
+            return Craft::$app->getView()->renderTemplate('analytics/_components/fieldtypes/Report/disabled');
         }
-        else
-        {
-            return Craft::$app->getView()->renderTemplate('analytics/_special/plugin-not-configured');
-        }
+
+        return Craft::$app->getView()->renderTemplate('analytics/_special/plugin-not-configured');
     }
 }
