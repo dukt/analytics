@@ -9,6 +9,7 @@ namespace dukt\analytics\fields;
 
 use Craft;
 use craft\base\Field;
+use craft\base\ElementInterface;
 use dukt\analytics\web\assets\reportfield\ReportFieldAsset;
 use dukt\analytics\Plugin as Analytics;
 
@@ -31,7 +32,7 @@ class Report extends Field
     /**
      * @inheritdoc
      */
-    public function getInputHtml($value, \craft\base\ElementInterface $element = null): string
+    public function getInputHtml($value, ElementInterface $element = null): string
     {
         $name = $this->handle;
 
