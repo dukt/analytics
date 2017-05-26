@@ -23,7 +23,7 @@ abstract class Api extends Component
         $token = Analytics::$plugin->getOauth()->getToken();
 
         if ($token) {
-            // make token compatible with Google library
+            // make token compatible with Google Client
             $arrayToken = [
                 'created' => 0,
                 'access_token' => $token->getToken(),
