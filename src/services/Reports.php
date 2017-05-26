@@ -9,7 +9,7 @@ namespace dukt\analytics\services;
 
 use Craft;
 use craft\helpers\StringHelper;
-use dukt\analytics\models\ReportingRequestCriteria;
+use dukt\analytics\models\ReportRequestCriteria;
 use yii\base\Component;
 use dukt\analytics\Plugin as Analytics;
 use \Google_Service_AnalyticsReporting_Report;
@@ -80,7 +80,7 @@ class Reports extends Component
 
         if (!$response) {
 
-            $criteria = new ReportingRequestCriteria;
+            $criteria = new ReportRequestCriteria;
             $criteria->startDate = $startDate;
             $criteria->endDate = $endDate;
             $criteria->metrics = $metrics;
@@ -123,7 +123,7 @@ class Reports extends Component
                 $endDate = date('Y-m-d');
         }
 
-        $criteria = new ReportingRequestCriteria;
+        $criteria = new ReportRequestCriteria;
         $criteria->startDate = $startDate;
         $criteria->endDate = $endDate;
         $criteria->metrics = $metricString;
@@ -161,7 +161,7 @@ class Reports extends Component
         $startDate = date('Y-m-d', strtotime('-1 '.$period));
         $endDate = date('Y-m-d');
 
-        $criteria = new ReportingRequestCriteria;
+        $criteria = new ReportRequestCriteria;
         $criteria->startDate = $startDate;
         $criteria->endDate = $endDate;
         $criteria->metrics = $metricString;
@@ -207,7 +207,7 @@ class Reports extends Component
         $startDate = date('Y-m-d', strtotime('-1 '.$period));
         $endDate = date('Y-m-d');
 
-        $criteria = new ReportingRequestCriteria;
+        $criteria = new ReportRequestCriteria;
         $criteria->startDate = $startDate;
         $criteria->endDate = $endDate;
         $criteria->metrics = $metricString;
@@ -239,7 +239,7 @@ class Reports extends Component
         $dimensionString = (isset($request['options']['dimension']) ? $request['options']['dimension'] : null);
         $metricString = (isset($request['options']['metric']) ? $request['options']['metric'] : null);
 
-        $criteria = new ReportingRequestCriteria;
+        $criteria = new ReportRequestCriteria;
         $criteria->dimensions = $dimensionString;
         $criteria->metrics = $metricString;
         $criteria->startDate = date('Y-m-d', strtotime('-1 '.$period));
@@ -277,7 +277,7 @@ class Reports extends Component
             $dimensionString = 'ga:latitude,ga:longitude,'.$dimensionString;
         }
 
-        $criteria = new ReportingRequestCriteria;
+        $criteria = new ReportRequestCriteria;
         $criteria->dimensions = $dimensionString;
         $criteria->metrics = $metricString;
         $criteria->startDate = date('Y-m-d', strtotime('-1 '.$period));

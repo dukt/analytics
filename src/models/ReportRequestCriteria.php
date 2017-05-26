@@ -11,11 +11,11 @@ use craft\base\Model;
 use dukt\analytics\Plugin as Analytics;
 
 /**
- * Class ReportingRequestCriteria
+ * Class ReportRequestCriteria
  *
  * @package dukt\analytics\models
  */
-class ReportingRequestCriteria extends Model
+class ReportRequestCriteria extends Model
 {
     // Properties
     // =========================================================================

@@ -8,7 +8,7 @@
 namespace dukt\analytics\apis;
 
 use dukt\analytics\base\Api;
-use dukt\analytics\models\ReportingRequestCriteria;
+use dukt\analytics\models\ReportRequestCriteria;
 use dukt\analytics\Plugin as Analytics;
 use \Google_Service_AnalyticsReporting;
 use \Google_Service_AnalyticsReporting_DateRange;
@@ -37,12 +37,12 @@ class AnalyticsReporting extends Api
     /**
      * Get report.
      *
-     * @param ReportingRequestCriteria $criteria
-     * @param bool                     $toArray
+     * @param ReportRequestCriteria $criteria
+     * @param bool                  $toArray
      *
      * @return array|Google_Service_AnalyticsReporting_Report
      */
-    public function getReport(ReportingRequestCriteria $criteria, bool $toArray = false)
+    public function getReport(ReportRequestCriteria $criteria, bool $toArray = false)
     {
         $reports = $this->getReports([$criteria], $toArray);
 
@@ -100,11 +100,11 @@ class AnalyticsReporting extends Api
     /**
      * Get reporting report request.
      *
-     * @param ReportingRequestCriteria $criteria
+     * @param ReportRequestCriteria $criteria
      *
      * @return Google_Service_AnalyticsReporting_ReportRequest
      */
-    private function getReportingReportRequest(ReportingRequestCriteria $criteria)
+    private function getReportingReportRequest(ReportRequestCriteria $criteria)
     {
         $request = new Google_Service_AnalyticsReporting_ReportRequest();
 
