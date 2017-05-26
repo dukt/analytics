@@ -16,7 +16,7 @@ abstract class Api extends Component
     /**
      * Returns a Google client.
      *
-     * @return null|Google_Client
+     * @return Google_Client
      */
     protected function getClient()
     {
