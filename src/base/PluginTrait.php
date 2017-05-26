@@ -13,8 +13,7 @@ use dukt\analytics\Plugin as Analytics;
  * PluginTrait implements the common methods and properties for plugin classes.
  *
  * @property \dukt\analytics\services\Analytics                 $analytics                  The analytics service
- * @property \dukt\analytics\services\AnalyticsReportingApi     $analyticsReportingApi      The Analytics reporting api service
- * @property \dukt\analytics\services\AnalyticsApi              $analyticsApi               The api service
+ * @property \dukt\analytics\services\Apis                      $apis                       The apis service
  * @property \dukt\analytics\services\Cache                     $cache                      The cache service
  * @property \dukt\analytics\services\Metadata                  $metadata                   The metadata service
  * @property \dukt\analytics\services\Oauth                     $oauth                      The oauth service
@@ -34,25 +33,14 @@ trait PluginTrait
     }
 
     /**
-     * Returns the api service.
+     * Returns the apis service.
      *
-     * @return \dukt\analytics\services\AnalyticsApi The api service
+     * @return \dukt\analytics\services\Apis The apis service
      */
-    public function getAnalyticsApi()
+    public function getApis()
     {
         /** @var Analytics $this */
-        return $this->get('analyticsApi');
-    }
-
-    /**
-     * Returns the api service.
-     *
-     * @return \dukt\analytics\services\AnalyticsReportingApi The api service
-     */
-    public function getAnalyticsReportingApi()
-    {
-        /** @var Analytics $this */
-        return $this->get('analyticsReportingApi');
+        return $this->get('apis');
     }
 
     /**

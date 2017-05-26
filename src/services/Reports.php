@@ -34,9 +34,9 @@ class Reports extends Component
         $metrics = $request['metrics'];
         $optParams = $request['optParams'];
 
-        $response = Analytics::$plugin->getAnalyticsApi()->googleAnalytics()->data_realtime->get($ids, $metrics, $optParams);
+        $response = Analytics::$plugin->getApis()->getAnalytics()->data_realtime->get($ids, $metrics, $optParams);
 
-        return Analytics::$plugin->getAnalyticsApi()->parseReportResponse($response);
+        return Analytics::$plugin->getApis()->getAnalytics()->parseReportResponse($response);
     }
 
     /**
@@ -87,7 +87,7 @@ class Reports extends Component
             $criteria->dimensions = $dimensions;
             $criteria->filtersExpression = $filters;
 
-            $reportResponse = Analytics::$plugin->getAnalyticsReportingApi()->getReport($criteria);
+            $reportResponse = Analytics::$plugin->getApis()->getAnalyticsReporting()->getReport($criteria);
             $response = $this->parseReportingReport($reportResponse);
 
             if ($response) {
@@ -132,7 +132,7 @@ class Reports extends Component
             ["fieldName" => $dimensionString, "orderType" => 'VALUE', "sortOrder" => 'ASCENDING']
         ];
 
-        $reportResponse = Analytics::$plugin->getAnalyticsReportingApi()->getReport($criteria);
+        $reportResponse = Analytics::$plugin->getApis()->getAnalyticsReporting()->getReport($criteria);
         $report = $this->parseReportingReport($reportResponse);
 
         $total = $report['totals'][0];
@@ -167,7 +167,7 @@ class Reports extends Component
         $criteria->metrics = $metricString;
 
 
-        $reportResponse = Analytics::$plugin->getAnalyticsReportingApi()->getReport($criteria);
+        $reportResponse = Analytics::$plugin->getApis()->getAnalyticsReporting()->getReport($criteria);
         $report = $this->parseReportingReport($reportResponse);
 
         $total = 0;
@@ -213,7 +213,7 @@ class Reports extends Component
         $criteria->metrics = $metricString;
         $criteria->dimensions = $dimensionString;
 
-        $reportResponse = Analytics::$plugin->getAnalyticsReportingApi()->getReport($criteria);
+        $reportResponse = Analytics::$plugin->getApis()->getAnalyticsReporting()->getReport($criteria);
         $report = $this->parseReportingReport($reportResponse);
 
         return [
@@ -245,7 +245,7 @@ class Reports extends Component
         $criteria->startDate = date('Y-m-d', strtotime('-1 '.$period));
         $criteria->endDate = date('Y-m-d');
 
-        $reportResponse = Analytics::$plugin->getAnalyticsReportingApi()->getReport($criteria);
+        $reportResponse = Analytics::$plugin->getApis()->getAnalyticsReporting()->getReport($criteria);
         $report = $this->parseReportingReport($reportResponse);
 
         return [
@@ -283,7 +283,7 @@ class Reports extends Component
         $criteria->startDate = date('Y-m-d', strtotime('-1 '.$period));
         $criteria->endDate = date('Y-m-d');
 
-        $reportResponse = Analytics::$plugin->getAnalyticsReportingApi()->getReport($criteria);
+        $reportResponse = Analytics::$plugin->getApis()->getAnalyticsReporting()->getReport($criteria);
         $report = $this->parseReportingReport($reportResponse);
 
         return [

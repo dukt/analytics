@@ -5,7 +5,7 @@
  * @license   https://dukt.net/craft/analytics/docs/license
  */
 
-namespace dukt\analytics\services;
+namespace dukt\analytics\apis;
 
 use dukt\analytics\base\Api;
 use dukt\analytics\models\ReportingRequestCriteria;
@@ -19,10 +19,20 @@ use \Google_Service_AnalyticsReporting_Metric;
 use \Google_Service_AnalyticsReporting_Report;
 use \Google_Service_AnalyticsReporting_ReportRequest;
 
-class AnalyticsReportingApi extends Api
+class AnalyticsReporting extends Api
 {
     // Public Methods
     // =========================================================================
+
+    /**
+     * @return Google_Service_AnalyticsReporting
+     */
+    public function getService()
+    {
+        $client = $this->getClient();
+
+        return new Google_Service_AnalyticsReporting($client);
+    }
 
     /**
      * Get report.
@@ -84,10 +94,7 @@ class AnalyticsReportingApi extends Api
         $reportsRequest = new Google_Service_AnalyticsReporting_GetReportsRequest();
         $reportsRequest->setReportRequests($requests);
 
-        $client = $this->getClient();
-        $analyticsReportingApi = new Google_Service_AnalyticsReporting($client);
-
-        return $analyticsReportingApi->reports->batchGet($reportsRequest);
+        return $this->getService()->reports->batchGet($reportsRequest);
     }
 
     /**

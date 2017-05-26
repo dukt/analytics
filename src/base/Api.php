@@ -7,15 +7,12 @@
 
 namespace dukt\analytics\base;
 
-use yii\base\Component;
-use \Google_Client;
+use craft\base\Component;
+use Google_Client;
 use dukt\analytics\Plugin as Analytics;
 
-abstract class Api extends Component
+class Api extends Component
 {
-    // Protected Methods
-    // =========================================================================
-
     /**
      * Returns a Google client.
      *

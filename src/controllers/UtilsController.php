@@ -70,7 +70,7 @@ class UtilsController extends Controller
     {
         $columns = [];
 
-        $items = Analytics::$plugin->getAnalyticsApi()->getColumns();
+        $items = Analytics::$plugin->getApis()->getAnalytics()->getColumns();
 
         if($items)
         {

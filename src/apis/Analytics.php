@@ -5,19 +5,28 @@
  * @license   https://dukt.net/craft/analytics/docs/license
  */
 
-namespace dukt\analytics\services;
+namespace dukt\analytics\apis;
 
 use Craft;
 use dukt\analytics\base\Api;
-use dukt\analytics\models\RequestCriteria;
-use dukt\analytics\Plugin as Analytics;
+use dukt\analytics\Plugin;
 use \Google_Service_Analytics;
 use \Google_Service_Analytics_Columns;
 
-class AnalyticsApi extends Api
+class Analytics extends Api
 {
     // Public Methods
     // =========================================================================
+
+    /**
+     * @return Google_Service_Analytics
+     */
+    public function getService()
+    {
+        $client = $this->getClient();
+
+        return new Google_Service_Analytics($client);
+    }
 
     /**
      * Get columns.
@@ -26,7 +35,7 @@ class AnalyticsApi extends Api
      */
     public function getColumns()
     {
-        return $this->googleAnalytics()->metadata_columns->listMetadataColumns('ga');
+        return Plugin::$plugin->getApis()->getAnalytics()->metadata_columns->listMetadataColumns('ga');
     }
 
     /**
@@ -37,15 +46,15 @@ class AnalyticsApi extends Api
     public function getAccountExplorerData()
     {
         // Accounts
-        $apiAccounts = $this->googleAnalytics()->management_accounts->listManagementAccounts();
+        $apiAccounts = Plugin::$plugin->getApis()->getAnalytics()->management_accounts->listManagementAccounts();
         $accounts = $apiAccounts->toSimpleObject()->items;
 
         // Properties
-        $apiProperties = $this->googleAnalytics()->management_webproperties->listManagementWebproperties('~all');;
+        $apiProperties = Plugin::$plugin->getApis()->getAnalytics()->management_webproperties->listManagementWebproperties('~all');;
         $properties = $apiProperties->toSimpleObject()->items;
 
         // Views
-        $apiViews = $this->googleAnalytics()->management_profiles->listManagementProfiles('~all', '~all');
+        $apiViews = Plugin::$plugin->getApis()->getAnalytics()->management_profiles->listManagementProfiles('~all', '~all');
         $views = $apiViews->toSimpleObject()->items;
 
         // Return Data
@@ -66,7 +75,7 @@ class AnalyticsApi extends Api
     public function populateAccountExplorerSettings($settings = [])
     {
         if (!empty($settings['accountId']) && !empty($settings['webPropertyId']) && !empty($settings['profileId'])) {
-            $apiAccounts = $this->googleAnalytics()->management_accounts->listManagementAccounts();
+            $apiAccounts = Plugin::$plugin->getApis()->getAnalytics()->management_accounts->listManagementAccounts();
 
             $account = null;
 
@@ -76,8 +85,8 @@ class AnalyticsApi extends Api
                 }
             }
 
-            $webProperty = $this->googleAnalytics()->management_webproperties->get($settings['accountId'], $settings['webPropertyId']);
-            $profile = $this->googleAnalytics()->management_profiles->get($settings['accountId'], $settings['webPropertyId'], $settings['profileId']);
+            $webProperty = Plugin::$plugin->getApis()->getAnalytics()->management_webproperties->get($settings['accountId'], $settings['webPropertyId']);
+            $profile = Plugin::$plugin->getApis()->getAnalytics()->management_profiles->get($settings['accountId'], $settings['webPropertyId'], $settings['profileId']);
 
             $settings['accountName'] = $account->name;
             $settings['webPropertyName'] = $webProperty->name;
@@ -105,7 +114,7 @@ class AnalyticsApi extends Api
         foreach ($data['columnHeaders'] as $col) {
             $dataType = $col->dataType;
             $id = $col->name;
-            $label = Analytics::$plugin->metadata->getDimMet($col->name);
+            $label = Plugin::$plugin->metadata->getDimMet($col->name);
             $type = strtolower($dataType);
 
             switch ($col->name) {
@@ -150,11 +159,11 @@ class AnalyticsApi extends Api
                     $value = $this->formatRawValue($col['type'], $_value);
 
                     if ($col['id'] == 'ga:continent') {
-                        $value = Analytics::$plugin->metadata->getContinentCode($value);
+                        $value = Plugin::$plugin->metadata->getContinentCode($value);
                     }
 
                     if ($col['id'] == 'ga:subContinent') {
-                        $value = Analytics::$plugin->metadata->getSubContinentCode($value);
+                        $value = Plugin::$plugin->metadata->getSubContinentCode($value);
                     }
 
 
@@ -187,18 +196,6 @@ class AnalyticsApi extends Api
             'cols' => $cols,
             'rows' => $rows
         ];
-    }
-
-    /**
-     * Returns the Google Analytics API object (API v3)
-     *
-     * @return bool|Google_Service_Analytics
-     */
-    public function googleAnalytics()
-    {
-        $client = $this->getClient();
-
-        return new Google_Service_Analytics($client);
     }
 
     // Private Methods
