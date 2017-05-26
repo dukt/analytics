@@ -11,7 +11,7 @@ use craft\base\Component;
 use Google_Client;
 use dukt\analytics\Plugin as Analytics;
 
-class Api extends Component
+abstract class Api extends Component
 {
     /**
      * Returns a Google client.
