@@ -15,7 +15,7 @@
         this.$error = $('.error', this.$element);
 
         this.elementId = $('.analytics-field', this.$element).data('element-id');
-        this.locale = $('.analytics-field', this.$element).data('locale');
+        this.siteId = $('.analytics-field', this.$element).data('site-id');
         this.metric = this.$metric.val();
 
         this.addListener(this.$metric, 'change', 'onMetricChange');
@@ -43,7 +43,7 @@
 
         var data = {
             elementId: this.elementId,
-            locale: this.locale,
+            siteId: this.siteId,
             metric: this.metric
         };
 

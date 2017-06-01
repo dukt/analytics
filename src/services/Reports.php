@@ -42,16 +42,16 @@ class Reports extends Component
     /**
      * Returns an element report.
      *
-     * @param $elementId
-     * @param $locale
-     * @param $metric
+     * @param int           $elementId
+     * @param int|null      $siteId
+     * @param string        $metric
      *
      * @return array
      * @throws \Exception
      */
-    public function getElementReport($elementId, $locale, $metric)
+    public function getElementReport($elementId, $siteId, $metric)
     {
-        $uri = Analytics::$plugin->getAnalytics()->getElementUrlPath($elementId, $locale);
+        $uri = Analytics::$plugin->getAnalytics()->getElementUrlPath($elementId, $siteId);
 
         if (!$uri) {
             throw new \Exception("Element doesn't support URLs.", 1);

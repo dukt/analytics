@@ -47,7 +47,7 @@ class Report extends Field
                 $namespacedId = Craft::$app->getView()->namespaceInputId($id);
 
                 if ($element->uri) {
-                    $uri = Analytics::$plugin->getAnalytics()->getElementUrlPath($element->id, $element->locale);
+                    $uri = Analytics::$plugin->getAnalytics()->getElementUrlPath($element->id, $element->siteId);
 
                     $ids = Analytics::$plugin->getAnalytics()->getProfileId();
 

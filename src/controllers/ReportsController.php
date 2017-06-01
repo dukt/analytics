@@ -24,11 +24,11 @@ class ReportsController extends Controller
     public function actionElement()
     {
         $elementId = Craft::$app->getRequest()->getRequiredParam('elementId');
-        $locale = Craft::$app->getRequest()->getRequiredParam('locale');
+        $siteId = (int) Craft::$app->getRequest()->getRequiredParam('siteId');
         $metric = Craft::$app->getRequest()->getRequiredParam('metric');
 
         try {
-            $response = Analytics::$plugin->getReports()->getElementReport($elementId, $locale, $metric);
+            $response = Analytics::$plugin->getReports()->getElementReport($elementId, $siteId, $metric);
 
             return $this->asJson([
                 'type' => 'area',
