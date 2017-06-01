@@ -4,7 +4,7 @@
 
 	<div data-element-id="{{ element.id }}" data-locale="{#{{ element.locale }}#}" data-language="{{ element.site.language }}" data-site-id="{{ element.siteId }}" class="analytics-field">
 
-		<span class="uri light right">&nbsp; URI: {{ uri }}</span>
+		<span class="uri light right">&nbsp; URL: {{ element.url }}</span>
 
 		{% set metricOpts = {
 			'ga:pageviews':'Pageviews'|t('analytics'),
