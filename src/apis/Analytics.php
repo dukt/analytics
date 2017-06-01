@@ -35,7 +35,7 @@ class Analytics extends Api
      */
     public function getColumns()
     {
-        return Plugin::$plugin->getApis()->getAnalytics()->metadata_columns->listMetadataColumns('ga');
+        return Plugin::$plugin->getApis()->getAnalytics()->getService()->metadata_columns->listMetadataColumns('ga');
     }
 
     /**
@@ -46,15 +46,15 @@ class Analytics extends Api
     public function getAccountExplorerData()
     {
         // Accounts
-        $apiAccounts = Plugin::$plugin->getApis()->getAnalytics()->management_accounts->listManagementAccounts();
+        $apiAccounts = Plugin::$plugin->getApis()->getAnalytics()->getService()->management_accounts->listManagementAccounts();
         $accounts = $apiAccounts->toSimpleObject()->items;
 
         // Properties
-        $apiProperties = Plugin::$plugin->getApis()->getAnalytics()->management_webproperties->listManagementWebproperties('~all');;
+        $apiProperties = Plugin::$plugin->getApis()->getAnalytics()->getService()->management_webproperties->listManagementWebproperties('~all');;
         $properties = $apiProperties->toSimpleObject()->items;
 
         // Views
-        $apiViews = Plugin::$plugin->getApis()->getAnalytics()->management_profiles->listManagementProfiles('~all', '~all');
+        $apiViews = Plugin::$plugin->getApis()->getAnalytics()->getService()->management_profiles->listManagementProfiles('~all', '~all');
         $views = $apiViews->toSimpleObject()->items;
 
         // Return Data
@@ -75,7 +75,7 @@ class Analytics extends Api
     public function populateAccountExplorerSettings($settings = [])
     {
         if (!empty($settings['accountId']) && !empty($settings['webPropertyId']) && !empty($settings['profileId'])) {
-            $apiAccounts = Plugin::$plugin->getApis()->getAnalytics()->management_accounts->listManagementAccounts();
+            $apiAccounts = Plugin::$plugin->getApis()->getAnalytics()->getService()->management_accounts->listManagementAccounts();
 
             $account = null;
 
@@ -85,8 +85,8 @@ class Analytics extends Api
                 }
             }
 
-            $webProperty = Plugin::$plugin->getApis()->getAnalytics()->management_webproperties->get($settings['accountId'], $settings['webPropertyId']);
-            $profile = Plugin::$plugin->getApis()->getAnalytics()->management_profiles->get($settings['accountId'], $settings['webPropertyId'], $settings['profileId']);
+            $webProperty = Plugin::$plugin->getApis()->getAnalytics()->getService()->management_webproperties->get($settings['accountId'], $settings['webPropertyId']);
+            $profile = Plugin::$plugin->getApis()->getAnalytics()->getService()->management_profiles->get($settings['accountId'], $settings['webPropertyId'], $settings['profileId']);
 
             $settings['accountName'] = $account->name;
             $settings['webPropertyName'] = $webProperty->name;
