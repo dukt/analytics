@@ -1,0 +1,35 @@
+{% extends "_layouts/cp" %}
+
+{% set crumbs = [
+	{ label: "Settings"|t('analytics'), url: url('settings') },
+	{ label: "Plugins"|t('analytics'), url: url('settings/plugins') },
+	{ label: "Analytics"|t('analytics'), url: url('analytics/settings') }
+] %}
+
+{% set title = "Site Settings"|t('analytics')%}
+
+{% set content %}
+
+	<table class="data fullwidth">
+		<thead>
+			<tr>
+				<th>{{ "Site"|t('analytics') }}</th>
+				<th>{{ "Google Analytics View"|t('analytics') }}</th>
+			</tr>
+		</thead>
+		<tbody>
+
+			{% for site in sites %}
+				<tr>
+					<td><a href="{{ url('analytics/settings/sites/'~ site.id) }}">{{ site.name }}</a> <span class="light">— {{ site.baseUrl }}</span></td>
+					<td>
+						<span class="light">{{ "No view attached"|t('analytics') }}</span>
+					</td>
+				</tr>
+			{% endfor %}
+
+		</tbody>
+	</table>
+
+
+{% endset %}

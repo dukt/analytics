@@ -94,6 +94,8 @@ class Plugin extends \craft\base\Plugin
         $rules = [
             'analytics/settings' => 'analytics/settings/index',
             'analytics/settings/oauth' => 'analytics/settings/oauth',
+            'analytics/settings/sites' => 'analytics/settings/sites',
+            'analytics/settings/sites/<siteId:\d+>' => 'analytics/settings/edit-site',
             'analytics/utils' => 'analytics/utils/metadata',
             'analytics/utils/metadata' => 'analytics/utils/metadata',
             'analytics/tests/data-types' => 'analytics/tests/data-types',
