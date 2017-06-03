@@ -142,8 +142,7 @@ class Reports extends Component
         $view = Analytics::$plugin->getViews()->getViewById($viewId);
 
         return [
-            'viewId' => $viewId,
-            'viewName' => $view->name,
+            'view' => $view->name,
             'type' => 'area',
             'chart' => $report,
             'total' => $total,
@@ -162,6 +161,7 @@ class Reports extends Component
      */
     public function getCounterReport(array $request)
     {
+        $viewId = (isset($request['viewId']) ? $request['viewId'] : null);
         $period = (isset($request['period']) ? $request['period'] : null);
         $metricString = (isset($request['options']['metric']) ? $request['options']['metric'] : null);
         $startDate = date('Y-m-d', strtotime('-1 '.$period));
@@ -188,7 +188,10 @@ class Reports extends Component
             'label' => StringHelper::toLowerCase(Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($metricString)))
         ];
 
+        $view = Analytics::$plugin->getViews()->getViewById($viewId);
+
         return [
+            'view' => $view->name,
             'type' => 'counter',
             'counter' => $counter,
             'response' => $report,

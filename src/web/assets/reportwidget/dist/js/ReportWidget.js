@@ -85,17 +85,11 @@ Analytics.ReportWidget = Garnish.Base.extend(
     parseResponse: function(response)
     {
         var chartData = response,
-            viewName = response.viewName,
-            metric = response.metric,
-            periodLabel = response.periodLabel,
             type = response.type,
             chartType = type.charAt(0).toUpperCase() + type.slice(1);
 
         this.$report = $('<div class="report"></div>');
         this.$report.appendTo(this.$body);
-
-        this.$title.html(viewName);
-        this.$date.html(periodLabel);
 
         chartData['onAfterDraw'] = $.proxy(function() {
             this.$spinner.addClass('hidden');

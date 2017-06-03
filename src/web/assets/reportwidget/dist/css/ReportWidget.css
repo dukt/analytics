@@ -52,6 +52,8 @@
     color: #318EC4; }
   .dukt\\analytics\\widgets\\report .report .chart.counter .period {
     color: #666; }
+  .dukt\\analytics\\widgets\\report .report .chart.counter .view {
+    margin-top: 0; }
   .dukt\\analytics\\widgets\\report .report .chart.geo {
     min-height: 300px; }
   .dukt\\analytics\\widgets\\report .report .chart.table {
