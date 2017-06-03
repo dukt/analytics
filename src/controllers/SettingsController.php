@@ -9,8 +9,10 @@ namespace dukt\analytics\controllers;
 
 use Craft;
 use craft\web\Controller;
+use dukt\analytics\models\View;
 use dukt\analytics\web\assets\settings\SettingsAsset;
 use dukt\analytics\Plugin as Analytics;
+use yii\web\NotFoundHttpException;
 
 class SettingsController extends Controller
 {
@@ -215,24 +217,44 @@ class SettingsController extends Controller
         }
     }
 
-    public function actionSites()
+    public function actionViews()
     {
-        $sites = Craft::$app->getSites()->getAllSites();
-        
-        return $this->renderTemplate('analytics/settings/sites/_index', [
-            'sites' => $sites
+        $reportingViews = Analytics::$plugin->getViews()->getViews();
+
+        return $this->renderTemplate('analytics/settings/views/_index', [
+            'reportingViews' => $reportingViews
         ]);
     }
 
-    public function actionEditSite($siteId)
+    public function actionEditView(int $viewId = null, View $view = null)
     {
-        $site = Craft::$app->getSites()->getSiteById($siteId);
+        $variables['isNewView'] = false;
+
+        if ($viewId !== null) {
+            if ($view === null) {
+                $view = Analytics::$plugin->getViews()->getViewById($viewId);
+
+                if (!$view) {
+                    throw new NotFoundHttpException('View not found');
+                }
+            }
+
+            $variables['title'] = $view->name;
+            $variables['reportingView'] = $view;
+        } else {
+            if ($view === null) {
+                $view = new View();
+                $variables['isNewView'] = true;
+            }
+            $variables['title'] = Craft::t('analytics', 'Create a new view');
+        }
+
+        $variables['reportingView'] = $view;
 
         $isOauthProviderConfigured = Analytics::$plugin->getAnalytics()->isOauthProviderConfigured();
 
         if($isOauthProviderConfigured) {
             $errors = [];
-
 
             try {
                 $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
@@ -296,7 +318,7 @@ class SettingsController extends Controller
 
                         $accountId = $settings->accountId;
                         $webPropertyId = $settings->webPropertyId;
-                        $viewId = $settings->profileId;
+                        $googleAnalyticsviewId = $settings->profileId;
                     }
                 }
             } catch (\Google_Service_Exception $e) {
@@ -320,27 +342,84 @@ class SettingsController extends Controller
 
         Craft::$app->getView()->registerAssetBundle(SettingsAsset::class);
 
+        $variables['isOauthProviderConfigured'] = $isOauthProviderConfigured;
+        $variables['accountExplorerData'] = (isset($accountExplorerData) ? $accountExplorerData : null);
+        $variables['accountId'] = (isset($accountId) ? $accountId : null);
+        $variables['accountOptions'] = (isset($accountOptions) ? $accountOptions : null);
+        $variables['errors'] = (isset($errors) ? $errors : null);
+        $variables['oauthAccount'] = (isset($oauthAccount) ? $oauthAccount : null);
+        $variables['provider'] = (isset($provider) ? $provider : null);
+        $variables['settings'] = (isset($settings) ? $settings : null);
+        $variables['token'] = (isset($token) ? $token : null);
+        $variables['viewId'] = (isset($googleAnalyticsviewId) ? $googleAnalyticsviewId : null);
+        $variables['viewOptions'] = (isset($viewOptions) ? $viewOptions : null);
+        $variables['webPropertyId'] = (isset($webPropertyId) ? $webPropertyId : null);
+        $variables['webPropertyOptions'] = (isset($webPropertyOptions) ? $webPropertyOptions : null);
+
+        $variables['javascriptOrigin'] = Analytics::$plugin->oauth->getJavascriptOrigin();
+        $variables['redirectUri'] = Analytics::$plugin->oauth->getRedirectUri();
+        $variables['googleIconUrl'] = Craft::$app->assetManager->getPublishedUrl('@dukt/analytics/icons/google.svg', true);
+
+        return $this->renderTemplate('analytics/settings/views/_edit', $variables);
+    }
+
+    public function actionSaveView()
+    {
+        $this->requirePostRequest();
+
+        $view = new View();
+
+        // Set the simple stuff
+        $request = Craft::$app->getRequest();
+        $view->id = $request->getBodyParam('viewId');
+        $view->name = $request->getBodyParam('name');
+        $view->reportingViewId = $request->getBodyParam('reportingViewId');
+
+        // Save it
+        if (!Analytics::$plugin->getViews()->saveView($view)) {
+            Craft::$app->getSession()->setError(Craft::t('analytics', 'Couldn’t save the view.'));
+
+            // Send the view back to the template
+            Craft::$app->getUrlManager()->setRouteParams([
+                'view' => $view
+            ]);
+
+            return null;
+        }
+
+        Craft::$app->getSession()->setNotice(Craft::t('analytics', 'View saved.'));
+
+        return $this->redirectToPostedUrl($view);
+    }
+
+    public function actionDeleteView()
+    {
+        $this->requirePostRequest();
+        $this->requireAcceptsJson();
+
+        $request = Craft::$app->getRequest();
+        $viewId = $request->getRequiredBodyParam('id');
+
+        Analytics::$plugin->getViews()->deleteViewById($viewId);
+
+        return $this->asJson(['success' => true]);
+    }
+
+    public function actionSites()
+    {
+        $sites = Craft::$app->getSites()->getAllSites();
+        
+        return $this->renderTemplate('analytics/settings/sites/_index', [
+            'sites' => $sites
+        ]);
+    }
+
+    public function actionEditSite($siteId)
+    {
+        $site = Craft::$app->getSites()->getSiteById($siteId);
+
         return $this->renderTemplate('analytics/settings/sites/_edit', [
-            'site' => $site,
-
-            'isOauthProviderConfigured' => $isOauthProviderConfigured,
-
-            'accountExplorerData' => (isset($accountExplorerData) ? $accountExplorerData : null),
-            'accountId' => (isset($accountId) ? $accountId : null),
-            'accountOptions' => (isset($accountOptions) ? $accountOptions : null),
-            'errors' => (isset($errors) ? $errors : null),
-            'oauthAccount' => (isset($oauthAccount) ? $oauthAccount : null),
-            'provider' => (isset($provider) ? $provider : null),
-            'settings' => (isset($settings) ? $settings : null),
-            'token' => (isset($token) ? $token : null),
-            'viewId' => (isset($viewId) ? $viewId : null),
-            'viewOptions' => (isset($viewOptions) ? $viewOptions : null),
-            'webPropertyId' => (isset($webPropertyId) ? $webPropertyId : null),
-            'webPropertyOptions' => (isset($webPropertyOptions) ? $webPropertyOptions : null),
-
-            'javascriptOrigin' => Analytics::$plugin->oauth->getJavascriptOrigin(),
-            'redirectUri' => Analytics::$plugin->oauth->getRedirectUri(),
-            'googleIconUrl' => Craft::$app->assetManager->getPublishedUrl('@dukt/analytics/icons/google.svg', true),
+            'site' => $site
         ]);
     }
 }

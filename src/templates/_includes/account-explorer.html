@@ -1,0 +1,31 @@
+{% import "_includes/forms" as forms %}
+
+<div id="account-explorer-v2" class="account-explorer">
+
+	<h2 class="first">{{ "Google Analytics View (Profile)"|t('analytics') }}</h2>
+
+	{{ forms.selectField({
+		label: "Account"|t('analytics'),
+		class: 'account',
+	}) }}
+
+	{{ forms.selectField({
+		label: "Property"|t('analytics'),
+		class: 'property',
+	}) }}
+
+	{{ forms.selectField({
+		label: "View"|t('analytics'),
+		class: 'view',
+	}) }}
+
+	<input type="hidden" class="reporting-view-id" name="{{ name }}" value="{{ value }}">
+
+	<div class="buttons">
+		<div class="btn small refresh-views">Refresh</div> <div class="spinner hidden"></div>
+	</div>
+</div>
+
+{% js %}
+	var accountExplorer = new Analytics.AccountExplorerV2('#account-explorer-v2');
+{% endjs %}

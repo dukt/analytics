@@ -37,6 +37,7 @@ class SettingsAsset extends AssetBundle
         // when this asset bundle is registered
         $this->js = [
             'AccountExplorer.js',
+            'AccountExplorerV2.js',
         ];
 
         $this->css = [

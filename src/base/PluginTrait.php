@@ -18,6 +18,7 @@ use dukt\analytics\Plugin as Analytics;
  * @property \dukt\analytics\services\Metadata                  $metadata                   The metadata service
  * @property \dukt\analytics\services\Oauth                     $oauth                      The oauth service
  * @property \dukt\analytics\services\Reports                   $reports                    The reports service
+ * @property \dukt\analytics\services\Views                     $views                    The views service
  */
 trait PluginTrait
 {
@@ -85,5 +86,16 @@ trait PluginTrait
     {
         /** @var Analytics $this */
         return $this->get('reports');
+    }
+
+    /**
+     * Returns the views service.
+     *
+     * @return \dukt\analytics\services\Views The views service
+     */
+    public function getViews()
+    {
+        /** @var Analytics $this */
+        return $this->get('views');
     }
 }

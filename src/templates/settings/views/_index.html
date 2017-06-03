@@ -1,0 +1,50 @@
+{% extends "_layouts/cp" %}
+
+{% set crumbs = [
+{ label: "Settings"|t('analytics'), url: url('settings') },
+{ label: "Plugins"|t('analytics'), url: url('settings/plugins') },
+{ label: "Analytics"|t('analytics'), url: url('analytics/settings') }
+] %}
+
+{% set title = "Views"|t('analytics')%}
+
+{% set content %}
+	<p id="noviews"{% if reportingViews|length %} class="hidden"{% endif %}>
+		{{ "No views exist yet."|t('app') }}
+	</p>
+
+	<table id="views" class="data fullwidth collapsible">
+		<thead>
+		<tr>
+			<th>{{ "Name"|t('analytics') }}</th>
+			<th>{{ "Google Analytics View"|t('analytics') }}</th>
+			<td class="thin"></td>
+
+		</tr>
+		</thead>
+		<tbody>
+
+		{% for reportingView in reportingViews %}
+			<tr data-id="{{ reportingView.id }}" data-name="{{ reportingView.name }}">
+				<td><a href="{{ url('analytics/settings/views/'~reportingView.id) }}">{{ reportingView.name }}</a></td>
+				<td>{{ reportingView.reportingViewId}}</td>
+				<td class="thin"><a class="delete icon" title="{{ 'Delete'|t('app') }}" role="button"></a></td>
+			</tr>
+		{% endfor %}
+
+		</tbody>
+	</table>
+	
+	<div class="buttons">
+		<a href="{{ url('analytics/settings/views/new') }}" class="btn submit add icon">New View</a>
+	</div>
+
+	{% js %}
+	new Craft.AdminTable({
+		tableSelector: '#views',
+		noItemsSelector: '#noviews',
+		sortable: false,
+		deleteAction: 'analytics/settings/delete-view'
+	});
+	{% endjs %}
+{% endset %}

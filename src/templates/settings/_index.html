@@ -3,7 +3,14 @@
 {% import "_includes/forms" as forms %}
 
 {% set content %}
+	
 
+	<h2><a href="{{ url('analytics/settings/views') }}">Views</a></h2>
+	<h2><a href="{{ url('analytics/settings/sites') }}">Sites</a></h2>
+
+	
+	<hr>
+	
 	<h2 class="first">{{ 'Google Analytics Account'|t('analytics') }}</h2>
 
 	{% if not oauthAccount or settings.forceConnect %}

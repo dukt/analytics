@@ -66,6 +66,7 @@ class Plugin extends \craft\base\Plugin
             'metadata' => \dukt\analytics\services\Metadata::class,
             'oauth' => \dukt\analytics\services\Oauth::class,
             'reports' => \dukt\analytics\services\Reports::class,
+            'views' => \dukt\analytics\services\Views::class,
         ]);
 
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, [$this, 'registerCpUrlRules']);
@@ -94,6 +95,9 @@ class Plugin extends \craft\base\Plugin
         $rules = [
             'analytics/settings' => 'analytics/settings/index',
             'analytics/settings/oauth' => 'analytics/settings/oauth',
+            'analytics/settings/views' => 'analytics/settings/views',
+            'analytics/settings/views/new' => 'analytics/settings/edit-view',
+            'analytics/settings/views/<viewId:\d+>' => 'analytics/settings/edit-view',
             'analytics/settings/sites' => 'analytics/settings/sites',
             'analytics/settings/sites/<siteId:\d+>' => 'analytics/settings/edit-site',
             'analytics/utils' => 'analytics/utils/metadata',
