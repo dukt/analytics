@@ -168,6 +168,7 @@ class Reports extends Component
         $endDate = date('Y-m-d');
 
         $criteria = new ReportRequestCriteria;
+        $criteria->viewId = $viewId;
         $criteria->startDate = $startDate;
         $criteria->endDate = $endDate;
         $criteria->metrics = $metricString;
@@ -210,6 +211,7 @@ class Reports extends Component
      */
     public function getPieReport(array $request)
     {
+        $viewId = (isset($request['viewId']) ? $request['viewId'] : null);
         $period = (isset($request['period']) ? $request['period'] : null);
         $dimensionString = (isset($request['options']['dimension']) ? $request['options']['dimension'] : null);
         $metricString = (isset($request['options']['metric']) ? $request['options']['metric'] : null);
@@ -217,6 +219,7 @@ class Reports extends Component
         $endDate = date('Y-m-d');
 
         $criteria = new ReportRequestCriteria;
+        $criteria->viewId = $viewId;
         $criteria->startDate = $startDate;
         $criteria->endDate = $endDate;
         $criteria->metrics = $metricString;
@@ -225,7 +228,10 @@ class Reports extends Component
         $reportResponse = Analytics::$plugin->getApis()->getAnalyticsReporting()->getReport($criteria);
         $report = $this->parseReportingReport($reportResponse);
 
+        $view = Analytics::$plugin->getViews()->getViewById($viewId);
+
         return [
+            'view' => $view->name,
             'type' => 'pie',
             'chart' => $report,
             'dimension' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($dimensionString)),
@@ -244,11 +250,14 @@ class Reports extends Component
      */
     public function getTableReport(array $request)
     {
+        $viewId = (isset($request['viewId']) ? $request['viewId'] : null);
+
         $period = (isset($request['period']) ? $request['period'] : null);
         $dimensionString = (isset($request['options']['dimension']) ? $request['options']['dimension'] : null);
         $metricString = (isset($request['options']['metric']) ? $request['options']['metric'] : null);
 
         $criteria = new ReportRequestCriteria;
+        $criteria->viewId = $viewId;
         $criteria->dimensions = $dimensionString;
         $criteria->metrics = $metricString;
         $criteria->startDate = date('Y-m-d', strtotime('-1 '.$period));
@@ -257,7 +266,10 @@ class Reports extends Component
         $reportResponse = Analytics::$plugin->getApis()->getAnalyticsReporting()->getReport($criteria);
         $report = $this->parseReportingReport($reportResponse);
 
+        $view = Analytics::$plugin->getViews()->getViewById($viewId);
+
         return [
+            'view' => $view->name,
             'type' => 'table',
             'chart' => $report,
             'dimension' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($dimensionString)),
@@ -276,6 +288,7 @@ class Reports extends Component
      */
     public function getGeoReport(array $request)
     {
+        $viewId = (isset($request['viewId']) ? $request['viewId'] : null);
         $period = (isset($request['period']) ? $request['period'] : null);
         $dimensionString = (isset($request['options']['dimension']) ? $request['options']['dimension'] : null);
         $metricString = (isset($request['options']['metric']) ? $request['options']['metric'] : null);
@@ -287,6 +300,7 @@ class Reports extends Component
         }
 
         $criteria = new ReportRequestCriteria;
+        $criteria->viewId = $viewId;
         $criteria->dimensions = $dimensionString;
         $criteria->metrics = $metricString;
         $criteria->startDate = date('Y-m-d', strtotime('-1 '.$period));
@@ -295,7 +309,10 @@ class Reports extends Component
         $reportResponse = Analytics::$plugin->getApis()->getAnalyticsReporting()->getReport($criteria);
         $report = $this->parseReportingReport($reportResponse);
 
+        $view = Analytics::$plugin->getViews()->getViewById($viewId);
+
         return [
+            'view' => $view->name,
             'type' => 'geo',
             'chart' => $report,
             'dimensionRaw' => $originDimension,

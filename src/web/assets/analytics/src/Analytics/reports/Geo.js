@@ -10,6 +10,9 @@ Analytics.reports.Geo = Analytics.reports.BaseChart.extend(
 
         $period = $('<div class="period" />').prependTo(this.$chart);
         $title = $('<div class="title" />').prependTo(this.$chart);
+        $view = $('<div class="view" />').prependTo(this.$chart);
+
+        $view.html(this.data.view);
         $title.html(this.data.metric);
         $period.html(this.data.periodLabel);
 
