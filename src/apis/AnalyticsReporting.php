@@ -108,8 +108,15 @@ class AnalyticsReporting extends Api
     {
         $request = new Google_Service_AnalyticsReporting_ReportRequest();
 
-        $viewId = Analytics::$plugin->getAnalytics()->getProfileId();
-        $request->setViewId($viewId);
+        $reportingViewId = Analytics::$plugin->getAnalytics()->getProfileId();
+
+        if($criteria->viewId) {
+
+            $view = Analytics::$plugin->getViews()->getViewById($criteria->viewId);
+            $reportingViewId = $view->reportingViewId;
+        }
+
+        $request->setViewId($reportingViewId);
 
         $dateRange = new Google_Service_AnalyticsReporting_DateRange();
         $dateRange->setStartDate($criteria->startDate);

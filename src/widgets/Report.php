@@ -18,6 +18,7 @@ class Report extends \craft\base\Widget
     // Properties
     // =========================================================================
 
+    public $viewId;
     public $realtime;
     public $chart;
     public $period;
@@ -77,6 +78,7 @@ class Report extends \craft\base\Widget
 
                     if ($profileId) {
                         $request = [
+                            'viewId' => (isset($settings['viewId']) ? $settings['viewId'] : null),
                             'chart' => (isset($settings['chart']) ? $settings['chart'] : null),
                             'period' => (isset($settings['period']) ? $settings['period'] : null),
                             'options' => (isset($settings['options'][$settings['chart']]) ? $settings['options'][$settings['chart']] : null),
@@ -110,7 +112,7 @@ class Report extends \craft\base\Widget
                         $view->registerJs($js);
                         $view->registerJs('var AnalyticsChartLanguage = "'.Craft::t('analytics', 'analyticsChartLanguage').'";');
                         $view->registerJs('new Analytics.ReportWidget("widget'.$widgetId.'", '.Json::encode($widgetOptions).');');
-
+                        
                         return $view->renderTemplate('analytics/_components/widgets/Report/body');
                     } else {
                         return $view->renderTemplate('analytics/_special/plugin-not-configured');
@@ -154,29 +156,15 @@ class Report extends \craft\base\Widget
             $selectOptions[$chartType] = $this->_geSelectOptionsByChartType($chartType);
         }
 
+        // view options
+        $reportingViews = Analytics::$plugin->getViews()->getViews();
+
         return Craft::$app->getView()->renderTemplate('analytics/_components/widgets/Report/settings', array(
            'id' => $id,
            'settings' => $settings,
            'selectOptions' => $selectOptions,
+           'reportingViews' => $reportingViews,
         ));
-    }
-
-    // Protected Methods
-    // =========================================================================
-
-    /**
-     * @inheritDoc BaseSavableComponentType::defineSettings()
-     *
-     * @return array
-     */
-    protected function defineSettings()
-    {
-        return array(
-            'realtime' => array(AttributeType::Bool),
-            'chart' => array(AttributeType::String),
-            'period' => array(AttributeType::String),
-            'options' => array(AttributeType::Mixed),
-        );
     }
 
     // Private Methods

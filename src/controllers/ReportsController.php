@@ -151,11 +151,13 @@ class ReportsController extends Controller
         try {
             $profileId = Analytics::$plugin->getAnalytics()->getProfileId();
 
+            $viewId = Craft::$app->getRequest()->getBodyParam('viewId');
             $chart = Craft::$app->getRequest()->getBodyParam('chart');
             $period = Craft::$app->getRequest()->getBodyParam('period');
             $options = Craft::$app->getRequest()->getBodyParam('options');
 
             $request = [
+                'viewId' => $viewId,
                 'chart' => $chart,
                 'period' => $period,
                 'options' => $options,

@@ -107,6 +107,7 @@ class Reports extends Component
      */
     public function getAreaReport(array $request)
     {
+        $viewId = (isset($request['viewId']) ? $request['viewId'] : null);
         $period = (isset($request['period']) ? $request['period'] : null);
         $metricString = (isset($request['options']['metric']) ? $request['options']['metric'] : null);
 
@@ -124,6 +125,7 @@ class Reports extends Component
         }
 
         $criteria = new ReportRequestCriteria;
+        $criteria->viewId = $viewId;
         $criteria->startDate = $startDate;
         $criteria->endDate = $endDate;
         $criteria->metrics = $metricString;
@@ -137,7 +139,11 @@ class Reports extends Component
 
         $total = $report['totals'][0];
 
+        $view = Analytics::$plugin->getViews()->getViewById($viewId);
+
         return [
+            'viewId' => $viewId,
+            'viewName' => $view->name,
             'type' => 'area',
             'chart' => $report,
             'total' => $total,

@@ -1,6 +1,20 @@
 <div id="{{ id }}">
 	{% import "_includes/forms" as forms %}
 
+
+	{% set reportingViewOptions = [] %}
+	{% for reportingView in reportingViews %}
+		{% set reportingViewOptions = reportingViewOptions|merge([{ label: reportingView.name, value: reportingView.id }]) %}
+	{% endfor %}
+
+	{{ forms.selectField({
+		label: "View"|t('analytics'),
+		name: 'viewId',
+		class: 'view',
+		options: reportingViewOptions,
+		value: settings.viewId
+	}) }}
+
 	{% set chartTypes = {
 			area: "Area"|t('analytics'),
 			counter: "Counter"|t('analytics'),

@@ -5,6 +5,10 @@
     z-index: 1; }
   .dukt\\analytics\\widgets\\report h2 {
     display: none; }
+  .dukt\\analytics\\widgets\\report div.view {
+    margin-top: -1em;
+    font-size: 0.8em;
+    color: #8f98a3; }
   .dukt\\analytics\\widgets\\report div.title {
     font-weight: bold;
     font-size: 15px;

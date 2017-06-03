@@ -116,6 +116,11 @@ class Settings extends Model
     public $oauthClientSecret;
 
     /**
+     * @var int View
+     */
+    public $viewId;
+
+    /**
      * @var bool Demo mode
      */
     public $demoMode = false;
