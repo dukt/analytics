@@ -8,8 +8,10 @@
 namespace dukt\analytics\services;
 
 use Craft;
+use dukt\analytics\models\SiteView;
 use dukt\analytics\models\View;
 use dukt\analytics\records\View as ViewRecord;
+use dukt\analytics\records\SiteView as SiteViewRecord;
 use yii\base\Component;
 
 class Views extends Component
@@ -48,6 +50,37 @@ class Views extends Component
                 'id',
                 'name',
                 'reportingViewId',
+            ]));
+        }
+    }
+
+    public function getSiteViews()
+    {
+        $results = SiteViewRecord::find()->all();
+
+        $views = [];
+
+        foreach ($results as $result) {
+            $views[] = new SiteView($result->toArray([
+                'siteId',
+                'viewId',
+            ]));
+        }
+
+        return $views;
+    }
+
+    public function getSiteViewBySiteId($id)
+    {
+        $result = SiteViewRecord::findOne([
+            'siteId' => $id
+        ]);
+
+        if($result) {
+            return new SiteView($result->toArray([
+                'id',
+                'siteId',
+                'viewId',
             ]));
         }
     }
@@ -121,10 +154,54 @@ class Views extends Component
 
         $viewRecord->delete();
 
-/*        Craft::$app->getDb()->createCommand()
-            ->delete('{{%analytics_views}}', ['id' => $viewId])
-            ->execute();*/
+        return true;
+    }
 
+    public function saveSiteView(SiteView $siteView, bool $runValidation = true): bool
+    {
+        if ($runValidation && !$siteView->validate()) {
+            Craft::info('Site view not saved due to validation error.', __METHOD__);
+
+            return false;
+        }
+
+        if ($siteView->siteId) {
+            $siteViewRecord = SiteViewRecord::find()
+                ->where(['siteId' => $siteView->siteId])
+                ->one();
+
+            if (!$siteViewRecord) {
+                throw new SiteViewNotFoundException("No site view exists with the site ID '{$siteView->siteId}'");
+            }
+
+            $isNewSiteView = false;
+        } else {
+            $siteViewRecord = new SiteViewRecord();
+            $isNewSiteView = true;
+        }
+
+        // Shared attributes
+        $siteViewRecord->siteId = $siteView->siteId;
+        $siteViewRecord->viewId = $siteView->viewId;
+
+
+        $transaction = Craft::$app->getDb()->beginTransaction();
+
+        try {
+            // Is the event giving us the go-ahead?
+            $siteViewRecord->save(false);
+
+            // Now that we have a view ID, save it on the model
+            if ($isNewSiteView) {
+                $siteView->id = $siteViewRecord->id;
+            }
+
+            $transaction->commit();
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+
+            throw $e;
+        }
 
         return true;
     }

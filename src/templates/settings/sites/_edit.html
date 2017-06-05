@@ -1,5 +1,7 @@
 {% extends "_layouts/cp" %}
 
+{% set fullPageForm = true %}
+
 {% import "_includes/forms" as forms %}
 
 {% set crumbs = [
@@ -13,5 +15,20 @@
 
 {% set content %}
 
+	<input type="hidden" name="action" value="analytics/settings/save-site">
+	<input type="hidden" name="siteId" value="{{ site.id }}">
+
+	{% set reportingViewOptions = [{ label: "None", value: "" }] %}
+	{% for reportingView in reportingViews %}
+		{% set reportingViewOptions = reportingViewOptions|merge([{ label: reportingView.name, value: reportingView.id }]) %}
+	{% endfor %}
+
+	{{ forms.selectField({
+		first: true,
+		label: "Attached View",
+		name: 'viewId',
+		options: reportingViewOptions,
+		value: (siteView.viewId is defined ? siteView.viewId : '')
+	}) }}
 
 {% endset %}

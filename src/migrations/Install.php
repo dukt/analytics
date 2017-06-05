@@ -57,6 +57,7 @@ class Install extends Migration
     public function safeDown()
     {
         $this->driver = Craft::$app->getConfig()->getDb()->driver;
+        $this->removeForeignKeys();
         $this->removeIndexes();
         $this->removeTables();
         return true;
@@ -84,6 +85,19 @@ class Install extends Migration
                 'uid' => $this->uid()
             ]
         );
+
+        $this->createTable(
+            '{{%analytics_site_views}}',
+            [
+                'id' => $this->primaryKey(),
+                'siteId' => $this->integer()->notNull(),
+                'viewId' => $this->integer()->notNull(),
+
+                'dateCreated' => $this->dateTime()->notNull(),
+                'dateUpdated' => $this->dateTime()->notNull(),
+                'uid' => $this->uid()
+            ]
+        );
     }
 
     /**
@@ -93,6 +107,7 @@ class Install extends Migration
      */
     protected function createIndexes()
     {
+        $this->createIndex(null, '{{%analytics_site_views}}', 'siteId,viewId', true);
     }
 
     /**
@@ -102,6 +117,8 @@ class Install extends Migration
      */
     protected function addForeignKeys()
     {
+        $this->addForeignKey($this->db->getForeignKeyName('{{%analytics_site_views}}', 'siteId'), '{{%analytics_site_views}}', 'siteId', '{{%sites}}', 'id', 'CASCADE', null);
+        $this->addForeignKey($this->db->getForeignKeyName('{{%analytics_site_views}}', 'viewId'), '{{%analytics_site_views}}', 'viewId', '{{%analytics_views}}', 'id', 'CASCADE', null);
     }
 
     /**
@@ -121,6 +138,7 @@ class Install extends Migration
     protected function removeTables()
     {
         $this->dropTable('{{%analytics_views}}');
+        $this->dropTable('{{%analytics_site_views}}');
     }
 
     /**
@@ -130,5 +148,17 @@ class Install extends Migration
      */
     protected function removeIndexes()
     {
+        $this->dropIndex($this->db->getIndexName('{{%analytics_site_views}}', 'siteId,viewId', true), '{{%analytics_site_views}}');
+    }
+
+    /**
+     * Removes the foreign keys needed for the Records used by the plugin
+     *
+     * @return void
+     */
+    protected function removeForeignKeys()
+    {
+        $this->dropForeignKey($this->db->getForeignKeyName('{{%analytics_site_views}}', 'siteId'), '{{%analytics_site_views}}');
+        $this->dropForeignKey($this->db->getForeignKeyName('{{%analytics_site_views}}', 'viewId'), '{{%analytics_site_views}}');
     }
 }

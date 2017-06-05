@@ -14,16 +14,28 @@
 		<thead>
 			<tr>
 				<th>{{ "Site"|t('analytics') }}</th>
-				<th>{{ "Google Analytics View"|t('analytics') }}</th>
+				<th>{{ "Attached View"|t('analytics') }}</th>
 			</tr>
 		</thead>
 		<tbody>
 
 			{% for site in sites %}
+				
+				{% set siteView = false %}
+
+				{% for sView in siteViews %}
+					{% if sView.siteId == site.id %}
+						{% set siteView = sView %}
+					{% endif %}
+				{% endfor %}
 				<tr>
 					<td><a href="{{ url('analytics/settings/sites/'~ site.id) }}">{{ site.name }}</a> <span class="light">— {{ site.baseUrl }}</span></td>
 					<td>
-						<span class="light">{{ "No view attached"|t('analytics') }}</span>
+						{% if siteView %}
+							{{ siteView.view.name }}
+						{% else %}
+							<span class="light">—</span>
+						{% endif %}
 					</td>
 				</tr>
 			{% endfor %}

@@ -9,6 +9,7 @@ namespace dukt\analytics\controllers;
 
 use Craft;
 use craft\web\Controller;
+use dukt\analytics\models\SiteView;
 use dukt\analytics\models\View;
 use dukt\analytics\web\assets\settings\SettingsAsset;
 use dukt\analytics\Plugin as Analytics;
@@ -408,18 +409,53 @@ class SettingsController extends Controller
     public function actionSites()
     {
         $sites = Craft::$app->getSites()->getAllSites();
-        
+        $siteViews = Analytics::$plugin->getViews()->getSiteViews();
+
         return $this->renderTemplate('analytics/settings/sites/_index', [
-            'sites' => $sites
+            'sites' => $sites,
+            'siteViews' => $siteViews,
+
         ]);
     }
 
     public function actionEditSite($siteId)
     {
         $site = Craft::$app->getSites()->getSiteById($siteId);
+        $siteView = Analytics::$plugin->getViews()->getSiteViewBySiteId($siteId);
+        $reportingViews = Analytics::$plugin->getViews()->getViews();
 
         return $this->renderTemplate('analytics/settings/sites/_edit', [
-            'site' => $site
+            'site' => $site,
+            'siteView' => $siteView,
+            'reportingViews' => $reportingViews,
         ]);
+    }
+
+    public function actionSaveSite()
+    {
+        $this->requirePostRequest();
+
+        $siteView = new SiteView();
+
+        // Set the simple stuff
+        $request = Craft::$app->getRequest();
+        $siteView->siteId = $request->getBodyParam('siteId');
+        $siteView->viewId = $request->getBodyParam('viewId');
+
+        // Save it
+        if (!Analytics::$plugin->getViews()->saveSiteView($siteView)) {
+            Craft::$app->getSession()->setError(Craft::t('analytics', 'Couldn’t save the site view.'));
+
+            // Send the view back to the template
+            Craft::$app->getUrlManager()->setRouteParams([
+                'siteView' => $siteView
+            ]);
+
+            return null;
+        }
+
+        Craft::$app->getSession()->setNotice(Craft::t('analytics', 'Site view saved.'));
+
+        return $this->redirectToPostedUrl($siteView);
     }
 }
