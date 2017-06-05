@@ -61,6 +61,14 @@ class Reports extends Component
             $uri = '';
         }
 
+        $siteView = Analytics::$plugin->getViews()->getSiteViewBySiteId($siteId);
+
+        $viewId = null;
+
+        if($siteView) {
+            $viewId = $siteView->viewId;
+        }
+
         $startDate = date('Y-m-d', strtotime('-1 month'));
         $endDate = date('Y-m-d');
         $dimensions = 'ga:date';
@@ -68,6 +76,7 @@ class Reports extends Component
         $filters = "ga:pagePath==".$uri;
 
         $request = [
+            'viewId' => $viewId,
             'startDate' => $startDate,
             'endDate' => $endDate,
             'metrics' => $metrics,
@@ -81,6 +90,7 @@ class Reports extends Component
         if (!$response) {
 
             $criteria = new ReportRequestCriteria;
+            $criteria->viewId = $viewId;
             $criteria->startDate = $startDate;
             $criteria->endDate = $endDate;
             $criteria->metrics = $metrics;

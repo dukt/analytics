@@ -171,7 +171,9 @@ class Views extends Component
                 ->one();
 
             if (!$siteViewRecord) {
-                throw new SiteViewNotFoundException("No site view exists with the site ID '{$siteView->siteId}'");
+                // throw new SiteViewNotFoundException("No site view exists with the site ID '{$siteView->siteId}'");
+                $siteViewRecord = new SiteViewRecord();
+                $isNewSiteView = true;
             }
 
             $isNewSiteView = false;
