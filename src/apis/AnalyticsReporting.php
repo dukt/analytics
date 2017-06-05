@@ -107,6 +107,7 @@ class AnalyticsReporting extends Api
     private function getReportingReportRequest(ReportRequestCriteria $criteria)
     {
         $request = new Google_Service_AnalyticsReporting_ReportRequest();
+        $request->includeEmptyRows = true;
 
         $reportingViewId = Analytics::$plugin->getAnalytics()->getProfileId();
 
