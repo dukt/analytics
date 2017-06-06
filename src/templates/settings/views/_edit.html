@@ -32,7 +32,7 @@
 
 	{% include 'analytics/_includes/account-explorer' with {
 		name: 'reportingViewId',
-		value: (reportingView is defined ? reportingView.reportingViewId : null),
+		value: (reportingView is defined ? reportingView.gaViewId : null),
 	} %}
 
 {% endset %}

@@ -7,19 +7,22 @@
 	{{ forms.selectField({
 		label: "Account"|t('analytics'),
 		class: 'account',
+		name: 'accountExplorer[account]'
 	}) }}
 
 	{{ forms.selectField({
 		label: "Property"|t('analytics'),
 		class: 'property',
+		name: 'accountExplorer[property]'
 	}) }}
 
 	{{ forms.selectField({
 		label: "View"|t('analytics'),
 		class: 'view',
+		name: 'accountExplorer[view]'
 	}) }}
 
-	<input type="hidden" class="reporting-view-id" name="{{ name }}" value="{{ value }}">
+	<input type="text" class="reporting-view-id" name="{{ name }}" value="{{ value }}">
 
 	<div class="buttons">
 		<div class="btn small refresh-views">Refresh</div> <div class="spinner hidden"></div>

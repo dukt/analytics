@@ -21,7 +21,13 @@
 		{% for reportingView in reportingViews %}
 			<tr data-id="{{ reportingView.id }}" data-name="{{ reportingView.name }}">
 				<td><a href="{{ url('analytics/settings/views/'~reportingView.id) }}">{{ reportingView.name }}</a></td>
-				<td>{{ reportingView.reportingViewId}}</td>
+				<td>
+					<div class="light">
+						{{ reportingView.gaAccountName }} →
+						{{ reportingView.gaPropertyName }}
+					</div>
+					{{ reportingView.gaViewName }}
+				</td>
 				<td class="thin"><a class="delete icon" title="{{ 'Delete'|t('app') }}" role="button"></a></td>
 			</tr>
 		{% endfor %}
@@ -41,4 +47,5 @@
 		deleteAction: 'analytics/settings/delete-view'
 	});
 	{% endjs %}
+
 {% endset %}

@@ -30,9 +30,33 @@ class View extends Model
     public $name;
 
     /**
-     * @var string Reporting View ID
+     * @var string Google Analytics Account ID
      */
-    public $reportingViewId;
+    public $gaAccountId;
+    /**
+     * @var string Google Analytics Account Name
+     */
+    public $gaAccountName;
+
+    /**
+     * @var string Google Analytics Property ID
+     */
+    public $gaPropertyId;
+
+    /**
+     * @var string Google Analytics Property Name
+     */
+    public $gaPropertyName;
+
+    /**
+     * @var string Google Analytics View ID
+     */
+    public $gaViewId;
+
+    /**
+     * @var string Google Analytics View Name
+     */
+    public $gaViewName;
 
     // Public Methods
     // =========================================================================

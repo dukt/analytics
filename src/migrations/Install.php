@@ -78,7 +78,12 @@ class Install extends Migration
             [
                 'id' => $this->primaryKey(),
                 'name' => $this->string()->notNull(),
-                'reportingViewId' => $this->string()->notNull(),
+                'gaAccountId' => $this->string()->notNull(),
+                'gaAccountName' => $this->string()->notNull(),
+                'gaPropertyId' => $this->string()->notNull(),
+                'gaPropertyName' => $this->string()->notNull(),
+                'gaViewId' => $this->string()->notNull(),
+                'gaViewName' => $this->string()->notNull(),
 
                 'dateCreated' => $this->dateTime()->notNull(),
                 'dateUpdated' => $this->dateTime()->notNull(),

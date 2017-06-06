@@ -123,7 +123,7 @@ class SettingsController extends Controller
 
         return $this->renderTemplate('analytics/settings/_index', [
             'isOauthProviderConfigured' => $isOauthProviderConfigured,
-            
+
             'accountExplorerData' => (isset($accountExplorerData) ? $accountExplorerData : null),
             'accountId' => (isset($accountId) ? $accountId : null),
             'accountOptions' => (isset($accountOptions) ? $accountOptions : null),
@@ -221,9 +221,12 @@ class SettingsController extends Controller
     public function actionViews()
     {
         $reportingViews = Analytics::$plugin->getViews()->getViews();
+        $accountExplorerData = Analytics::$plugin->getApis()->getAnalytics()->getAccountExplorerData();
+
 
         return $this->renderTemplate('analytics/settings/views/_index', [
-            'reportingViews' => $reportingViews
+            'reportingViews' => $reportingViews,
+            'accountExplorerData' => $accountExplorerData,
         ]);
     }
 
@@ -374,7 +377,38 @@ class SettingsController extends Controller
         $request = Craft::$app->getRequest();
         $view->id = $request->getBodyParam('viewId');
         $view->name = $request->getBodyParam('name');
-        $view->reportingViewId = $request->getBodyParam('reportingViewId');
+
+        $accountExplorer = $request->getBodyParam('accountExplorer');
+
+        $view->gaAccountId = $accountExplorer['account'];
+        $view->gaPropertyId = $accountExplorer['property'];
+        $view->gaViewId = $accountExplorer['view'];
+
+
+        $accountExplorerData = Analytics::$plugin->getApis()->getAnalytics()->getAccountExplorerData();
+
+        foreach($accountExplorerData['accounts'] as $dataAccount) {
+            if($dataAccount['id'] == $view->gaAccountId) {
+                $view->gaAccountName = $dataAccount['name'];
+            }
+        }
+
+        foreach($accountExplorerData['properties'] as $dataProperty) {
+            if($dataProperty['id'] == $view->gaPropertyId) {
+                $view->gaPropertyName = $dataProperty['name'];
+            }
+        }
+        foreach($accountExplorerData['views'] as $dataView) {
+            if($dataView['id'] == $view->gaViewId) {
+                $view->gaViewName = $dataView['name'];
+            }
+        }
+
+
+/*        $apiView = Analytics::$plugin->getApis()->getAnalytics()->getService()->management_profiles->get($view->gaAccountId, $view->gaPropertyId, $view->gaViewId);
+        $objView = $apiView->toSimpleObject();
+        var_dump($objView);*/
+
 
         // Save it
         if (!Analytics::$plugin->getViews()->saveView($view)) {

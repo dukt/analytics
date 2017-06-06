@@ -34,7 +34,12 @@ class Views extends Component
             $views[] = new View($result->toArray([
                 'id',
                 'name',
-                'reportingViewId',
+                'gaAccountId',
+                'gaAccountName',
+                'gaPropertyId',
+                'gaPropertyName',
+                'gaViewId',
+                'gaViewName',
             ]));
         }
 
@@ -49,7 +54,12 @@ class Views extends Component
             return new View($result->toArray([
                 'id',
                 'name',
-                'reportingViewId',
+                'gaAccountId',
+                'gaAccountName',
+                'gaPropertyId',
+                'gaPropertyName',
+                'gaViewId',
+                'gaViewName',
             ]));
         }
     }
@@ -120,7 +130,12 @@ class Views extends Component
 
         // Shared attributes
         $viewRecord->name = $view->name;
-        $viewRecord->reportingViewId = $view->reportingViewId;
+        $viewRecord->gaAccountId = $view->gaAccountId;
+        $viewRecord->gaAccountName = $view->gaAccountName;
+        $viewRecord->gaPropertyId = $view->gaPropertyId;
+        $viewRecord->gaPropertyName = $view->gaPropertyName;
+        $viewRecord->gaViewId = $view->gaViewId;
+        $viewRecord->gaViewName = $view->gaViewName;
 
 
         $transaction = Craft::$app->getDb()->beginTransaction();
