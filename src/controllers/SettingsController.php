@@ -123,7 +123,7 @@ class SettingsController extends Controller
 
         return $this->renderTemplate('analytics/settings/_index', [
             'isOauthProviderConfigured' => $isOauthProviderConfigured,
-
+            
             'accountExplorerData' => (isset($accountExplorerData) ? $accountExplorerData : null),
             'accountId' => (isset($accountId) ? $accountId : null),
             'accountOptions' => (isset($accountOptions) ? $accountOptions : null),

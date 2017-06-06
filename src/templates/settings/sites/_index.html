@@ -1,12 +1,6 @@
-{% extends "_layouts/cp" %}
+{% extends "analytics/settings/_layout" %}
 
-{% set crumbs = [
-	{ label: "Settings"|t('analytics'), url: url('settings') },
-	{ label: "Plugins"|t('analytics'), url: url('settings/plugins') },
-	{ label: "Analytics"|t('analytics'), url: url('analytics/settings') }
-] %}
-
-{% set title = "Sites"|t('analytics')%}
+{% set selectedNavItem = 'sites' %}
 
 {% set content %}
 

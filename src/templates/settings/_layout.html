@@ -1,0 +1,19 @@
+{% extends "_layouts/cp" %}
+{% set title = "Analytics"|t('analytics')%}
+
+{% set crumbs = [
+	{ label: "Settings"|t('analytics'), url: url('settings') },
+	{ label: "Plugins"|t('analytics'), url: url('settings/plugins') }
+] %}
+
+{% set navItems = {
+general: { label: "General Settings"|t('analytics'), url: url('analytics/settings') },
+views: { label: "Views"|t('analytics'), url: url('analytics/settings/views') },
+sites: { label: "Sites"|t('analytics'), url: url('analytics/settings/sites') },
+} %}
+
+{% block sidebar %}
+	<nav>
+		{% include "_includes/nav" with { items: navItems, selectedItem: selectedNavItem } only %}
+	</nav>
+{% endblock %}
