@@ -14,46 +14,6 @@ class Settings extends Model
     // =========================================================================
 
     /**
-     * @var string|null Google Analytics Account ID
-     */
-    public $accountId;
-
-    /**
-     * @var string|null Google Analytics Account Name
-     */
-    public $accountName;
-
-    /**
-     * @var string|null Web Property ID
-     */
-    public $webPropertyId;
-
-    /**
-     * @var string|null Web Property Name
-     */
-    public $webPropertyName;
-
-    /**
-     * @var string|null Internal Web Property ID
-     */
-    public $internalWebPropertyId;
-
-    /**
-     * @var string|null Profile ID
-     */
-    public $profileId;
-
-    /**
-     * @var string|null Profile Name
-     */
-    public $profileName;
-
-    /**
-     * @var string|null Profile Currency
-     */
-    public $profileCurrency;
-
-    /**
      * @var int Realtime Refresh Interval (in seconds)
      */
     public $realtimeRefreshInterval = 60;
@@ -91,11 +51,6 @@ class Settings extends Model
     public $enableFieldtype = true;
 
     /**
-     * @var array Defines global filters applied to every request to the Core Reporting API
-     */
-    public $filters = [];
-
-    /**
      * @var string OAuth token
      */
     public $token;
@@ -114,11 +69,6 @@ class Settings extends Model
      * @var string OAuth client ID
      */
     public $oauthClientSecret;
-
-    /**
-     * @var int View
-     */
-    public $viewId;
 
     /**
      * @var bool Demo mode
