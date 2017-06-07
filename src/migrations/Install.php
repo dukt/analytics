@@ -96,7 +96,7 @@ class Install extends Migration
             [
                 'id' => $this->primaryKey(),
                 'siteId' => $this->integer()->notNull(),
-                'viewId' => $this->integer()->notNull(),
+                'viewId' => $this->integer(),
 
                 'dateCreated' => $this->dateTime()->notNull(),
                 'dateUpdated' => $this->dateTime()->notNull(),

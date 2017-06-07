@@ -65,40 +65,54 @@ class Realtime extends \craft\base\Widget
      */
     public function getBodyHtml()
     {
+        $view = Craft::$app->getView();
+
         if(Analytics::$plugin->getAnalytics()->checkPluginRequirements()) {
             if (Analytics::$plugin->getSettings()->enableWidgets) {
-                $widgetSettings = $this->settings;
+                $reportingViews = Analytics::$plugin->getViews()->getViews();
 
-                if ($widgetSettings['viewId']) {
-                    $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
-                    $pluginSettings = $plugin->getSettings();
+                if(count($reportingViews) > 0) {
+                    $widgetSettings = $this->settings;
 
-                    if (!empty($pluginSettings['enableRealtime'])) {
-                        $realtimeRefreshInterval = Analytics::$plugin->getAnalytics()->getRealtimeRefreshInterval();
+                    $reportingView = Analytics::$plugin->getViews()->getViewById($widgetSettings['viewId']);
 
-                        $widgetId = $this->id;
-                        $widgetOptions = [
-                            'viewId' => $widgetSettings['viewId'],
-                            'refreshInterval' => $realtimeRefreshInterval,
-                        ];
+                    if ($reportingView) {
+                        $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
+                        $pluginSettings = $plugin->getSettings();
 
-                        Craft::$app->getView()->registerAssetBundle(RealtimeReportWidgetAsset::class);
+                        if (!empty($pluginSettings['enableRealtime'])) {
+                            $realtimeRefreshInterval = Analytics::$plugin->getAnalytics()->getRealtimeRefreshInterval();
 
-                        Craft::$app->getView()->registerJs('var AnalyticsChartLanguage = "'.Craft::$app->language.'";', true);
+                            $widgetId = $this->id;
+                            $widgetOptions = [
+                                'viewId' => $widgetSettings['viewId'],
+                                'refreshInterval' => $realtimeRefreshInterval,
+                            ];
 
-                        Craft::$app->getView()->registerJs('new Analytics.Realtime("widget'.$widgetId.'", '.Json::encode($widgetOptions).');');
+                            $view->registerAssetBundle(RealtimeReportWidgetAsset::class);
 
-                        return Craft::$app->getView()->renderTemplate('analytics/_components/widgets/Realtime/body');
-                    } else {
-                        return Craft::$app->getView()->renderTemplate('analytics/_components/widgets/Realtime/disabled');
+                            $view->registerJs('var AnalyticsChartLanguage = "'.Craft::$app->language.'";', true);
+
+                            $view->registerJs('new Analytics.Realtime("widget'.$widgetId.'", '.Json::encode($widgetOptions).');');
+
+                            return $view->renderTemplate('analytics/_components/widgets/Realtime/body', [
+                                'reportingView' => $reportingView
+                            ]);
+                        }
+
+                        return $view->renderTemplate('analytics/_components/widgets/Realtime/disabled');
                     }
-                } else {
-                    return Craft::$app->getView()->renderTemplate('analytics/_special/plugin-not-configured');
+
+                    return $view->renderTemplate('analytics/_special/view-not-configured');
                 }
-            } else {
-                return Craft::$app->getView()->renderTemplate('analytics/_components/widgets/Realtime/disabled');
+
+                return $view->renderTemplate('analytics/_special/no-views');
             }
+
+            return $view->renderTemplate('analytics/_components/widgets/Realtime/disabled');
         }
+
+        return $view->renderTemplate('analytics/_special/not-connected');
     }
 
     /**
@@ -119,9 +133,11 @@ class Realtime extends \craft\base\Widget
         $settings = $this->getSettings();
         $reportingViews = Analytics::$plugin->getViews()->getViews();
 
-        return Craft::$app->getView()->renderTemplate('analytics/_components/widgets/Realtime/settings', array(
-            'settings' => $settings,
-            'reportingViews' => $reportingViews,
-        ));
+        if(count($reportingViews) > 0) {
+            return Craft::$app->getView()->renderTemplate('analytics/_components/widgets/Realtime/settings', [
+                'settings' => $settings,
+                'reportingViews' => $reportingViews,
+            ]);
+        }
     }
 }

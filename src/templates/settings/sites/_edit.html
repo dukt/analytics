@@ -18,6 +18,8 @@
 	<input type="hidden" name="action" value="analytics/settings/save-site">
 	<input type="hidden" name="siteId" value="{{ site.id }}">
 
+	{{ redirectInput('analytics/settings/sites') }}
+
 	{% set reportingViewOptions = [{ label: "None", value: "" }] %}
 	{% for reportingView in reportingViews %}
 		{% set reportingViewOptions = reportingViewOptions|merge([{ label: reportingView.name, value: reportingView.id }]) %}

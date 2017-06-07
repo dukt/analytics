@@ -36,13 +36,13 @@ Analytics.Realtime = Garnish.Base.extend(
         this.$streamstatus = $('.streamstatus', this.$element);
         this.$error = $('.error', this.$element);
 
+        this.$realtimeVisitors = $('.analytics-realtime-visitors', this.$element);
+
         this.$activeVisitorsCount = $('.active-visitors .count', this.$realtimeVisitors);
 
         this.$progress = $('.progress', this.$realtimeVisitors);
         this.$legend = $('.legend', this.$realtimeVisitors);
-
-        this.$realtimeVisitors = $('.analytics-realtime-visitors', this.$element);
-
+        
         this.$newVisitorsProgress = $('.progress-bar.new-visitors', this.$realtimeVisitors);
         this.$newVisitorsValue = $('.progress-bar.new-visitors span', this.$realtimeVisitors);
         this.$returningVisitorsProgress = $('.progress-bar.returning-visitors', this.$realtimeVisitors);

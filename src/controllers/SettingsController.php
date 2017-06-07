@@ -167,14 +167,18 @@ class SettingsController extends Controller
 
     public function actionViews()
     {
-        $reportingViews = Analytics::$plugin->getViews()->getViews();
-        $accountExplorerData = Analytics::$plugin->getApis()->getAnalytics()->getAccountExplorerData();
+        $isOauthProviderConfigured = Analytics::$plugin->getAnalytics()->isOauthProviderConfigured();
+        $token = Analytics::$plugin->oauth->getToken();
 
+        $variables['isConnected'] = false;
 
-        return $this->renderTemplate('analytics/settings/views/_index', [
-            'reportingViews' => $reportingViews,
-            'accountExplorerData' => $accountExplorerData,
-        ]);
+        if($isOauthProviderConfigured && $token) {
+            $variables['isConnected'] = true;
+            $variables['reportingViews'] = Analytics::$plugin->getViews()->getViews();
+            $variables['accountExplorerData'] = Analytics::$plugin->getApis()->getAnalytics()->getAccountExplorerData();
+        }
+
+        return $this->renderTemplate('analytics/settings/views/_index', $variables);
     }
 
     public function actionEditView(int $viewId = null, View $view = null)
@@ -260,8 +264,8 @@ class SettingsController extends Controller
                         $viewOptions = [];
 
                         if (isset($accountExplorerData['views'])) {
-                            foreach ($accountExplorerData['views'] as $view) {
-                                $viewOptions[] = ['label' => $view['name'], 'value' => $view['id']];
+                            foreach ($accountExplorerData['views'] as $dataView) {
+                                $viewOptions[] = ['label' => $dataView['name'], 'value' => $dataView['id']];
                             }
                         } else {
                             $viewOptions[] = ['label' => $settings->profileName, 'value' => $settings->profileId];
@@ -389,14 +393,18 @@ class SettingsController extends Controller
 
     public function actionSites()
     {
-        $sites = Craft::$app->getSites()->getAllSites();
-        $siteViews = Analytics::$plugin->getViews()->getSiteViews();
+        $isOauthProviderConfigured = Analytics::$plugin->getAnalytics()->isOauthProviderConfigured();
+        $token = Analytics::$plugin->oauth->getToken();
 
-        return $this->renderTemplate('analytics/settings/sites/_index', [
-            'sites' => $sites,
-            'siteViews' => $siteViews,
+        $variables['isConnected'] = false;
 
-        ]);
+        if($isOauthProviderConfigured && $token) {
+            $variables['isConnected'] = true;
+            $variables['sites'] = Craft::$app->getSites()->getAllSites();
+            $variables['siteViews'] = Analytics::$plugin->getViews()->getSiteViews();
+        }
+
+        return $this->renderTemplate('analytics/settings/sites/_index', $variables);
     }
 
     public function actionEditSite($siteId)

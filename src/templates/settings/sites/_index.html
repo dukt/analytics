@@ -3,39 +3,40 @@
 {% set selectedNavItem = 'sites' %}
 
 {% set content %}
-
-	<table class="data fullwidth">
-		<thead>
-			<tr>
-				<th>{{ "Site"|t('analytics') }}</th>
-				<th>{{ "Attached View"|t('analytics') }}</th>
-			</tr>
-		</thead>
-		<tbody>
-
-			{% for site in sites %}
-				
-				{% set siteView = false %}
-
-				{% for sView in siteViews %}
-					{% if sView.siteId == site.id %}
-						{% set siteView = sView %}
-					{% endif %}
-				{% endfor %}
+	{% if isConnected %}
+		<table class="data fullwidth">
+			<thead>
 				<tr>
-					<td><a href="{{ url('analytics/settings/sites/'~ site.id) }}">{{ site.name }}</a> <span class="light">— {{ site.baseUrl }}</span></td>
-					<td>
-						{% if siteView %}
-							{{ siteView.view.name }}
-						{% else %}
-							<span class="light">—</span>
-						{% endif %}
-					</td>
+					<th>{{ "Site"|t('analytics') }}</th>
+					<th>{{ "Attached View"|t('analytics') }}</th>
 				</tr>
-			{% endfor %}
+			</thead>
+			<tbody>
 
-		</tbody>
-	</table>
+				{% for site in sites %}
 
+					{% set siteView = false %}
 
+					{% for sView in siteViews %}
+						{% if sView.siteId == site.id %}
+							{% set siteView = sView %}
+						{% endif %}
+					{% endfor %}
+					<tr>
+						<td><a href="{{ url('analytics/settings/sites/'~ site.id) }}">{{ site.name }}</a> <span class="light">— {{ site.baseUrl }}</span></td>
+						<td>
+							{% if siteView and siteView.view %}
+								{{ siteView.view.name }}
+							{% else %}
+								<span class="light">—</span>
+							{% endif %}
+						</td>
+					</tr>
+				{% endfor %}
+
+			</tbody>
+		</table>
+	{% else %}
+		{% include 'analytics/_special/not-connected' %}
+	{% endif %}
 {% endset %}

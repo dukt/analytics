@@ -3,49 +3,54 @@
 {% set selectedNavItem = 'views' %}
 
 {% set content %}
-	<p id="noviews"{% if reportingViews|length %} class="hidden"{% endif %}>
-		{{ "No views exist yet."|t('app') }}
-	</p>
 
-	<table id="views" class="data fullwidth collapsible">
-		<thead>
-		<tr>
-			<th>{{ "Name"|t('analytics') }}</th>
-			<th>{{ "Google Analytics View"|t('analytics') }}</th>
-			<td class="thin"></td>
+	{% if isConnected %}
+		<p id="noviews"{% if reportingViews|length %} class="hidden"{% endif %}>
+			{{ "No views exist yet."|t('app') }}
+		</p>
 
-		</tr>
-		</thead>
-		<tbody>
+		<table id="views" class="data fullwidth collapsible">
+			<thead>
+			<tr>
+				<th>{{ "Name"|t('analytics') }}</th>
+				<th>{{ "Google Analytics View"|t('analytics') }}</th>
+				<td class="thin"></td>
 
-		{% for reportingView in reportingViews %}
-			<tr data-id="{{ reportingView.id }}" data-name="{{ reportingView.name }}">
-				<td><a href="{{ url('analytics/settings/views/'~reportingView.id) }}">{{ reportingView.name }}</a></td>
-				<td>
-					<div class="light">
-						{{ reportingView.gaAccountName }} →
-						{{ reportingView.gaPropertyName }}
-					</div>
-					{{ reportingView.gaViewName }}
-				</td>
-				<td class="thin"><a class="delete icon" title="{{ 'Delete'|t('app') }}" role="button"></a></td>
 			</tr>
-		{% endfor %}
+			</thead>
+			<tbody>
 
-		</tbody>
-	</table>
-	
-	<div class="buttons">
-		<a href="{{ url('analytics/settings/views/new') }}" class="btn submit add icon">New View</a>
-	</div>
+			{% for reportingView in reportingViews %}
+				<tr data-id="{{ reportingView.id }}" data-name="{{ reportingView.name }}">
+					<td><a href="{{ url('analytics/settings/views/'~reportingView.id) }}">{{ reportingView.name }}</a></td>
+					<td>
+						<div class="light">
+							{{ reportingView.gaAccountName }} →
+							{{ reportingView.gaPropertyName }}
+						</div>
+						{{ reportingView.gaViewName }}
+					</td>
+					<td class="thin"><a class="delete icon" title="{{ 'Delete'|t('app') }}" role="button"></a></td>
+				</tr>
+			{% endfor %}
 
-	{% js %}
-	new Craft.AdminTable({
-		tableSelector: '#views',
-		noItemsSelector: '#noviews',
-		sortable: false,
-		deleteAction: 'analytics/settings/delete-view'
-	});
-	{% endjs %}
+			</tbody>
+		</table>
+
+		<div class="buttons">
+			<a href="{{ url('analytics/settings/views/new') }}" class="btn submit add icon">New View</a>
+		</div>
+
+		{% js %}
+		new Craft.AdminTable({
+			tableSelector: '#views',
+			noItemsSelector: '#noviews',
+			sortable: false,
+			deleteAction: 'analytics/settings/delete-view'
+		});
+		{% endjs %}
+	{% else %}
+		{% include 'analytics/_special/not-connected' %}
+	{% endif %}
 
 {% endset %}
