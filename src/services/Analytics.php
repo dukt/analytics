@@ -162,11 +162,7 @@ class Analytics extends Component
     {
         if ($this->isOauthProviderConfigured()) {
             if ($this->isTokenSet()) {
-                if ($this->isGoogleAnalyticsAccountConfigured()) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return true;
             } else {
                 return false;
             }
@@ -184,25 +180,5 @@ class Analytics extends Component
         } else {
             return false;
         }
-    }
-
-    private function isGoogleAnalyticsAccountConfigured()
-    {
-        if (!$this->isTokenSet()) {
-            return false;
-        }
-
-        // check if profile id is set up
-        $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
-        $settings = $plugin->getSettings();
-        $profileId = $settings['profileId'];
-
-        if (!$profileId) {
-            Craft::info('Analytics profileId not found', __METHOD__);
-
-            return false;
-        }
-
-        return true;
     }
 }
