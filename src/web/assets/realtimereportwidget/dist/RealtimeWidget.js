@@ -115,7 +115,11 @@ Analytics.Realtime = Garnish.Base.extend(
         this.$spinner.removeClass('body-loading');
         this.$spinner.removeClass('hidden');
 
-        Craft.queueActionRequest('analytics/reports/realtime-widget', {}, $.proxy(function(response, textStatus)
+        var data = {
+            viewId: this.settings.viewId
+        };
+
+        Craft.queueActionRequest('analytics/reports/realtime-widget', data, $.proxy(function(response, textStatus)
         {
             if(textStatus == 'success' && typeof(response.error) == 'undefined')
             {
@@ -217,6 +221,7 @@ Analytics.Realtime = Garnish.Base.extend(
     },
 }, {
     defaults: {
+        viewId: null,
         refreshInterval: 15,
     }
 });

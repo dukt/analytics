@@ -32,7 +32,6 @@ class SettingsController extends Controller
         if($isOauthProviderConfigured) {
             $errors = [];
 
-
             try {
                 if(!$plugin) {
                     $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
@@ -53,51 +52,6 @@ class SettingsController extends Controller
                         Craft::info("Account:\r\n".print_r($oauthAccount, true), __METHOD__);
 
                         $settings = $plugin->getSettings();
-
-
-                        // Account
-
-                        $accountExplorerData = Analytics::$plugin->cache->get(['accountExplorerData']);
-
-                        $accountOptions = [];
-
-                        if (isset($accountExplorerData['accounts'])) {
-                            foreach ($accountExplorerData['accounts'] as $account) {
-                                $accountOptions[] = ['label' => $account['name'], 'value' => $account['id']];
-                            }
-                        } else {
-                            $accountOptions[] = ['label' => $settings->accountName, 'value' => $settings->accountId];
-                        }
-
-
-                        // Web Properties
-
-                        $webPropertyOptions = [];
-
-                        if (isset($accountExplorerData['properties'])) {
-                            foreach ($accountExplorerData['properties'] as $webProperty) {
-                                $webPropertyOptions[] = ['label' => $webProperty['name'], 'value' => $webProperty['id']];
-                            }
-                        } else {
-                            $webPropertyOptions[] = ['label' => $settings->webPropertyName, 'value' => $settings->webPropertyId];
-                        }
-
-
-                        // Views
-
-                        $viewOptions = [];
-
-                        if (isset($accountExplorerData['views'])) {
-                            foreach ($accountExplorerData['views'] as $view) {
-                                $viewOptions[] = ['label' => $view['name'], 'value' => $view['id']];
-                            }
-                        } else {
-                            $viewOptions[] = ['label' => $settings->profileName, 'value' => $settings->profileId];
-                        }
-
-                        $accountId = $settings->accountId;
-                        $webPropertyId = $settings->webPropertyId;
-                        $viewId = $settings->profileId;
                     }
                 }
             } catch (\Google_Service_Exception $e) {
@@ -124,18 +78,11 @@ class SettingsController extends Controller
         return $this->renderTemplate('analytics/settings/_index', [
             'isOauthProviderConfigured' => $isOauthProviderConfigured,
 
-            'accountExplorerData' => (isset($accountExplorerData) ? $accountExplorerData : null),
-            'accountId' => (isset($accountId) ? $accountId : null),
-            'accountOptions' => (isset($accountOptions) ? $accountOptions : null),
             'errors' => (isset($errors) ? $errors : null),
             'oauthAccount' => (isset($oauthAccount) ? $oauthAccount : null),
             'provider' => (isset($provider) ? $provider : null),
             'settings' => (isset($settings) ? $settings : null),
             'token' => (isset($token) ? $token : null),
-            'viewId' => (isset($viewId) ? $viewId : null),
-            'viewOptions' => (isset($viewOptions) ? $viewOptions : null),
-            'webPropertyId' => (isset($webPropertyId) ? $webPropertyId : null),
-            'webPropertyOptions' => (isset($webPropertyOptions) ? $webPropertyOptions : null),
 
             'javascriptOrigin' => Analytics::$plugin->oauth->getJavascriptOrigin(),
             'redirectUri' => Analytics::$plugin->oauth->getRedirectUri(),

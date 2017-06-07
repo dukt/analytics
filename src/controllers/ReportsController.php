@@ -66,7 +66,10 @@ class ReportsController extends Controller
 
         if (!Analytics::$plugin->getSettings()->demoMode) {
             try {
+                $viewId = Craft::$app->getRequest()->getBodyParam('viewId');
+
                 $request = [
+                    'viewId' => $viewId,
                     'metrics' => 'ga:activeVisitors',
                     'optParams' => ['dimensions' => 'ga:visitorType']
                 ];
@@ -149,8 +152,6 @@ class ReportsController extends Controller
     public function actionReportWidget()
     {
         try {
-            $profileId = Analytics::$plugin->getAnalytics()->getProfileId();
-
             $viewId = Craft::$app->getRequest()->getBodyParam('viewId');
             $chart = Craft::$app->getRequest()->getBodyParam('chart');
             $period = Craft::$app->getRequest()->getBodyParam('period');
@@ -163,7 +164,7 @@ class ReportsController extends Controller
                 'options' => $options,
             ];
 
-            $cacheId = ['getReport', $request, $profileId];
+            $cacheId = ['getReport', $request];
 
             $response = Analytics::$plugin->cache->get($cacheId);
 

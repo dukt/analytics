@@ -63,53 +63,6 @@
 			<input type="hidden" name="pluginClass" value="Analytics">
 			<input type="hidden" name="redirect" value="{{ 'analytics/settings'|hash }}">
 
-			<div id="account-explorer" class="account-explorer">
-
-				<h2 class="first">{{ "Google Analytics View (Profile)"|t('analytics') }}</h2>
-
-				{{ forms.selectField({
-					label: "Account"|t('analytics'),
-					name: 'settings[accountId]',
-					class: 'account',
-					options: accountOptions,
-					value: accountId,
-				}) }}
-
-				{{ forms.selectField({
-					label: "Property"|t('analytics'),
-					name: 'settings[webPropertyId]',
-					class: 'property',
-					options: webPropertyOptions,
-					value: webPropertyId,
-				}) }}
-
-				{{ forms.selectField({
-					label: "View"|t('analytics'),
-					name: 'settings[profileId]',
-					class: 'view',
-					options: viewOptions,
-					value: viewId,
-				}) }}
-
-				<div class="buttons">
-					<div class="btn small refresh-views">Refresh</div> <div class="spinner hidden"></div>
-				</div>
-			</div>
-
-			{% js %}
-
-			{% if accountExplorerData %}
-				var forceRefresh = false;
-			{% else %}
-				var forceRefresh = true;
-			{% endif %}
-
-			var accountExplorer = new Analytics.AccountExplorer('#account-explorer', { forceRefresh: forceRefresh, data: {{ accountExplorerData|json_encode|raw }}  });
-
-			{% endjs %}
-
-			<hr />
-
 			<h2>{{ 'Real-Time'|t('analytics') }}</h2>
 
 			{{ forms.checkboxField({

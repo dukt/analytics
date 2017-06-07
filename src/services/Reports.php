@@ -28,13 +28,18 @@ class Reports extends Component
      */
     public function getRealtimeReport(array $request)
     {
-        $viewId = Analytics::$plugin->getAnalytics()->getProfileId();
+        $view = Analytics::$plugin->getViews()->getViewById($request['viewId']);
 
-        $ids = $viewId;
+        $tableId = null;
+
+        if($view) {
+            $tableId = 'ga:'.$view->gaViewId;
+        }
+
         $metrics = $request['metrics'];
         $optParams = $request['optParams'];
 
-        $response = Analytics::$plugin->getApis()->getAnalytics()->data_realtime->get($ids, $metrics, $optParams);
+        $response = Analytics::$plugin->getApis()->getAnalytics()->getService()->data_realtime->get($tableId, $metrics, $optParams);
 
         return Analytics::$plugin->getApis()->getAnalytics()->parseReportResponse($response);
     }

@@ -17,6 +17,8 @@ class Realtime extends \craft\base\Widget
     // Properties
     // =========================================================================
 
+    public $viewId;
+
     /**
      * Whether users should be able to select more than one of this widget type.
      *
@@ -65,17 +67,18 @@ class Realtime extends \craft\base\Widget
     {
         if(Analytics::$plugin->getAnalytics()->checkPluginRequirements()) {
             if (Analytics::$plugin->getSettings()->enableWidgets) {
-                $profileId = Analytics::$plugin->getAnalytics()->getProfileId();
+                $widgetSettings = $this->settings;
 
-                if ($profileId) {
+                if ($widgetSettings['viewId']) {
                     $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
-                    $settings = $plugin->getSettings();
+                    $pluginSettings = $plugin->getSettings();
 
-                    if (!empty($settings['enableRealtime'])) {
+                    if (!empty($pluginSettings['enableRealtime'])) {
                         $realtimeRefreshInterval = Analytics::$plugin->getAnalytics()->getRealtimeRefreshInterval();
 
                         $widgetId = $this->id;
                         $widgetOptions = [
+                            'viewId' => $widgetSettings['viewId'],
                             'refreshInterval' => $realtimeRefreshInterval,
                         ];
 
@@ -104,5 +107,21 @@ class Realtime extends \craft\base\Widget
     public static function maxColspan()
     {
         return 1;
+    }
+
+    /**
+     * @inheritDoc ISavableComponentType::getSettingsHtml()
+     *
+     * @return string
+     */
+    public function getSettingsHtml()
+    {
+        $settings = $this->getSettings();
+        $reportingViews = Analytics::$plugin->getViews()->getViews();
+
+        return Craft::$app->getView()->renderTemplate('analytics/_components/widgets/Realtime/settings', array(
+            'settings' => $settings,
+            'reportingViews' => $reportingViews,
+        ));
     }
 }

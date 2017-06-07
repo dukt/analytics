@@ -46,21 +46,6 @@ class Analytics extends Component
     }
 
     /**
-     * Returns the Google Analytics Profile ID
-     *
-     * @return string|null
-     */
-    public function getProfileId()
-    {
-        $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
-        $settings = $plugin->getSettings();
-
-        if (!empty($settings['profileId'])) {
-            return 'ga:'.$settings['profileId'];
-        }
-    }
-
-    /**
      * Get Element URL Path
      *
      * @param int           $elementId

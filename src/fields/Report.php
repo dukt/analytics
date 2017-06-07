@@ -49,8 +49,6 @@ class Report extends Field
                 if ($element->uri) {
                     $uri = Analytics::$plugin->getAnalytics()->getElementUrlPath($element->id, $element->siteId);
 
-                    $ids = Analytics::$plugin->getAnalytics()->getProfileId();
-
                     $startDate = date('Y-m-d', strtotime('-1 month'));
                     $endDate = date('Y-m-d');
                     $metrics = 'ga:pageviews';

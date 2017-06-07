@@ -72,24 +72,21 @@ class Report extends \craft\base\Widget
         try {
             if (Analytics::$plugin->getAnalytics()->checkPluginRequirements()) {
                 if (Analytics::$plugin->getSettings()->enableWidgets) {
-                    $settings = $this->settings;
+                    $widgetSettings = $this->settings;
 
-                    $profileId = Analytics::$plugin->getAnalytics()->getProfileId();
-
-                    if ($profileId) {
+                    if ($widgetSettings['viewId']) {
                         $request = [
-                            'viewId' => (isset($settings['viewId']) ? $settings['viewId'] : null),
-                            'chart' => (isset($settings['chart']) ? $settings['chart'] : null),
-                            'period' => (isset($settings['period']) ? $settings['period'] : null),
-                            'options' => (isset($settings['options'][$settings['chart']]) ? $settings['options'][$settings['chart']] : null),
+                            'viewId' => (isset($widgetSettings['viewId']) ? $widgetSettings['viewId'] : null),
+                            'chart' => (isset($widgetSettings['chart']) ? $widgetSettings['chart'] : null),
+                            'period' => (isset($widgetSettings['period']) ? $widgetSettings['period'] : null),
+                            'options' => (isset($widgetSettings['options'][$widgetSettings['chart']]) ? $widgetSettings['options'][$widgetSettings['chart']] : null),
                         ];
 
 
                         // use cached response if available
 
                         if (Analytics::$plugin->getSettings()->enableCache === true) {
-                            $cacheId = ['getReport', $request, $profileId];
-
+                            $cacheId = ['getReport', $request];
                             $cachedResponse = Analytics::$plugin->cache->get($cacheId);
                         }
 
@@ -112,17 +109,18 @@ class Report extends \craft\base\Widget
                         $view->registerJs($js);
                         $view->registerJs('var AnalyticsChartLanguage = "'.Craft::t('analytics', 'analyticsChartLanguage').'";');
                         $view->registerJs('new Analytics.ReportWidget("widget'.$widgetId.'", '.Json::encode($widgetOptions).');');
-                        
+
                         return $view->renderTemplate('analytics/_components/widgets/Report/body');
-                    } else {
-                        return $view->renderTemplate('analytics/_special/plugin-not-configured');
                     }
-                } else {
-                    return $view->renderTemplate('analytics/_components/widgets/Report/disabled');
+
+                    return $view->renderTemplate('analytics/_special/plugin-not-configured');
                 }
-            } else {
-                return $view->renderTemplate('analytics/_special/plugin-not-configured');
+
+                return $view->renderTemplate('analytics/_components/widgets/Report/disabled');
             }
+
+            return $view->renderTemplate('analytics/_special/plugin-not-configured');
+
         } catch(\Exception $e) {
             return $view->renderTemplate('analytics/_special/plugin-not-configured');
         }
