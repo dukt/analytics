@@ -7,6 +7,8 @@ Analytics.reports.BaseChart = Garnish.Base.extend(
     $chart: null,
     $graph: null,
 
+    localeDefinition: null,
+
     type: null,
     chart: null,
     chartOptions: null,
@@ -16,10 +18,11 @@ Analytics.reports.BaseChart = Garnish.Base.extend(
     visualization: null,
     drawing: false,
 
-    init: function($element, data, localeDefinition)
+    init: function($element, data, localeDefinition, chartLanguage)
     {
         this.visualization = new Analytics.Visualization(
             {
+                chartLanguage: chartLanguage,
                 onAfterInit: $.proxy(function()
                 {
                     this.$chart = $element;

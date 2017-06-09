@@ -71,7 +71,9 @@ class Report extends Field
 
                         // JS Options
 
-                        $jsOptions = [];
+                        $jsOptions = [
+                            'chartLanguage' => Analytics::$plugin->getAnalytics()->getChartLanguage(),
+                        ];
 
 
                         // Add locale definition to JS options
@@ -108,7 +110,6 @@ class Report extends Field
                         // Register JS & Styles
 
                         Craft::$app->getView()->registerAssetBundle(ReportFieldAsset::class);
-                        Craft::$app->getView()->registerJs('var AnalyticsChartLanguage = "'.Craft::t('analytics', 'analyticsChartLanguage').'";');
                         Craft::$app->getView()->registerJs('new AnalyticsReportField("'.$namespacedId.'-field", '.json_encode($jsOptions).');');
 
 

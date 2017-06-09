@@ -15,14 +15,16 @@ Analytics.Visualization = Garnish.Base.extend({
         {
             Analytics.GoogleVisualizationCalled = true;
 
-            if(typeof(AnalyticsChartLanguage) == 'undefined')
+            var chartLanguage = 'en';
+
+            if(typeof(this.options['chartLanguage']) != 'undefined')
             {
-                AnalyticsChartLanguage = 'en';
+                chartLanguage = this.options['chartLanguage'];
             }
 
             google.load("visualization", "1", {
                 packages:['corechart', 'table'],
-                language: AnalyticsChartLanguage,
+                language: chartLanguage,
                 callback: $.proxy(function() {
                     Analytics.GoogleVisualizationReady = true;
 

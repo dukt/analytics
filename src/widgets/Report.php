@@ -106,13 +106,13 @@ class Report extends \craft\base\Widget
 
                             $widgetOptions = [
                                 'localeDefinition' => $localeDefinition,
+                                'chartLanguage' => Analytics::$plugin->getAnalytics()->getChartLanguage(),
                                 'request' => $request,
                                 'cachedResponse' => isset($cachedResponse) ? $cachedResponse : null,
                             ];
 
                             $view->registerAssetBundle(ReportWidgetAsset::class);
 
-                            $view->registerJs('window.AnalyticsChartLanguage = "'.Analytics::$plugin->getAnalytics()->getChartLanguage().'";');
                             $view->registerJs('new Analytics.ReportWidget("widget'.$this->id.'", '.Json::encode($widgetOptions).');');
 
                             return $view->renderTemplate('analytics/_components/widgets/Report/body');
