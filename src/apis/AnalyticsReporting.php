@@ -109,10 +109,10 @@ class AnalyticsReporting extends Api
         $request = new Google_Service_AnalyticsReporting_ReportRequest();
         $request->includeEmptyRows = true;
 
-        if($criteria->viewId) {
+        if ($criteria->viewId) {
             $view = Analytics::$plugin->getViews()->getViewById($criteria->viewId);
 
-            if($view) {
+            if ($view) {
                 $request->setViewId($view->gaViewId);
             }
         }
@@ -142,7 +142,7 @@ class AnalyticsReporting extends Api
             $request->setPageSize($criteria->pageSize);
         }
 
-        if($criteria->filtersExpression) {
+        if ($criteria->filtersExpression) {
             $request->setFiltersExpression($criteria->filtersExpression);
         }
 
