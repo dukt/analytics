@@ -173,6 +173,8 @@ class Report extends \craft\base\Widget
                 'reportingViews' => $reportingViews,
             ]);
         }
+
+        return null;
     }
 
     // Private Methods
@@ -266,5 +268,7 @@ class Report extends \craft\base\Widget
         {
             Craft::info('Couldn’t get Analytics Report’s title: '.$e->getMessage(), __METHOD__);
         }
+
+        return null;
     }
 }
