@@ -135,9 +135,9 @@ class Report extends \craft\base\Widget
     }
 
     /**
-     * @inheritDoc ISavableComponentType::getSettingsHtml()
+     * ISavableComponentType::getSettingsHtml()
      *
-     * @return string
+     * @return null|string
      */
     public function getSettingsHtml()
     {
