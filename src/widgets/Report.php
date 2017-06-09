@@ -12,6 +12,7 @@ use craft\helpers\StringHelper;
 use craft\helpers\Json;
 use dukt\analytics\web\assets\reportwidget\ReportWidgetAsset;
 use dukt\analytics\Plugin as Analytics;
+use craft\web\View;
 
 class Report extends \craft\base\Widget
 {
@@ -98,9 +99,13 @@ class Report extends \craft\base\Widget
 
                             // render
 
-                            $widgetId = $this->id;
+                            $gaReportingViewResponse = Analytics::$plugin->getApis()->getAnalytics()->getService()->management_profiles->get($reportingView->gaAccountId, $reportingView->gaPropertyId, $reportingView->gaViewId);
+                            $gaReportingView = $gaReportingViewResponse->toSimpleObject();
+
+                            $localeDefinition = Analytics::$plugin->getAnalytics()->getD3LocaleDefinition(['currency' => $gaReportingView->currency]);
 
                             $widgetOptions = [
+                                'localeDefinition' => $localeDefinition,
                                 'request' => $request,
                                 'cachedResponse' => isset($cachedResponse) ? $cachedResponse : null,
                             ];
@@ -112,8 +117,8 @@ class Report extends \craft\base\Widget
                             $js = $view->renderString($jsTemplate);
 
                             $view->registerJs($js);
-                            $view->registerJs('var AnalyticsChartLanguage = "'.Craft::t('analytics', 'analyticsChartLanguage').'";');
-                            $view->registerJs('new Analytics.ReportWidget("widget'.$widgetId.'", '.Json::encode($widgetOptions).');');
+                            $view->registerJs('window.AnalyticsChartLanguage = "'.Analytics::$plugin->getAnalytics()->getChartLanguage().'";');
+                            $view->registerJs('new Analytics.ReportWidget("widget'.$this->id.'", '.Json::encode($widgetOptions).');');
 
                             return $view->renderTemplate('analytics/_components/widgets/Report/body');
                         }

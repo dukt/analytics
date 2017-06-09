@@ -16,7 +16,7 @@ Analytics.reports.BaseChart = Garnish.Base.extend(
     visualization: null,
     drawing: false,
 
-    init: function($element, data)
+    init: function($element, data, localeDefinition)
     {
         this.visualization = new Analytics.Visualization(
             {
@@ -27,6 +27,7 @@ Analytics.reports.BaseChart = Garnish.Base.extend(
                     this.$graph = $('<div class="chart" />').appendTo(this.$chart);
 
                     this.data = data;
+                    this.localeDefinition = localeDefinition;
 
                     if(typeof(this.data.chartOptions) != 'undefined')
                     {

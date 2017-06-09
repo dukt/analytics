@@ -4,6 +4,7 @@
 Analytics.ReportWidget = Garnish.Base.extend(
 {
     report: null,
+    localeDefinition: null,
 
     $title: null,
     $body: null,
@@ -21,6 +22,11 @@ Analytics.ReportWidget = Garnish.Base.extend(
         this.$spinner = $('.spinner', this.$element);
         this.$spinner.removeClass('body-loading');
         this.$error = $('.error', this.$element);
+
+
+        // locale definition
+
+        this.localeDefinition = options['localeDefinition'];
 
 
         // cached request
@@ -95,6 +101,6 @@ Analytics.ReportWidget = Garnish.Base.extend(
             this.$spinner.addClass('hidden');
         }, this);
 
-        this.report = new Analytics.reports[chartType](this.$report, chartData);
+        this.report = new Analytics.reports[chartType](this.$report, chartData, this.localeDefinition);
     }
 });

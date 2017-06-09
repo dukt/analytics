@@ -92,32 +92,100 @@ class Analytics extends Component
      *
      * @return string
      */
-    public function getD3LocaleDefinitionCurrency()
+    public function getD3LocaleDefinitionCurrency($currency = false)
     {
-        $currency = $this->getCurrency();
+        if(!$currency) {
+            $currency = $this->getCurrency();
+        }
 
         $currencySymbol = ($currency ? Craft::$app->locale->getCurrencySymbol($currency) : '$');
-        // $currencyFormat = Craft::$app->locale->getCurrencyFormat();
-        $currencyFormat = '$,.2f';
 
-        if (strpos($currencyFormat, ";") > 0) {
-            $currencyFormatArray = explode(";", $currencyFormat);
-            $currencyFormat = $currencyFormatArray[0];
+        $localeDefinition = $this->getD3LocaleDefinition();
+
+        $currencyDefinition = $localeDefinition['currency'];
+
+        foreach($currencyDefinition as $key => $row) {
+            if(!empty($row)) {
+                // Todo: Check currency symbol replacement with arabic
+
+                $pattern = '/[^\s]+/u';
+                $replacement = $currencySymbol;
+                $newRow = preg_replace($pattern, $replacement, $row);
+
+                $currencyDefinition[$key] = $newRow;
+            }
         }
 
-        $pattern = '/[#0,.]/';
-        $replacement = '';
-        $currencyFormat = preg_replace($pattern, $replacement, $currencyFormat);
+        return $currencyDefinition;
+    }
 
-        if (strpos($currencyFormat, "¤") === 0) {
-            // symbol at beginning
-            $currencyD3Format = [str_replace('¤', $currencySymbol, $currencyFormat), ''];
+    /**
+     * Returns D3 format locale definition.
+     *
+     * @return array
+     */
+    public function getD3LocaleDefinition(array $options = [])
+    {
+        // Figure out which D3 i18n script to load
+
+        $language = Craft::$app->language;
+
+        if (in_array($language, ['ca-ES', 'de-CH', 'de-DE', 'en-CA', 'en-GB', 'en-US', 'es-ES', 'fi-FI', 'fr-CA', 'fr-FR', 'he-IL', 'hu-HU', 'it-IT', 'ja-JP', 'ko-KR', 'nl-NL', 'pl-PL', 'pt-BR', 'ru-RU', 'sv-SE', 'zh-CN'], true)) {
+            $d3Language = $language;
         } else {
-            // symbol at the end
-            $currencyD3Format = ['', str_replace('¤', $currencySymbol, $currencyFormat)];
+            $languageId = Craft::$app->getLocale()->getLanguageID();
+
+            $d3LanguageIds = [
+                'ca' => 'ca-ES',
+                'de' => 'de-DE',
+                'en' => 'en-US',
+                'es' => 'es-ES',
+                'fi' => 'fi-FI',
+                'fr' => 'fr-FR',
+                'he' => 'he-IL',
+                'hu' => 'hu-HU',
+                'it' => 'it-IT',
+                'ja' => 'ja-JP',
+                'ko' => 'ko-KR',
+                'nl' => 'nl-NL',
+                'pl' => 'pl-PL',
+                'pt' => 'pt-BR',
+                'ru' => 'ru-RU',
+                'sv' => 'sv-SE',
+                'zh' => 'zh-CN',
+            ];
+
+            if (array_key_exists($language, $d3LanguageIds)) {
+                $d3Language = $d3LanguageIds[$language];
+            } else {
+                if (array_key_exists($languageId, $d3LanguageIds)) {
+                    $d3Language = $d3LanguageIds[$languageId];
+                } else {
+                    $d3Language = 'en-US';
+                }
+            }
         }
 
-        return $currencyD3Format;
+        $formatLocalePath = Craft::getAlias('@bower')."/d3-format/locale/{$d3Language}.json";
+
+        $localeDefinition = json_decode(file_get_contents($formatLocalePath), true);
+
+        if(isset($options['currency'])) {
+            $localeDefinition['currency'] = $this->getD3LocaleDefinitionCurrency($options['currency']);
+        }
+
+        return $localeDefinition;
+    }
+
+    public function getChartLanguage()
+    {
+        $chartLanguage = Craft::t('analytics', 'analyticsChartLanguage');
+
+        if($chartLanguage == 'analyticsChartLanguage') {
+            $chartLanguage = 'en';
+        }
+
+        return $chartLanguage;
     }
 
     /**

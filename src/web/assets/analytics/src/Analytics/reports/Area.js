@@ -7,6 +7,8 @@ Analytics.reports.Area = Analytics.reports.BaseChart.extend(
     {
         this.base();
 
+        console.log('locale definition', this.localeDefinition);
+
         $period = $('<div class="period" />').prependTo(this.$chart);
         $title = $('<div class="title" />').prependTo(this.$chart);
         $view = $('<div class="view" />').prependTo(this.$chart);
@@ -15,7 +17,8 @@ Analytics.reports.Area = Analytics.reports.BaseChart.extend(
         $title.html(this.data.metric);
         $period.html(this.data.periodLabel);
 
-        this.dataTable = Analytics.Utils.responseToDataTableV4(this.data.chart);
+        this.dataTable = Analytics.Utils.responseToDataTableV4(this.data.chart, this.localeDefinition);
+
         this.chartOptions = Analytics.ChartOptions.area(this.data.period);
 
         if(typeof(this.data.chartOptions) != 'undefined')

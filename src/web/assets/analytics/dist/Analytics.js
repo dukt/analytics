@@ -289,7 +289,7 @@ Analytics.Utils = {
         return data;
     },
 
-    responseToDataTableV4: function(response)
+    responseToDataTableV4: function(response, localeDefinition)
     {
         var dataTable = new google.visualization.DataTable();
 
@@ -332,7 +332,7 @@ Analytics.Utils = {
             $.each(response.cols, $.proxy(function(keyColumn, column) {
                 switch(column.type) {
                     case 'date':
-                        dataTableRow[keyColumn] = Analytics.Utils.formatByType(column.type, row[keyColumn]);
+                        dataTableRow[keyColumn] = Analytics.Utils.formatByType(localeDefinition, column.type, row[keyColumn]);
                         break;
 
                     case 'float':
@@ -346,8 +346,8 @@ Analytics.Utils = {
                     case 'continent':
                     case 'subContinent':
                         dataTableRow[keyColumn] = {
-                            v: Analytics.Utils.formatRawValueByType(column.type, row[keyColumn]),
-                            f: Analytics.Utils.formatByType(column.type, row[keyColumn])
+                            v: Analytics.Utils.formatRawValueByType(localeDefinition, column.type, row[keyColumn]),
+                            f: Analytics.Utils.formatByType(localeDefinition, column.type, row[keyColumn])
                         };
                         break;
 
@@ -363,7 +363,7 @@ Analytics.Utils = {
         return dataTable;
     },
 
-    formatRawValueByType: function(type, value)
+    formatRawValueByType: function(localeDefinition, type, value)
     {
         switch(type) {
             case 'integer':
@@ -379,7 +379,7 @@ Analytics.Utils = {
         }
     },
 
-    formatByType: function(type, value)
+    formatByType: function(localeDefinition, type, value)
     {
         switch (type)
         {
@@ -392,7 +392,7 @@ Analytics.Utils = {
                 break;
 
             case 'currency':
-                return Analytics.Utils.formatCurrency(+value);
+                return Analytics.Utils.formatCurrency(localeDefinition, +value);
                 break;
 
             case 'float':
@@ -442,9 +442,12 @@ Analytics.Utils = {
         }
     },
 
-    formatCurrency: function(value)
+    formatCurrency: function(localeDefinition, value)
     {
-        return this.getD3Locale().format(Craft.charts.BaseChart.defaults.formats.currencyFormat)(value);
+        var d3Locale = this.getD3Locale(localeDefinition);
+        var formatter = d3Locale.format(Craft.charts.BaseChart.defaults.formats.currencyFormat);
+
+        return formatter(value);
     },
 
     formatDuration: function(_seconds)
@@ -470,17 +473,8 @@ Analytics.Utils = {
         return this.getD3Locale().format(Craft.charts.BaseChart.defaults.formats.percentFormat)(value / 100);
     },
 
-    getD3Locale: function()
+    getD3Locale: function(localeDefinition)
     {
-        /*
-        this.formatLocale = d3.formatLocale(this.settings.formatLocaleDefinition);
-        this.timeFormatLocale = d3.timeFormatLocale(this.settings.timeFormatLocaleDefinition);
-        */
-
-        var localeDefinition = window['d3FormatLocaleDefinition'];
-
-        localeDefinition.currency = Analytics.currency;
-
         return d3.formatLocale(localeDefinition);
     },
 };
@@ -566,7 +560,7 @@ Analytics.reports.BaseChart = Garnish.Base.extend(
     visualization: null,
     drawing: false,
 
-    init: function($element, data)
+    init: function($element, data, localeDefinition)
     {
         this.visualization = new Analytics.Visualization(
             {
@@ -577,6 +571,7 @@ Analytics.reports.BaseChart = Garnish.Base.extend(
                     this.$graph = $('<div class="chart" />').appendTo(this.$chart);
 
                     this.data = data;
+                    this.localeDefinition = localeDefinition;
 
                     if(typeof(this.data.chartOptions) != 'undefined')
                     {
@@ -657,6 +652,8 @@ Analytics.reports.Area = Analytics.reports.BaseChart.extend(
     {
         this.base();
 
+        console.log('locale definition', this.localeDefinition);
+
         $period = $('<div class="period" />').prependTo(this.$chart);
         $title = $('<div class="title" />').prependTo(this.$chart);
         $view = $('<div class="view" />').prependTo(this.$chart);
@@ -665,7 +662,8 @@ Analytics.reports.Area = Analytics.reports.BaseChart.extend(
         $title.html(this.data.metric);
         $period.html(this.data.periodLabel);
 
-        this.dataTable = Analytics.Utils.responseToDataTableV4(this.data.chart);
+        this.dataTable = Analytics.Utils.responseToDataTableV4(this.data.chart, this.localeDefinition);
+
         this.chartOptions = Analytics.ChartOptions.area(this.data.period);
 
         if(typeof(this.data.chartOptions) != 'undefined')
