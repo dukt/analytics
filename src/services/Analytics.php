@@ -72,22 +72,6 @@ class Analytics extends Component
     }
 
     /**
-     * Returns a currency
-     *
-     * @param string|null $currency
-     */
-    public function getCurrency()
-    {
-        $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
-
-        $settings = $plugin->getSettings();
-
-        if (!empty($settings['profileCurrency'])) {
-            return $settings['profileCurrency'];
-        }
-    }
-
-    /**
      * Returns D3 currency format locale definition.
      *
      * @return string
