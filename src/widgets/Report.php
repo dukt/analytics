@@ -103,7 +103,7 @@ class Report extends \craft\base\Widget
 
                             $localeDefinition = Analytics::$plugin->getAnalytics()->getD3LocaleDefinition(['currency' => $gaReportingView->currency]);
 
-                            $widgetOptions = [
+                            $jsOptions = [
                                 'localeDefinition' => $localeDefinition,
                                 'chartLanguage' => Analytics::$plugin->getAnalytics()->getChartLanguage(),
                                 'request' => $request,
@@ -112,7 +112,7 @@ class Report extends \craft\base\Widget
 
                             $view->registerAssetBundle(ReportWidgetAsset::class);
 
-                            $view->registerJs('new Analytics.ReportWidget("widget'.$this->id.'", '.Json::encode($widgetOptions).');');
+                            $view->registerJs('new Analytics.ReportWidget("widget'.$this->id.'", '.Json::encode($jsOptions).');');
 
                             return $view->renderTemplate('analytics/_components/widgets/Report/body');
                         }

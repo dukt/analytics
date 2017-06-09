@@ -111,7 +111,7 @@ class Report extends Field
                         // Register JS & Styles
 
                         Craft::$app->getView()->registerAssetBundle(ReportFieldAsset::class);
-                        Craft::$app->getView()->registerJs('new AnalyticsReportField("'.$namespacedId.'-field", '.json_encode($jsOptions).');');
+                        Craft::$app->getView()->registerJs('new AnalyticsReportField("'.$namespacedId.'-field", '.Json::encode($jsOptions).');');
 
 
                         // Variables
