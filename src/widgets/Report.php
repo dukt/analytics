@@ -112,11 +112,6 @@ class Report extends \craft\base\Widget
 
                             $view->registerAssetBundle(ReportWidgetAsset::class);
 
-                            $jsTemplate = 'window.csrfTokenName = "{{ craft.app.config.general.csrfTokenName|e(\'js\') }}";';
-                            $jsTemplate .= 'window.csrfTokenValue = "{{ craft.app.request.csrfToken|e(\'js\') }}";';
-                            $js = $view->renderString($jsTemplate);
-
-                            $view->registerJs($js);
                             $view->registerJs('window.AnalyticsChartLanguage = "'.Analytics::$plugin->getAnalytics()->getChartLanguage().'";');
                             $view->registerJs('new Analytics.ReportWidget("widget'.$this->id.'", '.Json::encode($widgetOptions).');');
 
