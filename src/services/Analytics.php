@@ -219,6 +219,14 @@ class Analytics extends Component
         }
     }
 
+    // Private Methods
+    // =========================================================================
+
+    /**
+     * Checks if token is set.
+     * 
+     * @return bool
+     */
     private function isTokenSet()
     {
         $token = AnalyticsPlugin::$plugin->getOauth()->getToken();
