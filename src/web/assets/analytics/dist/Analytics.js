@@ -400,7 +400,7 @@ Analytics.Utils = {
                 break;
 
             case 'integer':
-                return Analytics.Utils.formatInteger(+value);
+                return Analytics.Utils.formatInteger(localeDefinition, +value);
                 break;
 
             case 'time':
@@ -408,7 +408,7 @@ Analytics.Utils = {
                 break;
 
             case 'percent':
-                return Analytics.Utils.formatPercent(+value);
+                return Analytics.Utils.formatPercent(localeDefinition, +value);
                 break;
 
             case 'date':
@@ -463,14 +463,14 @@ Analytics.Utils = {
         return hours+':'+minutes+':'+seconds;
     },
 
-    formatInteger: function(value)
+    formatInteger: function(localeDefinition, value)
     {
-        return this.getD3Locale().format(",")(value);
+        return this.getD3Locale(localeDefinition).format(",")(value);
     },
 
-    formatPercent: function(value)
+    formatPercent: function(localeDefinition, value)
     {
-        return this.getD3Locale().format(Craft.charts.BaseChart.defaults.formats.percentFormat)(value / 100);
+        return this.getD3Locale(localeDefinition).format(Craft.charts.BaseChart.defaults.formats.percentFormat)(value / 100);
     },
 
     getD3Locale: function(localeDefinition)
