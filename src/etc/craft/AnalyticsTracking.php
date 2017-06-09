@@ -9,6 +9,7 @@ namespace dukt\analytics\etc\craft;
 
 use Craft;
 use dukt\analytics\errors\InvalidAccountException;
+use Racecore\GATracking\GATracking;
 
 class AnalyticsTracking
 {
