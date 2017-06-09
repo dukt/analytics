@@ -8,12 +8,13 @@
 namespace dukt\analytics\services;
 
 use Craft;
-use dukt\analytics\errors\ViewNotFoundException;
+use dukt\analytics\errors\InvalidViewException;
 use dukt\analytics\models\SiteView;
 use dukt\analytics\models\View;
 use dukt\analytics\records\View as ViewRecord;
 use dukt\analytics\records\SiteView as SiteViewRecord;
 use yii\base\Component;
+use Exception;
 
 class Views extends Component
 {
@@ -103,8 +104,8 @@ class Views extends Component
      * @param bool $runValidation Whether the view should be validated
      *
      * @return bool
-     * @throws ViewNotFoundException if $view->id is invalid
-     * @throws \Exception if reasons
+     * @throws InvalidViewException if $view->id is invalid
+     * @throws Exception if reasons
      */
     public function saveView(View $view, bool $runValidation = true): bool
     {
@@ -120,7 +121,7 @@ class Views extends Component
                 ->one();
 
             if (!$viewRecord) {
-                throw new ViewNotFoundException("No view exists with the ID '{$view->id}'");
+                throw new InvalidViewException("No view exists with the ID '{$view->id}'");
             }
 
             $isNewView = false;
@@ -151,7 +152,7 @@ class Views extends Component
             }
 
             $transaction->commit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $transaction->rollBack();
 
             throw $e;
@@ -214,7 +215,7 @@ class Views extends Component
             }
 
             $transaction->commit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $transaction->rollBack();
 
             throw $e;

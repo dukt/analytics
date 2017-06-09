@@ -8,6 +8,7 @@
 namespace dukt\analytics\controllers;
 
 use Craft;
+use craft\errors\InvalidPluginException;
 use craft\web\Controller;
 use dukt\analytics\models\SiteView;
 use dukt\analytics\models\View;
@@ -108,7 +109,7 @@ class SettingsController extends Controller
     /**
      * Saves settings.
      *
-     * @throws Exception
+     * @throws InvalidPluginException
      * @return null
      */
     public function actionSaveSettings()
@@ -122,7 +123,7 @@ class SettingsController extends Controller
 
         if (!$plugin)
         {
-            throw new Exception(Craft::t('analytics', 'No plugin exists with the class “{class}”', array('class' => $pluginClass)));
+            throw new InvalidPluginException($pluginClass);
         }
 
         $settings = Analytics::$plugin->getApis()->getAnalytics()->populateAccountExplorerSettings($settings);

@@ -9,6 +9,7 @@ namespace dukt\analytics\controllers;
 
 use Craft;
 use craft\web\Controller;
+use dukt\analytics\errors\InvalidChartTypeException;
 use dukt\analytics\Plugin as Analytics;
 
 class ReportsController extends Controller
@@ -186,7 +187,7 @@ class ReportsController extends Controller
                         $response = Analytics::$plugin->getReports()->getGeoReport($request);
                         break;
                     default:
-                        throw new \Exception("Chart type `".$chart."` not supported.");
+                        throw new InvalidChartTypeException("Chart type `".$chart."` not supported.");
                 }
 
                 if ($response) {

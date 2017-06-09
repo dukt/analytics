@@ -8,6 +8,7 @@
 namespace dukt\analytics\etc\craft;
 
 use Craft;
+use dukt\analytics\errors\InvalidAccountException;
 
 class AnalyticsTracking
 {
@@ -47,7 +48,7 @@ class AnalyticsTracking
         }
         else
         {
-            throw new Exception("Account ID not provided");
+            throw new InvalidAccountException("Account ID not provided");
         }
     }
 

@@ -10,8 +10,8 @@ namespace dukt\analytics\errors;
 use yii\base\Exception;
 
 /**
- * Class ViewNotFoundException
+ * Class InvalidAccountException
  */
-class ViewNotFoundException extends Exception
+class InvalidAccountException extends Exception
 {
 }

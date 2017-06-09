@@ -9,6 +9,7 @@ namespace dukt\analytics\services;
 
 use Craft;
 use craft\helpers\StringHelper;
+use dukt\analytics\errors\InvalidElementException;
 use dukt\analytics\models\ReportRequestCriteria;
 use yii\base\Component;
 use dukt\analytics\Plugin as Analytics;
@@ -59,7 +60,7 @@ class Reports extends Component
         $uri = Analytics::$plugin->getAnalytics()->getElementUrlPath($elementId, $siteId);
 
         if (!$uri) {
-            throw new \Exception("Element doesn't support URLs.", 1);
+            throw new InvalidElementException("Element doesn't support URLs.", 1);
         }
 
         if ($uri === '__home__') {
