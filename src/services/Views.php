@@ -8,6 +8,7 @@
 namespace dukt\analytics\services;
 
 use Craft;
+use dukt\analytics\errors\ViewNotFoundException;
 use dukt\analytics\models\SiteView;
 use dukt\analytics\models\View;
 use dukt\analytics\records\View as ViewRecord;
@@ -186,12 +187,11 @@ class Views extends Component
                 ->one();
 
             if (!$siteViewRecord) {
-                // throw new SiteViewNotFoundException("No site view exists with the site ID '{$siteView->siteId}'");
                 $siteViewRecord = new SiteViewRecord();
                 $isNewSiteView = true;
+            } else {
+                $isNewSiteView = false;
             }
-
-            $isNewSiteView = false;
         } else {
             $siteViewRecord = new SiteViewRecord();
             $isNewSiteView = true;
