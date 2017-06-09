@@ -38,93 +38,98 @@ class Report extends Field
 
         if (Analytics::$plugin->getAnalytics()->checkPluginRequirements()) {
             if (Analytics::$plugin->getSettings()->enableFieldtype) {
-                $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
-
                 // Reformat the input name into something that looks more like an ID
                 $id = Craft::$app->getView()->formatInputId($name);
 
                 // Figure out what that ID is going to look like once it has been namespaced
                 $namespacedId = Craft::$app->getView()->namespaceInputId($id);
 
-                if ($element->uri) {
-                    $uri = Analytics::$plugin->getAnalytics()->getElementUrlPath($element->id, $element->siteId);
+                // Default variables
+                $variables = [
+                    'hasUrl' => false,
+                    'isNew' => false,
+                ];
 
-                    $startDate = date('Y-m-d', strtotime('-1 month'));
-                    $endDate = date('Y-m-d');
-                    $metrics = 'ga:pageviews';
-                    $dimensions = 'ga:date';
-                    $filters = "ga:pagePath==".$uri;
+                if ($element) {
+                    if ($element->uri) {
+                        $uri = Analytics::$plugin->getAnalytics()->getElementUrlPath($element->id, $element->siteId);
 
-                    $request = [
-                        'startDate' => $startDate,
-                        'endDate' => $endDate,
-                        'metrics' => $metrics,
-                        'dimensions' => $dimensions,
-                        'filters' => $filters
-                    ];
+                        $startDate = date('Y-m-d', strtotime('-1 month'));
+                        $endDate = date('Y-m-d');
+                        $metrics = 'ga:pageviews';
+                        $dimensions = 'ga:date';
+                        $filters = "ga:pagePath==".$uri;
 
-
-                    // View
-                    $siteView = Analytics::$plugin->getViews()->getSiteViewBySiteId($element->siteId);
-
-                    $reportingView = null;
-                    $localeDefinition = null;
-
-                    if($siteView) {
-                        $reportingView = $siteView->getView();
-
-                        if($reportingView) {
-                            $gaReportingViewResponse = Analytics::$plugin->getApis()->getAnalytics()->getService()->management_profiles->get($reportingView->gaAccountId, $reportingView->gaPropertyId, $reportingView->gaViewId);
-                            $gaReportingView = $gaReportingViewResponse->toSimpleObject();
-
-                            $localeDefinition = Analytics::$plugin->getAnalytics()->getD3LocaleDefinition(['currency' => $gaReportingView->currency]);
-                        }
-                    }
-
-                    // Check if there is a cached response and add it to JS options if so
-
-                    $cacheId = ['reports.getElementReport', $request];
-                    $response = Analytics::$plugin->cache->get($cacheId);
-
-                    $options = [
-                        'localeDefinition' => $localeDefinition,
-                    ];
-
-                    if ($response) {
-                        $response = [
-                            'type' => 'area',
-                            'chart' => $response
+                        $request = [
+                            'startDate' => $startDate,
+                            'endDate' => $endDate,
+                            'metrics' => $metrics,
+                            'dimensions' => $dimensions,
+                            'filters' => $filters
                         ];
 
-                        $options['cachedResponse'] = $response;
+
+                        // JS Options
+
+                        $jsOptions = [];
+
+
+                        // Add locale definition to JS options
+
+                        $siteView = Analytics::$plugin->getViews()->getSiteViewBySiteId($element->siteId);
+
+                        if ($siteView) {
+                            $reportingView = $siteView->getView();
+
+                            if ($reportingView) {
+                                $gaReportingViewResponse = Analytics::$plugin->getApis()->getAnalytics()->getService()->management_profiles->get($reportingView->gaAccountId, $reportingView->gaPropertyId, $reportingView->gaViewId);
+                                $gaReportingView = $gaReportingViewResponse->toSimpleObject();
+
+                                $jsOptions['localeDefinition'] = Analytics::$plugin->getAnalytics()->getD3LocaleDefinition(['currency' => $gaReportingView->currency]);
+                            }
+                        }
+
+
+                        // Add cached response to JS options if any
+
+                        $cacheId = ['reports.getElementReport', $request];
+                        $response = Analytics::$plugin->cache->get($cacheId);
+
+                        if ($response) {
+                            $response = [
+                                'type' => 'area',
+                                'chart' => $response
+                            ];
+
+                            $jsOptions['cachedResponse'] = $response;
+                        }
+
+
+                        // Register JS & Styles
+
+                        Craft::$app->getView()->registerAssetBundle(ReportFieldAsset::class);
+                        Craft::$app->getView()->registerJs('var AnalyticsChartLanguage = "'.Craft::t('analytics', 'analyticsChartLanguage').'";');
+                        Craft::$app->getView()->registerJs('new AnalyticsReportField("'.$namespacedId.'-field", '.json_encode($jsOptions).');');
+
+
+                        // Variables
+
+                        $variables = [
+                            'isNew' => false,
+                            'hasUrl' => true,
+                            'id' => $id,
+                            'uri' => $uri,
+                            'name' => $name,
+                            'value' => $value,
+                            'model' => $this,
+                            'element' => $element
+                        ];
+                    } elseif (!$element->id) {
+                        $variables = [
+                            'hasUrl' => false,
+                            'isNew' => true,
+                        ];
                     }
-
-                    $jsonOptions = json_encode($options);
-
-                    Craft::$app->getView()->registerAssetBundle(ReportFieldAsset::class);
-                    Craft::$app->getView()->registerJs('var AnalyticsChartLanguage = "'.Craft::t('analytics', 'analyticsChartLanguage').'";');
-                    Craft::$app->getView()->registerJs('new AnalyticsReportField("'.$namespacedId.'-field", '.$jsonOptions.');');
-
-                    $variables = [
-                        'isNew' => false,
-                        'hasUrl' => true,
-                        'id' => $id,
-                        'uri' => $uri,
-                        'name' => $name,
-                        'value' => $value,
-                        'model' => $this,
-                        'element' => $element
-                    ];
-                } elseif (!$element->id) {
-                    $variables = [
-                        'hasUrl' => false,
-                        'isNew' => true,
-                    ];
-                } else {
-                    $variables = [
-                        'hasUrl' => false,
-                        'isNew' => false,
-                    ];
                 }
 
                 return Craft::$app->getView()->renderTemplate('analytics/_components/fieldtypes/Report/input', $variables);
