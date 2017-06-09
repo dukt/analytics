@@ -7,8 +7,6 @@ Analytics.reports.Area = Analytics.reports.BaseChart.extend(
     {
         this.base();
 
-        console.log('locale definition', this.localeDefinition);
-
         $period = $('<div class="period" />').prependTo(this.$chart);
         $title = $('<div class="title" />').prependTo(this.$chart);
         $view = $('<div class="view" />').prependTo(this.$chart);

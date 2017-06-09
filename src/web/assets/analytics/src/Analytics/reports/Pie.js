@@ -15,7 +15,7 @@ Analytics.reports.Pie = Analytics.reports.BaseChart.extend(
         $title.html(this.data.dimension);
         $period.html(this.data.metric+" "+this.data.periodLabel);
 
-        this.dataTable = Analytics.Utils.responseToDataTableV4(this.data.chart);
+        this.dataTable = Analytics.Utils.responseToDataTableV4(this.data.chart, this.localeDefinition);
         this.chartOptions = Analytics.ChartOptions.pie();
         this.chart = new google.visualization.PieChart(this.$graph.get(0));
 

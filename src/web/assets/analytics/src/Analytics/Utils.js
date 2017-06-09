@@ -3,7 +3,7 @@
  */
 Analytics.Utils = {
 
-    responseToDataTable: function(response)
+    responseToDataTable: function(response, localeDefinition)
     {
         var data = new google.visualization.DataTable();
 
@@ -52,12 +52,12 @@ Analytics.Utils = {
                     case 'time':
                         row[kCell] = {
                             v: cell,
-                            f: Analytics.Utils.formatByType(response.cols[kCell]['type'], cell)
+                            f: Analytics.Utils.formatByType(localeDefinition, response.cols[kCell]['type'], cell)
                         };
                         break;
 
                     default:
-                        row[kCell] = Analytics.Utils.formatByType(response.cols[kCell]['type'], cell);
+                        row[kCell] = Analytics.Utils.formatByType(localeDefinition, response.cols[kCell]['type'], cell);
                         break;
                 }
             });

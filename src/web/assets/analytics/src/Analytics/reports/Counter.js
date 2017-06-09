@@ -12,7 +12,7 @@ Analytics.reports.Counter = Analytics.reports.BaseChart.extend(
             $period = $('<div class="period" />').appendTo(this.$graph);
             $view = $('<div class="view" />').appendTo(this.$graph);
 
-        var value = Analytics.Utils.formatByType(this.data.counter.type, this.data.counter.value);
+        var value = Analytics.Utils.formatByType(this.localeDefinition, this.data.counter.type, this.data.counter.value);
 
         $value.html(value);
         $label.html(this.data.metric);

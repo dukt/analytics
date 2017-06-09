@@ -43,7 +43,6 @@ class AnalyticsAsset extends AssetBundle
         $continents = Analytics::$plugin->metadata->getContinents();
         $subContinents = Analytics::$plugin->metadata->getSubContinents();
         $formats = ChartHelper::formats();
-        $currency = Analytics::$plugin->getAnalytics()->getD3LocaleDefinitionCurrency();
 
         $js = "if(typeof Analytics == 'undefined') {";
 
@@ -54,7 +53,6 @@ class AnalyticsAsset extends AssetBundle
         $js .= 'Analytics.continents = '.Json::encode($continents).';';
         $js .= 'Analytics.subContinents = '.Json::encode($subContinents).';';
         $js .= 'Analytics.formats = '.Json::encode($formats).';';
-        $js .= 'Analytics.currency = '.Json::encode($currency).';';
 
         $js .= '}';
 

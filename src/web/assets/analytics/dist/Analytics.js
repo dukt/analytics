@@ -224,7 +224,7 @@ Analytics.Metadata = {
  */
 Analytics.Utils = {
 
-    responseToDataTable: function(response)
+    responseToDataTable: function(response, localeDefinition)
     {
         var data = new google.visualization.DataTable();
 
@@ -273,12 +273,12 @@ Analytics.Utils = {
                     case 'time':
                         row[kCell] = {
                             v: cell,
-                            f: Analytics.Utils.formatByType(response.cols[kCell]['type'], cell)
+                            f: Analytics.Utils.formatByType(localeDefinition, response.cols[kCell]['type'], cell)
                         };
                         break;
 
                     default:
-                        row[kCell] = Analytics.Utils.formatByType(response.cols[kCell]['type'], cell);
+                        row[kCell] = Analytics.Utils.formatByType(localeDefinition, response.cols[kCell]['type'], cell);
                         break;
                 }
             });
@@ -652,8 +652,6 @@ Analytics.reports.Area = Analytics.reports.BaseChart.extend(
     {
         this.base();
 
-        console.log('locale definition', this.localeDefinition);
-
         $period = $('<div class="period" />').prependTo(this.$chart);
         $title = $('<div class="title" />').prependTo(this.$chart);
         $view = $('<div class="view" />').prependTo(this.$chart);
@@ -700,7 +698,7 @@ Analytics.reports.Counter = Analytics.reports.BaseChart.extend(
             $period = $('<div class="period" />').appendTo(this.$graph);
             $view = $('<div class="view" />').appendTo(this.$graph);
 
-        var value = Analytics.Utils.formatByType(this.data.counter.type, this.data.counter.value);
+        var value = Analytics.Utils.formatByType(this.localeDefinition, this.data.counter.type, this.data.counter.value);
 
         $value.html(value);
         $label.html(this.data.metric);
@@ -728,7 +726,7 @@ Analytics.reports.Geo = Analytics.reports.BaseChart.extend(
         $title.html(this.data.metric);
         $period.html(this.data.periodLabel);
 
-        this.dataTable = Analytics.Utils.responseToDataTableV4(this.data.chart);
+        this.dataTable = Analytics.Utils.responseToDataTableV4(this.data.chart, this.localeDefinition);
         this.chartOptions = Analytics.ChartOptions.geo(this.data.dimensionRaw);
         this.chart = new google.visualization.GeoChart(this.$graph.get(0));
 
@@ -753,7 +751,7 @@ Analytics.reports.Pie = Analytics.reports.BaseChart.extend(
         $title.html(this.data.dimension);
         $period.html(this.data.metric+" "+this.data.periodLabel);
 
-        this.dataTable = Analytics.Utils.responseToDataTableV4(this.data.chart);
+        this.dataTable = Analytics.Utils.responseToDataTableV4(this.data.chart, this.localeDefinition);
         this.chartOptions = Analytics.ChartOptions.pie();
         this.chart = new google.visualization.PieChart(this.$graph.get(0));
 
@@ -780,7 +778,7 @@ Analytics.reports.Table = Analytics.reports.BaseChart.extend(
         $title.html(this.data.metric);
         $period.html(this.data.periodLabel);
 
-        this.dataTable = Analytics.Utils.responseToDataTableV4(this.data.chart);
+        this.dataTable = Analytics.Utils.responseToDataTableV4(this.data.chart, this.localeDefinition);
         this.chartOptions = Analytics.ChartOptions.table();
         this.chart = new google.visualization.Table(this.$graph.get(0));
 

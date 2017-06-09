@@ -76,12 +76,8 @@ class Analytics extends Component
      *
      * @return string
      */
-    public function getD3LocaleDefinitionCurrency($currency = false)
+    public function getD3LocaleDefinitionCurrency(string $currency)
     {
-        if(!$currency) {
-            $currency = $this->getCurrency();
-        }
-
         $currencySymbol = ($currency ? Craft::$app->locale->getCurrencySymbol($currency) : '$');
 
         $localeDefinition = $this->getD3LocaleDefinition();
