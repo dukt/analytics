@@ -8,11 +8,10 @@
 namespace dukt\analytics\widgets;
 
 use Craft;
-use craft\helpers\StringHelper;
 use craft\helpers\Json;
+use craft\helpers\StringHelper;
 use dukt\analytics\web\assets\reportwidget\ReportWidgetAsset;
 use dukt\analytics\Plugin as Analytics;
-use craft\web\View;
 
 class Report extends \craft\base\Widget
 {

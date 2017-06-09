@@ -10,6 +10,7 @@ namespace dukt\analytics\fields;
 use Craft;
 use craft\base\Field;
 use craft\base\ElementInterface;
+use craft\helpers\Json;
 use dukt\analytics\web\assets\reportfield\ReportFieldAsset;
 use dukt\analytics\Plugin as Analytics;
 
