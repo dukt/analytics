@@ -44,8 +44,7 @@ class Report extends \craft\base\Widget
     {
         $reportTitle = $this->_getReportTitle();
 
-        if($reportTitle)
-        {
+        if ($reportTitle) {
             return $reportTitle;
         }
 
@@ -74,7 +73,7 @@ class Report extends \craft\base\Widget
                 if (Analytics::$plugin->getSettings()->enableWidgets) {
                     $reportingViews = Analytics::$plugin->getViews()->getViews();
 
-                    if(count($reportingViews) > 0) {
+                    if (count($reportingViews) > 0) {
                         $widgetSettings = $this->settings;
 
                         $reportingView = Analytics::$plugin->getViews()->getViewById($widgetSettings['viewId']);
@@ -127,8 +126,7 @@ class Report extends \craft\base\Widget
             }
 
             return $view->renderTemplate('analytics/_special/not-connected');
-
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return $view->renderTemplate('analytics/_special/not-connected');
         }
     }
@@ -144,7 +142,7 @@ class Report extends \craft\base\Widget
 
         $reportingViews = Analytics::$plugin->getViews()->getViews();
 
-        if(count($reportingViews) > 0) {
+        if (count($reportingViews) > 0) {
             $id = 'analytics-settings-'.StringHelper::randomString();
             $namespaceId = Craft::$app->getView()->namespaceInputId($id);
 
@@ -188,8 +186,7 @@ class Report extends \craft\base\Widget
      */
     private function _geSelectOptionsByChartType($chartType)
     {
-        switch($chartType)
-        {
+        switch ($chartType) {
             case 'area':
 
                 $options = [
@@ -233,38 +230,30 @@ class Report extends \craft\base\Widget
      */
     private function _getReportTitle()
     {
-        try
-        {
+        try {
             $name = [];
             $chartType = $this->settings['chart'];
 
-            if(isset($this->settings['options'][$chartType]))
-            {
+            if (isset($this->settings['options'][$chartType])) {
                 $options = $this->settings['options'][$chartType];
 
-                if(!empty($options['dimension']))
-                {
+                if (!empty($options['dimension'])) {
                     $name[] = Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($options['dimension']));
                 }
 
-                if(!empty($options['metric']))
-                {
+                if (!empty($options['metric'])) {
                     $name[] = Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($options['metric']));
                 }
             }
 
-            if(!empty($this->settings['period']))
-            {
+            if (!empty($this->settings['period'])) {
                 $name[] = Craft::t('analytics', ucfirst($this->settings['period']));
             }
 
-            if(count($name) > 0)
-            {
+            if (count($name) > 0) {
                 return implode(" - ", $name);
             }
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             Craft::info('Couldn’t get Analytics Report’s title: '.$e->getMessage(), __METHOD__);
         }
 

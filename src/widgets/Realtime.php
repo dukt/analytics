@@ -29,13 +29,15 @@ class Realtime extends \craft\base\Widget
     // Public Methods
     // =========================================================================
 
+    /**
+     * @inheritdoc
+     */
     public static function isSelectable(): bool
     {
         $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
         $settings = $plugin->getSettings();
 
-        if(empty($settings['enableRealtime']))
-        {
+        if (empty($settings['enableRealtime'])) {
             return false;
         }
 
@@ -67,11 +69,11 @@ class Realtime extends \craft\base\Widget
     {
         $view = Craft::$app->getView();
 
-        if(Analytics::$plugin->getAnalytics()->checkPluginRequirements()) {
+        if (Analytics::$plugin->getAnalytics()->checkPluginRequirements()) {
             if (Analytics::$plugin->getSettings()->enableWidgets) {
                 $reportingViews = Analytics::$plugin->getViews()->getViews();
 
-                if(count($reportingViews) > 0) {
+                if (count($reportingViews) > 0) {
                     $widgetSettings = $this->settings;
 
                     $reportingView = Analytics::$plugin->getViews()->getViewById($widgetSettings['viewId']);
@@ -133,7 +135,7 @@ class Realtime extends \craft\base\Widget
         $settings = $this->getSettings();
         $reportingViews = Analytics::$plugin->getViews()->getViews();
 
-        if(count($reportingViews) > 0) {
+        if (count($reportingViews) > 0) {
             return Craft::$app->getView()->renderTemplate('analytics/_components/widgets/Realtime/settings', [
                 'settings' => $settings,
                 'reportingViews' => $reportingViews,
