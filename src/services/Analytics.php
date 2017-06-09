@@ -72,34 +72,6 @@ class Analytics extends Component
     }
 
     /**
-     * Returns D3 currency format locale definition.
-     *
-     * @return string
-     */
-    public function getD3LocaleDefinitionCurrency(string $currency)
-    {
-        $currencySymbol = ($currency ? Craft::$app->locale->getCurrencySymbol($currency) : '$');
-
-        $localeDefinition = $this->getD3LocaleDefinition();
-
-        $currencyDefinition = $localeDefinition['currency'];
-
-        foreach($currencyDefinition as $key => $row) {
-            if(!empty($row)) {
-                // Todo: Check currency symbol replacement with arabic
-
-                $pattern = '/[^\s]+/u';
-                $replacement = $currencySymbol;
-                $newRow = preg_replace($pattern, $replacement, $row);
-
-                $currencyDefinition[$key] = $newRow;
-            }
-        }
-
-        return $currencyDefinition;
-    }
-
-    /**
      * Returns D3 format locale definition.
      *
      * @return array
@@ -223,8 +195,38 @@ class Analytics extends Component
     // =========================================================================
 
     /**
+     * Returns D3 currency format locale definition.
+     *
+     * @param string $currency
+     *
+     * @return array
+     */
+    private function getD3LocaleDefinitionCurrency(string $currency)
+    {
+        $currencySymbol = ($currency ? Craft::$app->locale->getCurrencySymbol($currency) : '$');
+
+        $localeDefinition = $this->getD3LocaleDefinition();
+
+        $currencyDefinition = $localeDefinition['currency'];
+
+        foreach($currencyDefinition as $key => $row) {
+            if(!empty($row)) {
+                // Todo: Check currency symbol replacement with arabic
+
+                $pattern = '/[^\s]+/u';
+                $replacement = $currencySymbol;
+                $newRow = preg_replace($pattern, $replacement, $row);
+
+                $currencyDefinition[$key] = $newRow;
+            }
+        }
+
+        return $currencyDefinition;
+    }
+
+    /**
      * Checks if token is set.
-     * 
+     *
      * @return bool
      */
     private function isTokenSet()
