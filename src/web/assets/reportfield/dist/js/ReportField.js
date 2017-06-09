@@ -76,7 +76,7 @@
     {
         Garnish.requestAnimationFrame($.proxy(function() {
             response.chartOptions = Analytics.ChartOptions.field();
-            this.chart = new Analytics.reports.Area(this.$chart, response);
+            this.chart = new Analytics.reports.Area(this.$chart, response, this.settings.localeDefinition);
         }, this));
     }
 }, {

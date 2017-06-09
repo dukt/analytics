@@ -63,12 +63,32 @@ class Report extends Field
                         'filters' => $filters
                     ];
 
+
+                    // View
+                    $siteView = Analytics::$plugin->getViews()->getSiteViewBySiteId($element->siteId);
+
+                    $reportingView = null;
+                    $localeDefinition = null;
+
+                    if($siteView) {
+                        $reportingView = $siteView->getView();
+
+                        if($reportingView) {
+                            $gaReportingViewResponse = Analytics::$plugin->getApis()->getAnalytics()->getService()->management_profiles->get($reportingView->gaAccountId, $reportingView->gaPropertyId, $reportingView->gaViewId);
+                            $gaReportingView = $gaReportingViewResponse->toSimpleObject();
+
+                            $localeDefinition = Analytics::$plugin->getAnalytics()->getD3LocaleDefinition(['currency' => $gaReportingView->currency]);
+                        }
+                    }
+
                     // Check if there is a cached response and add it to JS options if so
 
                     $cacheId = ['reports.getElementReport', $request];
                     $response = Analytics::$plugin->cache->get($cacheId);
 
-                    $options = [];
+                    $options = [
+                        'localeDefinition' => $localeDefinition,
+                    ];
 
                     if ($response) {
                         $response = [
@@ -76,15 +96,12 @@ class Report extends Field
                             'chart' => $response
                         ];
 
-                        $options = [
-                            'cachedResponse' => $response
-                        ];
+                        $options['cachedResponse'] = $response;
                     }
 
                     $jsonOptions = json_encode($options);
 
                     Craft::$app->getView()->registerAssetBundle(ReportFieldAsset::class);
-
                     Craft::$app->getView()->registerJs('var AnalyticsChartLanguage = "'.Craft::t('analytics', 'analyticsChartLanguage').'";');
                     Craft::$app->getView()->registerJs('new AnalyticsReportField("'.$namespacedId.'-field", '.$jsonOptions.');');
 
