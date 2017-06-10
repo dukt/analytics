@@ -58,6 +58,11 @@ class View extends Model
      */
     public $gaViewName;
 
+    /**
+     * @var string Google Analytics View Currency
+     */
+    public $gaViewCurrency;
+
     // Public Methods
     // =========================================================================
 

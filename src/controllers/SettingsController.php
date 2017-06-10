@@ -353,14 +353,9 @@ class SettingsController extends Controller
         foreach($accountExplorerData['views'] as $dataView) {
             if($dataView['id'] == $view->gaViewId) {
                 $view->gaViewName = $dataView['name'];
+                $view->gaViewCurrency = $dataView['currency'];
             }
         }
-
-
-/*        $apiView = Analytics::$plugin->getApis()->getAnalytics()->getService()->management_profiles->get($view->gaAccountId, $view->gaPropertyId, $view->gaViewId);
-        $objView = $apiView->toSimpleObject();
-        var_dump($objView);*/
-
 
         // Save it
         if (!Analytics::$plugin->getViews()->saveView($view)) {

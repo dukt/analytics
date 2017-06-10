@@ -138,6 +138,7 @@ class Views extends Component
         $viewRecord->gaPropertyName = $view->gaPropertyName;
         $viewRecord->gaViewId = $view->gaViewId;
         $viewRecord->gaViewName = $view->gaViewName;
+        $viewRecord->gaViewCurrency = $view->gaViewCurrency;
 
 
         $transaction = Craft::$app->getDb()->beginTransaction();

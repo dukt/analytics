@@ -85,10 +85,7 @@ class Report extends Field
                             $reportingView = $siteView->getView();
 
                             if ($reportingView) {
-                                $gaReportingViewResponse = Analytics::$plugin->getApis()->getAnalytics()->getService()->management_profiles->get($reportingView->gaAccountId, $reportingView->gaPropertyId, $reportingView->gaViewId);
-                                $gaReportingView = $gaReportingViewResponse->toSimpleObject();
-
-                                $jsOptions['localeDefinition'] = Analytics::$plugin->getAnalytics()->getD3LocaleDefinition(['currency' => $gaReportingView->currency]);
+                                $jsOptions['localeDefinition'] = Analytics::$plugin->getAnalytics()->getD3LocaleDefinition(['currency' => $reportingView->gaViewCurrency]);
                             }
                         }
 

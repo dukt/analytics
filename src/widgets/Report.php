@@ -97,10 +97,7 @@ class Report extends \craft\base\Widget
 
                             // render
 
-                            $gaReportingViewResponse = Analytics::$plugin->getApis()->getAnalytics()->getService()->management_profiles->get($reportingView->gaAccountId, $reportingView->gaPropertyId, $reportingView->gaViewId);
-                            $gaReportingView = $gaReportingViewResponse->toSimpleObject();
-
-                            $localeDefinition = Analytics::$plugin->getAnalytics()->getD3LocaleDefinition(['currency' => $gaReportingView->currency]);
+                            $localeDefinition = Analytics::$plugin->getAnalytics()->getD3LocaleDefinition(['currency' => $reportingView->gaViewCurrency]);
 
                             $jsOptions = [
                                 'localeDefinition' => $localeDefinition,
