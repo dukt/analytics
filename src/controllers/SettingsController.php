@@ -243,20 +243,20 @@ class SettingsController extends Controller
                                 $accountOptions[] = ['label' => $account['name'], 'value' => $account['id']];
                             }
                         } else {
-                            $accountOptions[] = ['label' => $settings->accountName, 'value' => $settings->accountId];
+                            $accountOptions[] = ['label' => $view->gaAccountName, 'value' => $view->gaAccountId];
                         }
 
 
                         // Web Properties
 
-                        $webPropertyOptions = [];
+                        $propertyOptions = [];
 
                         if (isset($accountExplorerData['properties'])) {
                             foreach ($accountExplorerData['properties'] as $webProperty) {
-                                $webPropertyOptions[] = ['label' => $webProperty['name'], 'value' => $webProperty['id']];
+                                $propertyOptions[] = ['label' => $webProperty['name'], 'value' => $webProperty['id']];
                             }
                         } else {
-                            $webPropertyOptions[] = ['label' => $settings->webPropertyName, 'value' => $settings->webPropertyId];
+                            $propertyOptions[] = ['label' => $view->gaPropertyName, 'value' => $view->gaPropertyId];
                         }
 
 
@@ -269,8 +269,14 @@ class SettingsController extends Controller
                                 $viewOptions[] = ['label' => $dataView['name'], 'value' => $dataView['id']];
                             }
                         } else {
-                            $viewOptions[] = ['label' => $settings->profileName, 'value' => $settings->profileId];
+                            $viewOptions[] = ['label' => $view->gaViewName, 'value' => $view->gaViewId];
                         }
+
+                        $accountExplorerOptions = [
+                            'accounts' => $accountOptions,
+                            'properties' => $propertyOptions,
+                            'views' => $viewOptions,
+                        ];
 
                         $accountId = $settings->accountId;
                         $webPropertyId = $settings->webPropertyId;
@@ -300,17 +306,15 @@ class SettingsController extends Controller
 
         $variables['isOauthProviderConfigured'] = $isOauthProviderConfigured;
         $variables['accountExplorerData'] = (isset($accountExplorerData) ? $accountExplorerData : null);
+        $variables['accountExplorerOptions'] = (isset($accountExplorerOptions) ? $accountExplorerOptions : null);
         $variables['accountId'] = (isset($accountId) ? $accountId : null);
-        $variables['accountOptions'] = (isset($accountOptions) ? $accountOptions : null);
         $variables['errors'] = (isset($errors) ? $errors : null);
         $variables['oauthAccount'] = (isset($oauthAccount) ? $oauthAccount : null);
         $variables['provider'] = (isset($provider) ? $provider : null);
         $variables['settings'] = (isset($settings) ? $settings : null);
         $variables['token'] = (isset($token) ? $token : null);
         $variables['viewId'] = (isset($googleAnalyticsviewId) ? $googleAnalyticsviewId : null);
-        $variables['viewOptions'] = (isset($viewOptions) ? $viewOptions : null);
         $variables['webPropertyId'] = (isset($webPropertyId) ? $webPropertyId : null);
-        $variables['webPropertyOptions'] = (isset($webPropertyOptions) ? $webPropertyOptions : null);
 
         $variables['javascriptOrigin'] = Analytics::$plugin->oauth->getJavascriptOrigin();
         $variables['redirectUri'] = Analytics::$plugin->oauth->getRedirectUri();

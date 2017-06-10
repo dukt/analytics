@@ -24,11 +24,15 @@
 				<tr data-id="{{ reportingView.id }}" data-name="{{ reportingView.name }}">
 					<td><a href="{{ url('analytics/settings/views/'~reportingView.id) }}">{{ reportingView.name }}</a></td>
 					<td>
-						<div class="light">
-							{{ reportingView.gaAccountName }} →
-							{{ reportingView.gaPropertyName }}
-						</div>
-						{{ reportingView.gaViewName }}
+						{% if reportingView.gaViewId %}
+							<div class="light">
+								{{ reportingView.gaAccountName }} →
+								{{ reportingView.gaPropertyName }}
+							</div>
+							{{ reportingView.gaViewName }}
+						{% else %}
+							<span class="light">—</span>
+						{% endif %}
 					</td>
 					<td class="thin"><a class="delete icon" title="{{ 'Delete'|t('app') }}" role="button"></a></td>
 				</tr>

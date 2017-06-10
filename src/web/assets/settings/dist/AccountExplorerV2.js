@@ -21,9 +21,6 @@ Analytics.AccountExplorerV2 = Garnish.Base.extend({
         this.$accountSelect = $('.account > select', this.$container);
         this.$propertySelect = $('.property > select', this.$container);
         this.$viewSelect = $('.view > select', this.$container);
-        this.$reportingViewIdInput = $('.reporting-view-id', this.$container);
-
-        console.log('reporting view ID: ', this.$reportingViewIdInput.val());
 
 
         // Add listeners
@@ -31,9 +28,8 @@ Analytics.AccountExplorerV2 = Garnish.Base.extend({
         this.addListener(this.$refreshViewsBtn, 'click', 'onRefresh');
         this.addListener(this.$accountSelect, 'change', 'onAccountChange');
         this.addListener(this.$propertySelect, 'change', 'onPropertyChange');
-        this.addListener(this.$viewSelect, 'change', 'onViewChange');
 
-        this.requestExplorerData(this.$reportingViewIdInput.val());
+        this.requestExplorerData(this.$viewSelect.val());
     },
 
     requestExplorerData: function(selectedView)
@@ -167,12 +163,6 @@ Analytics.AccountExplorerV2 = Garnish.Base.extend({
     onPropertyChange: function()
     {
         this.updateViewOptions();
-        this.onViewChange();
-    },
-
-    onViewChange: function()
-    {
-        this.$reportingViewIdInput.val(this.$viewSelect.val());
     },
 
     updateAccountOptions: function()
