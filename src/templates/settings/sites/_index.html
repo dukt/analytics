@@ -8,25 +8,41 @@
 			<thead>
 				<tr>
 					<th>{{ "Site"|t('analytics') }}</th>
-					<th>{{ "Attached View"|t('analytics') }}</th>
+					<th>{{ "Reporting View"|t('analytics') }}</th>
+					<th>{{ "Google Analytics View"|t('analytics') }}</th>
 				</tr>
 			</thead>
 			<tbody>
 
 				{% for site in sites %}
 
-					{% set siteView = false %}
+					{% set reportingView = false %}
 
-					{% for sView in siteViews %}
-						{% if sView.siteId == site.id %}
-							{% set siteView = sView %}
+					{% for siteView in siteViews %}
+						{% if siteView.siteId == site.id %}
+							{% if siteView.view %}
+								{% set reportingView = siteView.view %}
+							{% endif %}
 						{% endif %}
 					{% endfor %}
+
+
 					<tr>
 						<td><a href="{{ url('analytics/settings/sites/'~ site.id) }}">{{ site.name }}</a> <span class="light">— {{ site.baseUrl }}</span></td>
 						<td>
-							{% if siteView and siteView.view %}
-								{{ siteView.view.name }}
+							{% if reportingView %}
+								{{ reportingView.name }}
+							{% else %}
+								<span class="light">—</span>
+							{% endif %}
+						</td>
+						<td>
+							{% if reportingView %}
+								<div class="light">
+									{{ reportingView.gaAccountName }} →
+									{{ reportingView.gaPropertyName }}
+								</div>
+								{{ reportingView.gaViewName }}
 							{% else %}
 								<span class="light">—</span>
 							{% endif %}
