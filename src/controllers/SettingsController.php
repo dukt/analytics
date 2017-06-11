@@ -176,7 +176,6 @@ class SettingsController extends Controller
         if($isOauthProviderConfigured && $token) {
             $variables['isConnected'] = true;
             $variables['reportingViews'] = Analytics::$plugin->getViews()->getViews();
-            $variables['accountExplorerData'] = Analytics::$plugin->getApis()->getAnalytics()->getAccountExplorerData();
         }
 
         return $this->renderTemplate('analytics/settings/views/_index', $variables);
