@@ -6,7 +6,7 @@
 
 	{% if isConnected %}
 		<p id="noviews"{% if reportingViews|length %} class="hidden"{% endif %}>
-			{{ "No views exist yet."|t('app') }}
+			{{ "No views exist yet."|t('analytics') }}
 		</p>
 
 		<table id="views" class="data fullwidth collapsible">
@@ -34,7 +34,7 @@
 							<span class="light">—</span>
 						{% endif %}
 					</td>
-					<td class="thin"><a class="delete icon" title="{{ 'Delete'|t('app') }}" role="button"></a></td>
+					<td class="thin"><a class="delete icon" title="{{ 'Delete'|t('analytics') }}" role="button"></a></td>
 				</tr>
 			{% endfor %}
 
@@ -42,7 +42,7 @@
 		</table>
 
 		<div class="buttons">
-			<a href="{{ url('analytics/settings/views/new') }}" class="btn submit add icon">New View</a>
+			<a href="{{ url('analytics/settings/views/new') }}" class="btn submit add icon">{{ 'New View'|t('analytics') }}</a>
 		</div>
 
 		{% js %}
