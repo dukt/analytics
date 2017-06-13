@@ -10,7 +10,6 @@ Analytics.Realtime = Garnish.Base.extend(
     $element: null,
     $title: null,
     $body: null,
-    $spinner: null,
     $streamstatus: null,
     $error: null,
     $activeVisitorsCount: null,
@@ -32,7 +31,6 @@ Analytics.Realtime = Garnish.Base.extend(
         this.$element = $('#'+element);
         this.$title = $('.title', this.$element);
         this.$body = $('.body', this.$element);
-        this.$spinner = $('.spinner', this.$element);
         this.$streamstatus = $('.streamstatus', this.$element);
         this.$error = $('.error', this.$element);
 
@@ -112,9 +110,6 @@ Analytics.Realtime = Garnish.Base.extend(
 
     request: function()
     {
-        this.$spinner.removeClass('body-loading');
-        this.$spinner.removeClass('hidden');
-
         var data = {
             viewId: this.settings.viewId
         };
@@ -140,8 +135,6 @@ Analytics.Realtime = Garnish.Base.extend(
                 this.$error.html(msg);
                 this.$error.removeClass('hidden');
             }
-
-            this.$spinner.addClass('hidden');
 
         }, this));
     },
