@@ -37,12 +37,14 @@
 				</div>
 				<div class="details">
 					<ul>
-						<li><strong>{{ 'Name'|t('analytics') }}: </strong> {{ oauthAccount.name }}</li>
+						<li>{{ oauthAccount.name }}</li>
 
-						{% if oauthAccount.uid is defined %}
-							<li><strong>{{ 'UID'|t('analytics') }}: </strong> {{ oauthAccount.uid }}</li>
+						{% if oauthAccount.email is defined and not oauthAccount.email is empty %}
+							<li class="light">{{ oauthAccount.email }}</li>
+						{% elseif oauthAccount.uid is defined %}
+							<li class="light">{{ oauthAccount.uid }}</li>
 						{% elseif oauthAccount.id is defined %}
-							<li><strong>{{ 'UID'|t('analytics') }}: </strong> {{ oauthAccount.id }}</li>
+							<li class="light">{{ oauthAccount.id }}</li>
 						{% endif %}
 					</ul>
 				</div>
