@@ -72,7 +72,7 @@ class View extends Model
     public function rules()
     {
         $rules = [
-            [['name'], 'required'],
+            [['name', 'gaAccountId', 'gaAccountName', 'gaPropertyId', 'gaPropertyName', 'gaViewId', 'gaViewName', 'gaViewCurrency'], 'required'],
             [['id'], 'number', 'integerOnly' => true]
         ];
 
