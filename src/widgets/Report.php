@@ -124,7 +124,8 @@ class Report extends \craft\base\Widget
 
             return $view->renderTemplate('analytics/_special/not-connected');
         } catch (\Exception $e) {
-            return $view->renderTemplate('analytics/_special/not-connected');
+            Craft::info('Couldn’t load report widget: '.$e->getMessage(), __METHOD__);
+            return $view->renderTemplate('analytics/_special/error');
         }
     }
 
