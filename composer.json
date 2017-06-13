@@ -30,7 +30,7 @@
     "extra": {
         "name": "Analytics",
         "handle": "analytics",
-        "schemaVersion": "1.0.2",
+        "schemaVersion": "1.1.0",
         "documentationUrl": "https://dukt.net/analytics/docs",
         "changelogUrl": "https://dukt.net/analytics/changelog.md?craft=3"
     }
