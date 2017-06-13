@@ -40,7 +40,16 @@ class Reports extends Component
         $metrics = $request['metrics'];
         $optParams = $request['optParams'];
 
-        $response = Analytics::$plugin->getApis()->getAnalytics()->getService()->data_realtime->get($tableId, $metrics, $optParams);
+        $cacheId = ['reports.getRealtimeReport', $tableId, $metrics, $optParams];
+        $response = Analytics::$plugin->cache->get($cacheId);
+
+        if(!$response)
+        {
+            $response = Analytics::$plugin->getApis()->getAnalytics()->getService()->data_realtime->get($tableId, $metrics, $optParams);
+
+            $cacheDuration = Analytics::$plugin->getSettings()->realtimeRefreshInterval;
+            Analytics::$plugin->cache->set($cacheId, $response, $cacheDuration);
+        }
 
         return Analytics::$plugin->getApis()->getAnalytics()->parseReportResponse($response);
     }
