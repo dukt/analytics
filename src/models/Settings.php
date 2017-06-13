@@ -71,6 +71,11 @@ class Settings extends Model
     public $oauthClientSecret;
 
     /**
+     * Google API key
+     */
+    public $apiKey;
+
+    /**
      * @var bool Demo mode
      */
     public $demoMode = false;

@@ -30,7 +30,6 @@ class AnalyticsAsset extends AssetBundle
         // when this asset bundle is registered
         $this->js = [
             'Analytics.js',
-            'jsapi.js',
         ];
 
         parent::init();

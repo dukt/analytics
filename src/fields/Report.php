@@ -112,7 +112,8 @@ class Report extends Field
 
 
                                 // Register JS & Styles
-
+                                $apiKey = Analytics::$plugin->getSettings()->apiKey;
+                                Craft::$app->getView()->registerJsFile('https://www.google.com/jsapi'.($apiKey ? '?key='.$apiKey : '' ));
                                 Craft::$app->getView()->registerAssetBundle(ReportFieldAsset::class);
                                 Craft::$app->getView()->registerJs('new AnalyticsReportField("'.$namespacedId.'-field", '.Json::encode($jsOptions).');');
 
