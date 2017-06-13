@@ -181,30 +181,30 @@ class SettingsController extends Controller
         return $this->renderTemplate('analytics/settings/views/_index', $variables);
     }
 
-    public function actionEditView(int $viewId = null, View $view = null)
+    public function actionEditView(int $viewId = null, View $reportingView = null)
     {
         $variables['isNewView'] = false;
 
         if ($viewId !== null) {
-            if ($view === null) {
-                $view = Analytics::$plugin->getViews()->getViewById($viewId);
+            if ($reportingView === null) {
+                $reportingView = Analytics::$plugin->getViews()->getViewById($viewId);
 
-                if (!$view) {
+                if (!$reportingView) {
                     throw new NotFoundHttpException('View not found');
                 }
             }
 
-            $variables['title'] = $view->name;
-            $variables['reportingView'] = $view;
+            $variables['title'] = $reportingView->name;
+            $variables['reportingView'] = $reportingView;
         } else {
-            if ($view === null) {
-                $view = new View();
+            if ($reportingView === null) {
+                $reportingView = new View();
                 $variables['isNewView'] = true;
             }
             $variables['title'] = Craft::t('analytics', 'Create a new view');
         }
 
-        $variables['reportingView'] = $view;
+        $variables['reportingView'] = $reportingView;
 
         $isOauthProviderConfigured = Analytics::$plugin->getAnalytics()->isOauthProviderConfigured();
 
@@ -242,7 +242,7 @@ class SettingsController extends Controller
                                 $accountOptions[] = ['label' => $account['name'], 'value' => $account['id']];
                             }
                         } else {
-                            $accountOptions[] = ['label' => $view->gaAccountName, 'value' => $view->gaAccountId];
+                            $accountOptions[] = ['label' => $reportingView->gaAccountName, 'value' => $reportingView->gaAccountId];
                         }
 
 
@@ -255,7 +255,7 @@ class SettingsController extends Controller
                                 $propertyOptions[] = ['label' => $webProperty['name'], 'value' => $webProperty['id']];
                             }
                         } else {
-                            $propertyOptions[] = ['label' => $view->gaPropertyName, 'value' => $view->gaPropertyId];
+                            $propertyOptions[] = ['label' => $reportingView->gaPropertyName, 'value' => $reportingView->gaPropertyId];
                         }
 
 
@@ -268,7 +268,7 @@ class SettingsController extends Controller
                                 $viewOptions[] = ['label' => $dataView['name'], 'value' => $dataView['id']];
                             }
                         } else {
-                            $viewOptions[] = ['label' => $view->gaViewName, 'value' => $view->gaViewId];
+                            $viewOptions[] = ['label' => $reportingView->gaViewName, 'value' => $reportingView->gaViewId];
                         }
 
                         $accountExplorerOptions = [
@@ -326,47 +326,47 @@ class SettingsController extends Controller
     {
         $this->requirePostRequest();
 
-        $view = new View();
+        $reportingView = new View();
 
         // Set the simple stuff
         $request = Craft::$app->getRequest();
-        $view->id = $request->getBodyParam('viewId');
-        $view->name = $request->getBodyParam('name');
+        $reportingView->id = $request->getBodyParam('viewId');
+        $reportingView->name = $request->getBodyParam('name');
 
         $accountExplorer = $request->getBodyParam('accountExplorer');
 
-        $view->gaAccountId = $accountExplorer['account'];
-        $view->gaPropertyId = $accountExplorer['property'];
-        $view->gaViewId = $accountExplorer['view'];
+        $reportingView->gaAccountId = $accountExplorer['account'];
+        $reportingView->gaPropertyId = $accountExplorer['property'];
+        $reportingView->gaViewId = $accountExplorer['view'];
 
 
         $accountExplorerData = Analytics::$plugin->getApis()->getAnalytics()->getAccountExplorerData();
 
         foreach($accountExplorerData['accounts'] as $dataAccount) {
-            if($dataAccount['id'] == $view->gaAccountId) {
-                $view->gaAccountName = $dataAccount['name'];
+            if($dataAccount['id'] == $reportingView->gaAccountId) {
+                $reportingView->gaAccountName = $dataAccount['name'];
             }
         }
 
         foreach($accountExplorerData['properties'] as $dataProperty) {
-            if($dataProperty['id'] == $view->gaPropertyId) {
-                $view->gaPropertyName = $dataProperty['name'];
+            if($dataProperty['id'] == $reportingView->gaPropertyId) {
+                $reportingView->gaPropertyName = $dataProperty['name'];
             }
         }
         foreach($accountExplorerData['views'] as $dataView) {
-            if($dataView['id'] == $view->gaViewId) {
-                $view->gaViewName = $dataView['name'];
-                $view->gaViewCurrency = $dataView['currency'];
+            if($dataView['id'] == $reportingView->gaViewId) {
+                $reportingView->gaViewName = $dataView['name'];
+                $reportingView->gaViewCurrency = $dataView['currency'];
             }
         }
 
         // Save it
-        if (!Analytics::$plugin->getViews()->saveView($view)) {
+        if (!Analytics::$plugin->getViews()->saveView($reportingView)) {
             Craft::$app->getSession()->setError(Craft::t('analytics', 'Couldn’t save the view.'));
 
             // Send the view back to the template
             Craft::$app->getUrlManager()->setRouteParams([
-                'view' => $view
+                'reportingView' => $reportingView
             ]);
 
             return null;
@@ -374,7 +374,7 @@ class SettingsController extends Controller
 
         Craft::$app->getSession()->setNotice(Craft::t('analytics', 'View saved.'));
 
-        return $this->redirectToPostedUrl($view);
+        return $this->redirectToPostedUrl($reportingView);
     }
 
     public function actionDeleteView()
