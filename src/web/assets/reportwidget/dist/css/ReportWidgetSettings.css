@@ -5,7 +5,8 @@
   color: #fff;
   border: 1px solid #ddd;
   border-radius: 3px;
-  overflow: hidden; }
+  overflow: hidden;
+}
 
 .chart-picker ul.chart-types li {
   display: inline-block;
@@ -14,62 +15,81 @@
   height: 26px;
   padding: 7px;
   text-align: center;
-  border-right: 1px solid #eee; }
+  border-right: 1px solid #eee;
+}
 
 .chart-picker ul.chart-types li:last-child {
-  border-right: 0; }
+  border-right: 0;
+}
 
 .chart-picker ul.chart-types li:hover {
   background-color: #f7f7f7;
-  cursor: pointer; }
+  cursor: pointer;
+}
 
 .chart-picker ul.chart-types li.active {
-  background-color: #eee; }
+  background-color: #eee;
+}
 
 .chart-picker .chart-select {
-  display: none !important; }
+  display: none !important;
+}
 
 .chart-picker ul.chart-types li[data-chart-type="area"] {
-  background-image: url(../images/charttypes/area-black.png); }
+  background-image: url(../images/charttypes/area-black.png);
+}
 
 .chart-picker ul.chart-types li[data-chart-type="counter"] {
-  background-image: url(../images/charttypes/counter-black.png); }
+  background-image: url(../images/charttypes/counter-black.png);
+}
 
 .chart-picker ul.chart-types li[data-chart-type="pie"] {
-  background-image: url(../images/charttypes/pie-black.png); }
+  background-image: url(../images/charttypes/pie-black.png);
+}
 
 .chart-picker ul.chart-types li[data-chart-type="table"] {
-  background-image: url(../images/charttypes/table-black.png); }
+  background-image: url(../images/charttypes/table-black.png);
+}
 
 .chart-picker ul.chart-types li[data-chart-type="geo"] {
-  background-image: url(../images/charttypes/geo-black.png); }
+  background-image: url(../images/charttypes/geo-black.png);
+}
 
 .selectize {
   display: block;
   width: 100%;
-  line-height: 0; }
+  line-height: 0;
+}
 
 .selectize > .selectize-control {
-  width: 100%; }
+  width: 100%;
+}
 
 .selectize > .selectize-control > .selectize-input {
-  padding: 7px 22px 7px 10px; }
+  padding: 7px 22px 7px 10px;
+}
 
 .selectize > .selectize-control > .selectize-input.focus {
-  -webkit-box-shadow: 0 0 2px #33aaff, inset 0 0 0 1px rgba(51, 170, 255, 0.5);
-  -moz-box-shadow: 0 0 2px #33aaff, inset 0 0 0 1px rgba(51, 170, 255, 0.5);
-  box-shadow: 0 0 2px #33aaff, inset 0 0 0 1px rgba(51, 170, 255, 0.5); }
+  box-shadow: 0 0 2px #33aaff, inset 0 0 0 1px rgba(51, 170, 255, 0.5);
+}
 
 @media (-webkit-min-device-pixel-ratio: 2) {
   .chart-picker ul.chart-types li[data-chart-type="area"] {
-    background-image: url(../images/charttypes/area-black@2x.png); }
+    background-image: url(../images/charttypes/area-black@2x.png);
+  }
   .chart-picker ul.chart-types li[data-chart-type="counter"] {
-    background-image: url(../images/charttypes/counter-black@2x.png); }
+    background-image: url(../images/charttypes/counter-black@2x.png);
+  }
   .chart-picker ul.chart-types li[data-chart-type="pie"] {
-    background-image: url(../images/charttypes/pie-black@2x.png); }
+    background-image: url(../images/charttypes/pie-black@2x.png);
+  }
   .chart-picker ul.chart-types li[data-chart-type="table"] {
-    background-image: url(../images/charttypes/table-black@2x.png); }
+    background-image: url(../images/charttypes/table-black@2x.png);
+  }
   .chart-picker ul.chart-types li[data-chart-type="geo"] {
-    background-image: url(../images/charttypes/geo-black@2x.png); }
+    background-image: url(../images/charttypes/geo-black@2x.png);
+  }
   .chart-picker ul.chart-types li {
-    background-size: 80% 80%; } }
+    background-size: 80% 80%;
+  }
+}

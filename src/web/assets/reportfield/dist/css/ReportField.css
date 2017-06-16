@@ -1,5 +1,6 @@
 .center {
-  text-align: center; }
+  text-align: center;
+}
 
 .analytics-field {
   background: #fdfdfd;
@@ -9,35 +10,44 @@
   border-left: 0;
   border-right: 0;
   position: relative;
-  min-height: 46px; }
+  min-height: 46px;
+}
 
 .analytics-field .uri {
   margin-top: 14px;
-  margin-right: 20px; }
+  margin-right: 20px;
+}
 
 .analytics-field .spinner {
   position: absolute;
   top: 20px;
-  right: 10px; }
+  right: 10px;
+}
 
 .analytics-field .select {
-  margin: 10px 0; }
+  margin: 10px 0;
+}
 
 .analytics-field .select select {
-  font-size: 0.9em; }
+  font-size: 0.9em;
+}
 
 .analytics-field .chart {
   clear: both;
-  margin: 15px -12px -15px -12px; }
+  margin: 15px -12px -15px -12px;
+}
 
 .analytics-field.analytics-error .chart {
-  display: none; }
+  display: none;
+}
 
 .analytics-field.analytics-error .select {
-  display: none; }
+  display: none;
+}
 
 .analytics-field.analytics-error .error {
-  display: block; }
+  display: block;
+}
 
 .analytics-field .error {
   background: url("../images/error.png") no-repeat center 20px;
@@ -45,8 +55,10 @@
   color: #aaa !important;
   display: none;
   margin-bottom: 1em;
-  text-align: center; }
+  text-align: center;
+}
 
 .analytics-field.analytics-error.disable-icon .error {
   background: none;
-  padding-top: inherit; }
+  padding-top: inherit;
+}
