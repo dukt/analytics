@@ -129,6 +129,12 @@ Analytics.AccountExplorerV2 = Garnish.Base.extend({
                 this.$accountSelect.val(account.id);
                 this.$accountSelect.trigger('change');
             }
+            else
+            {
+                // select first account
+                $('option:first-child', this.$accountSelect).prop('selected', true);
+                this.$accountSelect.trigger('change');
+            }
 
             if(property)
             {
