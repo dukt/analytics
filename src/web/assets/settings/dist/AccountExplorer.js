@@ -1,7 +1,7 @@
 /**
- * Account Explorer V2
+ * Account Explorer
  */
-Analytics.AccountExplorerV2 = Garnish.Base.extend({
+Analytics.AccountExplorer = Garnish.Base.extend({
 
     data: null,
 
