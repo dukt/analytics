@@ -101,7 +101,6 @@ Analytics.AccountExplorerV2 = Garnish.Base.extend({
     selectView: function(viewId)
     {
         if(viewId) {
-            console.log('viewId', viewId);
             var account;
             var property;
             var view;
@@ -142,9 +141,6 @@ Analytics.AccountExplorerV2 = Garnish.Base.extend({
                 this.$viewSelect.val(view.id);
                 this.$viewSelect.trigger('change');
             }
-
-            console.log('data', this.data);
-            console.log('account, property, view', account, property, view);
         }
     },
 
