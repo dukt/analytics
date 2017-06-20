@@ -20,6 +20,7 @@ Analytics.Realtime = Garnish.Base.extend(
     $newVisitorsValue: null,
     $returningVisitorsProgress: null,
     $returningVisitorsValue: null,
+    $history: null,
 
     timer: null,
     settings: null,
@@ -45,6 +46,8 @@ Analytics.Realtime = Garnish.Base.extend(
         this.$newVisitorsValue = $('.progress-bar.new-visitors span', this.$realtimeVisitors);
         this.$returningVisitorsProgress = $('.progress-bar.returning-visitors', this.$realtimeVisitors);
         this.$returningVisitorsValue = $('.progress-bar.returning-visitors span', this.$realtimeVisitors);
+
+        this.$history = $('.history', this.$element);
 
         this.timer = false;
 
@@ -211,6 +214,20 @@ Analytics.Realtime = Garnish.Base.extend(
         {
             this.$returningVisitorsProgress.addClass('hidden');
         }
+
+        // history
+
+        this.$history.empty();
+
+        $.each(response.realtimeHistory.rows, $.proxy(function(key, value) {
+            var $tr = $('<tr></tr>');
+            $('<th>'+value[0]+' minutes ago</th>').appendTo($tr);
+            $('<td>'+value[1]+'</td>').appendTo($tr);
+
+            $tr.appendTo(this.$history);
+        }, this));
+
+        this.$history.removeClass('hidden');
     },
 }, {
     defaults: {

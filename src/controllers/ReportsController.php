@@ -131,6 +131,15 @@ class ReportsController extends Controller
 
                 return $this->asErrorJson($errorMsg);
             }
+
+            $realtimeHistoryRequest = [
+                'viewId' => $viewId,
+                'metrics' => 'rt:pageviews',
+                'optParams' => ['dimensions' => 'rt:minutesAgo']
+            ];
+
+            $realtimeHistory = Analytics::$plugin->getReports()->getRealtimeReport($realtimeHistoryRequest);
+
         } else {
             // Demo Mode
             $newVisitor = 5;
@@ -141,7 +150,8 @@ class ReportsController extends Controller
         return $this->asJson([
             'total' => $total,
             'newVisitor' => $newVisitor,
-            'returningVisitor' => $returningVisitor
+            'returningVisitor' => $returningVisitor,
+            'realtimeHistory' => $realtimeHistory
         ]);
     }
 
