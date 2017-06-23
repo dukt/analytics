@@ -20,7 +20,7 @@ Analytics.Realtime = Garnish.Base.extend(
     $newVisitorsValue: null,
     $returningVisitorsProgress: null,
     $returningVisitorsValue: null,
-    $history: null,
+    $pageviewsChart: null,
 
     timer: null,
     settings: null,
@@ -47,7 +47,10 @@ Analytics.Realtime = Garnish.Base.extend(
         this.$returningVisitorsProgress = $('.progress-bar.returning-visitors', this.$realtimeVisitors);
         this.$returningVisitorsValue = $('.progress-bar.returning-visitors span', this.$realtimeVisitors);
 
-        this.$history = $('.history', this.$element);
+        this.$pageviewsChart = $('.pageviews .chart', this.$element);
+        this.$pageviewsNoData = $('.pageviews .nodata', this.$element);
+
+        this.loadGoogleCharts();
 
         this.timer = false;
 
@@ -215,19 +218,85 @@ Analytics.Realtime = Garnish.Base.extend(
             this.$returningVisitorsProgress.addClass('hidden');
         }
 
-        // history
 
-        this.$history.empty();
+        // Page views
 
-        $.each(response.realtimeHistory.rows, $.proxy(function(key, value) {
-            var $tr = $('<tr></tr>');
-            $('<th>'+value[0]+' minutes ago</th>').appendTo($tr);
-            $('<td>'+value[1]+'</td>').appendTo($tr);
+        this.drawChart(response);
+    },
 
-            $tr.appendTo(this.$history);
+    loadGoogleCharts: function()
+    {
+        google.charts.load('current', {packages: ['corechart', 'bar']});
+
+        /*
+
+        google.charts.setOnLoadCallback($.proxy(function() {
+            this._drawChart();
         }, this));
 
-        this.$history.removeClass('hidden');
+        */
+    },
+
+    drawChart: function(response)
+    {
+        var data = new google.visualization.DataTable();
+        data.addColumn('number', 'Minutes ago');
+        data.addColumn('number', 'Pageviews');
+
+        var realtimeHistory = response.realtimeHistory;
+
+        console.log('realtimeHistory', realtimeHistory);
+
+        if(realtimeHistory.rows.length > 0) {
+            this.$pageviewsChart.removeClass('hidden');
+            this.$pageviewsNoData.addClass('hidden');
+        } else {
+            this.$pageviewsChart.addClass('hidden');
+            this.$pageviewsNoData.removeClass('hidden');
+        }
+
+        for(minutesAgo = 30; minutesAgo >= 0; minutesAgo--) {
+            var pageviews = 0;
+            $.each(realtimeHistory.rows, function(key, row) {
+                var rowMinutesAgo = parseInt(row[0]);
+
+                if(rowMinutesAgo === minutesAgo) {
+                    pageviews = row[1];
+                }
+            });
+
+            data.addRow([{v: minutesAgo, f: minutesAgo+" minutes ago"}, pageviews]);
+        }
+
+        var options = {
+            theme: 'maximized',
+            bar: {groupWidth: "90%"},
+            legend: {
+                position: 'bottom',
+            },
+            hAxis: {
+                direction: -1,
+                baselineColor: 'transparent',
+                gridlineColor: 'transparent',
+                textPosition: 'none',
+                gridlines: {
+                    count: 0
+                },
+            },
+            vAxis: {
+                baselineColor: '#fff',
+                gridlineColor: '#fff',
+                textPosition: 'none',
+                gridlines: {
+                    count: 0
+                },
+            }
+        };
+        console.log('this.$pageviewsChart', this.$pageviewsChart);
+
+        var chart = new google.visualization.ColumnChart(this.$pageviewsChart.get(0));
+
+        chart.draw(data, options);
     },
 }, {
     defaults: {

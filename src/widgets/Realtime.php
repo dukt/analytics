@@ -91,6 +91,8 @@ class Realtime extends \craft\base\Widget
                                 'refreshInterval' => $realtimeRefreshInterval,
                             ];
 
+                            $view->registerJsFile('//www.gstatic.com/charts/loader.js');
+
                             $view->registerAssetBundle(RealtimeReportWidgetAsset::class);
 
                             $view->registerJs('var AnalyticsChartLanguage = "'.Craft::$app->language.'";', true);
