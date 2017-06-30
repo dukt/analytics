@@ -1,37 +1,33 @@
 {# Realtime visitors #}
 
-<p class="light">{{ reportingView.name }}</p>
-
 <div class="analytics-realtime-visitors">
-	<div class="streamstatus"></div>
-	<div class="active-visitors">
-		<span class="currently">{{ 'Currently'|t('analytics') }}</span>
-		<strong class="count">•••</strong>
-		<span class="txt">{{ 'Active visitors on your website'|t('analytics') }}</span>
-	</div>
 
-	<div class="progress hidden">
-		<div class="progress-bar new-visitors" style="width: 35%">
-			<span>35%</span>
-		</div>
-		<div class="progress-bar returning-visitors" style="width: 65%">
-			<span>65%</span>
-		</div>
-	</div>
+	<div class="active-users">0</div>
 
-	<ul class="legend hidden">
-		<li class="new-visitors"><span class="status"></span>{{ 'New'|t('analytics') }}</li>
-		<li class="returning-visitors"><span class="status"></span>{{ 'Returning'|t('analytics') }}</li>
-	</ul>
-
-	<hr>
-
+	<h3>{{ "Pageviews per minute"|t('analytics') }}</h3>
 	<div class="pageviews">
-		<h2>{{ "Pageviews per minute"|t('analytics') }}</h2>
 		<p class="light nodata">No data</p>
 		<div class="chart"></div>
+	</div>
+
+	<h3>{{ "Active pages"|t('analytics') }}</h3>
+	<div class="active-pages">
+		<p class="light nodata">No data</p>
+		<table class="data fullwidth hidden">
+			<thead>
+				<tr>
+					<th>Active page</th>
+					<th>Users</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
 	</div>
 
 </div>
 
 <div class="error"></div>
+
+<div class="view">
+	<p class="light">{{ reportingView.name }}</p>
+</div>

@@ -49,7 +49,7 @@ class Realtime extends \craft\base\Widget
      */
     public static function displayName(): string
     {
-        return Craft::t('analytics', 'Analytics Real-time');
+        return Craft::t('analytics', 'Active users');
     }
 
     /**

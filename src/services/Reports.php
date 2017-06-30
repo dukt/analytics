@@ -51,7 +51,7 @@ class Reports extends Component
             Analytics::$plugin->cache->set($cacheId, $response, $cacheDuration);
         }
 
-        return Analytics::$plugin->getApis()->getAnalytics()->parseReportResponse($response);
+        return (array) $response;
     }
 
     /**

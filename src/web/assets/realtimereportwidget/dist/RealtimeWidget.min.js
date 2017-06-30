@@ -3,25 +3,20 @@
  */
 Analytics.Realtime = Garnish.Base.extend(
 {
-    calcTotal: null,
-    calcNewVisitor: null,
-    calcReturningVisitor: null,
-
     $element: null,
     $title: null,
     $body: null,
-    $streamstatus: null,
     $error: null,
-    $activeVisitorsCount: null,
-    $progress: null,
-    $legend: null,
+    $activeUsers: null,
     $realtimeVisitors: null,
-    $newVisitorsProgress: null,
-    $newVisitorsValue: null,
-    $returningVisitorsProgress: null,
-    $returningVisitorsValue: null,
     $pageviewsChart: null,
+    $activePagesTable: null,
+    $activePagesTableBody: null,
+    $activePagesTableBodyNoData: null,
 
+    chart: null,
+    chartData: null,
+    chartOptions: null,
     timer: null,
     settings: null,
 
@@ -32,23 +27,18 @@ Analytics.Realtime = Garnish.Base.extend(
         this.$element = $('#'+element);
         this.$title = $('.title', this.$element);
         this.$body = $('.body', this.$element);
-        this.$streamstatus = $('.streamstatus', this.$element);
         this.$error = $('.error', this.$element);
 
         this.$realtimeVisitors = $('.analytics-realtime-visitors', this.$element);
 
-        this.$activeVisitorsCount = $('.active-visitors .count', this.$realtimeVisitors);
-
-        this.$progress = $('.progress', this.$realtimeVisitors);
-        this.$legend = $('.legend', this.$realtimeVisitors);
-        
-        this.$newVisitorsProgress = $('.progress-bar.new-visitors', this.$realtimeVisitors);
-        this.$newVisitorsValue = $('.progress-bar.new-visitors span', this.$realtimeVisitors);
-        this.$returningVisitorsProgress = $('.progress-bar.returning-visitors', this.$realtimeVisitors);
-        this.$returningVisitorsValue = $('.progress-bar.returning-visitors span', this.$realtimeVisitors);
+        this.$activeUsers = $('.active-users', this.$realtimeVisitors);
 
         this.$pageviewsChart = $('.pageviews .chart', this.$element);
         this.$pageviewsNoData = $('.pageviews .nodata', this.$element);
+
+        this.$activePagesTable = $('.active-pages table', this.$element);
+        this.$activePagesTableBody = $('.active-pages table tbody', this.$element);
+        this.$activePagesNoData = $('.active-pages .nodata', this.$element);
 
         this.loadGoogleCharts();
 
@@ -56,41 +46,7 @@ Analytics.Realtime = Garnish.Base.extend(
 
         this.start();
 
-        setInterval($.proxy(function()
-        {
-            if(this.$streamstatus.hasClass('hidden'))
-            {
-                this.$streamstatus.removeClass('hidden');
-            }
-            else
-            {
-                this.$streamstatus.addClass('hidden');
-            }
-
-        }, this), 1000);
-
         this.addListener(Garnish.$win, 'resize', '_handleWindowResize');
-    },
-
-    _handleWindowResize: function()
-    {
-        if(this.$newVisitorsValue.innerWidth() > this.$newVisitorsProgress.width())
-        {
-            this.$newVisitorsValue.addClass('hidden');
-        }
-        else
-        {
-            this.$newVisitorsValue.removeClass('hidden');
-        }
-
-        if(this.$returningVisitorsValue.innerWidth() > this.$returningVisitorsProgress.width())
-        {
-            this.$returningVisitorsValue.addClass('hidden');
-        }
-        else
-        {
-            this.$returningVisitorsValue.removeClass('hidden');
-        }
     },
 
     start: function()
@@ -147,81 +103,29 @@ Analytics.Realtime = Garnish.Base.extend(
 
     handleResponse: function(response)
     {
-        var newVisitor = response.newVisitor;
-        var returningVisitor = response.returningVisitor;
-
-        this.calcTotal = ((returningVisitor * 1) + (newVisitor * 1));
-
-        this.$activeVisitorsCount.text(this.calcTotal);
-
-        if (this.calcTotal > 0)
-        {
-            this.$progress.removeClass('hidden');
-            this.$legend.removeClass('hidden');
-        }
-        else
-        {
-            this.$progress.addClass('hidden');
-            this.$legend.addClass('hidden');
-        }
-
-        if(this.calcTotal > 0)
-        {
-            this.calcNewVisitor = Math.round(100 * newVisitor / this.calcTotal);
-        }
-        else
-        {
-            this.calcNewVisitor = 100;
-        }
-
-        this.calcReturningVisitor = 100 - this.calcNewVisitor;
-
-
-        // new-visitor
-
-        this.$newVisitorsProgress.css('width', this.calcNewVisitor+'%');
-        this.$newVisitorsProgress.attr('title', this.calcNewVisitor+'%');
-        this.$newVisitorsValue.text(this.calcNewVisitor+'%');
-
-        if(this.$newVisitorsValue.innerWidth() > this.$newVisitorsProgress.width())
-        {
-            this.$newVisitorsValue.addClass('hidden');
-        }
-
-        if(this.calcNewVisitor > 0)
-        {
-            this.$newVisitorsProgress.removeClass('hidden');
-        }
-        else
-        {
-            this.$newVisitorsProgress.addClass('hidden');
-        }
-
-
-        // returning-visitor
-
-        this.$returningVisitorsProgress.css('width', this.calcReturningVisitor+'%');
-        this.$returningVisitorsProgress.attr('title', this.calcReturningVisitor+'%');
-        this.$returningVisitorsValue.text(this.calcReturningVisitor+'%');
-
-        if(this.$returningVisitorsValue.innerWidth() > this.$returningVisitorsProgress.width())
-        {
-            this.$returningVisitorsValue.addClass('hidden');
-        }
-
-        if(this.calcReturningVisitor > 0)
-        {
-            this.$returningVisitorsProgress.removeClass('hidden');
-        }
-        else
-        {
-            this.$returningVisitorsProgress.addClass('hidden');
-        }
+        this.$activeUsers.text(response.activeUsers);
 
 
         // Page views
+        this.setChart(response);
 
-        this.drawChart(response);
+
+        // Active pages
+
+        this.$activePagesTableBody.empty();
+
+        if(response.activePages.rows && response.activePages.rows.length > 0) {
+            this.$activePagesNoData.addClass('hidden');
+            $.each(response.activePages.rows, $.proxy(function(key, row) {
+                var $tr = $('<tr></tr>').appendTo(this.$activePagesTableBody);
+                $('<td>'+row[0]+'</td>').appendTo($tr);
+                $('<td>'+row[1]+'</td>').appendTo($tr);
+            }, this));
+            this.$activePagesTable.removeClass('hidden');
+        } else {
+            this.$activePagesTable.addClass('hidden');
+            this.$activePagesNoData.removeClass('hidden');
+        }
     },
 
     loadGoogleCharts: function()
@@ -231,23 +135,21 @@ Analytics.Realtime = Garnish.Base.extend(
         /*
 
         google.charts.setOnLoadCallback($.proxy(function() {
-            this._drawChart();
+            this._setChart();
         }, this));
 
         */
     },
 
-    drawChart: function(response)
+    setChart: function(response)
     {
         var data = new google.visualization.DataTable();
         data.addColumn('number', 'Minutes ago');
         data.addColumn('number', 'Pageviews');
 
-        var realtimeHistory = response.realtimeHistory;
+        var pageviews = response.pageviews;
 
-        console.log('realtimeHistory', realtimeHistory);
-
-        if(realtimeHistory.rows.length > 0) {
+        if(pageviews.rows && pageviews.rows.length > 0) {
             this.$pageviewsChart.removeClass('hidden');
             this.$pageviewsNoData.addClass('hidden');
         } else {
@@ -256,19 +158,21 @@ Analytics.Realtime = Garnish.Base.extend(
         }
 
         for(minutesAgo = 30; minutesAgo >= 0; minutesAgo--) {
-            var pageviews = 0;
-            $.each(realtimeHistory.rows, function(key, row) {
+            var rowPageviews = 0;
+            $.each(pageviews.rows, function(key, row) {
                 var rowMinutesAgo = parseInt(row[0]);
 
                 if(rowMinutesAgo === minutesAgo) {
-                    pageviews = row[1];
+                    rowPageviews = parseInt(row[1]);
                 }
             });
 
-            data.addRow([{v: minutesAgo, f: minutesAgo+" minutes ago"}, pageviews]);
+            data.addRow([{v: minutesAgo, f: minutesAgo+" minutes ago"}, rowPageviews]);
         }
 
         var options = {
+            height: 150,
+            //backgroundColor: '#eee',
             theme: 'maximized',
             bar: {groupWidth: "90%"},
             legend: {
@@ -292,11 +196,20 @@ Analytics.Realtime = Garnish.Base.extend(
                 },
             }
         };
-        console.log('this.$pageviewsChart', this.$pageviewsChart);
 
-        var chart = new google.visualization.ColumnChart(this.$pageviewsChart.get(0));
+        this.chartData = data;
+        this.chartOptions = options;
 
-        chart.draw(data, options);
+        this.chart = new google.visualization.ColumnChart(this.$pageviewsChart.get(0));
+        this.chart.draw(this.chartData, this.chartOptions);
+    },
+
+    _handleWindowResize: function()
+    {
+        if(this.chart)
+        {
+            this.chart.draw(this.chartData, this.chartOptions);
+        }
     },
 }, {
     defaults: {
