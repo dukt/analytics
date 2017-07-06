@@ -9,6 +9,7 @@ namespace dukt\analytics\web\assets\realtimereportwidget;
 
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
+use craft\web\View;
 use dukt\analytics\web\assets\analytics\AnalyticsAsset;
 
 /**
@@ -44,5 +45,20 @@ class RealtimeReportWidgetAsset extends AssetBundle
         ];
 
         parent::init();
+    }
+
+    public function registerAssetFiles($view)
+    {
+        parent::registerAssetFiles($view);
+
+        $js = "if(typeof AnalyticsRealtime == 'undefined') {";
+
+        $js .= 'var AnalyticsRealtime = {};';
+        $js .= 'AnalyticsRealtime.GoogleVisualizationCalled = false;';
+        $js .= 'AnalyticsRealtime.GoogleVisualizationReady = false;';
+
+        $js .= '}';
+
+        $view->registerJs($js, View::POS_BEGIN);
     }
 }

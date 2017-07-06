@@ -125,9 +125,11 @@ Analytics.Realtime = Garnish.Base.extend(
         }
     },
 
-    loadGoogleCharts: function(callback)
-    {
-        google.charts.load('current', {packages: ['corechart', 'bar']});
+    loadGoogleCharts: function(callback) {
+        if (!AnalyticsRealtime.GoogleVisualizationCalled) {
+            google.charts.load('current', {packages: ['corechart', 'bar']});
+            AnalyticsRealtime.GoogleVisualizationCalled = true;
+        }
 
         google.charts.setOnLoadCallback($.proxy(function() {
             callback();
