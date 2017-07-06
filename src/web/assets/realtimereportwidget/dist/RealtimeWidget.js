@@ -17,7 +17,7 @@ Analytics.Realtime = Garnish.Base.extend(
     chart: null,
     chartData: null,
     chartOptions: null,
-    timer: null,
+    timer: false,
     settings: null,
 
     init: function(element, settings)
@@ -40,13 +40,11 @@ Analytics.Realtime = Garnish.Base.extend(
         this.$activePagesTableBody = $('.active-pages table tbody', this.$element);
         this.$activePagesNoData = $('.active-pages .nodata', this.$element);
 
-        this.loadGoogleCharts();
-
-        this.timer = false;
-
-        this.start();
-
         this.addListener(Garnish.$win, 'resize', '_handleWindowResize');
+
+        this.loadGoogleCharts();
+        
+        this.start();
     },
 
     start: function()
