@@ -46,6 +46,17 @@ Analytics.Realtime = Garnish.Base.extend(
         }, this));
     },
 
+    loadGoogleCharts: function(callback) {
+        if (!AnalyticsRealtime.GoogleVisualizationCalled) {
+            google.charts.load('current', {packages: ['corechart', 'bar']});
+            AnalyticsRealtime.GoogleVisualizationCalled = true;
+        }
+
+        google.charts.setOnLoadCallback($.proxy(function() {
+            callback();
+        }, this));
+    },
+
     start: function()
     {
         if(this.timer)
@@ -94,41 +105,16 @@ Analytics.Realtime = Garnish.Base.extend(
 
     handleResponse: function(response)
     {
-        this.$activeUsers.text(response.activeUsers);
+        this.handleActiveUsers(response.activeUsers);
 
-
-        // Page views
-        
         this.handlePageviews(response.pageviews);
 
-
-        // Active pages
-
-        this.$activePagesTableBody.empty();
-
-        if(response.activePages.rows && response.activePages.rows.length > 0) {
-            this.$activePagesNoData.addClass('hidden');
-            $.each(response.activePages.rows, $.proxy(function(key, row) {
-                var $tr = $('<tr></tr>').appendTo(this.$activePagesTableBody);
-                $('<td>'+row[0]+'</td>').appendTo($tr);
-                $('<td>'+row[1]+'</td>').appendTo($tr);
-            }, this));
-            this.$activePagesTable.removeClass('hidden');
-        } else {
-            this.$activePagesTable.addClass('hidden');
-            this.$activePagesNoData.removeClass('hidden');
-        }
+        this.handleActivePages(response.activePages);
     },
 
-    loadGoogleCharts: function(callback) {
-        if (!AnalyticsRealtime.GoogleVisualizationCalled) {
-            google.charts.load('current', {packages: ['corechart', 'bar']});
-            AnalyticsRealtime.GoogleVisualizationCalled = true;
-        }
-
-        google.charts.setOnLoadCallback($.proxy(function() {
-            callback();
-        }, this));
+    handleActiveUsers: function(activeUsers)
+    {
+        this.$activeUsers.text(activeUsers);
     },
 
     handlePageviews: function(pageviews)
@@ -190,6 +176,23 @@ Analytics.Realtime = Garnish.Base.extend(
 
         this.chart = new google.visualization.ColumnChart(this.$pageviewsChart.get(0));
         this.chart.draw(this.chartData, this.chartOptions);
+    },
+
+    handleActivePages: function(activePages) {
+        this.$activePagesTableBody.empty();
+
+        if(activePages.rows && activePages.rows.length > 0) {
+            this.$activePagesNoData.addClass('hidden');
+            $.each(activePages.rows, $.proxy(function(key, row) {
+                var $tr = $('<tr></tr>').appendTo(this.$activePagesTableBody);
+                $('<td>'+row[0]+'</td>').appendTo($tr);
+                $('<td>'+row[1]+'</td>').appendTo($tr);
+            }, this));
+            this.$activePagesTable.removeClass('hidden');
+        } else {
+            this.$activePagesTable.addClass('hidden');
+            this.$activePagesNoData.removeClass('hidden');
+        }
     },
 
     _handleWindowResize: function()
