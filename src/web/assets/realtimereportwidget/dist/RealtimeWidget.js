@@ -67,26 +67,20 @@ Analytics.Realtime = Garnish.Base.extend(
         clearInterval(this.timer);
     },
 
-    request: function()
-    {
+    request: function() {
         var data = {
             viewId: this.settings.viewId
         };
 
-        Craft.queueActionRequest('analytics/reports/realtime-widget', data, $.proxy(function(response, textStatus)
-        {
-            if(textStatus == 'success' && typeof(response.error) == 'undefined')
-            {
+        Craft.queueActionRequest('analytics/reports/realtime-widget', data, $.proxy(function(response, textStatus) {
+            if (textStatus === 'success' && typeof(response.error) === 'undefined') {
                 this.$error.addClass('hidden');
                 this.$realtimeVisitors.removeClass('hidden');
                 this.handleResponse(response);
-            }
-            else
-            {
+            } else {
                 var msg = 'An unknown error occured.';
 
-                if(typeof(response) != 'undefined' && response && typeof(response.error) != 'undefined')
-                {
+                if (typeof(response) !== 'undefined' && response && typeof(response.error) !== 'undefined') {
                     msg = response.error;
                 }
 
@@ -133,7 +127,6 @@ Analytics.Realtime = Garnish.Base.extend(
 
         google.charts.setOnLoadCallback($.proxy(function() {
             callback();
-            // this._setChart();
         }, this));
     },
 
