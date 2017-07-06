@@ -39,12 +39,11 @@ Analytics.Realtime = Garnish.Base.extend(
         this.$activePagesTable = $('.active-pages table', this.$element);
         this.$activePagesTableBody = $('.active-pages table tbody', this.$element);
         this.$activePagesNoData = $('.active-pages .nodata', this.$element);
-
-        this.addListener(Garnish.$win, 'resize', '_handleWindowResize');
-
-        this.loadGoogleCharts();
         
-        this.start();
+        this.loadGoogleCharts($.proxy(function() {
+            this.addListener(Garnish.$win, 'resize', '_handleWindowResize');
+            this.start();
+        }, this));
     },
 
     start: function()
@@ -126,17 +125,14 @@ Analytics.Realtime = Garnish.Base.extend(
         }
     },
 
-    loadGoogleCharts: function()
+    loadGoogleCharts: function(callback)
     {
         google.charts.load('current', {packages: ['corechart', 'bar']});
 
-        /*
-
         google.charts.setOnLoadCallback($.proxy(function() {
-            this._setChart();
+            callback();
+            // this._setChart();
         }, this));
-
-        */
     },
 
     setChart: function(response)
