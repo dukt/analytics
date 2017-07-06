@@ -98,7 +98,8 @@ Analytics.Realtime = Garnish.Base.extend(
 
 
         // Page views
-        this.setChart(response);
+        
+        this.handlePageviews(response.pageviews);
 
 
         // Active pages
@@ -130,13 +131,11 @@ Analytics.Realtime = Garnish.Base.extend(
         }, this));
     },
 
-    setChart: function(response)
+    handlePageviews: function(pageviews)
     {
         var data = new google.visualization.DataTable();
         data.addColumn('number', 'Minutes ago');
         data.addColumn('number', 'Pageviews');
-
-        var pageviews = response.pageviews;
 
         if(pageviews.rows && pageviews.rows.length > 0) {
             this.$pageviewsChart.removeClass('hidden');
