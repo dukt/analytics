@@ -10,10 +10,12 @@ namespace dukt\analytics;
 use Craft;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
+use craft\events\DefineComponentsEvent;
 use craft\helpers\UrlHelper;
 use craft\services\Dashboard;
 use craft\services\Fields;
 use craft\web\UrlManager;
+use craft\web\twig\variables\CraftVariable;
 use dukt\analytics\base\PluginTrait;
 use dukt\analytics\fields\Report as ReportField;
 use dukt\analytics\models\Settings;
@@ -80,6 +82,10 @@ class Plugin extends \craft\base\Plugin
             $event->types[] = ReportField::class;
         });
 
+        Event::on(CraftVariable::class, CraftVariable::EVENT_DEFINE_COMPONENTS, function(DefineComponentsEvent $event) {
+            $event->components['analytics'] = AnalyticsVariable::class;
+        });
+
         if (Craft::$app->getRequest()->getIsCpRequest()) {
             Craft::$app->getView()->registerAssetBundle(AnalyticsAsset::class);
         }
@@ -112,14 +118,6 @@ class Plugin extends \craft\base\Plugin
         ];
 
         $event->rules = array_merge($event->rules, $rules);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function defineTemplateComponent()
-    {
-        return AnalyticsVariable::class;
     }
 
     /**
