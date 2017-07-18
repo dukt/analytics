@@ -15,8 +15,15 @@
             "homepage": "https://dukt.net/"
         }
     ],
+    "support": {
+        "email": "support@dukt.net",
+        "issues": "https://github.com/dukt/analytics/issues?state=open",
+        "source": "https://github.com/dukt/analytics",
+        "docs": "https://github.com/dukt/analytics",
+        "rss": "https://github.com/dukt/analytics/commits/v2.atom"
+    },
     "require": {
-        "craftcms/cms": "~3.0.0-beta.8",
+        "craftcms/cms": "^3.0.0-beta.20",
         "league/oauth2-client": "^2.2",
         "dukt/oauth2-google": "^2.0",
         "google/apiclient": "v2.1.0",
