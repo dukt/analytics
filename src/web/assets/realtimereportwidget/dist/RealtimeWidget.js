@@ -185,8 +185,8 @@ Analytics.Realtime = Garnish.Base.extend(
             this.$activePagesNoData.addClass('hidden');
             $.each(activePages.rows, $.proxy(function(key, row) {
                 var $tr = $('<tr></tr>').appendTo(this.$activePagesTableBody);
-                $('<td>'+row[0]+'</td>').appendTo($tr);
-                $('<td>'+row[1]+'</td>').appendTo($tr);
+                $('<td class="col-page">'+row[0]+'</td>').appendTo($tr);
+                $('<td class="col-users">'+row[1]+'</td>').appendTo($tr);
             }, this));
             this.$activePagesTable.removeClass('hidden');
         } else {

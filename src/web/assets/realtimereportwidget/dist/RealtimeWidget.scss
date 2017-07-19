@@ -6,13 +6,15 @@ $green: #50B431;
 
 .dukt\\analytics\\widgets\\realtime {
     .analytics-realtime-visitors .active-users { margin-top: -10px; margin-bottom: 20px; }
-    .analytics-realtime-visitors .pageviews,
-    .analytics-realtime-visitors .active-pages { height: 150px; margin: 1em 0; }
-    .analytics-realtime-visitors .active-pages .chart { height: 100px; }
-    /*.analytics-realtime-visitors .pageviews .chart { margin: 1em 0; }*/
     .analytics-realtime-visitors .active-users { font-size: 56px; line-height: 1.2em; }
-    .view {
-        margin-top: 24px;
-        text-align: center;
-    }
+
+    .analytics-realtime-visitors .pageviews { height: 150px; margin: 1em 0; }
+    .analytics-realtime-visitors .pageviews .chart { height: 100px; }
+    .analytics-realtime-visitors .active-pages { height: 190px; margin: 1em 0; }
+
+    .analytics-realtime-visitors .active-pages table { width: 100%; border-collapse: collapse; }
+    .analytics-realtime-visitors .active-pages table .col-page { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width:1px; width:100%; }
+    .analytics-realtime-visitors .active-pages table .col-users { white-space: nowrap; overflow-wrap: normal; word-break: keep-all; }
+
+    .view { margin-top: 24px; text-align: center; }
 }
