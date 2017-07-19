@@ -142,7 +142,7 @@ class ReportsController extends Controller
         $activePagesRequest = [
             'viewId' => $viewId,
             'metrics' => 'rt:activeUsers',
-            'optParams' => ['dimensions' => 'rt:pagePath']
+            'optParams' => ['dimensions' => 'rt:pagePath', 'max-results' => 5]
         ];
 
         $activePages = Analytics::$plugin->getReports()->getRealtimeReport($activePagesRequest);
