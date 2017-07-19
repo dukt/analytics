@@ -116,14 +116,14 @@ class SettingsController extends Controller
     {
         $this->requirePostRequest();
 
-        $pluginClass = Craft::$app->getRequest()->getRequiredBodyParam('pluginClass');
+        $pluginHandle = Craft::$app->getRequest()->getRequiredBodyParam('pluginHandle');
         $settings = Craft::$app->getRequest()->getBodyParam('settings');
 
-        $plugin = Craft::$app->getPlugins()->getPlugin($pluginClass);
+        $plugin = Craft::$app->getPlugins()->getPlugin($pluginHandle);
 
         if (!$plugin)
         {
-            throw new InvalidPluginException($pluginClass);
+            throw new InvalidPluginException($pluginHandle);
         }
 
         $settings = Analytics::$plugin->getApis()->getAnalytics()->populateAccountExplorerSettings($settings);
