@@ -27,7 +27,8 @@
 
 	{{ forms.selectField({
 		first: true,
-		label: "Attached View",
+		label: "View",
+		instructions: "Select the view this site should be attached to."|t('analytics'),
 		name: 'viewId',
 		options: reportingViewOptions,
 		value: (siteView.viewId is defined ? siteView.viewId : '')
