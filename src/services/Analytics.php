@@ -118,7 +118,7 @@ class Analytics extends Component
             }
         }
 
-        $formatLocalePath = Craft::getAlias('@bower')."/d3-format/locale/{$d3Language}.json";
+        $formatLocalePath = Craft::getAlias('@lib')."/d3-format/{$d3Language}.json";
 
         $localeDefinition = json_decode(file_get_contents($formatLocalePath), true);
 
