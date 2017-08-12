@@ -19,13 +19,6 @@ class Realtime extends \craft\base\Widget
 
     public $viewId;
 
-    /**
-     * Whether users should be able to select more than one of this widget type.
-     *
-     * @var bool
-     */
-    protected $multi = false;
-
     // Public Methods
     // =========================================================================
 
