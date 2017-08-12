@@ -71,9 +71,9 @@ class Settings extends Model
     public $oauthClientSecret;
 
     /**
-     * Google API key
+     * Google Maps API key
      */
-    public $apiKey;
+    public $mapsApiKey;
 
     /**
      * @var bool Demo mode
