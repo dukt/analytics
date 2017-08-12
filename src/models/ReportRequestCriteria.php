@@ -51,7 +51,7 @@ class ReportRequestCriteria extends Model
     public $orderBys;
 
     /**
-     * @var int Order Bys
+     * @var int Page size
      */
     public $pageSize;
 
