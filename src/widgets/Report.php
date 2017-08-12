@@ -106,8 +106,7 @@ class Report extends \craft\base\Widget
                                 'cachedResponse' => isset($cachedResponse) ? $cachedResponse : null,
                             ];
 
-                            $apiKey = Analytics::$plugin->getSettings()->apiKey;
-                            $view->registerJsFile('https://www.google.com/jsapi'.($apiKey ? '?key='.$apiKey : '' ));
+                            $view->registerJsFile('//www.gstatic.com/charts/loader.js');
                             $view->registerAssetBundle(ReportWidgetAsset::class);
 
                             $view->registerJs('new Analytics.ReportWidget("widget'.$this->id.'", '.Json::encode($jsOptions).');');
