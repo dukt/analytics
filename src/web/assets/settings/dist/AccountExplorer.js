@@ -189,6 +189,5 @@ Analytics.AccountExplorer = Garnish.Base.extend({
         }
     }
 }, {
-    defaults: {
-    }
+    defaults: {}
 });

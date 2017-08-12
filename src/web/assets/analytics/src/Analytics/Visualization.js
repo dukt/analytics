@@ -7,16 +7,14 @@ Analytics.Visualization = Garnish.Base.extend({
     options: null,
     afterInitStack: [],
 
-    init: function(options)
-    {
+    init: function(options) {
         this.options = options;
 
-        if(Analytics.GoogleVisualizationCalled == false)
-        {
+        if (Analytics.GoogleVisualizationCalled == false) {
             Analytics.GoogleVisualizationCalled = true;
 
             google.charts.load('current', {
-                packages:['corechart', 'table'],
+                packages: ['corechart', 'table'],
                 language: Analytics.chartLanguage,
                 mapsApiKey: Analytics.mapsApiKey,
                 callback: $.proxy(function() {
@@ -27,31 +25,23 @@ Analytics.Visualization = Garnish.Base.extend({
                     this.onAfterFirstInit();
                 }, this)
             });
-        }
-        else
-        {
+        } else {
             this.onAfterInit();
         }
     },
 
-    onAfterFirstInit: function()
-    {
+    onAfterFirstInit: function() {
         // call inAfterInits that are waiting for initialization completion
 
-        for(i=0; i < this.afterInitStack.length; i++)
-        {
+        for (i = 0; i < this.afterInitStack.length; i++) {
             this.afterInitStack[i]();
         }
     },
 
-    onAfterInit: function()
-    {
-        if(Analytics.GoogleVisualizationReady)
-        {
+    onAfterInit: function() {
+        if (Analytics.GoogleVisualizationReady) {
             this.options.onAfterInit();
-        }
-        else
-        {
+        } else {
             // add it to the stack
             this.afterInitStack.push(this.options.onAfterInit);
         }

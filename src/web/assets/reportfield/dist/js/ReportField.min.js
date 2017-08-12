@@ -1,13 +1,9 @@
-/**
- * Field
- */
- AnalyticsReportField = Garnish.Base.extend({
+AnalyticsReportField = Garnish.Base.extend({
 
-    init: function(fieldId, options)
-    {
+    init: function(fieldId, options) {
         this.setSettings(options, AnalyticsReportField.defaults);
 
-        this.$element = $("#"+fieldId);
+        this.$element = $("#" + fieldId);
         this.$field = $(".analytics-field", this.$element);
         this.$metric = $('.analytics-metric select', this.$element);
         this.$chart = $('.chart', this.$element);
@@ -20,24 +16,20 @@
 
         this.addListener(this.$metric, 'change', 'onMetricChange');
 
-        if(!this.settings.cachedResponse)
-        {
+        if (!this.settings.cachedResponse) {
             this.sendRequest();
         }
-        else
-        {
+        else {
             this.parseResponse(this.settings.cachedResponse);
         }
     },
 
-    onMetricChange: function(ev)
-    {
+    onMetricChange: function(ev) {
         this.metric = $(ev.currentTarget).val();
         this.sendRequest();
     },
 
-    sendRequest: function()
-    {
+    sendRequest: function() {
         this.$spinner.removeClass('hidden');
         this.$field.removeClass('analytics-error');
 
@@ -48,16 +40,13 @@
         };
 
         Craft.postActionRequest('analytics/reports/element', data, $.proxy(function(response, textStatus) {
-            if(textStatus == 'success' && typeof(response.error) == 'undefined')
-            {
+            if (textStatus == 'success' && typeof(response.error) == 'undefined') {
                 this.parseResponse(response);
             }
-            else
-            {
+            else {
                 var msg = Craft.t('An unknown error occurred.');
 
-                if(typeof(response) != 'undefined' && response && typeof(response.error) != 'undefined')
-                {
+                if (typeof(response) != 'undefined' && response && typeof(response.error) != 'undefined') {
                     msg = response.error;
                 }
 
@@ -72,15 +61,14 @@
         }, this));
     },
 
-    parseResponse: function(response)
-    {
+    parseResponse: function(response) {
         Garnish.requestAnimationFrame($.proxy(function() {
             response.chartOptions = Analytics.ChartOptions.field();
             this.chart = new Analytics.reports.Area(this.$chart, response, this.settings.localeDefinition, this.settings.chartLanguage);
         }, this));
     }
 }, {
-     defaults: {
-         cachedResponse: null,
-     }
- });
+    defaults: {
+        cachedResponse: null,
+    }
+});

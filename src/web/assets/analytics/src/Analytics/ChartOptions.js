@@ -7,8 +7,7 @@ Analytics.ChartOptions = Garnish.Base.extend({}, {
 
         options = this.defaults.area;
 
-        switch(scale)
-        {
+        switch (scale) {
             case 'week':
                 options.hAxis.format = 'E';
                 options.hAxis.showTextEvery = 1;
@@ -28,17 +27,14 @@ Analytics.ChartOptions = Garnish.Base.extend({}, {
         return options;
     },
 
-    table: function()
-    {
+    table: function() {
         return this.defaults.table;
     },
 
-    geo: function(dimension)
-    {
+    geo: function(dimension) {
         options = this.defaults.geo;
 
-        switch(dimension)
-        {
+        switch (dimension) {
             case 'ga:city':
                 options.displayMode = 'markers';
                 break;
@@ -62,13 +58,11 @@ Analytics.ChartOptions = Garnish.Base.extend({}, {
         return options;
     },
 
-    pie: function()
-    {
+    pie: function() {
         return this.defaults.pie;
     },
 
-    field: function()
-    {
+    field: function() {
         return {
             theme: 'maximized',
             legend: 'none',
@@ -117,8 +111,7 @@ Analytics.ChartOptions = Garnish.Base.extend({}, {
             areaOpacity: 0.1,
             pointSize: 7,
             lineWidth: 4,
-            chartArea: {
-            },
+            chartArea: {},
             hAxis: {
                 //format:'MMM yy',
                 // format: 'MMM d',
@@ -160,13 +153,13 @@ Analytics.ChartOptions = Garnish.Base.extend({}, {
             pieHole: 0.5,
             legend: {
                 alignment: 'center',
-                position:'top'
+                position: 'top'
             },
-            chartArea:{
-                top:40,
-                height:'82%'
+            chartArea: {
+                top: 40,
+                height: '82%'
             },
-            sliceVisibilityThreshold: 1/120
+            sliceVisibilityThreshold: 1 / 120
         },
 
         table: {

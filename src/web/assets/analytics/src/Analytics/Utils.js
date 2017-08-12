@@ -3,16 +3,13 @@
  */
 Analytics.Utils = {
 
-    responseToDataTable: function(response, localeDefinition)
-    {
+    responseToDataTable: function(response, localeDefinition) {
         var data = new google.visualization.DataTable();
 
-        $.each(response.cols, function(k, column)
-        {
+        $.each(response.cols, function(k, column) {
             var type;
 
-            switch(column.type)
-            {
+            switch (column.type) {
                 case 'percent':
                 case 'time':
                 case 'integer':
@@ -42,8 +39,7 @@ Analytics.Utils = {
 
             $.each(row, function(kCell, cell) {
 
-                switch(response.cols[kCell]['type'])
-                {
+                switch (response.cols[kCell]['type']) {
                     case 'continent':
                     case 'subContinent':
                     case 'currency':
@@ -68,8 +64,7 @@ Analytics.Utils = {
         return data;
     },
 
-    responseToDataTableV4: function(response, localeDefinition)
-    {
+    responseToDataTableV4: function(response, localeDefinition) {
         var dataTable = new google.visualization.DataTable();
 
 
@@ -78,7 +73,7 @@ Analytics.Utils = {
         $.each(response.cols, function(key, column) {
             var dataTableColumnType;
 
-            switch(column.type) {
+            switch (column.type) {
                 case 'date':
                     dataTableColumnType = 'date';
                     break;
@@ -109,7 +104,7 @@ Analytics.Utils = {
             var dataTableRow = [];
 
             $.each(response.cols, $.proxy(function(keyColumn, column) {
-                switch(column.type) {
+                switch (column.type) {
                     case 'date':
                         dataTableRow[keyColumn] = Analytics.Utils.formatByType(localeDefinition, column.type, row[keyColumn]);
                         break;
@@ -142,9 +137,8 @@ Analytics.Utils = {
         return dataTable;
     },
 
-    formatRawValueByType: function(localeDefinition, type, value)
-    {
-        switch(type) {
+    formatRawValueByType: function(localeDefinition, type, value) {
+        switch (type) {
             case 'integer':
             case 'currency':
             case 'percent':
@@ -158,10 +152,8 @@ Analytics.Utils = {
         }
     },
 
-    formatByType: function(localeDefinition, type, value)
-    {
-        switch (type)
-        {
+    formatByType: function(localeDefinition, type, value) {
+        switch (type) {
             case 'continent':
                 return Analytics.Metadata.getContinentByCode(value);
                 break;
@@ -193,7 +185,7 @@ Analytics.Utils = {
             case 'date':
                 $dateString = value;
 
-                if($dateString.length == 8) {
+                if ($dateString.length == 8) {
                     // 20150101
 
                     $year = eval($dateString.substr(0, 4));
@@ -203,7 +195,7 @@ Analytics.Utils = {
                     $date = new Date($year, $month, $day);
 
                     return $date;
-                } else if($dateString.length == 6) {
+                } else if ($dateString.length == 6) {
                     // 201501
 
                     $year = eval($dateString.substr(0, 4));
@@ -221,39 +213,40 @@ Analytics.Utils = {
         }
     },
 
-    formatCurrency: function(localeDefinition, value)
-    {
+    formatCurrency: function(localeDefinition, value) {
         var d3Locale = this.getD3Locale(localeDefinition);
         var formatter = d3Locale.format(Craft.charts.BaseChart.defaults.formats.currencyFormat);
 
         return formatter(value);
     },
 
-    formatDuration: function(_seconds)
-    {
+    formatDuration: function(_seconds) {
         var sec_num = parseInt(_seconds, 10); // don't forget the second param
-        var hours   = Math.floor(sec_num / 3600);
+        var hours = Math.floor(sec_num / 3600);
         var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
         var seconds = sec_num - (hours * 3600) - (minutes * 60);
 
-        if (hours   < 10) {hours   = "0"+hours;}
-        if (minutes < 10) {minutes = "0"+minutes;}
-        if (seconds < 10) {seconds = "0"+seconds;}
-        return hours+':'+minutes+':'+seconds;
+        if (hours < 10) {
+            hours = "0" + hours;
+        }
+        if (minutes < 10) {
+            minutes = "0" + minutes;
+        }
+        if (seconds < 10) {
+            seconds = "0" + seconds;
+        }
+        return hours + ':' + minutes + ':' + seconds;
     },
 
-    formatInteger: function(localeDefinition, value)
-    {
+    formatInteger: function(localeDefinition, value) {
         return this.getD3Locale(localeDefinition).format(",")(value);
     },
 
-    formatPercent: function(localeDefinition, value)
-    {
+    formatPercent: function(localeDefinition, value) {
         return this.getD3Locale(localeDefinition).format(Craft.charts.BaseChart.defaults.formats.percentFormat)(value / 100);
     },
 
-    getD3Locale: function(localeDefinition)
-    {
+    getD3Locale: function(localeDefinition) {
         return d3.formatLocale(localeDefinition);
     },
 };
