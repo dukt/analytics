@@ -42,7 +42,7 @@ Analytics.Realtime = Garnish.Base.extend(
         
         this.loadGoogleCharts($.proxy(function() {
             this.addListener(Garnish.$win, 'resize', '_handleWindowResize');
-            this.start();
+            this.startTimer();
         }, this));
     },
 
@@ -57,11 +57,11 @@ Analytics.Realtime = Garnish.Base.extend(
         }, this));
     },
 
-    start: function()
+    startTimer: function()
     {
         if(this.timer)
         {
-            this.stop();
+            this.stopTimer();
         }
 
         this.request();
@@ -73,7 +73,7 @@ Analytics.Realtime = Garnish.Base.extend(
         }, this), this.settings.refreshInterval * 1000);
     },
 
-    stop: function()
+    stopTimer: function()
     {
         clearInterval(this.timer);
     },
