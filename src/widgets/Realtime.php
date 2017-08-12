@@ -85,11 +85,8 @@ class Realtime extends \craft\base\Widget
                             ];
 
                             $view->registerJsFile('//www.gstatic.com/charts/loader.js');
-
                             $view->registerAssetBundle(RealtimeReportWidgetAsset::class);
-
                             $view->registerJs('var AnalyticsChartLanguage = "'.Craft::$app->language.'";', true);
-
                             $view->registerJs('new Analytics.Realtime("widget'.$widgetId.'", '.Json::encode($widgetOptions).');');
 
                             return $view->renderTemplate('analytics/_components/widgets/Realtime/body', [
