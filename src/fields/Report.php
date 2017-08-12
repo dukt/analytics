@@ -35,6 +35,8 @@ class Report extends Field
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
+        $view = Craft::$app->getView();
+
         $name = $this->handle;
 
         if (Analytics::$plugin->getAnalytics()->checkPluginRequirements()) {
@@ -52,10 +54,10 @@ class Report extends Field
                     if ($reportingView) {
                         if ($element) {
                             // Reformat the input name into something that looks more like an ID
-                            $id = Craft::$app->getView()->formatInputId($name);
+                            $id = $view->formatInputId($name);
 
                             // Figure out what that ID is going to look like once it has been namespaced
-                            $namespacedId = Craft::$app->getView()->namespaceInputId($id);
+                            $namespacedId = $view->namespaceInputId($id);
 
                             if ($element->uri) {
                                 $uri = Analytics::$plugin->getAnalytics()->getElementUrlPath($element->id, $element->siteId);
@@ -112,10 +114,9 @@ class Report extends Field
 
 
                                 // Register JS & Styles
-                                $apiKey = Analytics::$plugin->getSettings()->apiKey;
-                                Craft::$app->getView()->registerJsFile('https://www.google.com/jsapi'.($apiKey ? '?key='.$apiKey : '' ));
-                                Craft::$app->getView()->registerAssetBundle(ReportFieldAsset::class);
-                                Craft::$app->getView()->registerJs('new AnalyticsReportField("'.$namespacedId.'-field", '.Json::encode($jsOptions).');');
+                                $view->registerJsFile('//www.gstatic.com/charts/loader.js');
+                                $view->registerAssetBundle(ReportFieldAsset::class);
+                                $view->registerJs('new AnalyticsReportField("'.$namespacedId.'-field", '.Json::encode($jsOptions).');');
 
 
                                 // Variables
@@ -138,16 +139,16 @@ class Report extends Field
                             }
                         }
 
-                        return Craft::$app->getView()->renderTemplate('analytics/_components/fieldtypes/Report/input', $variables);
+                        return $view->renderTemplate('analytics/_components/fieldtypes/Report/input', $variables);
                     }
                 }
 
-                return Craft::$app->getView()->renderTemplate('analytics/_special/view-not-configured');
+                return $view->renderTemplate('analytics/_special/view-not-configured');
             }
 
-            return Craft::$app->getView()->renderTemplate('analytics/_components/fieldtypes/Report/disabled');
+            return $view->renderTemplate('analytics/_components/fieldtypes/Report/disabled');
         }
 
-        return Craft::$app->getView()->renderTemplate('analytics/_special/plugin-not-configured');
+        return $view->renderTemplate('analytics/_special/plugin-not-configured');
     }
 }

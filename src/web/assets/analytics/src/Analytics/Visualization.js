@@ -22,9 +22,10 @@ Analytics.Visualization = Garnish.Base.extend({
                 chartLanguage = this.options['chartLanguage'];
             }
 
-            google.load("visualization", "1", {
+            google.charts.load('current', {
                 packages:['corechart', 'table'],
                 language: chartLanguage,
+                mapsApiKey: Analytics.mapsApiKey,
                 callback: $.proxy(function() {
                     Analytics.GoogleVisualizationReady = true;
 

@@ -39,6 +39,7 @@ class AnalyticsAsset extends AssetBundle
     {
         parent::registerAssetFiles($view);
 
+        $mapsApiKey = Analytics::$plugin->getSettings()->mapsApiKey;
         $continents = Analytics::$plugin->metadata->getContinents();
         $subContinents = Analytics::$plugin->metadata->getSubContinents();
         $formats = ChartHelper::formats();
@@ -46,6 +47,7 @@ class AnalyticsAsset extends AssetBundle
         $js = "if(typeof Analytics == 'undefined') {";
 
         $js .= 'var Analytics = {};';
+        $js .= 'Analytics.mapsApiKey = "'.$mapsApiKey.'";';
         $js .= 'Analytics.GoogleVisualizationCalled = false;';
         $js .= 'Analytics.GoogleVisualizationReady = false;';
         $js .= 'Analytics.reports = {};';
