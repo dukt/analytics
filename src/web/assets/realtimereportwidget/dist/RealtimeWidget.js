@@ -110,8 +110,8 @@
 
             handlePageviews: function(pageviews) {
                 var data = new google.visualization.DataTable();
-                data.addColumn('number', 'Minutes ago');
-                data.addColumn('number', 'Pageviews');
+                data.addColumn('number', Craft.t('analytics', 'Minutes ago'));
+                data.addColumn('number', Craft.t('analytics', 'Pageviews'));
 
                 if (pageviews.rows && pageviews.rows.length > 0) {
                     this.$pageviewsChart.removeClass('hidden');
@@ -131,7 +131,13 @@
                         }
                     });
 
-                    data.addRow([{v: minutesAgo, f: minutesAgo + " minutes ago"}, rowPageviews]);
+                    var minutesAgoFormatted = Craft.t('analytics', '{count} minutes ago', { count: minutesAgo })
+
+                    if(minutesAgo == 1) {
+                        minutesAgoFormatted = Craft.t('analytics', '{count} minute ago', { count: minutesAgo })
+                    }
+
+                    data.addRow([{ v: minutesAgo, f: minutesAgoFormatted }, rowPageviews]);
                 }
 
                 var options = {

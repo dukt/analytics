@@ -1,34 +1,34 @@
 /* realtime visitors */
-.dukt\\analytics\\widgets\\realtime .analytics-realtime-visitors .active-users {
+.dukt\\analytics\\widgets\\realtime .front .analytics-realtime-visitors .active-users {
   margin-top: -10px;
   margin-bottom: 20px;
 }
 
-.dukt\\analytics\\widgets\\realtime .analytics-realtime-visitors .active-users {
+.dukt\\analytics\\widgets\\realtime .front .analytics-realtime-visitors .active-users {
   font-size: 56px;
   line-height: 1.2em;
 }
 
-.dukt\\analytics\\widgets\\realtime .analytics-realtime-visitors .pageviews {
+.dukt\\analytics\\widgets\\realtime .front .analytics-realtime-visitors .pageviews {
   height: 150px;
   margin: 1em 0;
 }
 
-.dukt\\analytics\\widgets\\realtime .analytics-realtime-visitors .pageviews .chart {
+.dukt\\analytics\\widgets\\realtime .front .analytics-realtime-visitors .pageviews .chart {
   height: 100px;
 }
 
-.dukt\\analytics\\widgets\\realtime .analytics-realtime-visitors .active-pages {
+.dukt\\analytics\\widgets\\realtime .front .analytics-realtime-visitors .active-pages {
   height: 190px;
   margin: 1em 0;
 }
 
-.dukt\\analytics\\widgets\\realtime .analytics-realtime-visitors .active-pages table {
+.dukt\\analytics\\widgets\\realtime .front .analytics-realtime-visitors .active-pages table {
   width: 100%;
   border-collapse: collapse;
 }
 
-.dukt\\analytics\\widgets\\realtime .analytics-realtime-visitors .active-pages table .col-page {
+.dukt\\analytics\\widgets\\realtime .front .analytics-realtime-visitors .active-pages table .col-page {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -36,13 +36,13 @@
   width: 100%;
 }
 
-.dukt\\analytics\\widgets\\realtime .analytics-realtime-visitors .active-pages table .col-users {
+.dukt\\analytics\\widgets\\realtime .front .analytics-realtime-visitors .active-pages table .col-users {
   white-space: nowrap;
   overflow-wrap: normal;
   word-break: keep-all;
 }
 
-.dukt\\analytics\\widgets\\realtime .view {
+.dukt\\analytics\\widgets\\realtime .front .view {
   margin-top: 24px;
   text-align: center;
 }
