@@ -54,6 +54,7 @@ class AnalyticsAsset extends AssetBundle
         $js .= 'Analytics.continents = '.Json::encode($continents).';';
         $js .= 'Analytics.subContinents = '.Json::encode($subContinents).';';
         $js .= 'Analytics.formats = '.Json::encode($formats).';';
+        $js .= 'Analytics.chartLanguage = "'.Analytics::$plugin->getAnalytics()->getChartLanguage().'";';
 
         $js .= '}';
 

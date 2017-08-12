@@ -43,7 +43,11 @@
 
             loadGoogleCharts: function(callback) {
                 if (!AnalyticsRealtime.GoogleVisualizationCalled) {
-                    google.charts.load('current', {packages: ['corechart', 'bar']});
+                    google.charts.load('current', {
+                        packages: ['corechart', 'bar'],
+                        language: Analytics.chartLanguage,
+                        mapsApiKey: Analytics.mapsApiKey
+                    });
                     AnalyticsRealtime.GoogleVisualizationCalled = true;
                 }
 

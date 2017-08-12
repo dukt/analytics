@@ -496,16 +496,9 @@ Analytics.Visualization = Garnish.Base.extend({
         {
             Analytics.GoogleVisualizationCalled = true;
 
-            var chartLanguage = 'en';
-
-            if(typeof(this.options['chartLanguage']) != 'undefined')
-            {
-                chartLanguage = this.options['chartLanguage'];
-            }
-
             google.charts.load('current', {
                 packages:['corechart', 'table'],
-                language: chartLanguage,
+                language: Analytics.chartLanguage,
                 mapsApiKey: Analytics.mapsApiKey,
                 callback: $.proxy(function() {
                     Analytics.GoogleVisualizationReady = true;
