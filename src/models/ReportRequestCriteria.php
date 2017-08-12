@@ -77,7 +77,7 @@ class ReportRequestCriteria extends Model
 
         try
         {
-            $response['data'] = Analytics::$plugin->getApis()->getAnalyticsReporting()->getReport($this, $toArray);
+            $response['report'] = Analytics::$plugin->getApis()->getAnalyticsReporting()->getReport($this, $toArray);
             $response['success'] = true;
         }
         catch(\Exception $e)
