@@ -37,11 +37,6 @@ class TestsController extends Controller
      */
     public function actionReportWidgets(array $variables = array())
     {
-/*        Craft::$app->getView()->registerJsFile('analytics/js/jsapi.js', true);
-
-        Craft::$app->getView()->registerJsFile('analytics/js/ReportWidget.js');
-        Craft::$app->getView()->registerCssFile('analytics/css/ReportWidget.css');
-        Craft::$app->getView()->registerCssFile('analytics/css/tests.css');*/
         Craft::$app->getView()->registerAssetBundle(TestsAsset::class);
 
         $this->renderTemplate('analytics/tests/_reportWidgets', $variables);
