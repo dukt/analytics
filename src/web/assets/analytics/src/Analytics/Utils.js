@@ -2,68 +2,6 @@
  * Utils
  */
 Analytics.Utils = {
-
-    responseToDataTable: function(response, localeDefinition) {
-        var data = new google.visualization.DataTable();
-
-        $.each(response.cols, function(k, column) {
-            var type;
-
-            switch (column.type) {
-                case 'percent':
-                case 'time':
-                case 'integer':
-                case 'currency':
-                case 'float':
-                    type = 'number';
-                    break;
-
-
-                case 'continent':
-                case 'subContinent':
-                    type = 'string';
-                    break;
-
-                default:
-                    type = column.type;
-            }
-
-            data.addColumn({
-                type: type,
-                label: column.label,
-                id: column.id,
-            });
-        });
-
-        $.each(response.rows, function(kRow, row) {
-
-            $.each(row, function(kCell, cell) {
-
-                switch (response.cols[kCell]['type']) {
-                    case 'continent':
-                    case 'subContinent':
-                    case 'currency':
-                    case 'percent':
-                    case 'integer':
-                    case 'time':
-                        row[kCell] = {
-                            v: cell,
-                            f: Analytics.Utils.formatByType(localeDefinition, response.cols[kCell]['type'], cell)
-                        };
-                        break;
-
-                    default:
-                        row[kCell] = Analytics.Utils.formatByType(localeDefinition, response.cols[kCell]['type'], cell);
-                        break;
-                }
-            });
-
-            data.addRow(row);
-        });
-
-        return data;
-    },
-
     responseToDataTableV4: function(response, localeDefinition) {
         var dataTable = new google.visualization.DataTable();
 
