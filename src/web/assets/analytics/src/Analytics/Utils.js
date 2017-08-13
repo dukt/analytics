@@ -2,7 +2,7 @@
  * Utils
  */
 Analytics.Utils = {
-    responseToDataTableV4: function(response, localeDefinition) {
+    responseToDataTable: function(response, localeDefinition) {
         var dataTable = new google.visualization.DataTable();
 
 

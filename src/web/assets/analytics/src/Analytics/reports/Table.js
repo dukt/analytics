@@ -14,7 +14,7 @@ Analytics.reports.Table = Analytics.reports.BaseChart.extend(
             $title.html(this.data.metric);
             $period.html(this.data.periodLabel);
 
-            this.dataTable = Analytics.Utils.responseToDataTableV4(this.data.chart, this.localeDefinition);
+            this.dataTable = Analytics.Utils.responseToDataTable(this.data.chart, this.localeDefinition);
             this.chartOptions = Analytics.ChartOptions.table();
             this.chart = new google.visualization.Table(this.$graph.get(0));
 

@@ -208,7 +208,7 @@ Analytics.Metadata = {
  * Utils
  */
 Analytics.Utils = {
-    responseToDataTableV4: function(response, localeDefinition) {
+    responseToDataTable: function(response, localeDefinition) {
         var dataTable = new google.visualization.DataTable();
 
 
@@ -550,7 +550,7 @@ Analytics.reports.Area = Analytics.reports.BaseChart.extend(
             $title.html(this.data.metric);
             $period.html(this.data.periodLabel);
 
-            this.dataTable = Analytics.Utils.responseToDataTableV4(this.data.chart, this.localeDefinition);
+            this.dataTable = Analytics.Utils.responseToDataTable(this.data.chart, this.localeDefinition);
 
             this.chartOptions = Analytics.ChartOptions.area(this.data.period);
 
@@ -612,7 +612,7 @@ Analytics.reports.Geo = Analytics.reports.BaseChart.extend(
             $title.html(this.data.metric);
             $period.html(this.data.periodLabel);
 
-            this.dataTable = Analytics.Utils.responseToDataTableV4(this.data.chart, this.localeDefinition);
+            this.dataTable = Analytics.Utils.responseToDataTable(this.data.chart, this.localeDefinition);
             this.chartOptions = Analytics.ChartOptions.geo(this.data.dimensionRaw);
             this.chart = new google.visualization.GeoChart(this.$graph.get(0));
 
@@ -636,7 +636,7 @@ Analytics.reports.Pie = Analytics.reports.BaseChart.extend(
             $title.html(this.data.dimension);
             $period.html(this.data.metric + " " + this.data.periodLabel);
 
-            this.dataTable = Analytics.Utils.responseToDataTableV4(this.data.chart, this.localeDefinition);
+            this.dataTable = Analytics.Utils.responseToDataTable(this.data.chart, this.localeDefinition);
             this.chartOptions = Analytics.ChartOptions.pie();
             this.chart = new google.visualization.PieChart(this.$graph.get(0));
 
@@ -662,7 +662,7 @@ Analytics.reports.Table = Analytics.reports.BaseChart.extend(
             $title.html(this.data.metric);
             $period.html(this.data.periodLabel);
 
-            this.dataTable = Analytics.Utils.responseToDataTableV4(this.data.chart, this.localeDefinition);
+            this.dataTable = Analytics.Utils.responseToDataTable(this.data.chart, this.localeDefinition);
             this.chartOptions = Analytics.ChartOptions.table();
             this.chart = new google.visualization.Table(this.$graph.get(0));
 
