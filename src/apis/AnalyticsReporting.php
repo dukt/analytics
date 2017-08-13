@@ -107,7 +107,6 @@ class AnalyticsReporting extends Api
     private function getReportingReportRequest(ReportRequestCriteria $criteria)
     {
         $request = new Google_Service_AnalyticsReporting_ReportRequest();
-        $request->includeEmptyRows = true;
 
         if ($criteria->viewId) {
             $view = Analytics::$plugin->getViews()->getViewById($criteria->viewId);
@@ -121,6 +120,10 @@ class AnalyticsReporting extends Api
         $dateRange->setStartDate($criteria->startDate);
         $dateRange->setEndDate($criteria->endDate);
         $request->setDateRanges($dateRange);
+
+        if ($criteria->samplingLevel) {
+            $request->setSamplingLevel($criteria->samplingLevel);
+        }
 
         if ($criteria->metrics) {
             $metricString = $criteria->metrics;
@@ -138,12 +141,34 @@ class AnalyticsReporting extends Api
             $request->setOrderBys($criteria->orderBys);
         }
 
+        if ($criteria->pageToken) {
+            $pageToken = $criteria->pageToken;
+
+            if(is_int($pageToken)) {
+                $pageToken = (string) $pageToken;
+            }
+
+            $request->setPageToken($pageToken);
+        }
+
         if ($criteria->pageSize) {
             $request->setPageSize($criteria->pageSize);
         }
 
         if ($criteria->filtersExpression) {
             $request->setFiltersExpression($criteria->filtersExpression);
+        }
+
+        if($criteria->includeEmptyRows) {
+            $request->setIncludeEmptyRows($criteria->includeEmptyRows);
+        }
+
+        if($criteria->hideTotals) {
+            $request->setHideTotals($criteria->hideTotals);
+        }
+
+        if($criteria->hideValueRanges) {
+            $request->setHideValueRanges($criteria->hideValueRanges);
         }
 
         return $request;

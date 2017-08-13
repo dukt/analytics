@@ -36,6 +36,11 @@ class ReportRequestCriteria extends Model
     public $endDate;
 
     /**
+     * @var string Sampling level
+     */
+    public $samplingLevel;
+
+    /**
      * @var string Metrics
      */
     public $metrics;
@@ -56,9 +61,29 @@ class ReportRequestCriteria extends Model
     public $pageSize;
 
     /**
+     * @var string A continuation token to get the next page of the results. Adding this to the request will return the rows after the pageToken.
+     */
+    public $pageToken;
+
+    /**
      * @var string Filters expression
      */
     public $filtersExpression;
+
+    /**
+     * @var bool If set to false, the response does not include rows if all the retrieved metrics are equal to zero. The default is false which will exclude these rows.
+     */
+    public $includeEmptyRows;
+
+    /**
+     * @var bool If set to true, hides the total of all metrics for all the matching rows, for every date range. The default false and will return the totals.
+     */
+    public $hideTotals;
+
+    /**
+     * @var bool If set to true, hides the minimum and maximum across all matching rows. The default is false and the value ranges are returned.
+     */
+    public $hideValueRanges;
 
     // Public Methods
     // =========================================================================
