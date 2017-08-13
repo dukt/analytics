@@ -93,7 +93,7 @@ class ReportRequestCriteria extends Model
      *
      * @return array
      */
-    public function send(bool $toArray = true)
+    public function send(bool $toArray = false)
     {
         $response = array(
             'success' => false,
