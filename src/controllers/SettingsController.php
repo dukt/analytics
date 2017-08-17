@@ -152,18 +152,11 @@ class SettingsController extends Controller
      */
     public function actionGetAccountExplorerData()
     {
-        try
-        {
-            $accountExplorerData = Analytics::$plugin->getApis()->getAnalytics()->getAccountExplorerData();
+        $accountExplorerData = Analytics::$plugin->getApis()->getAnalytics()->getAccountExplorerData();
 
-            Analytics::$plugin->cache->set(['accountExplorerData'], $accountExplorerData);
+        Analytics::$plugin->cache->set(['accountExplorerData'], $accountExplorerData);
 
-            return $this->asJson($accountExplorerData);
-        }
-        catch(\Exception $e)
-        {
-            return $this->asErrorJson($e->getMessage());
-        }
+        return $this->asJson($accountExplorerData);
     }
 
     public function actionViews()
