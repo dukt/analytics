@@ -11,7 +11,13 @@ use Craft;
 use craft\web\Controller;
 use dukt\analytics\Plugin as Analytics;
 use dukt\analytics\web\assets\tests\TestsAsset;
+use yii\web\Response;
 
+/**
+ * Class TestsController
+ *
+ * @package dukt\analytics\controllers
+ */
 class TestsController extends Controller
 {
     // Public Methods
@@ -20,59 +26,67 @@ class TestsController extends Controller
     /**
      * Data Types
      *
-     * @return null
+     * @param array $variables
+     *
+     * @return Response
      */
     public function actionDataTypes(array $variables = array())
     {
         $variables['googleAnalyticsDataTypes'] = Analytics::$plugin->metadata->getGoogleAnalyticsDataTypes();
         $variables['dataTypes'] = Analytics::$plugin->metadata->getDataTypes();
 
-        $this->renderTemplate('analytics/tests/_dataTypes', $variables);
+        return $this->renderTemplate('analytics/tests/_dataTypes', $variables);
     }
 
     /**
      * Charts
      *
-     * @return null
+     * @param array $variables
+     *
+     * @return Response
      */
     public function actionReportWidgets(array $variables = array())
     {
         Craft::$app->getView()->registerAssetBundle(TestsAsset::class);
 
-        $this->renderTemplate('analytics/tests/_reportWidgets', $variables);
+        return $this->renderTemplate('analytics/tests/_reportWidgets', $variables);
     }
 
     /**
-     * Tests
+     * @param array $variables
      *
-     * @return null
+     * @return Response
      */
     public function actionFormatting(array $variables = array())
     {
-        $this->renderTemplate('analytics/tests/_formatting', $variables);
+        return $this->renderTemplate('analytics/tests/_formatting', $variables);
     }
 
     /**
      * Columns
      *
-     * @return null
+     * @param array $variables
+     *
+     * @return Response
      */
     public function actionColumns(array $variables = array())
     {
         $variables['columns'] = Analytics::$plugin->metadata->getColumns();
 
-        $this->renderTemplate('analytics/tests/_columns', $variables);
+        return $this->renderTemplate('analytics/tests/_columns', $variables);
     }
 
     /**
      * Groups
      *
-     * @return null
+     * @param array $variables
+     *
+     * @return Response
      */
     public function actionColumnGroups(array $variables = array())
     {
         $variables['columnGroups'] = Analytics::$plugin->metadata->getColumnGroups();
 
-        $this->renderTemplate('analytics/tests/_columnGroups', $variables);
+        return $this->renderTemplate('analytics/tests/_columnGroups', $variables);
     }
 }

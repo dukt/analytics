@@ -11,18 +11,38 @@ use Craft;
 use craft\helpers\FileHelper;
 use craft\web\Controller;
 use dukt\analytics\Plugin as Analytics;
+use yii\web\Response;
 
+/**
+ * Class UtilsController
+ *
+ * @package dukt\analytics\controllers
+ */
 class UtilsController extends Controller
 {
     // Properties
     // =========================================================================
 
+    /**
+     * @var bool
+     */
     protected $allowAnonymous = true;
+
+    /**
+     * @var int
+     */
     private $addedInApiVersion = 3;
 
     // Public Methods
     // =========================================================================
 
+    /**
+     * Metadata.
+     *
+     * @param array $variables
+     *
+     * @return Response
+     */
     public function actionMetadata(array $variables = array())
     {
         $variables['dimensions'] = Analytics::$plugin->metadata->getDimensions();
@@ -30,9 +50,12 @@ class UtilsController extends Controller
 
         $variables['dimmetsFileExists'] = Analytics::$plugin->metadata->dimmetsFileExists();
 
-        $this->renderTemplate('analytics/utils/metadata/_index', $variables);
+        return $this->renderTemplate('analytics/utils/metadata/_index', $variables);
     }
 
+    /**
+     * Search metadata.
+     */
     public function actionSearchMetadata()
     {
         $q = Craft::$app->getRequest()->getParam('q');
@@ -45,6 +68,11 @@ class UtilsController extends Controller
         ));
     }
 
+    /**
+     * Loads metadata.
+     *
+     * @return Response
+     */
     public function actionLoadMetadata()
     {
         $this->_deleteMetadata();
@@ -59,6 +87,10 @@ class UtilsController extends Controller
     // Private Methods
     // =========================================================================
 
+
+    /**
+     * Deletes metadata.
+     */
     private function _deleteMetadata()
     {
         $path = Analytics::$plugin->metadata->getDimmetsFilePath();
@@ -66,6 +98,9 @@ class UtilsController extends Controller
         FileHelper::removeFile($path);
     }
 
+    /**
+     * Imports metadata.
+     */
     private function _importMetadata()
     {
         $columns = [];
@@ -117,6 +152,14 @@ class UtilsController extends Controller
         FileHelper::writeToFile($path, $contents);
     }
 
+    /**
+     * Populates the coloumn attribute.
+     *
+     * @param $column
+     * @param $item
+     *
+     * @return mixed
+     */
     private function populateColumnAttributes($column, $item)
     {
         $column['type'] = $item->attributes['type'];

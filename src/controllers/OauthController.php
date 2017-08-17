@@ -10,6 +10,7 @@ namespace dukt\analytics\controllers;
 use Craft;
 use craft\web\Controller;
 use dukt\analytics\Plugin as Analytics;
+use yii\web\Response;
 
 class OauthController extends Controller
 {
@@ -17,9 +18,9 @@ class OauthController extends Controller
     // =========================================================================
 
     /**
-     * Connect
+     * OAuth connect.
      *
-     * @return null
+     * @return Response
      */
     public function actionConnect()
     {
@@ -42,9 +43,9 @@ class OauthController extends Controller
     }
 
     /**
-     * Disconnect
+     * OAuth disconnect.
      *
-     * @return null
+     * @return Response
      */
     public function actionDisconnect()
     {
@@ -68,9 +69,9 @@ class OauthController extends Controller
     }
 
     /**
-     * Callback
+     * OAuth callback.
      *
-     * @return null
+     * @return Response
      */
     public function actionCallback()
     {
