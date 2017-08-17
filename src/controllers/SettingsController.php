@@ -453,7 +453,7 @@ class SettingsController extends Controller
 
     /**
      * Saves a site.
-     * 
+     *
      * @return null|Response
      */
     public function actionSaveSite()
