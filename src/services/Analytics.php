@@ -23,7 +23,7 @@ class Analytics extends Component
     // =========================================================================
 
     /**
-     * Get real time refresh interval
+     * Returns the real time refresh interval.
      *
      * @return int|null
      */
@@ -46,10 +46,12 @@ class Analytics extends Component
     }
 
     /**
-     * Get Element URL Path
+     * Returns the element URL path.
      *
-     * @param int           $elementId
-     * @param int|null      $siteId
+     * @param int      $elementId
+     * @param int|null $siteId
+     *
+     * @return string
      */
     public function getElementUrlPath($elementId, $siteId)
     {
@@ -73,6 +75,8 @@ class Analytics extends Component
 
     /**
      * Returns D3 format locale definition.
+     *
+     * @param array $options
      *
      * @return array
      */
@@ -129,6 +133,11 @@ class Analytics extends Component
         return $localeDefinition;
     }
 
+    /**
+     * Returns the chart language.
+     *
+     * @return string
+     */
     public function getChartLanguage()
     {
         $chartLanguage = Craft::t('analytics', 'analyticsChartLanguage');
@@ -157,7 +166,7 @@ class Analytics extends Component
     }
 
     /**
-     * Checks if the OAuth provider is configured
+     * Checks if the OAuth provider is configured.
      *
      * @return bool
      */
@@ -174,7 +183,7 @@ class Analytics extends Component
     }
 
     /**
-     * Checks plugin requirements (dependencies, configured OAuth provider, and token)
+     * Checks plugin requirements (dependencies, configured OAuth provider, and token).
      *
      * @return bool
      */

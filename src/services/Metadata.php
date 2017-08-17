@@ -48,6 +48,8 @@ class Metadata extends Component
      * Returns available data types for Google Analytics
      *
      * @param mixed
+     *
+     * @return array
      */
     public function getGoogleAnalyticsDataTypes()
     {
@@ -68,6 +70,8 @@ class Metadata extends Component
      * Returns available data types
      *
      * @param mixed
+     *
+     * @return array
      */
     public function getDataTypes()
     {
@@ -96,6 +100,8 @@ class Metadata extends Component
      * Get Continent Code
      *
      * @param string $label
+     *
+     * @return mixed
      */
     public function getContinentCode($label)
     {
@@ -112,6 +118,8 @@ class Metadata extends Component
      * Get Sub-Continent Code
      *
      * @param string $label
+     *
+     * @return mixed
      */
     public function getSubContinentCode($label)
     {
@@ -128,6 +136,8 @@ class Metadata extends Component
      * Get a dimension or a metric label from its id
      *
      * @param string $id
+     *
+     * @return mixed
      */
     public function getDimMet($id)
     {
@@ -142,6 +152,8 @@ class Metadata extends Component
      * Returns columns based on a search string `$q`
      *
      * @param string $q
+     *
+     * @return array
      */
     public function searchColumns($q)
     {
@@ -420,7 +432,11 @@ class Metadata extends Component
     /**
      * Get Data
      *
-     * @param string $label
+     * @param $name
+     *
+     * @return mixed
+     * @internal param string $label
+     *
      */
     private function _getData($name)
     {
