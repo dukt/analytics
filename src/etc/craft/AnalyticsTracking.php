@@ -38,6 +38,8 @@ class AnalyticsTracking
      * Constructor
      *
      * @param array|null $options
+     *
+     * @throws InvalidAccountException
      */
     public function __construct($options = null)
     {
@@ -55,6 +57,10 @@ class AnalyticsTracking
 
     /**
      * Campaign
+     *
+     * @param $options
+     *
+     * @return $this
      */
     public function campaign($options)
     {
@@ -66,6 +72,10 @@ class AnalyticsTracking
 
     /**
      * Ecommerce Transaction
+     *
+     * @param $options
+     *
+     * @return $this
      */
     public function ecommerceTransaction($options)
     {
@@ -77,6 +87,10 @@ class AnalyticsTracking
 
     /**
      * Ecommerce Item
+     *
+     * @param $options
+     *
+     * @return $this
      */
     public function ecommerceItem($options)
     {
@@ -88,6 +102,10 @@ class AnalyticsTracking
 
     /**
      * Page
+     *
+     * @param $options
+     *
+     * @return $this
      */
     public function page($options)
     {
@@ -99,6 +117,10 @@ class AnalyticsTracking
 
     /**
      * Event
+     *
+     * @param $options
+     *
+     * @return $this
      */
     public function event($options)
     {
@@ -110,6 +132,10 @@ class AnalyticsTracking
 
     /**
      * Social
+     *
+     * @param $options
+     *
+     * @return $this
      */
     public function social($options)
     {
@@ -121,6 +147,10 @@ class AnalyticsTracking
 
     /**
      * App Event
+     *
+     * @param $options
+     *
+     * @return $this
      */
     public function appEvent($options)
     {
@@ -132,6 +162,10 @@ class AnalyticsTracking
 
     /**
      * App Screen
+     *
+     * @param $options
+     *
+     * @return $this
      */
     public function appScreen($options)
     {
@@ -143,6 +177,10 @@ class AnalyticsTracking
 
     /**
      * User Timing
+     *
+     * @param $options
+     *
+     * @return $this
      */
     public function userTiming($options)
     {
@@ -154,6 +192,10 @@ class AnalyticsTracking
 
     /**
      * Exception
+     *
+     * @param $options
+     *
+     * @return $this
      */
     public function exception($options)
     {
@@ -182,6 +224,11 @@ class AnalyticsTracking
 
     /**
      * Fill Item
+     *
+     * @param $item
+     * @param $options
+     *
+     * @return mixed
      */
     private function _fillItem($item, $options)
     {

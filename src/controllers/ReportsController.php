@@ -123,6 +123,7 @@ class ReportsController extends Controller
      * Get report widget report.
      *
      * @return \yii\web\Response
+     * @throws InvalidChartTypeException
      */
     public function actionReportWidget()
     {

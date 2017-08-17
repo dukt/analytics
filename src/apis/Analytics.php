@@ -206,6 +206,8 @@ class Analytics extends Api
      *
      * @param string $type
      * @param string $value
+     *
+     * @return float|string
      */
     private function formatRawValue($type, $value)
     {

@@ -91,6 +91,8 @@ class ReportRequestCriteria extends Model
     /**
      * Sends the request
      *
+     * @param bool $toArray
+     *
      * @return array
      */
     public function send(bool $toArray = false)
