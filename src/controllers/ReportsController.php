@@ -144,66 +144,48 @@ class ReportsController extends Controller
      */
     public function actionReportWidget()
     {
-        try {
-            $viewId = Craft::$app->getRequest()->getBodyParam('viewId');
-            $chart = Craft::$app->getRequest()->getBodyParam('chart');
-            $period = Craft::$app->getRequest()->getBodyParam('period');
-            $options = Craft::$app->getRequest()->getBodyParam('options');
+        $viewId = Craft::$app->getRequest()->getBodyParam('viewId');
+        $chart = Craft::$app->getRequest()->getBodyParam('chart');
+        $period = Craft::$app->getRequest()->getBodyParam('period');
+        $options = Craft::$app->getRequest()->getBodyParam('options');
 
-            $request = [
-                'viewId' => $viewId,
-                'chart' => $chart,
-                'period' => $period,
-                'options' => $options,
-            ];
+        $request = [
+            'viewId' => $viewId,
+            'chart' => $chart,
+            'period' => $period,
+            'options' => $options,
+        ];
 
-            $cacheId = ['getReport', $request];
+        $cacheId = ['getReport', $request];
 
-            $response = Analytics::$plugin->cache->get($cacheId);
+        $response = Analytics::$plugin->cache->get($cacheId);
 
-            if (!$response) {
-                switch ($chart) {
-                    case 'area':
-                        $response = Analytics::$plugin->getReports()->getAreaReport($request);
-                        break;
-                    case 'counter':
-                        $response = Analytics::$plugin->getReports()->getCounterReport($request);
-                        break;
-                    case 'pie':
-                        $response = Analytics::$plugin->getReports()->getPieReport($request);
-                        break;
-                    case 'table':
-                        $response = Analytics::$plugin->getReports()->getTableReport($request);
-                        break;
-                    case 'geo':
-                        $response = Analytics::$plugin->getReports()->getGeoReport($request);
-                        break;
-                    default:
-                        throw new InvalidChartTypeException("Chart type `".$chart."` not supported.");
-                }
-
-                if ($response) {
-                    Analytics::$plugin->cache->set($cacheId, $response);
-                }
+        if (!$response) {
+            switch ($chart) {
+                case 'area':
+                    $response = Analytics::$plugin->getReports()->getAreaReport($request);
+                    break;
+                case 'counter':
+                    $response = Analytics::$plugin->getReports()->getCounterReport($request);
+                    break;
+                case 'pie':
+                    $response = Analytics::$plugin->getReports()->getPieReport($request);
+                    break;
+                case 'table':
+                    $response = Analytics::$plugin->getReports()->getTableReport($request);
+                    break;
+                case 'geo':
+                    $response = Analytics::$plugin->getReports()->getGeoReport($request);
+                    break;
+                default:
+                    throw new InvalidChartTypeException("Chart type `".$chart."` not supported.");
             }
 
-            return $this->asJson($response);
-        } catch (\Google_Service_Exception $e) {
-            $errors = $e->getErrors();
-            $errorMsg = $e->getMessage();
-
-            if (isset($errors[0]['message'])) {
-                $errorMsg = $errors[0]['message'];
+            if ($response) {
+                Analytics::$plugin->cache->set($cacheId, $response);
             }
-
-            Craft::info('Couldn’t get report widget data: '.$errorMsg."\r\n".print_r($errors, true), __METHOD__);
-
-            return $this->asErrorJson($errorMsg);
-        } catch (\Exception $e) {
-            $errorMsg = $e->getMessage();
-            Craft::info('Couldn’t get element data: '.$errorMsg, __METHOD__);
-
-            return $this->asErrorJson($errorMsg);
         }
+
+        return $this->asJson($response);
     }
 }
