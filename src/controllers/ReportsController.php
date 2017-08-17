@@ -93,37 +93,20 @@ class ReportsController extends Controller
         
         $activeUsers = 0;
 
-        try {
-            $viewId = Craft::$app->getRequest()->getBodyParam('viewId');
+        $viewId = Craft::$app->getRequest()->getBodyParam('viewId');
 
-            $request = [
-                'viewId' => $viewId,
-                'metrics' => 'ga:activeVisitors',
-                'optParams' => []
-            ];
+        $request = [
+            'viewId' => $viewId,
+            'metrics' => 'ga:activeeVisitors',
+            'optParams' => []
+        ];
 
-            $response = Analytics::$plugin->getReports()->getRealtimeReport($request);
+        $response = Analytics::$plugin->getReports()->getRealtimeReport($request);
 
-            if (!empty($response['totalResults'])) {
-                $activeUsers = $response['totalResults'];
-            }
-        } catch (\Google_Service_Exception $e) {
-            $errors = $e->getErrors();
-            $errorMsg = $e->getMessage();
-
-            if (isset($errors[0]['message'])) {
-                $errorMsg = $errors[0]['message'];
-            }
-
-            Craft::info('Couldn’t get realtime widget data: '.$errorMsg."\r\n".print_r($errors, true), __METHOD__);
-
-            return $this->asErrorJson($errorMsg);
-        } catch (\Exception $e) {
-            $errorMsg = $e->getMessage();
-            Craft::info('Couldn’t get element data: '.$errorMsg, __METHOD__);
-
-            return $this->asErrorJson($errorMsg);
+        if (!empty($response['totalResults'])) {
+            $activeUsers = $response['totalResults'];
         }
+
 
 
         // Pageviews
