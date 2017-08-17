@@ -15,6 +15,7 @@ use dukt\analytics\models\View;
 use dukt\analytics\web\assets\settings\SettingsAsset;
 use dukt\analytics\Plugin as Analytics;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 class SettingsController extends Controller
 {
@@ -22,9 +23,11 @@ class SettingsController extends Controller
     // =========================================================================
 
     /**
-     * Settings Index
+     * Index.
      *
-     * @return null
+     * @param null $plugin
+     *
+     * @return Response
      */
     public function actionIndex($plugin = null)
     {
@@ -92,9 +95,9 @@ class SettingsController extends Controller
     }
 
     /**
-     * OAuth Settings
+     * OAuth Settings.
      *
-     * @return \yii\web\Response
+     * @return Response
      */
     public function actionOauth()
     {
@@ -107,10 +110,10 @@ class SettingsController extends Controller
     }
 
     /**
-     * Saves settings.
+     * Saves the settings.
      *
+     * @return null|Response
      * @throws InvalidPluginException
-     * @return null
      */
     public function actionSaveSettings()
     {
@@ -146,9 +149,9 @@ class SettingsController extends Controller
     }
 
     /**
-     * Get Account Explorer Data
+     * Returns the account explorer data.
      *
-     * @return null
+     * @return Response
      */
     public function actionGetAccountExplorerData()
     {
@@ -159,6 +162,11 @@ class SettingsController extends Controller
         return $this->asJson($accountExplorerData);
     }
 
+    /**
+     * Views index.
+     *
+     * @return Response
+     */
     public function actionViews()
     {
         $isOauthProviderConfigured = Analytics::$plugin->getAnalytics()->isOauthProviderConfigured();
@@ -174,6 +182,15 @@ class SettingsController extends Controller
         return $this->renderTemplate('analytics/settings/views/_index', $variables);
     }
 
+    /**
+     * Edit a view.
+     *
+     * @param int|null  $viewId
+     * @param View|null $reportingView
+     *
+     * @return Response
+     * @throws NotFoundHttpException
+     */
     public function actionEditView(int $viewId = null, View $reportingView = null)
     {
         $variables['isNewView'] = false;
@@ -315,6 +332,11 @@ class SettingsController extends Controller
         return $this->renderTemplate('analytics/settings/views/_edit', $variables);
     }
 
+    /**
+     * Saves a view.
+     *
+     * @return null|Response
+     */
     public function actionSaveView()
     {
         $this->requirePostRequest();
@@ -370,6 +392,11 @@ class SettingsController extends Controller
         return $this->redirectToPostedUrl($reportingView);
     }
 
+    /**
+     * Deletes a view.
+     *
+     * @return Response
+     */
     public function actionDeleteView()
     {
         $this->requirePostRequest();
@@ -383,6 +410,11 @@ class SettingsController extends Controller
         return $this->asJson(['success' => true]);
     }
 
+    /**
+     * Sites index.
+     *
+     * @return Response
+     */
     public function actionSites()
     {
         $isOauthProviderConfigured = Analytics::$plugin->getAnalytics()->isOauthProviderConfigured();
@@ -399,6 +431,13 @@ class SettingsController extends Controller
         return $this->renderTemplate('analytics/settings/sites/_index', $variables);
     }
 
+    /**
+     * Edit a site.
+     *
+     * @param $siteId
+     *
+     * @return Response
+     */
     public function actionEditSite($siteId)
     {
         $site = Craft::$app->getSites()->getSiteById($siteId);
@@ -412,6 +451,11 @@ class SettingsController extends Controller
         ]);
     }
 
+    /**
+     * Saves a site.
+     * 
+     * @return null|Response
+     */
     public function actionSaveSite()
     {
         $this->requirePostRequest();
