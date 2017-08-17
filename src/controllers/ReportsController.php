@@ -79,7 +79,7 @@ class ReportsController extends Controller
 
         $request = [
             'viewId' => $viewId,
-            'metrics' => 'ga:activeeVisitors',
+            'metrics' => 'ga:activeVisitors',
             'optParams' => []
         ];
 
