@@ -28,30 +28,12 @@ class ReportsController extends Controller
         $siteId = (int) Craft::$app->getRequest()->getRequiredParam('siteId');
         $metric = Craft::$app->getRequest()->getRequiredParam('metric');
 
-        try {
-            $response = Analytics::$plugin->getReports()->getElementReport($elementId, $siteId, $metric);
+        $response = Analytics::$plugin->getReports()->getElementReport($elementId, $siteId, $metric);
 
-            return $this->asJson([
-                'type' => 'area',
-                'chart' => $response
-            ]);
-        } catch (\Google_Service_Exception $e) {
-            $errors = $e->getErrors();
-            $errorMsg = $e->getMessage();
-
-            if (isset($errors[0]['message'])) {
-                $errorMsg = $errors[0]['message'];
-            }
-
-            Craft::info('Couldn’t get element data: '.$errorMsg."\r\n".print_r($errors, true), __METHOD__);
-
-            return $this->asErrorJson($errorMsg);
-        } catch (\Exception $e) {
-            $errorMsg = $e->getMessage();
-            Craft::info('Couldn’t get element data: '.$errorMsg, __METHOD__);
-
-            return $this->asErrorJson($errorMsg);
-        }
+        return $this->asJson([
+            'type' => 'area',
+            'chart' => $response
+        ]);
     }
 
     /**
