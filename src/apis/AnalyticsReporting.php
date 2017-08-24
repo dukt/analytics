@@ -108,11 +108,15 @@ class AnalyticsReporting extends Api
     {
         $request = new Google_Service_AnalyticsReporting_ReportRequest();
 
-        if ($criteria->viewId) {
-            $view = Analytics::$plugin->getViews()->getViewById($criteria->viewId);
+        if($criteria->gaViewId) {
+            $request->setViewId('ga:'.$criteria->gaViewId);
+        } else {
+            if ($criteria->viewId) {
+                $view = Analytics::$plugin->getViews()->getViewById($criteria->viewId);
 
-            if ($view) {
-                $request->setViewId($view->gaViewId);
+                if ($view) {
+                    $request->setViewId($view->gaViewId);
+                }
             }
         }
 
