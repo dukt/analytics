@@ -10,8 +10,6 @@
 					<th>{{ "Site"|t('analytics') }}</th>
 					<th>{{ "Base URL"|t('analytics') }}</th>
 					<th>{{ "View"|t('analytics') }}</th>
-					<th>{{ "Google Analytics View"|t('analytics') }}</th>
-					<th>{{ "Tracking ID"|t('analytics') }}</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -28,27 +26,12 @@
 						{% endif %}
 					{% endfor %}
 
-
 					<tr>
 						<td><a href="{{ url('analytics/settings/sites/'~ site.id) }}">{{ site.name }}</a></td>
 						<td><code>{{ site.baseUrl }}</code></td>
 						<td>
 							{% if reportingView %}
 								{{ reportingView.name }}
-							{% endif %}
-						</td>
-						<td>
-							{% if reportingView and reportingView.gaViewId %}
-								<div class="light">
-									{{ reportingView.gaAccountName }} →
-									{{ reportingView.gaPropertyName }}
-								</div>
-								{{ reportingView.gaViewName }}
-							{% endif %}
-						</td>
-						<td>
-							{% if reportingView %}
-								<code>{{ reportingView.gaPropertyId }}</code>
 							{% endif %}
 						</td>
 					</tr>
