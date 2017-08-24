@@ -14,6 +14,7 @@
 				<tr>
 					<th>{{ "Name"|t('analytics') }}</th>
 					<th>{{ "Google Analytics View"|t('analytics') }}</th>
+					<th>{{ "GA View ID"|t('analytics') }}</th>
 					<td class="thin"></td>
 				</tr>
 			</thead>
@@ -29,6 +30,13 @@
 								{{ reportingView.gaPropertyName }}
 							</div>
 							{{ reportingView.gaViewName }}
+						{% else %}
+							<span class="light">—</span>
+						{% endif %}
+					</td>
+					<td>
+						{% if reportingView.gaViewId %}
+							{{ reportingView.gaViewId }}
 						{% else %}
 							<span class="light">—</span>
 						{% endif %}
