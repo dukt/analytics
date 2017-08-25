@@ -6,25 +6,13 @@ Customizable statistics widgets and entry tracking for Craft & Google Analytics.
 
 ## Requirements
 
-This plugin requires Craft CMS 3.0.0-beta.1 or later.
+This plugin requires Craft CMS 3.0.0-beta.20 or later.
 
-## Installation
+## How to install Analytics 4 Beta
 
-To install the plugin, follow these instructions.
+Installation instructions can be found in the [Analytics 4 documentation](https://github.com/dukt/analytics-docs/blob/master/en/installation.md).
 
-1. Open your terminal and go to your Craft project:
+## Resources
 
-        cd /path/to/project
-
-2. Then tell Composer to load the plugin:
-
-        composer require dukt/craft-analytics
-
-3. In the Control Panel, go to Settings → Plugins and click the “Install” button for Analytics.
-
-## Learn more
-
-- [Plugin Overview](https://dukt.net/analytics)
-- [Documentation](https://dukt.net/analytics/docs)
-
-[Dukt.net](https://dukt.net/) © 2017 - All rights reserved
+- [Analytics 4 Documentation](https://github.com/dukt/analytics-docs)
+- [Analytics 4 Plugin Overview](https://dukt.net/analytics)
