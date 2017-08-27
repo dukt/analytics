@@ -51,20 +51,19 @@ class Oauth extends Component
     }
 
     /**
-     * Get OAuth Token
+     * Returns the OAuth Token.
      *
-     * @return AccessToken|null
+     * @param bool $refresh
+     *
+     * @return AccessToken
      */
-    public function getToken()
+    public function getToken($refresh = true)
     {
-        if ($this->token) {
-            return $this->token;
-        } else {
+        if (!$this->token) {
             $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
             $settings = $plugin->getSettings();
 
             if ($settings->token) {
-
                 $token = new AccessToken([
                     'access_token' => (isset($settings->token['accessToken']) ? $settings->token['accessToken'] : null),
                     'expires' => (isset($settings->token['expires']) ? $settings->token['expires'] : null),
@@ -73,7 +72,7 @@ class Oauth extends Component
                     'values' => (isset($settings->token['values']) ? $settings->token['values'] : null),
                 ]);
 
-                if ($token->hasExpired()) {
+                if ($refresh && $token->hasExpired()) {
                     $provider = $this->getOauthProvider();
                     $grant = new \League\OAuth2\Client\Grant\RefreshToken();
                     $newToken = $provider->getAccessToken($grant, ['refresh_token' => $token->getRefreshToken()]);
@@ -92,6 +91,8 @@ class Oauth extends Component
                 return $token;
             }
         }
+
+        return $this->token;
     }
 
     /**
