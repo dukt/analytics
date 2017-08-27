@@ -234,18 +234,18 @@ class Analytics extends Component
     }
 
     /**
-     * Checks if token is set.
+     * Checks if the token is set.
      *
      * @return bool
      */
     private function isTokenSet()
     {
-        $token = AnalyticsPlugin::$plugin->getOauth()->getToken();
+        $token = AnalyticsPlugin::$plugin->getOauth()->getToken(false);
 
         if ($token) {
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 }
