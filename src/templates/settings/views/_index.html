@@ -60,6 +60,8 @@
 			deleteAction: 'analytics/settings/delete-view'
 		});
 		{% endjs %}
+	{% elseif error is defined %}
+		<p class="error">{{ error }}</p>
 	{% else %}
 		{% include 'analytics/_special/not-connected' %}
 	{% endif %}

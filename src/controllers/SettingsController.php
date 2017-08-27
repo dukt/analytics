@@ -14,6 +14,9 @@ use dukt\analytics\models\SiteView;
 use dukt\analytics\models\View;
 use dukt\analytics\web\assets\settings\SettingsAsset;
 use dukt\analytics\Plugin as Analytics;
+use Exception;
+use Google_Service_Exception;
+use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
@@ -33,11 +36,11 @@ class SettingsController extends Controller
     {
         $isOauthProviderConfigured = Analytics::$plugin->getAnalytics()->isOauthProviderConfigured();
 
-        if($isOauthProviderConfigured) {
+        if ($isOauthProviderConfigured) {
             $errors = [];
 
             try {
-                if(!$plugin) {
+                if (!$plugin) {
                     $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
                 }
 
@@ -58,20 +61,30 @@ class SettingsController extends Controller
                         $settings = $plugin->getSettings();
                     }
                 }
-            } catch (\Google_Service_Exception $e) {
+            } catch (Google_Service_Exception $e) {
                 Craft::info("Couldn’t get OAuth account: ".$e->getMessage(), __METHOD__);
 
                 foreach ($e->getErrors() as $error) {
-                    array_push($errors, $error['message']);
+                    $errors[] = $error['message'];
                 }
-            } catch (\Exception $e) {
+            } catch (IdentityProviderException $e) {
+                $error = $e->getMessage();
+
+                $data = $e->getResponseBody();
+
+                if (isset($data['error_description'])) {
+                    $error = $data['error_description'];
+                }
+
+                $errors[] = $error;
+            } catch (Exception $e) {
                 if (method_exists($e, 'getResponse')) {
                     Craft::info("Couldn’t get OAuth account: ".$e->getResponse(), __METHOD__);
                 } else {
                     Craft::info("Couldn’t get OAuth account: ".$e->getMessage(), __METHOD__);
                 }
 
-                array_push($errors, $e->getMessage());
+                $errors[] = $e->getMessage();
             }
         }
 
@@ -170,13 +183,24 @@ class SettingsController extends Controller
     public function actionViews()
     {
         $isOauthProviderConfigured = Analytics::$plugin->getAnalytics()->isOauthProviderConfigured();
-        $token = Analytics::$plugin->oauth->getToken();
 
         $variables['isConnected'] = false;
 
-        if($isOauthProviderConfigured && $token) {
-            $variables['isConnected'] = true;
-            $variables['reportingViews'] = Analytics::$plugin->getViews()->getViews();
+        try {
+            $token = Analytics::$plugin->oauth->getToken();
+
+            if($isOauthProviderConfigured && $token) {
+                $variables['isConnected'] = true;
+                $variables['reportingViews'] = Analytics::$plugin->getViews()->getViews();
+            }
+        } catch (IdentityProviderException $e) {
+            $variables['error'] = $e->getMessage();
+
+            $data = $e->getResponseBody();
+
+            if (isset($data['error_description'])) {
+                $variables['error'] = $data['error_description'];
+            }
         }
 
         return $this->renderTemplate('analytics/settings/views/_index', $variables);
@@ -418,14 +442,25 @@ class SettingsController extends Controller
     public function actionSites()
     {
         $isOauthProviderConfigured = Analytics::$plugin->getAnalytics()->isOauthProviderConfigured();
-        $token = Analytics::$plugin->oauth->getToken();
 
         $variables['isConnected'] = false;
 
-        if($isOauthProviderConfigured && $token) {
-            $variables['isConnected'] = true;
-            $variables['sites'] = Craft::$app->getSites()->getAllSites();
-            $variables['siteViews'] = Analytics::$plugin->getViews()->getSiteViews();
+        try {
+            $token = Analytics::$plugin->oauth->getToken();
+
+            if ($isOauthProviderConfigured && $token) {
+                $variables['isConnected'] = true;
+                $variables['sites'] = Craft::$app->getSites()->getAllSites();
+                $variables['siteViews'] = Analytics::$plugin->getViews()->getSiteViews();
+            }
+        } catch (IdentityProviderException $e) {
+            $variables['error'] = $e->getMessage();
+
+            $data = $e->getResponseBody();
+
+            if (isset($data['error_description'])) {
+                $variables['error'] = $data['error_description'];
+            }
         }
 
         return $this->renderTemplate('analytics/settings/sites/_index', $variables);

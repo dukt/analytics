@@ -39,6 +39,8 @@
 
 			</tbody>
 		</table>
+	{% elseif error is defined %}
+		<p class="error">{{ error }}</p>
 	{% else %}
 		{% include 'analytics/_special/not-connected' %}
 	{% endif %}
