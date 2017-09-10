@@ -39,4 +39,19 @@ class AnalyticsVariable
     {
         return Analytics::$plugin->getAnalytics()->track($options);
     }
+
+    /**
+     * Returns the Analytics tracking object.
+     *
+     * @param bool $isSsl
+     * @param bool $isDisabled
+     * @param array $options
+     * @throws \InvalidArgumentException
+     *
+     * @return \TheIconic\Tracking\GoogleAnalytics\Analytics
+     */
+    public function tracking($isSsl = false, $isDisabled = false, array $options = [])
+    {
+        return Analytics::$plugin->getAnalytics()->tracking($isSsl, $isDisabled, $options);
+    }
 }
