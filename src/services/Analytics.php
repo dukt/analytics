@@ -166,6 +166,42 @@ class Analytics extends Component
     }
 
     /**
+     * Returns the Analytics tracking object.
+     *
+     * @param bool $isSsl
+     * @param bool $isDisabled
+     * @param array $options
+     * @throws \InvalidArgumentException
+     *
+     * @return \TheIconic\Tracking\GoogleAnalytics\Analytics
+     */
+    public function tracking($isSsl = false, $isDisabled = false, array $options = [])
+    {
+        $userAgent = Craft::$app->getRequest()->getUserAgent();
+
+        if (empty($userAgent)) {
+            $userAgent = "User-Agent:Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13\r\n";
+        }
+
+        $referrer = Craft::$app->getRequest()->getReferrer();
+
+        if (empty($referrer)) {
+            $referrer = "";
+        }
+
+        $analyticsTracking = new \TheIconic\Tracking\GoogleAnalytics\Analytics($isSsl, $isDisabled, $options);
+        $analyticsTracking
+            ->setProtocolVersion('1')
+            ->setUserAgentOverride($userAgent)
+            ->setDocumentHostName(Craft::$app->getRequest()->getServerName())
+            ->setDocumentReferrer($referrer)
+            ->setAsyncRequest(false)
+            ->setClientId($this->_gaParseCookie());
+
+        return $analyticsTracking;
+    }
+
+    /**
      * Checks if the OAuth provider is configured.
      *
      * @return bool
@@ -248,4 +284,68 @@ class Analytics extends Component
 
         return false;
     }
+
+
+    /**
+     * _getGclid get the `gclid` and sets the 'gclid' cookie
+     */
+    private function _getGclid()
+    {
+        $gclid = "";
+        if (isset($_GET['gclid']))
+        {
+            $gclid = $_GET['gclid'];
+            if (!empty($gclid))
+            {
+                setcookie("gclid", $gclid, time() + (10 * 365 * 24 * 60 * 60),  "/");
+            }
+        }
+        return $gclid;
+    } /* -- _getGclid */
+
+    /**
+     * _gaParseCookie handles the parsing of the _ga cookie or setting it to a unique identifier
+     * @return string the cid
+     */
+    private function _gaParseCookie()
+    {
+        if (isset($_COOKIE['_ga']))
+        {
+            list($version, $domainDepth, $cid1, $cid2) = preg_split('[\.]', $_COOKIE["_ga"], 4);
+            $contents = array('version' => $version, 'domainDepth' => $domainDepth, 'cid' => $cid1 . '.' . $cid2);
+            $cid = $contents['cid'];
+        }
+        else
+        {
+            if (isset($_COOKIE['_ia']) && $_COOKIE['_ia'] !='' )
+                $cid = $_COOKIE['_ia'];
+            else
+                $cid = $this->_gaGenUUID();
+        }
+        setcookie('_ia', $cid, time()+60*60*24*730, "/"); // Two years
+        return $cid;
+    } /* -- _gaParseCookie */
+
+    /**
+     * _gaGenUUID Generate UUID v4 function - needed to generate a CID when one isn't available
+     * @return string The generated UUID
+     */
+    private function _gaGenUUID()
+    {
+        return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+            // 32 bits for "time_low"
+            mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+            // 16 bits for "time_mid"
+            mt_rand(0, 0xffff),
+            // 16 bits for "time_hi_and_version",
+            // four most significant bits holds version number 4
+            mt_rand(0, 0x0fff) | 0x4000,
+            // 16 bits, 8 bits for "clk_seq_hi_res",
+            // 8 bits for "clk_seq_low",
+            // two most significant bits holds zero and one for variant DCE1.1
+            mt_rand(0, 0x3fff) | 0x8000,
+            // 48 bits for "node"
+            mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+        );
+    } /* -- _gaGenUUID */
 }
