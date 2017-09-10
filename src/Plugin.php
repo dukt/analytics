@@ -86,7 +86,7 @@ class Plugin extends \craft\base\Plugin
             $event->components['analytics'] = AnalyticsVariable::class;
         });
 
-        if (Craft::$app->getRequest()->getIsCpRequest()) {
+        if (!Craft::$app->getRequest()->getIsConsoleRequest() && Craft::$app->getRequest()->getIsCpRequest()) {
             Craft::$app->getView()->registerAssetBundle(AnalyticsAsset::class);
         }
     }
