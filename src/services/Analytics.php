@@ -9,7 +9,6 @@ namespace dukt\analytics\services;
 
 use Craft;
 use yii\base\Component;
-use dukt\analytics\etc\craft\AnalyticsTracking;
 use dukt\Analytics\Plugin as AnalyticsPlugin;
 
 class Analytics extends Component
@@ -147,22 +146,6 @@ class Analytics extends Component
         }
 
         return $chartLanguage;
-    }
-
-    /**
-     * Send tracking data to Google Analytics.
-     *
-     * @param array $options
-     *
-     * @return AnalyticsTracking|null
-     */
-    public function track($options)
-    {
-        if (!$this->tracking) {
-            $this->tracking = new AnalyticsTracking($options);
-        }
-
-        return $this->tracking;
     }
 
     /**
