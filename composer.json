@@ -27,7 +27,6 @@
         "league/oauth2-client": "^2.2",
         "dukt/oauth2-google": "^2.0",
         "google/apiclient": "v2.1.0",
-        "ins0/google-measurement-php-client": "v2.0.1",
         "theiconic/php-ga-measurement-protocol": "^2.0"
     },
     "autoload": {
