@@ -70,7 +70,28 @@ class Plugin extends \craft\base\Plugin
             'views' => \dukt\analytics\services\Views::class,
         ]);
 
-        Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, [$this, 'registerCpUrlRules']);
+        Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $event) {
+            $rules = [
+                'analytics/settings' => 'analytics/settings/index',
+                'analytics/settings/oauth' => 'analytics/settings/oauth',
+                'analytics/settings/views' => 'analytics/settings/views',
+                'analytics/settings/views/new' => 'analytics/settings/edit-view',
+                'analytics/settings/views/<viewId:\d+>' => 'analytics/settings/edit-view',
+                'analytics/settings/sites' => 'analytics/settings/sites',
+                'analytics/settings/sites/<siteId:\d+>' => 'analytics/settings/edit-site',
+                'analytics/utils' => 'analytics/utils/metadata',
+                'analytics/utils/metadata' => 'analytics/utils/metadata',
+                'analytics/tests/data-types' => 'analytics/tests/data-types',
+                'analytics/tests' => 'analytics/tests/columns',
+                'analytics/tests/columns' => 'analytics/tests/columns',
+                'analytics/tests/column-groups' => 'analytics/tests/column-groups',
+                'analytics/tests/formatting' => 'analytics/tests/formatting',
+                'analytics/tests/report-widgets' => 'analytics/tests/report-widgets',
+                'analytics/api4' => 'analytics/api4',
+            ];
+
+            $event->rules = array_merge($event->rules, $rules);
+        });
 
         Event::on(Dashboard::class, Dashboard::EVENT_REGISTER_WIDGET_TYPES, function(RegisterComponentTypesEvent $event) {
             $event->types[] = Realtime::class;
@@ -90,35 +111,6 @@ class Plugin extends \craft\base\Plugin
         if (!Craft::$app->getRequest()->getIsConsoleRequest() && Craft::$app->getRequest()->getIsCpRequest()) {
             Craft::$app->getView()->registerAssetBundle(AnalyticsAsset::class);
         }
-    }
-
-    /**
-     * Register CP rules.
-     *
-     * @param RegisterUrlRulesEvent $event
-     */
-    public function registerCpUrlRules(RegisterUrlRulesEvent $event)
-    {
-        $rules = [
-            'analytics/settings' => 'analytics/settings/index',
-            'analytics/settings/oauth' => 'analytics/settings/oauth',
-            'analytics/settings/views' => 'analytics/settings/views',
-            'analytics/settings/views/new' => 'analytics/settings/edit-view',
-            'analytics/settings/views/<viewId:\d+>' => 'analytics/settings/edit-view',
-            'analytics/settings/sites' => 'analytics/settings/sites',
-            'analytics/settings/sites/<siteId:\d+>' => 'analytics/settings/edit-site',
-            'analytics/utils' => 'analytics/utils/metadata',
-            'analytics/utils/metadata' => 'analytics/utils/metadata',
-            'analytics/tests/data-types' => 'analytics/tests/data-types',
-            'analytics/tests' => 'analytics/tests/columns',
-            'analytics/tests/columns' => 'analytics/tests/columns',
-            'analytics/tests/column-groups' => 'analytics/tests/column-groups',
-            'analytics/tests/formatting' => 'analytics/tests/formatting',
-            'analytics/tests/report-widgets' => 'analytics/tests/report-widgets',
-            'analytics/api4' => 'analytics/api4',
-        ];
-
-        $event->rules = array_merge($event->rules, $rules);
     }
 
     /**
