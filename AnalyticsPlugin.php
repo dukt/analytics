@@ -1,8 +1,8 @@
 <?php
 /**
- * @link      https://dukt.net/craft/analytics/
- * @copyright Copyright (c) 2016, Dukt
- * @license   https://dukt.net/craft/analytics/docs/license
+ * @link      https://dukt.net/analytics/
+ * @copyright Copyright (c) 2017, Dukt
+ * @license   https://dukt.net/analytics/docs/license
  */
 
 namespace Craft;
@@ -79,7 +79,7 @@ class AnalyticsPlugin extends BasePlugin
 			array(
 				'name' => "OAuth",
 				'handle' => 'oauth',
-				'url' => 'https://dukt.net/craft/oauth',
+				'url' => 'https://dukt.net/oauth',
 				'version' => '1.0.0'
 			)
 		);
@@ -106,16 +106,16 @@ class AnalyticsPlugin extends BasePlugin
 	 */
 	public function getDocumentationUrl()
 	{
-		return 'https://dukt.net/craft/analytics/docs/';
+		return 'https://dukt.net/analytics/docs/';
 	}
 
-	/**
-	 * Get Release Feed URL
-	 */
-	public function getReleaseFeedUrl()
-	{
-		return 'https://dukt.net/craft/analytics/updates.json';
-	}
+    /**
+     * Get release feed URL
+     */
+    public function getReleaseFeedUrl()
+    {
+        return 'https://raw.githubusercontent.com/dukt/analytics/v3/releases.json';
+    }
 
 	/**
 	 * Get Settings URL
