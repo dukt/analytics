@@ -1,0 +1,78 @@
+[
+  {
+    "version": "3.4.5",
+    "downloadUrl": "https://github.com/dukt/analytics/archive/3.4.5.zip",
+    "date": "2016-12-23T11:00:00-02:00",
+    "notes": [
+      "[Improved] `AnalyticsService::getElementUrlPath()` is now taking the `addTrailingSlashesToUrls` setting into account."
+    ]
+  },
+  {
+    "version": "3.4.4",
+    "downloadUrl": "https://github.com/dukt/analytics/archive/3.4.4.zip",
+    "date": "2016-12-09T11:00:00-02:00",
+    "notes": [
+      "[Improved] Improved the Google Analytics account block in the settings.",
+      "[Fixed] Fixed a visual bug with Realtime widget’s progress bars."
+    ]
+  },
+  {
+    "version": "3.4.3",
+    "downloadUrl": "https://github.com/dukt/analytics/archive/3.4.3.zip",
+    "date": "2016-11-17T11:00:00-02:00",
+    "notes": [
+      "[Fixed] Fixed a bug that prevented the account explorer to load properly in the plugin's settings.",
+      "[Added] Added `Analytics_CacheService::delete()` method.",
+      "[Improved] Schema `1.0.2`."
+    ]
+  },
+  {
+    "version": "3.4.2",
+    "downloadUrl": "https://github.com/dukt/analytics/archive/3.4.2.zip",
+    "date": "2016-11-16T11:00:00-02:00",
+    "notes": [
+      "[Improved] Removed an unused variable in `AnalyticsTrait.php`.",
+      "[Fixed] Fixed a bug which prevented the `Google_Utils_UriTemplate` from loading properly."
+    ]
+  },
+  {
+    "version": "3.4.1",
+    "downloadUrl": "https://github.com/dukt/analytics/archive/3.4.1.zip",
+    "date": "2016-11-11T11:00:00-02:00",
+    "notes": [
+      "[Fixed] Updated `google/apiclient` to `2.1.0`."
+    ]
+  },
+  {
+    "version": "3.4.0",
+    "downloadUrl": "https://github.com/dukt/analytics/archive/3.4.0.zip",
+    "date": "2016-11-08T11:00:00-02:00",
+    "notes": [
+      "[Added] Added a Google Analytics account explorer to select views with ease.",
+      "[Added] Added a plugin description.",
+      "[Added] Added required OAuth scope: https://www.googleapis.com/auth/analytics.edit.",
+      "[Added] Report widget settings now remember the selected dimensions & metrics when changing the chart type.",
+      "[Added] This update requires a reconnect to Google Analytics since the OAuth scope has changed.",
+      "[Fixed] Fixed a `z-index` bug where the widget was positioned behind the Craft's edition logo.",
+      "[Fixed] Fixed a bug where Analytics.ReportWidget's spinner was not getting hidden properly after data has been requested.",
+      "[Fixed] Fixed a bug where cached ID was different when getting and setting a report from the cache.",
+      "[Fixed] Fixed a bug where missing dependencies couldn't be retrieved during the installation process.",
+      "[Fixed] Fixed a bug where report field would not load data from cache.",
+      "[Fixed] Fixed a bug where table reports were causing Safari Mobile to get stuck.",
+      "[Improved] Improved formatting of API responses.",
+      "[Improved] Improved the order of dimension & metric select options in Analytics_MetadataService.",
+      "[Improved] Refactored API, reports & charts.",
+      "[Improved] Updated `google/apiclient` dependency to 2.0.1."
+    ]
+  },
+  {
+    "version": "3.3.0",
+    "downloadUrl": "https://github.com/dukt/analytics/archive/3.3.0.zip",
+    "date": "2016-06-24T11:00:00-02:00",
+    "notes": [
+      "[Added] Added a `filters` config which defines global filters applied to every request to the Core Reporting API.",
+      "[Fixed] Fixed a bug where the Dashboard's grid was not being refreshed when the height of the Report widget changed.",
+      "[Improved] Prevented UID from appearing twice in the Settings when the plugin is being used with OAuth 2.0."
+    ]
+  }
+]
