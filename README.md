@@ -6,7 +6,7 @@ Customizable statistics widgets and entry tracking for Craft & Google Analytics.
 
 ## Requirements
 
-This plugin requires Craft CMS 3.0.0-beta.20 or later.
+This plugin requires Craft CMS 3.0.0-RC1 or later.
 
 ## How to install Analytics 4 Beta
 
