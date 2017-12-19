@@ -1,7 +1,7 @@
 Changelog
 =========
 
-## 4.0.0-beta.1 - Unreleased
+## 4.0.0-beta.1 - 2017-12-19
 
 ### Added
 - Added `craftcms/cms` as a composer dependency.
