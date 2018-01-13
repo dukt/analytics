@@ -49,6 +49,8 @@ class AnalyticsReporting extends Api
         if (isset($reports[0])) {
             return $reports[0];
         }
+
+        return null;
     }
 
     /**

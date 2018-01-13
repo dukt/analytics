@@ -64,6 +64,8 @@ class Views extends Component
                 'gaViewName',
             ]));
         }
+
+        return null;
     }
 
     public function getSiteViews()
@@ -95,6 +97,8 @@ class Views extends Component
                 'viewId',
             ]));
         }
+
+        return null;
     }
 
     /**

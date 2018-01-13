@@ -217,13 +217,11 @@ class Analytics extends Api
             case 'float':
             case 'time':
             case 'percent':
-                $value = (float)$value;
+                return (float) $value;
                 break;
 
             default:
-                $value = (string)$value;
+                return (string) $value;
         }
-
-        return $value;
     }
 }

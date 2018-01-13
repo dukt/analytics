@@ -112,6 +112,8 @@ class Metadata extends Component
                 return $continent['code'];
             }
         }
+
+        return null;
     }
 
     /**
@@ -130,6 +132,8 @@ class Metadata extends Component
                 return $subContinent['code'];
             }
         }
+
+        return null;
     }
 
     /**
@@ -146,6 +150,8 @@ class Metadata extends Component
         if (isset($columns[$id])) {
             return $columns[$id]->uiName;
         }
+
+        return null;
     }
 
     /**

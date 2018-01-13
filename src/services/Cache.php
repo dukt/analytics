@@ -32,6 +32,8 @@ class Cache extends Component
 
             return Craft::$app->getCache()->get($cacheKey);
         }
+
+        return null;
     }
 
     /**
@@ -60,6 +62,8 @@ class Cache extends Component
 
             return Craft::$app->getCache()->set($cacheKey, $value, $expire, $dependency);
         }
+
+        return null;
     }
 
     /**

@@ -42,5 +42,7 @@ abstract class Api extends Component
 
             return $client;
         }
+
+        return null;
     }
 }

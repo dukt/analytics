@@ -140,5 +140,7 @@ class Realtime extends \craft\base\Widget
                 'reportingViews' => $reportingViews,
             ]);
         }
+
+        return null;
     }
 }

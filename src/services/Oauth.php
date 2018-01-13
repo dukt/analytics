@@ -37,7 +37,7 @@ class Oauth extends Component
 
         $settings = $plugin->getSettings();
 
-        $token = [
+        $tokenArray = [
             'accessToken' => $token->getToken(),
             'expires' => $token->getExpires(),
             'refreshToken' => $token->getRefreshToken(),
@@ -45,7 +45,7 @@ class Oauth extends Component
             'values' => $token->getValues(),
         ];
 
-        $settings->token = $token;
+        $settings->token = $tokenArray;
 
         Craft::$app->getPlugins()->savePluginSettings($plugin, $settings->getAttributes());
     }

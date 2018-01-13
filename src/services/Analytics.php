@@ -194,11 +194,7 @@ class Analytics extends Component
         $oauthClientId = AnalyticsPlugin::$plugin->getSettings()->oauthClientId;
         $oauthClientSecret = AnalyticsPlugin::$plugin->getSettings()->oauthClientSecret;
 
-        if (!empty($oauthClientId) && !empty($oauthClientSecret)) {
-            return true;
-        }
-
-        return false;
+        return !empty($oauthClientId) && !empty($oauthClientSecret);
     }
 
     /**
