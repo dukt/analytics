@@ -145,7 +145,7 @@ class UtilsController extends Controller
             }
         }
 
-        $contents = json_encode($columns);
+        $contents = json_encode($columns, JSON_PRETTY_PRINT);
 
         $path = Analytics::$plugin->metadata->getDimmetsFilePath();
 
