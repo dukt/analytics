@@ -1,5 +1,16 @@
 [
   {
+    "version": "3.4.6",
+    "downloadUrl": "https://github.com/dukt/analytics/archive/3.4.6.zip",
+    "date": "2018-03-07T18:00:00-02:00",
+    "notes": [
+      "[Added] Added releases.json file.",
+      "[Added] Added `apiKey` config setting.",
+      "[Improved] Now using remote version of JSAPI.",
+      "[Fixed] Fixed a bug where the URI that the report field was trying to show statistics for was ending with double slashes when the `addTrailingSlashesToUrls` was set to `true`.",
+    ]
+  },
+  {
     "version": "3.4.5",
     "downloadUrl": "https://github.com/dukt/analytics/archive/3.4.5.zip",
     "date": "2016-12-23T11:00:00-02:00",
