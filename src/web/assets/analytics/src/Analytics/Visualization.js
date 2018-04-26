@@ -1,5 +1,5 @@
 /** global: Analytics */
-
+/** global: Garnish */
 /**
  * Visualization
  */

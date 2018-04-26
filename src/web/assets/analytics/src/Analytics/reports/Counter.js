@@ -1,9 +1,12 @@
+/** global: Analytics */
 /**
  * Counter
  */
 Analytics.reports.Counter = Analytics.reports.BaseChart.extend(
     {
         initChart: function() {
+            /** global: Analytics */
+
             this.base();
 
             $value = $('<div class="value" />').appendTo(this.$graph),
