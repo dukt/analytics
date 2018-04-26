@@ -1,6 +1,5 @@
-/** global: Analytics */
-
 Analytics.Metadata = {
+    /** global: Analytics */
 
     getContinentByCode: function(code) {
         var continent;
@@ -19,6 +18,8 @@ Analytics.Metadata = {
     },
 
     getSubContinentByCode: function(code) {
+        /** global: Analytics */
+        
         var continent;
 
         $.each(Analytics.subContinents, function(key, _continent) {
