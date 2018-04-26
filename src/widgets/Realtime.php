@@ -131,6 +131,8 @@ class Realtime extends \craft\base\Widget
      * @inheritDoc ISavableComponentType::getSettingsHtml()
      *
      * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml()
     {
