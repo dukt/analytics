@@ -7,7 +7,7 @@ Analytics.ChartOptions = Garnish.Base.extend({}, {
     /** global: Analytics */
     /** global: Garnish */
     area: function(scale) {
-        options = this.defaults.area;
+        var options = this.defaults.area;
 
         switch (scale) {
             case 'week':
@@ -34,7 +34,7 @@ Analytics.ChartOptions = Garnish.Base.extend({}, {
     },
 
     geo: function(dimension) {
-        options = this.defaults.geo;
+        var options = this.defaults.geo;
 
         switch (dimension) {
             case 'ga:city':
