@@ -1,4 +1,5 @@
 /** global: Analytics */
+/** global: google */
 /**
  * BaseChart
  */
@@ -19,7 +20,6 @@ Analytics.reports.BaseChart = Garnish.Base.extend(
         drawing: false,
 
         init: function($element, data, localeDefinition, chartLanguage) {
-            /** global: Analytics */
             this.visualization = new Analytics.Visualization(
                 {
                     chartLanguage: chartLanguage,
@@ -58,7 +58,6 @@ Analytics.reports.BaseChart = Garnish.Base.extend(
         },
 
         addChartReadyListener: function() {
-            /** global: google */
             google.visualization.events.addListener(this.chart, 'ready', $.proxy(function() {
                 this.drawing = false;
 

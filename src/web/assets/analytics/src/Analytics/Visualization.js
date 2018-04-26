@@ -1,5 +1,6 @@
 /** global: Analytics */
 /** global: Garnish */
+/** global: google */
 /**
  * Visualization
  */
@@ -9,9 +10,6 @@ Analytics.Visualization = Garnish.Base.extend({
     afterInitStack: [],
 
     init: function(options) {
-        /** global: Analytics */
-        /** global: google */
-
         this.options = options;
 
         if (Analytics.GoogleVisualizationCalled == false) {
@@ -43,8 +41,6 @@ Analytics.Visualization = Garnish.Base.extend({
     },
 
     onAfterInit: function() {
-        /** global: Analytics */
-
         if (Analytics.GoogleVisualizationReady) {
             this.options.onAfterInit();
         } else {
