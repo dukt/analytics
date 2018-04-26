@@ -1,11 +1,9 @@
-/** global: Analytics */
-/** global: Garnish */
 /**
  * Chart Options
  */
+/** global: Analytics */
+/** global: Garnish */
 Analytics.ChartOptions = Garnish.Base.extend({}, {
-    /** global: Analytics */
-    /** global: Garnish */
     area: function(scale) {
         var options = this.defaults.area;
 
