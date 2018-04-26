@@ -44,6 +44,7 @@ class TestsController extends Controller
      * @param array $variables
      *
      * @return Response
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionReportWidgets(array $variables = array())
     {

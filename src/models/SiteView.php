@@ -50,6 +50,9 @@ class SiteView extends Model
         return $rules;
     }
 
+    /**
+     * @return View|null
+     */
     public function getView()
     {
         return Analytics::$plugin->getViews()->getViewById($this->viewId);

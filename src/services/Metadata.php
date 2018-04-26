@@ -18,11 +18,34 @@ class Metadata extends Component
     // Properties
     // =========================================================================
 
+    /**
+     * @var array|null
+     */
     private $groups;
+
+    /**
+     * @var array|null
+     */
     private $dimensions;
+
+    /**
+     * @var array|null
+     */
     private $metrics;
+
+    /**
+     * @var array|null
+     */
     private $columns;
+
+    /**
+     * @var array|null
+     */
     private $selectDimensionOptions;
+
+    /**
+     * @var array|null
+     */
     private $selectMetricOptions;
 
     // Public Methods

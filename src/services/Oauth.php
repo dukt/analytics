@@ -132,11 +132,22 @@ class Oauth extends Component
         return new Google($options);
     }
 
+    /**
+     * Returns the javascript orgin URL.
+     *
+     * @return string
+     * @throws \craft\errors\SiteNotFoundException
+     */
     public function getJavascriptOrigin()
     {
         return UrlHelper::baseUrl();
     }
 
+    /**
+     * Returns the redirect URI.
+     *
+     * @return string
+     */
     public function getRedirectUri()
     {
         return UrlHelper::actionUrl('analytics/oauth/callback');

@@ -87,6 +87,7 @@ class Cache extends Component
      * Get cache duration (in seconds)
      *
      * @return int
+     * @throws \Exception
      */
     private function getCacheDuration()
     {

@@ -11,6 +11,7 @@ use Craft;
 use craft\web\Controller;
 use dukt\analytics\errors\InvalidChartTypeException;
 use dukt\analytics\Plugin as Analytics;
+use yii\web\Response;
 
 class ReportsController extends Controller
 {
@@ -20,7 +21,8 @@ class ReportsController extends Controller
     /**
      * Get element report.
      *
-     * @return \yii\web\Response
+     * @return Response
+     * @throws \yii\web\BadRequestHttpException
      */
     public function actionElement()
     {
@@ -39,7 +41,7 @@ class ReportsController extends Controller
     /**
      * Get realtime widget report.
      *
-     * @return \yii\web\Response
+     * @return Response
      */
     public function actionRealtimeWidget()
     {
@@ -122,7 +124,7 @@ class ReportsController extends Controller
     /**
      * Get report widget report.
      *
-     * @return \yii\web\Response
+     * @return Response
      * @throws InvalidChartTypeException
      */
     public function actionReportWidget()

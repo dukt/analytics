@@ -351,6 +351,11 @@ class Reports extends Component
     // Private Methods
     // =========================================================================
 
+    /**
+     * @param Google_Service_AnalyticsReporting_Report $_report
+     *
+     * @return array
+     */
     private function parseReportingReport(Google_Service_AnalyticsReporting_Report $_report)
     {
         $columnHeader = $_report->getColumnHeader();

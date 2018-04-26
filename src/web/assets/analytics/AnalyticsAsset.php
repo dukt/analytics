@@ -16,6 +16,9 @@ use dukt\analytics\Plugin as Analytics;
 
 class AnalyticsAsset extends AssetBundle
 {
+    /**
+     * @inheritdoc
+     */
     public function init()
     {
         // define the path that your publishable resources live
@@ -35,6 +38,9 @@ class AnalyticsAsset extends AssetBundle
         parent::init();
     }
 
+    /**
+     * @inheritdoc
+     */
     public function registerAssetFiles($view)
     {
         parent::registerAssetFiles($view);

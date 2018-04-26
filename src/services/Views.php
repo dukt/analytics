@@ -48,6 +48,13 @@ class Views extends Component
         return $views;
     }
 
+    /**
+     * Get view by ID.
+     *
+     * @param $id
+     *
+     * @return View|null
+     */
     public function getViewById($id)
     {
         $result = ViewRecord::findOne($id);
@@ -68,6 +75,11 @@ class Views extends Component
         return null;
     }
 
+    /**
+     * Get site views.
+     *
+     * @return array
+     */
     public function getSiteViews()
     {
         $results = SiteViewRecord::find()->all();
@@ -84,6 +96,13 @@ class Views extends Component
         return $views;
     }
 
+    /**
+     * Get ite view by site ID.
+     *
+     * @param $id
+     *
+     * @return SiteView|null
+     */
     public function getSiteViewBySiteId($id)
     {
         $result = SiteViewRecord::findOne([
@@ -166,6 +185,15 @@ class Views extends Component
         return true;
     }
 
+    /**
+     * Delete a view by ID.
+     *
+     * @param int $viewId
+     *
+     * @return bool
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
+     */
     public function deleteViewById(int $viewId): bool
     {
         $viewRecord = ViewRecord::findOne($viewId);
@@ -179,6 +207,15 @@ class Views extends Component
         return true;
     }
 
+    /**
+     * Save a site view.
+     *
+     * @param SiteView $siteView
+     * @param bool     $runValidation
+     *
+     * @return bool
+     * @throws \yii\db\Exception
+     */
     public function saveSiteView(SiteView $siteView, bool $runValidation = true): bool
     {
         if ($runValidation && !$siteView->validate()) {

@@ -18,10 +18,29 @@ class Report extends \craft\base\Widget
     // Properties
     // =========================================================================
 
+    /**
+     * @var string|null
+     */
     public $viewId;
+
+    /**
+     * @var bool|null
+     */
     public $realtime;
+
+    /**
+     * @var string|null
+     */
     public $chart;
+
+    /**
+     * @var string|null
+     */
     public $period;
+
+    /**
+     * @var array|null
+     */
     public $options;
 
     // Public Methods
@@ -63,6 +82,8 @@ class Report extends \craft\base\Widget
      * @inheritDoc IWidget::getBodyHtml()
      *
      * @return string|false
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getBodyHtml()
     {
@@ -134,6 +155,9 @@ class Report extends \craft\base\Widget
      * ISavableComponentType::getSettingsHtml()
      *
      * @return null|string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
+     * @throws \yii\base\InvalidConfigException
      */
     public function getSettingsHtml()
     {

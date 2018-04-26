@@ -57,6 +57,9 @@ class Realtime extends \craft\base\Widget
      * @inheritDoc IWidget::getBodyHtml()
      *
      * @return string|false
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
+     * @throws \yii\base\InvalidConfigException
      */
     public function getBodyHtml()
     {

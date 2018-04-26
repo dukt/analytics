@@ -47,6 +47,9 @@ class RealtimeReportWidgetAsset extends AssetBundle
         parent::init();
     }
 
+    /**
+     * @inheritdoc
+     */
     public function registerAssetFiles($view)
     {
         parent::registerAssetFiles($view);

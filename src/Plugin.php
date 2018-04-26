@@ -114,20 +114,7 @@ class Plugin extends \craft\base\Plugin
     }
 
     /**
-     * Creates and returns the model used to store the plugin’s settings.
-     *
-     * @return Settings
-     */
-    protected function createSettingsModel()
-    {
-        return new Settings();
-    }
-
-    /**
-     * Returns the rendered settings HTML, which will be inserted into the content
-     * block on the settings page.
-     *
-     * @return string The rendered settings HTML
+     * @inheritdoc
      */
     public function getSettingsResponse()
     {
@@ -136,5 +123,16 @@ class Plugin extends \craft\base\Plugin
         Craft::$app->controller->redirect($url);
 
         return '';
+    }
+
+    // Protected Methods
+    // =========================================================================
+    
+    /**
+     * @inheritdoc
+     */
+    protected function createSettingsModel()
+    {
+        return new Settings();
     }
 }

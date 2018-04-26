@@ -31,6 +31,7 @@ class SettingsController extends Controller
      * @param null $plugin
      *
      * @return Response
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionIndex($plugin = null)
     {
@@ -127,6 +128,7 @@ class SettingsController extends Controller
      *
      * @return null|Response
      * @throws InvalidPluginException
+     * @throws \yii\web\BadRequestHttpException
      */
     public function actionSaveSettings()
     {
@@ -214,6 +216,7 @@ class SettingsController extends Controller
      *
      * @return Response
      * @throws NotFoundHttpException
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionEditView(int $viewId = null, View $reportingView = null)
     {
@@ -360,6 +363,8 @@ class SettingsController extends Controller
      * Saves a view.
      *
      * @return null|Response
+     * @throws \dukt\analytics\errors\InvalidViewException
+     * @throws \yii\web\BadRequestHttpException
      */
     public function actionSaveView()
     {
@@ -420,6 +425,7 @@ class SettingsController extends Controller
      * Deletes a view.
      *
      * @return Response
+     * @throws \yii\web\BadRequestHttpException
      */
     public function actionDeleteView()
     {
@@ -490,6 +496,7 @@ class SettingsController extends Controller
      * Saves a site.
      *
      * @return null|Response
+     * @throws \yii\web\BadRequestHttpException
      */
     public function actionSaveSite()
     {
