@@ -5,7 +5,6 @@
  */
 Analytics.ChartOptions = Garnish.Base.extend({}, {
     area: function(scale) {
-
         options = this.defaults.area;
 
         switch (scale) {
