@@ -9,7 +9,7 @@ namespace dukt\analytics\apis;
 
 use dukt\analytics\base\Api;
 use dukt\analytics\models\ReportRequestCriteria;
-use dukt\analytics\Plugin as Analytics;
+use dukt\analytics\Plugin;
 use \Google_Service_AnalyticsReporting;
 use \Google_Service_AnalyticsReporting_DateRange;
 use \Google_Service_AnalyticsReporting_Dimension;
@@ -114,7 +114,7 @@ class AnalyticsReporting extends Api
             $request->setViewId('ga:'.$criteria->gaViewId);
         } else {
             if ($criteria->viewId) {
-                $view = Analytics::$plugin->getViews()->getViewById($criteria->viewId);
+                $view = Plugin::getInstance()->getViews()->getViewById($criteria->viewId);
 
                 if ($view) {
                     $request->setViewId($view->gaViewId);
