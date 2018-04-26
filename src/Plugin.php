@@ -127,7 +127,7 @@ class Plugin extends \craft\base\Plugin
 
     // Protected Methods
     // =========================================================================
-    
+
     /**
      * @inheritdoc
      */
