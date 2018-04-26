@@ -44,7 +44,7 @@ Analytics.Visualization = Garnish.Base.extend({
 
     onAfterInit: function() {
         /** global: Analytics */
-        
+
         if (Analytics.GoogleVisualizationReady) {
             this.options.onAfterInit();
         } else {
