@@ -1,11 +1,10 @@
-/** global: Analytics */
-/** global: google */
-
 /**
  * Utils
  */
 Analytics.Utils = {
     responseToDataTable: function(response, localeDefinition) {
+        /** global: Analytics */
+        /** global: google */
         var dataTable = new google.visualization.DataTable();
 
 
@@ -94,6 +93,8 @@ Analytics.Utils = {
     },
 
     formatByType: function(localeDefinition, type, value) {
+        /** global: Analytics */
+
         switch (type) {
             case 'continent':
                 return Analytics.Metadata.getContinentByCode(value);
