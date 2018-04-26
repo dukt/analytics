@@ -13,11 +13,6 @@ use dukt\Analytics\Plugin as AnalyticsPlugin;
 
 class Analytics extends Component
 {
-    // Properties
-    // =========================================================================
-
-    private $tracking;
-
     // Public Methods
     // =========================================================================
 
