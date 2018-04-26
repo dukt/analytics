@@ -120,7 +120,7 @@ class Analytics extends Component
 
         $localeDefinition = json_decode(file_get_contents($formatLocalePath), true);
 
-        if(isset($options['currency'])) {
+        if (isset($options['currency'])) {
             $localeDefinition['currency'] = $this->getD3LocaleDefinitionCurrency($options['currency']);
         }
 
@@ -136,7 +136,7 @@ class Analytics extends Component
     {
         $chartLanguage = Craft::t('analytics', 'analyticsChartLanguage');
 
-        if($chartLanguage == 'analyticsChartLanguage') {
+        if ($chartLanguage == 'analyticsChartLanguage') {
             $chartLanguage = 'en';
         }
 
@@ -146,9 +146,10 @@ class Analytics extends Component
     /**
      * Returns the Analytics tracking object.
      *
-     * @param bool $isSsl
-     * @param bool $isDisabled
+     * @param bool  $isSsl
+     * @param bool  $isDisabled
      * @param array $options
+     *
      * @throws \InvalidArgumentException
      *
      * @return \TheIconic\Tracking\GoogleAnalytics\Analytics
@@ -228,8 +229,8 @@ class Analytics extends Component
 
         $currencyDefinition = $localeDefinition['currency'];
 
-        foreach($currencyDefinition as $key => $row) {
-            if(!empty($row)) {
+        foreach ($currencyDefinition as $key => $row) {
+            if (!empty($row)) {
                 // Todo: Check currency symbol replacement with arabic
 
                 $pattern = '/[^\s]+/u';
@@ -266,42 +267,42 @@ class Analytics extends Component
     private function _getGclid()
     {
         $gclid = "";
-        if (isset($_GET['gclid']))
-        {
+        if (isset($_GET['gclid'])) {
             $gclid = $_GET['gclid'];
-            if (!empty($gclid))
-            {
-                setcookie("gclid", $gclid, time() + (10 * 365 * 24 * 60 * 60),  "/");
+            if (!empty($gclid)) {
+                setcookie("gclid", $gclid, time() + (10 * 365 * 24 * 60 * 60), "/");
             }
         }
+
         return $gclid;
     } /* -- _getGclid */
 
     /**
      * _gaParseCookie handles the parsing of the _ga cookie or setting it to a unique identifier
+     *
      * @return string the cid
      */
     private function _gaParseCookie()
     {
-        if (isset($_COOKIE['_ga']))
-        {
+        if (isset($_COOKIE['_ga'])) {
             list($version, $domainDepth, $cid1, $cid2) = preg_split('[\.]', $_COOKIE["_ga"], 4);
-            $contents = array('version' => $version, 'domainDepth' => $domainDepth, 'cid' => $cid1 . '.' . $cid2);
+            $contents = ['version' => $version, 'domainDepth' => $domainDepth, 'cid' => $cid1.'.'.$cid2];
             $cid = $contents['cid'];
-        }
-        else
-        {
-            if (isset($_COOKIE['_ia']) && $_COOKIE['_ia'] !='' )
+        } else {
+            if (isset($_COOKIE['_ia']) && $_COOKIE['_ia'] != '') {
                 $cid = $_COOKIE['_ia'];
-            else
+            } else {
                 $cid = $this->_gaGenUUID();
+            }
         }
-        setcookie('_ia', $cid, time()+60*60*24*730, "/"); // Two years
+        setcookie('_ia', $cid, time() + 60 * 60 * 24 * 730, "/"); // Two years
+
         return $cid;
     } /* -- _gaParseCookie */
 
     /**
      * _gaGenUUID Generate UUID v4 function - needed to generate a CID when one isn't available
+     *
      * @return string The generated UUID
      */
     private function _gaGenUUID()

@@ -1,4 +1,5 @@
 <?php
+
 namespace dukt\analytics\migrations;
 
 use craft\db\Migration;

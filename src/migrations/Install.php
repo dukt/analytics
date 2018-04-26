@@ -60,6 +60,7 @@ class Install extends Migration
         $this->removeForeignKeys();
         $this->removeIndexes();
         $this->removeTables();
+
         return true;
     }
 

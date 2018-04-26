@@ -1,4 +1,5 @@
 <?php
+
 namespace dukt\analytics\migrations;
 
 use craft\db\Migration;
@@ -23,10 +24,8 @@ class m150921_000001_explorer_widget_to_realtime_and_reports extends Migration
             ->where(['type' => 'Analytics_Explorer'])
             ->all();
 
-        if($widgetResults)
-        {
-            foreach($widgetResults as $result)
-            {
+        if ($widgetResults) {
+            foreach ($widgetResults as $result) {
                 $oldSettings = Json::decode($result['settings']);
 
 
@@ -34,36 +33,31 @@ class m150921_000001_explorer_widget_to_realtime_and_reports extends Migration
 
                 $newSettings = [];
 
-                if(isset($oldSettings['chart']))
-                {
+                if (isset($oldSettings['chart'])) {
                     $newSettings['chart'] = $oldSettings['chart'];
                 }
 
-                if(isset($oldSettings['period']))
-                {
+                if (isset($oldSettings['period'])) {
                     $newSettings['period'] = $oldSettings['period'];
                 }
 
                 $newSettings['options'] = [];
 
-                if(isset($oldSettings['dimension']))
-                {
+                if (isset($oldSettings['dimension'])) {
                     $newSettings['options']['dimension'] = $oldSettings['dimension'];
                 }
 
-                if(isset($oldSettings['metric']))
-                {
+                if (isset($oldSettings['metric'])) {
                     $newSettings['options']['metric'] = $oldSettings['metric'];
                 }
 
-                switch($oldSettings['menu'])
-                {
+                switch ($oldSettings['menu']) {
                     case 'realtimeVisitors':
-                        $type='Analytics_Realtime';
+                        $type = 'Analytics_Realtime';
                         break;
 
                     default:
-                        $type='Analytics_Report';
+                        $type = 'Analytics_Report';
                 }
 
 

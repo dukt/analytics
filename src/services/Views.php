@@ -59,7 +59,7 @@ class Views extends Component
     {
         $result = ViewRecord::findOne($id);
 
-        if($result) {
+        if ($result) {
             return new View($result->toArray([
                 'id',
                 'name',
@@ -109,7 +109,7 @@ class Views extends Component
             'siteId' => $id
         ]);
 
-        if($result) {
+        if ($result) {
             return new SiteView($result->toArray([
                 'id',
                 'siteId',

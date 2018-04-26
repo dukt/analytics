@@ -1,4 +1,5 @@
 <?php
+
 namespace dukt\analytics\migrations;
 
 use craft\db\Migration;
@@ -24,11 +25,11 @@ class m170324_000003_fix_widget_options extends Migration
             ->orWhere(['type' => 'dukt\analytics\widgets\Report'])
             ->all();
 
-        if($widgetResults) {
+        if ($widgetResults) {
             foreach ($widgetResults as $result) {
                 $settings = Json::decode($result['settings']);
-                
-                if(isset($settings['options']['metric'])) {
+
+                if (isset($settings['options']['metric'])) {
                     $settings['options'] = [
                         $settings['chart'] => $settings['options']
                     ];

@@ -33,7 +33,7 @@ class Reports extends Component
 
         $tableId = null;
 
-        if($view) {
+        if ($view) {
             $tableId = 'ga:'.$view->gaViewId;
         }
 
@@ -43,23 +43,22 @@ class Reports extends Component
         $cacheId = ['reports.getRealtimeReport', $tableId, $metrics, $optParams];
         $response = Analytics::$plugin->cache->get($cacheId);
 
-        if(!$response)
-        {
+        if (!$response) {
             $response = Analytics::$plugin->getApis()->getAnalytics()->getService()->data_realtime->get($tableId, $metrics, $optParams);
 
             $cacheDuration = Analytics::$plugin->getSettings()->realtimeRefreshInterval;
             Analytics::$plugin->cache->set($cacheId, $response, $cacheDuration);
         }
 
-        return (array) $response;
+        return (array)$response;
     }
 
     /**
      * Returns an element report.
      *
-     * @param int           $elementId
-     * @param int|null      $siteId
-     * @param string        $metric
+     * @param int      $elementId
+     * @param int|null $siteId
+     * @param string   $metric
      *
      * @return array
      * @throws \Exception
@@ -80,7 +79,7 @@ class Reports extends Component
 
         $viewId = null;
 
-        if($siteView) {
+        if ($siteView) {
             $viewId = $siteView->viewId;
         }
 

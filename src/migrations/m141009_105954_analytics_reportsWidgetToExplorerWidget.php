@@ -1,4 +1,5 @@
 <?php
+
 namespace dukt\analytics\migrations;
 
 use craft\db\Migration;
@@ -29,7 +30,7 @@ class m141009_105954_analytics_reportsWidgetToExplorerWidget extends Migration
                 $settings = Json::decode($result['settings']);
                 $newSettings = [];
 
-                if(!empty($settings['type'])) {
+                if (!empty($settings['type'])) {
                     switch ($settings['type']) {
                         case 'visits':
                             $newSettings = [

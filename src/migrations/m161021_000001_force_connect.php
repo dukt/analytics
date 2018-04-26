@@ -1,4 +1,5 @@
 <?php
+
 namespace dukt\analytics\migrations;
 
 use craft\db\Migration;
@@ -24,8 +25,7 @@ class m161021_000001_force_connect extends Migration
             ->where(['handle' => 'analytics'])
             ->one();
 
-        if($row)
-        {
+        if ($row) {
             $settingsJson = $row['settings'];
 
             $settings = Json::decode($settingsJson);

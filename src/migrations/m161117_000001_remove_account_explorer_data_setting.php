@@ -1,4 +1,5 @@
 <?php
+
 namespace dukt\analytics\migrations;
 
 use craft\db\Migration;
@@ -25,14 +26,12 @@ class m161117_000001_remove_account_explorer_data_setting extends Migration
             ->where(['handle' => 'analytics'])
             ->one();
 
-        if($row)
-        {
+        if ($row) {
             $settingsJson = $row['settings'];
 
             $settings = Json::decode($settingsJson);
 
-            if(isset($settings['accountExplorerData']))
-            {
+            if (isset($settings['accountExplorerData'])) {
                 unset($settings['accountExplorerData']);
             }
 
