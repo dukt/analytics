@@ -1,13 +1,11 @@
 /** global: Analytics */
+/** global: google */
 /**
  * Area
  */
 Analytics.reports.Area = Analytics.reports.BaseChart.extend(
     {
         initChart: function() {
-            /** global: Analytics */
-            /** global: google */
-            
             this.base();
 
             $period = $('<div class="period" />').prependTo(this.$chart);
