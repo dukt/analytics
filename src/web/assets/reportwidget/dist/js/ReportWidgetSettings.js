@@ -1,3 +1,5 @@
+/** global: Analytics */
+
 /**
  * Report Widget Settings
  */

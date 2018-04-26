@@ -1,3 +1,6 @@
+/** global: Analytics */
+/** global: google */
+
 /**
  * Utils
  */

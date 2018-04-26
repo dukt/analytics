@@ -1,3 +1,5 @@
+/** global: Analytics */
+
 /**
  * Account Explorer
  */

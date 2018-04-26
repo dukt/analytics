@@ -1,3 +1,4 @@
+/** global: Analytics */
 
 Analytics.Metadata = {
 

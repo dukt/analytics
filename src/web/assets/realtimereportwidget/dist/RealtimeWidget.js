@@ -1,3 +1,5 @@
+/** global: Analytics */
+
 (function($) {
     Analytics.Realtime = Garnish.Base.extend(
         {

@@ -1,3 +1,5 @@
+/** global: Analytics */
+
 AnalyticsReportField = Garnish.Base.extend({
 
     init: function(fieldId, options) {
