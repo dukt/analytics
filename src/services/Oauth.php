@@ -16,11 +16,6 @@ use dukt\analytics\Plugin as Analytics;
 
 class Oauth extends Component
 {
-    // Properties
-    // =========================================================================
-
-    private $token;
-
     // Public Methods
     // =========================================================================
 
@@ -55,44 +50,42 @@ class Oauth extends Component
      *
      * @param bool $refresh
      *
-     * @return AccessToken
+     * @return AccessToken|null
      */
     public function getToken($refresh = true)
     {
-        if (!$this->token) {
-            $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
-            $settings = $plugin->getSettings();
+        $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
+        $settings = $plugin->getSettings();
 
-            if ($settings->token) {
-                $token = new AccessToken([
-                    'access_token' => (isset($settings->token['accessToken']) ? $settings->token['accessToken'] : null),
-                    'expires' => (isset($settings->token['expires']) ? $settings->token['expires'] : null),
-                    'refresh_token' => (isset($settings->token['refreshToken']) ? $settings->token['refreshToken'] : null),
-                    'resource_owner_id' => (isset($settings->token['resourceOwnerId']) ? $settings->token['resourceOwnerId'] : null),
-                    'values' => (isset($settings->token['values']) ? $settings->token['values'] : null),
-                ]);
-
-                if ($refresh && $token->hasExpired()) {
-                    $provider = $this->getOauthProvider();
-                    $grant = new \League\OAuth2\Client\Grant\RefreshToken();
-                    $newToken = $provider->getAccessToken($grant, ['refresh_token' => $token->getRefreshToken()]);
-
-                    $token = new AccessToken([
-                        'access_token' => $newToken->getToken(),
-                        'expires' => $newToken->getExpires(),
-                        'refresh_token' => $settings->token['refreshToken'],
-                        'resource_owner_id' => $newToken->getResourceOwnerId(),
-                        'values' => $newToken->getValues(),
-                    ]);
-
-                    $this->saveToken($token);
-                }
-
-                return $token;
-            }
+        if (!$settings->token) {
+            return null;
         }
 
-        return $this->token;
+        $token = new AccessToken([
+            'access_token' => (isset($settings->token['accessToken']) ? $settings->token['accessToken'] : null),
+            'expires' => (isset($settings->token['expires']) ? $settings->token['expires'] : null),
+            'refresh_token' => (isset($settings->token['refreshToken']) ? $settings->token['refreshToken'] : null),
+            'resource_owner_id' => (isset($settings->token['resourceOwnerId']) ? $settings->token['resourceOwnerId'] : null),
+            'values' => (isset($settings->token['values']) ? $settings->token['values'] : null),
+        ]);
+
+        if ($refresh && $token->hasExpired()) {
+            $provider = $this->getOauthProvider();
+            $grant = new \League\OAuth2\Client\Grant\RefreshToken();
+            $newToken = $provider->getAccessToken($grant, ['refresh_token' => $token->getRefreshToken()]);
+
+            $token = new AccessToken([
+                'access_token' => $newToken->getToken(),
+                'expires' => $newToken->getExpires(),
+                'refresh_token' => $settings->token['refreshToken'],
+                'resource_owner_id' => $newToken->getResourceOwnerId(),
+                'values' => $newToken->getValues(),
+            ]);
+
+            $this->saveToken($token);
+        }
+
+        return $token;
     }
 
     /**
