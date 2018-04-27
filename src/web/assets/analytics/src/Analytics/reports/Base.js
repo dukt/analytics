@@ -27,7 +27,6 @@ Analytics.reports.BaseChart = Garnish.Base.extend(
                         this.$chart = $element;
                         this.$chart.html('');
                         this.$graph = $('<div class="chart" />').appendTo(this.$chart);
-
                         this.data = data;
                         this.localeDefinition = localeDefinition;
 
