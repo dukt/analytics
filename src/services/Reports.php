@@ -54,6 +54,58 @@ class Reports extends Component
     }
 
     /**
+     * Get e-commerce report.
+     *
+     * @param $viewId
+     * @param $period
+     *
+     * @return array
+     */
+    public function getEcommerceReport($viewId, $period)
+    {
+        $startDate = '7daysAgo';
+        $endDate = 'today';
+
+        switch ($period) {
+            case 'week':
+                $startDate = '7daysAgo';
+                break;
+            case 'month':
+                $startDate = '30daysAgo';
+                break;
+            case 'year':
+                $startDate = '365daysAgo';
+                break;
+        }
+
+        $dimensions = 'ga:date';
+        $metrics = 'ga:transactionRevenue,ga:revenuePerTransaction,ga:transactions,ga:transactionsPerSession';
+
+        $criteria = new ReportRequestCriteria;
+        $criteria->viewId = $viewId;
+        $criteria->startDate = $startDate;
+        $criteria->endDate = $endDate;
+        $criteria->metrics = $metrics;
+        $criteria->dimensions = $dimensions;
+        $criteria->includeEmptyRows = true;
+
+        $reportResponse = Analytics::$plugin->getApis()->getAnalyticsReporting()->getReport($criteria);
+        $report = $reportResponse->toSimpleObject();
+        $reportData = $this->parseReportingReport($reportResponse);
+
+        return [
+            'period' => $startDate.' - '.$endDate,
+            'totalRevenue' => $report->data['totals'][0]['values'][0],
+            'totalRevenuePerTransaction' => $report->data['totals'][0]['values'][1],
+            'totalTransactions' => $report->data['totals'][0]['values'][2],
+            'totalTransactionsPerSession' => $report->data['totals'][0]['values'][3],
+            'reportData' => [
+                'chart' => $reportData
+            ],
+        ];
+    }
+
+    /**
      * Returns an element report.
      *
      * @param int      $elementId

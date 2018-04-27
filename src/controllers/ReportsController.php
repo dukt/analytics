@@ -19,6 +19,23 @@ class ReportsController extends Controller
     // =========================================================================
 
     /**
+     * E-commerce Report
+     *
+     * @param array $variables
+     *
+     * @return null
+     */
+    public function actionEcommerceWidget()
+    {
+        $viewId = Craft::$app->getRequest()->getBodyParam('viewId');
+        $period = Craft::$app->getRequest()->getBodyParam('period');
+
+        $response = Analytics::$plugin->getReports()->getEcommerceReport($viewId, $period);
+
+        return $this->asJson($response);
+    }
+
+    /**
      * Get element report.
      *
      * @return Response
