@@ -94,6 +94,8 @@ class Reports extends Component
         $report = $reportResponse->toSimpleObject();
         $reportData = $this->parseReportingReport($reportResponse);
 
+        $view = Analytics::$plugin->getViews()->getViewById($viewId);
+
         return [
             'period' => $startDate.' - '.$endDate,
             'totalRevenue' => $report->data['totals'][0]['values'][0],
@@ -101,6 +103,7 @@ class Reports extends Component
             'totalTransactions' => $report->data['totals'][0]['values'][2],
             'totalTransactionsPerSession' => $report->data['totals'][0]['values'][3],
             'reportData' => [
+                'view' => $view->name,
                 'chart' => $reportData,
                 'period' => $period,
                 'periodLabel' => Craft::t('analytics', 'This '.$period)
