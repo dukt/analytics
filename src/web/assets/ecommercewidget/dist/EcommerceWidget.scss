@@ -13,7 +13,7 @@
 
   .body {
     & > .chart {
-      height: 234px;
+      height: 204px;
 
       .view {
         font-size: 0.8em;
@@ -22,6 +22,7 @@
 
       .chart {
         margin-top: 14px;
+        height: 150px;
       }
     }
 
