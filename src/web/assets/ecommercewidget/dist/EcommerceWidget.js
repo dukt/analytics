@@ -67,12 +67,20 @@
 
             parseResponse: function(response)
             {
+                var localeDefinition = this.settings.localeDefinition;
+
+                var totalRevenue = Analytics.Utils.formatByType(localeDefinition, 'currency', response.totalRevenue);
+                var totalRevenuePerTransaction = Analytics.Utils.formatByType(localeDefinition, 'currency', response.totalRevenuePerTransaction);
+                var totalTransactions = Analytics.Utils.formatByType(localeDefinition, 'number', response.totalTransactions);
+                var totalTransactionsPerSession = Analytics.Utils.formatByType(localeDefinition, 'percent', response.totalTransactionsPerSession);
+
                 this.$period.html(response.period);
-                this.$revenue.html(response.totalRevenue);
-                this.$revenuePerTransaction.html(response.totalRevenuePerTransaction);
-                this.$transactions.html(response.totalTransactions);
-                this.$transactionsPerSession.html(response.totalTransactionsPerSession);
-                this.chart = new Analytics.reports.Area(this.$chart, response.reportData, this.settings.localeDefinition, this.settings.chartLanguage);
+                this.$revenue.html(totalRevenue);
+                this.$revenuePerTransaction.html(totalRevenuePerTransaction);
+                this.$transactions.html(totalTransactions);
+                this.$transactionsPerSession.html(totalTransactionsPerSession);
+
+                this.chart = new Analytics.reports.Area(this.$chart, response.reportData, localeDefinition, this.settings.chartLanguage);
             },
         },
         {
