@@ -101,7 +101,8 @@ class Reports extends Component
             'totalTransactions' => $report->data['totals'][0]['values'][2],
             'totalTransactionsPerSession' => $report->data['totals'][0]['values'][3],
             'reportData' => [
-                'chart' => $reportData
+                'chart' => $reportData,
+                'period' => $period,
             ],
         ];
     }
