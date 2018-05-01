@@ -65,6 +65,7 @@ class Reports extends Component
     {
         $startDate = '7daysAgo';
         $endDate = 'today';
+        $dimensions = 'ga:date';
 
         switch ($period) {
             case 'week':
@@ -75,10 +76,10 @@ class Reports extends Component
                 break;
             case 'year':
                 $startDate = '365daysAgo';
+                $dimensions = 'ga:yearMonth';
                 break;
         }
 
-        $dimensions = 'ga:date';
         $metrics = 'ga:transactionRevenue,ga:revenuePerTransaction,ga:transactions,ga:transactionsPerSession';
 
         $criteria = new ReportRequestCriteria;
