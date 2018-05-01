@@ -103,6 +103,7 @@ class Reports extends Component
             'reportData' => [
                 'chart' => $reportData,
                 'period' => $period,
+                'periodLabel' => Craft::t('analytics', 'This '.$period)
             ],
         ];
     }
