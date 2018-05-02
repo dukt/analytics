@@ -104,8 +104,8 @@ class ReportsController extends Controller
 
         $response = Analytics::$plugin->getReports()->getRealtimeReport($request);
 
-        if (!empty($response['totalResults'])) {
-            $activeUsers = $response['totalResults'];
+        if (!empty($response['totalsForAllResults']) && isset($response['totalsForAllResults']['ga:activeVisitors'])) {
+            $activeUsers = $response['totalsForAllResults']['ga:activeVisitors'];
         }
 
 
