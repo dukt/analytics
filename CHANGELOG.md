@@ -1,7 +1,7 @@
 Changelog
 =========
 
-## Unreleased
+## 4.0.0-beta.2 - 2018-05-03
 
 ### Fixed
 - Fixed a bug where realtime reporting was always showing one active user. ([#1](https://github.com/dukt/analytics/issues/1))
