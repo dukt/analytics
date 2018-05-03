@@ -65,28 +65,24 @@ class AnalyticsService extends BaseApplicationComponent
 		}
 	}
 
-	/**
-	 * Get Element URL Path
-	 *
-	 * @param int           $elementId
-	 * @param string|null   $localeId
-	 */
-	public function getElementUrlPath($elementId, $localeId)
-	{
-		$element = craft()->elements->getElementById($elementId, null, $localeId);
+    /**
+     * Get Element URL Path
+     *
+     * @param int         $elementId
+     * @param string|null $localeId
+     *
+     * @return bool|string
+     */
+    public function getElementUrlPath($elementId, $localeId)
+    {
+        $element = craft()->elements->getElementById($elementId, null, $localeId);
 
-		$uri = $element->uri;
-		$url = $element->url;
+        $url = $element->url;
 
-		$components = parse_url($url);
+        $components = parse_url($url);
 
-		if($components['path'])
-		{
-			$uri = $components['path'];
-		}
-
-		return $uri;
-	}
+        return substr($url, strlen($components['scheme'].'://'.$components['host']));
+    }
 
     /**
      * Returns a currency

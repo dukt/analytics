@@ -1,5 +1,13 @@
 [
   {
+    "version": "3.4.7",
+    "downloadUrl": "https://github.com/dukt/analytics/archive/3.4.7.zip",
+    "date": "2018-05-03T18:00:00-02:00",
+    "notes": [
+      "[Fixed] Fixed a bug where the URI used by report field could be wrong.",
+    ]
+  },
+  {
     "version": "3.4.6",
     "downloadUrl": "https://github.com/dukt/analytics/archive/3.4.6.zip",
     "date": "2018-03-07T18:00:00-02:00",
