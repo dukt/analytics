@@ -5,6 +5,7 @@ Changelog
 
 ### Fixed
 - Fixed a bug where realtime reporting was always showing one active user. ([#1](https://github.com/dukt/analytics/issues/1))
+- Fixed a bug where the URI used by report field could be wrong. ([#2](https://github.com/dukt/analytics/issues/2))
 
 ## 4.0.0-beta.1 - 2017-12-19
 

@@ -47,24 +47,15 @@ class Analytics extends Component
      *
      * @return string
      */
-    public function getElementUrlPath($elementId, $siteId)
+    public function getElementUrlPath($elementId, $siteId): string
     {
         $element = Craft::$app->elements->getElementById($elementId, null, $siteId);
 
-        $uri = $element->uri;
         $url = $element->url;
 
         $components = parse_url($url);
 
-        if ($components['path']) {
-            $uri = $components['path'];
-        }
-
-        if (Craft::$app->getConfig()->getGeneral()->addTrailingSlashesToUrls) {
-            $uri .= '/';
-        }
-
-        return $uri;
+        return substr($url, \strlen($components['scheme'].'://'.$components['host']));
     }
 
     /**
