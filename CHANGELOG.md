@@ -3,6 +3,10 @@ Changelog
 
 ## 4.0.0-beta.2 - 2018-05-03
 
+### Changed
+- Removed unused `\dukt\analytics\services\Oauth::$token`.
+- Removed unused `\dukt\analytics\services\Analytics::$tracking`.
+
 ### Fixed
 - Fixed a bug where realtime reporting was always showing one active user. ([#1](https://github.com/dukt/analytics/issues/1))
 - Fixed a bug where the URI used by report field could be wrong. ([#2](https://github.com/dukt/analytics/issues/2))
