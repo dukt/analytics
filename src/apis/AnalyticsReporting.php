@@ -137,23 +137,18 @@ class AnalyticsReporting extends Api
             $request->setMetrics($metrics);
         }
 
-        if ($criteria->dimensions) {
+        if (!empty($criteria->dimensions)) {
             $dimensionString = $criteria->dimensions;
             $dimensions = $this->getDimensionsFromString($dimensionString);
             $request->setDimensions($dimensions);
         }
 
-        if ($criteria->orderBys) {
+        if (!empty($criteria->orderBys)) {
             $request->setOrderBys($criteria->orderBys);
         }
 
         if ($criteria->pageToken) {
-            $pageToken = $criteria->pageToken;
-
-            if(is_int($pageToken)) {
-                $pageToken = (string) $pageToken;
-            }
-
+            $pageToken = (string) $criteria->pageToken;
             $request->setPageToken($pageToken);
         }
 
