@@ -1,8 +1,8 @@
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/dukt/analytics/badges/quality-score.png?b=v4)](https://scrutinizer-ci.com/g/dukt/analytics/?branch=v4) [![Code Coverage](https://scrutinizer-ci.com/g/dukt/analytics/badges/coverage.png?b=v4)](https://scrutinizer-ci.com/g/dukt/analytics/?branch=v4) [![Build Status](https://scrutinizer-ci.com/g/dukt/analytics/badges/build.png?b=v4)](https://scrutinizer-ci.com/g/dukt/analytics/build-status/v4) [![Code Intelligence Status](https://scrutinizer-ci.com/g/dukt/analytics/badges/code-intelligence.svg?b=v4)](https://scrutinizer-ci.com/code-intelligence)
+
 # Analytics for Craft CMS
 
 Customizable statistics widgets and entry tracking for Craft & Google Analytics.
-
--------------------------------------------
 
 ## Requirements
 
