@@ -140,7 +140,7 @@ class ReportsController extends Controller
                     $response = Analytics::$plugin->getReports()->getGeoReport($request);
                     break;
                 default:
-                    throw new InvalidChartTypeException("Chart type `".$chart."` not supported.");
+                    throw new InvalidChartTypeException('Chart type `'.$chart.'` not supported.');
             }
 
             if ($response) {

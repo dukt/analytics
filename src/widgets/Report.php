@@ -101,10 +101,10 @@ class Report extends \craft\base\Widget
 
                         if ($reportingView) {
                             $request = [
-                                'viewId' => (isset($widgetSettings['viewId']) ? $widgetSettings['viewId'] : null),
-                                'chart' => (isset($widgetSettings['chart']) ? $widgetSettings['chart'] : null),
-                                'period' => (isset($widgetSettings['period']) ? $widgetSettings['period'] : null),
-                                'options' => (isset($widgetSettings['options'][$widgetSettings['chart']]) ? $widgetSettings['options'][$widgetSettings['chart']] : null),
+                                'viewId' => isset($widgetSettings['viewId']) ? $widgetSettings['viewId'] : null,
+                                'chart' => isset($widgetSettings['chart']) ? $widgetSettings['chart'] : null,
+                                'period' => isset($widgetSettings['period']) ? $widgetSettings['period'] : null,
+                                'options' => isset($widgetSettings['options'][$widgetSettings['chart']]) ? $widgetSettings['options'][$widgetSettings['chart']] : null,
                             ];
 
 
@@ -274,7 +274,7 @@ class Report extends \craft\base\Widget
             }
 
             if (count($name) > 0) {
-                return implode(" - ", $name);
+                return implode(' - ', $name);
             }
         } catch (\Exception $e) {
             Craft::info('Couldn’t get Analytics Report’s title: '.$e->getMessage(), __METHOD__);

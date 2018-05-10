@@ -87,7 +87,7 @@ class Reports extends Component
         $endDate = date('Y-m-d');
         $dimensions = 'ga:date';
         $metrics = $metric;
-        $filters = "ga:pagePath==".$uri;
+        $filters = 'ga:pagePath=='.$uri;
 
         $request = [
             'viewId' => $viewId,
@@ -155,7 +155,7 @@ class Reports extends Component
         $criteria->metrics = $metricString;
         $criteria->dimensions = $dimensionString;
         $criteria->orderBys = [
-            ["fieldName" => $dimensionString, "orderType" => 'VALUE', "sortOrder" => 'ASCENDING']
+            ['fieldName' => $dimensionString, 'orderType' => 'VALUE', 'sortOrder' => 'ASCENDING']
         ];
 
         $reportResponse = Analytics::$plugin->getApis()->getAnalyticsReporting()->getReport($criteria);

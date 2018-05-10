@@ -185,7 +185,7 @@ class AnalyticsReporting extends Api
     private function getDimensionsFromString($string)
     {
         $dimensions = [];
-        $_dimensions = explode(",", $string);
+        $_dimensions = explode(',', $string);
         foreach ($_dimensions as $_dimension) {
             $dimension = new Google_Service_AnalyticsReporting_Dimension();
             $dimension->setName($_dimension);
@@ -205,7 +205,7 @@ class AnalyticsReporting extends Api
     private function getMetricsFromString($string)
     {
         $metrics = [];
-        $_metrics = explode(",", $string);
+        $_metrics = explode(',', $string);
         foreach ($_metrics as $_metric) {
             $metric = new Google_Service_AnalyticsReporting_Metric();
             $metric->setExpression($_metric);

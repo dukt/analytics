@@ -27,13 +27,13 @@ class Analytics extends Component
 
         if ($interval) {
             return $interval;
-        } else {
-            $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
-            $settings = $plugin->getSettings();
+        }
 
-            if (!empty($settings['realtimeRefreshInterval'])) {
-                return $settings['realtimeRefreshInterval'];
-            }
+        $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
+        $settings = $plugin->getSettings();
+
+        if (!empty($settings['realtimeRefreshInterval'])) {
+            return $settings['realtimeRefreshInterval'];
         }
 
         return null;
@@ -156,7 +156,7 @@ class Analytics extends Component
         $referrer = Craft::$app->getRequest()->getReferrer();
 
         if (empty($referrer)) {
-            $referrer = "";
+            $referrer = '';
         }
 
         $analyticsTracking = new \TheIconic\Tracking\GoogleAnalytics\Analytics($isSsl, $isDisabled, $options);
@@ -194,9 +194,9 @@ class Analytics extends Component
         if ($this->isOauthProviderConfigured()) {
             if ($this->isTokenSet()) {
                 return true;
-            } else {
-                return false;
             }
+
+            return false;
         } else {
             return false;
         }
@@ -257,11 +257,11 @@ class Analytics extends Component
      */
     private function _getGclid()
     {
-        $gclid = "";
+        $gclid = '';
         if (isset($_GET['gclid'])) {
             $gclid = $_GET['gclid'];
             if (!empty($gclid)) {
-                setcookie("gclid", $gclid, time() + (10 * 365 * 24 * 60 * 60), "/");
+                setcookie('gclid', $gclid, time() + (10 * 365 * 24 * 60 * 60), '/');
             }
         }
 
@@ -276,7 +276,7 @@ class Analytics extends Component
     private function _gaParseCookie()
     {
         if (isset($_COOKIE['_ga'])) {
-            list($version, $domainDepth, $cid1, $cid2) = preg_split('[\.]', $_COOKIE["_ga"], 4);
+            list($version, $domainDepth, $cid1, $cid2) = preg_split('[\.]', $_COOKIE['_ga'], 4);
             $contents = ['version' => $version, 'domainDepth' => $domainDepth, 'cid' => $cid1.'.'.$cid2];
             $cid = $contents['cid'];
         } else {
@@ -286,7 +286,7 @@ class Analytics extends Component
                 $cid = $this->_gaGenUUID();
             }
         }
-        setcookie('_ia', $cid, time() + 60 * 60 * 24 * 730, "/"); // Two years
+        setcookie('_ia', $cid, time() + 60 * 60 * 24 * 730, '/'); // Two years
 
         return $cid;
     } /* -- _gaParseCookie */

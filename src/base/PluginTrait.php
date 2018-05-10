@@ -26,6 +26,7 @@ trait PluginTrait
      * Returns the analytics service.
      *
      * @return \dukt\analytics\services\Analytics The analytics service
+     * @throws \yii\base\InvalidConfigException
      */
     public function getAnalytics()
     {
@@ -37,6 +38,7 @@ trait PluginTrait
      * Returns the apis service.
      *
      * @return \dukt\analytics\services\Apis The apis service
+     * @throws \yii\base\InvalidConfigException
      */
     public function getApis()
     {
@@ -48,6 +50,7 @@ trait PluginTrait
      * Returns the cache service.
      *
      * @return \dukt\analytics\services\Cache The cache service
+     * @throws \yii\base\InvalidConfigException
      */
     public function getCache()
     {
@@ -59,6 +62,7 @@ trait PluginTrait
      * Returns the metadata service.
      *
      * @return \dukt\analytics\services\Metadata The metadata service
+     * @throws \yii\base\InvalidConfigException
      */
     public function getMetadata()
     {
@@ -70,6 +74,7 @@ trait PluginTrait
      * Returns the oauth service.
      *
      * @return \dukt\analytics\services\Oauth The oauth service
+     * @throws \yii\base\InvalidConfigException
      */
     public function getOauth()
     {
@@ -81,6 +86,7 @@ trait PluginTrait
      * Returns the reports service.
      *
      * @return \dukt\analytics\services\Reports The reports service
+     * @throws \yii\base\InvalidConfigException
      */
     public function getReports()
     {
@@ -92,6 +98,7 @@ trait PluginTrait
      * Returns the views service.
      *
      * @return \dukt\analytics\services\Views The views service
+     * @throws \yii\base\InvalidConfigException
      */
     public function getViews()
     {

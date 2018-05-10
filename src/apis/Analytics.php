@@ -50,7 +50,7 @@ class Analytics extends Api
         $accounts = $apiAccounts->toSimpleObject()->items;
 
         // Properties
-        $apiProperties = Plugin::$plugin->getApis()->getAnalytics()->getService()->management_webproperties->listManagementWebproperties('~all');;
+        $apiProperties = Plugin::$plugin->getApis()->getAnalytics()->getService()->management_webproperties->listManagementWebproperties('~all');
         $properties = $apiProperties->toSimpleObject()->items;
 
         // Views

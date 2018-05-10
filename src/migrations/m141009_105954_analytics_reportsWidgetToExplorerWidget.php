@@ -34,71 +34,71 @@ class m141009_105954_analytics_reportsWidgetToExplorerWidget extends Migration
                     switch ($settings['type']) {
                         case 'visits':
                             $newSettings = [
-                                'menu' => "audienceOverview",
-                                'dimension' => "",
+                                'menu' => 'audienceOverview',
+                                'dimension' => '',
                                 'metric' => 'ga:sessions',
-                                'chart' => "area",
-                                'period' => "month",
+                                'chart' => 'area',
+                                'period' => 'month',
                             ];
                             break;
 
                         case 'geo':
                             $newSettings = [
-                                "menu" => "location",
-                                "dimension" => "ga:country",
-                                "metric" => "ga:pageviewsPerSession",
-                                "chart" => "geo",
-                                "period" => "month",
+                                'menu' => 'location',
+                                'dimension' => 'ga:country',
+                                'metric' => 'ga:pageviewsPerSession',
+                                'chart' => 'geo',
+                                'period' => 'month',
                             ];
                             break;
 
                         case 'mobile':
                             $newSettings = [
-                                "menu" => "mobile",
-                                "dimension" => "ga:deviceCategory",
-                                "metric" => "ga:sessions",
-                                "chart" => "pie",
-                                "period" => "week",
+                                'menu' => 'mobile',
+                                'dimension' => 'ga:deviceCategory',
+                                'metric' => 'ga:sessions',
+                                'chart' => 'pie',
+                                'period' => 'week',
                             ];
                             break;
 
                         case 'pages':
                             $newSettings = [
-                                "menu" => "allPages",
-                                "dimension" => "ga:pagePath",
-                                "metric" => "ga:pageviews",
-                                "chart" => "table",
-                                "period" => "week",
+                                'menu' => 'allPages',
+                                'dimension' => 'ga:pagePath',
+                                'metric' => 'ga:pageviews',
+                                'chart' => 'table',
+                                'period' => 'week',
                             ];
                             break;
 
                         case 'acquisition':
                             $newSettings = [
-                                "menu" => "allChannels",
-                                "dimension" => "ga:channelGrouping",
-                                "metric" => "ga:sessions",
-                                "chart" => "table",
-                                "period" => "week",
+                                'menu' => 'allChannels',
+                                'dimension' => 'ga:channelGrouping',
+                                'metric' => 'ga:sessions',
+                                'chart' => 'table',
+                                'period' => 'week',
                             ];
                             break;
 
                         case 'technology':
                             $newSettings = [
-                                "menu" => "browserOs",
-                                "dimension" => "ga:browser",
-                                "metric" => "ga:sessions",
-                                "chart" => "pie",
-                                "period" => "week",
+                                'menu' => 'browserOs',
+                                'dimension' => 'ga:browser',
+                                'metric' => 'ga:sessions',
+                                'chart' => 'pie',
+                                'period' => 'week',
                             ];
                             break;
 
                         case 'conversions':
                             $newSettings = [
-                                "menu" => "goals",
-                                "dimension" => "ga:goalCompletionLocation",
-                                "metric" => "ga:goalCompletionsAll",
-                                "chart" => "area",
-                                "period" => "week",
+                                'menu' => 'goals',
+                                'dimension' => 'ga:goalCompletionLocation',
+                                'metric' => 'ga:goalCompletionsAll',
+                                'chart' => 'area',
+                                'period' => 'week',
                             ];
                             break;
 
@@ -106,11 +106,11 @@ class m141009_105954_analytics_reportsWidgetToExplorerWidget extends Migration
                         case 'custom':
                         case 'realtime':
                             $newSettings = [
-                                'menu' => "audienceOverview",
-                                'dimension' => "",
+                                'menu' => 'audienceOverview',
+                                'dimension' => '',
                                 'metric' => 'ga:sessions',
-                                'chart' => "area",
-                                'period' => "month",
+                                'chart' => 'area',
+                                'period' => 'month',
                             ];
                             break;
                     }

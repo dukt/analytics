@@ -66,7 +66,7 @@ class Report extends Field
                                 $endDate = date('Y-m-d');
                                 $metrics = 'ga:pageviews';
                                 $dimensions = 'ga:date';
-                                $filters = "ga:pagePath==".$uri;
+                                $filters = 'ga:pagePath=='.$uri;
 
                                 $request = [
                                     'startDate' => $startDate,

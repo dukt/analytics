@@ -62,9 +62,9 @@ class Metadata extends Component
 
         if (file_exists($path)) {
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -221,9 +221,9 @@ class Metadata extends Component
             }
 
             return $columns;
-        } else {
-            return $this->columns;
         }
+
+        return $this->columns;
     }
 
     /**
@@ -251,23 +251,23 @@ class Metadata extends Component
     {
         if ($type && isset($this->groups[$type])) {
             return $this->groups[$type];
-        } else {
-            $groups = [];
-
-            foreach ($this->getColumns() as $column) {
-                if (!$type || ($type && $column->type == $type)) {
-                    $groups[$column->group] = $column->group;
-                }
-            }
-
-            // ksort($groups);
-
-            if ($type) {
-                $this->groups[$type] = $groups;
-            }
-
-            return $groups;
         }
+
+        $groups = [];
+
+        foreach ($this->getColumns() as $column) {
+            if (!$type || ($type && $column->type == $type)) {
+                $groups[$column->group] = $column->group;
+            }
+        }
+
+        // ksort($groups);
+
+        if ($type) {
+            $this->groups[$type] = $groups;
+        }
+
+        return $groups;
     }
 
     /**
@@ -305,9 +305,9 @@ class Metadata extends Component
             }
 
             return $filteredOptions;
-        } else {
-            return $this->selectDimensionOptions;
         }
+
+        return $this->selectDimensionOptions;
     }
 
     /**
@@ -345,9 +345,9 @@ class Metadata extends Component
             }
 
             return $filteredOptions;
-        } else {
-            return $this->selectMetricOptions;
         }
+
+        return $this->selectMetricOptions;
     }
 
     /**
@@ -397,9 +397,9 @@ class Metadata extends Component
             }
 
             return $filteredOptions;
-        } else {
-            return $options;
         }
+
+        return $options;
     }
 
     /**

@@ -78,7 +78,7 @@ class UtilsController extends Controller
         $this->_deleteMetadata();
         $this->_importMetadata();
 
-        Craft::$app->getSession()->setNotice(Craft::t('analytics', "Metadata loaded."));
+        Craft::$app->getSession()->setNotice(Craft::t('analytics', 'Metadata loaded.'));
 
         $referrer = Craft::$app->getRequest()->referrer;
         return $this->redirect($referrer);
