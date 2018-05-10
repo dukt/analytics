@@ -31,6 +31,7 @@ class SettingsController extends Controller
      * @param null $plugin
      *
      * @return Response
+     * @throws \craft\errors\SiteNotFoundException
      * @throws \yii\base\InvalidConfigException
      */
     public function actionIndex($plugin = null)
@@ -112,6 +113,7 @@ class SettingsController extends Controller
      * OAuth Settings.
      *
      * @return Response
+     * @throws \craft\errors\SiteNotFoundException
      */
     public function actionOauth()
     {
@@ -216,6 +218,7 @@ class SettingsController extends Controller
      *
      * @return Response
      * @throws NotFoundHttpException
+     * @throws \craft\errors\SiteNotFoundException
      * @throws \yii\base\InvalidConfigException
      */
     public function actionEditView(int $viewId = null, View $reportingView = null)
@@ -425,6 +428,8 @@ class SettingsController extends Controller
      * Deletes a view.
      *
      * @return Response
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      * @throws \yii\web\BadRequestHttpException
      */
     public function actionDeleteView()
@@ -496,6 +501,7 @@ class SettingsController extends Controller
      * Saves a site.
      *
      * @return null|Response
+     * @throws \yii\db\Exception
      * @throws \yii\web\BadRequestHttpException
      */
     public function actionSaveSite()
