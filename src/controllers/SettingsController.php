@@ -271,45 +271,13 @@ class SettingsController extends Controller
                         $settings = $plugin->getSettings();
 
 
-                        // Account
+                        // Account explorer options
 
                         $accountExplorerData = Analytics::$plugin->cache->get(['accountExplorerData']);
 
-                        $accountOptions = [];
-
-                        if (isset($accountExplorerData['accounts'])) {
-                            foreach ($accountExplorerData['accounts'] as $account) {
-                                $accountOptions[] = ['label' => $account['name'], 'value' => $account['id']];
-                            }
-                        } else {
-                            $accountOptions[] = ['label' => $reportingView->gaAccountName, 'value' => $reportingView->gaAccountId];
-                        }
-
-
-                        // Web Properties
-
-                        $propertyOptions = [];
-
-                        if (isset($accountExplorerData['properties'])) {
-                            foreach ($accountExplorerData['properties'] as $webProperty) {
-                                $propertyOptions[] = ['label' => $webProperty['name'], 'value' => $webProperty['id']];
-                            }
-                        } else {
-                            $propertyOptions[] = ['label' => $reportingView->gaPropertyName, 'value' => $reportingView->gaPropertyId];
-                        }
-
-
-                        // Views
-
-                        $viewOptions = [];
-
-                        if (isset($accountExplorerData['views'])) {
-                            foreach ($accountExplorerData['views'] as $dataView) {
-                                $viewOptions[] = ['label' => $dataView['name'], 'value' => $dataView['id']];
-                            }
-                        } else {
-                            $viewOptions[] = ['label' => $reportingView->gaViewName, 'value' => $reportingView->gaViewId];
-                        }
+                        $accountOptions = $this->getAccountOptions($accountExplorerData, $reportingView);
+                        $propertyOptions = $this->getPropertyOptions($accountExplorerData, $reportingView);
+                        $viewOptions = $this->getViewOptions($accountExplorerData, $reportingView);
 
                         $accountExplorerOptions = [
                             'accounts' => $accountOptions,
@@ -530,5 +498,68 @@ class SettingsController extends Controller
         Craft::$app->getSession()->setNotice(Craft::t('analytics', 'Site view saved.'));
 
         return $this->redirectToPostedUrl($siteView);
+    }
+
+    /**
+     * @param      $accountExplorerData
+     * @param View $reportingView
+     *
+     * @return array
+     */
+    private function getAccountOptions($accountExplorerData, View $reportingView): array
+    {
+        $accountOptions = [];
+
+        if (isset($accountExplorerData['accounts'])) {
+            foreach ($accountExplorerData['accounts'] as $account) {
+                $accountOptions[] = ['label' => $account['name'], 'value' => $account['id']];
+            }
+        } else {
+            $accountOptions[] = ['label' => $reportingView->gaAccountName, 'value' => $reportingView->gaAccountId];
+        }
+
+        return $accountOptions;
+    }
+
+    /**
+     * @param      $accountExplorerData
+     * @param View $reportingView
+     *
+     * @return array
+     */
+    private function getPropertyOptions($accountExplorerData, View $reportingView): array
+    {
+        $propertyOptions = [];
+
+        if (isset($accountExplorerData['properties'])) {
+            foreach ($accountExplorerData['properties'] as $webProperty) {
+                $propertyOptions[] = ['label' => $webProperty['name'], 'value' => $webProperty['id']];
+            }
+        } else {
+            $propertyOptions[] = ['label' => $reportingView->gaPropertyName, 'value' => $reportingView->gaPropertyId];
+        }
+
+        return $propertyOptions;
+    }
+
+    /**
+     * @param      $accountExplorerData
+     * @param View $reportingView
+     *
+     * @return array
+     */
+    private function getViewOptions($accountExplorerData, View $reportingView): array
+    {
+        $viewOptions = [];
+
+        if (isset($accountExplorerData['views'])) {
+            foreach ($accountExplorerData['views'] as $dataView) {
+                $viewOptions[] = ['label' => $dataView['name'], 'value' => $dataView['id']];
+            }
+        } else {
+            $viewOptions[] = ['label' => $reportingView->gaViewName, 'value' => $reportingView->gaViewId];
+        }
+
+        return $viewOptions;
     }
 }
