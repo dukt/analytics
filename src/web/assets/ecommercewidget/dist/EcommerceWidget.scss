@@ -1,10 +1,11 @@
 .dukt\\analytics\\widgets\\ecommerce {
-  .spinner {
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin-right: 14px;
-    margin-top: 14px;
+
+  .front {
+    .pane {
+      & > .spinner {
+        display: none !important;
+      }
+    }
   }
 
   h2 {
@@ -12,6 +13,10 @@
   }
 
   .body {
+    .spinner {
+      position: absolute;
+    }
+
     & > .chart {
       height: 204px;
 
