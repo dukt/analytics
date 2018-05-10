@@ -239,6 +239,7 @@ class Analytics extends Component
      * Checks if the token is set.
      *
      * @return bool
+     * @throws \yii\base\InvalidConfigException
      */
     private function isTokenSet()
     {

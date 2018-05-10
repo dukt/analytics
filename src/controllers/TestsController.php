@@ -30,7 +30,7 @@ class TestsController extends Controller
      *
      * @return Response
      */
-    public function actionDataTypes(array $variables = array())
+    public function actionDataTypes(array $variables = [])
     {
         $variables['googleAnalyticsDataTypes'] = Analytics::$plugin->metadata->getGoogleAnalyticsDataTypes();
         $variables['dataTypes'] = Analytics::$plugin->metadata->getDataTypes();
@@ -46,7 +46,7 @@ class TestsController extends Controller
      * @return Response
      * @throws \yii\base\InvalidConfigException
      */
-    public function actionReportWidgets(array $variables = array())
+    public function actionReportWidgets(array $variables = [])
     {
         Craft::$app->getView()->registerAssetBundle(TestsAsset::class);
 
@@ -58,7 +58,7 @@ class TestsController extends Controller
      *
      * @return Response
      */
-    public function actionFormatting(array $variables = array())
+    public function actionFormatting(array $variables = [])
     {
         return $this->renderTemplate('analytics/tests/_formatting', $variables);
     }
@@ -70,7 +70,7 @@ class TestsController extends Controller
      *
      * @return Response
      */
-    public function actionColumns(array $variables = array())
+    public function actionColumns(array $variables = [])
     {
         $variables['columns'] = Analytics::$plugin->metadata->getColumns();
 
@@ -84,7 +84,7 @@ class TestsController extends Controller
      *
      * @return Response
      */
-    public function actionColumnGroups(array $variables = array())
+    public function actionColumnGroups(array $variables = [])
     {
         $variables['columnGroups'] = Analytics::$plugin->metadata->getColumnGroups();
 

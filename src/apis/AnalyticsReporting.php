@@ -83,6 +83,7 @@ class AnalyticsReporting extends Api
      * @param array $criterias
      *
      * @return Google_Service_AnalyticsReporting_GetReportsResponse
+     * @throws \yii\base\InvalidConfigException
      */
     private function getReportingReports($criterias)
     {
@@ -139,7 +140,7 @@ class AnalyticsReporting extends Api
         }
 
         if ($criteria->pageToken) {
-            $pageToken = (string) $criteria->pageToken;
+            $pageToken = (string)$criteria->pageToken;
             $request->setPageToken($pageToken);
         }
 
@@ -151,15 +152,15 @@ class AnalyticsReporting extends Api
             $request->setFiltersExpression($criteria->filtersExpression);
         }
 
-        if($criteria->includeEmptyRows) {
+        if ($criteria->includeEmptyRows) {
             $request->setIncludeEmptyRows($criteria->includeEmptyRows);
         }
 
-        if($criteria->hideTotals) {
+        if ($criteria->hideTotals) {
             $request->setHideTotals($criteria->hideTotals);
         }
 
-        if($criteria->hideValueRanges) {
+        if ($criteria->hideValueRanges) {
             $request->setHideValueRanges($criteria->hideValueRanges);
         }
 
@@ -174,7 +175,7 @@ class AnalyticsReporting extends Api
      */
     private function setRequestViewIdFromCriteria(Google_Service_AnalyticsReporting_ReportRequest &$request, ReportRequestCriteria $criteria)
     {
-        if($criteria->gaViewId) {
+        if ($criteria->gaViewId) {
             $request->setViewId('ga:'.$criteria->gaViewId);
         } else {
             if ($criteria->viewId) {

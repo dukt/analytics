@@ -130,6 +130,7 @@ class SettingsController extends Controller
      *
      * @return null|Response
      * @throws InvalidPluginException
+     * @throws \yii\base\InvalidConfigException
      * @throws \yii\web\BadRequestHttpException
      */
     public function actionSaveSettings()
@@ -141,15 +142,13 @@ class SettingsController extends Controller
 
         $plugin = Craft::$app->getPlugins()->getPlugin($pluginHandle);
 
-        if (!$plugin)
-        {
+        if (!$plugin) {
             throw new InvalidPluginException($pluginHandle);
         }
 
         $settings = Analytics::$plugin->getApis()->getAnalytics()->populateAccountExplorerSettings($settings);
 
-        if (Craft::$app->getPlugins()->savePluginSettings($plugin, $settings))
-        {
+        if (Craft::$app->getPlugins()->savePluginSettings($plugin, $settings)) {
             Craft::$app->getSession()->setNotice(Craft::t('analytics', 'Plugin settings saved.'));
 
             return $this->redirectToPostedUrl();
@@ -169,6 +168,7 @@ class SettingsController extends Controller
      * Returns the account explorer data.
      *
      * @return Response
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionGetAccountExplorerData(): Response
     {
@@ -183,6 +183,7 @@ class SettingsController extends Controller
      * Views index.
      *
      * @return Response
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionViews(): Response
     {
@@ -193,7 +194,7 @@ class SettingsController extends Controller
         try {
             $token = Analytics::$plugin->oauth->getToken();
 
-            if($isOauthProviderConfigured && $token) {
+            if ($isOauthProviderConfigured && $token) {
                 $variables['isConnected'] = true;
                 $variables['reportingViews'] = Analytics::$plugin->getViews()->getViews();
             }
@@ -248,7 +249,7 @@ class SettingsController extends Controller
 
         $isOauthProviderConfigured = Analytics::$plugin->getAnalytics()->isOauthProviderConfigured();
 
-        if($isOauthProviderConfigured) {
+        if ($isOauthProviderConfigured) {
             $errors = [];
 
             try {
@@ -335,6 +336,7 @@ class SettingsController extends Controller
      *
      * @return null|Response
      * @throws \dukt\analytics\errors\InvalidViewException
+     * @throws \yii\base\InvalidConfigException
      * @throws \yii\web\BadRequestHttpException
      */
     public function actionSaveView()
@@ -357,19 +359,19 @@ class SettingsController extends Controller
 
         $accountExplorerData = Analytics::$plugin->getApis()->getAnalytics()->getAccountExplorerData();
 
-        foreach($accountExplorerData['accounts'] as $dataAccount) {
-            if($dataAccount['id'] == $reportingView->gaAccountId) {
+        foreach ($accountExplorerData['accounts'] as $dataAccount) {
+            if ($dataAccount['id'] == $reportingView->gaAccountId) {
                 $reportingView->gaAccountName = $dataAccount['name'];
             }
         }
 
-        foreach($accountExplorerData['properties'] as $dataProperty) {
-            if($dataProperty['id'] == $reportingView->gaPropertyId) {
+        foreach ($accountExplorerData['properties'] as $dataProperty) {
+            if ($dataProperty['id'] == $reportingView->gaPropertyId) {
                 $reportingView->gaPropertyName = $dataProperty['name'];
             }
         }
-        foreach($accountExplorerData['views'] as $dataView) {
-            if($dataView['id'] == $reportingView->gaViewId) {
+        foreach ($accountExplorerData['views'] as $dataView) {
+            if ($dataView['id'] == $reportingView->gaViewId) {
                 $reportingView->gaViewName = $dataView['name'];
                 $reportingView->gaViewCurrency = $dataView['currency'];
             }
@@ -417,6 +419,7 @@ class SettingsController extends Controller
      * Sites index.
      *
      * @return Response
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionSites(): Response
     {
@@ -451,6 +454,7 @@ class SettingsController extends Controller
      * @param $siteId
      *
      * @return Response
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionEditSite($siteId): Response
     {
@@ -469,6 +473,7 @@ class SettingsController extends Controller
      * Saves a site.
      *
      * @return null|Response
+     * @throws \yii\base\InvalidConfigException
      * @throws \yii\db\Exception
      * @throws \yii\web\BadRequestHttpException
      */

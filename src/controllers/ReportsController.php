@@ -22,12 +22,13 @@ class ReportsController extends Controller
      * Get element report.
      *
      * @return Response
+     * @throws \yii\base\InvalidConfigException
      * @throws \yii\web\BadRequestHttpException
      */
     public function actionElement()
     {
         $elementId = Craft::$app->getRequest()->getRequiredParam('elementId');
-        $siteId = (int) Craft::$app->getRequest()->getRequiredParam('siteId');
+        $siteId = (int)Craft::$app->getRequest()->getRequiredParam('siteId');
         $metric = Craft::$app->getRequest()->getRequiredParam('metric');
 
         $response = Analytics::$plugin->getReports()->getElementReport($elementId, $siteId, $metric);
@@ -42,16 +43,17 @@ class ReportsController extends Controller
      * Get realtime widget report.
      *
      * @return Response
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionRealtimeWidget()
     {
-        if(Analytics::$plugin->getSettings()->demoMode) {
+        if (Analytics::$plugin->getSettings()->demoMode) {
             return $this->getRealtimeDemoResponse();
         }
 
 
         // Active users
-        
+
         $activeUsers = 0;
 
         $viewId = Craft::$app->getRequest()->getBodyParam('viewId');
@@ -67,7 +69,6 @@ class ReportsController extends Controller
         if (!empty($response['totalsForAllResults']) && isset($response['totalsForAllResults']['ga:activeVisitors'])) {
             $activeUsers = $response['totalsForAllResults']['ga:activeVisitors'];
         }
-
 
 
         // Pageviews
@@ -103,6 +104,7 @@ class ReportsController extends Controller
      *
      * @return Response
      * @throws InvalidChartTypeException
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionReportWidget()
     {
@@ -156,7 +158,7 @@ class ReportsController extends Controller
 
     /**
      * Get realtime demo response.
-     * 
+     *
      * @return Response
      */
     private function getRealtimeDemoResponse(): Response
@@ -166,7 +168,7 @@ class ReportsController extends Controller
             'rows' => []
         ];
 
-        for($i = 0; $i <= 30; $i++) {
+        for ($i = 0; $i <= 30; $i++) {
             $pageviews['rows'][] = [$i, random_int(0, 20)];
         }
 

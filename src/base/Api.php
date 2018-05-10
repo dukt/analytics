@@ -17,6 +17,7 @@ abstract class Api extends Component
      * Returns a Google client.
      *
      * @return Google_Client
+     * @throws \yii\base\InvalidConfigException
      */
     protected function getClient()
     {

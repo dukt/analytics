@@ -26,6 +26,7 @@ class Reports extends Component
      * @param array $request
      *
      * @return array
+     * @throws \yii\base\InvalidConfigException
      */
     public function getRealtimeReport(array $request)
     {
@@ -128,6 +129,7 @@ class Reports extends Component
      * @param array $request
      *
      * @return array
+     * @throws \yii\base\InvalidConfigException
      */
     public function getAreaReport(array $request)
     {
@@ -182,6 +184,7 @@ class Reports extends Component
      * @param array $request
      *
      * @return array
+     * @throws \yii\base\InvalidConfigException
      */
     public function getCounterReport(array $request)
     {
@@ -232,6 +235,7 @@ class Reports extends Component
      * @param array $request
      *
      * @return array
+     * @throws \yii\base\InvalidConfigException
      */
     public function getPieReport(array $request)
     {
@@ -271,6 +275,7 @@ class Reports extends Component
      * @param array $request
      *
      * @return array
+     * @throws \yii\base\InvalidConfigException
      */
     public function getTableReport(array $request)
     {
@@ -309,6 +314,7 @@ class Reports extends Component
      * @param array $request
      *
      * @return array
+     * @throws \yii\base\InvalidConfigException
      */
     public function getGeoReport(array $request)
     {
