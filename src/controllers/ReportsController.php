@@ -46,30 +46,7 @@ class ReportsController extends Controller
     public function actionRealtimeWidget()
     {
         if(Analytics::$plugin->getSettings()->demoMode) {
-            $activeUsers = random_int(0, 20);
-            $pageviews = [
-                'rows' => []
-            ];
-
-            for($i = 0; $i <= 30; $i++) {
-                $pageviews['rows'][] = [$i, random_int(0, 20)];
-            }
-
-            $activePages = [
-                'rows' => [
-                    ['/some-url/', random_int(0, 20)],
-                    ['/some-super-long-url/with-kebab-case/', random_int(0, 20)],
-                    ['/somesuperlongurlwithoutkebabcasebutstillsuperlong/', random_int(10000000, 20000000)],
-                    ['/someothersuperlongurl/withoutkebabcasebutstillsuperlong/', random_int(0, 20)],
-                    ['/one-last-url/', random_int(0, 20)],
-                ]
-            ];
-
-            return $this->asJson([
-                'activeUsers' => $activeUsers,
-                'pageviews' => $pageviews,
-                'activePages' => $activePages,
-            ]);
+            return $this->getRealtimeDemoResponse();
         }
 
 
@@ -172,5 +149,41 @@ class ReportsController extends Controller
         }
 
         return $this->asJson($response);
+    }
+
+    // Private Methods
+    // =========================================================================
+
+    /**
+     * Get realtime demo response.
+     * 
+     * @return Response
+     */
+    private function getRealtimeDemoResponse(): Response
+    {
+        $activeUsers = random_int(0, 20);
+        $pageviews = [
+            'rows' => []
+        ];
+
+        for($i = 0; $i <= 30; $i++) {
+            $pageviews['rows'][] = [$i, random_int(0, 20)];
+        }
+
+        $activePages = [
+            'rows' => [
+                ['/some-url/', random_int(0, 20)],
+                ['/some-super-long-url/with-kebab-case/', random_int(0, 20)],
+                ['/somesuperlongurlwithoutkebabcasebutstillsuperlong/', random_int(10000000, 20000000)],
+                ['/someothersuperlongurl/withoutkebabcasebutstillsuperlong/', random_int(0, 20)],
+                ['/one-last-url/', random_int(0, 20)],
+            ]
+        ];
+
+        return $this->asJson([
+            'activeUsers' => $activeUsers,
+            'pageviews' => $pageviews,
+            'activePages' => $activePages,
+        ]);
     }
 }
