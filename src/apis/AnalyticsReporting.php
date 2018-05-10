@@ -105,22 +105,13 @@ class AnalyticsReporting extends Api
      * @param ReportRequestCriteria $criteria
      *
      * @return Google_Service_AnalyticsReporting_ReportRequest
+     * @throws \yii\base\InvalidConfigException
      */
     private function getReportingReportRequest(ReportRequestCriteria $criteria)
     {
         $request = new Google_Service_AnalyticsReporting_ReportRequest();
 
-        if($criteria->gaViewId) {
-            $request->setViewId('ga:'.$criteria->gaViewId);
-        } else {
-            if ($criteria->viewId) {
-                $view = Plugin::getInstance()->getViews()->getViewById($criteria->viewId);
-
-                if ($view) {
-                    $request->setViewId($view->gaViewId);
-                }
-            }
-        }
+        $this->setRequestViewIdFromCriteria($request, $criteria);
 
         $dateRange = new Google_Service_AnalyticsReporting_DateRange();
         $dateRange->setStartDate($criteria->startDate);
@@ -173,6 +164,27 @@ class AnalyticsReporting extends Api
         }
 
         return $request;
+    }
+
+    /**
+     * @param Google_Service_AnalyticsReporting_ReportRequest $request
+     * @param ReportRequestCriteria                           $criteria
+     *
+     * @throws \yii\base\InvalidConfigException
+     */
+    private function setRequestViewIdFromCriteria(Google_Service_AnalyticsReporting_ReportRequest &$request, ReportRequestCriteria $criteria)
+    {
+        if($criteria->gaViewId) {
+            $request->setViewId('ga:'.$criteria->gaViewId);
+        } else {
+            if ($criteria->viewId) {
+                $view = Plugin::getInstance()->getViews()->getViewById($criteria->viewId);
+
+                if ($view) {
+                    $request->setViewId($view->gaViewId);
+                }
+            }
+        }
     }
 
     /**
