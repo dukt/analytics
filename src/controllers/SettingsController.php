@@ -34,7 +34,7 @@ class SettingsController extends Controller
      * @throws \craft\errors\SiteNotFoundException
      * @throws \yii\base\InvalidConfigException
      */
-    public function actionIndex($plugin = null)
+    public function actionIndex($plugin = null): Response
     {
         $isOauthProviderConfigured = Analytics::$plugin->getAnalytics()->isOauthProviderConfigured();
 
@@ -64,7 +64,7 @@ class SettingsController extends Controller
                     }
                 }
             } catch (Google_Service_Exception $e) {
-                Craft::info("Couldn’t get OAuth account: ".$e->getMessage(), __METHOD__);
+                Craft::info('Couldn’t get OAuth account: '.$e->getMessage(), __METHOD__);
 
                 foreach ($e->getErrors() as $error) {
                     $errors[] = $error['message'];
@@ -81,27 +81,27 @@ class SettingsController extends Controller
                 $errors[] = $error;
             } catch (Exception $e) {
                 if (method_exists($e, 'getResponse')) {
-                    Craft::info("Couldn’t get OAuth account: ".$e->getResponse(), __METHOD__);
+                    Craft::info('Couldn’t get OAuth account: '.$e->getResponse(), __METHOD__);
                 } else {
-                    Craft::info("Couldn’t get OAuth account: ".$e->getMessage(), __METHOD__);
+                    Craft::info('Couldn’t get OAuth account: '.$e->getMessage(), __METHOD__);
                 }
 
                 $errors[] = $e->getMessage();
             }
         }
 
-        $token = (isset($token) ? $token : null);
+        $token = ($token ?? null);
 
         Craft::$app->getView()->registerAssetBundle(SettingsAsset::class);
 
         return $this->renderTemplate('analytics/settings/_index', [
             'isOauthProviderConfigured' => $isOauthProviderConfigured,
 
-            'errors' => (isset($errors) ? $errors : null),
-            'oauthAccount' => (isset($oauthAccount) ? $oauthAccount : null),
-            'provider' => (isset($provider) ? $provider : null),
-            'settings' => (isset($settings) ? $settings : null),
-            'token' => (isset($token) ? $token : null),
+            'errors' => $errors ?? null,
+            'oauthAccount' => $oauthAccount ?? null,
+            'provider' => $provider ?? null,
+            'settings' => $settings ?? null,
+            'token' => $token ?? null,
 
             'javascriptOrigin' => Analytics::$plugin->oauth->getJavascriptOrigin(),
             'redirectUri' => Analytics::$plugin->oauth->getRedirectUri(),
@@ -115,7 +115,7 @@ class SettingsController extends Controller
      * @return Response
      * @throws \craft\errors\SiteNotFoundException
      */
-    public function actionOauth()
+    public function actionOauth(): Response
     {
         return $this->renderTemplate('analytics/settings/_oauth', [
             'javascriptOrigin' => Analytics::$plugin->oauth->getJavascriptOrigin(),
@@ -170,7 +170,7 @@ class SettingsController extends Controller
      *
      * @return Response
      */
-    public function actionGetAccountExplorerData()
+    public function actionGetAccountExplorerData(): Response
     {
         $accountExplorerData = Analytics::$plugin->getApis()->getAnalytics()->getAccountExplorerData();
 
@@ -184,7 +184,7 @@ class SettingsController extends Controller
      *
      * @return Response
      */
-    public function actionViews()
+    public function actionViews(): Response
     {
         $isOauthProviderConfigured = Analytics::$plugin->getAnalytics()->isOauthProviderConfigured();
 
@@ -221,7 +221,7 @@ class SettingsController extends Controller
      * @throws \craft\errors\SiteNotFoundException
      * @throws \yii\base\InvalidConfigException
      */
-    public function actionEditView(int $viewId = null, View $reportingView = null)
+    public function actionEditView(int $viewId = null, View $reportingView = null): Response
     {
         $variables['isNewView'] = false;
 
@@ -323,37 +323,37 @@ class SettingsController extends Controller
                     }
                 }
             } catch (\Google_Service_Exception $e) {
-                Craft::info("Couldn’t get OAuth account: ".$e->getMessage(), __METHOD__);
+                Craft::info('Couldn’t get OAuth account: '.$e->getMessage(), __METHOD__);
 
                 foreach ($e->getErrors() as $error) {
                     array_push($errors, $error['message']);
                 }
             } catch (\Exception $e) {
                 if (method_exists($e, 'getResponse')) {
-                    Craft::info("Couldn’t get OAuth account: ".$e->getResponse(), __METHOD__);
+                    Craft::info('Couldn’t get OAuth account: '.$e->getResponse(), __METHOD__);
                 } else {
-                    Craft::info("Couldn’t get OAuth account: ".$e->getMessage(), __METHOD__);
+                    Craft::info('Couldn’t get OAuth account: '.$e->getMessage(), __METHOD__);
                 }
 
                 array_push($errors, $e->getMessage());
             }
         }
 
-        $token = (isset($token) ? $token : null);
+        $token = ($token ?? null);
 
         Craft::$app->getView()->registerAssetBundle(SettingsAsset::class);
 
         $variables['isOauthProviderConfigured'] = $isOauthProviderConfigured;
-        $variables['accountExplorerData'] = (isset($accountExplorerData) ? $accountExplorerData : null);
-        $variables['accountExplorerOptions'] = (isset($accountExplorerOptions) ? $accountExplorerOptions : null);
-        $variables['accountId'] = (isset($accountId) ? $accountId : null);
-        $variables['errors'] = (isset($errors) ? $errors : null);
-        $variables['oauthAccount'] = (isset($oauthAccount) ? $oauthAccount : null);
-        $variables['provider'] = (isset($provider) ? $provider : null);
-        $variables['settings'] = (isset($settings) ? $settings : null);
-        $variables['token'] = (isset($token) ? $token : null);
-        $variables['viewId'] = (isset($googleAnalyticsviewId) ? $googleAnalyticsviewId : null);
-        $variables['webPropertyId'] = (isset($webPropertyId) ? $webPropertyId : null);
+        $variables['accountExplorerData'] = ($accountExplorerData ?? null);
+        $variables['accountExplorerOptions'] = ($accountExplorerOptions ?? null);
+        $variables['accountId'] = ($accountId ?? null);
+        $variables['errors'] = ($errors ?? null);
+        $variables['oauthAccount'] = ($oauthAccount ?? null);
+        $variables['provider'] = ($provider ?? null);
+        $variables['settings'] = ($settings ?? null);
+        $variables['token'] = ($token ?? null);
+        $variables['viewId'] = ($googleAnalyticsviewId ?? null);
+        $variables['webPropertyId'] = ($webPropertyId ?? null);
 
         $variables['javascriptOrigin'] = Analytics::$plugin->oauth->getJavascriptOrigin();
         $variables['redirectUri'] = Analytics::$plugin->oauth->getRedirectUri();
@@ -432,7 +432,7 @@ class SettingsController extends Controller
      * @throws \yii\db\StaleObjectException
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionDeleteView()
+    public function actionDeleteView(): Response
     {
         $this->requirePostRequest();
         $this->requireAcceptsJson();
@@ -450,7 +450,7 @@ class SettingsController extends Controller
      *
      * @return Response
      */
-    public function actionSites()
+    public function actionSites(): Response
     {
         $isOauthProviderConfigured = Analytics::$plugin->getAnalytics()->isOauthProviderConfigured();
 
@@ -484,7 +484,7 @@ class SettingsController extends Controller
      *
      * @return Response
      */
-    public function actionEditSite($siteId)
+    public function actionEditSite($siteId): Response
     {
         $site = Craft::$app->getSites()->getSiteById($siteId);
         $siteView = Analytics::$plugin->getViews()->getSiteViewBySiteId($siteId);
