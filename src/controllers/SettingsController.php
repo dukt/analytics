@@ -246,87 +246,9 @@ class SettingsController extends Controller
         }
 
         $variables['reportingView'] = $reportingView;
-
-        $isOauthProviderConfigured = Analytics::$plugin->getAnalytics()->isOauthProviderConfigured();
-
-        if ($isOauthProviderConfigured) {
-            $errors = [];
-
-            try {
-                $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
-
-                $provider = Analytics::$plugin->oauth->getOauthProvider();
-                $token = Analytics::$plugin->oauth->getToken();
-
-                if ($token) {
-                    $oauthAccount = Analytics::$plugin->cache->get(['getAccount', $token]);
-
-                    if (!$oauthAccount) {
-                        $oauthAccount = $provider->getResourceOwner($token);
-                        Analytics::$plugin->cache->set(['getAccount', $token], $oauthAccount);
-                    }
-
-                    if ($oauthAccount) {
-                        Craft::info("Account:\r\n".print_r($oauthAccount, true), __METHOD__);
-
-                        $settings = $plugin->getSettings();
-
-
-                        // Account explorer options
-
-                        $accountExplorerData = Analytics::$plugin->cache->get(['accountExplorerData']);
-
-                        $accountOptions = $this->getAccountOptions($accountExplorerData, $reportingView);
-                        $propertyOptions = $this->getPropertyOptions($accountExplorerData, $reportingView);
-                        $viewOptions = $this->getViewOptions($accountExplorerData, $reportingView);
-
-                        $accountExplorerOptions = [
-                            'accounts' => $accountOptions,
-                            'properties' => $propertyOptions,
-                            'views' => $viewOptions,
-                        ];
-
-                        $accountId = $settings->accountId;
-                        $webPropertyId = $settings->webPropertyId;
-                        $googleAnalyticsviewId = $settings->profileId;
-                    }
-                }
-            } catch (\Google_Service_Exception $e) {
-                Craft::info('Couldn’t get OAuth account: '.$e->getMessage(), __METHOD__);
-
-                foreach ($e->getErrors() as $error) {
-                    array_push($errors, $error['message']);
-                }
-            } catch (\Exception $e) {
-                if (method_exists($e, 'getResponse')) {
-                    Craft::info('Couldn’t get OAuth account: '.$e->getResponse(), __METHOD__);
-                } else {
-                    Craft::info('Couldn’t get OAuth account: '.$e->getMessage(), __METHOD__);
-                }
-
-                array_push($errors, $e->getMessage());
-            }
-        }
-
-        $token = ($token ?? null);
+        $variables['accountExplorerOptions'] = $this->getAccountExplorerOptions($reportingView);
 
         Craft::$app->getView()->registerAssetBundle(SettingsAsset::class);
-
-        $variables['isOauthProviderConfigured'] = $isOauthProviderConfigured;
-        $variables['accountExplorerData'] = ($accountExplorerData ?? null);
-        $variables['accountExplorerOptions'] = ($accountExplorerOptions ?? null);
-        $variables['accountId'] = ($accountId ?? null);
-        $variables['errors'] = ($errors ?? null);
-        $variables['oauthAccount'] = ($oauthAccount ?? null);
-        $variables['provider'] = ($provider ?? null);
-        $variables['settings'] = ($settings ?? null);
-        $variables['token'] = ($token ?? null);
-        $variables['viewId'] = ($googleAnalyticsviewId ?? null);
-        $variables['webPropertyId'] = ($webPropertyId ?? null);
-
-        $variables['javascriptOrigin'] = Analytics::$plugin->oauth->getJavascriptOrigin();
-        $variables['redirectUri'] = Analytics::$plugin->oauth->getRedirectUri();
-        $variables['googleIconUrl'] = Craft::$app->assetManager->getPublishedUrl('@dukt/analytics/icons/google.svg', true);
 
         return $this->renderTemplate('analytics/settings/views/_edit', $variables);
     }
@@ -503,6 +425,22 @@ class SettingsController extends Controller
         Craft::$app->getSession()->setNotice(Craft::t('analytics', 'Site view saved.'));
 
         return $this->redirectToPostedUrl($siteView);
+    }
+
+    /**
+     * @param View $reportingView
+     *
+     * @return array
+     */
+    private function getAccountExplorerOptions(View $reportingView): array
+    {
+        $accountExplorerData = Analytics::$plugin->cache->get(['accountExplorerData']);
+
+        return [
+            'accounts' => $this->getAccountOptions($accountExplorerData, $reportingView),
+            'properties' => $this->getPropertyOptions($accountExplorerData, $reportingView),
+            'views' => $this->getViewOptions($accountExplorerData, $reportingView),
+        ];
     }
 
     /**
