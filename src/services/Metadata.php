@@ -355,9 +355,9 @@ class Metadata extends Component
     /**
      * Returns the file path of the dimensions-metrics.json file
      *
-     * @return string
+     * @return string|bool
      */
-    public function getDimmetsFilePath(): string
+    public function getDimmetsFilePath()
     {
         return Craft::getAlias('@dukt/analytics/etc/data/dimensions-metrics.json');
     }
