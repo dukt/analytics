@@ -423,7 +423,7 @@ class Metadata extends Component
      */
     private function filterOptions(array $options, array $filters): array
     {
-        if(!$filters) {
+        if (\count($filters) === 0) {
             return $options;
         }
 
