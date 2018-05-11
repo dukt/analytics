@@ -50,7 +50,7 @@ class Cache extends Component
      */
     public function set($id, $value, $expire = null, $dependency = null, $enableCache = null)
     {
-        if (is_null($enableCache)) {
+        if (null === $enableCache) {
             $enableCache = Analytics::$plugin->getSettings()->enableCache;
         }
 

@@ -133,9 +133,9 @@ class Reports extends Component
      */
     public function getAreaReport(array $request)
     {
-        $viewId = (isset($request['viewId']) ? $request['viewId'] : null);
-        $period = (isset($request['period']) ? $request['period'] : null);
-        $metricString = (isset($request['options']['metric']) ? $request['options']['metric'] : null);
+        $viewId = ($request['viewId'] ?? null);
+        $period = ($request['period'] ?? null);
+        $metricString = ($request['options']['metric'] ?? null);
 
         switch ($period) {
             case 'year':
@@ -188,9 +188,9 @@ class Reports extends Component
      */
     public function getCounterReport(array $request)
     {
-        $viewId = (isset($request['viewId']) ? $request['viewId'] : null);
-        $period = (isset($request['period']) ? $request['period'] : null);
-        $metricString = (isset($request['options']['metric']) ? $request['options']['metric'] : null);
+        $viewId = ($request['viewId'] ?? null);
+        $period = ($request['period'] ?? null);
+        $metricString = ($request['options']['metric'] ?? null);
         $startDate = date('Y-m-d', strtotime('-1 '.$period));
         $endDate = date('Y-m-d');
 
@@ -239,10 +239,10 @@ class Reports extends Component
      */
     public function getPieReport(array $request)
     {
-        $viewId = (isset($request['viewId']) ? $request['viewId'] : null);
-        $period = (isset($request['period']) ? $request['period'] : null);
-        $dimensionString = (isset($request['options']['dimension']) ? $request['options']['dimension'] : null);
-        $metricString = (isset($request['options']['metric']) ? $request['options']['metric'] : null);
+        $viewId = ($request['viewId'] ?? null);
+        $period = ($request['period'] ?? null);
+        $dimensionString = ($request['options']['dimension'] ?? null);
+        $metricString = ($request['options']['metric'] ?? null);
         $startDate = date('Y-m-d', strtotime('-1 '.$period));
         $endDate = date('Y-m-d');
 
@@ -279,11 +279,11 @@ class Reports extends Component
      */
     public function getTableReport(array $request)
     {
-        $viewId = (isset($request['viewId']) ? $request['viewId'] : null);
+        $viewId = ($request['viewId'] ?? null);
 
-        $period = (isset($request['period']) ? $request['period'] : null);
-        $dimensionString = (isset($request['options']['dimension']) ? $request['options']['dimension'] : null);
-        $metricString = (isset($request['options']['metric']) ? $request['options']['metric'] : null);
+        $period = ($request['period'] ?? null);
+        $dimensionString = ($request['options']['dimension'] ?? null);
+        $metricString = ($request['options']['metric'] ?? null);
 
         $criteria = new ReportRequestCriteria;
         $criteria->viewId = $viewId;
@@ -318,10 +318,10 @@ class Reports extends Component
      */
     public function getGeoReport(array $request)
     {
-        $viewId = (isset($request['viewId']) ? $request['viewId'] : null);
-        $period = (isset($request['period']) ? $request['period'] : null);
-        $dimensionString = (isset($request['options']['dimension']) ? $request['options']['dimension'] : null);
-        $metricString = (isset($request['options']['metric']) ? $request['options']['metric'] : null);
+        $viewId = ($request['viewId'] ?? null);
+        $period = ($request['period'] ?? null);
+        $dimensionString = ($request['options']['dimension'] ?? null);
+        $metricString = ($request['options']['metric'] ?? null);
 
         $originDimension = $dimensionString;
 

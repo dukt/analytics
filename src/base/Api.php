@@ -25,13 +25,12 @@ abstract class Api extends Component
 
         if ($token) {
             // make token compatible with Google Client
-            $arrayToken = [
+
+            $arrayToken = json_encode([
                 'created' => 0,
                 'access_token' => $token->getToken(),
                 'expires_in' => $token->getExpires(),
-            ];
-
-            $arrayToken = json_encode($arrayToken);
+            ]);
 
             // client
             $client = new Google_Client();
