@@ -56,7 +56,7 @@ class Metadata extends Component
      *
      * @return bool
      */
-    public function dimmetsFileExists()
+    public function dimmetsFileExists(): bool
     {
         $path = Analytics::$plugin->metadata->getDimmetsFilePath();
 
@@ -74,7 +74,7 @@ class Metadata extends Component
      *
      * @return array
      */
-    public function getGoogleAnalyticsDataTypes()
+    public function getGoogleAnalyticsDataTypes(): array
     {
         $columns = $this->getColumns();
 
@@ -96,7 +96,7 @@ class Metadata extends Component
      *
      * @return array
      */
-    public function getDataTypes()
+    public function getDataTypes(): array
     {
         return [
             'string',
@@ -128,10 +128,8 @@ class Metadata extends Component
      */
     public function getContinentCode($label)
     {
-        $continents = $this->_getData('continents');
-
-        foreach ($continents as $continent) {
-            if ($continent['label'] == $label) {
+        foreach ($this->_getData('continents') as $continent) {
+            if ($continent['label'] === $label) {
                 return $continent['code'];
             }
         }
@@ -148,10 +146,8 @@ class Metadata extends Component
      */
     public function getSubContinentCode($label)
     {
-        $subContinents = $this->_getData('subContinents');
-
-        foreach ($subContinents as $subContinent) {
-            if ($subContinent['label'] == $label) {
+        foreach ($this->_getData('subContinents') as $subContinent) {
+            if ($subContinent['label'] === $label) {
                 return $subContinent['code'];
             }
         }
@@ -184,7 +180,7 @@ class Metadata extends Component
      *
      * @return array
      */
-    public function searchColumns($q)
+    public function searchColumns($q): array
     {
         $columns = $this->getColumns();
         $results = [];
@@ -205,7 +201,7 @@ class Metadata extends Component
      *
      * @return array
      */
-    public function getColumns($type = null)
+    public function getColumns($type = null): array
     {
         if (!$this->columns) {
             $this->columns = $this->_loadColumns();
@@ -215,7 +211,7 @@ class Metadata extends Component
             $columns = [];
 
             foreach ($this->columns as $column) {
-                if ($column->type == $type) {
+                if ($column->type === $type) {
                     $columns[] = $column;
                 }
             }
@@ -231,7 +227,7 @@ class Metadata extends Component
      *
      * @return array
      */
-    public function getDimensions()
+    public function getDimensions(): array
     {
         if (!$this->dimensions) {
             $this->dimensions = $this->getColumns('DIMENSION');
@@ -247,7 +243,7 @@ class Metadata extends Component
      *
      * @return array
      */
-    public function getColumnGroups($type = null)
+    public function getColumnGroups($type = null): array
     {
         if ($type && isset($this->groups[$type])) {
             return $this->groups[$type];
@@ -256,7 +252,7 @@ class Metadata extends Component
         $groups = [];
 
         foreach ($this->getColumns() as $column) {
-            if (!$type || ($type && $column->type == $type)) {
+            if (!$type || ($type && $column->type === $type)) {
                 $groups[$column->group] = $column->group;
             }
         }
@@ -318,7 +314,7 @@ class Metadata extends Component
      *
      * @return array
      */
-    public function getSelectOptions($type = null, array $filters = null)
+    public function getSelectOptions($type = null, array $filters = null): array
     {
         $options = [];
 
@@ -326,7 +322,7 @@ class Metadata extends Component
             $options[]['optgroup'] = Craft::t('analytics', $group);
 
             foreach ($this->getColumns($type) as $column) {
-                if ($column->group == $group) {
+                if ($column->group === $group) {
                     $options[$column->id] = Craft::t('analytics', $column->uiName);
                 }
             }
@@ -347,7 +343,7 @@ class Metadata extends Component
      *
      * @return array
      */
-    public function getMetrics()
+    public function getMetrics(): array
     {
         if (!$this->metrics) {
             $this->metrics = $this->getColumns('METRIC');
@@ -361,7 +357,7 @@ class Metadata extends Component
      *
      * @return string
      */
-    public function getDimmetsFilePath()
+    public function getDimmetsFilePath(): string
     {
         return Craft::getAlias('@dukt/analytics/etc/data/dimensions-metrics.json');
     }
@@ -374,7 +370,7 @@ class Metadata extends Component
      *
      * @return array
      */
-    private function _loadColumns()
+    private function _loadColumns(): array
     {
         $cols = [];
 
@@ -389,7 +385,7 @@ class Metadata extends Component
             foreach ($columnsResponse as $columnResponse) {
                 $cols[$columnResponse['id']] = new Column($columnResponse);
 
-                if ($columnResponse['id'] == 'ga:countryIsoCode') {
+                if ($columnResponse['id'] === 'ga:countryIsoCode') {
                     $cols[$columnResponse['id']]->uiName = 'Country';
                 }
             }
@@ -403,16 +399,15 @@ class Metadata extends Component
      *
      * @param $name
      *
-     * @return mixed
+     * @return array
      * @internal param string $label
      *
      */
-    private function _getData($name)
+    private function _getData($name): array
     {
         $jsonData = file_get_contents(Craft::getAlias('@dukt/analytics/etc/data/'.$name.'.json'));
-        $data = json_decode($jsonData, true);
 
-        return $data;
+        return json_decode($jsonData, true);
     }
 
     /**
