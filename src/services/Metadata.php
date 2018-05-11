@@ -273,38 +273,18 @@ class Metadata extends Component
     /**
      * Returns select dimension options
      *
-     * @param null $filters
+     * @param array $filters
      *
      * @return array
      */
-    public function getSelectDimensionOptions($filters = null)
+    public function getSelectDimensionOptions(array $filters = null): array
     {
         if (!$this->selectDimensionOptions) {
             $this->selectDimensionOptions = $this->getSelectOptions('DIMENSION');
         }
 
-        if ($filters && is_array($filters)) {
-            $filteredOptions = [];
-
-            foreach ($this->selectDimensionOptions as $id => $option) {
-                if (isset($option['optgroup'])) {
-                    $optgroup = null;
-                    $lastOptgroup = $option['optgroup'];
-                } else {
-                    foreach ($filters as $filter) {
-                        if ($id == $filter) {
-                            if (!$optgroup) {
-                                $optgroup = $lastOptgroup;
-                                $filteredOptions[]['optgroup'] = $optgroup;
-                            }
-
-                            $filteredOptions[$id] = $option;
-                        }
-                    }
-                }
-            }
-
-            return $filteredOptions;
+        if($filters) {
+            $this->selectDimensionOptions = $this->filterOptions($this->selectDimensionOptions, $filters);
         }
 
         return $this->selectDimensionOptions;
@@ -313,38 +293,18 @@ class Metadata extends Component
     /**
      * Returns select metric options
      *
-     * @param null $filters
+     * @param array $filters
      *
      * @return array
      */
-    public function getSelectMetricOptions($filters = null)
+    public function getSelectMetricOptions(array $filters = null): array
     {
         if (!$this->selectMetricOptions) {
             $this->selectMetricOptions = $this->getSelectOptions('METRIC');
         }
 
-        if ($filters && is_array($filters)) {
-            $filteredOptions = [];
-
-            foreach ($this->selectMetricOptions as $id => $option) {
-                if (isset($option['optgroup'])) {
-                    $optgroup = null;
-                    $lastOptgroup = $option['optgroup'];
-                } else {
-                    foreach ($filters as $filter) {
-                        if ($id == $filter) {
-                            if (!$optgroup) {
-                                $optgroup = $lastOptgroup;
-                                $filteredOptions[]['optgroup'] = $optgroup;
-                            }
-
-                            $filteredOptions[$id] = $option;
-                        }
-                    }
-                }
-            }
-
-            return $filteredOptions;
+        if($filters) {
+            $this->selectMetricOptions = $this->filterOptions($this->selectMetricOptions, $filters);
         }
 
         return $this->selectMetricOptions;
@@ -353,12 +313,12 @@ class Metadata extends Component
     /**
      * Returns select options
      *
-     * @param null $type
-     * @param null $filters
+     * @param null  $type
+     * @param array $filters
      *
      * @return array
      */
-    public function getSelectOptions($type = null, $filters = null)
+    public function getSelectOptions($type = null, array $filters = null)
     {
         $options = [];
 
@@ -375,28 +335,8 @@ class Metadata extends Component
 
         // filters
 
-        if ($filters && is_array($filters)) {
-            $filteredOptions = [];
-
-            foreach ($options as $id => $option) {
-                if (isset($option['optgroup'])) {
-                    $optgroup = null;
-                    $lastOptgroup = $option['optgroup'];
-                } else {
-                    foreach ($filters as $filter) {
-                        if ($id == $filter) {
-                            if (!$optgroup) {
-                                $optgroup = $lastOptgroup;
-                                $filteredOptions[]['optgroup'] = $optgroup;
-                            }
-
-                            $filteredOptions[$id] = $option;
-                        }
-                    }
-                }
-            }
-
-            return $filteredOptions;
+        if($filters) {
+            $options = $this->filterOptions($options, $filters);
         }
 
         return $options;
@@ -473,5 +413,45 @@ class Metadata extends Component
         $data = json_decode($jsonData, true);
 
         return $data;
+    }
+
+    /**
+     * @param array      $options
+     * @param array $filters
+     *
+     * @return array
+     */
+    private function filterOptions(array $options, array $filters): array
+    {
+        if(!$filters) {
+            return $options;
+        }
+
+        $filteredOptions = [];
+        $optgroup = null;
+        $lastOptgroup = null;
+
+        foreach ($options as $id => $option) {
+            if (isset($option['optgroup'])) {
+                $optgroup = null;
+                $lastOptgroup = $option['optgroup'];
+                continue;
+            }
+
+            foreach ($filters as $filter) {
+                if ($id !== $filter) {
+                    continue;
+                }
+
+                if (!$optgroup) {
+                    $optgroup = $lastOptgroup;
+                    $filteredOptions[]['optgroup'] = $optgroup;
+                }
+
+                $filteredOptions[$id] = $option;
+            }
+        }
+
+        return $filteredOptions;
     }
 }
