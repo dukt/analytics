@@ -219,7 +219,6 @@ class SettingsController extends Controller
      *
      * @return Response
      * @throws NotFoundHttpException
-     * @throws \craft\errors\SiteNotFoundException
      * @throws \yii\base\InvalidConfigException
      */
     public function actionEditView(int $viewId = null, View $reportingView = null): Response
@@ -426,6 +425,9 @@ class SettingsController extends Controller
 
         return $this->redirectToPostedUrl($siteView);
     }
+
+    // Private Methods
+    // =========================================================================
 
     /**
      * @param View $reportingView
