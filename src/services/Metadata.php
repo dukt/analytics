@@ -283,7 +283,7 @@ class Metadata extends Component
             $this->selectDimensionOptions = $this->getSelectOptions('DIMENSION');
         }
 
-        if($filters) {
+        if ($filters) {
             $this->selectDimensionOptions = $this->filterOptions($this->selectDimensionOptions, $filters);
         }
 
@@ -303,7 +303,7 @@ class Metadata extends Component
             $this->selectMetricOptions = $this->getSelectOptions('METRIC');
         }
 
-        if($filters) {
+        if ($filters) {
             $this->selectMetricOptions = $this->filterOptions($this->selectMetricOptions, $filters);
         }
 
@@ -335,7 +335,7 @@ class Metadata extends Component
 
         // filters
 
-        if($filters) {
+        if ($filters) {
             $options = $this->filterOptions($options, $filters);
         }
 
@@ -416,7 +416,7 @@ class Metadata extends Component
     }
 
     /**
-     * @param array      $options
+     * @param array $options
      * @param array $filters
      *
      * @return array
