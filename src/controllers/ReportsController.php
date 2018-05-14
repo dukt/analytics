@@ -163,7 +163,10 @@ class ReportsController extends Controller
      */
     private function getRealtimeDemoResponse(): Response
     {
-        $activeUsers = random_int(0, 20);
+        if (Analytics::$plugin->getSettings()->demoMode === 'test') {
+            return $this->getRealtimeDemoTestResponse();
+        }
+
         $pageviews = [
             'rows' => []
         ];
@@ -174,13 +177,57 @@ class ReportsController extends Controller
 
         $activePages = [
             'rows' => [
-                ['/some-url/', random_int(0, 20)],
-                ['/some-super-long-url/with-kebab-case/', random_int(0, 20)],
-                ['/somesuperlongurlwithoutkebabcasebutstillsuperlong/', random_int(10000000, 20000000)],
-                ['/someothersuperlongurl/withoutkebabcasebutstillsuperlong/', random_int(0, 20)],
-                ['/one-last-url/', random_int(0, 20)],
+                ['/a-new-toga/', random_int(1, 20)],
+                ['/parka-with-stripes-on-back/', random_int(1, 20)],
+                ['/romper-for-a-red-eye/', random_int(1, 20)],
+                ['/the-fleece-awakens/', random_int(1, 20)],
+                ['/the-last-knee-high/', random_int(1, 20)],
             ]
         ];
+
+        $activeUsers = 0;
+
+        foreach ($activePages['rows'] as $row) {
+            $activeUsers += $row[1];
+        }
+
+        return $this->asJson([
+            'activeUsers' => $activeUsers,
+            'pageviews' => $pageviews,
+            'activePages' => $activePages,
+        ]);
+    }
+
+    /**
+     * Get realtime demo test response.
+     *
+     * @return Response
+     */
+    private function getRealtimeDemoTestResponse(): Response
+    {
+        $pageviews = [
+            'rows' => []
+        ];
+
+        for ($i = 0; $i <= 30; $i++) {
+            $pageviews['rows'][] = [$i, random_int(0, 20)];
+        }
+
+        $activePages = [
+            'rows' => [
+                ['/some-url/', random_int(1, 20)],
+                ['/some-super-long-url/with-kebab-case/', random_int(1, 20)],
+                ['/somesuperlongurlwithoutkebabcasebutstillsuperlong/', random_int(10000000, 20000000)],
+                ['/someothersuperlongurl/withoutkebabcasebutstillsuperlong/', random_int(1, 20)],
+                ['/one-last-url/', random_int(1, 20)],
+            ]
+        ];
+
+        $activeUsers = 0;
+
+        foreach ($activePages['rows'] as $row) {
+            $activeUsers += $row[1];
+        }
 
         return $this->asJson([
             'activeUsers' => $activeUsers,
