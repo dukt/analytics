@@ -26,6 +26,7 @@ class Reports extends Component
      * @param array $request
      *
      * @return array
+     * @throws \yii\base\InvalidConfigException
      */
     public function getRealtimeReport(array $request)
     {
@@ -145,7 +146,7 @@ class Reports extends Component
         $endDate = date('Y-m-d');
         $dimensions = 'ga:date';
         $metrics = $metric;
-        $filters = "ga:pagePath==".$uri;
+        $filters = 'ga:pagePath=='.$uri;
 
         $request = [
             'viewId' => $viewId,
@@ -186,12 +187,13 @@ class Reports extends Component
      * @param array $request
      *
      * @return array
+     * @throws \yii\base\InvalidConfigException
      */
     public function getAreaReport(array $request)
     {
-        $viewId = (isset($request['viewId']) ? $request['viewId'] : null);
-        $period = (isset($request['period']) ? $request['period'] : null);
-        $metricString = (isset($request['options']['metric']) ? $request['options']['metric'] : null);
+        $viewId = ($request['viewId'] ?? null);
+        $period = ($request['period'] ?? null);
+        $metricString = ($request['options']['metric'] ?? null);
 
         switch ($period) {
             case 'year':
@@ -213,7 +215,7 @@ class Reports extends Component
         $criteria->metrics = $metricString;
         $criteria->dimensions = $dimensionString;
         $criteria->orderBys = [
-            ["fieldName" => $dimensionString, "orderType" => 'VALUE', "sortOrder" => 'ASCENDING']
+            ['fieldName' => $dimensionString, 'orderType' => 'VALUE', 'sortOrder' => 'ASCENDING']
         ];
 
         $reportResponse = Analytics::$plugin->getApis()->getAnalyticsReporting()->getReport($criteria);
@@ -240,12 +242,13 @@ class Reports extends Component
      * @param array $request
      *
      * @return array
+     * @throws \yii\base\InvalidConfigException
      */
     public function getCounterReport(array $request)
     {
-        $viewId = (isset($request['viewId']) ? $request['viewId'] : null);
-        $period = (isset($request['period']) ? $request['period'] : null);
-        $metricString = (isset($request['options']['metric']) ? $request['options']['metric'] : null);
+        $viewId = ($request['viewId'] ?? null);
+        $period = ($request['period'] ?? null);
+        $metricString = ($request['options']['metric'] ?? null);
         $startDate = date('Y-m-d', strtotime('-1 '.$period));
         $endDate = date('Y-m-d');
 
@@ -290,13 +293,14 @@ class Reports extends Component
      * @param array $request
      *
      * @return array
+     * @throws \yii\base\InvalidConfigException
      */
     public function getPieReport(array $request)
     {
-        $viewId = (isset($request['viewId']) ? $request['viewId'] : null);
-        $period = (isset($request['period']) ? $request['period'] : null);
-        $dimensionString = (isset($request['options']['dimension']) ? $request['options']['dimension'] : null);
-        $metricString = (isset($request['options']['metric']) ? $request['options']['metric'] : null);
+        $viewId = ($request['viewId'] ?? null);
+        $period = ($request['period'] ?? null);
+        $dimensionString = ($request['options']['dimension'] ?? null);
+        $metricString = ($request['options']['metric'] ?? null);
         $startDate = date('Y-m-d', strtotime('-1 '.$period));
         $endDate = date('Y-m-d');
 
@@ -329,14 +333,15 @@ class Reports extends Component
      * @param array $request
      *
      * @return array
+     * @throws \yii\base\InvalidConfigException
      */
     public function getTableReport(array $request)
     {
-        $viewId = (isset($request['viewId']) ? $request['viewId'] : null);
+        $viewId = ($request['viewId'] ?? null);
 
-        $period = (isset($request['period']) ? $request['period'] : null);
-        $dimensionString = (isset($request['options']['dimension']) ? $request['options']['dimension'] : null);
-        $metricString = (isset($request['options']['metric']) ? $request['options']['metric'] : null);
+        $period = ($request['period'] ?? null);
+        $dimensionString = ($request['options']['dimension'] ?? null);
+        $metricString = ($request['options']['metric'] ?? null);
 
         $criteria = new ReportRequestCriteria;
         $criteria->viewId = $viewId;
@@ -367,13 +372,14 @@ class Reports extends Component
      * @param array $request
      *
      * @return array
+     * @throws \yii\base\InvalidConfigException
      */
     public function getGeoReport(array $request)
     {
-        $viewId = (isset($request['viewId']) ? $request['viewId'] : null);
-        $period = (isset($request['period']) ? $request['period'] : null);
-        $dimensionString = (isset($request['options']['dimension']) ? $request['options']['dimension'] : null);
-        $metricString = (isset($request['options']['metric']) ? $request['options']['metric'] : null);
+        $viewId = ($request['viewId'] ?? null);
+        $period = ($request['period'] ?? null);
+        $dimensionString = ($request['options']['dimension'] ?? null);
+        $metricString = ($request['options']['metric'] ?? null);
 
         $originDimension = $dimensionString;
 

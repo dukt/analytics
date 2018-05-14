@@ -56,15 +56,15 @@ class Metadata extends Component
      *
      * @return bool
      */
-    public function dimmetsFileExists()
+    public function dimmetsFileExists(): bool
     {
         $path = Analytics::$plugin->metadata->getDimmetsFilePath();
 
         if (file_exists($path)) {
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -74,7 +74,7 @@ class Metadata extends Component
      *
      * @return array
      */
-    public function getGoogleAnalyticsDataTypes()
+    public function getGoogleAnalyticsDataTypes(): array
     {
         $columns = $this->getColumns();
 
@@ -96,7 +96,7 @@ class Metadata extends Component
      *
      * @return array
      */
-    public function getDataTypes()
+    public function getDataTypes(): array
     {
         return [
             'string',
@@ -128,10 +128,8 @@ class Metadata extends Component
      */
     public function getContinentCode($label)
     {
-        $continents = $this->_getData('continents');
-
-        foreach ($continents as $continent) {
-            if ($continent['label'] == $label) {
+        foreach ($this->_getData('continents') as $continent) {
+            if ($continent['label'] === $label) {
                 return $continent['code'];
             }
         }
@@ -148,10 +146,8 @@ class Metadata extends Component
      */
     public function getSubContinentCode($label)
     {
-        $subContinents = $this->_getData('subContinents');
-
-        foreach ($subContinents as $subContinent) {
-            if ($subContinent['label'] == $label) {
+        foreach ($this->_getData('subContinents') as $subContinent) {
+            if ($subContinent['label'] === $label) {
                 return $subContinent['code'];
             }
         }
@@ -184,7 +180,7 @@ class Metadata extends Component
      *
      * @return array
      */
-    public function searchColumns($q)
+    public function searchColumns($q): array
     {
         $columns = $this->getColumns();
         $results = [];
@@ -205,7 +201,7 @@ class Metadata extends Component
      *
      * @return array
      */
-    public function getColumns($type = null)
+    public function getColumns($type = null): array
     {
         if (!$this->columns) {
             $this->columns = $this->_loadColumns();
@@ -215,15 +211,15 @@ class Metadata extends Component
             $columns = [];
 
             foreach ($this->columns as $column) {
-                if ($column->type == $type) {
+                if ($column->type === $type) {
                     $columns[] = $column;
                 }
             }
 
             return $columns;
-        } else {
-            return $this->columns;
         }
+
+        return $this->columns;
     }
 
     /**
@@ -231,7 +227,7 @@ class Metadata extends Component
      *
      * @return array
      */
-    public function getDimensions()
+    public function getDimensions(): array
     {
         if (!$this->dimensions) {
             $this->dimensions = $this->getColumns('DIMENSION');
@@ -247,118 +243,78 @@ class Metadata extends Component
      *
      * @return array
      */
-    public function getColumnGroups($type = null)
+    public function getColumnGroups($type = null): array
     {
         if ($type && isset($this->groups[$type])) {
             return $this->groups[$type];
-        } else {
-            $groups = [];
-
-            foreach ($this->getColumns() as $column) {
-                if (!$type || ($type && $column->type == $type)) {
-                    $groups[$column->group] = $column->group;
-                }
-            }
-
-            // ksort($groups);
-
-            if ($type) {
-                $this->groups[$type] = $groups;
-            }
-
-            return $groups;
         }
+
+        $groups = [];
+
+        foreach ($this->getColumns() as $column) {
+            if (!$type || ($type && $column->type === $type)) {
+                $groups[$column->group] = $column->group;
+            }
+        }
+
+        // ksort($groups);
+
+        if ($type) {
+            $this->groups[$type] = $groups;
+        }
+
+        return $groups;
     }
 
     /**
      * Returns select dimension options
      *
-     * @param null $filters
+     * @param array $filters
      *
      * @return array
      */
-    public function getSelectDimensionOptions($filters = null)
+    public function getSelectDimensionOptions(array $filters = null): array
     {
         if (!$this->selectDimensionOptions) {
             $this->selectDimensionOptions = $this->getSelectOptions('DIMENSION');
         }
 
-        if ($filters && is_array($filters)) {
-            $filteredOptions = [];
-
-            foreach ($this->selectDimensionOptions as $id => $option) {
-                if (isset($option['optgroup'])) {
-                    $optgroup = null;
-                    $lastOptgroup = $option['optgroup'];
-                } else {
-                    foreach ($filters as $filter) {
-                        if ($id == $filter) {
-                            if (!$optgroup) {
-                                $optgroup = $lastOptgroup;
-                                $filteredOptions[]['optgroup'] = $optgroup;
-                            }
-
-                            $filteredOptions[$id] = $option;
-                        }
-                    }
-                }
-            }
-
-            return $filteredOptions;
-        } else {
-            return $this->selectDimensionOptions;
+        if ($filters) {
+            $this->selectDimensionOptions = $this->filterOptions($this->selectDimensionOptions, $filters);
         }
+
+        return $this->selectDimensionOptions;
     }
 
     /**
      * Returns select metric options
      *
-     * @param null $filters
+     * @param array $filters
      *
      * @return array
      */
-    public function getSelectMetricOptions($filters = null)
+    public function getSelectMetricOptions(array $filters = null): array
     {
         if (!$this->selectMetricOptions) {
             $this->selectMetricOptions = $this->getSelectOptions('METRIC');
         }
 
-        if ($filters && is_array($filters)) {
-            $filteredOptions = [];
-
-            foreach ($this->selectMetricOptions as $id => $option) {
-                if (isset($option['optgroup'])) {
-                    $optgroup = null;
-                    $lastOptgroup = $option['optgroup'];
-                } else {
-                    foreach ($filters as $filter) {
-                        if ($id == $filter) {
-                            if (!$optgroup) {
-                                $optgroup = $lastOptgroup;
-                                $filteredOptions[]['optgroup'] = $optgroup;
-                            }
-
-                            $filteredOptions[$id] = $option;
-                        }
-                    }
-                }
-            }
-
-            return $filteredOptions;
-        } else {
-            return $this->selectMetricOptions;
+        if ($filters) {
+            $this->selectMetricOptions = $this->filterOptions($this->selectMetricOptions, $filters);
         }
+
+        return $this->selectMetricOptions;
     }
 
     /**
      * Returns select options
      *
-     * @param null $type
-     * @param null $filters
+     * @param null  $type
+     * @param array $filters
      *
      * @return array
      */
-    public function getSelectOptions($type = null, $filters = null)
+    public function getSelectOptions($type = null, array $filters = null): array
     {
         $options = [];
 
@@ -366,7 +322,7 @@ class Metadata extends Component
             $options[]['optgroup'] = Craft::t('analytics', $group);
 
             foreach ($this->getColumns($type) as $column) {
-                if ($column->group == $group) {
+                if ($column->group === $group) {
                     $options[$column->id] = Craft::t('analytics', $column->uiName);
                 }
             }
@@ -375,31 +331,11 @@ class Metadata extends Component
 
         // filters
 
-        if ($filters && is_array($filters)) {
-            $filteredOptions = [];
-
-            foreach ($options as $id => $option) {
-                if (isset($option['optgroup'])) {
-                    $optgroup = null;
-                    $lastOptgroup = $option['optgroup'];
-                } else {
-                    foreach ($filters as $filter) {
-                        if ($id == $filter) {
-                            if (!$optgroup) {
-                                $optgroup = $lastOptgroup;
-                                $filteredOptions[]['optgroup'] = $optgroup;
-                            }
-
-                            $filteredOptions[$id] = $option;
-                        }
-                    }
-                }
-            }
-
-            return $filteredOptions;
-        } else {
-            return $options;
+        if ($filters) {
+            $options = $this->filterOptions($options, $filters);
         }
+
+        return $options;
     }
 
     /**
@@ -407,7 +343,7 @@ class Metadata extends Component
      *
      * @return array
      */
-    public function getMetrics()
+    public function getMetrics(): array
     {
         if (!$this->metrics) {
             $this->metrics = $this->getColumns('METRIC');
@@ -419,7 +355,7 @@ class Metadata extends Component
     /**
      * Returns the file path of the dimensions-metrics.json file
      *
-     * @return string
+     * @return string|bool
      */
     public function getDimmetsFilePath()
     {
@@ -434,7 +370,7 @@ class Metadata extends Component
      *
      * @return array
      */
-    private function _loadColumns()
+    private function _loadColumns(): array
     {
         $cols = [];
 
@@ -449,7 +385,7 @@ class Metadata extends Component
             foreach ($columnsResponse as $columnResponse) {
                 $cols[$columnResponse['id']] = new Column($columnResponse);
 
-                if ($columnResponse['id'] == 'ga:countryIsoCode') {
+                if ($columnResponse['id'] === 'ga:countryIsoCode') {
                     $cols[$columnResponse['id']]->uiName = 'Country';
                 }
             }
@@ -463,15 +399,54 @@ class Metadata extends Component
      *
      * @param $name
      *
-     * @return mixed
+     * @return array
      * @internal param string $label
      *
      */
-    private function _getData($name)
+    private function _getData($name): array
     {
         $jsonData = file_get_contents(Craft::getAlias('@dukt/analytics/etc/data/'.$name.'.json'));
-        $data = json_decode($jsonData, true);
 
-        return $data;
+        return json_decode($jsonData, true);
+    }
+
+    /**
+     * @param array $options
+     * @param array $filters
+     *
+     * @return array
+     */
+    private function filterOptions(array $options, array $filters): array
+    {
+        if (\count($filters) === 0) {
+            return $options;
+        }
+
+        $filteredOptions = [];
+        $optgroup = null;
+        $lastOptgroup = null;
+
+        foreach ($options as $id => $option) {
+            if (isset($option['optgroup'])) {
+                $optgroup = null;
+                $lastOptgroup = $option['optgroup'];
+                continue;
+            }
+
+            foreach ($filters as $filter) {
+                if ($id !== $filter) {
+                    continue;
+                }
+
+                if (!$optgroup) {
+                    $optgroup = $lastOptgroup;
+                    $filteredOptions[]['optgroup'] = $optgroup;
+                }
+
+                $filteredOptions[$id] = $option;
+            }
+        }
+
+        return $filteredOptions;
     }
 }

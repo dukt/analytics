@@ -32,6 +32,7 @@ class Analytics extends Api
      * Get columns.
      *
      * @return Google_Service_Analytics_Columns
+     * @throws \yii\base\InvalidConfigException
      */
     public function getColumns()
     {
@@ -42,6 +43,7 @@ class Analytics extends Api
      * Get account explorer data.
      *
      * @return array
+     * @throws \yii\base\InvalidConfigException
      */
     public function getAccountExplorerData()
     {
@@ -50,7 +52,7 @@ class Analytics extends Api
         $accounts = $apiAccounts->toSimpleObject()->items;
 
         // Properties
-        $apiProperties = Plugin::$plugin->getApis()->getAnalytics()->getService()->management_webproperties->listManagementWebproperties('~all');;
+        $apiProperties = Plugin::$plugin->getApis()->getAnalytics()->getService()->management_webproperties->listManagementWebproperties('~all');
         $properties = $apiProperties->toSimpleObject()->items;
 
         // Views
@@ -71,6 +73,7 @@ class Analytics extends Api
      * @param array $settings
      *
      * @return array
+     * @throws \yii\base\InvalidConfigException
      */
     public function populateAccountExplorerSettings($settings = [])
     {
@@ -217,11 +220,11 @@ class Analytics extends Api
             case 'float':
             case 'time':
             case 'percent':
-                return (float) $value;
+                return (float)$value;
                 break;
 
             default:
-                return (string) $value;
+                return (string)$value;
         }
     }
 }

@@ -52,6 +52,7 @@ class SiteView extends Model
 
     /**
      * @return View|null
+     * @throws \yii\base\InvalidConfigException
      */
     public function getView()
     {

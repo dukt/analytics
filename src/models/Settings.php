@@ -76,7 +76,7 @@ class Settings extends Model
     public $mapsApiKey;
 
     /**
-     * @var bool Demo mode
+     * @var bool|string|null Demo mode
      */
     public $demoMode = false;
 

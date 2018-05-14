@@ -62,11 +62,11 @@ class Oauth extends Component
         }
 
         $token = new AccessToken([
-            'access_token' => (isset($settings->token['accessToken']) ? $settings->token['accessToken'] : null),
-            'expires' => (isset($settings->token['expires']) ? $settings->token['expires'] : null),
-            'refresh_token' => (isset($settings->token['refreshToken']) ? $settings->token['refreshToken'] : null),
-            'resource_owner_id' => (isset($settings->token['resourceOwnerId']) ? $settings->token['resourceOwnerId'] : null),
-            'values' => (isset($settings->token['values']) ? $settings->token['values'] : null),
+            'access_token' => $settings->token['accessToken'] ?? null,
+            'expires' => $settings->token['expires'] ?? null,
+            'refresh_token' => $settings->token['refreshToken'] ?? null,
+            'resource_owner_id' => $settings->token['resourceOwnerId'] ?? null,
+            'values' => $settings->token['values'] ?? null,
         ]);
 
         if ($refresh && $token->hasExpired()) {

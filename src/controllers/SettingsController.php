@@ -31,9 +31,10 @@ class SettingsController extends Controller
      * @param null $plugin
      *
      * @return Response
+     * @throws \craft\errors\SiteNotFoundException
      * @throws \yii\base\InvalidConfigException
      */
-    public function actionIndex($plugin = null)
+    public function actionIndex($plugin = null): Response
     {
         $isOauthProviderConfigured = Analytics::$plugin->getAnalytics()->isOauthProviderConfigured();
 
@@ -63,7 +64,7 @@ class SettingsController extends Controller
                     }
                 }
             } catch (Google_Service_Exception $e) {
-                Craft::info("Couldn’t get OAuth account: ".$e->getMessage(), __METHOD__);
+                Craft::info('Couldn’t get OAuth account: '.$e->getMessage(), __METHOD__);
 
                 foreach ($e->getErrors() as $error) {
                     $errors[] = $error['message'];
@@ -80,27 +81,27 @@ class SettingsController extends Controller
                 $errors[] = $error;
             } catch (Exception $e) {
                 if (method_exists($e, 'getResponse')) {
-                    Craft::info("Couldn’t get OAuth account: ".$e->getResponse(), __METHOD__);
+                    Craft::info('Couldn’t get OAuth account: '.$e->getResponse(), __METHOD__);
                 } else {
-                    Craft::info("Couldn’t get OAuth account: ".$e->getMessage(), __METHOD__);
+                    Craft::info('Couldn’t get OAuth account: '.$e->getMessage(), __METHOD__);
                 }
 
                 $errors[] = $e->getMessage();
             }
         }
 
-        $token = (isset($token) ? $token : null);
+        $token = ($token ?? null);
 
         Craft::$app->getView()->registerAssetBundle(SettingsAsset::class);
 
         return $this->renderTemplate('analytics/settings/_index', [
             'isOauthProviderConfigured' => $isOauthProviderConfigured,
 
-            'errors' => (isset($errors) ? $errors : null),
-            'oauthAccount' => (isset($oauthAccount) ? $oauthAccount : null),
-            'provider' => (isset($provider) ? $provider : null),
-            'settings' => (isset($settings) ? $settings : null),
-            'token' => (isset($token) ? $token : null),
+            'errors' => $errors ?? null,
+            'oauthAccount' => $oauthAccount ?? null,
+            'provider' => $provider ?? null,
+            'settings' => $settings ?? null,
+            'token' => $token ?? null,
 
             'javascriptOrigin' => Analytics::$plugin->oauth->getJavascriptOrigin(),
             'redirectUri' => Analytics::$plugin->oauth->getRedirectUri(),
@@ -112,8 +113,9 @@ class SettingsController extends Controller
      * OAuth Settings.
      *
      * @return Response
+     * @throws \craft\errors\SiteNotFoundException
      */
-    public function actionOauth()
+    public function actionOauth(): Response
     {
         return $this->renderTemplate('analytics/settings/_oauth', [
             'javascriptOrigin' => Analytics::$plugin->oauth->getJavascriptOrigin(),
@@ -128,6 +130,7 @@ class SettingsController extends Controller
      *
      * @return null|Response
      * @throws InvalidPluginException
+     * @throws \yii\base\InvalidConfigException
      * @throws \yii\web\BadRequestHttpException
      */
     public function actionSaveSettings()
@@ -139,15 +142,13 @@ class SettingsController extends Controller
 
         $plugin = Craft::$app->getPlugins()->getPlugin($pluginHandle);
 
-        if (!$plugin)
-        {
+        if (!$plugin) {
             throw new InvalidPluginException($pluginHandle);
         }
 
         $settings = Analytics::$plugin->getApis()->getAnalytics()->populateAccountExplorerSettings($settings);
 
-        if (Craft::$app->getPlugins()->savePluginSettings($plugin, $settings))
-        {
+        if (Craft::$app->getPlugins()->savePluginSettings($plugin, $settings)) {
             Craft::$app->getSession()->setNotice(Craft::t('analytics', 'Plugin settings saved.'));
 
             return $this->redirectToPostedUrl();
@@ -167,8 +168,9 @@ class SettingsController extends Controller
      * Returns the account explorer data.
      *
      * @return Response
+     * @throws \yii\base\InvalidConfigException
      */
-    public function actionGetAccountExplorerData()
+    public function actionGetAccountExplorerData(): Response
     {
         $accountExplorerData = Analytics::$plugin->getApis()->getAnalytics()->getAccountExplorerData();
 
@@ -181,8 +183,9 @@ class SettingsController extends Controller
      * Views index.
      *
      * @return Response
+     * @throws \yii\base\InvalidConfigException
      */
-    public function actionViews()
+    public function actionViews(): Response
     {
         $isOauthProviderConfigured = Analytics::$plugin->getAnalytics()->isOauthProviderConfigured();
 
@@ -191,7 +194,7 @@ class SettingsController extends Controller
         try {
             $token = Analytics::$plugin->oauth->getToken();
 
-            if($isOauthProviderConfigured && $token) {
+            if ($isOauthProviderConfigured && $token) {
                 $variables['isConnected'] = true;
                 $variables['reportingViews'] = Analytics::$plugin->getViews()->getViews();
             }
@@ -218,7 +221,7 @@ class SettingsController extends Controller
      * @throws NotFoundHttpException
      * @throws \yii\base\InvalidConfigException
      */
-    public function actionEditView(int $viewId = null, View $reportingView = null)
+    public function actionEditView(int $viewId = null, View $reportingView = null): Response
     {
         $variables['isNewView'] = false;
 
@@ -242,119 +245,9 @@ class SettingsController extends Controller
         }
 
         $variables['reportingView'] = $reportingView;
-
-        $isOauthProviderConfigured = Analytics::$plugin->getAnalytics()->isOauthProviderConfigured();
-
-        if($isOauthProviderConfigured) {
-            $errors = [];
-
-            try {
-                $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
-
-                $provider = Analytics::$plugin->oauth->getOauthProvider();
-                $token = Analytics::$plugin->oauth->getToken();
-
-                if ($token) {
-                    $oauthAccount = Analytics::$plugin->cache->get(['getAccount', $token]);
-
-                    if (!$oauthAccount) {
-                        $oauthAccount = $provider->getResourceOwner($token);
-                        Analytics::$plugin->cache->set(['getAccount', $token], $oauthAccount);
-                    }
-
-                    if ($oauthAccount) {
-                        Craft::info("Account:\r\n".print_r($oauthAccount, true), __METHOD__);
-
-                        $settings = $plugin->getSettings();
-
-
-                        // Account
-
-                        $accountExplorerData = Analytics::$plugin->cache->get(['accountExplorerData']);
-
-                        $accountOptions = [];
-
-                        if (isset($accountExplorerData['accounts'])) {
-                            foreach ($accountExplorerData['accounts'] as $account) {
-                                $accountOptions[] = ['label' => $account['name'], 'value' => $account['id']];
-                            }
-                        } else {
-                            $accountOptions[] = ['label' => $reportingView->gaAccountName, 'value' => $reportingView->gaAccountId];
-                        }
-
-
-                        // Web Properties
-
-                        $propertyOptions = [];
-
-                        if (isset($accountExplorerData['properties'])) {
-                            foreach ($accountExplorerData['properties'] as $webProperty) {
-                                $propertyOptions[] = ['label' => $webProperty['name'], 'value' => $webProperty['id']];
-                            }
-                        } else {
-                            $propertyOptions[] = ['label' => $reportingView->gaPropertyName, 'value' => $reportingView->gaPropertyId];
-                        }
-
-
-                        // Views
-
-                        $viewOptions = [];
-
-                        if (isset($accountExplorerData['views'])) {
-                            foreach ($accountExplorerData['views'] as $dataView) {
-                                $viewOptions[] = ['label' => $dataView['name'], 'value' => $dataView['id']];
-                            }
-                        } else {
-                            $viewOptions[] = ['label' => $reportingView->gaViewName, 'value' => $reportingView->gaViewId];
-                        }
-
-                        $accountExplorerOptions = [
-                            'accounts' => $accountOptions,
-                            'properties' => $propertyOptions,
-                            'views' => $viewOptions,
-                        ];
-
-                        $accountId = $settings->accountId;
-                        $webPropertyId = $settings->webPropertyId;
-                        $googleAnalyticsviewId = $settings->profileId;
-                    }
-                }
-            } catch (\Google_Service_Exception $e) {
-                Craft::info("Couldn’t get OAuth account: ".$e->getMessage(), __METHOD__);
-
-                foreach ($e->getErrors() as $error) {
-                    array_push($errors, $error['message']);
-                }
-            } catch (\Exception $e) {
-                if (method_exists($e, 'getResponse')) {
-                    Craft::info("Couldn’t get OAuth account: ".$e->getResponse(), __METHOD__);
-                } else {
-                    Craft::info("Couldn’t get OAuth account: ".$e->getMessage(), __METHOD__);
-                }
-
-                array_push($errors, $e->getMessage());
-            }
-        }
-
-        $token = (isset($token) ? $token : null);
+        $variables['accountExplorerOptions'] = $this->getAccountExplorerOptions($reportingView);
 
         Craft::$app->getView()->registerAssetBundle(SettingsAsset::class);
-
-        $variables['isOauthProviderConfigured'] = $isOauthProviderConfigured;
-        $variables['accountExplorerData'] = (isset($accountExplorerData) ? $accountExplorerData : null);
-        $variables['accountExplorerOptions'] = (isset($accountExplorerOptions) ? $accountExplorerOptions : null);
-        $variables['accountId'] = (isset($accountId) ? $accountId : null);
-        $variables['errors'] = (isset($errors) ? $errors : null);
-        $variables['oauthAccount'] = (isset($oauthAccount) ? $oauthAccount : null);
-        $variables['provider'] = (isset($provider) ? $provider : null);
-        $variables['settings'] = (isset($settings) ? $settings : null);
-        $variables['token'] = (isset($token) ? $token : null);
-        $variables['viewId'] = (isset($googleAnalyticsviewId) ? $googleAnalyticsviewId : null);
-        $variables['webPropertyId'] = (isset($webPropertyId) ? $webPropertyId : null);
-
-        $variables['javascriptOrigin'] = Analytics::$plugin->oauth->getJavascriptOrigin();
-        $variables['redirectUri'] = Analytics::$plugin->oauth->getRedirectUri();
-        $variables['googleIconUrl'] = Craft::$app->assetManager->getPublishedUrl('@dukt/analytics/icons/google.svg', true);
 
         return $this->renderTemplate('analytics/settings/views/_edit', $variables);
     }
@@ -364,6 +257,7 @@ class SettingsController extends Controller
      *
      * @return null|Response
      * @throws \dukt\analytics\errors\InvalidViewException
+     * @throws \yii\base\InvalidConfigException
      * @throws \yii\web\BadRequestHttpException
      */
     public function actionSaveView()
@@ -386,19 +280,19 @@ class SettingsController extends Controller
 
         $accountExplorerData = Analytics::$plugin->getApis()->getAnalytics()->getAccountExplorerData();
 
-        foreach($accountExplorerData['accounts'] as $dataAccount) {
-            if($dataAccount['id'] == $reportingView->gaAccountId) {
+        foreach ($accountExplorerData['accounts'] as $dataAccount) {
+            if ($dataAccount['id'] == $reportingView->gaAccountId) {
                 $reportingView->gaAccountName = $dataAccount['name'];
             }
         }
 
-        foreach($accountExplorerData['properties'] as $dataProperty) {
-            if($dataProperty['id'] == $reportingView->gaPropertyId) {
+        foreach ($accountExplorerData['properties'] as $dataProperty) {
+            if ($dataProperty['id'] == $reportingView->gaPropertyId) {
                 $reportingView->gaPropertyName = $dataProperty['name'];
             }
         }
-        foreach($accountExplorerData['views'] as $dataView) {
-            if($dataView['id'] == $reportingView->gaViewId) {
+        foreach ($accountExplorerData['views'] as $dataView) {
+            if ($dataView['id'] == $reportingView->gaViewId) {
                 $reportingView->gaViewName = $dataView['name'];
                 $reportingView->gaViewCurrency = $dataView['currency'];
             }
@@ -425,9 +319,11 @@ class SettingsController extends Controller
      * Deletes a view.
      *
      * @return Response
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionDeleteView()
+    public function actionDeleteView(): Response
     {
         $this->requirePostRequest();
         $this->requireAcceptsJson();
@@ -444,8 +340,9 @@ class SettingsController extends Controller
      * Sites index.
      *
      * @return Response
+     * @throws \yii\base\InvalidConfigException
      */
-    public function actionSites()
+    public function actionSites(): Response
     {
         $isOauthProviderConfigured = Analytics::$plugin->getAnalytics()->isOauthProviderConfigured();
 
@@ -478,8 +375,9 @@ class SettingsController extends Controller
      * @param $siteId
      *
      * @return Response
+     * @throws \yii\base\InvalidConfigException
      */
-    public function actionEditSite($siteId)
+    public function actionEditSite($siteId): Response
     {
         $site = Craft::$app->getSites()->getSiteById($siteId);
         $siteView = Analytics::$plugin->getViews()->getSiteViewBySiteId($siteId);
@@ -496,6 +394,8 @@ class SettingsController extends Controller
      * Saves a site.
      *
      * @return null|Response
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\db\Exception
      * @throws \yii\web\BadRequestHttpException
      */
     public function actionSaveSite()
@@ -524,5 +424,87 @@ class SettingsController extends Controller
         Craft::$app->getSession()->setNotice(Craft::t('analytics', 'Site view saved.'));
 
         return $this->redirectToPostedUrl($siteView);
+    }
+
+    // Private Methods
+    // =========================================================================
+
+    /**
+     * @param View $reportingView
+     *
+     * @return array
+     */
+    private function getAccountExplorerOptions(View $reportingView): array
+    {
+        $accountExplorerData = Analytics::$plugin->cache->get(['accountExplorerData']);
+
+        return [
+            'accounts' => $this->getAccountOptions($accountExplorerData, $reportingView),
+            'properties' => $this->getPropertyOptions($accountExplorerData, $reportingView),
+            'views' => $this->getViewOptions($accountExplorerData, $reportingView),
+        ];
+    }
+
+    /**
+     * @param      $accountExplorerData
+     * @param View $reportingView
+     *
+     * @return array
+     */
+    private function getAccountOptions($accountExplorerData, View $reportingView): array
+    {
+        $accountOptions = [];
+
+        if (isset($accountExplorerData['accounts'])) {
+            foreach ($accountExplorerData['accounts'] as $account) {
+                $accountOptions[] = ['label' => $account['name'], 'value' => $account['id']];
+            }
+        } else {
+            $accountOptions[] = ['label' => $reportingView->gaAccountName, 'value' => $reportingView->gaAccountId];
+        }
+
+        return $accountOptions;
+    }
+
+    /**
+     * @param      $accountExplorerData
+     * @param View $reportingView
+     *
+     * @return array
+     */
+    private function getPropertyOptions($accountExplorerData, View $reportingView): array
+    {
+        $propertyOptions = [];
+
+        if (isset($accountExplorerData['properties'])) {
+            foreach ($accountExplorerData['properties'] as $webProperty) {
+                $propertyOptions[] = ['label' => $webProperty['name'], 'value' => $webProperty['id']];
+            }
+        } else {
+            $propertyOptions[] = ['label' => $reportingView->gaPropertyName, 'value' => $reportingView->gaPropertyId];
+        }
+
+        return $propertyOptions;
+    }
+
+    /**
+     * @param      $accountExplorerData
+     * @param View $reportingView
+     *
+     * @return array
+     */
+    private function getViewOptions($accountExplorerData, View $reportingView): array
+    {
+        $viewOptions = [];
+
+        if (isset($accountExplorerData['views'])) {
+            foreach ($accountExplorerData['views'] as $dataView) {
+                $viewOptions[] = ['label' => $dataView['name'], 'value' => $dataView['id']];
+            }
+        } else {
+            $viewOptions[] = ['label' => $reportingView->gaViewName, 'value' => $reportingView->gaViewId];
+        }
+
+        return $viewOptions;
     }
 }

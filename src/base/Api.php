@@ -17,6 +17,7 @@ abstract class Api extends Component
      * Returns a Google client.
      *
      * @return Google_Client
+     * @throws \yii\base\InvalidConfigException
      */
     protected function getClient()
     {
@@ -24,13 +25,12 @@ abstract class Api extends Component
 
         if ($token) {
             // make token compatible with Google Client
-            $arrayToken = [
+
+            $arrayToken = json_encode([
                 'created' => 0,
                 'access_token' => $token->getToken(),
                 'expires_in' => $token->getExpires(),
-            ];
-
-            $arrayToken = json_encode($arrayToken);
+            ]);
 
             // client
             $client = new Google_Client();

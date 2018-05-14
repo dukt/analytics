@@ -83,6 +83,7 @@ class AnalyticsReporting extends Api
      * @param array $criterias
      *
      * @return Google_Service_AnalyticsReporting_GetReportsResponse
+     * @throws \yii\base\InvalidConfigException
      */
     private function getReportingReports($criterias)
     {
@@ -105,22 +106,13 @@ class AnalyticsReporting extends Api
      * @param ReportRequestCriteria $criteria
      *
      * @return Google_Service_AnalyticsReporting_ReportRequest
+     * @throws \yii\base\InvalidConfigException
      */
     private function getReportingReportRequest(ReportRequestCriteria $criteria)
     {
         $request = new Google_Service_AnalyticsReporting_ReportRequest();
 
-        if($criteria->gaViewId) {
-            $request->setViewId('ga:'.$criteria->gaViewId);
-        } else {
-            if ($criteria->viewId) {
-                $view = Plugin::getInstance()->getViews()->getViewById($criteria->viewId);
-
-                if ($view) {
-                    $request->setViewId($view->gaViewId);
-                }
-            }
-        }
+        $this->setRequestViewIdFromCriteria($request, $criteria);
 
         $dateRange = new Google_Service_AnalyticsReporting_DateRange();
         $dateRange->setStartDate($criteria->startDate);
@@ -148,7 +140,7 @@ class AnalyticsReporting extends Api
         }
 
         if ($criteria->pageToken) {
-            $pageToken = (string) $criteria->pageToken;
+            $pageToken = (string)$criteria->pageToken;
             $request->setPageToken($pageToken);
         }
 
@@ -160,19 +152,40 @@ class AnalyticsReporting extends Api
             $request->setFiltersExpression($criteria->filtersExpression);
         }
 
-        if($criteria->includeEmptyRows) {
+        if ($criteria->includeEmptyRows) {
             $request->setIncludeEmptyRows($criteria->includeEmptyRows);
         }
 
-        if($criteria->hideTotals) {
+        if ($criteria->hideTotals) {
             $request->setHideTotals($criteria->hideTotals);
         }
 
-        if($criteria->hideValueRanges) {
+        if ($criteria->hideValueRanges) {
             $request->setHideValueRanges($criteria->hideValueRanges);
         }
 
         return $request;
+    }
+
+    /**
+     * @param Google_Service_AnalyticsReporting_ReportRequest $request
+     * @param ReportRequestCriteria                           $criteria
+     *
+     * @throws \yii\base\InvalidConfigException
+     */
+    private function setRequestViewIdFromCriteria(Google_Service_AnalyticsReporting_ReportRequest &$request, ReportRequestCriteria $criteria)
+    {
+        if ($criteria->gaViewId) {
+            $request->setViewId('ga:'.$criteria->gaViewId);
+        } else {
+            if ($criteria->viewId) {
+                $view = Plugin::getInstance()->getViews()->getViewById($criteria->viewId);
+
+                if ($view) {
+                    $request->setViewId($view->gaViewId);
+                }
+            }
+        }
     }
 
     /**
@@ -185,7 +198,7 @@ class AnalyticsReporting extends Api
     private function getDimensionsFromString($string)
     {
         $dimensions = [];
-        $_dimensions = explode(",", $string);
+        $_dimensions = explode(',', $string);
         foreach ($_dimensions as $_dimension) {
             $dimension = new Google_Service_AnalyticsReporting_Dimension();
             $dimension->setName($_dimension);
@@ -205,7 +218,7 @@ class AnalyticsReporting extends Api
     private function getMetricsFromString($string)
     {
         $metrics = [];
-        $_metrics = explode(",", $string);
+        $_metrics = explode(',', $string);
         foreach ($_metrics as $_metric) {
             $metric = new Google_Service_AnalyticsReporting_Metric();
             $metric->setExpression($_metric);

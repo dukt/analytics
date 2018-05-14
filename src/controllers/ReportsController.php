@@ -39,12 +39,13 @@ class ReportsController extends Controller
      * Get element report.
      *
      * @return Response
+     * @throws \yii\base\InvalidConfigException
      * @throws \yii\web\BadRequestHttpException
      */
     public function actionElement()
     {
         $elementId = Craft::$app->getRequest()->getRequiredParam('elementId');
-        $siteId = (int) Craft::$app->getRequest()->getRequiredParam('siteId');
+        $siteId = (int)Craft::$app->getRequest()->getRequiredParam('siteId');
         $metric = Craft::$app->getRequest()->getRequiredParam('metric');
 
         $response = Analytics::$plugin->getReports()->getElementReport($elementId, $siteId, $metric);
@@ -59,39 +60,17 @@ class ReportsController extends Controller
      * Get realtime widget report.
      *
      * @return Response
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionRealtimeWidget()
     {
-        if(Analytics::$plugin->getSettings()->demoMode) {
-            $activeUsers = random_int(0, 20);
-            $pageviews = [
-                'rows' => []
-            ];
-
-            for($i = 0; $i <= 30; $i++) {
-                $pageviews['rows'][] = [$i, random_int(0, 20)];
-            }
-
-            $activePages = [
-                'rows' => [
-                    ['/some-url/', random_int(0, 20)],
-                    ['/some-super-long-url/with-kebab-case/', random_int(0, 20)],
-                    ['/somesuperlongurlwithoutkebabcasebutstillsuperlong/', random_int(10000000, 20000000)],
-                    ['/someothersuperlongurl/withoutkebabcasebutstillsuperlong/', random_int(0, 20)],
-                    ['/one-last-url/', random_int(0, 20)],
-                ]
-            ];
-
-            return $this->asJson([
-                'activeUsers' => $activeUsers,
-                'pageviews' => $pageviews,
-                'activePages' => $activePages,
-            ]);
+        if (Analytics::$plugin->getSettings()->demoMode) {
+            return $this->getRealtimeDemoResponse();
         }
 
 
         // Active users
-        
+
         $activeUsers = 0;
 
         $viewId = Craft::$app->getRequest()->getBodyParam('viewId');
@@ -107,7 +86,6 @@ class ReportsController extends Controller
         if (!empty($response['totalsForAllResults']) && isset($response['totalsForAllResults']['ga:activeVisitors'])) {
             $activeUsers = $response['totalsForAllResults']['ga:activeVisitors'];
         }
-
 
 
         // Pageviews
@@ -143,6 +121,7 @@ class ReportsController extends Controller
      *
      * @return Response
      * @throws InvalidChartTypeException
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionReportWidget()
     {
@@ -180,7 +159,7 @@ class ReportsController extends Controller
                     $response = Analytics::$plugin->getReports()->getGeoReport($request);
                     break;
                 default:
-                    throw new InvalidChartTypeException("Chart type `".$chart."` not supported.");
+                    throw new InvalidChartTypeException('Chart type `'.$chart.'` not supported.');
             }
 
             if ($response) {
@@ -189,5 +168,88 @@ class ReportsController extends Controller
         }
 
         return $this->asJson($response);
+    }
+
+    // Private Methods
+    // =========================================================================
+
+    /**
+     * Get realtime demo response.
+     *
+     * @return Response
+     */
+    private function getRealtimeDemoResponse(): Response
+    {
+        if (Analytics::$plugin->getSettings()->demoMode === 'test') {
+            return $this->getRealtimeDemoTestResponse();
+        }
+
+        $pageviews = [
+            'rows' => []
+        ];
+
+        for ($i = 0; $i <= 30; $i++) {
+            $pageviews['rows'][] = [$i, random_int(0, 20)];
+        }
+
+        $activePages = [
+            'rows' => [
+                ['/a-new-toga/', random_int(1, 20)],
+                ['/parka-with-stripes-on-back/', random_int(1, 20)],
+                ['/romper-for-a-red-eye/', random_int(1, 20)],
+                ['/the-fleece-awakens/', random_int(1, 20)],
+                ['/the-last-knee-high/', random_int(1, 20)],
+            ]
+        ];
+
+        $activeUsers = 0;
+
+        foreach ($activePages['rows'] as $row) {
+            $activeUsers += $row[1];
+        }
+
+        return $this->asJson([
+            'activeUsers' => $activeUsers,
+            'pageviews' => $pageviews,
+            'activePages' => $activePages,
+        ]);
+    }
+
+    /**
+     * Get realtime demo test response.
+     *
+     * @return Response
+     */
+    private function getRealtimeDemoTestResponse(): Response
+    {
+        $pageviews = [
+            'rows' => []
+        ];
+
+        for ($i = 0; $i <= 30; $i++) {
+            $pageviews['rows'][] = [$i, random_int(0, 20)];
+        }
+
+        $activePages = [
+            'rows' => [
+                ['/some-url/', random_int(1, 20)],
+                ['/some-super-long-url/with-kebab-case/', random_int(1, 20)],
+                ['/somesuperlongurlwithoutkebabcasebutstillsuperlong/', random_int(10000000, 20000000)],
+                ['/someothersuperlongurl/withoutkebabcasebutstillsuperlong/', random_int(1, 20)],
+                ['/one-last-url/', random_int(1, 20)],
+            ]
+        ];
+
+        $activeUsers = 0;
+
+        foreach ($activePages['rows'] as $row) {
+            $activeUsers += $row[1];
+        }
+
+        return $this->asJson([
+            'activeUsers' => $activeUsers,
+            'pageviews' => $pageviews,
+            'activePages' => $activePages,
+        ]);
     }
 }

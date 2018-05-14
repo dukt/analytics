@@ -43,7 +43,7 @@ class UtilsController extends Controller
      *
      * @return Response
      */
-    public function actionMetadata(array $variables = array())
+    public function actionMetadata(array $variables = [])
     {
         $variables['dimensions'] = Analytics::$plugin->metadata->getDimensions();
         $variables['metrics'] = Analytics::$plugin->metadata->getMetrics();
@@ -62,10 +62,10 @@ class UtilsController extends Controller
         $columns = Analytics::$plugin->metadata->searchColumns($q);
 
         // Send the source back to the template
-        Craft::$app->urlManager->setRouteVariables(array(
+        Craft::$app->urlManager->setRouteVariables([
             'q' => $q,
             'columns' => $columns,
-        ));
+        ]);
     }
 
     /**
@@ -78,9 +78,10 @@ class UtilsController extends Controller
         $this->_deleteMetadata();
         $this->_importMetadata();
 
-        Craft::$app->getSession()->setNotice(Craft::t('analytics', "Metadata loaded."));
+        Craft::$app->getSession()->setNotice(Craft::t('analytics', 'Metadata loaded.'));
 
         $referrer = Craft::$app->getRequest()->referrer;
+
         return $this->redirect($referrer);
     }
 
@@ -107,24 +108,18 @@ class UtilsController extends Controller
 
         $items = Analytics::$plugin->getApis()->getAnalytics()->getColumns();
 
-        if($items)
-        {
-            foreach($items as $item)
-            {
-                if($item->attributes['status'] == 'DEPRECATED')
-                {
+        if ($items) {
+            foreach ($items as $item) {
+                if ($item->attributes['status'] == 'DEPRECATED') {
                     continue;
                 }
 
-                if($item->attributes['addedInApiVersion'] > $this->addedInApiVersion)
-                {
+                if ($item->attributes['addedInApiVersion'] > $this->addedInApiVersion) {
                     continue;
                 }
 
-                if(isset($item->attributes['minTemplateIndex']))
-                {
-                    for($i = $item->attributes['minTemplateIndex']; $i <= $item->attributes['maxTemplateIndex']; $i++)
-                    {
+                if (isset($item->attributes['minTemplateIndex'])) {
+                    for ($i = $item->attributes['minTemplateIndex']; $i <= $item->attributes['maxTemplateIndex']; $i++) {
                         $column = [];
                         $column['id'] = str_replace('XX', $i, $item->id);
                         $column['uiName'] = str_replace('XX', $i, $item->attributes['uiName']);
@@ -132,9 +127,7 @@ class UtilsController extends Controller
 
                         $columns[$column['id']] = $this->populateColumnAttributes($column, $item);
                     }
-                }
-                else
-                {
+                } else {
                     $column = [];
                     $column['id'] = $item->id;
                     $column['uiName'] = $item->attributes['uiName'];
@@ -167,13 +160,11 @@ class UtilsController extends Controller
         $column['group'] = $item->attributes['group'];
         $column['status'] = $item->attributes['status'];
 
-        if(isset($item->attributes['allowInSegments']))
-        {
+        if (isset($item->attributes['allowInSegments'])) {
             $column['allowInSegments'] = $item->attributes['allowInSegments'];
         }
 
-        if(isset($item->attributes['addedInApiVersion']))
-        {
+        if (isset($item->attributes['addedInApiVersion'])) {
             $column['addedInApiVersion'] = $item->attributes['addedInApiVersion'];
         }
 
