@@ -362,7 +362,7 @@ class Reports extends Component
             'dimension' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($dimensionString)),
             'metric' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($metricString)),
             'period' => $period,
-            'periodLabel' => Craft::t('analytics', 'this '.$period)
+            'periodLabel' => Craft::t('analytics', 'This '.$period)
         ];
     }
 
@@ -407,7 +407,7 @@ class Reports extends Component
             'dimension' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($originDimension)),
             'metric' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($metricString)),
             'period' => $period,
-            'periodLabel' => Craft::t('analytics', 'this '.$period)
+            'periodLabel' => Craft::t('analytics', 'This '.$period)
         ];
     }
 
