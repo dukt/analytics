@@ -1,7 +1,7 @@
 Changelog
 =========
 
-## Unreleased
+## 4.0.0-beta.3 - 2018-05-16
 
 ### Fixed
 - Updated google/apiclient to `^v2.1.3`. ([#6](https://github.com/dukt/analytics/issues/6))
