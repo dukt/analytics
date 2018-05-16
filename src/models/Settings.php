@@ -14,7 +14,7 @@ class Settings extends Model
     // =========================================================================
 
     /**
-     * @var string The amount of time cache should last.
+     * @var string The amount of time cache should last
      *
      * @see http://www.php.net/manual/en/dateinterval.construct.php
      */
@@ -51,17 +51,17 @@ class Settings extends Model
     public $forceConnect = false;
 
     /**
-     * Google Maps API key
+     * @var string|null Google Maps API key
      */
     public $mapsApiKey;
 
     /**
-     * @var string OAuth client ID
+     * @var string|null OAuth client ID
      */
     public $oauthClientId;
 
     /**
-     * @var string OAuth client ID
+     * @var string|null OAuth client ID
      */
     public $oauthClientSecret;
 
@@ -74,9 +74,9 @@ class Settings extends Model
      * @var int Realtime Refresh Interval (in seconds)
      */
     public $realtimeRefreshInterval = 60;
-    
+
     /**
-     * @var string OAuth token
+     * @var string|null OAuth token
      */
     public $token;
 
