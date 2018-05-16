@@ -14,21 +14,6 @@ class Settings extends Model
     // =========================================================================
 
     /**
-     * @var int Realtime Refresh Interval (in seconds)
-     */
-    public $realtimeRefreshInterval = 60;
-
-    /**
-     * @var bool Force connect
-     */
-    public $forceConnect = false;
-
-    /**
-     * @var bool Enable Realtime
-     */
-    public $enableRealtime = false;
-
-    /**
      * @var string The amount of time cache should last.
      *
      * @see http://www.php.net/manual/en/dateinterval.construct.php
@@ -36,14 +21,14 @@ class Settings extends Model
     public $cacheDuration = 'PT10M';
 
     /**
+     * @var bool|string|null Demo mode
+     */
+    public $demoMode = false;
+
+    /**
      * @var bool Whether request to APIs should be cached or not
      */
     public $enableCache = true;
-
-    /**
-     * @var bool Whether Analytics widgets are enabled or disabled
-     */
-    public $enableWidgets = true;
 
     /**
      * @var bool Whether Analytics fieldtype is enabled or not
@@ -51,14 +36,24 @@ class Settings extends Model
     public $enableFieldtype = true;
 
     /**
-     * @var string OAuth token
+     * @var bool Enable Realtime
      */
-    public $token;
+    public $enableRealtime = false;
 
     /**
-     * @var array OAuth provider options
+     * @var bool Whether Analytics widgets are enabled or disabled
      */
-    public $oauthProviderOptions = [];
+    public $enableWidgets = true;
+
+    /**
+     * @var bool Force connect
+     */
+    public $forceConnect = false;
+
+    /**
+     * Google Maps API key
+     */
+    public $mapsApiKey;
 
     /**
      * @var string OAuth client ID
@@ -71,14 +66,20 @@ class Settings extends Model
     public $oauthClientSecret;
 
     /**
-     * Google Maps API key
+     * @var array OAuth provider options
      */
-    public $mapsApiKey;
+    public $oauthProviderOptions = [];
 
     /**
-     * @var bool|string|null Demo mode
+     * @var int Realtime Refresh Interval (in seconds)
      */
-    public $demoMode = false;
+    public $realtimeRefreshInterval = 60;
+    
+    /**
+     * @var string OAuth token
+     */
+    public $token;
+
 
     // Public Methods
     // =========================================================================
