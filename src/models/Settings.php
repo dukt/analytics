@@ -14,9 +14,7 @@ class Settings extends Model
     // =========================================================================
 
     /**
-     * @var string The amount of time cache should last.
-     *
-     * @see http://www.php.net/manual/en/dateinterval.construct.php
+     * @var string The amount of time cache should last. The value should be set as a [PHP date interval](http://www.php.net/manual/en/dateinterval.construct.php).
      */
     public $cacheDuration = 'PT10M';
 
@@ -51,17 +49,17 @@ class Settings extends Model
     public $forceConnect = false;
 
     /**
-     * @var string|null Google Maps API key.
+     * @var string|null Google Maps API key. Used by the Geo chart.
      */
     public $mapsApiKey;
 
     /**
-     * @var string|null OAuth client ID.
+     * @var string|null The Google API application’s OAuth client ID.
      */
     public $oauthClientId;
 
     /**
-     * @var string|null OAuth client secret.
+     * @var string|null The Google API application’s OAuth client Secret.
      */
     public $oauthClientSecret;
 
@@ -71,7 +69,7 @@ class Settings extends Model
     public $oauthProviderOptions = [];
 
     /**
-     * @var int Realtime refresh interval (in seconds).
+     * @var int Interval at which the realtime widget should refresh its data (in seconds).
      */
     public $realtimeRefreshInterval = 60;
 
