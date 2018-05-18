@@ -38,7 +38,7 @@
         "name": "Analytics",
         "handle": "analytics",
         "schemaVersion": "1.1.0",
-        "documentationUrl": "https://github.com/dukt/analytics-docs",
+        "documentationUrl": "https://docs.dukt.net/analytics/v4",
         "changelogUrl": "https://raw.githubusercontent.com/dukt/analytics/develop/CHANGELOG.md"
     }
 }
