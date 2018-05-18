@@ -14,5 +14,5 @@ Installation instructions can be found in the [Analytics 4 documentation](https:
 
 ## Resources
 
-- [Analytics 4 Documentation](https://github.com/dukt/analytics-docs)
+- [Analytics 4 Documentation](https://docs.dukt.net/analytics/v4)
 - [Analytics 4 Plugin Overview](https://dukt.net/analytics)
