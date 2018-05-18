@@ -10,7 +10,7 @@ This plugin requires Craft CMS 3.0.0-RC1 or later.
 
 ## How to install Analytics 4 Beta
 
-Installation instructions can be found in the [Analytics 4 documentation](https://github.com/dukt/analytics-docs/blob/v4/en/installation.md).
+Installation instructions can be found in the [Analytics 4 documentation](https://docs.dukt.net/analytics/v4/installation.html).
 
 ## Resources
 
