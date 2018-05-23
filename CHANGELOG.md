@@ -1,7 +1,7 @@
 Changelog
 =========
 
-## Unreleased
+## 4.0.0-beta.4 - 2018-05-24
 
 ### Fixed
 - Fixed a bug where saving a view was throwing an error. ([#7](https://github.com/dukt/analytics/issues/7))
