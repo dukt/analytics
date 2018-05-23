@@ -19,11 +19,6 @@ class Settings extends Model
     public $cacheDuration = 'PT10M';
 
     /**
-     * @var bool|string|null Demo mode.
-     */
-    public $demoMode = false;
-
-    /**
      * @var bool Whether requests to APIs should be cached or not.
      */
     public $enableCache = true;
