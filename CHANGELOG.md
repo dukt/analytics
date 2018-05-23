@@ -1,9 +1,14 @@
 Changelog
 =========
 
-## 4.0.0-beta.3 - 2018-05-16
+## Unreleased
 
 ### Fixed
+- Fixed a bug where saving a view was throwing an error. ([#7](https://github.com/dukt/analytics/issues/7))
+
+## 4.0.0-beta.3 - 2018-05-16
+
+### Changed
 - Updated google/apiclient to `^v2.1.3`. ([#6](https://github.com/dukt/analytics/issues/6))
 
 ## 4.0.0-beta.2 - 2018-05-03
