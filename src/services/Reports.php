@@ -99,10 +99,10 @@ class Reports extends Component
 
         return [
             'period' => $startDate.' - '.$endDate,
-            'totalRevenue' => $report->data['totals'][0]['values'][0],
-            'totalRevenuePerTransaction' => $report->data['totals'][0]['values'][1],
-            'totalTransactions' => $report->data['totals'][0]['values'][2],
-            'totalTransactionsPerSession' => $report->data['totals'][0]['values'][3],
+            'totalRevenue' => $report->data->totals[0]->values[0],
+            'totalRevenuePerTransaction' => $report->data->totals[0]->values[1],
+            'totalTransactions' => $report->data->totals[0]->values[2],
+            'totalTransactionsPerSession' => $report->data->totals[0]->values[3],
             'reportData' => [
                 'view' => $view->name,
                 'chart' => $reportData,
