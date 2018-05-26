@@ -14,71 +14,65 @@ class Settings extends Model
     // =========================================================================
 
     /**
-     * @var int Realtime Refresh Interval (in seconds)
-     */
-    public $realtimeRefreshInterval = 60;
-
-    /**
-     * @var bool Force connect
-     */
-    public $forceConnect = false;
-
-    /**
-     * @var bool Enable Realtime
-     */
-    public $enableRealtime = false;
-
-    /**
-     * @var string The amount of time cache should last.
-     *
-     * @see http://www.php.net/manual/en/dateinterval.construct.php
+     * @var string The amount of time cache should last. The value should be set as a [PHP date interval](http://www.php.net/manual/en/dateinterval.construct.php).
      */
     public $cacheDuration = 'PT10M';
 
     /**
-     * @var bool Whether request to APIs should be cached or not
+     * @var bool Whether requests to APIs should be cached or not.
      */
     public $enableCache = true;
 
     /**
-     * @var bool Whether Analytics widgets are enabled or disabled
-     */
-    public $enableWidgets = true;
-
-    /**
-     * @var bool Whether Analytics fieldtype is enabled or not
+     * @var bool Whether the Report field type is enabled or not.
      */
     public $enableFieldtype = true;
 
     /**
-     * @var string OAuth token
+     * @var bool Whether the Realtime widget is enabled or not.
      */
-    public $token;
+    public $enableRealtime = false;
 
     /**
-     * @var array OAuth provider options
+     * @var bool Whether Analytics widgets are enabled or disabled.
      */
-    public $oauthProviderOptions = [];
+    public $enableWidgets = true;
 
     /**
-     * @var string OAuth client ID
+     * @var bool Force connect.
      */
-    public $oauthClientId;
+    public $forceConnect = false;
 
     /**
-     * @var string OAuth client ID
-     */
-    public $oauthClientSecret;
-
-    /**
-     * Google Maps API key
+     * @var string|null Google Maps API key. Used by the Geo chart.
      */
     public $mapsApiKey;
 
     /**
-     * @var bool|string|null Demo mode
+     * @var string|null The Google API application’s OAuth client ID.
      */
-    public $demoMode = false;
+    public $oauthClientId;
+
+    /**
+     * @var string|null The Google API application’s OAuth client Secret.
+     */
+    public $oauthClientSecret;
+
+    /**
+     * @var array OAuth provider options.
+     */
+    public $oauthProviderOptions = [];
+
+    /**
+     * @var int Interval at which the realtime widget should refresh its data (in seconds).
+     */
+    public $realtimeRefreshInterval = 60;
+
+    /**
+     * @var string|null OAuth token.
+     */
+    public $token;
+
 
     // Public Methods
     // =========================================================================

@@ -281,20 +281,20 @@ class SettingsController extends Controller
         $accountExplorerData = Analytics::$plugin->getApis()->getAnalytics()->getAccountExplorerData();
 
         foreach ($accountExplorerData['accounts'] as $dataAccount) {
-            if ($dataAccount['id'] == $reportingView->gaAccountId) {
-                $reportingView->gaAccountName = $dataAccount['name'];
+            if ($dataAccount->id == $reportingView->gaAccountId) {
+                $reportingView->gaAccountName = $dataAccount->name;
             }
         }
 
         foreach ($accountExplorerData['properties'] as $dataProperty) {
-            if ($dataProperty['id'] == $reportingView->gaPropertyId) {
-                $reportingView->gaPropertyName = $dataProperty['name'];
+            if ($dataProperty->id == $reportingView->gaPropertyId) {
+                $reportingView->gaPropertyName = $dataProperty->name;
             }
         }
         foreach ($accountExplorerData['views'] as $dataView) {
-            if ($dataView['id'] == $reportingView->gaViewId) {
-                $reportingView->gaViewName = $dataView['name'];
-                $reportingView->gaViewCurrency = $dataView['currency'];
+            if ($dataView->id == $reportingView->gaViewId) {
+                $reportingView->gaViewName = $dataView->name;
+                $reportingView->gaViewCurrency = $dataView->currency;
             }
         }
 

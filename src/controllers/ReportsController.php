@@ -67,7 +67,7 @@ class ReportsController extends Controller
      */
     public function actionRealtimeWidget()
     {
-        if (Analytics::$plugin->getSettings()->demoMode) {
+        if (Analytics::getInstance()->getAnalytics()->demoMode) {
             return $this->getRealtimeDemoResponse();
         }
 
@@ -183,7 +183,7 @@ class ReportsController extends Controller
      */
     private function getRealtimeDemoResponse(): Response
     {
-        if (Analytics::$plugin->getSettings()->demoMode === 'test') {
+        if (Analytics::$plugin->getAnalytics()->demoMode === 'test') {
             return $this->getRealtimeDemoTestResponse();
         }
 

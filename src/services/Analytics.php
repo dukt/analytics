@@ -13,6 +13,14 @@ use dukt\Analytics\Plugin as AnalyticsPlugin;
 
 class Analytics extends Component
 {
+    // Properties
+    // =========================================================================
+
+    /**
+     * @var bool|string|null Demo mode.
+     */
+    public $demoMode = false;
+
     // Public Methods
     // =========================================================================
 
