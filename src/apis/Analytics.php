@@ -20,6 +20,7 @@ class Analytics extends Api
 
     /**
      * @return Google_Service_Analytics
+     * @throws \yii\base\InvalidConfigException
      */
     public function getService()
     {

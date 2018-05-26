@@ -196,6 +196,7 @@ class Analytics extends Component
      * Checks plugin requirements (dependencies, configured OAuth provider, and token).
      *
      * @return bool
+     * @throws \yii\base\InvalidConfigException
      */
     public function checkPluginRequirements()
     {
