@@ -109,11 +109,21 @@ class Metadata extends Component
         ];
     }
 
+    /**
+     * Get continents.
+     *
+     * @return array
+     */
     public function getContinents()
     {
         return $this->_getData('continents');
     }
 
+    /**
+     * Get subcontinents.
+     *
+     * @return array
+     */
     public function getSubContinents()
     {
         return $this->_getData('subContinents');
