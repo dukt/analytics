@@ -326,9 +326,6 @@ class Metadata extends Component
             }
         }
 
-
-        // filters
-
         if ($filters) {
             $options = $this->filterOptions($options, $filters);
         }
@@ -371,12 +368,8 @@ class Metadata extends Component
     private function _loadColumns(): array
     {
         $cols = [];
-
         $path = Analytics::$plugin->metadata->getDimmetsFilePath();
-
-
         $contents = file_get_contents($path);
-
         $columnsResponse = Json::decode($contents);
 
         if ($columnsResponse) {
