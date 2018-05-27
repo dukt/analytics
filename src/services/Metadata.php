@@ -114,7 +114,7 @@ class Metadata extends Component
      *
      * @return array
      */
-    public function getContinents()
+    public function getContinents(): array
     {
         return $this->_getData('continents');
     }
@@ -124,7 +124,7 @@ class Metadata extends Component
      *
      * @return array
      */
-    public function getSubContinents()
+    public function getSubContinents(): array
     {
         return $this->_getData('subContinents');
     }
