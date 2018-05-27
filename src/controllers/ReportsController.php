@@ -26,7 +26,7 @@ class ReportsController extends Controller
      */
     public function actionEcommerceWidget()
     {
-        if (Analytics::$plugin->getSettings()->demoMode) {
+        if (Analytics::getInstance()->getAnalytics()->demoMode) {
             return $this->getEcommerceDemoResponse();
         }
 
