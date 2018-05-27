@@ -131,7 +131,7 @@ class UtilsController extends Controller
 
     /**
      * Add column from item.
-     * 
+     *
      * @param $columns
      * @param $item
      */
