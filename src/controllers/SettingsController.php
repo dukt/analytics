@@ -124,7 +124,6 @@ class SettingsController extends Controller
 
         $pluginHandle = Craft::$app->getRequest()->getRequiredBodyParam('pluginHandle');
         $settings = Craft::$app->getRequest()->getBodyParam('settings');
-
         $plugin = Craft::$app->getPlugins()->getPlugin($pluginHandle);
 
         if (!$plugin) {
@@ -174,7 +173,9 @@ class SettingsController extends Controller
     {
         $isOauthProviderConfigured = Analytics::$plugin->getAnalytics()->isOauthProviderConfigured();
 
-        $variables['isConnected'] = false;
+        $variables = [
+            'isConnected' => false
+        ];
 
         try {
             $token = Analytics::$plugin->oauth->getToken();
@@ -249,19 +250,15 @@ class SettingsController extends Controller
     {
         $this->requirePostRequest();
 
-        $reportingView = new View();
-
-        // Set the simple stuff
         $request = Craft::$app->getRequest();
-        $reportingView->id = $request->getBodyParam('viewId');
-        $reportingView->name = $request->getBodyParam('name');
-
         $accountExplorer = $request->getBodyParam('accountExplorer');
 
+        $reportingView = new View();
+        $reportingView->id = $request->getBodyParam('viewId');
+        $reportingView->name = $request->getBodyParam('name');
         $reportingView->gaAccountId = $accountExplorer['account'];
         $reportingView->gaPropertyId = $accountExplorer['property'];
         $reportingView->gaViewId = $accountExplorer['view'];
-
 
         $accountExplorerData = Analytics::$plugin->getApis()->getAnalytics()->getAccountExplorerData();
 
@@ -331,7 +328,9 @@ class SettingsController extends Controller
     {
         $isOauthProviderConfigured = Analytics::$plugin->getAnalytics()->isOauthProviderConfigured();
 
-        $variables['isConnected'] = false;
+        $variables = [
+            'isConnected' => false
+        ];
 
         try {
             $token = Analytics::$plugin->oauth->getToken();
@@ -387,10 +386,9 @@ class SettingsController extends Controller
     {
         $this->requirePostRequest();
 
-        $siteView = new SiteView();
-
-        // Set the simple stuff
         $request = Craft::$app->getRequest();
+
+        $siteView = new SiteView();
         $siteView->siteId = $request->getBodyParam('siteId');
         $siteView->viewId = $request->getBodyParam('viewId');
 
