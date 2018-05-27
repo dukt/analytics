@@ -28,13 +28,10 @@ class SettingsController extends Controller
     /**
      * Index.
      *
-     * @param null $plugin
-     *
      * @return Response
-     * @throws \craft\errors\SiteNotFoundException
      * @throws \yii\base\InvalidConfigException
      */
-    public function actionIndex($plugin = null): Response
+    public function actionIndex(): Response
     {
         $isOauthProviderConfigured = Analytics::$plugin->getAnalytics()->isOauthProviderConfigured();
 
@@ -42,10 +39,6 @@ class SettingsController extends Controller
             $errors = [];
 
             try {
-                if (!$plugin) {
-                    $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
-                }
-
                 $provider = Analytics::$plugin->oauth->getOauthProvider();
                 $token = Analytics::$plugin->oauth->getToken();
 
@@ -60,6 +53,7 @@ class SettingsController extends Controller
                     if ($oauthAccount) {
                         Craft::info("Account:\r\n".print_r($oauthAccount, true), __METHOD__);
 
+                        $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
                         $settings = $plugin->getSettings();
                     }
                 }
@@ -71,7 +65,6 @@ class SettingsController extends Controller
                 }
             } catch (IdentityProviderException $e) {
                 $error = $e->getMessage();
-
                 $data = $e->getResponseBody();
 
                 if (isset($data['error_description'])) {
@@ -90,21 +83,13 @@ class SettingsController extends Controller
             }
         }
 
-        $token = ($token ?? null);
-
         Craft::$app->getView()->registerAssetBundle(SettingsAsset::class);
 
         return $this->renderTemplate('analytics/settings/_index', [
             'isOauthProviderConfigured' => $isOauthProviderConfigured,
-
             'errors' => $errors ?? null,
             'oauthAccount' => $oauthAccount ?? null,
-            'provider' => $provider ?? null,
             'settings' => $settings ?? null,
-            'token' => $token ?? null,
-
-            'javascriptOrigin' => Analytics::$plugin->oauth->getJavascriptOrigin(),
-            'redirectUri' => Analytics::$plugin->oauth->getRedirectUri(),
             'googleIconUrl' => Craft::$app->assetManager->getPublishedUrl('@dukt/analytics/icons/google.svg', true),
         ]);
     }
