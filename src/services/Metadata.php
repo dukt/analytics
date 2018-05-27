@@ -239,11 +239,11 @@ class Metadata extends Component
     /**
      * Returns column groups
      *
-     * @param null $type
+     * @param string|null $type
      *
      * @return array
      */
-    public function getColumnGroups($type = null): array
+    public function getColumnGroups(string $type = null): array
     {
         if ($type && isset($this->groups[$type])) {
             return $this->groups[$type];
@@ -256,8 +256,6 @@ class Metadata extends Component
                 $groups[$column->group] = $column->group;
             }
         }
-
-        // ksort($groups);
 
         if ($type) {
             $this->groups[$type] = $groups;
