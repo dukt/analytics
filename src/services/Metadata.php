@@ -422,6 +422,19 @@ class Metadata extends Component
             return $options;
         }
 
+        return $this->getFilteredOptions($options, $filters);
+    }
+
+    /**
+     * Get filtered options.
+     *
+     * @param array $options
+     * @param array $filters
+     *
+     * @return array
+     */
+    private function getFilteredOptions(array $options, array $filters): array
+    {
         $filteredOptions = [];
         $optgroup = null;
         $lastOptgroup = null;
