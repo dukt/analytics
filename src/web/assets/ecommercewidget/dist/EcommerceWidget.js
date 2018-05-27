@@ -18,7 +18,7 @@
                 this.$body = $('.body', this.$element);
                 this.$spinner = $('.spinner', this.$element);
                 this.$spinner.removeClass('body-loading');
-                this.$error = $('<div class="error" />').appendTo(this.$body);
+                this.$error = $('<div class="error hidden" />').appendTo(this.$body);
 
                 this.$period = $('.period', this.$element);
                 this.$revenue = $('.revenue', this.$element);
@@ -26,6 +26,7 @@
                 this.$transactions = $('.transactions', this.$element);
                 this.$transactionsPerSession = $('.transactions-per-session', this.$element);
                 this.$chart = $('.chart', this.$element);
+                this.$tiles = $('.tiles', this.$element);
 
                 this.sendRequest();
             },
@@ -33,7 +34,6 @@
             sendRequest: function()
             {
                 this.$spinner.removeClass('hidden');
-
                 this.$error.addClass('hidden');
 
                 var data = {
@@ -47,6 +47,8 @@
 
                     if(textStatus == 'success' && typeof(response.error) == 'undefined')
                     {
+                        this.$tiles.removeClass('hidden');
+                        this.$chart.removeClass('hidden');
                         this.parseResponse(response);
                     }
                     else
@@ -60,6 +62,8 @@
 
                         this.$error.html(msg);
                         this.$error.removeClass('hidden');
+                        this.$tiles.addClass('hidden');
+                        this.$chart.addClass('hidden');
                     }
 
                 }, this));
