@@ -3,6 +3,9 @@ Changelog
 
 ## Unreleased
 
+### Added
+- Added E-commerce widget to display revenue and transactions data.
+
 ### Changed
 - Moved `forceConnect` and `token` settings to a new `analytics_info` table.
 - Removed `forceConnect` config setting.
