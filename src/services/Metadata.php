@@ -109,12 +109,22 @@ class Metadata extends Component
         ];
     }
 
-    public function getContinents()
+    /**
+     * Get continents.
+     *
+     * @return array
+     */
+    public function getContinents(): array
     {
         return $this->_getData('continents');
     }
 
-    public function getSubContinents()
+    /**
+     * Get subcontinents.
+     *
+     * @return array
+     */
+    public function getSubContinents(): array
     {
         return $this->_getData('subContinents');
     }
@@ -239,11 +249,11 @@ class Metadata extends Component
     /**
      * Returns column groups
      *
-     * @param null $type
+     * @param string|null $type
      *
      * @return array
      */
-    public function getColumnGroups($type = null): array
+    public function getColumnGroups(string $type = null): array
     {
         if ($type && isset($this->groups[$type])) {
             return $this->groups[$type];
@@ -256,8 +266,6 @@ class Metadata extends Component
                 $groups[$column->group] = $column->group;
             }
         }
-
-        // ksort($groups);
 
         if ($type) {
             $this->groups[$type] = $groups;
@@ -328,9 +336,6 @@ class Metadata extends Component
             }
         }
 
-
-        // filters
-
         if ($filters) {
             $options = $this->filterOptions($options, $filters);
         }
@@ -373,12 +378,8 @@ class Metadata extends Component
     private function _loadColumns(): array
     {
         $cols = [];
-
         $path = Analytics::$plugin->metadata->getDimmetsFilePath();
-
-
         $contents = file_get_contents($path);
-
         $columnsResponse = Json::decode($contents);
 
         if ($columnsResponse) {
@@ -422,6 +423,19 @@ class Metadata extends Component
             return $options;
         }
 
+        return $this->getFilteredOptions($options, $filters);
+    }
+
+    /**
+     * Get filtered options.
+     *
+     * @param array $options
+     * @param array $filters
+     *
+     * @return array
+     */
+    private function getFilteredOptions(array $options, array $filters): array
+    {
         $filteredOptions = [];
         $optgroup = null;
         $lastOptgroup = null;

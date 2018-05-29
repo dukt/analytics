@@ -39,11 +39,6 @@ class Settings extends Model
     public $enableWidgets = true;
 
     /**
-     * @var bool Force connect.
-     */
-    public $forceConnect = false;
-
-    /**
      * @var string|null Google Maps API key. Used by the Geo chart.
      */
     public $mapsApiKey;
@@ -67,12 +62,6 @@ class Settings extends Model
      * @var int Interval at which the realtime widget should refresh its data (in seconds).
      */
     public $realtimeRefreshInterval = 60;
-
-    /**
-     * @var string|null OAuth token.
-     */
-    public $token;
-
 
     // Public Methods
     // =========================================================================

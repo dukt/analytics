@@ -110,7 +110,7 @@ class Plugin extends \craft\base\Plugin
             $variable->set('analytics', AnalyticsVariable::class);
         });
 
-        if (!Craft::$app->getRequest()->getIsConsoleRequest() && Craft::$app->getRequest()->getIsCpRequest()) {
+        if ($this->isInstalled && !Craft::$app->getRequest()->getIsConsoleRequest() && Craft::$app->getRequest()->getIsCpRequest()) {
             Craft::$app->getView()->registerAssetBundle(AnalyticsAsset::class);
         }
     }

@@ -180,6 +180,7 @@ class ReportsController extends Controller
      * Get realtime demo response.
      *
      * @return Response
+     * @throws \yii\base\InvalidConfigException
      */
     private function getRealtimeDemoResponse(): Response
     {

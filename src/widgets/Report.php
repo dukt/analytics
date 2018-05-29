@@ -90,61 +90,61 @@ class Report extends \craft\base\Widget
         $view = Craft::$app->getView();
 
         try {
-            if (Analytics::$plugin->getAnalytics()->checkPluginRequirements()) {
-                if (Analytics::$plugin->getSettings()->enableWidgets) {
-                    $reportingViews = Analytics::$plugin->getViews()->getViews();
+            if (!Analytics::$plugin->getAnalytics()->checkPluginRequirements()) {
+                return $view->renderTemplate('analytics/_special/not-connected');
+            }
 
-                    if (count($reportingViews) > 0) {
-                        $widgetSettings = $this->settings;
-
-                        $reportingView = Analytics::$plugin->getViews()->getViewById($widgetSettings['viewId']);
-
-                        if ($reportingView) {
-                            $request = [
-                                'viewId' => $widgetSettings['viewId'] ?? null,
-                                'chart' => $widgetSettings['chart'] ?? null,
-                                'period' => $widgetSettings['period'] ?? null,
-                                'options' => $widgetSettings['options'][$widgetSettings['chart']] ?? null,
-                            ];
-
-
-                            // use cached response if available
-
-                            if (Analytics::$plugin->getSettings()->enableCache === true) {
-                                $cacheId = ['getReport', $request];
-                                $cachedResponse = Analytics::$plugin->cache->get($cacheId);
-                            }
-
-
-                            // render
-
-                            $localeDefinition = Analytics::$plugin->getAnalytics()->getD3LocaleDefinition(['currency' => $reportingView->gaViewCurrency]);
-
-                            $jsOptions = [
-                                'localeDefinition' => $localeDefinition,
-                                'chartLanguage' => Analytics::$plugin->getAnalytics()->getChartLanguage(),
-                                'request' => $request,
-                                'cachedResponse' => $cachedResponse ?? null,
-                            ];
-
-                            $view->registerJsFile('//www.gstatic.com/charts/loader.js');
-                            $view->registerAssetBundle(ReportWidgetAsset::class);
-
-                            $view->registerJs('new Analytics.ReportWidget("widget'.$this->id.'", '.Json::encode($jsOptions).');');
-
-                            return $view->renderTemplate('analytics/_components/widgets/Report/body');
-                        }
-
-                        return $view->renderTemplate('analytics/_special/view-not-configured');
-                    }
-
-                    return $view->renderTemplate('analytics/_special/no-views');
-                }
-
+            if (!Analytics::$plugin->getSettings()->enableWidgets) {
                 return $view->renderTemplate('analytics/_components/widgets/Report/disabled');
             }
 
-            return $view->renderTemplate('analytics/_special/not-connected');
+            $reportingViews = Analytics::$plugin->getViews()->getViews();
+
+            if (\count($reportingViews) === 0) {
+                return $view->renderTemplate('analytics/_special/no-views');
+            }
+
+            $widgetSettings = $this->settings;
+
+            $reportingView = Analytics::$plugin->getViews()->getViewById($widgetSettings['viewId']);
+
+            if (!$reportingView) {
+                return $view->renderTemplate('analytics/_special/view-not-configured');
+            }
+
+            $request = [
+                'viewId' => $widgetSettings['viewId'] ?? null,
+                'chart' => $widgetSettings['chart'] ?? null,
+                'period' => $widgetSettings['period'] ?? null,
+                'options' => $widgetSettings['options'][$widgetSettings['chart']] ?? null,
+            ];
+
+
+            // use cached response if available
+
+            if (Analytics::$plugin->getSettings()->enableCache === true) {
+                $cacheId = ['getReport', $request];
+                $cachedResponse = Analytics::$plugin->cache->get($cacheId);
+            }
+
+
+            // render
+
+            $localeDefinition = Analytics::$plugin->getAnalytics()->getD3LocaleDefinition(['currency' => $reportingView->gaViewCurrency]);
+
+            $jsOptions = [
+                'localeDefinition' => $localeDefinition,
+                'chartLanguage' => Analytics::$plugin->getAnalytics()->getChartLanguage(),
+                'request' => $request,
+                'cachedResponse' => $cachedResponse ?? null,
+            ];
+
+            $view->registerJsFile('//www.gstatic.com/charts/loader.js');
+            $view->registerAssetBundle(ReportWidgetAsset::class);
+
+            $view->registerJs('new Analytics.ReportWidget("widget'.$this->id.'", '.Json::encode($jsOptions).');');
+
+            return $view->renderTemplate('analytics/_components/widgets/Report/body');
         } catch (\Exception $e) {
             Craft::info('Couldn’t load report widget: '.$e->getMessage(), __METHOD__);
             return $view->renderTemplate('analytics/_special/error');
@@ -165,26 +165,20 @@ class Report extends \craft\base\Widget
 
         $reportingViews = Analytics::$plugin->getViews()->getViews();
 
-        if (count($reportingViews) > 0) {
+        if (\count($reportingViews) > 0) {
             $id = 'analytics-settings-'.StringHelper::randomString();
             $namespaceId = Craft::$app->getView()->namespaceInputId($id);
 
             Craft::$app->getView()->registerJs("new Analytics.ReportWidgetSettings('".$namespaceId."');");
 
-            $settings = $this->getSettings();
-
-
-            // select options
-
             $chartTypes = ['area', 'counter', 'pie', 'table', 'geo'];
-
             $selectOptions = [];
 
             foreach ($chartTypes as $chartType) {
                 $selectOptions[$chartType] = $this->_geSelectOptionsByChartType($chartType);
             }
 
-            // view options
+            $settings = $this->getSettings();
 
             return Craft::$app->getView()->renderTemplate('analytics/_components/widgets/Report/settings', [
                 'id' => $id,

@@ -118,23 +118,7 @@ class UtilsController extends Controller
                     continue;
                 }
 
-                if (isset($item->attributes['minTemplateIndex'])) {
-                    for ($i = $item->attributes['minTemplateIndex']; $i <= $item->attributes['maxTemplateIndex']; $i++) {
-                        $column = [];
-                        $column['id'] = str_replace('XX', $i, $item->id);
-                        $column['uiName'] = str_replace('XX', $i, $item->attributes['uiName']);
-                        $column['description'] = str_replace('XX', $i, $item->attributes['description']);
-
-                        $columns[$column['id']] = $this->populateColumnAttributes($column, $item);
-                    }
-                } else {
-                    $column = [];
-                    $column['id'] = $item->id;
-                    $column['uiName'] = $item->attributes['uiName'];
-                    $column['description'] = $item->attributes['description'];
-
-                    $columns[$column['id']] = $this->populateColumnAttributes($column, $item);
-                }
+                $this->addColumnFromItem($columns, $item);
             }
         }
 
@@ -143,6 +127,33 @@ class UtilsController extends Controller
         $path = Analytics::$plugin->metadata->getDimmetsFilePath();
 
         FileHelper::writeToFile($path, $contents);
+    }
+
+    /**
+     * Add column from item.
+     *
+     * @param $columns
+     * @param $item
+     */
+    private function addColumnFromItem(&$columns, $item)
+    {
+        if (isset($item->attributes['minTemplateIndex'])) {
+            for ($i = $item->attributes['minTemplateIndex']; $i <= $item->attributes['maxTemplateIndex']; $i++) {
+                $column = [];
+                $column['id'] = str_replace('XX', $i, $item->id);
+                $column['uiName'] = str_replace('XX', $i, $item->attributes['uiName']);
+                $column['description'] = str_replace('XX', $i, $item->attributes['description']);
+
+                $columns[$column['id']] = $this->populateColumnAttributes($column, $item);
+            }
+        } else {
+            $column = [];
+            $column['id'] = $item->id;
+            $column['uiName'] = $item->attributes['uiName'];
+            $column['description'] = $item->attributes['description'];
+
+            $columns[$column['id']] = $this->populateColumnAttributes($column, $item);
+        }
     }
 
     /**
