@@ -1,6 +1,13 @@
 Changelog
 =========
 
+## Unreleased
+
+### Changed
+- Moved `forceConnect` and `token` settings to a new `analytics_info` table.
+- Removed `forceConnect` config setting.
+- Removed `token` config setting.
+
 ## 4.0.0-beta.4 - 2018-05-24
 
 ### Fixed

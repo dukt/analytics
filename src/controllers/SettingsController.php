@@ -90,6 +90,7 @@ class SettingsController extends Controller
             'errors' => $errors ?? null,
             'oauthAccount' => $oauthAccount ?? null,
             'settings' => $settings ?? null,
+            'info' => Analytics::getInstance()->getInfo(),
             'googleIconUrl' => Craft::$app->assetManager->getPublishedUrl('@dukt/analytics/icons/google.svg', true),
         ]);
     }
