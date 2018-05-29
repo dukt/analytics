@@ -17,6 +17,7 @@ mix.combine([
 // Minify JS
 
 mix.minify('src/web/assets/analytics/dist/Analytics.js');
+mix.minify('src/web/assets/ecommercewidget/dist/EcommerceWidget.js');
 mix.minify('src/web/assets/realtimereportwidget/dist/RealtimeWidget.js');
 mix.minify('src/web/assets/reportfield/dist/js/ReportField.js');
 mix.minify('src/web/assets/reportwidget/dist/js/ReportWidget.js');
@@ -27,6 +28,7 @@ mix.minify('src/web/assets/settings/dist/AccountExplorer.js');
 // Compile SASS
 
 mix
+    .sass('src/web/assets/ecommercewidget/dist/EcommerceWidget.scss', 'src/web/assets/ecommercewidget/dist')
     .sass('src/web/assets/realtimereportwidget/dist/RealtimeWidget.scss', 'src/web/assets/realtimereportwidget/dist')
     .sass('src/web/assets/reportfield/dist/css/ReportField.scss', 'src/web/assets/reportfield/dist/css')
     .sass('src/web/assets/reportwidget/dist/css/ReportWidget.scss', 'src/web/assets/reportwidget/dist/css')

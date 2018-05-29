@@ -13,5 +13,8 @@
   "src/web/assets/reportfield/dist/js/ReportField.min.js": "src/web/assets/reportfield/dist/js/ReportField.min.js",
   "src/web/assets/reportwidget/dist/js/ReportWidget.min.js": "src/web/assets/reportwidget/dist/js/ReportWidget.min.js",
   "src/web/assets/reportwidget/dist/js/ReportWidgetSettings.min.js": "src/web/assets/reportwidget/dist/js/ReportWidgetSettings.min.js",
-  "src/web/assets/settings/dist/AccountExplorer.min.js": "src/web/assets/settings/dist/AccountExplorer.min.js"
+  "src/web/assets/settings/dist/AccountExplorer.min.js": "src/web/assets/settings/dist/AccountExplorer.min.js",
+  "src/web/assets/ecommerce/dist/EcommerceWidget.min.js": "src/web/assets/ecommerce/dist/EcommerceWidget.min.js",
+  "src/web/assets/ecommercewidget/dist/EcommerceWidget.min.js": "src/web/assets/ecommercewidget/dist/EcommerceWidget.min.js",
+  "/src/web/assets/ecommercewidget/dist/EcommerceWidget.css": "/src/web/assets/ecommercewidget/dist/EcommerceWidget.css"
 }

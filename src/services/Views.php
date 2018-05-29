@@ -67,6 +67,7 @@ class Views extends Component
                 'gaAccountName',
                 'gaPropertyId',
                 'gaPropertyName',
+                'gaViewCurrency',
                 'gaViewId',
                 'gaViewName',
             ]));

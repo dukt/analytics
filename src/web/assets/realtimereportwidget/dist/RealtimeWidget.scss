@@ -5,16 +5,57 @@ $blue: #058DC7;
 $green: #50B431;
 
 .dukt\\analytics\\widgets\\realtime {
-    .front .analytics-realtime-visitors .active-users { margin-top: -10px; margin-bottom: 20px; }
-    .front .analytics-realtime-visitors .active-users { font-size: 56px; line-height: 1.2em; }
 
-    .front .analytics-realtime-visitors .pageviews { height: 150px; margin: 1em 0; }
-    .front .analytics-realtime-visitors .pageviews .chart { height: 100px; }
-    .front .analytics-realtime-visitors .active-pages { height: 190px; margin: 1em 0; }
+    .front {
+        h2 {
+            margin-bottom: 7px;
+        }
 
-    .front .analytics-realtime-visitors .active-pages table { width: 100%; border-collapse: collapse; }
-    .front .analytics-realtime-visitors .active-pages table .col-page { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width:1px; width:100%; }
-    .front .analytics-realtime-visitors .active-pages table .col-users { white-space: nowrap; overflow-wrap: normal; word-break: keep-all; }
+        .view {
+            color: #8f98a3;
+            margin-bottom: 14px;
+        }
 
-    .front .view { margin-top: 24px; text-align: center; }
+        .analytics-realtime-visitors {
+            .active-users {
+                margin-top: -10px;
+                margin-bottom: 20px;
+                font-size: 56px;
+                line-height: 1.2em;
+            }
+
+            .pageviews {
+                height: 150px;
+                margin: 1em 0;
+            }
+
+            .pageviews .chart {
+                height: 100px;
+            }
+
+            .active-pages {
+                height: 190px;
+                margin: 1em 0;
+
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+
+                    .col-page {
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        max-width:1px;
+                        width:100%;
+                    }
+
+                    .col-users {
+                        white-space: nowrap;
+                        overflow-wrap: normal;
+                        word-break: keep-all;
+                    }
+                }
+            }
+        }
+    }
 }

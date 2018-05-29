@@ -8,9 +8,10 @@ Analytics.reports.Table = Analytics.reports.BaseChart.extend(
         initChart: function() {
             this.base();
 
-            $period = $('<div class="period" />').prependTo(this.$chart);
-            $title = $('<div class="title" />').prependTo(this.$chart);
-            $view = $('<div class="view" />').prependTo(this.$chart);
+            var $reportTitle = $('<div class="subtitle" />').prependTo(this.$chart),
+                $period = $('<div class="period" />').appendTo($reportTitle),
+                $view = $('<div class="view" />').appendTo($reportTitle),
+                $title = $('<div class="title" />').prependTo(this.$chart);
 
             $view.html(this.data.view);
             $title.html(this.data.metric);

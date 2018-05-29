@@ -1,0 +1,53 @@
+.dukt\\analytics\\widgets\\ecommerce {
+
+  .front {
+    .pane {
+      & > .spinner {
+        display: none !important;
+      }
+    }
+  }
+
+  h2 {
+    margin-bottom: 7px;
+  }
+
+  .body {
+    .spinner {
+      position: absolute;
+    }
+
+    & > .chart {
+      height: 204px;
+
+      .view {
+        color: #8f98a3;
+      }
+
+      .chart {
+        margin-top: 14px;
+        height: 150px;
+      }
+    }
+
+    .tiles {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+
+      .tile {
+        margin-top: 14px;
+        flex-grow: 1;
+        flex-basis: 50%;
+        flex-shrink: 0;
+        box-sizing: border-box;
+        overflow: hidden;
+
+        .value {
+          font-size: 16px;
+        }
+      }
+    }
+  }
+}
