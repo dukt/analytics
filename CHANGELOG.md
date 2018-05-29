@@ -8,6 +8,9 @@ Changelog
 - Removed `forceConnect` config setting.
 - Removed `token` config setting.
 
+### Fixed
+- Fixed a bug where the Analytics asset bundle was getting registered even though the plugin was not installed.
+
 ## 4.0.0-beta.4 - 2018-05-24
 
 ### Fixed
