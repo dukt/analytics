@@ -28,6 +28,11 @@ class Realtime extends \craft\base\Widget
     public static function isSelectable(): bool
     {
         $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
+
+        if (!$plugin) {
+            return false;
+        }
+
         $settings = $plugin->getSettings();
 
         if (empty($settings['enableRealtime'])) {

@@ -10,6 +10,7 @@ Changelog
 
 ### Fixed
 - Fixed a bug where the Analytics asset bundle was getting registered even though the plugin was not installed.
+- Fixed a bug where the Realtime widget was trying to use the plugin instance even though the plugin was not installed.
 
 ## 4.0.0-beta.4 - 2018-05-24
 
