@@ -1,7 +1,7 @@
 Changelog
 =========
 
-## Unreleased
+## 4.0.0 - 2018-05-29
 
 ### Added
 - Added E-commerce widget to display revenue and transactions data.
