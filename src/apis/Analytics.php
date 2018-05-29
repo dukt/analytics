@@ -20,6 +20,7 @@ class Analytics extends Api
 
     /**
      * @return Google_Service_Analytics
+     * @throws \yii\base\InvalidConfigException
      */
     public function getService()
     {
@@ -47,19 +48,15 @@ class Analytics extends Api
      */
     public function getAccountExplorerData()
     {
-        // Accounts
         $apiAccounts = Plugin::$plugin->getApis()->getAnalytics()->getService()->management_accounts->listManagementAccounts();
         $accounts = $apiAccounts->toSimpleObject()->items;
 
-        // Properties
         $apiProperties = Plugin::$plugin->getApis()->getAnalytics()->getService()->management_webproperties->listManagementWebproperties('~all');
         $properties = $apiProperties->toSimpleObject()->items;
 
-        // Views
         $apiViews = Plugin::$plugin->getApis()->getAnalytics()->getService()->management_profiles->listManagementProfiles('~all', '~all');
         $views = $apiViews->toSimpleObject()->items;
 
-        // Return Data
         return [
             'accounts' => $accounts,
             'properties' => $properties,
@@ -169,9 +166,7 @@ class Analytics extends Api
                         $value = Plugin::$plugin->metadata->getSubContinentCode($value);
                     }
 
-
                     // translate values
-
                     switch ($col['id']) {
                         case 'ga:country':
                         case 'ga:city':
@@ -187,9 +182,7 @@ class Analytics extends Api
                             break;
                     }
 
-
                     // update cell
-
                     $rows[$kRow][$_valueKey] = $value;
                 }
             }

@@ -8,7 +8,7 @@
 
 	<h2 class="first">{{ 'Google Analytics Account'|t('analytics') }}</h2>
 
-	{% if not oauthAccount or settings.forceConnect %}
+	{% if not oauthAccount or info.forceConnect %}
 
 		{% if isOauthProviderConfigured %}
 			<p>{{ 'Gettings errors trying to connect? Check your {link}.'|t('analytics', { link: '<a href="'~url('analytics/settings/oauth')~'">OAuth settings</a>' })|raw }}</p>

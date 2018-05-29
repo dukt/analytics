@@ -20,6 +20,7 @@ use dukt\analytics\fields\Report as ReportField;
 use dukt\analytics\models\Settings;
 use dukt\analytics\web\twig\variables\AnalyticsVariable;
 use dukt\analytics\web\assets\analytics\AnalyticsAsset;
+use dukt\analytics\widgets\Ecommerce;
 use dukt\analytics\widgets\Realtime;
 use dukt\analytics\widgets\Report;
 use yii\base\Event;
@@ -94,6 +95,7 @@ class Plugin extends \craft\base\Plugin
         });
 
         Event::on(Dashboard::class, Dashboard::EVENT_REGISTER_WIDGET_TYPES, function(RegisterComponentTypesEvent $event) {
+            $event->types[] = Ecommerce::class;
             $event->types[] = Realtime::class;
             $event->types[] = Report::class;
         });
@@ -108,7 +110,7 @@ class Plugin extends \craft\base\Plugin
             $variable->set('analytics', AnalyticsVariable::class);
         });
 
-        if (!Craft::$app->getRequest()->getIsConsoleRequest() && Craft::$app->getRequest()->getIsCpRequest()) {
+        if ($this->isInstalled && !Craft::$app->getRequest()->getIsConsoleRequest() && Craft::$app->getRequest()->getIsCpRequest()) {
             Craft::$app->getView()->registerAssetBundle(AnalyticsAsset::class);
         }
     }

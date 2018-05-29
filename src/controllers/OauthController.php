@@ -87,11 +87,11 @@ class OauthController extends Controller
 
             // Todo: Reset session variables
 
-            $pluginSettings = Analytics::$plugin->getSettings();
+            $info = Analytics::getInstance()->getInfo();
 
-            if ($pluginSettings->forceConnect === true) {
-                $pluginSettings->forceConnect = false;
-                Craft::$app->getPlugins()->savePluginSettings(Analytics::$plugin, $pluginSettings->getAttributes());
+            if ($info->forceConnect === true) {
+                $info->forceConnect = false;
+                Analytics::getInstance()->saveInfo($info);
             }
 
             // Redirect

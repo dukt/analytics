@@ -19,6 +19,26 @@ class ReportsController extends Controller
     // =========================================================================
 
     /**
+     * E-commerce Report
+     *
+     * @return null
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function actionEcommerceWidget()
+    {
+        if (Analytics::getInstance()->getAnalytics()->demoMode) {
+            return $this->getEcommerceDemoResponse();
+        }
+
+        $viewId = Craft::$app->getRequest()->getBodyParam('viewId');
+        $period = Craft::$app->getRequest()->getBodyParam('period');
+
+        $response = Analytics::$plugin->getReports()->getEcommerceReport($viewId, $period);
+
+        return $this->asJson($response);
+    }
+
+    /**
      * Get element report.
      *
      * @return Response
@@ -160,6 +180,7 @@ class ReportsController extends Controller
      * Get realtime demo response.
      *
      * @return Response
+     * @throws \yii\base\InvalidConfigException
      */
     private function getRealtimeDemoResponse(): Response
     {
@@ -233,6 +254,71 @@ class ReportsController extends Controller
             'activeUsers' => $activeUsers,
             'pageviews' => $pageviews,
             'activePages' => $activePages,
+        ]);
+    }
+
+    /**
+     * @return Response
+     */
+    private function getEcommerceDemoResponse(): Response
+    {
+        $date = new \DateTime();
+        $date = $date->modify('-12 months');
+        $rows = [];
+
+        for ($i = 1; $i <= 12; $i++) {
+            $rows[] = [
+                $date->format('Ym'),
+                random_int(50000, 150000)
+            ];
+
+            $date->modify('+1 month');
+        }
+
+        $reportData = [
+            'chart' => [
+                'cols' => [
+                    [
+                        'id' => 'ga:yearMonth',
+                        'label' => 'Month of Year',
+                        'type' => 'date',
+                    ],
+                    [
+                        'id' => 'ga:transactionRevenue',
+                        'label' => 'Revenue',
+                        'type' => 'currency',
+                    ],
+                ],
+                'rows' => $rows,
+                'totals' => [
+                    [
+                        '11385.0',
+                        '97.3076923076923',
+                    ]
+                ],
+            ],
+            'period' => 'year',
+            'periodLabel' => 'This year',
+            'view' => 'Craft Shop',
+        ];
+
+        $totalRevenue = 0;
+
+        foreach($rows as $row) {
+            $totalRevenue += $row[1];
+        }
+
+        $totalTransactions = random_int(3400, 3800);
+        $totalRevenuePerTransaction = $totalRevenue / $totalTransactions;
+        $totalTransactionsPerSession = 8.291991495393338;
+
+        return $this->asJson([
+            'period' =>  '365daysAgo - today',
+            'reportData' => $reportData,
+            'totalRevenue' => $totalRevenue,
+            'totalRevenuePerTransaction' => $totalRevenuePerTransaction,
+            'totalTransactions' => $totalTransactions,
+            'totalTransactionsPerSession' => $totalTransactionsPerSession,
         ]);
     }
 }

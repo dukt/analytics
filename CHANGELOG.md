@@ -1,6 +1,20 @@
 Changelog
 =========
 
+## 4.0.0 - 2018-05-29
+
+### Added
+- Added E-commerce widget to display revenue and transactions data.
+
+### Changed
+- Moved `forceConnect` and `token` settings to a new `analytics_info` table.
+- Removed `forceConnect` config setting.
+- Removed `token` config setting.
+
+### Fixed
+- Fixed a bug where the Analytics asset bundle was getting registered even though the plugin was not installed.
+- Fixed a bug where the Realtime widget was trying to use the plugin instance even though the plugin was not installed.
+
 ## 4.0.0-beta.4 - 2018-05-24
 
 ### Fixed

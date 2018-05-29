@@ -9,6 +9,8 @@ namespace dukt\analytics\migrations;
 
 use Craft;
 use craft\db\Migration;
+use dukt\analytics\models\Info;
+use dukt\analytics\Plugin;
 
 class Install extends Migration
 {
@@ -105,6 +107,19 @@ class Install extends Migration
                 'uid' => $this->uid()
             ]
         );
+
+        $this->createTable(
+            '{{%analytics_info}}',
+            [
+                'id' => $this->primaryKey(),
+                'forceConnect' => $this->boolean()->defaultValue(false)->notNull(),
+                'token' => $this->text(),
+
+                'dateCreated' => $this->dateTime()->notNull(),
+                'dateUpdated' => $this->dateTime()->notNull(),
+                'uid' => $this->uid()
+            ]
+        );
     }
 
     /**
@@ -135,6 +150,10 @@ class Install extends Migration
      */
     protected function insertDefaultData()
     {
+        // Populate the info table
+        echo '    > populate the analytics_info table ...';
+        Plugin::getInstance()->saveInfo(new Info());
+        echo " done\n";
     }
 
     /**
@@ -146,6 +165,7 @@ class Install extends Migration
     {
         $this->dropTable('{{%analytics_views}}');
         $this->dropTable('{{%analytics_site_views}}');
+        $this->dropTable('{{%analytics_info}}');
     }
 
     /**

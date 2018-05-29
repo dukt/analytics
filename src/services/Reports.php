@@ -55,6 +55,64 @@ class Reports extends Component
     }
 
     /**
+     * Get e-commerce report.
+     *
+     * @param $viewId
+     * @param $period
+     *
+     * @return array
+     */
+    public function getEcommerceReport($viewId, $period)
+    {
+        $startDate = '7daysAgo';
+        $endDate = 'today';
+        $dimensions = 'ga:date';
+
+        switch ($period) {
+            case 'week':
+                $startDate = '7daysAgo';
+                break;
+            case 'month':
+                $startDate = '30daysAgo';
+                break;
+            case 'year':
+                $startDate = '365daysAgo';
+                $dimensions = 'ga:yearMonth';
+                break;
+        }
+
+        $metrics = 'ga:transactionRevenue,ga:revenuePerTransaction,ga:transactions,ga:transactionsPerSession';
+
+        $criteria = new ReportRequestCriteria;
+        $criteria->viewId = $viewId;
+        $criteria->startDate = $startDate;
+        $criteria->endDate = $endDate;
+        $criteria->metrics = $metrics;
+        $criteria->dimensions = $dimensions;
+        $criteria->includeEmptyRows = true;
+
+        $reportResponse = Analytics::$plugin->getApis()->getAnalyticsReporting()->getReport($criteria);
+        $report = $reportResponse->toSimpleObject();
+        $reportData = $this->parseReportingReport($reportResponse);
+
+        $view = Analytics::$plugin->getViews()->getViewById($viewId);
+
+        return [
+            'period' => $startDate.' - '.$endDate,
+            'totalRevenue' => $report->data->totals[0]->values[0],
+            'totalRevenuePerTransaction' => $report->data->totals[0]->values[1],
+            'totalTransactions' => $report->data->totals[0]->values[2],
+            'totalTransactionsPerSession' => $report->data->totals[0]->values[3],
+            'reportData' => [
+                'view' => $view->name,
+                'chart' => $reportData,
+                'period' => $period,
+                'periodLabel' => Craft::t('analytics', 'This '.$period)
+            ],
+        ];
+    }
+
+    /**
      * Returns an element report.
      *
      * @param int      $elementId
@@ -304,7 +362,7 @@ class Reports extends Component
             'dimension' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($dimensionString)),
             'metric' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($metricString)),
             'period' => $period,
-            'periodLabel' => Craft::t('analytics', 'this '.$period)
+            'periodLabel' => Craft::t('analytics', 'This '.$period)
         ];
     }
 
@@ -349,7 +407,7 @@ class Reports extends Component
             'dimension' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($originDimension)),
             'metric' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($metricString)),
             'period' => $period,
-            'periodLabel' => Craft::t('analytics', 'this '.$period)
+            'periodLabel' => Craft::t('analytics', 'This '.$period)
         ];
     }
 

@@ -1,0 +1,28 @@
+{% import "_includes/forms" as forms %}
+
+
+{% set reportingViewOptions = [] %}
+{% for reportingView in reportingViews %}
+    {% set reportingViewOptions = reportingViewOptions|merge([{ label: reportingView.name, value: reportingView.id }]) %}
+{% endfor %}
+
+{{ forms.selectField({
+    label: "View"|t('analytics'),
+    name: 'viewId',
+    class: 'view',
+    options: reportingViewOptions,
+    value: settings.viewId
+}) }}
+
+{{ forms.selectField({
+    label: "Period"|t('analytics'),
+    name: 'period',
+    class: 'period',
+    options: {
+        week: "Week"|t('analytics'),
+        month: "Month"|t('analytics'),
+        year: "Year"|t('analytics'),
+    },
+    value: settings.period
+}) }}
+

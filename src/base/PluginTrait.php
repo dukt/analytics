@@ -7,6 +7,10 @@
 
 namespace dukt\analytics\base;
 
+use Craft;
+use craft\db\Query;
+use craft\helpers\Db;
+use dukt\analytics\models\Info;
 use dukt\analytics\Plugin as Analytics;
 
 /**
@@ -22,6 +26,22 @@ use dukt\analytics\Plugin as Analytics;
  */
 trait PluginTrait
 {
+    // Properties
+    // =========================================================================
+
+    /**
+     * @var
+     */
+    private $_info;
+
+    /**
+     * @var
+     */
+    private $_isInstalled;
+
+    // Public Methods
+    // =========================================================================
+
     /**
      * Returns the analytics service.
      *
@@ -104,5 +124,100 @@ trait PluginTrait
     {
         /** @var Analytics $this */
         return $this->get('views');
+    }
+
+    /**
+     * Updates the info row.
+     *
+     * @param Info $info
+     *
+     * @return bool
+     * @throws \yii\db\Exception
+     */
+    public function saveInfo(Info $info): bool
+    {
+        $attributes = Db::prepareValuesForDb($info);
+
+        if (array_key_exists('id', $attributes) && $attributes['id'] === null) {
+            unset($attributes['id']);
+        }
+        echo 'a';
+        if ($this->getIsInstalled()) {
+            echo 'b';
+
+            Craft::$app->getDb()->createCommand()
+                ->update('{{%analytics_info}}', $attributes)
+                ->execute();
+        } else {
+            echo 'c';
+
+            Craft::$app->getDb()->createCommand()
+                ->insert('{{%analytics_info}}', $attributes)
+                ->execute();
+
+            if (Craft::$app->getIsInstalled()) {
+                // Set the new id
+                $info->id = Craft::$app->getDb()->getLastInsertID('{{%analytics_info}}');
+            }
+        }
+
+        $this->_info = $info;
+
+        return true;
+    }
+
+    /**
+     * Returns the info model, or just a particular attribute.
+     *
+     * @return Info
+     * @throws ServerErrorHttpException if the info table is missing its row
+     */
+    public function getInfo(): Info
+    {
+        /** @var WebApplication|ConsoleApplication $this */
+        if ($this->_info !== null) {
+            return $this->_info;
+        }
+
+        if (!$this->getIsInstalled()) {
+            return new Info();
+        }
+
+        $row = (new Query())
+            ->from(['{{%analytics_info}}'])
+            ->one();
+
+        if (!$row) {
+            $tableName = $this->getDb()->getSchema()->getRawTableName('{{%analytics_info}}');
+            throw new ServerErrorHttpException("The {$tableName} table is missing its row");
+        }
+
+        return $this->_info = new Info($row);
+    }
+
+    /**
+     * Returns whether Craft is installed.
+     *
+     * @return bool
+     */
+    public function getIsInstalled(): bool
+    {
+        /** @var WebApplication|ConsoleApplication $this */
+        if ($this->_isInstalled !== null) {
+            return $this->_isInstalled;
+        }
+
+        $infoRowExists = false;
+
+        if(Craft::$app->getDb()->tableExists('{{%analytics_info}}', false)) {
+            $infoRowExists = (new Query())
+                ->from(['{{%analytics_info}}'])
+                ->one();
+        }
+
+        return $this->_isInstalled = (
+            Craft::$app->getIsDbConnectionValid() &&
+            $infoRowExists
+        );
     }
 }

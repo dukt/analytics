@@ -26,13 +26,9 @@ class Oauth extends Component
      */
     public function saveToken(AccessToken $token)
     {
-        // Save token and token secret in the plugin's settings
+        $info = Analytics::getInstance()->getInfo();
 
-        $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
-
-        $settings = $plugin->getSettings();
-
-        $tokenArray = [
+        $info->token = [
             'accessToken' => $token->getToken(),
             'expires' => $token->getExpires(),
             'refreshToken' => $token->getRefreshToken(),
@@ -40,9 +36,7 @@ class Oauth extends Component
             'values' => $token->getValues(),
         ];
 
-        $settings->token = $tokenArray;
-
-        Craft::$app->getPlugins()->savePluginSettings($plugin, $settings->getAttributes());
+        Analytics::getInstance()->saveInfo($info);
     }
 
     /**
@@ -54,19 +48,18 @@ class Oauth extends Component
      */
     public function getToken($refresh = true)
     {
-        $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
-        $settings = $plugin->getSettings();
+        $info = Analytics::getInstance()->getInfo();
 
-        if (!$settings->token) {
+        if (!$info->token) {
             return null;
         }
 
         $token = new AccessToken([
-            'access_token' => $settings->token['accessToken'] ?? null,
-            'expires' => $settings->token['expires'] ?? null,
-            'refresh_token' => $settings->token['refreshToken'] ?? null,
-            'resource_owner_id' => $settings->token['resourceOwnerId'] ?? null,
-            'values' => $settings->token['values'] ?? null,
+            'access_token' => $info->token['accessToken'] ?? null,
+            'expires' => $info->token['expires'] ?? null,
+            'refresh_token' => $info->token['refreshToken'] ?? null,
+            'resource_owner_id' => $info->token['resourceOwnerId'] ?? null,
+            'values' => $info->token['values'] ?? null,
         ]);
 
         if ($refresh && $token->hasExpired()) {
@@ -77,7 +70,7 @@ class Oauth extends Component
             $token = new AccessToken([
                 'access_token' => $newToken->getToken(),
                 'expires' => $newToken->getExpires(),
-                'refresh_token' => $settings->token['refreshToken'],
+                'refresh_token' => $info->token['refreshToken'],
                 'resource_owner_id' => $newToken->getResourceOwnerId(),
                 'values' => $newToken->getValues(),
             ]);
@@ -95,12 +88,9 @@ class Oauth extends Component
      */
     public function deleteToken()
     {
-        $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
-
-        $settings = $plugin->getSettings();
-        $settings->token = null;
-        Craft::$app->getPlugins()->savePluginSettings($plugin, $settings->getAttributes());
-
+        $info = Analytics::getInstance()->getInfo();
+        $info->token = null;
+        Analytics::getInstance()->saveInfo($info);
         return true;
     }
 
