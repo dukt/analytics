@@ -141,16 +141,12 @@ trait PluginTrait
         if (array_key_exists('id', $attributes) && $attributes['id'] === null) {
             unset($attributes['id']);
         }
-        echo 'a';
-        if ($this->getIsInstalled()) {
-            echo 'b';
 
+        if ($this->getIsInstalled()) {
             Craft::$app->getDb()->createCommand()
                 ->update('{{%analytics_info}}', $attributes)
                 ->execute();
         } else {
-            echo 'c';
-
             Craft::$app->getDb()->createCommand()
                 ->insert('{{%analytics_info}}', $attributes)
                 ->execute();

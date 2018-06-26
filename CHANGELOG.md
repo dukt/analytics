@@ -1,6 +1,11 @@
 Changelog
 =========
 
+## 4.0.1 - 2018-06-26
+
+### Fixed
+- Fixed a bug where plugin info couldn’t be saved.
+
 ## 4.0.0 - 2018-05-29
 
 ### Added
