@@ -12,6 +12,7 @@ use craft\helpers\Json;
 use craft\helpers\StringHelper;
 use dukt\analytics\web\assets\reportwidget\ReportWidgetAsset;
 use dukt\analytics\Plugin as Analytics;
+use craft\web\View;
 
 class Report extends \craft\base\Widget
 {
@@ -139,7 +140,10 @@ class Report extends \craft\base\Widget
                 'cachedResponse' => $cachedResponse ?? null,
             ];
 
-            $view->registerJsFile('//www.gstatic.com/charts/loader.js');
+            $view->registerJsFile('//www.gstatic.com/charts/loader.js', [
+                'position' => View::POS_HEAD,
+            ]);
+
             $view->registerAssetBundle(ReportWidgetAsset::class);
 
             $view->registerJs('new Analytics.ReportWidget("widget'.$this->id.'", '.Json::encode($jsOptions).');');

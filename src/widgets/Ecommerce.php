@@ -11,6 +11,7 @@ use Craft;
 use craft\helpers\Json;
 use dukt\analytics\Plugin as Analytics;
 use dukt\analytics\web\assets\ecommercewidget\EcommerceWidgetAsset;
+use craft\web\View;
 
 class Ecommerce extends \craft\base\Widget
 {
@@ -90,7 +91,9 @@ class Ecommerce extends \craft\base\Widget
             'chartLanguage' => Analytics::$plugin->getAnalytics()->getChartLanguage(),
         ];
 
-        $view->registerJsFile('//www.gstatic.com/charts/loader.js');
+        $view->registerJsFile('//www.gstatic.com/charts/loader.js', [
+            'position' => View::POS_HEAD,
+        ]);
         $view->registerAssetBundle(EcommerceWidgetAsset::class);
         $view->registerJs('var AnalyticsChartLanguage = "'.Craft::$app->language.'";', true);
         $view->registerJs('new Analytics.EcommerceWidget("widget'.$widgetId.'", '.Json::encode($widgetOptions).');');

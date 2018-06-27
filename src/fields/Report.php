@@ -13,6 +13,7 @@ use craft\base\ElementInterface;
 use craft\helpers\Json;
 use dukt\analytics\web\assets\reportfield\ReportFieldAsset;
 use dukt\analytics\Plugin as Analytics;
+use craft\web\View;
 
 class Report extends Field
 {
@@ -126,7 +127,9 @@ class Report extends Field
 
 
                 // Register JS & Styles
-                $view->registerJsFile('//www.gstatic.com/charts/loader.js');
+                $view->registerJsFile('//www.gstatic.com/charts/loader.js', [
+                    'position' => View::POS_HEAD,
+                ]);
                 $view->registerAssetBundle(ReportFieldAsset::class);
                 $view->registerJs('new AnalyticsReportField("'.$namespacedId.'-field", '.Json::encode($jsOptions).');');
 
