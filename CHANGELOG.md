@@ -1,6 +1,11 @@
 Changelog
 =========
 
+## Unreleased
+
+### Fixed
+- Fixed a bug where the Google Charts library was not loaded early enough, resulting in javascript errors.
+
 ## 4.0.1 - 2018-06-26
 
 ### Fixed
