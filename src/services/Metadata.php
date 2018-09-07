@@ -259,13 +259,7 @@ class Metadata extends Component
             return $this->groups[$type];
         }
 
-        $groups = [];
-
-        foreach ($this->getColumns() as $column) {
-            if (!$type || ($type && $column->type === $type)) {
-                $groups[$column->group] = $column->group;
-            }
-        }
+        $groups = $this->_getColumnGroups($type);
 
         if ($type) {
             $this->groups[$type] = $groups;
@@ -462,5 +456,24 @@ class Metadata extends Component
         }
 
         return $filteredOptions;
+    }
+
+    /**
+     * Get column groups.
+     *
+     * @param string|null $type
+     * @return array
+     */
+    private function _getColumnGroups(string $type = null): array
+    {
+        $groups = [];
+
+        foreach ($this->getColumns() as $column) {
+            if (!$type || ($type && $column->type === $type)) {
+                $groups[$column->group] = $column->group;
+            }
+        }
+
+        return $groups;
     }
 }
