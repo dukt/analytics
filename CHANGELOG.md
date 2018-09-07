@@ -1,6 +1,11 @@
 Changelog
 =========
 
+## Unreleased
+
+### Changed
+- Improved exception handling for the Reports controller.
+
 ## 4.0.2 - 2018-06-27
 
 ### Fixed
