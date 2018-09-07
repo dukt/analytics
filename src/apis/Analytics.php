@@ -105,10 +105,26 @@ class Analytics extends Api
      *
      * @return array
      */
-    public function parseReportResponse($data)
+    public function parseReportResponse($data): array
     {
-        // Columns
+        $cols = $this->parseReportResponseCols($data);
+        $rows = $this->parseReportResponseRows($data, $cols);
 
+        return [
+            'cols' => $cols,
+            'rows' => $rows
+        ];
+    }
+
+    // Private Methods
+    // =========================================================================
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    private function parseReportResponseCols(array $data): array
+    {
         $cols = [];
 
         foreach ($data['columnHeaders'] as $col) {
@@ -144,9 +160,16 @@ class Analytics extends Api
             ];
         }
 
+        return $cols;
+    }
 
-        // Rows
-
+    /**
+     * @param array $data
+     * @param array $cols
+     * @return array
+     */
+    private function parseReportResponseRows(array $data, array $cols): array
+    {
         $rows = [];
 
         if ($data['rows']) {
@@ -188,14 +211,8 @@ class Analytics extends Api
             }
         }
 
-        return [
-            'cols' => $cols,
-            'rows' => $rows
-        ];
+        return $rows;
     }
-
-    // Private Methods
-    // =========================================================================
 
     /**
      * Format RAW value
