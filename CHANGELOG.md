@@ -5,6 +5,7 @@ Changelog
 
 ### Changed
 - Improved exception handling for the Reports controller.
+- Updated `google/apiclient` dependency to `^v2.2.0`.
 
 ## 4.0.2 - 2018-06-27
 
