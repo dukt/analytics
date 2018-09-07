@@ -65,6 +65,7 @@ class Plugin extends \craft\base\Plugin
             'analytics' => \dukt\analytics\services\Analytics::class,
             'apis' => \dukt\analytics\services\Apis::class,
             'cache' => \dukt\analytics\services\Cache::class,
+            'geo' => \dukt\analytics\services\Geo::class,
             'metadata' => \dukt\analytics\services\Metadata::class,
             'oauth' => \dukt\analytics\services\Oauth::class,
             'reports' => \dukt\analytics\services\Reports::class,

@@ -501,10 +501,10 @@ class Reports extends Component
                         if (isset($columnHeaderDimensions[$colIndex])) {
                             switch ($columnHeaderDimensions[$colIndex]) {
                                 case 'ga:continent':
-                                    $value = Analytics::$plugin->metadata->getContinentCode($value);
+                                    $value = Analytics::$plugin->geo->getContinentCode($value);
                                     break;
                                 case 'ga:subContinent':
-                                    $value = Analytics::$plugin->metadata->getSubContinentCode($value);
+                                    $value = Analytics::$plugin->geo->getSubContinentCode($value);
                                     break;
                             }
                         }

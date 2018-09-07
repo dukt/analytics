@@ -159,11 +159,11 @@ class Analytics extends Api
                     $value = $this->formatRawValue($col['type'], $_value);
 
                     if ($col['id'] == 'ga:continent') {
-                        $value = Plugin::$plugin->metadata->getContinentCode($value);
+                        $value = Plugin::$plugin->geo->getContinentCode($value);
                     }
 
                     if ($col['id'] == 'ga:subContinent') {
-                        $value = Plugin::$plugin->metadata->getSubContinentCode($value);
+                        $value = Plugin::$plugin->geo->getSubContinentCode($value);
                     }
 
                     // translate values

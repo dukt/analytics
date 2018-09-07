@@ -6,6 +6,7 @@ Changelog
 ### Changed
 - Improved exception handling for the Reports controller.
 - Updated `google/apiclient` dependency to `^v2.2.0`.
+- Moved continent and subcontinent related methods to a new Geo service.
 
 ## 4.0.2 - 2018-06-27
 

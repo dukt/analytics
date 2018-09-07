@@ -19,10 +19,11 @@ use dukt\analytics\Plugin as Analytics;
  * @property \dukt\analytics\services\Analytics                 $analytics                  The analytics service
  * @property \dukt\analytics\services\Apis                      $apis                       The apis service
  * @property \dukt\analytics\services\Cache                     $cache                      The cache service
+ * @property \dukt\analytics\services\Geo                       $geo                        The geo service
  * @property \dukt\analytics\services\Metadata                  $metadata                   The metadata service
  * @property \dukt\analytics\services\Oauth                     $oauth                      The oauth service
  * @property \dukt\analytics\services\Reports                   $reports                    The reports service
- * @property \dukt\analytics\services\Views                     $views                    The views service
+ * @property \dukt\analytics\services\Views                     $views                      The views service
  */
 trait PluginTrait
 {
@@ -76,6 +77,18 @@ trait PluginTrait
     {
         /** @var Analytics $this */
         return $this->get('cache');
+    }
+
+    /**
+     * Returns the geo service.
+     *
+     * @return \dukt\analytics\services\Geo The geo service
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function getGeo()
+    {
+        /** @var Analytics $this */
+        return $this->get('geo');
     }
 
     /**

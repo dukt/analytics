@@ -46,8 +46,8 @@ class AnalyticsAsset extends AssetBundle
         parent::registerAssetFiles($view);
 
         $mapsApiKey = Analytics::$plugin->getSettings()->mapsApiKey;
-        $continents = Analytics::$plugin->metadata->getContinents();
-        $subContinents = Analytics::$plugin->metadata->getSubContinents();
+        $continents = Analytics::$plugin->geo->getContinents();
+        $subContinents = Analytics::$plugin->geo->getSubContinents();
         $formats = ChartHelper::formats();
 
         $js = "if(typeof Analytics == 'undefined') {";
