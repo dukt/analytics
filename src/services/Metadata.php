@@ -207,29 +207,21 @@ class Metadata extends Component
     /**
      * Returns columns
      *
-     * @param null $type
+     * @param string $type
      *
      * @return array
      */
-    public function getColumns($type = null): array
+    public function getColumns(string $type = null): array
     {
         if (!$this->columns) {
             $this->columns = $this->_loadColumns();
         }
 
-        if ($type) {
-            $columns = [];
-
-            foreach ($this->columns as $column) {
-                if ($column->type === $type) {
-                    $columns[] = $column;
-                }
-            }
-
-            return $columns;
+        if (!$type) {
+            return $this->columns;
         }
 
-        return $this->columns;
+        return $this->getColumnsByType($type);
     }
 
     /**
@@ -475,5 +467,24 @@ class Metadata extends Component
         }
 
         return $groups;
+    }
+
+    /**
+     * Get columns by type.
+     *
+     * @param string $type
+     * @return array
+     */
+    private function getColumnsByType(string $type): array
+    {
+        $columns = [];
+
+        foreach ($this->columns as $column) {
+            if ($column->type === $type) {
+                $columns[] = $column;
+            }
+        }
+
+        return $columns;
     }
 }
