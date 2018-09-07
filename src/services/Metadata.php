@@ -368,13 +368,15 @@ class Metadata extends Component
         $contents = file_get_contents($path);
         $columnsResponse = Json::decode($contents);
 
-        if ($columnsResponse) {
-            foreach ($columnsResponse as $columnResponse) {
-                $cols[$columnResponse['id']] = new Column($columnResponse);
+        if (!$columnsResponse) {
+            return $cols;
+        }
 
-                if ($columnResponse['id'] === 'ga:countryIsoCode') {
-                    $cols[$columnResponse['id']]->uiName = 'Country';
-                }
+        foreach ($columnsResponse as $columnResponse) {
+            $cols[$columnResponse['id']] = new Column($columnResponse);
+
+            if ($columnResponse['id'] === 'ga:countryIsoCode') {
+                $cols[$columnResponse['id']]->uiName = 'Country';
             }
         }
 
