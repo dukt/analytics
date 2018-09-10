@@ -1,8 +1,8 @@
 <?php
 /**
- * @link      https://dukt.net/craft/analytics/
+ * @link      https://dukt.net/analytics/
  * @copyright Copyright (c) 2018, Dukt
- * @license   https://dukt.net/craft/analytics/docs/license
+ * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
 namespace dukt\analytics\apis;
@@ -116,26 +116,12 @@ class AnalyticsReporting extends Api
         $request = new Google_Service_AnalyticsReporting_ReportRequest();
 
         $this->setRequestViewIdFromCriteria($request, $criteria);
-
-        $dateRange = new Google_Service_AnalyticsReporting_DateRange();
-        $dateRange->setStartDate($criteria->startDate);
-        $dateRange->setEndDate($criteria->endDate);
-        $request->setDateRanges($dateRange);
+        $this->setRequestDateRangeFromCriteria($request, $criteria);
+        $this->setRequestMetricsFromCriteria($request, $criteria);
+        $this->setRequestDimensionsFromCriteria($request, $criteria);
 
         if ($criteria->samplingLevel) {
             $request->setSamplingLevel($criteria->samplingLevel);
-        }
-
-        if ($criteria->metrics) {
-            $metricString = $criteria->metrics;
-            $metrics = $this->getMetricsFromString($metricString);
-            $request->setMetrics($metrics);
-        }
-
-        if (!empty($criteria->dimensions)) {
-            $dimensionString = $criteria->dimensions;
-            $dimensions = $this->getDimensionsFromString($dimensionString);
-            $request->setDimensions($dimensions);
         }
 
         if (!empty($criteria->orderBys)) {
@@ -143,7 +129,7 @@ class AnalyticsReporting extends Api
         }
 
         if ($criteria->pageToken) {
-            $pageToken = (string)$criteria->pageToken;
+            $pageToken = (string) $criteria->pageToken;
             $request->setPageToken($pageToken);
         }
 
@@ -188,6 +174,44 @@ class AnalyticsReporting extends Api
                     $request->setViewId($view->gaViewId);
                 }
             }
+        }
+    }
+
+    /**
+     * @param Google_Service_AnalyticsReporting_ReportRequest $request
+     * @param ReportRequestCriteria $criteria
+     */
+    private function setRequestDateRangeFromCriteria(Google_Service_AnalyticsReporting_ReportRequest &$request, ReportRequestCriteria $criteria)
+    {
+        $dateRange = new Google_Service_AnalyticsReporting_DateRange();
+        $dateRange->setStartDate($criteria->startDate);
+        $dateRange->setEndDate($criteria->endDate);
+        $request->setDateRanges($dateRange);
+    }
+
+    /**
+     * @param Google_Service_AnalyticsReporting_ReportRequest $request
+     * @param ReportRequestCriteria $criteria
+     */
+    private function setRequestMetricsFromCriteria(Google_Service_AnalyticsReporting_ReportRequest &$request, ReportRequestCriteria $criteria)
+    {
+        if ($criteria->metrics) {
+            $metricString = $criteria->metrics;
+            $metrics = $this->getMetricsFromString($metricString);
+            $request->setMetrics($metrics);
+        }
+    }
+
+    /**
+     * @param Google_Service_AnalyticsReporting_ReportRequest $request
+     * @param ReportRequestCriteria $criteria
+     */
+    private function setRequestDimensionsFromCriteria(Google_Service_AnalyticsReporting_ReportRequest &$request, ReportRequestCriteria $criteria)
+    {
+        if (!empty($criteria->dimensions)) {
+            $dimensionString = $criteria->dimensions;
+            $dimensions = $this->getDimensionsFromString($dimensionString);
+            $request->setDimensions($dimensions);
         }
     }
 

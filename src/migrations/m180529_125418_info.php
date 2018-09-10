@@ -63,7 +63,10 @@ class m180529_125418_info extends Migration
 
         if($settings) {
             $forceConnect = $settings['forceConnect'];
-            $token = $settings['token'];
+
+            if(isset($settings['token'])) {
+                $token = $settings['token'];
+            }
         }
 
         // Populate the analytics_info table
@@ -77,7 +80,12 @@ class m180529_125418_info extends Migration
         // Get rid of the old plugin settings
         echo '    > remove old plugin settings ...';
         if($settings) {
-            unset($settings['forceConnect'], $settings['token']);
+            unset($settings['forceConnect']);
+
+            if(isset($settings['token'])) {
+                unset($settings['token']);
+            }
+
             $settingsJson = Json::encode($settings);
             $this->update('{{%plugins}}', ['settings' => $settingsJson], ['id' => $row['id']]);
         }

@@ -1,8 +1,8 @@
 <?php
 /**
- * @link      https://dukt.net/craft/analytics/
+ * @link      https://dukt.net/analytics/
  * @copyright Copyright (c) 2018, Dukt
- * @license   https://dukt.net/craft/analytics/docs/license
+ * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
 namespace dukt\analytics\services;
@@ -110,62 +110,6 @@ class Metadata extends Component
     }
 
     /**
-     * Get continents.
-     *
-     * @return array
-     */
-    public function getContinents(): array
-    {
-        return $this->_getData('continents');
-    }
-
-    /**
-     * Get subcontinents.
-     *
-     * @return array
-     */
-    public function getSubContinents(): array
-    {
-        return $this->_getData('subContinents');
-    }
-
-    /**
-     * Get Continent Code
-     *
-     * @param string $label
-     *
-     * @return mixed
-     */
-    public function getContinentCode($label)
-    {
-        foreach ($this->_getData('continents') as $continent) {
-            if ($continent['label'] === $label) {
-                return $continent['code'];
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Get Sub-Continent Code
-     *
-     * @param string $label
-     *
-     * @return mixed
-     */
-    public function getSubContinentCode($label)
-    {
-        foreach ($this->_getData('subContinents') as $subContinent) {
-            if ($subContinent['label'] === $label) {
-                return $subContinent['code'];
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * Get a dimension or a metric label from its id
      *
      * @param string $id
@@ -207,29 +151,21 @@ class Metadata extends Component
     /**
      * Returns columns
      *
-     * @param null $type
+     * @param string $type
      *
      * @return array
      */
-    public function getColumns($type = null): array
+    public function getColumns(string $type = null): array
     {
         if (!$this->columns) {
             $this->columns = $this->_loadColumns();
         }
 
-        if ($type) {
-            $columns = [];
-
-            foreach ($this->columns as $column) {
-                if ($column->type === $type) {
-                    $columns[] = $column;
-                }
-            }
-
-            return $columns;
+        if (!$type) {
+            return $this->columns;
         }
 
-        return $this->columns;
+        return $this->getColumnsByType($type);
     }
 
     /**
@@ -259,13 +195,7 @@ class Metadata extends Component
             return $this->groups[$type];
         }
 
-        $groups = [];
-
-        foreach ($this->getColumns() as $column) {
-            if (!$type || ($type && $column->type === $type)) {
-                $groups[$column->group] = $column->group;
-            }
-        }
+        $groups = $this->_getColumnGroups($type);
 
         if ($type) {
             $this->groups[$type] = $groups;
@@ -382,33 +312,19 @@ class Metadata extends Component
         $contents = file_get_contents($path);
         $columnsResponse = Json::decode($contents);
 
-        if ($columnsResponse) {
-            foreach ($columnsResponse as $columnResponse) {
-                $cols[$columnResponse['id']] = new Column($columnResponse);
+        if (!$columnsResponse) {
+            return $cols;
+        }
 
-                if ($columnResponse['id'] === 'ga:countryIsoCode') {
-                    $cols[$columnResponse['id']]->uiName = 'Country';
-                }
+        foreach ($columnsResponse as $columnResponse) {
+            $cols[$columnResponse['id']] = new Column($columnResponse);
+
+            if ($columnResponse['id'] === 'ga:countryIsoCode') {
+                $cols[$columnResponse['id']]->uiName = 'Country';
             }
         }
 
         return $cols;
-    }
-
-    /**
-     * Get Data
-     *
-     * @param $name
-     *
-     * @return array
-     * @internal param string $label
-     *
-     */
-    private function _getData($name): array
-    {
-        $jsonData = file_get_contents(Craft::getAlias('@dukt/analytics/etc/data/'.$name.'.json'));
-
-        return json_decode($jsonData, true);
     }
 
     /**
@@ -462,5 +378,43 @@ class Metadata extends Component
         }
 
         return $filteredOptions;
+    }
+
+    /**
+     * Get column groups.
+     *
+     * @param string|null $type
+     * @return array
+     */
+    private function _getColumnGroups(string $type = null): array
+    {
+        $groups = [];
+
+        foreach ($this->getColumns() as $column) {
+            if (!$type || ($type && $column->type === $type)) {
+                $groups[$column->group] = $column->group;
+            }
+        }
+
+        return $groups;
+    }
+
+    /**
+     * Get columns by type.
+     *
+     * @param string $type
+     * @return array
+     */
+    private function getColumnsByType(string $type): array
+    {
+        $columns = [];
+
+        foreach ($this->columns as $column) {
+            if ($column->type === $type) {
+                $columns[] = $column;
+            }
+        }
+
+        return $columns;
     }
 }

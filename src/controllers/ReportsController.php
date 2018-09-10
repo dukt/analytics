@@ -1,8 +1,8 @@
 <?php
 /**
- * @link      https://dukt.net/craft/analytics/
+ * @link      https://dukt.net/analytics/
  * @copyright Copyright (c) 2018, Dukt
- * @license   https://dukt.net/craft/analytics/docs/license
+ * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
 namespace dukt\analytics\controllers;
@@ -22,6 +22,7 @@ class ReportsController extends Controller
      * E-commerce Report
      *
      * @return null
+     * @throws \Google_Service_Exception
      * @throws \yii\base\InvalidConfigException
      */
     public function actionEcommerceWidget()
@@ -33,7 +34,11 @@ class ReportsController extends Controller
         $viewId = Craft::$app->getRequest()->getBodyParam('viewId');
         $period = Craft::$app->getRequest()->getBodyParam('period');
 
-        $response = Analytics::$plugin->getReports()->getEcommerceReport($viewId, $period);
+        try {
+            $response = Analytics::$plugin->getReports()->getEcommerceReport($viewId, $period);
+        } catch(\Google_Service_Exception $e) {
+            return $this->handleGoogleServiceException($e);
+        }
 
         return $this->asJson($response);
     }
@@ -42,6 +47,7 @@ class ReportsController extends Controller
      * Get element report.
      *
      * @return Response
+     * @throws \Google_Service_Exception
      * @throws \yii\base\InvalidConfigException
      * @throws \yii\web\BadRequestHttpException
      */
@@ -51,7 +57,11 @@ class ReportsController extends Controller
         $siteId = (int)Craft::$app->getRequest()->getRequiredParam('siteId');
         $metric = Craft::$app->getRequest()->getRequiredParam('metric');
 
-        $response = Analytics::$plugin->getReports()->getElementReport($elementId, $siteId, $metric);
+        try {
+            $response = Analytics::$plugin->getReports()->getElementReport($elementId, $siteId, $metric);
+        } catch(\Google_Service_Exception $e) {
+            return $this->handleGoogleServiceException($e);
+        }
 
         return $this->asJson([
             'type' => 'area',
@@ -63,6 +73,7 @@ class ReportsController extends Controller
      * Get realtime widget report.
      *
      * @return Response
+     * @throws \Google_Exception
      * @throws \yii\base\InvalidConfigException
      */
     public function actionRealtimeWidget()
@@ -84,7 +95,11 @@ class ReportsController extends Controller
             'optParams' => []
         ];
 
-        $response = Analytics::$plugin->getReports()->getRealtimeReport($request);
+        try {
+            $response = Analytics::$plugin->getReports()->getRealtimeReport($request);
+        } catch(\Google_Service_Exception $e) {
+            return $this->handleGoogleServiceException($e);
+        }
 
         if (!empty($response['totalsForAllResults']) && isset($response['totalsForAllResults']['ga:activeVisitors'])) {
             $activeUsers = $response['totalsForAllResults']['ga:activeVisitors'];
@@ -124,6 +139,7 @@ class ReportsController extends Controller
      *
      * @return Response
      * @throws InvalidChartTypeException
+     * @throws \Google_Service_Exception
      * @throws \yii\base\InvalidConfigException
      */
     public function actionReportWidget()
@@ -142,39 +158,64 @@ class ReportsController extends Controller
 
         $cacheId = ['getReport', $request];
 
-        $response = Analytics::$plugin->cache->get($cacheId);
+        try {
+            $response = Analytics::$plugin->cache->get($cacheId);
 
-        if (!$response) {
-            switch ($chart) {
-                case 'area':
-                    $response = Analytics::$plugin->getReports()->getAreaReport($request);
-                    break;
-                case 'counter':
-                    $response = Analytics::$plugin->getReports()->getCounterReport($request);
-                    break;
-                case 'pie':
-                    $response = Analytics::$plugin->getReports()->getPieReport($request);
-                    break;
-                case 'table':
-                    $response = Analytics::$plugin->getReports()->getTableReport($request);
-                    break;
-                case 'geo':
-                    $response = Analytics::$plugin->getReports()->getGeoReport($request);
-                    break;
-                default:
-                    throw new InvalidChartTypeException('Chart type `'.$chart.'` not supported.');
+            if (!$response) {
+                switch ($chart) {
+                    case 'area':
+                        $response = Analytics::$plugin->getReports()->getAreaReport($request);
+                        break;
+                    case 'counter':
+                        $response = Analytics::$plugin->getReports()->getCounterReport($request);
+                        break;
+                    case 'pie':
+                        $response = Analytics::$plugin->getReports()->getPieReport($request);
+                        break;
+                    case 'table':
+                        $response = Analytics::$plugin->getReports()->getTableReport($request);
+                        break;
+                    case 'geo':
+                        $response = Analytics::$plugin->getReports()->getGeoReport($request);
+                        break;
+                    default:
+                        throw new InvalidChartTypeException('Chart type `'.$chart.'` not supported.');
+                }
+
+                if ($response) {
+                    Analytics::$plugin->cache->set($cacheId, $response);
+                }
             }
 
-            if ($response) {
-                Analytics::$plugin->cache->set($cacheId, $response);
-            }
+
+            return $this->asJson($response);
+        } catch(\Google_Service_Exception $e) {
+            return $this->handleGoogleServiceException($e);
         }
-
-        return $this->asJson($response);
     }
 
     // Private Methods
     // =========================================================================
+
+    /**
+     * Handle Google service exception.
+     *
+     * @param \Google_Service_Exception $e
+     * @return Response
+     * @throws \Google_Service_Exception
+     */
+    private function handleGoogleServiceException(\Google_Service_Exception $e): Response
+    {
+        $errors = $e->getErrors();
+
+        if(empty($errors)) {
+            throw $e;
+        }
+
+        Craft::error("Couldn’t generate Report widget’s report: \r\n".print_r($errors, true)."\r\n".$e->getTraceAsString(), __METHOD__);
+
+        return $this->asErrorJson($errors[0]['message']);
+    }
 
     /**
      * Get realtime demo response.
@@ -223,6 +264,7 @@ class ReportsController extends Controller
      * Get realtime demo test response.
      *
      * @return Response
+     * @throws \Exception
      */
     private function getRealtimeDemoTestResponse(): Response
     {
@@ -259,6 +301,7 @@ class ReportsController extends Controller
 
     /**
      * @return Response
+     * @throws \Exception
      */
     private function getEcommerceDemoResponse(): Response
     {

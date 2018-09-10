@@ -19,8 +19,6 @@ class m170324_000002_remove_old_widgets extends Migration
         $this->delete('{{%widgets}}', ['type' => 'Analytics_Chart']);
         $this->delete('{{%widgets}}', ['type' => 'Analytics_Stats']);
         $this->delete('{{%widgets}}', ['type' => 'Analytics_Reports']);
-        $this->delete('{{%widgets}}', ['type' => 'dukt\analytics\widgets\Report', 'enabled' => 0]);
-        $this->delete('{{%widgets}}', ['type' => 'dukt\analytics\widgets\Realtime', 'enabled' => 0]);
 
         return true;
     }

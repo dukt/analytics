@@ -1,8 +1,8 @@
 <?php
 /**
- * @link      https://dukt.net/craft/analytics/
+ * @link      https://dukt.net/analytics/
  * @copyright Copyright (c) 2018, Dukt
- * @license   https://dukt.net/craft/analytics/docs/license
+ * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
 namespace dukt\analytics\apis;
@@ -105,10 +105,26 @@ class Analytics extends Api
      *
      * @return array
      */
-    public function parseReportResponse($data)
+    public function parseReportResponse($data): array
     {
-        // Columns
+        $cols = $this->parseReportResponseCols($data);
+        $rows = $this->parseReportResponseRows($data, $cols);
 
+        return [
+            'cols' => $cols,
+            'rows' => $rows
+        ];
+    }
+
+    // Private Methods
+    // =========================================================================
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    private function parseReportResponseCols(array $data): array
+    {
         $cols = [];
 
         foreach ($data['columnHeaders'] as $col) {
@@ -144,9 +160,16 @@ class Analytics extends Api
             ];
         }
 
+        return $cols;
+    }
 
-        // Rows
-
+    /**
+     * @param array $data
+     * @param array $cols
+     * @return array
+     */
+    private function parseReportResponseRows(array $data, array $cols): array
+    {
         $rows = [];
 
         if ($data['rows']) {
@@ -159,11 +182,11 @@ class Analytics extends Api
                     $value = $this->formatRawValue($col['type'], $_value);
 
                     if ($col['id'] == 'ga:continent') {
-                        $value = Plugin::$plugin->metadata->getContinentCode($value);
+                        $value = Plugin::$plugin->geo->getContinentCode($value);
                     }
 
                     if ($col['id'] == 'ga:subContinent') {
-                        $value = Plugin::$plugin->metadata->getSubContinentCode($value);
+                        $value = Plugin::$plugin->geo->getSubContinentCode($value);
                     }
 
                     // translate values
@@ -188,14 +211,8 @@ class Analytics extends Api
             }
         }
 
-        return [
-            'cols' => $cols,
-            'rows' => $rows
-        ];
+        return $rows;
     }
-
-    // Private Methods
-    // =========================================================================
 
     /**
      * Format RAW value

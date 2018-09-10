@@ -1,6 +1,17 @@
 Changelog
 =========
 
+## 4.0.3 - 2018-09-10
+
+### Added
+- Added missing Craft 3 upgade migration.
+
+### Changed
+- Improved exception handling for the Reports controller.
+- Updated `google/apiclient` dependency to `^v2.2.0`.
+- Moved continent and subcontinent related methods to a new Geo service.
+- Added Craft 3 upgrade migration.
+
 ## 4.0.2 - 2018-06-27
 
 ### Fixed

@@ -1,8 +1,8 @@
 <?php
 /**
- * @link      https://dukt.net/craft/analytics/
+ * @link      https://dukt.net/analytics/
  * @copyright Copyright (c) 2018, Dukt
- * @license   https://dukt.net/craft/analytics/docs/license
+ * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
 namespace dukt\analytics\services;
@@ -415,18 +415,31 @@ class Reports extends Component
     // =========================================================================
 
     /**
-     * @param Google_Service_AnalyticsReporting_Report $_report
-     *
+     * @param Google_Service_AnalyticsReporting_Report $report
      * @return array
      */
-    private function parseReportingReport(Google_Service_AnalyticsReporting_Report $_report)
+    private function parseReportingReport(Google_Service_AnalyticsReporting_Report $report): array
     {
-        $columnHeader = $_report->getColumnHeader();
+        $cols = $this->parseReportingReportCols($report);
+        $rows = $this->parseReportingReportRows($report);
+        $totals = $report->getData()->getTotals()[0]->getValues();
+
+        return [
+            'cols' => $cols,
+            'rows' => $rows,
+            'totals' => $totals
+        ];
+    }
+
+    /**
+     * @param Google_Service_AnalyticsReporting_Report $report
+     * @return array
+     */
+    private function parseReportingReportCols(Google_Service_AnalyticsReporting_Report $report): array
+    {
+        $columnHeader = $report->getColumnHeader();
         $columnHeaderDimensions = $columnHeader->getDimensions();
         $metricHeaderEntries = $columnHeader->getMetricHeader()->getMetricHeaderEntries();
-
-
-        // Columns
 
         $cols = [];
 
@@ -480,12 +493,21 @@ class Reports extends Component
             array_push($cols, $col);
         }
 
+        return $cols;
+    }
 
-        // Rows
+    /**
+     * @param Google_Service_AnalyticsReporting_Report $report
+     * @return array
+     */
+    private function parseReportingReportRows(Google_Service_AnalyticsReporting_Report $report): array
+    {
+        $columnHeader = $report->getColumnHeader();
+        $columnHeaderDimensions = $columnHeader->getDimensions();
 
         $rows = [];
 
-        foreach ($_report->getData()->getRows() as $_row) {
+        foreach ($report->getData()->getRows() as $_row) {
 
             $colIndex = 0;
             $row = [];
@@ -501,10 +523,10 @@ class Reports extends Component
                         if (isset($columnHeaderDimensions[$colIndex])) {
                             switch ($columnHeaderDimensions[$colIndex]) {
                                 case 'ga:continent':
-                                    $value = Analytics::$plugin->metadata->getContinentCode($value);
+                                    $value = Analytics::$plugin->geo->getContinentCode($value);
                                     break;
                                 case 'ga:subContinent':
-                                    $value = Analytics::$plugin->metadata->getSubContinentCode($value);
+                                    $value = Analytics::$plugin->geo->getSubContinentCode($value);
                                     break;
                             }
                         }
@@ -524,12 +546,6 @@ class Reports extends Component
             array_push($rows, $row);
         }
 
-        $totals = $_report->getData()->getTotals()[0]->getValues();
-
-        return [
-            'cols' => $cols,
-            'rows' => $rows,
-            'totals' => $totals
-        ];
+        return $rows;
     }
 }
