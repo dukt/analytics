@@ -3,6 +3,9 @@ Changelog
 
 ## Unreleased
 
+### Added
+- Added missing Craft 3 upgade migration.
+
 ### Changed
 - Improved exception handling for the Reports controller.
 - Updated `google/apiclient` dependency to `^v2.2.0`.
