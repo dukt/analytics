@@ -5,6 +5,7 @@ namespace dukt\analytics\migrations;
 use Craft;
 use craft\db\Migration;
 use dukt\analytics\fields\Report as ReportField;
+use dukt\analytics\widgets\Realtime;
 use dukt\analytics\widgets\Report as ReportWidget;
 
 /**
@@ -23,6 +24,10 @@ class m180910_130202_craft3_upgrade extends Migration
         ], ['type' => 'Analytics_Report']);
 
         // Widgets
+        $this->update('{{%widgets}}', [
+            'type' => Realtime::class
+        ], ['type' => 'Analytics_Realtime']);
+
         $this->update('{{%widgets}}', [
             'type' => ReportWidget::class
         ], ['type' => 'Analytics_Report']);
