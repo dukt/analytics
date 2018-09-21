@@ -3,9 +3,6 @@ Changelog
 
 ## Unreleased
 
-### Added
-- Added a “Limit” option to the Report widget’s table chart to limit the number of results displayed. ([#9](https://github.com/dukt/analytics/issues/9))
-
 ### Fixed
 - Fixed a bug where pagination was not working to Table charts. ([#9](https://github.com/dukt/analytics/issues/9))
 - Fixed the intentation of the template files.

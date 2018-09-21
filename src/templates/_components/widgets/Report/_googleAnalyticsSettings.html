@@ -60,13 +60,6 @@
         options: selectOptions.table.metrics,
         value: (settings.options.table.metric is defined ? settings.options.table.metric : null),
     }) }}
-
-    {{ forms.textField({
-        type: 'number',
-        label: "Limit"|t('analytics'),
-        name: 'options[table][limit]',
-        value: (settings.options.table.limit is defined ? settings.options.table.limit : null),
-    }) }}
 </div>
 
 <div id="chartgeo"{% if settings.chart != 'geo' %} class="hidden"{% endif %}>
