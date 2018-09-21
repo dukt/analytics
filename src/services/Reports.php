@@ -350,6 +350,10 @@ class Reports extends Component
         $criteria->startDate = date('Y-m-d', strtotime('-1 '.$period));
         $criteria->endDate = date('Y-m-d');
 
+        if(!empty($request['options']['limit'])) {
+            $criteria->pageSize = $request['options']['limit'];
+        }
+
         $reportResponse = Analytics::$plugin->getApis()->getAnalyticsReporting()->getReport($criteria);
         $report = $this->parseReportingReport($reportResponse);
 
