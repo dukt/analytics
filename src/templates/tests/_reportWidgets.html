@@ -6,54 +6,54 @@
 
 {% set content %}
 
-	{% js %}
-		window.csrfTokenName = "{{ craft.app.config.general.csrfTokenName|e('js') }}";
-		window.csrfTokenValue = "{{ craft.app.request.csrfToken|e('js') }}";
+    {% js %}
+        window.csrfTokenName = "{{ craft.app.config.general.csrfTokenName|e('js') }}";
+        window.csrfTokenValue = "{{ craft.app.request.csrfToken|e('js') }}";
 
-		var AnalyticsChartLanguage = "{{ "analyticsChartLanguage"|t('analytics') }}";
-	{% endjs %}
+        var AnalyticsChartLanguage = "{{ "analyticsChartLanguage"|t('analytics') }}";
+    {% endjs %}
 
-	{{ macros.testReportWidget("Area", {
-		chart: 'area',
-		period: 'month',
-		options: {
-			metric: 'ga:users'
-		}
-	}) }}
+    {{ macros.testReportWidget("Area", {
+        chart: 'area',
+        period: 'month',
+        options: {
+            metric: 'ga:users'
+        }
+    }) }}
 
-	{{ macros.testReportWidget("Counter", {
-		chart: 'counter',
-		period: 'month',
-		options: {
-			metric: 'ga:users'
-		}
-	}) }}
+    {{ macros.testReportWidget("Counter", {
+        chart: 'counter',
+        period: 'month',
+        options: {
+            metric: 'ga:users'
+        }
+    }) }}
 
-	{{ macros.testReportWidget("Pie", {
-		chart: 'pie',
-		period: 'month',
-		options: {
-			dimension: 'ga:userType',
-			metric: 'ga:users'
-		}
-	}) }}
+    {{ macros.testReportWidget("Pie", {
+        chart: 'pie',
+        period: 'month',
+        options: {
+            dimension: 'ga:userType',
+            metric: 'ga:users'
+        }
+    }) }}
 
-	{{ macros.testReportWidget("Table", {
-		chart: 'table',
-		period: 'month',
-		options: {
-			dimension: 'ga:userType',
-			metric: 'ga:users'
-		}
-	}) }}
+    {{ macros.testReportWidget("Table", {
+        chart: 'table',
+        period: 'month',
+        options: {
+            dimension: 'ga:userType',
+            metric: 'ga:users'
+        }
+    }) }}
 
-	{{ macros.testReportWidget("Geo", {
-		chart: 'geo',
-		period: 'month',
-		options: {
-			dimension: 'ga:subContinent',
-			metric: 'ga:users'
-		}
-	}) }}
+    {{ macros.testReportWidget("Geo", {
+        chart: 'geo',
+        period: 'month',
+        options: {
+            dimension: 'ga:subContinent',
+            metric: 'ga:users'
+        }
+    }) }}
 
 {% endset %}

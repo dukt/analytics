@@ -5,62 +5,62 @@
 
 {% set content %}
 
-	<p>{{ "Testing area for Google Analytics Reporting API v4."|t }}</p>
+    <p>{{ "Testing area for Google Analytics Reporting API v4."|t }}</p>
 
-	<form method="post">
-		{{ csrfInput() }}
+    <form method="post">
+        {{ csrfInput() }}
 
-		<input type="hidden" name="action" value="analytics/api4/get-report">
+        <input type="hidden" name="action" value="analytics/api4/get-report">
 
-		{{ forms.textField({
-			label: 'startDate',
-			name: 'startDate',
-			value: (startDate ? startDate : '7daysAgo'),
-		}) }}
+        {{ forms.textField({
+            label: 'startDate',
+            name: 'startDate',
+            value: (startDate ? startDate : '7daysAgo'),
+        }) }}
 
-		{{ forms.textField({
-			label: 'endDate',
-			name: 'endDate',
-			value: (endDate ? endDate : 'today'),
-		}) }}
+        {{ forms.textField({
+            label: 'endDate',
+            name: 'endDate',
+            value: (endDate ? endDate : 'today'),
+        }) }}
 
-		{{ forms.textField({
-			label: 'metrics',
-			name: 'metrics',
-			value: (metrics ? metrics : 'ga:users'),
-		}) }}
-		{{ forms.textField({
-			label: 'dimensions',
-			name: 'dimensions',
-			value: (dimensions ? dimensions : 'ga:userType,ga:country'),
-		}) }}
+        {{ forms.textField({
+            label: 'metrics',
+            name: 'metrics',
+            value: (metrics ? metrics : 'ga:users'),
+        }) }}
+        {{ forms.textField({
+            label: 'dimensions',
+            name: 'dimensions',
+            value: (dimensions ? dimensions : 'ga:userType,ga:country'),
+        }) }}
 
-		<input type="submit" class="btn submit" name="Get Report">
-	</form>
+        <input type="submit" class="btn submit" name="Get Report">
+    </form>
 
-	{% if reports is defined %}
-		<hr>
+    {% if reports is defined %}
+        <hr>
 
-		{% for report in reports %}
-			<h2>Report #{{ loop.index }}</h2>
+        {% for report in reports %}
+            <h2>Report #{{ loop.index }}</h2>
 
-			<table class="data fullwidth">
-				<thead>
-				<tr>
-					{% for col in report.cols %}
-						<th>{{ col }}</th>
-					{% endfor %}
-				</tr>
-				</thead>
-				{% for row in report.rows %}
-					<tr>
-						{% for cell in row %}
-							<td>{{ cell }}</td>
-						{% endfor %}
-					</tr>
-				{% endfor %}
-			</table>
-		{% endfor %}
-	{% endif %}
+            <table class="data fullwidth">
+                <thead>
+                <tr>
+                    {% for col in report.cols %}
+                        <th>{{ col }}</th>
+                    {% endfor %}
+                </tr>
+                </thead>
+                {% for row in report.rows %}
+                    <tr>
+                        {% for cell in row %}
+                            <td>{{ cell }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endfor %}
+    {% endif %}
 
 {% endset %}

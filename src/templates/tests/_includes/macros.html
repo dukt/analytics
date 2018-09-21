@@ -1,10 +1,10 @@
 {% macro widgetMock(id) %}
 
-	<div id="{{ id }}" class="mock-widget analytics_report">
-		<div class="body"></div>
-		<div class="error"></div>
-		<div class="spinner"></div>
-	</div>
+    <div id="{{ id }}" class="mock-widget analytics_report">
+        <div class="body"></div>
+        <div class="error"></div>
+        <div class="spinner"></div>
+    </div>
 
 {% endmacro %}
 
@@ -12,31 +12,31 @@
 
 {% macro reportWidget(request) %}
 
-	{% from _self import widgetMock %}
+    {% from _self import widgetMock %}
 
-	{% set id = 'widget-'~random() %}
+    {% set id = 'widget-'~random() %}
 
-	{{ widgetMock(id) }}
+    {{ widgetMock(id) }}
 
-	{% js %}
+    {% js %}
 
-	var reportWidget = new Analytics.ReportWidget("{{ id }}", {
-	request: {{ request|json_encode|raw }},
-	});
+    var reportWidget = new Analytics.ReportWidget("{{ id }}", {
+    request: {{ request|json_encode|raw }},
+    });
 
-	{% endjs %}
+    {% endjs %}
 
 {% endmacro %}
 
 {% macro testReportWidget(name, request) %}
 
-	{% from _self import reportWidget %}
+    {% from _self import reportWidget %}
 
-	<div class="test-report-widget">
-		<h2>{{ name }} Report Widget</h2>
+    <div class="test-report-widget">
+        <h2>{{ name }} Report Widget</h2>
 
-		{{ reportWidget(request) }}
-	</div>
+        {{ reportWidget(request) }}
+    </div>
 
 {% endmacro %}
 

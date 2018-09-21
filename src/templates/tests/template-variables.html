@@ -5,39 +5,39 @@
 
 {% set content %}
 
-	<h2 class="first">{{ "Request"|t('analytics') }}</h2>
+    <h2 class="first">{{ "Request"|t('analytics') }}</h2>
 
-	<pre><code>{{ "{% set response = craft.analytics.api({
-	startDate: date('-1 year')|date(\"Y-m-d\"),
-	endDate: 'today',
-	metrics: 'ga:sessions',
-	optParams:
-	{
-		'dimensions': 'ga:keyword',
-		'sort': '-ga:sessions',
-		'max-results': 10,
-		'filters': 'ga:keyword!=(not set);ga:keyword!=(not provided)'
-	}
+    <pre><code>{{ "{% set response = craft.analytics.api({
+    startDate: date('-1 year')|date(\"Y-m-d\"),
+    endDate: 'today',
+    metrics: 'ga:sessions',
+    optParams:
+    {
+        'dimensions': 'ga:keyword',
+        'sort': '-ga:sessions',
+        'max-results': 10,
+        'filters': 'ga:keyword!=(not set);ga:keyword!=(not provided)'
+    }
 }).send() %}" }}</code></pre>
-	<hr>
+    <hr>
 
-	<h2>{{ "Response"|t('analytics') }}</h2>
+    <h2>{{ "Response"|t('analytics') }}</h2>
 
-	{% set response = craft.analytics.api({
-		startDate: date('-1 year')|date("Y-m-d"),
-		endDate: 'today',
-		metrics: 'ga:sessions',
-		optParams:{
-		'dimensions': 'ga:keyword',
-		'sort': '-ga:sessions',
-		'max-results': 10,
-		'filters': 'ga:keyword!=(not set);ga:keyword!=(not provided)'
-		}
-	}).send() %}
+    {% set response = craft.analytics.api({
+        startDate: date('-1 year')|date("Y-m-d"),
+        endDate: 'today',
+        metrics: 'ga:sessions',
+        optParams:{
+        'dimensions': 'ga:keyword',
+        'sort': '-ga:sessions',
+        'max-results': 10,
+        'filters': 'ga:keyword!=(not set);ga:keyword!=(not provided)'
+        }
+    }).send() %}
 
-	<pre>
-		<code>{{ dump(response) }}</code>
-	</pre>
+    <pre>
+        <code>{{ dump(response) }}</code>
+    </pre>
 
 
 {% endset %}

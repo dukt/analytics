@@ -5,20 +5,20 @@
 
 {% set content %}
 
-	<h2>{{ "Data Types"|t('analytics') }}</h2>
+    <h2>{{ "Data Types"|t('analytics') }}</h2>
 
-	<ul>
-		{% for dataType in dataTypes %}
-			<li>{{ dataType }}</li>
-		{% endfor %}
-	</ul>
+    <ul>
+        {% for dataType in dataTypes %}
+            <li>{{ dataType }}</li>
+        {% endfor %}
+    </ul>
 
-	<h2>{{ "Google Analytics Data Types"|t('analytics') }}</h2>
+    <h2>{{ "Google Analytics Data Types"|t('analytics') }}</h2>
 
-	<ul>
-		{% for dataType in googleAnalyticsDataTypes %}
-			<li>{{ dataType }}</li>
-		{% endfor %}
-	</ul>
+    <ul>
+        {% for dataType in googleAnalyticsDataTypes %}
+            <li>{{ dataType }}</li>
+        {% endfor %}
+    </ul>
 
 {% endset %}
