@@ -163,7 +163,8 @@ Analytics.ChartOptions = Garnish.Base.extend({}, {
         },
 
         table: {
-            // page: 'enable'
+            page: 'auto',
+            pageSize: 10,
         }
     }
 });

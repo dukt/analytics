@@ -1,6 +1,12 @@
 Changelog
 =========
 
+## 4.0.4 - 2018-09-21
+
+### Fixed
+- Fixed a bug where pagination was not working for Table charts. ([#9](https://github.com/dukt/analytics/issues/9))
+- Fixed the indentation of the template files.
+
 ## 4.0.3 - 2018-09-10
 
 ### Added

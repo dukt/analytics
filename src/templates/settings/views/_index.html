@@ -4,74 +4,74 @@
 
 {% set content %}
 
-	{% if isConnected %}
-		<p id="noviews"{% if reportingViews|length %} class="hidden"{% endif %}>
-			{{ "No views exist yet."|t('analytics') }}
-		</p>
+    {% if isConnected %}
+        <p id="noviews"{% if reportingViews|length %} class="hidden"{% endif %}>
+            {{ "No views exist yet."|t('analytics') }}
+        </p>
 
-		<table id="views" class="data fullwidth collapsible">
-			<thead>
-				<tr>
-					<th>{{ "Name"|t('analytics') }}</th>
-					<th>{{ "Google Analytics View"|t('analytics') }}</th>
-					<th>{{ "Tracking ID"|t('analytics') }}</th>
-					<th>{{ "View ID"|t('analytics') }}</th>
-					<td class="thin"></td>
-				</tr>
-			</thead>
-			<tbody>
+        <table id="views" class="data fullwidth collapsible">
+            <thead>
+                <tr>
+                    <th>{{ "Name"|t('analytics') }}</th>
+                    <th>{{ "Google Analytics View"|t('analytics') }}</th>
+                    <th>{{ "Tracking ID"|t('analytics') }}</th>
+                    <th>{{ "View ID"|t('analytics') }}</th>
+                    <td class="thin"></td>
+                </tr>
+            </thead>
+            <tbody>
 
-			{% for reportingView in reportingViews %}
-				<tr data-id="{{ reportingView.id }}" data-name="{{ reportingView.name }}">
-					<td><a href="{{ url('analytics/settings/views/'~reportingView.id) }}">{{ reportingView.name }}</a></td>
-					<td>
-						{% if reportingView.gaViewId %}
-							<div class="light">
-								{{ reportingView.gaAccountName }} →
-								{{ reportingView.gaPropertyName }}
-							</div>
-							{{ reportingView.gaViewName }}
-						{% else %}
-							<span class="light">—</span>
-						{% endif %}
-					</td>
-					<td>
-						{% if reportingView.gaPropertyId %}
-							<code>{{ reportingView.gaPropertyId }}</code>
-						{% else %}
-							<span class="light">—</span>
-						{% endif %}
-					</td>
-					<td>
-						{% if reportingView.gaViewId %}
-							<code>{{ reportingView.gaViewId }}</code>
-						{% else %}
-							<span class="light">—</span>
-						{% endif %}
-					</td>
-					<td class="thin"><a class="delete icon" title="{{ 'Delete'|t('analytics') }}" role="button"></a></td>
-				</tr>
-			{% endfor %}
+            {% for reportingView in reportingViews %}
+                <tr data-id="{{ reportingView.id }}" data-name="{{ reportingView.name }}">
+                    <td><a href="{{ url('analytics/settings/views/'~reportingView.id) }}">{{ reportingView.name }}</a></td>
+                    <td>
+                        {% if reportingView.gaViewId %}
+                            <div class="light">
+                                {{ reportingView.gaAccountName }} →
+                                {{ reportingView.gaPropertyName }}
+                            </div>
+                            {{ reportingView.gaViewName }}
+                        {% else %}
+                            <span class="light">—</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if reportingView.gaPropertyId %}
+                            <code>{{ reportingView.gaPropertyId }}</code>
+                        {% else %}
+                            <span class="light">—</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if reportingView.gaViewId %}
+                            <code>{{ reportingView.gaViewId }}</code>
+                        {% else %}
+                            <span class="light">—</span>
+                        {% endif %}
+                    </td>
+                    <td class="thin"><a class="delete icon" title="{{ 'Delete'|t('analytics') }}" role="button"></a></td>
+                </tr>
+            {% endfor %}
 
-			</tbody>
-		</table>
+            </tbody>
+        </table>
 
-		<div class="buttons">
-			<a href="{{ url('analytics/settings/views/new') }}" class="btn submit add icon">{{ 'New View'|t('analytics') }}</a>
-		</div>
+        <div class="buttons">
+            <a href="{{ url('analytics/settings/views/new') }}" class="btn submit add icon">{{ 'New View'|t('analytics') }}</a>
+        </div>
 
-		{% js %}
-		new Craft.AdminTable({
-			tableSelector: '#views',
-			noItemsSelector: '#noviews',
-			sortable: false,
-			deleteAction: 'analytics/settings/delete-view'
-		});
-		{% endjs %}
-	{% elseif error is defined %}
-		<p class="error">{{ error }}</p>
-	{% else %}
-		{% include 'analytics/_special/not-connected' %}
-	{% endif %}
+        {% js %}
+        new Craft.AdminTable({
+            tableSelector: '#views',
+            noItemsSelector: '#noviews',
+            sortable: false,
+            deleteAction: 'analytics/settings/delete-view'
+        });
+        {% endjs %}
+    {% elseif error is defined %}
+        <p class="error">{{ error }}</p>
+    {% else %}
+        {% include 'analytics/_special/not-connected' %}
+    {% endif %}
 
 {% endset %}

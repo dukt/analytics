@@ -5,15 +5,15 @@
 
 {% set content %}
 
-	{% for column in columns %}
+    {% for column in columns %}
 
-		{% include 'analytics/_includes/column' %}
+        {% include 'analytics/_includes/column' %}
 
-		{% if not loop.last %}
-			<hr>
-		{% endif %}
+        {% if not loop.last %}
+            <hr>
+        {% endif %}
 
-	{% endfor %}
+    {% endfor %}
 
 
 {% endset %}

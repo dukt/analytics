@@ -5,33 +5,33 @@
 {% import "_includes/forms" as forms %}
 
 {% set crumbs = [
-	{ label: "Settings"|t('analytics'), url: url('settings') },
-	{ label: "Plugins"|t('analytics'), url: url('settings/plugins') },
-	{ label: "Analytics"|t('analytics'), url: url('analytics/settings') },
-	{ label: "Sites"|t('analytics'), url: url('analytics/settings/sites') }
+    { label: "Settings"|t('analytics'), url: url('settings') },
+    { label: "Plugins"|t('analytics'), url: url('settings/plugins') },
+    { label: "Analytics"|t('analytics'), url: url('analytics/settings') },
+    { label: "Sites"|t('analytics'), url: url('analytics/settings/sites') }
 ] %}
 
 {% set title = site.name %}
 
 {% set content %}
 
-	<input type="hidden" name="action" value="analytics/settings/save-site">
-	<input type="hidden" name="siteId" value="{{ site.id }}">
+    <input type="hidden" name="action" value="analytics/settings/save-site">
+    <input type="hidden" name="siteId" value="{{ site.id }}">
 
-	{{ redirectInput('analytics/settings/sites') }}
+    {{ redirectInput('analytics/settings/sites') }}
 
-	{% set reportingViewOptions = [{ label: "None", value: "" }] %}
-	{% for reportingView in reportingViews %}
-		{% set reportingViewOptions = reportingViewOptions|merge([{ label: reportingView.name, value: reportingView.id }]) %}
-	{% endfor %}
+    {% set reportingViewOptions = [{ label: "None", value: "" }] %}
+    {% for reportingView in reportingViews %}
+        {% set reportingViewOptions = reportingViewOptions|merge([{ label: reportingView.name, value: reportingView.id }]) %}
+    {% endfor %}
 
-	{{ forms.selectField({
-		first: true,
-		label: "View",
-		instructions: "Select the view this site should be attached to."|t('analytics'),
-		name: 'viewId',
-		options: reportingViewOptions,
-		value: (siteView.viewId is defined ? siteView.viewId : '')
-	}) }}
+    {{ forms.selectField({
+        first: true,
+        label: "View",
+        instructions: "Select the view this site should be attached to."|t('analytics'),
+        name: 'viewId',
+        options: reportingViewOptions,
+        value: (siteView.viewId is defined ? siteView.viewId : '')
+    }) }}
 
 {% endset %}

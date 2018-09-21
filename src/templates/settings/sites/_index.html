@@ -3,45 +3,45 @@
 {% set selectedNavItem = 'sites' %}
 
 {% set content %}
-	{% if isConnected %}
-		<table class="data fullwidth">
-			<thead>
-				<tr>
-					<th>{{ "Site"|t('analytics') }}</th>
-					<th>{{ "Base URL"|t('analytics') }}</th>
-					<th>{{ "View"|t('analytics') }}</th>
-				</tr>
-			</thead>
-			<tbody>
+    {% if isConnected %}
+        <table class="data fullwidth">
+            <thead>
+                <tr>
+                    <th>{{ "Site"|t('analytics') }}</th>
+                    <th>{{ "Base URL"|t('analytics') }}</th>
+                    <th>{{ "View"|t('analytics') }}</th>
+                </tr>
+            </thead>
+            <tbody>
 
-				{% for site in sites %}
+                {% for site in sites %}
 
-					{% set reportingView = false %}
+                    {% set reportingView = false %}
 
-					{% for siteView in siteViews %}
-						{% if siteView.siteId == site.id %}
-							{% if siteView.view %}
-								{% set reportingView = siteView.view %}
-							{% endif %}
-						{% endif %}
-					{% endfor %}
+                    {% for siteView in siteViews %}
+                        {% if siteView.siteId == site.id %}
+                            {% if siteView.view %}
+                                {% set reportingView = siteView.view %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
 
-					<tr>
-						<td><a href="{{ url('analytics/settings/sites/'~ site.id) }}">{{ site.name }}</a></td>
-						<td><code>{{ site.baseUrl }}</code></td>
-						<td>
-							{% if reportingView %}
-								{{ reportingView.name }}
-							{% endif %}
-						</td>
-					</tr>
-				{% endfor %}
+                    <tr>
+                        <td><a href="{{ url('analytics/settings/sites/'~ site.id) }}">{{ site.name }}</a></td>
+                        <td><code>{{ site.baseUrl }}</code></td>
+                        <td>
+                            {% if reportingView %}
+                                {{ reportingView.name }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
 
-			</tbody>
-		</table>
-	{% elseif error is defined %}
-		<p class="error">{{ error }}</p>
-	{% else %}
-		{% include 'analytics/_special/not-connected' %}
-	{% endif %}
+            </tbody>
+        </table>
+    {% elseif error is defined %}
+        <p class="error">{{ error }}</p>
+    {% else %}
+        {% include 'analytics/_special/not-connected' %}
+    {% endif %}
 {% endset %}

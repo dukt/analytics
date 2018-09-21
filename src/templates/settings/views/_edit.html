@@ -5,33 +5,33 @@
 {% import "_includes/forms" as forms %}
 
 {% set crumbs = [
-	{ label: "Settings"|t('analytics'), url: url('settings') },
-	{ label: "Plugins"|t('analytics'), url: url('settings/plugins') },
-	{ label: "Analytics"|t('analytics'), url: url('analytics/settings') },
-	{ label: "Views"|t('analytics'), url: url('analytics/settings/views') }
+    { label: "Settings"|t('analytics'), url: url('settings') },
+    { label: "Plugins"|t('analytics'), url: url('settings/plugins') },
+    { label: "Analytics"|t('analytics'), url: url('analytics/settings') },
+    { label: "Views"|t('analytics'), url: url('analytics/settings/views') }
 ] %}
 
 {% set content %}
 
-	{{ csrfInput() }}
+    {{ csrfInput() }}
 
-	<input type="hidden" name="action" value="analytics/settings/save-view">
+    <input type="hidden" name="action" value="analytics/settings/save-view">
 
-	{{ redirectInput('analytics/settings/views') }}
+    {{ redirectInput('analytics/settings/views') }}
 
-	{% if not isNewView %}<input type="hidden" name="viewId" value="{{ reportingView.id }}">{% endif %}
+    {% if not isNewView %}<input type="hidden" name="viewId" value="{{ reportingView.id }}">{% endif %}
 
-	{{ forms.textField({
-		first: true,
-		label: "Name",
-		name: 'name',
-		value: (reportingView is defined ? reportingView.name : null),
-		errors: reportingView.getErrors('name'),
-		required: true,
-	}) }}
+    {{ forms.textField({
+        first: true,
+        label: "Name",
+        name: 'name',
+        value: (reportingView is defined ? reportingView.name : null),
+        errors: reportingView.getErrors('name'),
+        required: true,
+    }) }}
 
-	{% include 'analytics/_includes/account-explorer' with {
-		name: 'accountExplorer',
-	} %}
+    {% include 'analytics/_includes/account-explorer' with {
+        name: 'accountExplorer',
+    } %}
 
 {% endset %}
