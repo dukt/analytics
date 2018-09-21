@@ -4,7 +4,7 @@ Changelog
 ## Unreleased
 
 ### Added
-- Added a “Limit” option to the table chart to limit the number of results. ([#9](https://github.com/dukt/analytics/issues/9))
+- Added a “Limit” option to the Report widget’s table chart to limit the number of results displayed. ([#9](https://github.com/dukt/analytics/issues/9))
 
 ## 4.0.3 - 2018-09-10
 
