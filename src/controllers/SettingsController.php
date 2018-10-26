@@ -441,7 +441,7 @@ class SettingsController extends Controller
 
         if (isset($accountExplorerData['accounts'])) {
             foreach ($accountExplorerData['accounts'] as $account) {
-                $accountOptions[] = ['label' => $account['name'], 'value' => $account['id']];
+                $accountOptions[] = ['label' => $account->name, 'value' => $account->id];
             }
         } else {
             $accountOptions[] = ['label' => $reportingView->gaAccountName, 'value' => $reportingView->gaAccountId];
@@ -462,7 +462,7 @@ class SettingsController extends Controller
 
         if (isset($accountExplorerData['properties'])) {
             foreach ($accountExplorerData['properties'] as $webProperty) {
-                $propertyOptions[] = ['label' => $webProperty['name'], 'value' => $webProperty['id']];
+                $propertyOptions[] = ['label' => $webProperty->name, 'value' => $webProperty->id];
             }
         } else {
             $propertyOptions[] = ['label' => $reportingView->gaPropertyName, 'value' => $reportingView->gaPropertyId];
@@ -483,7 +483,7 @@ class SettingsController extends Controller
 
         if (isset($accountExplorerData['views'])) {
             foreach ($accountExplorerData['views'] as $dataView) {
-                $viewOptions[] = ['label' => $dataView['name'], 'value' => $dataView['id']];
+                $viewOptions[] = ['label' => $dataView->name, 'value' => $dataView->id];
             }
         } else {
             $viewOptions[] = ['label' => $reportingView->gaViewName, 'value' => $reportingView->gaViewId];
