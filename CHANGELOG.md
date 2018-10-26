@@ -1,7 +1,7 @@
 Changelog
 =========
 
-## Unreleased
+## 4.0.5 - 2018-10-26
 
 ### Fixed
 - Fixed a bug where it was not possible to create a new view in the plugin’s settings when the account explorer data was already cached.
