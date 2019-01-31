@@ -72,7 +72,7 @@ class Report extends Field
             // Figure out what that ID is going to look like once it has been namespaced
             $namespacedId = $view->namespaceInputId($id);
 
-            if ($element->uri) {
+            if ($element->id && $element->uri) {
                 $uri = Analytics::$plugin->getAnalytics()->getElementUrlPath($element->id, $element->siteId);
 
                 $startDate = date('Y-m-d', strtotime('-1 month'));
