@@ -1,6 +1,12 @@
 Changelog
 =========
 
+## 4.0.6 - 2019-02-01
+
+### Fixed
+- Fixed a bug where the plugin was not properly getting all accounts, properties, and views from Google Analytics. ([#10](https://github.com/dukt/analytics/issues/10))
+- Fixed a bug where the Report field was trying to get a data report for new elements. ([#13](https://github.com/dukt/analytics/issues/13))
+
 ## 4.0.5 - 2018-10-26
 
 ### Fixed
@@ -15,7 +21,7 @@ Changelog
 ## 4.0.3 - 2018-09-10
 
 ### Added
-- Added missing Craft 3 upgade migration.
+- Added missing Craft 3 upgrade migration.
 
 ### Changed
 - Improved exception handling for the Reports controller.
