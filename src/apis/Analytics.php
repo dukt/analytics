@@ -46,21 +46,12 @@ class Analytics extends Api
      * @return array
      * @throws \yii\base\InvalidConfigException
      */
-    public function getAccountExplorerData()
+    public function getAccountExplorerData(): array
     {
-        $apiAccounts = Plugin::$plugin->getApis()->getAnalytics()->getService()->management_accounts->listManagementAccounts();
-        $accounts = $apiAccounts->toSimpleObject()->items;
-
-        $apiProperties = Plugin::$plugin->getApis()->getAnalytics()->getService()->management_webproperties->listManagementWebproperties('~all');
-        $properties = $apiProperties->toSimpleObject()->items;
-
-        $apiViews = Plugin::$plugin->getApis()->getAnalytics()->getService()->management_profiles->listManagementProfiles('~all', '~all');
-        $views = $apiViews->toSimpleObject()->items;
-
         return [
-            'accounts' => $accounts,
-            'properties' => $properties,
-            'views' => $views,
+            'accounts' => $this->getAllAccounts(),
+            'properties' => $this->getAllProperties(),
+            'views' => $this->getAllViews(),
         ];
     }
 
@@ -118,6 +109,132 @@ class Analytics extends Api
 
     // Private Methods
     // =========================================================================
+
+    /**
+     * @return array
+     * @throws \yii\base\InvalidConfigException
+     */
+    private function getAllAccounts(): array
+    {
+        $startIndex = 1;
+        $maxResults = 1000;
+        $managementAccounts = Plugin::$plugin->getApis()->getAnalytics()->getService()->management_accounts;
+
+        $response = $managementAccounts->listManagementAccounts([
+            'start-index' => $startIndex,
+            'max-results' => $maxResults,
+        ]);
+
+        $totalResults = (int) $response->totalResults;
+
+        if ($totalResults === 0) {
+            return [];
+        }
+
+        $items = [];
+        $index = 0;
+
+        $items[] = $response->toSimpleObject()->items;
+        $index += count($response->toSimpleObject()->items);
+
+        while($index < $totalResults) {
+            $startIndex = $index + 1;
+
+            $response = $managementAccounts->listManagementAccounts([
+                'start-index' => $startIndex,
+                'max-results' => $maxResults,
+            ]);
+
+            $items[] = $response->toSimpleObject()->items;
+            $index += count($response->toSimpleObject()->items);
+        }
+
+        return array_merge(...$items);
+    }
+
+    /**
+     * @return array
+     * @throws \yii\base\InvalidConfigException
+     */
+    private function getAllProperties(): array
+    {
+        $startIndex = 1;
+        $maxResults = 1000;
+        $managementWebProperties = Plugin::$plugin->getApis()->getAnalytics()->getService()->management_webproperties;
+
+        $response = $managementWebProperties->listManagementWebproperties('~all', [
+            'start-index' => $startIndex,
+            'max-results' => $maxResults,
+        ]);
+
+        $totalResults = (int) $response->totalResults;
+
+        if ($totalResults === 0) {
+            return [];
+        }
+
+        $items = [];
+        $index = 0;
+
+        $items[] = $response->toSimpleObject()->items;
+        $index += count($response->toSimpleObject()->items);
+
+        while($index < $totalResults) {
+            $startIndex = $index + 1;
+
+            $response = $managementWebProperties->listManagementWebproperties('~all', [
+                'start-index' => $startIndex,
+                'max-results' => $maxResults,
+            ]);
+
+            $items[] = $response->toSimpleObject()->items;
+            $index += count($response->toSimpleObject()->items);
+        }
+
+        return array_merge(...$items);
+    }
+
+    /**
+     * @return array
+     * @throws \yii\base\InvalidConfigException
+     */
+    private function getAllViews(): array
+    {
+        $startIndex = 1;
+        $maxResults = 1000;
+        $managementWebProfiles = Plugin::$plugin->getApis()->getAnalytics()->getService()->management_profiles;
+
+        $response = $managementWebProfiles->listManagementProfiles('~all', '~all', [
+            'start-index' => $startIndex,
+            'max-results' => $maxResults,
+        ]);
+
+        $totalResults = (int) $response->totalResults;
+
+        if ($totalResults === 0) {
+            return [];
+        }
+
+        $items = [];
+        $index = 0;
+
+        $items[] = $response->toSimpleObject()->items;
+        $index += count($response->toSimpleObject()->items);
+
+        while($index < $totalResults) {
+            $startIndex = $index + 1;
+
+            $response = $managementWebProfiles->listManagementProfiles('~all', '~all', [
+                'start-index' => $startIndex,
+                'max-results' => $maxResults,
+            ]);
+
+            $items[] = $response->toSimpleObject()->items;
+            $index += count($response->toSimpleObject()->items);
+        }
+
+        return array_merge(...$items);
+    }
 
     /**
      * @param array $data
