@@ -20,7 +20,7 @@ Changelog
 ## 4.0.3 - 2018-09-10
 
 ### Added
-- Added missing Craft 3 upgade migration.
+- Added missing Craft 3 upgrade migration.
 
 ### Changed
 - Improved exception handling for the Reports controller.
