@@ -1,7 +1,7 @@
 Changelog
 =========
 
-## Unreleased
+## 4.0.6 - 2019-02-01
 
 ### Fixed
 - Fixed a bug where the plugin was not properly getting all accounts, properties, and views from Google Analytics. ([#10](https://github.com/dukt/analytics/issues/10))
