@@ -7,15 +7,18 @@
     "test": "tests"
   },
   "scripts": {
-    "dev": "NODE_ENV=development webpack --progress --hide-modules",
-    "watch": "NODE_ENV=development webpack --watch --progress --hide-modules",
-    "hot": "NODE_ENV=development webpack-dev-server --inline --hot",
-    "production": "NODE_ENV=production webpack --progress --hide-modules"
+    "dev": "NODE_ENV=development webpack --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch": "NODE_ENV=development webpack --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "hot": "NODE_ENV=development webpack-dev-server --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "prod": "npm run production",
+    "production": "NODE_ENV=production webpack --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "laravel-mix": "^2.0"
+    "laravel-mix": "^4.0",
+    "sass": "^1.17.0",
+    "sass-loader": "7.*"
   }
 }
