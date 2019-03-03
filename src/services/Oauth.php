@@ -10,7 +10,7 @@ namespace dukt\analytics\services;
 use Craft;
 use yii\base\Component;
 use League\OAuth2\Client\Token\AccessToken;
-use Dukt\OAuth2\Client\Provider\Google;
+use League\OAuth2\Client\Provider\Google;
 use craft\helpers\UrlHelper;
 use dukt\analytics\Plugin as Analytics;
 
