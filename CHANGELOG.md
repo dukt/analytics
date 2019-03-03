@@ -1,6 +1,11 @@
 Changelog
 =========
 
+## 4.0.7 - 2019-02-01
+
+### Changed
+- Replaced `dukt/oauth2-google` composer dependency with `league/oauth2-google`.
+
 ## 4.0.6 - 2019-02-01
 
 ### Fixed
