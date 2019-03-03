@@ -7,7 +7,6 @@
 
 namespace dukt\analytics\services;
 
-use Craft;
 use yii\base\Component;
 use League\OAuth2\Client\Token\AccessToken;
 use League\OAuth2\Client\Provider\Google;
