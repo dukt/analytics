@@ -46,20 +46,26 @@ class m180529_125418_info extends Migration
      */
     public function insertDefaultData()
     {
-        $forceConnect = false;
-        $token = null;
-        $settings = null;
-
         $row = (new Query())
             ->select('*')
             ->from(['{{%plugins}}'])
             ->where(['handle' => 'analytics'])
             ->one();
 
-        if ($row) {
-            $settingsJson = $row['settings'];
-            $settings = Json::decode($settingsJson);
+        if (!$row) {
+            echo " done\n";
+            return null;
         }
+
+        if (!isset($row['settings'])) {
+            echo " done\n";
+            return null;
+        }
+
+        $forceConnect = false;
+        $token = null;
+        $settingsJson = $row['settings'];
+        $settings = Json::decode($settingsJson);
 
         if($settings) {
             $forceConnect = $settings['forceConnect'];

@@ -1,6 +1,11 @@
 Changelog
 =========
 
+## Unreleased
+
+### Fixed
+- Fixed issue where `m180529_125418_info` migration was trying to use undefined settings.([#15](https://github.com/dukt/analytics/issues/15))
+
 ## 4.0.7 - 2019-02-01
 
 ### Changed
