@@ -1,8 +1,8 @@
+# Deprecated
+Analytics for Craft CMS 2 is no longer supported. The Craft 3 version of this plugin can be found here: [dukt/analytics](https://github.com/dukt/analytics) and can be installed via the Plugin Store in Craft’s control panel.
+
 # Craft Analytics
-
-Customizable statistics widgets and entry tracking for Craft & Google Analytics
-
--------------------------------------------
+Customizable statistics widgets and entry tracking for Craft & Google Analytics.
 
 ## Requirements
 
