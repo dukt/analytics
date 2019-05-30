@@ -5,7 +5,7 @@
  */
 Analytics.ChartOptions = Garnish.Base.extend({}, {
     area: function(scale) {
-        var options = this.defaults.area;
+        var options = JSON.parse(JSON.stringify(this.defaults.area));
 
         switch (scale) {
             case 'week':
@@ -72,9 +72,7 @@ Analytics.ChartOptions = Garnish.Base.extend({}, {
             lineWidth: 4,
             height: 120,
             hAxis: {
-                //format:'MMM yy',
                 format: 'MMM d',
-                // format: 'E',
                 textPosition: 'in',
                 textStyle: {
                     color: '#058DC7'
@@ -113,14 +111,10 @@ Analytics.ChartOptions = Garnish.Base.extend({}, {
             lineWidth: 4,
             chartArea: {},
             hAxis: {
-                //format:'MMM yy',
-                // format: 'MMM d',
-                format: 'E',
                 textPosition: 'in',
                 textStyle: {
                     color: '#058DC7'
                 },
-                showTextEvery: 1,
                 baselineColor: '#fff',
                 gridlines: {
                     color: 'none'
