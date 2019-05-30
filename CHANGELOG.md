@@ -1,7 +1,7 @@
 Changelog
 =========
 
-## Unreleased
+## 4.0.9 - 2019-05-30
 
 ### Fixed
 - Fixed a bug where the horizontal axis’ ticks could be mixed with the ones from another widget for Area charts. ([#16](https://github.com/dukt/analytics/issues/16))
