@@ -25,6 +25,25 @@ Analytics.reports.Area = Analytics.reports.BaseChart.extend(
                 $.extend(this.chartOptions, this.data.chartOptions);
             }
 
+
+            // generate ticks
+
+            var ticks = [];
+
+            for (i = 0; i < this.data.chart.rows.length; i++) {
+                var rowDate = this.data.chart.rows[i][0]
+                var tickYear = rowDate.substr(0, 4)
+                var tickMonth = rowDate.substr(4, 2) - 1
+                var tickDay = rowDate.substr(6, 2)
+                var tickDate = new Date(tickYear, tickMonth, tickDay)
+                ticks.push(tickDate)
+            }
+
+            this.chartOptions.hAxis.ticks = ticks
+
+
+            // period
+
             if (this.data.period == 'year') {
                 var dateFormatter = new google.visualization.DateFormat({
                     pattern: "MMMM yyyy"
