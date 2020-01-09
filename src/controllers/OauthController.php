@@ -36,7 +36,7 @@ class OauthController extends Controller
                 'https://www.googleapis.com/auth/analytics.edit',
             ],
             'access_type' => 'offline',
-            'approval_prompt' => 'force'
+            'prompt' => 'consent'
         ]);
 
         return $this->redirect($authorizationUrl);
