@@ -1,6 +1,11 @@
 Changelog
 =========
 
+## Unreleased
+
+### Fixed
+- Fixed a bug where the plugin was unable to refresh an OAuth token.
+
 ## 4.0.9 - 2019-05-30
 
 ### Fixed
