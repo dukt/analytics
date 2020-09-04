@@ -13,7 +13,5 @@
 } %}
 
 {% block sidebar %}
-    <nav>
-        {% include "_includes/nav" with { items: navItems, selectedItem: selectedNavItem } only %}
-    </nav>
+    {% include "_includes/nav" with { items: navItems, selectedItem: selectedNavItem } only %}
 {% endblock %}
