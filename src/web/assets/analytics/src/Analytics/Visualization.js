@@ -16,7 +16,7 @@ Analytics.Visualization = Garnish.Base.extend({
             Analytics.GoogleVisualizationCalled = true;
 
             google.charts.load('current', {
-                packages: ['corechart', 'table'],
+                packages: ['corechart', 'table', 'geochart'],
                 language: Analytics.chartLanguage,
                 mapsApiKey: Analytics.mapsApiKey,
                 callback: $.proxy(function() {
