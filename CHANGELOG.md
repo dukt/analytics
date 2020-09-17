@@ -6,7 +6,7 @@ Changelog
 ### Fixed
 - Fixed the styles of the sidebar in the plugin's settings.
 - Fixed a bug where the report widget’s default title was not properly hidden.
-
+- Fixed a bug where horizontal axis labels were not showing properly.
 ## 4.0.10 - 2020-01-09
 
 ### Fixed
