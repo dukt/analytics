@@ -8,6 +8,7 @@ Changelog
 - Fixed a bug where the report widget’s default title was not properly hidden.
 - Fixed a bug where geo charts were not loading.
 - Fixed a bug where charts were not getting redrawn when widgets size changed.
+- Fixed a bug where horizontal axis labels were blinking when changing the type of another report widget.
 - Fixed a bug where horizontal axis labels were not showing properly.
 
 ## 4.0.10 - 2020-01-09
