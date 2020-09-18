@@ -1,7 +1,7 @@
 Changelog
 =========
 
-## Unreleased
+## 4.0.11 - 2020-09-18
 
 ### Fixed
 - Fixed the styles of the sidebar in the plugin's settings.
