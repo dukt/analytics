@@ -10,6 +10,7 @@ Changelog
 - Fixed a bug where charts were not getting redrawn when widgets size changed.
 - Fixed a bug where horizontal axis labels were blinking when changing the type of another report widget.
 - Fixed a bug where horizontal axis labels were not showing properly.
+- Fixed widget icons.
 
 ## 4.0.10 - 2020-01-09
 

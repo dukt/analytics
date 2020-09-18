@@ -74,7 +74,7 @@ class Report extends \craft\base\Widget
     /**
      * @inheritdoc
      */
-    public static function iconPath()
+    public static function icon()
     {
         return Craft::getAlias('@dukt/analytics/icons/report.svg');
     }
