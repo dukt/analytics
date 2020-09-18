@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2019, Dukt
+ * @copyright Copyright (c) 2020, Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
@@ -42,7 +42,7 @@ class Ecommerce extends \craft\base\Widget
     /**
      * @inheritdoc
      */
-    public static function iconPath()
+    public static function icon()
     {
         return Craft::getAlias('@dukt/analytics/icons/report.svg');
     }

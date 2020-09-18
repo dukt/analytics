@@ -10,16 +10,13 @@ Analytics.ChartOptions = Garnish.Base.extend({}, {
         switch (scale) {
             case 'week':
                 options.hAxis.format = 'E';
-                options.hAxis.showTextEvery = 1;
                 break;
 
             case 'month':
                 options.hAxis.format = 'MMM d';
-                options.hAxis.showTextEvery = 1;
                 break;
 
             case 'year':
-                options.hAxis.showTextEvery = 1;
                 options.hAxis.format = 'MMM yy';
                 break;
         }

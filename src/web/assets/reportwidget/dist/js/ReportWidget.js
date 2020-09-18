@@ -25,6 +25,11 @@ Analytics.ReportWidget = Garnish.Base.extend(
             this.$spinner.removeClass('body-loading');
             this.$error = $('.error', this.$element);
 
+            $(this.$element).resize(function() {
+                if (this.report) {
+                    this.report.resize();
+                }
+            }.bind(this));
 
             // locale definition
 
