@@ -3,6 +3,9 @@ Changelog
 
 ## Unreleased
 
+### Changed
+- Updated `league/oauth2-client` to 2.5.
+
 ### Fixed
 - Fixed a bug where the settings dropdown were masked by other widgets. ([#28](https://github.com/dukt/analytics/issues/28))
 
