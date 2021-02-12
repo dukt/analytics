@@ -5,6 +5,7 @@ Changelog
 
 ### Changed
 - Updated `league/oauth2-client` to 2.5.
+- Updated `theiconic/php-ga-measurement-protocol` to 2.8.
 
 ### Fixed
 - Fixed a bug where the settings dropdown were masked by other widgets. ([#28](https://github.com/dukt/analytics/issues/28))
