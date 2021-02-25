@@ -7,6 +7,7 @@
 
 namespace dukt\analytics\web\assets\analytics;
 
+use Craft;
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
 use craft\helpers\ChartHelper;
