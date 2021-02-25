@@ -111,6 +111,8 @@ class Oauth extends Component
             $options['redirectUri'] = $this->getRedirectUri();
         }
 
+        $options = array_map('Craft::parseEnv', $options);
+
         return new Google($options);
     }
 
