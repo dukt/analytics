@@ -9,6 +9,7 @@ Changelog
 - Updated `google/apiclient` to 2.6.
 
 ### Fixed
+- Fixed currency formatting for Craft 3.6.
 - Fixed a bug where the environment variables were not being parsed OAuth options like client ID or secret.
 - Fixed a bug where the settings dropdown were masked by other widgets. ([#28](https://github.com/dukt/analytics/issues/28))
 
