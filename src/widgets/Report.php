@@ -147,7 +147,7 @@ class Report extends \craft\base\Widget
 
             return $view->renderTemplate('analytics/_components/widgets/Report/body');
         } catch (\Exception $e) {
-            Craft::info('Couldn’t load report widget: '.$e->getMessage(), __METHOD__);
+            Craft::error('Couldn’t load report widget: '.$e->getMessage(). " ".$e->getTraceAsString(), __METHOD__);
             return $view->renderTemplate('analytics/_special/error');
         }
     }
