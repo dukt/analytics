@@ -62,7 +62,7 @@ class AnalyticsAsset extends AssetBundle
         $js .= 'Analytics.subContinents = '.Json::encode($subContinents).';';
         $js .= 'Analytics.formats = '.Json::encode($formats).';';
         $js .= 'Analytics.chartLanguage = "'.Analytics::$plugin->getAnalytics()->getChartLanguage().'";';
-
+        $js .= 'Analytics.d3FormatLocaleDefinition = window.d3FormatLocaleDefinition;';
         $js .= '}';
 
         $view->registerJs($js, View::POS_BEGIN);

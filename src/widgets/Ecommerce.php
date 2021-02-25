@@ -82,12 +82,11 @@ class Ecommerce extends \craft\base\Widget
 
         $widgetId = $this->id;
         $widgetSettings = $this->settings;
-        $localeDefinition = Analytics::$plugin->getAnalytics()->getD3LocaleDefinition(['currency' => $reportingView->gaViewCurrency]);
 
         $widgetOptions = [
             'viewId' => $widgetSettings['viewId'],
             'period' => $widgetSettings['period'] ?? null,
-            'localeDefinition' => $localeDefinition,
+            'currencyDefinition' => Analytics::$plugin->getAnalytics()->getCurrencyDefinition($reportingView->gaViewCurrency),
             'chartLanguage' => Analytics::$plugin->getAnalytics()->getChartLanguage(),
         ];
 

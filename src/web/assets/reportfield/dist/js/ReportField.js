@@ -1,10 +1,13 @@
 /** global: Analytics */
 
 AnalyticsReportField = Garnish.Base.extend({
+    localeDefinition: null,
 
-    init: function(fieldId, options) {
-        this.setSettings(options, AnalyticsReportField.defaults);
+    init: function(fieldId, settings) {
+        this.setSettings(settings, AnalyticsReportField.defaults);
+        this.localeDefinition = Analytics.Utils.getLocaleDefinition(this.settings.currencyDefinition);
 
+        // Set elements
         this.$element = $("#" + fieldId);
         this.$field = $(".analytics-field", this.$element);
         this.$metric = $('.analytics-metric select', this.$element);
@@ -18,6 +21,7 @@ AnalyticsReportField = Garnish.Base.extend({
 
         this.addListener(this.$metric, 'change', 'onMetricChange');
 
+        // Send the request or use the cached response
         if (!this.settings.cachedResponse) {
             this.sendRequest();
         }
@@ -66,11 +70,12 @@ AnalyticsReportField = Garnish.Base.extend({
     parseResponse: function(response) {
         Garnish.requestAnimationFrame($.proxy(function() {
             response.chartOptions = Analytics.ChartOptions.field();
-            this.chart = new Analytics.reports.Area(this.$chart, response, this.settings.localeDefinition, this.settings.chartLanguage);
+            this.chart = new Analytics.reports.Area(this.$chart, response, this.localeDefinition, this.settings.chartLanguage);
         }, this));
     }
 }, {
     defaults: {
         cachedResponse: null,
+        currencyDefinition: null,
     }
 });

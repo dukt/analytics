@@ -114,6 +114,8 @@ class Plugin extends \craft\base\Plugin
         if ($this->isInstalled && !Craft::$app->getRequest()->getIsConsoleRequest() && Craft::$app->getRequest()->getIsCpRequest()) {
             Craft::$app->getView()->registerAssetBundle(AnalyticsAsset::class);
         }
+
+        Craft::setAlias('@analyticsLib', __DIR__ . '/../lib');
     }
 
     /**

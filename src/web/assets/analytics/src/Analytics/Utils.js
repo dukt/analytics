@@ -189,4 +189,15 @@ Analytics.Utils = {
     getD3Locale: function(localeDefinition) {
         return d3.formatLocale(localeDefinition);
     },
+
+    _getD3LocaleDefinition(extendLocaleDefinition) {
+        return $.extend(true, Analytics.d3FormatLocaleDefinition, extendLocaleDefinition);
+    },
+
+    getLocaleDefinition(currencyDefinition) {
+        // Get D3 locale definition with currency definition set from the widget's settings
+        return this._getD3LocaleDefinition({
+            currency: currencyDefinition
+        })
+    }
 };

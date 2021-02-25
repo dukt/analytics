@@ -130,11 +130,8 @@ class Report extends \craft\base\Widget
 
 
             // render
-
-            $localeDefinition = Analytics::$plugin->getAnalytics()->getD3LocaleDefinition(['currency' => $reportingView->gaViewCurrency]);
-
             $jsOptions = [
-                'localeDefinition' => $localeDefinition,
+                'currencyDefinition' => Analytics::$plugin->getAnalytics()->getCurrencyDefinition($reportingView->gaViewCurrency),
                 'chartLanguage' => Analytics::$plugin->getAnalytics()->getChartLanguage(),
                 'request' => $request,
                 'cachedResponse' => $cachedResponse ?? null,
