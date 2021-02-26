@@ -39,12 +39,14 @@ class UtilsController extends Controller
     /**
      * Metadata.
      *
-     * @param array $variables
-     *
+     * @param string|null $q
+     * @param array|null $columns
      * @return Response
      */
-    public function actionMetadata(array $variables = [])
+    public function actionMetadata(string $q = null, array $columns = null): Response
     {
+        $variables['q'] = $q;
+        $variables['columns'] = $columns;
         $variables['dimensions'] = Analytics::$plugin->metadata->getDimensions();
         $variables['metrics'] = Analytics::$plugin->metadata->getMetrics();
 
@@ -54,7 +56,9 @@ class UtilsController extends Controller
     }
 
     /**
-     * Search metadata.
+     * Searches the meta data.
+     *
+     * @return null
      */
     public function actionSearchMetadata()
     {
@@ -62,10 +66,12 @@ class UtilsController extends Controller
         $columns = Analytics::$plugin->metadata->searchColumns($q);
 
         // Send the source back to the template
-        Craft::$app->urlManager->setRouteVariables([
+        Craft::$app->getUrlManager()->setRouteParams([
             'q' => $q,
             'columns' => $columns,
         ]);
+
+        return null;
     }
 
     /**
