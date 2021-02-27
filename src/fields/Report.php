@@ -119,9 +119,6 @@ class Report extends Field
                 }
 
                 // Register JS & Styles
-                $view->registerJsFile('//www.gstatic.com/charts/loader.js', [
-                    'position' => View::POS_HEAD,
-                ]);
                 $view->registerAssetBundle(ReportFieldAsset::class);
                 $view->registerJs('new AnalyticsReportField("'.$namespacedId.'-field", '.Json::encode($jsOptions).');');
 

@@ -90,9 +90,6 @@ class Ecommerce extends \craft\base\Widget
             'chartLanguage' => Analytics::$plugin->getAnalytics()->getChartLanguage(),
         ];
 
-        $view->registerJsFile('//www.gstatic.com/charts/loader.js', [
-            'position' => View::POS_HEAD,
-        ]);
         $view->registerAssetBundle(EcommerceWidgetAsset::class);
         $view->registerJs('var AnalyticsChartLanguage = "'.Craft::$app->language.'";', true);
         $view->registerJs('new Analytics.EcommerceWidget("widget'.$widgetId.'", '.Json::encode($widgetOptions).');');

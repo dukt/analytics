@@ -3,6 +3,9 @@ Changelog
 
 ## Unreleased
 
+### Added
+- Added `GoogleChartsAsset` to handle Google Charts related resources.
+
 ### Changed
 - Updated `league/oauth2-client` to 2.5.
 - Updated `theiconic/php-ga-measurement-protocol` to 2.8.

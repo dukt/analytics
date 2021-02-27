@@ -10,6 +10,7 @@ namespace dukt\analytics\web\assets\reportwidget;
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
 use dukt\analytics\web\assets\analytics\AnalyticsAsset;
+use dukt\analytics\web\assets\googlecharts\GoogleChartsAsset;
 
 /**
  * Report widget asset bundle.
@@ -30,6 +31,7 @@ class ReportWidgetAsset extends AssetBundle
         // define the dependencies
         $this->depends = [
             CpAsset::class,
+            GoogleChartsAsset::class,
             AnalyticsAsset::class,
         ];
 
