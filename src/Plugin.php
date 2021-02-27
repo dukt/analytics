@@ -89,6 +89,7 @@ class Plugin extends \craft\base\Plugin
                 'analytics/tests/column-groups' => 'analytics/tests/column-groups',
                 'analytics/tests/formatting' => 'analytics/tests/formatting',
                 'analytics/tests/report-widgets' => 'analytics/tests/report-widgets',
+                'analytics/tests/template-variables' => 'analytics/tests/template-variables',
                 'analytics/api4' => 'analytics/api4',
             ];
 
