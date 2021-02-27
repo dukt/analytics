@@ -15,6 +15,7 @@ Changelog
 - Fixed currency formatting for Craft 3.6.
 - Fixed a bug where the environment variables were not being parsed OAuth options like client ID or secret.
 - Fixed a bug where the settings dropdown were masked by other widgets. ([#28](https://github.com/dukt/analytics/issues/28))
+- Fixed a bug where the report widget could try to refresh the CP dashboard grid that didn't exist.
 
 ## 4.0.11 - 2020-09-18
 

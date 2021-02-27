@@ -80,8 +80,9 @@
                         this.$spinner.addClass('hidden');
                     }
 
-                    window.dashboard.grid.refreshCols(true);
-
+                    if (window.dashboard && window.dashboard.grid) {
+                        window.dashboard.grid.refreshCols(true);
+                    }
                 }, this));
             },
 
