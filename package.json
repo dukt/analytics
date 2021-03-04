@@ -18,11 +18,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "cross-env": "^7.0.3",
     "d3-format": "^1.4.4",
-    "del": "^4.1.1",
+    "del": "^6.0.0",
     "laravel-mix": "^6.0",
-    "sass": "^1.17.0",
+    "sass": "^1.32.8",
     "sass-loader": "^11.0",
     "webpack": "^5.9.0"
   }

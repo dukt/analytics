@@ -6,7 +6,6 @@ Changelog
 ### Added
 - Added `GoogleChartsAsset` to handle Google Charts related resources.
 - Added `webpack` 5.9 dependency.
-- Added `cross-env` 7.0 dependency.
 
 ### Changed
 - Updated `league/oauth2-client` to 2.5.
@@ -14,6 +13,8 @@ Changelog
 - Updated `google/apiclient` to 2.6.
 - Updated `sass-loader` to 11.0.
 - Updated `laravel-mix` to 6.0.
+- Updated `del` to 6.0.
+- Updated `sass` to 1.32.
 
 
 ### Fixed
