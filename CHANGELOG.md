@@ -1,7 +1,7 @@
 Changelog
 =========
 
-## Unreleased
+## 4.0.12 - 2021-03-04
 
 ### Added
 - Added `GoogleChartsAsset` to handle Google Charts related resources.
