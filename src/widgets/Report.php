@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2020, Dukt
+ * @copyright Copyright (c) 2021, Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
@@ -130,19 +130,12 @@ class Report extends \craft\base\Widget
 
 
             // render
-
-            $localeDefinition = Analytics::$plugin->getAnalytics()->getD3LocaleDefinition(['currency' => $reportingView->gaViewCurrency]);
-
             $jsOptions = [
-                'localeDefinition' => $localeDefinition,
+                'currencyDefinition' => Analytics::$plugin->getAnalytics()->getCurrencyDefinition($reportingView->gaViewCurrency),
                 'chartLanguage' => Analytics::$plugin->getAnalytics()->getChartLanguage(),
                 'request' => $request,
                 'cachedResponse' => $cachedResponse ?? null,
             ];
-
-            $view->registerJsFile('//www.gstatic.com/charts/loader.js', [
-                'position' => View::POS_HEAD,
-            ]);
 
             $view->registerAssetBundle(ReportWidgetAsset::class);
 
@@ -150,7 +143,7 @@ class Report extends \craft\base\Widget
 
             return $view->renderTemplate('analytics/_components/widgets/Report/body');
         } catch (\Exception $e) {
-            Craft::info('Couldn’t load report widget: '.$e->getMessage(), __METHOD__);
+            Craft::error('Couldn’t load report widget: '.$e->getMessage(). " ".$e->getTraceAsString(), __METHOD__);
             return $view->renderTemplate('analytics/_special/error');
         }
     }

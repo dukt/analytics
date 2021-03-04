@@ -1,4 +1,5 @@
 let mix = require('laravel-mix');
+let del = require('del');
 
 
 // Combine Analytics.js
@@ -39,3 +40,7 @@ mix
     .options({
         processCssUrls: false
     });
+
+del('lib/').then(() => {
+    mix.copy('node_modules/d3-format/locale/*.json', 'lib/d3-format');
+})

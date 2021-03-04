@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2020, Dukt
+ * @copyright Copyright (c) 2021, Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
@@ -37,7 +37,6 @@ class Report extends Field
     public function getInputHtml($value, ElementInterface $element = null): string
     {
         $view = Craft::$app->getView();
-
         $name = $this->handle;
 
         if (!Analytics::$plugin->getAnalytics()->checkPluginRequirements()) {
@@ -89,30 +88,24 @@ class Report extends Field
                     'filters' => $filters
                 ];
 
-
                 // JS Options
-
                 $jsOptions = [
                     'chartLanguage' => Analytics::$plugin->getAnalytics()->getChartLanguage(),
-                    'localeDefinition' => Analytics::$plugin->getAnalytics()->getD3LocaleDefinition(['currency' => $reportingView->gaViewCurrency])
                 ];
 
-
                 // Add locale definition to JS options
-
                 $siteView = Analytics::$plugin->getViews()->getSiteViewBySiteId($element->siteId);
 
                 if ($siteView) {
                     $reportingView = $siteView->getView();
 
                     if ($reportingView) {
-                        $jsOptions['localeDefinition'] = Analytics::$plugin->getAnalytics()->getD3LocaleDefinition(['currency' => $reportingView->gaViewCurrency]);
+                        // Currency definition
+                        $jsOptions['currencyDefinition'] = Analytics::$plugin->getAnalytics()->getCurrencyDefinition($reportingView->gaViewCurrency);
                     }
                 }
 
-
                 // Add cached response to JS options if any
-
                 $cacheId = ['reports.getElementReport', $request];
                 $response = Analytics::$plugin->cache->get($cacheId);
 
@@ -125,17 +118,11 @@ class Report extends Field
                     $jsOptions['cachedResponse'] = $response;
                 }
 
-
                 // Register JS & Styles
-                $view->registerJsFile('//www.gstatic.com/charts/loader.js', [
-                    'position' => View::POS_HEAD,
-                ]);
                 $view->registerAssetBundle(ReportFieldAsset::class);
                 $view->registerJs('new AnalyticsReportField("'.$namespacedId.'-field", '.Json::encode($jsOptions).');');
 
-
                 // Variables
-
                 $variables = [
                     'isNew' => false,
                     'hasUrl' => true,

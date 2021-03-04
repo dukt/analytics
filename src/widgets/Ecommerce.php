@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2020, Dukt
+ * @copyright Copyright (c) 2021, Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
@@ -82,18 +82,14 @@ class Ecommerce extends \craft\base\Widget
 
         $widgetId = $this->id;
         $widgetSettings = $this->settings;
-        $localeDefinition = Analytics::$plugin->getAnalytics()->getD3LocaleDefinition(['currency' => $reportingView->gaViewCurrency]);
 
         $widgetOptions = [
             'viewId' => $widgetSettings['viewId'],
             'period' => $widgetSettings['period'] ?? null,
-            'localeDefinition' => $localeDefinition,
+            'currencyDefinition' => Analytics::$plugin->getAnalytics()->getCurrencyDefinition($reportingView->gaViewCurrency),
             'chartLanguage' => Analytics::$plugin->getAnalytics()->getChartLanguage(),
         ];
 
-        $view->registerJsFile('//www.gstatic.com/charts/loader.js', [
-            'position' => View::POS_HEAD,
-        ]);
         $view->registerAssetBundle(EcommerceWidgetAsset::class);
         $view->registerJs('var AnalyticsChartLanguage = "'.Craft::$app->language.'";', true);
         $view->registerJs('new Analytics.EcommerceWidget("widget'.$widgetId.'", '.Json::encode($widgetOptions).');');

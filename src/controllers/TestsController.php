@@ -1,14 +1,16 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2020, Dukt
+ * @copyright Copyright (c) 2021, Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
 namespace dukt\analytics\controllers;
 
 use Craft;
+use craft\helpers\Json;
 use craft\web\Controller;
+use craft\web\View;
 use dukt\analytics\Plugin as Analytics;
 use dukt\analytics\web\assets\tests\TestsAsset;
 use yii\web\Response;
@@ -22,6 +24,34 @@ class TestsController extends Controller
 {
     // Public Methods
     // =========================================================================
+
+    /**
+     * Columns
+     *
+     * @param array $variables
+     *
+     * @return Response
+     */
+    public function actionColumns(array $variables = [])
+    {
+        $variables['columns'] = Analytics::$plugin->metadata->getColumns();
+
+        return $this->renderTemplate('analytics/tests/_columns', $variables);
+    }
+
+    /**
+     * Column Groups
+     *
+     * @param array $variables
+     *
+     * @return Response
+     */
+    public function actionColumnGroups(array $variables = [])
+    {
+        $variables['columnGroups'] = Analytics::$plugin->metadata->getColumnGroups();
+
+        return $this->renderTemplate('analytics/tests/_columnGroups', $variables);
+    }
 
     /**
      * Data Types
@@ -39,12 +69,29 @@ class TestsController extends Controller
     }
 
     /**
-     * Charts
+     * Formatting
      *
      * @param array $variables
      *
      * @return Response
-     * @throws \yii\base\InvalidConfigException
+     */
+    public function actionFormatting(array $variables = [])
+    {
+        $currencyDefinition = Analytics::$plugin->getAnalytics()->getCurrencyDefinition();
+
+        $js = 'AnalyticsCurrencyDefinition = '.Json::encode($currencyDefinition).';';
+
+        Craft::$app->getView()->registerJs($js, View::POS_BEGIN);
+
+        return $this->renderTemplate('analytics/tests/_formatting', $variables);
+    }
+
+    /**
+     * Report Widgets
+     *
+     * @param array $variables
+     *
+     * @return Response
      */
     public function actionReportWidgets(array $variables = [])
     {
@@ -54,40 +101,16 @@ class TestsController extends Controller
     }
 
     /**
-     * @param array $variables
-     *
-     * @return Response
-     */
-    public function actionFormatting(array $variables = [])
-    {
-        return $this->renderTemplate('analytics/tests/_formatting', $variables);
-    }
-
-    /**
-     * Columns
+     * Template Variables
      *
      * @param array $variables
      *
      * @return Response
      */
-    public function actionColumns(array $variables = [])
+    public function actionTemplateVariables(array $variables = [])
     {
-        $variables['columns'] = Analytics::$plugin->metadata->getColumns();
+        Craft::$app->getView()->registerAssetBundle(TestsAsset::class);
 
-        return $this->renderTemplate('analytics/tests/_columns', $variables);
-    }
-
-    /**
-     * Groups
-     *
-     * @param array $variables
-     *
-     * @return Response
-     */
-    public function actionColumnGroups(array $variables = [])
-    {
-        $variables['columnGroups'] = Analytics::$plugin->metadata->getColumnGroups();
-
-        return $this->renderTemplate('analytics/tests/_columnGroups', $variables);
+        return $this->renderTemplate('analytics/tests/_templateVariables', $variables);
     }
 }

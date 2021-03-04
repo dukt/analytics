@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2020, Dukt
+ * @copyright Copyright (c) 2021, Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
@@ -100,9 +100,6 @@ class Realtime extends \craft\base\Widget
                                 '{count} minutes ago',
                             ]);
 
-                            $view->registerJsFile('//www.gstatic.com/charts/loader.js', [
-                                'position' => View::POS_HEAD,
-                            ]);
                             $view->registerAssetBundle(RealtimeReportWidgetAsset::class);
                             $view->registerJs('var AnalyticsChartLanguage = "'.Craft::$app->language.'";', true);
                             $view->registerJs('new Analytics.Realtime("widget'.$widgetId.'", '.Json::encode($widgetOptions).');');

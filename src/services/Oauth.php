@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2020, Dukt
+ * @copyright Copyright (c) 2021, Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
@@ -110,6 +110,8 @@ class Oauth extends Component
         if (!isset($options['redirectUri'])) {
             $options['redirectUri'] = $this->getRedirectUri();
         }
+
+        $options = array_map('Craft::parseEnv', $options);
 
         return new Google($options);
     }

@@ -10,9 +10,9 @@ This plugin requires Craft CMS 3.0.0-RC1 or later.
 
 ## How to install Analytics 4
 
-Installation instructions can be found in the [Analytics 4 documentation](https://docs.dukt.net/analytics/v4/installation.html).
+Installation instructions can be found in the [Analytics 4 documentation](https://dukt.net/docs/analytics/v4/installation.html).
 
 ## Resources
 
-- [Analytics 4 Documentation](https://docs.dukt.net/analytics/v4)
+- [Analytics 4 Documentation](https://dukt.net/docs/analytics/v4)
 - [Analytics 4 Plugin Overview](https://dukt.net/analytics)

@@ -1,6 +1,28 @@
 Changelog
 =========
 
+## 4.0.12 - 2021-03-04
+
+### Added
+- Added `GoogleChartsAsset` to handle Google Charts related resources.
+- Added `webpack` 5.9 dependency.
+
+### Changed
+- Updated `league/oauth2-client` to 2.5.
+- Updated `theiconic/php-ga-measurement-protocol` to 2.8.
+- Updated `google/apiclient` to 2.6.
+- Updated `sass-loader` to 11.0.
+- Updated `laravel-mix` to 6.0.
+- Updated `del` to 6.0.
+- Updated `sass` to 1.32.
+
+
+### Fixed
+- Fixed currency formatting for Craft 3.6.
+- Fixed a bug where the environment variables were not being parsed OAuth options like client ID or secret.
+- Fixed a bug where the settings dropdown were masked by other widgets. ([#28](https://github.com/dukt/analytics/issues/28))
+- Fixed a bug where the report widget could try to refresh the CP dashboard grid that didn't exist.
+
 ## 4.0.11 - 2020-09-18
 
 ### Fixed

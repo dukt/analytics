@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2020, Dukt
+ * @copyright Copyright (c) 2021, Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
@@ -89,6 +89,7 @@ class Plugin extends \craft\base\Plugin
                 'analytics/tests/column-groups' => 'analytics/tests/column-groups',
                 'analytics/tests/formatting' => 'analytics/tests/formatting',
                 'analytics/tests/report-widgets' => 'analytics/tests/report-widgets',
+                'analytics/tests/template-variables' => 'analytics/tests/template-variables',
                 'analytics/api4' => 'analytics/api4',
             ];
 
@@ -114,6 +115,8 @@ class Plugin extends \craft\base\Plugin
         if ($this->isInstalled && !Craft::$app->getRequest()->getIsConsoleRequest() && Craft::$app->getRequest()->getIsCpRequest()) {
             Craft::$app->getView()->registerAssetBundle(AnalyticsAsset::class);
         }
+
+        Craft::setAlias('@analyticsLib', __DIR__ . '/../lib');
     }
 
     /**

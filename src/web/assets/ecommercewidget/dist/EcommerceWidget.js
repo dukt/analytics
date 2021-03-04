@@ -7,19 +7,21 @@
         {
             settings: null,
             requestData: null,
+            localeDefinition: null,
 
             $chart: null,
 
             init: function(element, settings)
             {
                 this.setSettings(settings, Analytics.EcommerceWidget.defaults);
+                this.localeDefinition = Analytics.Utils.getLocaleDefinition(this.settings.currencyDefinition);
 
+                // Set elements
                 this.$element = $('#'+element);
                 this.$body = $('.body', this.$element);
                 this.$spinner = $('.spinner', this.$element);
                 this.$spinner.removeClass('body-loading');
                 this.$error = $('<div class="error hidden" />').appendTo(this.$body);
-
                 this.$period = $('.period', this.$element);
                 this.$revenue = $('.revenue', this.$element);
                 this.$revenuePerTransaction = $('.revenue-per-transaction', this.$element);
@@ -28,6 +30,7 @@
                 this.$chart = $('.chart', this.$element);
                 this.$tiles = $('.tiles', this.$element);
 
+                // Send the request
                 this.sendRequest();
             },
 
@@ -71,12 +74,10 @@
 
             parseResponse: function(response)
             {
-                var localeDefinition = this.settings.localeDefinition;
-
-                var totalRevenue = Analytics.Utils.formatByType(localeDefinition, 'currency', response.totalRevenue);
-                var totalRevenuePerTransaction = Analytics.Utils.formatByType(localeDefinition, 'currency', response.totalRevenuePerTransaction);
-                var totalTransactions = Analytics.Utils.formatByType(localeDefinition, 'number', response.totalTransactions);
-                var totalTransactionsPerSession = Analytics.Utils.formatByType(localeDefinition, 'percent', response.totalTransactionsPerSession);
+                var totalRevenue = Analytics.Utils.formatByType(this.localeDefinition, 'currency', response.totalRevenue);
+                var totalRevenuePerTransaction = Analytics.Utils.formatByType(this.localeDefinition, 'currency', response.totalRevenuePerTransaction);
+                var totalTransactions = Analytics.Utils.formatByType(this.localeDefinition, 'number', response.totalTransactions);
+                var totalTransactionsPerSession = Analytics.Utils.formatByType(this.localeDefinition, 'percent', response.totalTransactionsPerSession);
 
                 this.$period.html(response.period);
                 this.$revenue.html(totalRevenue);
@@ -84,14 +85,14 @@
                 this.$transactions.html(totalTransactions);
                 this.$transactionsPerSession.html(totalTransactionsPerSession);
 
-                this.chart = new Analytics.reports.Area(this.$chart, response.reportData, localeDefinition, this.settings.chartLanguage);
+                this.chart = new Analytics.reports.Area(this.$chart, response.reportData, this.localeDefinition, this.settings.chartLanguage);
             },
         },
         {
             defaults: {
                 viewId: null,
                 period: null,
-                localeDefinition: null,
+                currencyDefinition: null,
                 chartLanguage: null,
             }
         });

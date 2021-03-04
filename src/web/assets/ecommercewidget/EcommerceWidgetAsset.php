@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2020, Dukt
+ * @copyright Copyright (c) 2021, Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
@@ -10,6 +10,7 @@ namespace dukt\analytics\web\assets\ecommercewidget;
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
 use dukt\analytics\web\assets\analytics\AnalyticsAsset;
+use dukt\analytics\web\assets\googlecharts\GoogleChartsAsset;
 
 /**
  * Realtime report widget asset bundle.
@@ -30,6 +31,7 @@ class EcommerceWidgetAsset extends AssetBundle
         // define the dependencies
         $this->depends = [
             CpAsset::class,
+            GoogleChartsAsset::class,
             AnalyticsAsset::class,
         ];
 

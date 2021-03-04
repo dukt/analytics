@@ -1,12 +1,13 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2020, Dukt
+ * @copyright Copyright (c) 2021, Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
 namespace dukt\analytics\web\assets\analytics;
 
+use Craft;
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
 use craft\helpers\ChartHelper;
@@ -45,7 +46,7 @@ class AnalyticsAsset extends AssetBundle
     {
         parent::registerAssetFiles($view);
 
-        $mapsApiKey = Analytics::$plugin->getSettings()->mapsApiKey;
+        $mapsApiKey = Craft::parseEnv(Analytics::$plugin->getSettings()->mapsApiKey);
         $continents = Analytics::$plugin->geo->getContinents();
         $subContinents = Analytics::$plugin->geo->getSubContinents();
         $formats = ChartHelper::formats();
@@ -61,7 +62,7 @@ class AnalyticsAsset extends AssetBundle
         $js .= 'Analytics.subContinents = '.Json::encode($subContinents).';';
         $js .= 'Analytics.formats = '.Json::encode($formats).';';
         $js .= 'Analytics.chartLanguage = "'.Analytics::$plugin->getAnalytics()->getChartLanguage().'";';
-
+        $js .= 'Analytics.d3FormatLocaleDefinition = window.d3FormatLocaleDefinition;';
         $js .= '}';
 
         $view->registerJs($js, View::POS_BEGIN);

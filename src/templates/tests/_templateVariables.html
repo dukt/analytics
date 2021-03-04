@@ -1,0 +1,36 @@
+{% extends "analytics/_layouts/tests" %}
+{% import "_includes/forms" as forms %}
+
+{% set selectedTab = 'templateVariables' %}
+{% set request =  {
+    viewId: 1,
+    startDate: date('-1 year')|date("Y-m-d"),
+    endDate: 'today',
+    metrics: 'ga:sessions',
+    dimensions: 'ga:keyword',
+    orderBys: [
+        {
+            fieldName: 'ga:sessions',
+            orderType: 'VALUE',
+            sortOrder: 'DESCENDING'
+        }
+    ],
+    pageSize: 10,
+    filtersExpression: 'ga:keyword!=(not set);ga:keyword!=(not provided)'
+} %}
+
+{% set content %}
+
+    <h2 class="first">{{ "Request"|t('analytics') }}</h2>
+
+    <pre><code>{{ dump(request) }}</code></pre>
+    <hr>
+
+    <h2>{{ "Response"|t('analytics') }}</h2>
+
+    {% set response = craft.analytics.api(request).send() %}
+
+    <pre><code>{{ dump(response) }}</code></pre>
+
+
+{% endset %}

@@ -1,13 +1,15 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2020, Dukt
+ * @copyright Copyright (c) 2021, Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
 namespace dukt\analytics\services;
 
 use Craft;
+use craft\helpers\Json;
+use craft\web\assets\d3\D3Asset;
 use yii\base\Component;
 use dukt\Analytics\Plugin as AnalyticsPlugin;
 
@@ -64,66 +66,6 @@ class Analytics extends Component
         $components = parse_url($url);
 
         return substr($url, \strlen($components['scheme'].'://'.$components['host']));
-    }
-
-    /**
-     * Returns D3 format locale definition.
-     *
-     * @param array $options
-     *
-     * @return array
-     */
-    public function getD3LocaleDefinition(array $options = [])
-    {
-        // Figure out which D3 i18n script to load
-
-        $language = Craft::$app->language;
-
-        if (in_array($language, ['ca-ES', 'de-CH', 'de-DE', 'en-CA', 'en-GB', 'en-US', 'es-ES', 'fi-FI', 'fr-CA', 'fr-FR', 'he-IL', 'hu-HU', 'it-IT', 'ja-JP', 'ko-KR', 'nl-NL', 'pl-PL', 'pt-BR', 'ru-RU', 'sv-SE', 'zh-CN'], true)) {
-            $d3Language = $language;
-        } else {
-            $languageId = Craft::$app->getLocale()->getLanguageID();
-
-            $d3LanguageIds = [
-                'ca' => 'ca-ES',
-                'de' => 'de-DE',
-                'en' => 'en-US',
-                'es' => 'es-ES',
-                'fi' => 'fi-FI',
-                'fr' => 'fr-FR',
-                'he' => 'he-IL',
-                'hu' => 'hu-HU',
-                'it' => 'it-IT',
-                'ja' => 'ja-JP',
-                'ko' => 'ko-KR',
-                'nl' => 'nl-NL',
-                'pl' => 'pl-PL',
-                'pt' => 'pt-BR',
-                'ru' => 'ru-RU',
-                'sv' => 'sv-SE',
-                'zh' => 'zh-CN',
-            ];
-
-            if (array_key_exists($language, $d3LanguageIds)) {
-                $d3Language = $d3LanguageIds[$language];
-            } else {
-                if (array_key_exists($languageId, $d3LanguageIds)) {
-                    $d3Language = $d3LanguageIds[$languageId];
-                } else {
-                    $d3Language = 'en-US';
-                }
-            }
-        }
-
-        $formatLocalePath = Craft::getAlias('@lib')."/d3-format/{$d3Language}.json";
-
-        $localeDefinition = json_decode(file_get_contents($formatLocalePath), true);
-
-        if (isset($options['currency'])) {
-            $localeDefinition['currency'] = $this->getD3LocaleDefinitionCurrency($options['currency']);
-        }
-
-        return $localeDefinition;
     }
 
     /**
@@ -211,38 +153,39 @@ class Analytics extends Component
         return false;
     }
 
-    // Private Methods
-    // =========================================================================
-
     /**
-     * Returns D3 currency format locale definition.
+     * Get a currency definition, updated with the currency from the GA view.
      *
-     * @param string $currency
-     *
+     * @param string|null $gaViewCurrency
      * @return array
      */
-    private function getD3LocaleDefinitionCurrency(string $currency)
+    public function getCurrencyDefinition(string $gaViewCurrency = null): array
     {
-        $currencySymbol = ($currency ? Craft::$app->locale->getCurrencySymbol($currency) : '$');
+        // Get the currency definition from `d3-format`
+        $d3Asset = new D3Asset();
+        $localeDefinitionForCurrency = Json::decode($d3Asset->formatDef(Craft::getAlias('@analyticsLib/d3-format')));
+        $currencyDefinition = $localeDefinitionForCurrency['currency'];
 
-        $localeDefinition = $this->getD3LocaleDefinition();
+        // Define the currency symbol based on the GA view currency
+        $currencySymbol = ($gaViewCurrency ? Craft::$app->locale->getCurrencySymbol($gaViewCurrency) : '$');
 
-        $currencyDefinition = $localeDefinition['currency'];
-
+        // Update the currency definition with the new currency symbol
         foreach ($currencyDefinition as $key => $row) {
             if (!empty($row)) {
                 // Todo: Check currency symbol replacement with arabic
-
                 $pattern = '/[^\s]+/u';
                 $replacement = $currencySymbol;
                 $newRow = preg_replace($pattern, $replacement, $row);
-
                 $currencyDefinition[$key] = $newRow;
             }
         }
 
+        // Return the currency definition
         return $currencyDefinition;
     }
+
+    // Private Methods
+    // =========================================================================
 
     /**
      * Checks if the token is set.
@@ -286,7 +229,7 @@ class Analytics extends Component
     private function _gaParseCookie()
     {
         if (isset($_COOKIE['_ga'])) {
-            list($version, $domainDepth, $cid1, $cid2) = preg_split('[\.]', $_COOKIE['_ga'], 4);
+            [$version, $domainDepth, $cid1, $cid2] = preg_split('[\.]', $_COOKIE['_ga'], 4);
             $contents = ['version' => $version, 'domainDepth' => $domainDepth, 'cid' => $cid1.'.'.$cid2];
             $cid = $contents['cid'];
         } else {

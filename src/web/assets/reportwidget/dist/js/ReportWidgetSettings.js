@@ -19,7 +19,9 @@ Analytics.ReportWidgetSettings = Garnish.Base.extend(
             this.$chartSelect = $('.chart-select select', this.$form);
 
             this.$selectizeSelects = $('.selectize select', this.$form);
-            this.$selectizeSelects.selectize();
+            this.$selectizeSelects.selectize({
+                dropdownParent: 'body'
+            });
 
             this.addListener(this.$chartTypes, 'click', $.proxy(function(ev) {
 
