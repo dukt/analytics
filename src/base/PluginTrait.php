@@ -151,7 +151,7 @@ trait PluginTrait
     {
         $attributes = Db::prepareValuesForDb($info);
 
-        if (isset($attributes['id']) && $attributes['id'] === null) {
+        if (array_key_exists('id', $attributes) && $attributes['id'] === null) {
             unset($attributes['id']);
         }
 
