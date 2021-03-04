@@ -5,11 +5,16 @@ Changelog
 
 ### Added
 - Added `GoogleChartsAsset` to handle Google Charts related resources.
+- Added `webpack` 5.9 dependency.
+- Added `cross-env` 7.0 dependency.
 
 ### Changed
 - Updated `league/oauth2-client` to 2.5.
 - Updated `theiconic/php-ga-measurement-protocol` to 2.8.
 - Updated `google/apiclient` to 2.6.
+- Updated `sass-loader` to 11.0.
+- Updated `laravel-mix` to 6.0.
+
 
 ### Fixed
 - Fixed currency formatting for Craft 3.6.
