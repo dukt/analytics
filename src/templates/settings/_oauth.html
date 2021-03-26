@@ -35,16 +35,20 @@
         <p>{{ 'Once the OAuth client is created, Google will provide you with a client ID and secret.'|t('analytics') }}</p>
         <p>{{ ("Copy the client ID & secret from the <a href=\"https://console.developers.google.com/\">"~'Google Api Console'|t('analytics')~"</a> under the API Manager → Credentials tab, paste them below and save.")|raw }}</p>
 
-        {{ forms.textField({
+        {{ forms.autosuggestField({
             label: "Client ID",
             name: 'settings[oauthClientId]',
-            value: settings.oauthClientId
+            value: settings.oauthClientId,
+            suggestions: craft.cp.getEnvSuggestions(),
+            suggestEnvVars: true,
         }) }}
 
-        {{ forms.textField({
+        {{ forms.autosuggestField({
             label: "Client Secret",
             name: 'settings[oauthClientSecret]',
-            value: settings.oauthClientSecret
+            value: settings.oauthClientSecret,
+            suggestions: craft.cp.getEnvSuggestions(),
+            suggestEnvVars: true,
         }) }}
 
         <div class="buttons">
