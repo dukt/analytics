@@ -7,7 +7,7 @@ Changelog
 - Added environment variable suggestions support for the OAuth client ID and secret.
 
 ### Changed
-
+- The plugin’s icon has been updated.
 - Improved OAuth configuration instructions.
 
 ### Fixed
