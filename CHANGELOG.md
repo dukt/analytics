@@ -1,6 +1,19 @@
 Changelog
 =========
 
+## 4.0.13 - 2021-04-14
+
+### Added
+- Added environment variable suggestions support for the OAuth client ID and secret.
+
+### Changed
+- The plugin’s icon has been updated.
+- Improved OAuth configuration instructions.
+- Updated `laravel-mix` to 6.0.16.
+
+### Fixed
+- Removed the trailing slash of the OAuth JavaScript origin URL.
+
 ## 4.0.12 - 2021-03-04
 
 ### Added

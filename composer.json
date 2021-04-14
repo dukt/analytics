@@ -1,8 +1,9 @@
 {
     "name": "dukt/analytics",
     "description": "Customizable statistics widgets and entry tracking for Google Analytics.",
-    "version": "4.0.12",
+    "version": "4.0.13",
     "type": "craft-plugin",
+    "license": "proprietary",
     "keywords": [
         "google",
         "analytics",
