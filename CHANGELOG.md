@@ -1,7 +1,7 @@
 Changelog
 =========
 
-## Unreleased
+## 4.0.13 - 2021-04-14
 
 ### Added
 - Added environment variable suggestions support for the OAuth client ID and secret.
