@@ -22,8 +22,8 @@
 
         <h2 class="first">{{ 'Create the OAuth application'|t('analytics') }}</h2>
         <p>{{ 'Go to the {link} and create a new project or use an existing one.'|t('analytics', {link: '<a href="https://console.developers.google.com/">'~'Google API Console'|t('analytics')~'</a>'})|raw }}</p>
-        <p>{{ "In API Manager → Library, search for “analytics”  and enable the “Analytics API”."|t('analytics') }}</p>
-        <p>{{ "In API Manager → Credentials, click the “Create credential” button and create a new “OAuth client ID” of type “Web Application”."|t('analytics', {link: '<a href="https://console.developers.google.com/">'~'Google API Console'|t('analytics')~'</a>'})|raw }}</p>
+        <p>{{ "In <strong>API & Services → Library</strong>, search for “analytics”, and enable the “Google Analytics API” and “Google Analytics Reporting API”."|t('analytics')|raw }}</p>
+        <p>{{ "In <strong>API & Services → Credentials</strong>, click the “Create credentials” button and create a new “OAuth client ID” of type “Web Application”."|t('analytics', {link: '<a href="https://console.developers.google.com/">'~'Google API Console'|t('analytics')~'</a>'})|raw }}</p>
         <p>{{ "Configure the client with the following javascript origin and redirect urls."|t('analytics') }}</p>
 
         <ul class="bullets">

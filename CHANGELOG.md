@@ -6,6 +6,10 @@ Changelog
 ### Added
 - Added environment variable suggestions support for the OAuth client ID and secret.
 
+### Changed
+
+- Improved OAuth configuration instructions.
+
 ## 4.0.12 - 2021-03-04
 
 ### Added
