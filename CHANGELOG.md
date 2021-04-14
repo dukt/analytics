@@ -9,6 +9,7 @@ Changelog
 ### Changed
 - The plugin’s icon has been updated.
 - Improved OAuth configuration instructions.
+- Updated `laravel-mix` to 6.0.16.
 
 ### Fixed
 - Removed the trailing slash of the OAuth JavaScript origin URL.
