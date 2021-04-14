@@ -3,6 +3,7 @@
     "description": "Customizable statistics widgets and entry tracking for Google Analytics.",
     "version": "4.0.12",
     "type": "craft-plugin",
+    "license": "proprietary",
     "keywords": [
         "google",
         "analytics",
