@@ -124,7 +124,9 @@ class Oauth extends Component
      */
     public function getJavascriptOrigin()
     {
-        return UrlHelper::baseUrl();
+        $url = UrlHelper::baseUrl();
+
+        return rtrim($url, '/');
     }
 
     /**

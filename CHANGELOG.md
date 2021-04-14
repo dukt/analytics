@@ -10,6 +10,9 @@ Changelog
 
 - Improved OAuth configuration instructions.
 
+### Fixed
+- Removed the trailing slash of the OAuth JavaScript origin URL.
+
 ## 4.0.12 - 2021-03-04
 
 ### Added
