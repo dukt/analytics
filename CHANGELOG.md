@@ -1,6 +1,11 @@
 Changelog
 =========
 
+## Unreleased
+
+### Fixed
+- Fixed a bug where dimensions and metrics were not being updated when changing the chart type for a new widget. ([#30](https://github.com/dukt/analytics/issues/30))
+
 ## 4.0.13 - 2021-04-14
 
 ### Added
