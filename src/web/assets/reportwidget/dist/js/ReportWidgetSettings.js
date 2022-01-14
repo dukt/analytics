@@ -54,6 +54,7 @@ Analytics.ReportWidgetSettings = Garnish.Base.extend(
                 // change chart select
 
                 this.$chartSelect.val($target.data('chart-type'));
+                this.$chartSelect.trigger('change');
 
 
                 // after change
