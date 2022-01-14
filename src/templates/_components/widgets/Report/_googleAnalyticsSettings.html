@@ -4,7 +4,7 @@
     {{ forms.selectField({
         label: "Metric"|t('analytics'),
         name: 'options[area][metric]',
-        class: 'selectize metric',
+        class: 'selectize metric fullwidth',
         options: selectOptions.area.metrics,
         value: (settings.options.area.metric is defined ? settings.options.area.metric : null),
     }) }}
@@ -14,7 +14,7 @@
     {{ forms.selectField({
         label: "Metric"|t('analytics'),
         name: 'options[counter][metric]',
-        class: 'selectize metric',
+        class: 'selectize metric fullwidth',
         options: selectOptions.counter.metrics,
         value: (settings.options.counter.metric is defined ? settings.options.counter.metric : null),
     }) }}
@@ -24,7 +24,7 @@
     {{ forms.selectField({
         label: "Dimension"|t('analytics'),
         name: 'options[pie][dimension]',
-        class: 'selectize dimension',
+        class: 'selectize dimension fullwidth',
         options: selectOptions.pie.dimensions,
         value: (settings.options.pie.dimension is defined ? settings.options.pie.dimension : null),
     }) }}
@@ -32,7 +32,7 @@
     {{ forms.selectField({
         label: "Metric"|t('analytics'),
         name: 'options[pie][metric]',
-        class: 'selectize metric',
+        class: 'selectize metric fullwidth',
         options: selectOptions.pie.metrics,
         value: (settings.options.pie.metric is defined ? settings.options.pie.metric : null),
     }) }}
@@ -42,7 +42,7 @@
     {{ forms.selectField({
         label: "Dimension"|t('analytics'),
         name: 'options[table][dimension]',
-        class: 'selectize dimension',
+        class: 'selectize dimension fullwidth',
         options: selectOptions.table.dimensions,
         value: (settings.options.table.dimension is defined ? settings.options.table.dimension : null),
     }) }}
@@ -50,7 +50,7 @@
     {{ forms.selectField({
         label: "Metric"|t('analytics'),
         name: 'options[table][metric]',
-        class: 'selectize metric',
+        class: 'selectize metric fullwidth',
         options: selectOptions.table.metrics,
         value: (settings.options.table.metric is defined ? settings.options.table.metric : null),
     }) }}
@@ -60,7 +60,7 @@
     {{ forms.selectField({
         label: "Dimension"|t('analytics'),
         name: 'options[geo][dimension]',
-        class: 'selectize dimension',
+        class: 'selectize dimension fullwidth',
         options: selectOptions.geo.dimensions,
         value: (settings.options.geo.dimension is defined ? settings.options.geo.dimension : null),
     }) }}
@@ -68,7 +68,7 @@
     {{ forms.selectField({
         label: "Metric"|t('analytics'),
         name: 'options[geo][metric]',
-        class: 'selectize metric',
+        class: 'selectize metric fullwidth',
         options: selectOptions.geo.metrics,
         value: (settings.options.geo.metric is defined ? settings.options.geo.metric : null),
     }) }}
