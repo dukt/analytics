@@ -3,6 +3,9 @@ Changelog
 
 ## Unreleased
 
+### Changed
+- Updated `sass-loader` to 12.4.0.
+
 ### Fixed
 - Fixed a bug where dimensions and metrics were not being updated when changing the chart type for a new widget. ([#30](https://github.com/dukt/analytics/issues/30))
 
