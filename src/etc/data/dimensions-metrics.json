@@ -109,6 +109,16 @@
         "status": "PUBLIC",
         "addedInApiVersion": "3"
     },
+    "ga:28dayUsers": {
+        "id": "ga:28dayUsers",
+        "uiName": "28 Day Active Users",
+        "description": "Total number of 28-day active users for each day in the requested time period. At least one of ga:nthDay, ga:date, or ga:day must be specified as a dimension to query this metric. For a given date, the returned value will be the total number of unique users for the 28-day period ending on the given date.",
+        "type": "METRIC",
+        "dataType": "INTEGER",
+        "group": "User",
+        "status": "PUBLIC",
+        "addedInApiVersion": "3"
+    },
     "ga:30dayUsers": {
         "id": "ga:30dayUsers",
         "uiName": "30 Day Active Users",
@@ -291,7 +301,7 @@
     },
     "ga:adGroup": {
         "id": "ga:adGroup",
-        "uiName": "Ad Group",
+        "uiName": "Google Ads: Ad Group",
         "description": "The name of the AdWords ad group.",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -301,7 +311,7 @@
     },
     "ga:adSlot": {
         "id": "ga:adSlot",
-        "uiName": "Ad Slot",
+        "uiName": "Google Ads: Ad Slot",
         "description": "The location (Top, RHS, or not set) of the advertisement on the hosting page.",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -421,7 +431,7 @@
     },
     "ga:adwordsCustomerID": {
         "id": "ga:adwordsCustomerID",
-        "uiName": "AdWords Customer ID",
+        "uiName": "Google Ads Customer ID",
         "description": "Customer's AdWords ID, corresponding to AdWords API AccountInfo.customerId.",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -431,7 +441,7 @@
     },
     "ga:adwordsCampaignID": {
         "id": "ga:adwordsCampaignID",
-        "uiName": "AdWords Campaign ID",
+        "uiName": "Google Ads Campaign ID",
         "description": "AdWords API Campaign.id.",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -441,7 +451,7 @@
     },
     "ga:adwordsAdGroupID": {
         "id": "ga:adwordsAdGroupID",
-        "uiName": "AdWords Ad Group ID",
+        "uiName": "Google Ads Ad Group ID",
         "description": "AdWords API AdGroup.id.",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -451,7 +461,7 @@
     },
     "ga:adwordsCreativeID": {
         "id": "ga:adwordsCreativeID",
-        "uiName": "AdWords Creative ID",
+        "uiName": "Google Ads Creative ID",
         "description": "AdWords API Ad.id.",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -461,7 +471,7 @@
     },
     "ga:adwordsCriteriaID": {
         "id": "ga:adwordsCriteriaID",
-        "uiName": "AdWords Criteria ID",
+        "uiName": "Google Ads Criteria ID",
         "description": "AdWords API Criterion.id. The geographical targeting Criteria IDs are listed at https:\/\/developers.google.com\/analytics\/devguides\/collection\/protocol\/v1\/geoid.",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -3229,6 +3239,16 @@
         "status": "PUBLIC",
         "addedInApiVersion": "3"
     },
+    "ga:uniqueEvents": {
+        "id": "ga:uniqueEvents",
+        "uiName": "Unique Events",
+        "description": "The number of unique events. Events in different sessions are counted as separate events.",
+        "type": "METRIC",
+        "dataType": "INTEGER",
+        "group": "Event Tracking",
+        "status": "PUBLIC",
+        "addedInApiVersion": "3"
+    },
     "ga:eventValue": {
         "id": "ga:eventValue",
         "uiName": "Event Value",
@@ -3541,7 +3561,7 @@
     },
     "ga:socialInteractionNetworkAction": {
         "id": "ga:socialInteractionNetworkAction",
-        "uiName": "Social Network and Action",
+        "uiName": "Social Network and Action (Hit)",
         "description": "For social interactions, this is the concatenation of the socialInteractionNetwork and socialInteractionAction action (e.g., Google: +1) being tracked at this hit level.",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4362,7 +4382,17 @@
     "ga:dateHour": {
         "id": "ga:dateHour",
         "uiName": "Hour of Day",
-        "description": "Combined values of ga:date and ga:hour.",
+        "description": "Combined values of ga:date and ga:hour formated as YYYYMMDDHH.",
+        "type": "DIMENSION",
+        "dataType": "STRING",
+        "group": "Time",
+        "status": "PUBLIC",
+        "addedInApiVersion": "3"
+    },
+    "ga:dateHourMinute": {
+        "id": "ga:dateHourMinute",
+        "uiName": "Date Hour and Minute",
+        "description": "Combined values of ga:date, ga:hour and ga:minute formated as YYYYMMDDHHMM.",
         "type": "DIMENSION",
         "dataType": "STRING",
         "group": "Time",
@@ -4421,7 +4451,7 @@
     },
     "ga:dcmClickAd": {
         "id": "ga:dcmClickAd",
-        "uiName": "DFA Ad (GA Model)",
+        "uiName": "CM360 Ad (GA Model)",
         "description": "DCM ad name of the DCM click matching the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4431,7 +4461,7 @@
     },
     "ga:dcmClickAdId": {
         "id": "ga:dcmClickAdId",
-        "uiName": "DFA Ad ID (GA Model)",
+        "uiName": "CM360 Ad ID (GA Model)",
         "description": "DCM ad ID of the DCM click matching the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4441,7 +4471,7 @@
     },
     "ga:dcmClickAdType": {
         "id": "ga:dcmClickAdType",
-        "uiName": "DFA Ad Type (GA Model)",
+        "uiName": "CM360 Ad Type (GA Model)",
         "description": "DCM ad type name of the DCM click matching the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4451,7 +4481,7 @@
     },
     "ga:dcmClickAdTypeId": {
         "id": "ga:dcmClickAdTypeId",
-        "uiName": "DFA Ad Type ID",
+        "uiName": "CM360 Ad Type ID",
         "description": "DCM ad type ID of the DCM click matching the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4461,7 +4491,7 @@
     },
     "ga:dcmClickAdvertiser": {
         "id": "ga:dcmClickAdvertiser",
-        "uiName": "DFA Advertiser (GA Model)",
+        "uiName": "CM360 Advertiser (GA Model)",
         "description": "DCM advertiser name of the DCM click matching the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4471,7 +4501,7 @@
     },
     "ga:dcmClickAdvertiserId": {
         "id": "ga:dcmClickAdvertiserId",
-        "uiName": "DFA Advertiser ID (GA Model)",
+        "uiName": "CM360 Advertiser ID (GA Model)",
         "description": "DCM advertiser ID of the DCM click matching the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4481,7 +4511,7 @@
     },
     "ga:dcmClickCampaign": {
         "id": "ga:dcmClickCampaign",
-        "uiName": "DFA Campaign (GA Model)",
+        "uiName": "CM360 Campaign (GA Model)",
         "description": "DCM campaign name of the DCM click matching the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4491,7 +4521,7 @@
     },
     "ga:dcmClickCampaignId": {
         "id": "ga:dcmClickCampaignId",
-        "uiName": "DFA Campaign ID (GA Model)",
+        "uiName": "CM360 Campaign ID (GA Model)",
         "description": "DCM campaign ID of the DCM click matching the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4501,7 +4531,7 @@
     },
     "ga:dcmClickCreativeId": {
         "id": "ga:dcmClickCreativeId",
-        "uiName": "DFA Creative ID (GA Model)",
+        "uiName": "CM360 Creative ID (GA Model)",
         "description": "DCM creative ID of the DCM click matching the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4511,7 +4541,7 @@
     },
     "ga:dcmClickCreative": {
         "id": "ga:dcmClickCreative",
-        "uiName": "DFA Creative (GA Model)",
+        "uiName": "CM360 Creative (GA Model)",
         "description": "DCM creative name of the DCM click matching the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4521,7 +4551,7 @@
     },
     "ga:dcmClickRenderingId": {
         "id": "ga:dcmClickRenderingId",
-        "uiName": "DFA Rendering ID (GA Model)",
+        "uiName": "CM360 Rendering ID (GA Model)",
         "description": "DCM rendering ID of the DCM click matching the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4531,7 +4561,7 @@
     },
     "ga:dcmClickCreativeType": {
         "id": "ga:dcmClickCreativeType",
-        "uiName": "DFA Creative Type (GA Model)",
+        "uiName": "CM360 Creative Type (GA Model)",
         "description": "DCM creative type name of the DCM click matching the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4541,7 +4571,7 @@
     },
     "ga:dcmClickCreativeTypeId": {
         "id": "ga:dcmClickCreativeTypeId",
-        "uiName": "DFA Creative Type ID (GA Model)",
+        "uiName": "CM360 Creative Type ID (GA Model)",
         "description": "DCM creative type ID of the DCM click matching the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4551,7 +4581,7 @@
     },
     "ga:dcmClickCreativeVersion": {
         "id": "ga:dcmClickCreativeVersion",
-        "uiName": "DFA Creative Version (GA Model)",
+        "uiName": "CM360 Creative Version (GA Model)",
         "description": "DCM creative version of the DCM click matching the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4561,7 +4591,7 @@
     },
     "ga:dcmClickSite": {
         "id": "ga:dcmClickSite",
-        "uiName": "DFA Site (GA Model)",
+        "uiName": "CM360 Site (GA Model)",
         "description": "Site name where the DCM creative was shown and clicked on for the DCM click matching the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4571,7 +4601,7 @@
     },
     "ga:dcmClickSiteId": {
         "id": "ga:dcmClickSiteId",
-        "uiName": "DFA Site ID (GA Model)",
+        "uiName": "CM360 Site ID (GA Model)",
         "description": "DCM site ID where the DCM creative was shown and clicked on for the DCM click matching the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4581,7 +4611,7 @@
     },
     "ga:dcmClickSitePlacement": {
         "id": "ga:dcmClickSitePlacement",
-        "uiName": "DFA Placement (GA Model)",
+        "uiName": "CM360 Placement (GA Model)",
         "description": "DCM site placement name of the DCM click matching the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4591,7 +4621,7 @@
     },
     "ga:dcmClickSitePlacementId": {
         "id": "ga:dcmClickSitePlacementId",
-        "uiName": "DFA Placement ID (GA Model)",
+        "uiName": "CM360 Placement ID (GA Model)",
         "description": "DCM site placement ID of the DCM click matching the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4601,7 +4631,7 @@
     },
     "ga:dcmClickSpotId": {
         "id": "ga:dcmClickSpotId",
-        "uiName": "DFA Floodlight Configuration ID (GA Model)",
+        "uiName": "CM360 Floodlight Configuration ID (GA Model)",
         "description": "DCM Floodlight configuration ID of the DCM click matching the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4611,7 +4641,7 @@
     },
     "ga:dcmFloodlightActivity": {
         "id": "ga:dcmFloodlightActivity",
-        "uiName": "DFA Activity",
+        "uiName": "CM360 Activity",
         "description": "DCM Floodlight activity name associated with the floodlight conversion (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4621,7 +4651,7 @@
     },
     "ga:dcmFloodlightActivityAndGroup": {
         "id": "ga:dcmFloodlightActivityAndGroup",
-        "uiName": "DFA Activity and Group",
+        "uiName": "CM360 Activity and Group",
         "description": "DCM Floodlight activity name and group name associated with the floodlight conversion (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4631,7 +4661,7 @@
     },
     "ga:dcmFloodlightActivityGroup": {
         "id": "ga:dcmFloodlightActivityGroup",
-        "uiName": "DFA Activity Group",
+        "uiName": "CM360 Activity Group",
         "description": "DCM Floodlight activity group name associated with the floodlight conversion (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4641,7 +4671,7 @@
     },
     "ga:dcmFloodlightActivityGroupId": {
         "id": "ga:dcmFloodlightActivityGroupId",
-        "uiName": "DFA Activity Group ID",
+        "uiName": "CM360 Activity Group ID",
         "description": "DCM Floodlight activity group ID associated with the floodlight conversion (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4651,7 +4681,7 @@
     },
     "ga:dcmFloodlightActivityId": {
         "id": "ga:dcmFloodlightActivityId",
-        "uiName": "DFA Activity ID",
+        "uiName": "CM360 Activity ID",
         "description": "DCM Floodlight activity ID associated with the floodlight conversion (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4661,7 +4691,7 @@
     },
     "ga:dcmFloodlightAdvertiserId": {
         "id": "ga:dcmFloodlightAdvertiserId",
-        "uiName": "DFA Advertiser ID",
+        "uiName": "CM360 Advertiser ID",
         "description": "DCM Floodlight advertiser ID associated with the floodlight conversion (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4671,7 +4701,7 @@
     },
     "ga:dcmFloodlightSpotId": {
         "id": "ga:dcmFloodlightSpotId",
-        "uiName": "DFA Floodlight Configuration ID",
+        "uiName": "CM360 Floodlight Configuration ID",
         "description": "DCM Floodlight configuration ID associated with the floodlight conversion (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4681,7 +4711,7 @@
     },
     "ga:dcmLastEventAd": {
         "id": "ga:dcmLastEventAd",
-        "uiName": "DFA Ad",
+        "uiName": "CM360 Ad",
         "description": "DCM ad name of the last DCM event (impression or click within the DCM lookback window) associated with the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4691,7 +4721,7 @@
     },
     "ga:dcmLastEventAdId": {
         "id": "ga:dcmLastEventAdId",
-        "uiName": "DFA Ad ID (DFA Model)",
+        "uiName": "CM360 Ad ID (CM360 Model)",
         "description": "DCM ad ID of the last DCM event (impression or click within the DCM lookback window) associated with the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4701,7 +4731,7 @@
     },
     "ga:dcmLastEventAdType": {
         "id": "ga:dcmLastEventAdType",
-        "uiName": "DFA Ad Type (DFA Model)",
+        "uiName": "CM360 Ad Type (CM360 Model)",
         "description": "DCM ad type name of the last DCM event (impression or click within the DCM lookback window) associated with the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4711,7 +4741,7 @@
     },
     "ga:dcmLastEventAdTypeId": {
         "id": "ga:dcmLastEventAdTypeId",
-        "uiName": "DFA Ad Type ID (DFA Model)",
+        "uiName": "CM360 Ad Type ID (CM360 Model)",
         "description": "DCM ad type ID of the last DCM event (impression or click within the DCM lookback window) associated with the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4721,7 +4751,7 @@
     },
     "ga:dcmLastEventAdvertiser": {
         "id": "ga:dcmLastEventAdvertiser",
-        "uiName": "DFA Advertiser (DFA Model)",
+        "uiName": "CM360 Advertiser (CM360 Model)",
         "description": "DCM advertiser name of the last DCM event (impression or click within the DCM lookback window) associated with the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4731,7 +4761,7 @@
     },
     "ga:dcmLastEventAdvertiserId": {
         "id": "ga:dcmLastEventAdvertiserId",
-        "uiName": "DFA Advertiser ID (DFA Model)",
+        "uiName": "CM360 Advertiser ID (CM360 Model)",
         "description": "DCM advertiser ID of the last DCM event (impression or click within the DCM lookback window) associated with the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4741,7 +4771,7 @@
     },
     "ga:dcmLastEventAttributionType": {
         "id": "ga:dcmLastEventAttributionType",
-        "uiName": "DFA Attribution Type (DFA Model)",
+        "uiName": "CM360 Attribution Type (CM360 Model)",
         "description": "There are two possible values: ClickThrough and ViewThrough. If the last DCM event associated with the Google Analytics session was a click, then the value will be ClickThrough. If the last DCM event associated with the Google Analytics session was an ad impression, then the value will be ViewThrough (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4751,7 +4781,7 @@
     },
     "ga:dcmLastEventCampaign": {
         "id": "ga:dcmLastEventCampaign",
-        "uiName": "DFA Campaign (DFA Model)",
+        "uiName": "CM360 Campaign (CM360 Model)",
         "description": "DCM campaign name of the last DCM event (impression or click within the DCM lookback window) associated with the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4761,7 +4791,7 @@
     },
     "ga:dcmLastEventCampaignId": {
         "id": "ga:dcmLastEventCampaignId",
-        "uiName": "DFA Campaign ID (DFA Model)",
+        "uiName": "CM360 Campaign ID (CM360 Model)",
         "description": "DCM campaign ID of the last DCM event (impression or click within the DCM lookback window) associated with the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4771,7 +4801,7 @@
     },
     "ga:dcmLastEventCreativeId": {
         "id": "ga:dcmLastEventCreativeId",
-        "uiName": "DFA Creative ID (DFA Model)",
+        "uiName": "CM360 Creative ID (CM360 Model)",
         "description": "DCM creative ID of the last DCM event (impression or click within the DCM lookback window) associated with the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4781,7 +4811,7 @@
     },
     "ga:dcmLastEventCreative": {
         "id": "ga:dcmLastEventCreative",
-        "uiName": "DFA Creative (DFA Model)",
+        "uiName": "CM360 Creative (CM360 Model)",
         "description": "DCM creative name of the last DCM event (impression or click within the DCM lookback window) associated with the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4791,7 +4821,7 @@
     },
     "ga:dcmLastEventRenderingId": {
         "id": "ga:dcmLastEventRenderingId",
-        "uiName": "DFA Rendering ID (DFA Model)",
+        "uiName": "CM360 Rendering ID (CM360 Model)",
         "description": "DCM rendering ID of the last DCM event (impression or click within the DCM lookback window) associated with the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4801,7 +4831,7 @@
     },
     "ga:dcmLastEventCreativeType": {
         "id": "ga:dcmLastEventCreativeType",
-        "uiName": "DFA Creative Type (DFA Model)",
+        "uiName": "CM360 Creative Type (CM360 Model)",
         "description": "DCM creative type name of the last DCM event (impression or click within the DCM lookback window) associated with the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4811,7 +4841,7 @@
     },
     "ga:dcmLastEventCreativeTypeId": {
         "id": "ga:dcmLastEventCreativeTypeId",
-        "uiName": "DFA Creative Type ID (DFA Model)",
+        "uiName": "CM360 Creative Type ID (CM360 Model)",
         "description": "DCM creative type ID of the last DCM event (impression or click within the DCM lookback window) associated with the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4821,7 +4851,7 @@
     },
     "ga:dcmLastEventCreativeVersion": {
         "id": "ga:dcmLastEventCreativeVersion",
-        "uiName": "DFA Creative Version (DFA Model)",
+        "uiName": "CM360 Creative Version (CM360 Model)",
         "description": "DCM creative version of the last DCM event (impression or click within the DCM lookback window) associated with the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4831,7 +4861,7 @@
     },
     "ga:dcmLastEventSite": {
         "id": "ga:dcmLastEventSite",
-        "uiName": "DFA Site (DFA Model)",
+        "uiName": "CM360 Site (CM360 Model)",
         "description": "Site name where the DCM creative was shown and clicked on for the last DCM event (impression or click within the DCM lookback window) associated with the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4841,7 +4871,7 @@
     },
     "ga:dcmLastEventSiteId": {
         "id": "ga:dcmLastEventSiteId",
-        "uiName": "DFA Site ID (DFA Model)",
+        "uiName": "CM360 Site ID (CM360 Model)",
         "description": "DCM site ID where the DCM creative was shown and clicked on for the last DCM event (impression or click within the DCM lookback window) associated with the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4851,7 +4881,7 @@
     },
     "ga:dcmLastEventSitePlacement": {
         "id": "ga:dcmLastEventSitePlacement",
-        "uiName": "DFA Placement (DFA Model)",
+        "uiName": "CM360 Placement (CM360 Model)",
         "description": "DCM site placement name of the last DCM event (impression or click within the DCM lookback window) associated with the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4861,7 +4891,7 @@
     },
     "ga:dcmLastEventSitePlacementId": {
         "id": "ga:dcmLastEventSitePlacementId",
-        "uiName": "DFA Placement ID (DFA Model)",
+        "uiName": "CM360 Placement ID (CM360 Model)",
         "description": "DCM site placement ID of the last DCM event (impression or click within the DCM lookback window) associated with the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4871,7 +4901,7 @@
     },
     "ga:dcmLastEventSpotId": {
         "id": "ga:dcmLastEventSpotId",
-        "uiName": "DFA Floodlight Configuration ID (DFA Model)",
+        "uiName": "CM360 Floodlight Configuration ID (CM360 Model)",
         "description": "DCM Floodlight configuration ID of the last DCM event (impression or click within the DCM lookback window) associated with the Google Analytics session (Analytics 360 only).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -4881,7 +4911,7 @@
     },
     "ga:dcmFloodlightQuantity": {
         "id": "ga:dcmFloodlightQuantity",
-        "uiName": "DFA Conversions",
+        "uiName": "CM Conversions",
         "description": "The number of DCM Floodlight conversions (Analytics 360 only).",
         "type": "METRIC",
         "dataType": "INTEGER",
@@ -4891,7 +4921,7 @@
     },
     "ga:dcmFloodlightRevenue": {
         "id": "ga:dcmFloodlightRevenue",
-        "uiName": "DFA Revenue",
+        "uiName": "CM Revenue",
         "description": "DCM Floodlight revenue (Analytics 360 only).",
         "type": "METRIC",
         "dataType": "CURRENCY",
@@ -5199,6 +5229,106 @@
         "status": "PUBLIC",
         "addedInApiVersion": "3"
     },
+    "ga:totalPublisherImpressions": {
+        "id": "ga:totalPublisherImpressions",
+        "uiName": "Publisher Impressions",
+        "description": "An ad impression is reported whenever an individual ad is displayed on the website. For example, if a page with two ad units is viewed once, we'll display two impressions.",
+        "type": "METRIC",
+        "dataType": "INTEGER",
+        "group": "Publisher",
+        "status": "PUBLIC",
+        "addedInApiVersion": "3"
+    },
+    "ga:totalPublisherCoverage": {
+        "id": "ga:totalPublisherCoverage",
+        "uiName": "Publisher Coverage",
+        "description": "Coverage is the percentage of ad requests that returned at least one ad. Generally, coverage can help you identify sites where the publisher account (AdSense, AdX, DFP) isn't able to provide targeted ads. (Ad Impressions \/ Total Ad Requests) * 100",
+        "type": "METRIC",
+        "dataType": "PERCENT",
+        "group": "Publisher",
+        "status": "PUBLIC",
+        "addedInApiVersion": "3"
+    },
+    "ga:totalPublisherMonetizedPageviews": {
+        "id": "ga:totalPublisherMonetizedPageviews",
+        "uiName": "Publisher Monetized Pageviews",
+        "description": "This measures the total number of pageviews on the property that were shown with an ad from one of the linked publisher accounts (AdSense, AdX, DFP). Note that a single page can have multiple ad units.",
+        "type": "METRIC",
+        "dataType": "INTEGER",
+        "group": "Publisher",
+        "status": "PUBLIC",
+        "addedInApiVersion": "3"
+    },
+    "ga:totalPublisherImpressionsPerSession": {
+        "id": "ga:totalPublisherImpressionsPerSession",
+        "uiName": "Publisher Impressions \/ Session",
+        "description": "The ratio of linked publisher account (AdSense, AdX, DFP) ad impressions to Analytics sessions (Ad Impressions \/ Analytics Sessions).",
+        "type": "METRIC",
+        "dataType": "FLOAT",
+        "group": "Publisher",
+        "status": "PUBLIC",
+        "addedInApiVersion": "3"
+    },
+    "ga:totalPublisherViewableImpressionsPercent": {
+        "id": "ga:totalPublisherViewableImpressionsPercent",
+        "uiName": "Publisher Viewable Impressions %",
+        "description": "The percentage of viewable ad impressions. An impression is considered a viewable impression when it has appeared within users' browsers and has the opportunity to be seen.",
+        "type": "METRIC",
+        "dataType": "PERCENT",
+        "group": "Publisher",
+        "status": "PUBLIC",
+        "addedInApiVersion": "3"
+    },
+    "ga:totalPublisherClicks": {
+        "id": "ga:totalPublisherClicks",
+        "uiName": "Publisher Clicks",
+        "description": "The number of times ads from a linked publisher account (AdSense, AdX, DFP) were clicked on the site.",
+        "type": "METRIC",
+        "dataType": "INTEGER",
+        "group": "Publisher",
+        "status": "PUBLIC",
+        "addedInApiVersion": "3"
+    },
+    "ga:totalPublisherCTR": {
+        "id": "ga:totalPublisherCTR",
+        "uiName": "Publisher CTR",
+        "description": "The percentage of pageviews that resulted in a click on a linked publisher account (AdSense, AdX, DFP) ad.",
+        "type": "METRIC",
+        "dataType": "PERCENT",
+        "group": "Publisher",
+        "status": "PUBLIC",
+        "addedInApiVersion": "3"
+    },
+    "ga:totalPublisherRevenue": {
+        "id": "ga:totalPublisherRevenue",
+        "uiName": "Publisher Revenue",
+        "description": "The total estimated revenue from all linked publisher account (AdSense, AdX, DFP) ads.",
+        "type": "METRIC",
+        "dataType": "CURRENCY",
+        "group": "Publisher",
+        "status": "PUBLIC",
+        "addedInApiVersion": "3"
+    },
+    "ga:totalPublisherRevenuePer1000Sessions": {
+        "id": "ga:totalPublisherRevenuePer1000Sessions",
+        "uiName": "Publisher Revenue \/ 1000 Sessions",
+        "description": "The total estimated revenue from all linked publisher accounts (AdSense, AdX, DFP) per 1,000 Analytics sessions.",
+        "type": "METRIC",
+        "dataType": "CURRENCY",
+        "group": "Publisher",
+        "status": "PUBLIC",
+        "addedInApiVersion": "3"
+    },
+    "ga:totalPublisherECPM": {
+        "id": "ga:totalPublisherECPM",
+        "uiName": "Publisher eCPM",
+        "description": "The effective cost per thousand pageviews. It is the total estimated revenue from all linked publisher accounts (AdSense, AdX, DFP) per 1,000 pageviews.",
+        "type": "METRIC",
+        "dataType": "CURRENCY",
+        "group": "Publisher",
+        "status": "PUBLIC",
+        "addedInApiVersion": "3"
+    },
     "ga:adxImpressions": {
         "id": "ga:adxImpressions",
         "uiName": "AdX Impressions",
@@ -5299,9 +5429,29 @@
         "status": "PUBLIC",
         "addedInApiVersion": "3"
     },
+    "ga:dfpLineItemId": {
+        "id": "ga:dfpLineItemId",
+        "uiName": "GAM Line Item Id",
+        "description": "The ID of the Google Ad Manager line item.",
+        "type": "DIMENSION",
+        "dataType": "STRING",
+        "group": "DoubleClick for Publishers Backfill",
+        "status": "PUBLIC",
+        "addedInApiVersion": "3"
+    },
+    "ga:dfpLineItemName": {
+        "id": "ga:dfpLineItemName",
+        "uiName": "GAM Line Item Name",
+        "description": "The name of the Google Ad Manager line item.",
+        "type": "DIMENSION",
+        "dataType": "STRING",
+        "group": "DoubleClick for Publishers Backfill",
+        "status": "PUBLIC",
+        "addedInApiVersion": "3"
+    },
     "ga:dfpImpressions": {
         "id": "ga:dfpImpressions",
-        "uiName": "DFP Impressions",
+        "uiName": "GAM Impressions",
         "description": "A DFP ad impression is reported whenever an individual ad is displayed on the website. For example, if a page with two ad units is viewed once, we'll display two impressions (DFP linking enabled and Hide DFP Revenue not enabled).",
         "type": "METRIC",
         "dataType": "INTEGER",
@@ -5311,7 +5461,7 @@
     },
     "ga:dfpCoverage": {
         "id": "ga:dfpCoverage",
-        "uiName": "DFP Coverage",
+        "uiName": "GAM Coverage",
         "description": "Coverage is the percentage of ad requests that returned at least one ad. Generally, coverage can help identify sites where the DFP account isn't able to provide targeted ads. (Ad Impressions \/ Total Ad Requests) * 100 (DFP linking enabled and Hide DFP Revenue not enabled).",
         "type": "METRIC",
         "dataType": "PERCENT",
@@ -5321,7 +5471,7 @@
     },
     "ga:dfpMonetizedPageviews": {
         "id": "ga:dfpMonetizedPageviews",
-        "uiName": "DFP Monetized Pageviews",
+        "uiName": "GAM Monetized Pageviews",
         "description": "This measures the total number of pageviews on the property that were shown with an ad from the linked DFP account. Note that a single page can have multiple ad units (DFP linking enabled and Hide DFP Revenue not enabled).",
         "type": "METRIC",
         "dataType": "INTEGER",
@@ -5331,7 +5481,7 @@
     },
     "ga:dfpImpressionsPerSession": {
         "id": "ga:dfpImpressionsPerSession",
-        "uiName": "DFP Impressions \/ Session",
+        "uiName": "GAM Impressions \/ Session",
         "description": "The ratio of DFP ad impressions to Analytics sessions (Ad Impressions \/ Analytics Sessions) (DFP linking enabled and Hide DFP Revenue not enabled).",
         "type": "METRIC",
         "dataType": "FLOAT",
@@ -5341,7 +5491,7 @@
     },
     "ga:dfpViewableImpressionsPercent": {
         "id": "ga:dfpViewableImpressionsPercent",
-        "uiName": "DFP Viewable Impressions %",
+        "uiName": "GAM Viewable Impressions %",
         "description": "The percentage of viewable ad impressions. An impression is considered a viewable impression when it has appeared within users' browsers and has the opportunity to be seen (DFP linking enabled and Hide DFP Revenue not enabled).",
         "type": "METRIC",
         "dataType": "PERCENT",
@@ -5351,7 +5501,7 @@
     },
     "ga:dfpClicks": {
         "id": "ga:dfpClicks",
-        "uiName": "DFP Clicks",
+        "uiName": "GAM Clicks",
         "description": "The number of times DFP ads were clicked on the site (DFP linking enabled and Hide DFP Revenue not enabled).",
         "type": "METRIC",
         "dataType": "INTEGER",
@@ -5361,7 +5511,7 @@
     },
     "ga:dfpCTR": {
         "id": "ga:dfpCTR",
-        "uiName": "DFP CTR",
+        "uiName": "GAM CTR",
         "description": "The percentage of pageviews that resulted in a click on an DFP ad (DFP linking enabled and Hide DFP Revenue not enabled).",
         "type": "METRIC",
         "dataType": "PERCENT",
@@ -5371,7 +5521,7 @@
     },
     "ga:dfpRevenue": {
         "id": "ga:dfpRevenue",
-        "uiName": "DFP Revenue",
+        "uiName": "GAM Revenue",
         "description": "DFP revenue is an estimate of the total ad revenue based on served impressions (DFP linking enabled and Hide DFP Revenue not enabled).",
         "type": "METRIC",
         "dataType": "CURRENCY",
@@ -5381,7 +5531,7 @@
     },
     "ga:dfpRevenuePer1000Sessions": {
         "id": "ga:dfpRevenuePer1000Sessions",
-        "uiName": "DFP Revenue \/ 1000 Sessions",
+        "uiName": "GAM Revenue \/ 1000 Sessions",
         "description": "The total estimated revenue from DFP ads per 1,000 Analytics sessions. Note that this metric is based on sessions to the site, not on ad impressions (DFP linking enabled and Hide DFP Revenue not enabled).",
         "type": "METRIC",
         "dataType": "CURRENCY",
@@ -5391,7 +5541,7 @@
     },
     "ga:dfpECPM": {
         "id": "ga:dfpECPM",
-        "uiName": "DFP eCPM",
+        "uiName": "GAM eCPM",
         "description": "The effective cost per thousand pageviews. It is the DFP revenue per 1,000 pageviews (DFP linking enabled and Hide DFP Revenue not enabled).",
         "type": "METRIC",
         "dataType": "CURRENCY",
@@ -5401,7 +5551,7 @@
     },
     "ga:backfillImpressions": {
         "id": "ga:backfillImpressions",
-        "uiName": "DFP Backfill Impressions",
+        "uiName": "GAM Backfill Impressions",
         "description": "Backfill Impressions is the sum of all AdSense or Ad Exchance ad impressions served as backfill through DFP. An ad impression is reported whenever an individual ad is displayed on the website. For example, if a page with two ad units is viewed once, we'll display two impressions (DFP linking enabled and Hide DFP Revenue not enabled).",
         "type": "METRIC",
         "dataType": "INTEGER",
@@ -5411,7 +5561,7 @@
     },
     "ga:backfillCoverage": {
         "id": "ga:backfillCoverage",
-        "uiName": "DFP Backfill Coverage",
+        "uiName": "GAM Backfill Coverage",
         "description": "Backfill Coverage is the percentage of backfill ad requests that returned at least one ad. Generally, coverage can help identify sites where the publisher account isn't able to provide targeted ads. (Ad Impressions \/ Total Ad Requests) * 100. If both AdSense and Ad Exchange are providing backfill ads, this metric is the weighted average of the two backfill accounts (DFP linking enabled and Hide DFP Revenue not enabled).",
         "type": "METRIC",
         "dataType": "PERCENT",
@@ -5421,7 +5571,7 @@
     },
     "ga:backfillMonetizedPageviews": {
         "id": "ga:backfillMonetizedPageviews",
-        "uiName": "DFP Backfill Monetized Pageviews",
+        "uiName": "GAM Backfill Monetized Pageviews",
         "description": "This measures the total number of pageviews on the property that were shown with at least one ad from the linked backfill account(s). Note that a single monetized pageview can include multiple ad impressions (DFP linking enabled and Hide DFP Revenue not enabled).",
         "type": "METRIC",
         "dataType": "INTEGER",
@@ -5431,7 +5581,7 @@
     },
     "ga:backfillImpressionsPerSession": {
         "id": "ga:backfillImpressionsPerSession",
-        "uiName": "DFP Backfill Impressions \/ Session",
+        "uiName": "GAM Backfill Impressions \/ Session",
         "description": "The ratio of backfill ad impressions to Analytics sessions (Ad Impressions \/ Analytics Sessions). If both AdSense and Ad Exchange are providing backfill ads, this metric is the sum of the two backfill accounts (DFP linking enabled and Hide DFP Revenue not enabled).",
         "type": "METRIC",
         "dataType": "FLOAT",
@@ -5441,7 +5591,7 @@
     },
     "ga:backfillViewableImpressionsPercent": {
         "id": "ga:backfillViewableImpressionsPercent",
-        "uiName": "DFP Backfill Viewable Impressions %",
+        "uiName": "GAM Backfill Viewable Impressions %",
         "description": "The percentage of backfill ad impressions that were viewable. An impression is considered a viewable impression when it has appeared within the users' browsers and had the opportunity to be seen. If AdSense and Ad Exchange are both providing backfill ads, this metric is the weighted average of the two backfill accounts (DFP linking enabled and Hide DFP Revenue not enabled).",
         "type": "METRIC",
         "dataType": "PERCENT",
@@ -5451,7 +5601,7 @@
     },
     "ga:backfillClicks": {
         "id": "ga:backfillClicks",
-        "uiName": "DFP Backfill Clicks",
+        "uiName": "GAM Backfill Clicks",
         "description": "The number of times backfill ads were clicked on the site. If AdSense and Ad Exchange are both providing backfill ads, this metric is the sum of the two backfill accounts (DFP linking enabled and Hide DFP Revenue not enabled).",
         "type": "METRIC",
         "dataType": "INTEGER",
@@ -5461,7 +5611,7 @@
     },
     "ga:backfillCTR": {
         "id": "ga:backfillCTR",
-        "uiName": "DFP Backfill CTR",
+        "uiName": "GAM Backfill CTR",
         "description": "The percentage of backfill impressions that resulted in a click on an ad. If AdSense and Ad Exchange are both providing backfill ads, this metric is the weighted average of the two backfill accounts (DFP linking enabled and Hide DFP Revenue not enabled).",
         "type": "METRIC",
         "dataType": "PERCENT",
@@ -5471,7 +5621,7 @@
     },
     "ga:backfillRevenue": {
         "id": "ga:backfillRevenue",
-        "uiName": "DFP Backfill Revenue",
+        "uiName": "GAM Backfill Revenue",
         "description": "The total estimated revenue from backfill ads. If AdSense and Ad Exchange are both providing backfill ads, this metric is the sum of the two backfill accounts (DFP linking enabled and Hide DFP Revenue not enabled).",
         "type": "METRIC",
         "dataType": "CURRENCY",
@@ -5481,7 +5631,7 @@
     },
     "ga:backfillRevenuePer1000Sessions": {
         "id": "ga:backfillRevenuePer1000Sessions",
-        "uiName": "DFP Backfill Revenue \/ 1000 Sessions",
+        "uiName": "GAM Backfill Revenue \/ 1000 Sessions",
         "description": "The total estimated revenue from backfill ads per 1,000 Analytics sessions. Note that this metric is based on sessions to the site and not ad impressions. If both AdSense and Ad Exchange are providing backfill ads, this metric is the sum of the two backfill accounts (DFP linking enabled and Hide DFP Revenue not enabled).",
         "type": "METRIC",
         "dataType": "CURRENCY",
@@ -5491,7 +5641,7 @@
     },
     "ga:backfillECPM": {
         "id": "ga:backfillECPM",
-        "uiName": "DFP Backfill eCPM",
+        "uiName": "GAM Backfill eCPM",
         "description": "The effective cost per thousand pageviews. It is the DFP Backfill Revenue per 1,000 pageviews. If both AdSense and Ad Exchange are providing backfill ads, this metric is the sum of the two backfill accounts (DFP linking enabled and Hide DFP Revenue not enabled).",
         "type": "METRIC",
         "dataType": "CURRENCY",
@@ -5559,16 +5709,6 @@
         "status": "PUBLIC",
         "addedInApiVersion": "3"
     },
-    "ga:correlationModelId": {
-        "id": "ga:correlationModelId",
-        "uiName": "Correlation Model ID",
-        "description": "Correlation Model ID for related products.",
-        "type": "DIMENSION",
-        "dataType": "STRING",
-        "group": "Related Products",
-        "status": "PUBLIC",
-        "addedInApiVersion": "3"
-    },
     "ga:countryIsoCode": {
         "id": "ga:countryIsoCode",
         "uiName": "Country ISO Code",
@@ -5591,7 +5731,7 @@
     },
     "ga:dbmClickAdvertiser": {
         "id": "ga:dbmClickAdvertiser",
-        "uiName": "DBM Advertiser (GA Model)",
+        "uiName": "DV360 Advertiser (GA Model)",
         "description": "DBM advertiser name of the DBM click matching the Google Analytics session (Analytics 360 only, requires integration with DBM).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -5601,7 +5741,7 @@
     },
     "ga:dbmClickAdvertiserId": {
         "id": "ga:dbmClickAdvertiserId",
-        "uiName": "DBM Advertiser ID (GA Model)",
+        "uiName": "DV360 Advertiser ID (GA Model)",
         "description": "DBM advertiser ID of the DBM click matching the Google Analytics session (Analytics 360 only, requires integration with DBM).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -5611,7 +5751,7 @@
     },
     "ga:dbmClickCreativeId": {
         "id": "ga:dbmClickCreativeId",
-        "uiName": "DBM Creative ID (GA Model)",
+        "uiName": "DV360 Creative ID (GA Model)",
         "description": "DBM creative ID of the DBM click matching the Google Analytics session (Analytics 360 only, requires integration with DBM).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -5621,7 +5761,7 @@
     },
     "ga:dbmClickExchange": {
         "id": "ga:dbmClickExchange",
-        "uiName": "DBM Exchange (GA Model)",
+        "uiName": "DV360 Exchange (GA Model)",
         "description": "DBM exchange name of the DBM click matching the Google Analytics session (Analytics 360 only, requires integration with DBM).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -5631,7 +5771,7 @@
     },
     "ga:dbmClickExchangeId": {
         "id": "ga:dbmClickExchangeId",
-        "uiName": "DBM Exchange ID (GA Model)",
+        "uiName": "DV360 Exchange ID (GA Model)",
         "description": "DBM exchange ID of the DBM click matching the Google Analytics session (Analytics 360 only, requires integration with DBM).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -5641,7 +5781,7 @@
     },
     "ga:dbmClickInsertionOrder": {
         "id": "ga:dbmClickInsertionOrder",
-        "uiName": "DBM Insertion Order (GA Model)",
+        "uiName": "DV360 Insertion Order (GA Model)",
         "description": "DBM insertion order name of the DBM click matching the Google Analytics session (Analytics 360 only, requires integration with DBM).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -5651,7 +5791,7 @@
     },
     "ga:dbmClickInsertionOrderId": {
         "id": "ga:dbmClickInsertionOrderId",
-        "uiName": "DBM Insertion Order ID (GA Model)",
+        "uiName": "DV360 Insertion Order ID (GA Model)",
         "description": "DBM insertion order ID of the DBM click matching the Google Analytics session (Analytics 360 only, requires integration with DBM).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -5661,7 +5801,7 @@
     },
     "ga:dbmClickLineItem": {
         "id": "ga:dbmClickLineItem",
-        "uiName": "DBM Line Item NAME (GA Model)",
+        "uiName": "DV360 Line Item NAME (GA Model)",
         "description": "DBM line item name of the DBM click matching the Google Analytics session (Analytics 360 only, requires integration with DBM).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -5671,7 +5811,7 @@
     },
     "ga:dbmClickLineItemId": {
         "id": "ga:dbmClickLineItemId",
-        "uiName": "DBM Line Item ID (GA Model)",
+        "uiName": "DV360 Line Item ID (GA Model)",
         "description": "DBM line item ID of the DBM click matching the Google Analytics session (Analytics 360 only, requires integration with DBM).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -5681,7 +5821,7 @@
     },
     "ga:dbmClickSite": {
         "id": "ga:dbmClickSite",
-        "uiName": "DBM Site (GA Model)",
+        "uiName": "DV360 Site (GA Model)",
         "description": "DBM site name where the DBM creative was shown and clicked on for the DBM click matching the Google Analytics session (Analytics 360 only, requires integration with DBM).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -5691,7 +5831,7 @@
     },
     "ga:dbmClickSiteId": {
         "id": "ga:dbmClickSiteId",
-        "uiName": "DBM Site ID (GA Model)",
+        "uiName": "DV360 Site ID (GA Model)",
         "description": "DBM site ID where the DBM creative was shown and clicked on for the DBM click matching the Google Analytics session (Analytics 360 only, requires integration with DBM).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -5701,7 +5841,7 @@
     },
     "ga:dbmLastEventAdvertiser": {
         "id": "ga:dbmLastEventAdvertiser",
-        "uiName": "DBM Advertiser (DFA Model)",
+        "uiName": "DV360 Advertiser (CM360 Model)",
         "description": "DBM advertiser name of the last DBM event (impression or click within the DBM lookback window) associated with the Google Analytics session (Analytics 360 only, requires integration with DBM).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -5711,7 +5851,7 @@
     },
     "ga:dbmLastEventAdvertiserId": {
         "id": "ga:dbmLastEventAdvertiserId",
-        "uiName": "DBM Advertiser ID (DFA Model)",
+        "uiName": "DV360 Advertiser ID (CM360 Model)",
         "description": "DBM advertiser ID of the last DBM event (impression or click within the DBM lookback window) associated with the Google Analytics session (Analytics 360 only, requires integration with DBM).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -5721,7 +5861,7 @@
     },
     "ga:dbmLastEventCreativeId": {
         "id": "ga:dbmLastEventCreativeId",
-        "uiName": "DBM Creative ID (DFA Model)",
+        "uiName": "DV360 Creative ID (CM360 Model)",
         "description": "DBM creative ID of the last DBM event (impression or click within the DBM lookback window) associated with the Google Analytics session (Analytics 360 only, requires integration with DBM).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -5731,7 +5871,7 @@
     },
     "ga:dbmLastEventExchange": {
         "id": "ga:dbmLastEventExchange",
-        "uiName": "DBM Exchange (DFA Model)",
+        "uiName": "DV360 Exchange (CM360 Model)",
         "description": "DBM exchange name of the last DBM event (impression or click within the DBM lookback window) associated with the Google Analytics session (Analytics 360 only, requires integration with DBM).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -5741,7 +5881,7 @@
     },
     "ga:dbmLastEventExchangeId": {
         "id": "ga:dbmLastEventExchangeId",
-        "uiName": "DBM Exchange ID (DFA Model)",
+        "uiName": "DV360 Exchange ID (CM360 Model)",
         "description": "DBM exchange ID of the last DBM event (impression or click within the DBM lookback window) associated with the Google Analytics session (Analytics 360 only, requires integration with DBM).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -5751,7 +5891,7 @@
     },
     "ga:dbmLastEventInsertionOrder": {
         "id": "ga:dbmLastEventInsertionOrder",
-        "uiName": "DBM Insertion Order (DFA Model)",
+        "uiName": "DV360 Insertion Order (CM360 Model)",
         "description": "DBM insertion order name of the last DBM event (impression or click within the DBM lookback window) associated with the Google Analytics session (Analytics 360 only, requires integration with DBM).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -5761,7 +5901,7 @@
     },
     "ga:dbmLastEventInsertionOrderId": {
         "id": "ga:dbmLastEventInsertionOrderId",
-        "uiName": "DBM Insertion Order ID (DFA Model)",
+        "uiName": "DV360 Insertion Order ID (CM360 Model)",
         "description": "DBM insertion order ID of the last DBM event (impression or click within the DBM lookback window) associated with the Google Analytics session (Analytics 360 only, requires integration with DBM).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -5771,7 +5911,7 @@
     },
     "ga:dbmLastEventLineItem": {
         "id": "ga:dbmLastEventLineItem",
-        "uiName": "DBM Line Item (DFA Model)",
+        "uiName": "DV360 Line Item (CM360 Model)",
         "description": "DBM line item name of the last DBM event (impression or click within the DBM lookback window) associated with the Google Analytics session (Analytics 360 only, requires integration with DBM).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -5781,7 +5921,7 @@
     },
     "ga:dbmLastEventLineItemId": {
         "id": "ga:dbmLastEventLineItemId",
-        "uiName": "DBM Line Item ID (DFA Model)",
+        "uiName": "DV360 Line Item ID (CM360 Model)",
         "description": "DBM line item ID of the last DBM event (impression or click within the DBM lookback window) associated with the Google Analytics session (Analytics 360 only, requires integration with DBM).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -5791,7 +5931,7 @@
     },
     "ga:dbmLastEventSite": {
         "id": "ga:dbmLastEventSite",
-        "uiName": "DBM Site (DFA Model)",
+        "uiName": "DV360 Site (CM360 Model)",
         "description": "DBM site name where the DBM creative was shown and clicked on for the last DBM event (impression or click within the DBM lookback window) associated with the Google Analytics session (Analytics 360 only, requires integration with DBM).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -5801,7 +5941,7 @@
     },
     "ga:dbmLastEventSiteId": {
         "id": "ga:dbmLastEventSiteId",
-        "uiName": "DBM Site ID (DFA Model)",
+        "uiName": "DV360 Site ID (CM360 Model)",
         "description": "DBM site ID where the DBM creative was shown and clicked on for the last DBM event (impression or click within the DBM lookback window) associated with the Google Analytics session (Analytics 360 only, requires integration with DBM).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -5811,7 +5951,7 @@
     },
     "ga:dsAdGroup": {
         "id": "ga:dsAdGroup",
-        "uiName": "DS Ad Group",
+        "uiName": "SA360 Ad Group",
         "description": "DS Ad Group (Analytics 360 only, requires integration with DS).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -5821,7 +5961,7 @@
     },
     "ga:dsAdGroupId": {
         "id": "ga:dsAdGroupId",
-        "uiName": "DS Ad Group ID",
+        "uiName": "SA360 Ad Group ID",
         "description": "DS Ad Group ID (Analytics 360 only, requires integration with DS).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -5831,7 +5971,7 @@
     },
     "ga:dsAdvertiser": {
         "id": "ga:dsAdvertiser",
-        "uiName": "DS Advertiser",
+        "uiName": "SA360 Advertiser",
         "description": "DS Advertiser (Analytics 360 only, requires integration with DS).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -5841,7 +5981,7 @@
     },
     "ga:dsAdvertiserId": {
         "id": "ga:dsAdvertiserId",
-        "uiName": "DS Advertiser ID",
+        "uiName": "SA360 Advertiser ID",
         "description": "DS Advertiser ID (Analytics 360 only, requires integration with DS).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -5851,7 +5991,7 @@
     },
     "ga:dsAgency": {
         "id": "ga:dsAgency",
-        "uiName": "DS Agency",
+        "uiName": "SA360 Agency",
         "description": "DS Agency (Analytics 360 only, requires integration with DS).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -5861,7 +6001,7 @@
     },
     "ga:dsAgencyId": {
         "id": "ga:dsAgencyId",
-        "uiName": "DS Agency ID",
+        "uiName": "SA360 Agency ID",
         "description": "DS Agency ID (Analytics 360 only, requires integration with DS).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -5871,7 +6011,7 @@
     },
     "ga:dsCampaign": {
         "id": "ga:dsCampaign",
-        "uiName": "DS Campaign",
+        "uiName": "SA360 Campaign",
         "description": "DS Campaign (Analytics 360 only, requires integration with DS).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -5881,7 +6021,7 @@
     },
     "ga:dsCampaignId": {
         "id": "ga:dsCampaignId",
-        "uiName": "DS Campaign ID",
+        "uiName": "SA360 Campaign ID",
         "description": "DS Campaign ID (Analytics 360 only, requires integration with DS).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -5891,7 +6031,7 @@
     },
     "ga:dsEngineAccount": {
         "id": "ga:dsEngineAccount",
-        "uiName": "DS Engine Account",
+        "uiName": "SA360 Engine Account",
         "description": "DS Engine Account (Analytics 360 only, requires integration with DS).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -5901,7 +6041,7 @@
     },
     "ga:dsEngineAccountId": {
         "id": "ga:dsEngineAccountId",
-        "uiName": "DS Engine Account ID",
+        "uiName": "SA360 Engine Account ID",
         "description": "DS Engine Account ID (Analytics 360 only, requires integration with DS).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -5911,7 +6051,7 @@
     },
     "ga:dsKeyword": {
         "id": "ga:dsKeyword",
-        "uiName": "DS Keyword",
+        "uiName": "SA360 Keyword",
         "description": "DS Keyword (Analytics 360 only, requires integration with DS).",
         "type": "DIMENSION",
         "dataType": "STRING",
@@ -5921,11 +6061,31 @@
     },
     "ga:dsKeywordId": {
         "id": "ga:dsKeywordId",
-        "uiName": "DS Keyword ID",
+        "uiName": "SA360 Keyword ID",
         "description": "DS Keyword ID (Analytics 360 only, requires integration with DS).",
         "type": "DIMENSION",
         "dataType": "STRING",
         "group": "DoubleClick Search",
+        "status": "PUBLIC",
+        "addedInApiVersion": "3"
+    },
+    "ga:experimentCombination": {
+        "id": "ga:experimentCombination",
+        "uiName": "Experiment ID with Variant",
+        "description": "The user-scoped ID of the experiment and variant that users were exposed to during an experiment.",
+        "type": "DIMENSION",
+        "dataType": "STRING",
+        "group": "Content Experiments",
+        "status": "PUBLIC",
+        "addedInApiVersion": "3"
+    },
+    "ga:experimentName": {
+        "id": "ga:experimentName",
+        "uiName": "Experiment Name",
+        "description": "The user-scoped name of the content experiment that users were exposed to when the metrics were reported.",
+        "type": "DIMENSION",
+        "dataType": "STRING",
+        "group": "Content Experiments",
         "status": "PUBLIC",
         "addedInApiVersion": "3"
     },
@@ -6119,36 +6279,6 @@
         "status": "PUBLIC",
         "addedInApiVersion": "3"
     },
-    "ga:queryProductId": {
-        "id": "ga:queryProductId",
-        "uiName": "Queried Product ID",
-        "description": "ID of the product being queried.",
-        "type": "DIMENSION",
-        "dataType": "STRING",
-        "group": "Related Products",
-        "status": "PUBLIC",
-        "addedInApiVersion": "3"
-    },
-    "ga:queryProductName": {
-        "id": "ga:queryProductName",
-        "uiName": "Queried Product Name",
-        "description": "Name of the product being queried.",
-        "type": "DIMENSION",
-        "dataType": "STRING",
-        "group": "Related Products",
-        "status": "PUBLIC",
-        "addedInApiVersion": "3"
-    },
-    "ga:queryProductVariation": {
-        "id": "ga:queryProductVariation",
-        "uiName": "Queried Product Variation",
-        "description": "Variation of the product being queried.",
-        "type": "DIMENSION",
-        "dataType": "STRING",
-        "group": "Related Products",
-        "status": "PUBLIC",
-        "addedInApiVersion": "3"
-    },
     "ga:regionId": {
         "id": "ga:regionId",
         "uiName": "Region ID",
@@ -6166,36 +6296,6 @@
         "type": "DIMENSION",
         "dataType": "STRING",
         "group": "Geo Network",
-        "status": "PUBLIC",
-        "addedInApiVersion": "3"
-    },
-    "ga:relatedProductId": {
-        "id": "ga:relatedProductId",
-        "uiName": "Related Product ID",
-        "description": "ID of the related product.",
-        "type": "DIMENSION",
-        "dataType": "STRING",
-        "group": "Related Products",
-        "status": "PUBLIC",
-        "addedInApiVersion": "3"
-    },
-    "ga:relatedProductName": {
-        "id": "ga:relatedProductName",
-        "uiName": "Related Product Name",
-        "description": "Name of the related product.",
-        "type": "DIMENSION",
-        "dataType": "STRING",
-        "group": "Related Products",
-        "status": "PUBLIC",
-        "addedInApiVersion": "3"
-    },
-    "ga:relatedProductVariation": {
-        "id": "ga:relatedProductVariation",
-        "uiName": "Related Product Variation",
-        "description": "Variation of the related product.",
-        "type": "DIMENSION",
-        "dataType": "STRING",
-        "group": "Related Products",
         "status": "PUBLIC",
         "addedInApiVersion": "3"
     },
@@ -6249,19 +6349,9 @@
         "status": "PUBLIC",
         "addedInApiVersion": "3"
     },
-    "ga:correlationScore": {
-        "id": "ga:correlationScore",
-        "uiName": "Correlation Score",
-        "description": "Correlation Score for related products.",
-        "type": "METRIC",
-        "dataType": "CURRENCY",
-        "group": "Related Products",
-        "status": "PUBLIC",
-        "addedInApiVersion": "3"
-    },
     "ga:dbmCPA": {
         "id": "ga:dbmCPA",
-        "uiName": "DBM eCPA",
+        "uiName": "DV360 eCPA",
         "description": "DBM Revenue eCPA (Analytics 360 only, requires integration with DBM).",
         "type": "METRIC",
         "dataType": "CURRENCY",
@@ -6271,7 +6361,7 @@
     },
     "ga:dbmCPC": {
         "id": "ga:dbmCPC",
-        "uiName": "DBM eCPC",
+        "uiName": "DV360 eCPC",
         "description": "DBM Revenue eCPC (Analytics 360 only, requires integration with DBM).",
         "type": "METRIC",
         "dataType": "CURRENCY",
@@ -6281,7 +6371,7 @@
     },
     "ga:dbmCPM": {
         "id": "ga:dbmCPM",
-        "uiName": "DBM eCPM",
+        "uiName": "DV360 eCPM",
         "description": "DBM Revenue eCPM (Analytics 360 only, requires integration with DBM).",
         "type": "METRIC",
         "dataType": "CURRENCY",
@@ -6291,7 +6381,7 @@
     },
     "ga:dbmCTR": {
         "id": "ga:dbmCTR",
-        "uiName": "DBM CTR",
+        "uiName": "DV360 CTR",
         "description": "DBM CTR (Analytics 360 only, requires integration with DBM).",
         "type": "METRIC",
         "dataType": "PERCENT",
@@ -6301,7 +6391,7 @@
     },
     "ga:dbmClicks": {
         "id": "ga:dbmClicks",
-        "uiName": "DBM Clicks",
+        "uiName": "DV360 Clicks",
         "description": "DBM Total Clicks (Analytics 360 only, requires integration with DBM).",
         "type": "METRIC",
         "dataType": "INTEGER",
@@ -6311,7 +6401,7 @@
     },
     "ga:dbmConversions": {
         "id": "ga:dbmConversions",
-        "uiName": "DBM Conversions",
+        "uiName": "DV360 Conversions",
         "description": "DBM Total Conversions (Analytics 360 only, requires integration with DBM).",
         "type": "METRIC",
         "dataType": "INTEGER",
@@ -6321,7 +6411,7 @@
     },
     "ga:dbmCost": {
         "id": "ga:dbmCost",
-        "uiName": "DBM Cost",
+        "uiName": "DV360 Cost",
         "description": "DBM Cost (Analytics 360 only, requires integration with DBM).",
         "type": "METRIC",
         "dataType": "CURRENCY",
@@ -6331,7 +6421,7 @@
     },
     "ga:dbmImpressions": {
         "id": "ga:dbmImpressions",
-        "uiName": "DBM Impressions",
+        "uiName": "DV360 Impressions",
         "description": "DBM Total Impressions (Analytics 360 only, requires integration with DBM).",
         "type": "METRIC",
         "dataType": "INTEGER",
@@ -6341,7 +6431,7 @@
     },
     "ga:dbmROAS": {
         "id": "ga:dbmROAS",
-        "uiName": "DBM ROAS",
+        "uiName": "DV360 ROAS",
         "description": "DBM ROAS (Analytics 360 only, requires integration with DBM).",
         "type": "METRIC",
         "dataType": "PERCENT",
@@ -6351,7 +6441,7 @@
     },
     "ga:dcmCPC": {
         "id": "ga:dcmCPC",
-        "uiName": "DFA CPC",
+        "uiName": "CM CPC",
         "description": "DCM Cost Per Click (Analytics 360 only).",
         "type": "METRIC",
         "dataType": "CURRENCY",
@@ -6361,7 +6451,7 @@
     },
     "ga:dcmCTR": {
         "id": "ga:dcmCTR",
-        "uiName": "DFA CTR",
+        "uiName": "CM CTR",
         "description": "DCM Click Through Rate (Analytics 360 only).",
         "type": "METRIC",
         "dataType": "PERCENT",
@@ -6371,7 +6461,7 @@
     },
     "ga:dcmClicks": {
         "id": "ga:dcmClicks",
-        "uiName": "DFA Clicks",
+        "uiName": "CM Clicks",
         "description": "DCM Total Clicks (Analytics 360 only).",
         "type": "METRIC",
         "dataType": "INTEGER",
@@ -6381,7 +6471,7 @@
     },
     "ga:dcmCost": {
         "id": "ga:dcmCost",
-        "uiName": "DFA Cost",
+        "uiName": "CM Cost",
         "description": "DCM Total Cost (Analytics 360 only).",
         "type": "METRIC",
         "dataType": "CURRENCY",
@@ -6391,7 +6481,7 @@
     },
     "ga:dcmImpressions": {
         "id": "ga:dcmImpressions",
-        "uiName": "DFA Impressions",
+        "uiName": "CM Impressions",
         "description": "DCM Total Impressions (Analytics 360 only).",
         "type": "METRIC",
         "dataType": "INTEGER",
@@ -6401,7 +6491,7 @@
     },
     "ga:dcmROAS": {
         "id": "ga:dcmROAS",
-        "uiName": "DFA ROAS",
+        "uiName": "CM ROAS",
         "description": "DCM Return On Ad Spend (ROAS) (Analytics 360 only).",
         "type": "METRIC",
         "dataType": "PERCENT",
@@ -6411,7 +6501,7 @@
     },
     "ga:dcmRPC": {
         "id": "ga:dcmRPC",
-        "uiName": "DFA RPC",
+        "uiName": "CM RPC",
         "description": "DCM Revenue Per Click (Analytics 360 only).",
         "type": "METRIC",
         "dataType": "CURRENCY",
@@ -6421,7 +6511,7 @@
     },
     "ga:dsCPC": {
         "id": "ga:dsCPC",
-        "uiName": "DS CPC",
+        "uiName": "SA360 CPC",
         "description": "DS Cost to advertiser per click (Analytics 360 only, requires integration with DS).",
         "type": "METRIC",
         "dataType": "CURRENCY",
@@ -6431,7 +6521,7 @@
     },
     "ga:dsCTR": {
         "id": "ga:dsCTR",
-        "uiName": "DS CTR",
+        "uiName": "SA360 CTR",
         "description": "DS Click Through Rate (Analytics 360 only, requires integration with DS).",
         "type": "METRIC",
         "dataType": "PERCENT",
@@ -6441,7 +6531,7 @@
     },
     "ga:dsClicks": {
         "id": "ga:dsClicks",
-        "uiName": "DS Clicks",
+        "uiName": "SA360 Clicks",
         "description": "DS Clicks (Analytics 360 only, requires integration with DS).",
         "type": "METRIC",
         "dataType": "INTEGER",
@@ -6451,7 +6541,7 @@
     },
     "ga:dsCost": {
         "id": "ga:dsCost",
-        "uiName": "DS Cost",
+        "uiName": "SA360 Cost",
         "description": "DS Cost (Analytics 360 only, requires integration with DS).",
         "type": "METRIC",
         "dataType": "CURRENCY",
@@ -6461,7 +6551,7 @@
     },
     "ga:dsImpressions": {
         "id": "ga:dsImpressions",
-        "uiName": "DS Impressions",
+        "uiName": "SA360 Impressions",
         "description": "DS Impressions (Analytics 360 only, requires integration with DS).",
         "type": "METRIC",
         "dataType": "INTEGER",
@@ -6471,8 +6561,8 @@
     },
     "ga:dsProfit": {
         "id": "ga:dsProfit",
-        "uiName": "DS Profit",
-        "description": "DS Profie (Analytics 360 only, requires integration with DS).",
+        "uiName": "SA360 Profit",
+        "description": "DS Profit (Analytics 360 only, requires integration with DS).",
         "type": "METRIC",
         "dataType": "CURRENCY",
         "group": "DoubleClick Search",
@@ -6481,7 +6571,7 @@
     },
     "ga:dsReturnOnAdSpend": {
         "id": "ga:dsReturnOnAdSpend",
-        "uiName": "DS ROAS",
+        "uiName": "SA360 ROAS",
         "description": "DS Return On Ad Spend (Analytics 360 only, requires integration with DS).",
         "type": "METRIC",
         "dataType": "PERCENT",
@@ -6491,7 +6581,7 @@
     },
     "ga:dsRevenuePerClick": {
         "id": "ga:dsRevenuePerClick",
-        "uiName": "DS RPC",
+        "uiName": "SA360 RPC",
         "description": "DS Revenue Per Click (Analytics 360 only, requires integration with DS).",
         "type": "METRIC",
         "dataType": "CURRENCY",
@@ -6699,16 +6789,6 @@
         "status": "PUBLIC",
         "addedInApiVersion": "3"
     },
-    "ga:queryProductQuantity": {
-        "id": "ga:queryProductQuantity",
-        "uiName": "Queried Product Quantity",
-        "description": "Quantity of the product being queried.",
-        "type": "METRIC",
-        "dataType": "INTEGER",
-        "group": "Related Products",
-        "status": "PUBLIC",
-        "addedInApiVersion": "3"
-    },
     "ga:refundAmount": {
         "id": "ga:refundAmount",
         "uiName": "Refund Amount",
@@ -6716,16 +6796,6 @@
         "type": "METRIC",
         "dataType": "CURRENCY",
         "group": "Ecommerce",
-        "status": "PUBLIC",
-        "addedInApiVersion": "3"
-    },
-    "ga:relatedProductQuantity": {
-        "id": "ga:relatedProductQuantity",
-        "uiName": "Related Product Quantity",
-        "description": "Quantity of the related product.",
-        "type": "METRIC",
-        "dataType": "INTEGER",
-        "group": "Related Products",
         "status": "PUBLIC",
         "addedInApiVersion": "3"
     },

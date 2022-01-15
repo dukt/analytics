@@ -3,6 +3,14 @@ Changelog
 
 ## Unreleased
 
+### Added
+- Added metrics: ga:28dayUsers, ga:uniqueEvents, ga:totalPublisherImpressions, ga:totalPublisherCoverage, ga:totalPublisherMonetizedPageviews, ga:totalPublisherImpressionsPerSession, ga:totalPublisherViewableImpressionsPercent, ga:totalPublisherClicks, ga:totalPublisherCTR, ga:totalPublisherRevenue, ga:totalPublisherRevenuePer1000Sessions, ga:totalPublisherECPM.
+- Added dimensions: ga:dateHourMinute, ga:dfpLineItemId, ga:dfpLineItemName, ga:experimentCombination, ga:experimentName.
+
+### Changed
+- Removed metrics: ga:correlationScore, ga:queryProductQuantity, ga:relatedProductQuantity.
+- Removed dimensions: ga:correlationModelId, ga:queryProductId, ga:queryProductName, ga:queryProductVariation, ga:relatedProductId, ga:relatedProductName, ga:relatedProductVariation.
+
 ### Changed
 - Updated `sass-loader` to 12.4.0.
 
