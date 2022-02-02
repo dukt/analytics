@@ -13,7 +13,8 @@ Changelog
 - Updated `sass-loader` to 12.4.0.
 
 ### Fixed
-- Fixed a bug where dimensions and metrics were not being updated when changing the chart type for a new widget. ([#30](https://github.com/dukt/analytics/issues/30))
+- Fixed a bug where dimensions and metrics were not being updated when changing the chart type of a new widget. ([#30](https://github.com/dukt/analytics/issues/30))
+- Fixed a bug where dimensions and metrics were not being properly populated for existing widgets.
 - Fixed a bug where the plugin couldn’t be uninstalled.
 - Fixed a bug where reports for the area chart wouldn’t include empty rows.
 
