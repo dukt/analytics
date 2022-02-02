@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2021, Dukt
+ * @copyright Copyright (c) 2022, Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
@@ -37,16 +37,6 @@ class Metadata extends Component
      * @var array|null
      */
     private $columns;
-
-    /**
-     * @var array|null
-     */
-    private $selectDimensionOptions;
-
-    /**
-     * @var array|null
-     */
-    private $selectMetricOptions;
 
     // Public Methods
     // =========================================================================
@@ -213,15 +203,13 @@ class Metadata extends Component
      */
     public function getSelectDimensionOptions(array $filters = null): array
     {
-        if (!$this->selectDimensionOptions) {
-            $this->selectDimensionOptions = $this->getSelectOptions('DIMENSION');
-        }
+        $selectDimensionOptions = $this->getSelectOptions('DIMENSION');
 
         if ($filters) {
-            $this->selectDimensionOptions = $this->filterOptions($this->selectDimensionOptions, $filters);
+            $selectDimensionOptions = $this->filterOptions($selectDimensionOptions, $filters);
         }
 
-        return $this->selectDimensionOptions;
+        return $selectDimensionOptions;
     }
 
     /**
@@ -233,15 +221,13 @@ class Metadata extends Component
      */
     public function getSelectMetricOptions(array $filters = null): array
     {
-        if (!$this->selectMetricOptions) {
-            $this->selectMetricOptions = $this->getSelectOptions('METRIC');
-        }
+        $selectMetricOptions = $this->getSelectOptions('METRIC');
 
         if ($filters) {
-            $this->selectMetricOptions = $this->filterOptions($this->selectMetricOptions, $filters);
+            $selectMetricOptions = $this->filterOptions($selectMetricOptions, $filters);
         }
 
-        return $this->selectMetricOptions;
+        return $selectMetricOptions;
     }
 
     /**

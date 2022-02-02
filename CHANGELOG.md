@@ -1,6 +1,23 @@
 Changelog
 =========
 
+## 4.0.14 - 2022-02-02
+
+### Added
+- Added metrics: ga:28dayUsers, ga:uniqueEvents, ga:totalPublisherImpressions, ga:totalPublisherCoverage, ga:totalPublisherMonetizedPageviews, ga:totalPublisherImpressionsPerSession, ga:totalPublisherViewableImpressionsPercent, ga:totalPublisherClicks, ga:totalPublisherCTR, ga:totalPublisherRevenue, ga:totalPublisherRevenuePer1000Sessions, ga:totalPublisherECPM.
+- Added dimensions: ga:dateHourMinute, ga:dfpLineItemId, ga:dfpLineItemName, ga:experimentCombination, ga:experimentName.
+
+### Changed
+- Removed metrics: ga:correlationScore, ga:queryProductQuantity, ga:relatedProductQuantity.
+- Removed dimensions: ga:correlationModelId, ga:queryProductId, ga:queryProductName, ga:queryProductVariation, ga:relatedProductId, ga:relatedProductName, ga:relatedProductVariation.
+- Updated `sass-loader` to 12.4.0.
+
+### Fixed
+- Fixed a bug where dimensions and metrics were not being updated when changing the chart type of a new widget. ([#30](https://github.com/dukt/analytics/issues/30))
+- Fixed a bug where dimensions and metrics were not being properly populated for existing widgets.
+- Fixed a bug where the plugin couldn’t be uninstalled.
+- Fixed a bug where reports for the area chart wouldn’t include empty rows.
+
 ## 4.0.13 - 2021-04-14
 
 ### Added

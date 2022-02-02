@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2021, Dukt
+ * @copyright Copyright (c) 2022, Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
@@ -214,6 +214,8 @@ class Reports extends Component
         $criteria->endDate = $endDate;
         $criteria->metrics = $metricString;
         $criteria->dimensions = $dimensionString;
+        $criteria->includeEmptyRows = true;
+
         $criteria->orderBys = [
             ['fieldName' => $dimensionString, 'orderType' => 'VALUE', 'sortOrder' => 'ASCENDING']
         ];

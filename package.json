@@ -23,7 +23,7 @@
     "del": "^6.0.0",
     "laravel-mix": "^6.0.16",
     "sass": "^1.32.8",
-    "sass-loader": "^11.0",
+    "sass-loader": "^12.4.0",
     "webpack": "^5.9.0"
   }
 }
