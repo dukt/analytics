@@ -214,6 +214,8 @@ class Reports extends Component
         $criteria->endDate = $endDate;
         $criteria->metrics = $metricString;
         $criteria->dimensions = $dimensionString;
+        $criteria->includeEmptyRows = true;
+
         $criteria->orderBys = [
             ['fieldName' => $dimensionString, 'orderType' => 'VALUE', 'sortOrder' => 'ASCENDING']
         ];
