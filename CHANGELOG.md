@@ -1,7 +1,7 @@
 Changelog
 =========
 
-## Unreleased
+## 4.0.14 - 2022-02-02
 
 ### Added
 - Added metrics: ga:28dayUsers, ga:uniqueEvents, ga:totalPublisherImpressions, ga:totalPublisherCoverage, ga:totalPublisherMonetizedPageviews, ga:totalPublisherImpressionsPerSession, ga:totalPublisherViewableImpressionsPercent, ga:totalPublisherClicks, ga:totalPublisherCTR, ga:totalPublisherRevenue, ga:totalPublisherRevenuePer1000Sessions, ga:totalPublisherECPM.
