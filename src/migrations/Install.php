@@ -9,6 +9,7 @@ namespace dukt\analytics\migrations;
 
 use Craft;
 use craft\db\Migration;
+use craft\helpers\MigrationHelper;
 use dukt\analytics\models\Info;
 use dukt\analytics\Plugin;
 
@@ -60,7 +61,6 @@ class Install extends Migration
     {
         $this->driver = Craft::$app->getConfig()->getDb()->driver;
         $this->removeForeignKeys();
-        $this->removeIndexes();
         $this->removeTables();
 
         return true;
@@ -169,23 +169,14 @@ class Install extends Migration
     }
 
     /**
-     * Removes the indexes needed for the Records used by the plugin
-     *
-     * @return void
-     */
-    protected function removeIndexes()
-    {
-        $this->dropIndex($this->db->getIndexName('{{%analytics_site_views}}', 'siteId,viewId', true), '{{%analytics_site_views}}');
-    }
-
-    /**
      * Removes the foreign keys needed for the Records used by the plugin
      *
      * @return void
      */
     protected function removeForeignKeys()
     {
-        $this->dropForeignKey($this->db->getForeignKeyName('{{%analytics_site_views}}', 'siteId'), '{{%analytics_site_views}}');
-        $this->dropForeignKey($this->db->getForeignKeyName('{{%analytics_site_views}}', 'viewId'), '{{%analytics_site_views}}');
+        if ($this->db->tableExists('{{%analytics_site_views}}')) {
+            MigrationHelper::dropAllForeignKeysOnTable('{{%analytics_site_views}}');
+        }
     }
 }

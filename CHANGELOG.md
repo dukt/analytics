@@ -10,12 +10,11 @@ Changelog
 ### Changed
 - Removed metrics: ga:correlationScore, ga:queryProductQuantity, ga:relatedProductQuantity.
 - Removed dimensions: ga:correlationModelId, ga:queryProductId, ga:queryProductName, ga:queryProductVariation, ga:relatedProductId, ga:relatedProductName, ga:relatedProductVariation.
-
-### Changed
 - Updated `sass-loader` to 12.4.0.
 
 ### Fixed
 - Fixed a bug where dimensions and metrics were not being updated when changing the chart type for a new widget. ([#30](https://github.com/dukt/analytics/issues/30))
+- Fixed a bug where the plugin couldn’t be uninstalled.
 
 ## 4.0.13 - 2021-04-14
 
