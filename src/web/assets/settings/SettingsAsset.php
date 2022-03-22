@@ -35,14 +35,10 @@ class SettingsAsset extends AssetBundle
 
         // define the relative path to CSS/JS files that should be registered with the page
         // when this asset bundle is registered
-        $this->js = [
-            'AccountExplorer.js',
-        ];
+        $this->js[] = 'AccountExplorer.js';
 
-        $this->css = [
-            'AccountExplorer.css',
-            'settings.css',
-        ];
+        $this->css[] = 'AccountExplorer.css';
+        $this->css[] = 'Settings.css';
 
         parent::init();
     }
