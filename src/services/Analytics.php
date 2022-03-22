@@ -206,6 +206,7 @@ class Analytics extends Component
 
         return $gclid;
     }
+
      /* -- _getGclid */
 
     /**
@@ -229,6 +230,7 @@ class Analytics extends Component
 
         return $cid;
     }
+
      /* -- _gaParseCookie */
 
     /**
@@ -254,5 +256,6 @@ class Analytics extends Component
             random_int(0, 0xffff), random_int(0, 0xffff), random_int(0, 0xffff)
         );
     }
+
      /* -- _gaGenUUID */
 }

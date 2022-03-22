@@ -145,7 +145,7 @@ class Views extends Component
                 ->one();
 
             if (!$viewRecord) {
-                throw new InvalidViewException(sprintf('No view exists with the ID \'%d\'', $view->id));
+                throw new InvalidViewException(sprintf("No view exists with the ID '%d'", $view->id));
             }
 
             $isNewView = false;
