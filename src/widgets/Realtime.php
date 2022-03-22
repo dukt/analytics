@@ -80,7 +80,7 @@ class Realtime extends \craft\base\Widget
 
                     $reportingView = Analytics::$plugin->getViews()->getViewById($widgetSettings['viewId']);
 
-                    if ($reportingView) {
+                    if ($reportingView !== null) {
                         $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
                         $pluginSettings = $plugin->getSettings();
 

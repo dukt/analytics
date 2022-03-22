@@ -109,7 +109,7 @@ class Report extends \craft\base\Widget
 
             $reportingView = Analytics::$plugin->getViews()->getViewById($widgetSettings['viewId']);
 
-            if (!$reportingView) {
+            if ($reportingView === null) {
                 return $view->renderTemplate('analytics/_special/view-not-configured');
             }
 
@@ -142,8 +142,8 @@ class Report extends \craft\base\Widget
             $view->registerJs('new Analytics.ReportWidget("widget'.$this->id.'", '.Json::encode($jsOptions).');');
 
             return $view->renderTemplate('analytics/_components/widgets/Report/body');
-        } catch (\Exception $e) {
-            Craft::error('Couldn’t load report widget: '.$e->getMessage(). " ".$e->getTraceAsString(), __METHOD__);
+        } catch (\Exception $exception) {
+            Craft::error('Couldn’t load report widget: '.$exception->getMessage(). " ".$exception->getTraceAsString(), __METHOD__);
             return $view->renderTemplate('analytics/_special/error');
         }
     }
@@ -267,8 +267,8 @@ class Report extends \craft\base\Widget
             if (count($name) > 0) {
                 return implode(' - ', $name);
             }
-        } catch (\Exception $e) {
-            Craft::info('Couldn’t get Analytics Report’s title: '.$e->getMessage(), __METHOD__);
+        } catch (\Exception $exception) {
+            Craft::info('Couldn’t get Analytics Report’s title: '.$exception->getMessage(), __METHOD__);
         }
 
         return null;

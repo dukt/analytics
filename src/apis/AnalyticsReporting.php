@@ -169,7 +169,7 @@ class AnalyticsReporting extends Api
             if ($criteria->viewId) {
                 $view = Plugin::getInstance()->getViews()->getViewById($criteria->viewId);
 
-                if ($view) {
+                if ($view !== null) {
                     $request->setViewId($view->gaViewId);
                 }
             }
@@ -185,6 +185,7 @@ class AnalyticsReporting extends Api
         $dateRange = new Google_Service_AnalyticsReporting_DateRange();
         $dateRange->setStartDate($criteria->startDate);
         $dateRange->setEndDate($criteria->endDate);
+
         $request->setDateRanges($dateRange);
     }
 

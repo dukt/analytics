@@ -33,6 +33,7 @@ class View extends Model
      * @var string Google Analytics Account ID
      */
     public $gaAccountId;
+
     /**
      * @var string Google Analytics Account Name
      */

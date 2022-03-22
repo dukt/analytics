@@ -34,7 +34,7 @@ class Reports extends Component
 
         $tableId = null;
 
-        if ($view) {
+        if ($view !== null) {
             $tableId = 'ga:'.$view->gaViewId;
         }
 
@@ -135,7 +135,7 @@ class Reports extends Component
 
         $viewId = null;
 
-        if ($siteView) {
+        if ($siteView !== null) {
             $viewId = $siteView->viewId;
         }
 
@@ -192,17 +192,14 @@ class Reports extends Component
         $period = ($request['period'] ?? null);
         $metricString = ($request['options']['metric'] ?? null);
 
-        switch ($period) {
-            case 'year':
-                $dimensionString = 'ga:yearMonth';
-                $startDate = date('Y-m-01', strtotime('-1 '.$period));
-                $endDate = date('Y-m-d');
-                break;
-
-            default:
-                $dimensionString = 'ga:date';
-                $startDate = date('Y-m-d', strtotime('-1 '.$period));
-                $endDate = date('Y-m-d');
+        if ($period == 'year') {
+            $dimensionString = 'ga:yearMonth';
+            $startDate = date('Y-m-01', strtotime('-1 '.$period));
+            $endDate = date('Y-m-d');
+        } else {
+            $dimensionString = 'ga:date';
+            $startDate = date('Y-m-d', strtotime('-1 '.$period));
+            $endDate = date('Y-m-d');
         }
 
         $criteria = new ReportRequestCriteria;
@@ -520,26 +517,23 @@ class Reports extends Component
 
                     if ($columnHeaderDimensions) {
                         if (isset($columnHeaderDimensions[$colIndex])) {
-                            switch ($columnHeaderDimensions[$colIndex]) {
-                                case 'ga:continent':
-                                    $value = Analytics::$plugin->geo->getContinentCode($value);
-                                    break;
-                                case 'ga:subContinent':
-                                    $value = Analytics::$plugin->geo->getSubContinentCode($value);
-                                    break;
+                            if ($columnHeaderDimensions[$colIndex] == 'ga:continent') {
+                                $value = Analytics::$plugin->geo->getContinentCode($value);
+                            } elseif ($columnHeaderDimensions[$colIndex] == 'ga:subContinent') {
+                                $value = Analytics::$plugin->geo->getSubContinentCode($value);
                             }
                         }
                     }
 
                     array_push($row, $value);
 
-                    $colIndex++;
+                    ++$colIndex;
                 }
             }
 
             foreach ($_row->getMetrics() as $_metric) {
                 array_push($row, $_metric->getValues()[0]);
-                $colIndex++;
+                ++$colIndex;
             }
 
             array_push($rows, $row);

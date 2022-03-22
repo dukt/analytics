@@ -198,7 +198,7 @@ trait PluginTrait
 
         if (!$row) {
             $tableName = $this->getDb()->getSchema()->getRawTableName('{{%analytics_info}}');
-            throw new ServerErrorHttpException("The {$tableName} table is missing its row");
+            throw new ServerErrorHttpException(sprintf('The %s table is missing its row', $tableName));
         }
 
         return $this->_info = new Info($row);

@@ -57,7 +57,7 @@ class Column extends Model
     /**
      * @var bool Allow in segments
      */
-    public $allowInSegments;
+    public $allowInSegments = false;
 
     /**
      * @var int Added in API version

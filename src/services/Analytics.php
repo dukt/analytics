@@ -192,7 +192,7 @@ class Analytics extends Component
     {
         $token = AnalyticsPlugin::$plugin->getOauth()->getToken(false);
 
-        if ($token) {
+        if ($token !== null) {
             return true;
         }
 
@@ -214,7 +214,8 @@ class Analytics extends Component
         }
 
         return $gclid;
-    } /* -- _getGclid */
+    }
+     /* -- _getGclid */
 
     /**
      * _gaParseCookie handles the parsing of the _ga cookie or setting it to a unique identifier
@@ -234,10 +235,12 @@ class Analytics extends Component
                 $cid = $this->_gaGenUUID();
             }
         }
+
         setcookie('_ia', $cid, time() + 60 * 60 * 24 * 730, '/'); // Two years
 
         return $cid;
-    } /* -- _gaParseCookie */
+    }
+     /* -- _gaParseCookie */
 
     /**
      * _gaGenUUID Generate UUID v4 function - needed to generate a CID when one isn't available
@@ -261,5 +264,6 @@ class Analytics extends Component
             // 48 bits for "node"
             random_int(0, 0xffff), random_int(0, 0xffff), random_int(0, 0xffff)
         );
-    } /* -- _gaGenUUID */
+    }
+     /* -- _gaGenUUID */
 }

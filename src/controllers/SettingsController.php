@@ -42,7 +42,7 @@ class SettingsController extends Controller
                 $provider = Analytics::$plugin->oauth->getOauthProvider();
                 $token = Analytics::$plugin->oauth->getToken();
 
-                if ($token) {
+                if ($token !== null) {
                     $oauthAccount = Analytics::$plugin->cache->get(['getAccount', $token]);
 
                     if (!$oauthAccount) {
@@ -57,29 +57,29 @@ class SettingsController extends Controller
                         $settings = $plugin->getSettings();
                     }
                 }
-            } catch (Google_Service_Exception $e) {
-                Craft::info('Couldn’t get OAuth account: '.$e->getMessage(), __METHOD__);
+            } catch (Google_Service_Exception $googleServiceException) {
+                Craft::info('Couldn’t get OAuth account: '.$googleServiceException->getMessage(), __METHOD__);
 
-                foreach ($e->getErrors() as $error) {
+                foreach ($googleServiceException->getErrors() as $error) {
                     $errors[] = $error['message'];
                 }
-            } catch (IdentityProviderException $e) {
-                $error = $e->getMessage();
-                $data = $e->getResponseBody();
+            } catch (IdentityProviderException $identityProviderException) {
+                $error = $identityProviderException->getMessage();
+                $data = $identityProviderException->getResponseBody();
 
                 if (isset($data['error_description'])) {
                     $error = $data['error_description'];
                 }
 
                 $errors[] = $error;
-            } catch (Exception $e) {
-                if (method_exists($e, 'getResponse')) {
-                    Craft::info('Couldn’t get OAuth account: '.$e->getResponse(), __METHOD__);
+            } catch (Exception $exception) {
+                if (method_exists($exception, 'getResponse')) {
+                    Craft::info('Couldn’t get OAuth account: '.$exception->getResponse(), __METHOD__);
                 } else {
-                    Craft::info('Couldn’t get OAuth account: '.$e->getMessage(), __METHOD__);
+                    Craft::info('Couldn’t get OAuth account: '.$exception->getMessage(), __METHOD__);
                 }
 
-                $errors[] = $e->getMessage();
+                $errors[] = $exception->getMessage();
             }
         }
 
@@ -185,10 +185,10 @@ class SettingsController extends Controller
                 $variables['isConnected'] = true;
                 $variables['reportingViews'] = Analytics::$plugin->getViews()->getViews();
             }
-        } catch (IdentityProviderException $e) {
-            $variables['error'] = $e->getMessage();
+        } catch (IdentityProviderException $identityProviderException) {
+            $variables['error'] = $identityProviderException->getMessage();
 
-            $data = $e->getResponseBody();
+            $data = $identityProviderException->getResponseBody();
 
             if (isset($data['error_description'])) {
                 $variables['error'] = $data['error_description'];
@@ -217,7 +217,7 @@ class SettingsController extends Controller
             if ($reportingView === null) {
                 $reportingView = Analytics::$plugin->getViews()->getViewById($viewId);
 
-                if (!$reportingView) {
+                if ($reportingView === null) {
                     throw new NotFoundHttpException('View not found');
                 }
             }
@@ -229,6 +229,7 @@ class SettingsController extends Controller
                 $reportingView = new View();
                 $variables['isNewView'] = true;
             }
+
             $variables['title'] = Craft::t('analytics', 'Create a new view');
         }
 
@@ -275,6 +276,7 @@ class SettingsController extends Controller
                 $reportingView->gaPropertyName = $dataProperty->name;
             }
         }
+
         foreach ($accountExplorerData['views'] as $dataView) {
             if ($dataView->id == $reportingView->gaViewId) {
                 $reportingView->gaViewName = $dataView->name;
@@ -342,10 +344,10 @@ class SettingsController extends Controller
                 $variables['sites'] = Craft::$app->getSites()->getAllSites();
                 $variables['siteViews'] = Analytics::$plugin->getViews()->getSiteViews();
             }
-        } catch (IdentityProviderException $e) {
-            $variables['error'] = $e->getMessage();
+        } catch (IdentityProviderException $identityProviderException) {
+            $variables['error'] = $identityProviderException->getMessage();
 
-            $data = $e->getResponseBody();
+            $data = $identityProviderException->getResponseBody();
 
             if (isset($data['error_description'])) {
                 $variables['error'] = $data['error_description'];

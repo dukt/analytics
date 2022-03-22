@@ -145,7 +145,7 @@ class UtilsController extends Controller
     private function addColumnFromItem(&$columns, $item)
     {
         if (isset($item->attributes['minTemplateIndex'])) {
-            for ($i = $item->attributes['minTemplateIndex']; $i <= $item->attributes['maxTemplateIndex']; $i++) {
+            for ($i = $item->attributes['minTemplateIndex']; $i <= $item->attributes['maxTemplateIndex']; ++$i) {
                 $column = [];
                 $column['id'] = str_replace('XX', $i, $item->id);
                 $column['uiName'] = str_replace('XX', $i, $item->attributes['uiName']);

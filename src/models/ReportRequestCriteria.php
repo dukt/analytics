@@ -53,12 +53,12 @@ class ReportRequestCriteria extends Model
     /**
      * @var array Dimensions
      */
-    public $dimensions;
+    public $dimensions = [];
 
     /**
      * @var array Order Bys
      */
-    public $orderBys;
+    public $orderBys = [];
 
     /**
      * @var int Page size
@@ -78,17 +78,17 @@ class ReportRequestCriteria extends Model
     /**
      * @var bool If set to false, the response does not include rows if all the retrieved metrics are equal to zero. The default is false which will exclude these rows.
      */
-    public $includeEmptyRows;
+    public $includeEmptyRows = false;
 
     /**
      * @var bool If set to true, hides the total of all metrics for all the matching rows, for every date range. The default false and will return the totals.
      */
-    public $hideTotals;
+    public $hideTotals = false;
 
     /**
      * @var bool If set to true, hides the minimum and maximum across all matching rows. The default is false and the value ranges are returned.
      */
-    public $hideValueRanges;
+    public $hideValueRanges = false;
 
     // Public Methods
     // =========================================================================
@@ -112,10 +112,10 @@ class ReportRequestCriteria extends Model
             $response['report'] = Analytics::$plugin->getApis()->getAnalyticsReporting()->getReport($this, $toArray);
             $response['success'] = true;
         }
-        catch(\Exception $e)
+        catch(\Exception $exception)
         {
             $response['error'] = true;
-            $response['errorMessage'] = $e->getMessage();
+            $response['errorMessage'] = $exception->getMessage();
         }
 
         return $response;

@@ -76,7 +76,7 @@ class Ecommerce extends \craft\base\Widget
         $widgetSettings = $this->settings;
         $reportingView = Analytics::$plugin->getViews()->getViewById($widgetSettings['viewId']);
 
-        if (!$reportingView) {
+        if ($reportingView === null) {
             return $view->renderTemplate('analytics/_special/view-not-configured');
         }
 
