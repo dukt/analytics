@@ -23,7 +23,7 @@
             geo: "Geo"|t('analytics'),
     } %}
 
-    {% spaceless %}
+    {% apply spaceless %}
         <div class="chart-picker">
             {{ forms.selectField({
                 label: "Chart"|t('analytics'),
@@ -41,7 +41,7 @@
                 {% endfor %}
             </ul>
         </div>
-    {% endspaceless %}
+    {% endapply %}
 
     {{ forms.selectField({
         label: "Period"|t('analytics'),
