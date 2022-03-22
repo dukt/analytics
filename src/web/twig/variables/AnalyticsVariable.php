@@ -30,14 +30,11 @@ class AnalyticsVariable
     /**
      * Returns the Analytics tracking object.
      *
-     * @param bool  $isSsl
-     * @param bool  $isDisabled
-     * @param array $options
      *
      * @return \TheIconic\Tracking\GoogleAnalytics\Analytics
      * @throws \yii\base\InvalidConfigException
      */
-    public function tracking($isSsl = false, $isDisabled = false, array $options = [])
+    public function tracking(bool $isSsl = false, bool $isDisabled = false, array $options = [])
     {
         return Analytics::$plugin->getAnalytics()->tracking($isSsl, $isDisabled, $options);
     }

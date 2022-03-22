@@ -79,16 +79,15 @@ class AnalyticsReporting extends Api
 
     // Private Methods
     // =========================================================================
-
     /**
      * Get reporting reports.
      *
-     * @param array $criterias
      *
      * @return Google_Service_AnalyticsReporting_GetReportsResponse
      * @throws \yii\base\InvalidConfigException
+     * @param mixed[] $criterias
      */
-    private function getReportingReports($criterias)
+    private function getReportingReports(array $criterias)
     {
         $requests = [];
 

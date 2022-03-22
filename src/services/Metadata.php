@@ -102,11 +102,10 @@ class Metadata extends Component
     /**
      * Get a dimension or a metric label from its id
      *
-     * @param string $id
      *
      * @return mixed
      */
-    public function getDimMet($id)
+    public function getDimMet(string $id)
     {
         $columns = $this->getColumns();
 
@@ -120,11 +119,10 @@ class Metadata extends Component
     /**
      * Returns columns based on a search string `$q`
      *
-     * @param string $q
      *
      * @return array
      */
-    public function searchColumns($q): array
+    public function searchColumns(string $q): array
     {
         $columns = $this->getColumns();
         $results = [];
@@ -238,7 +236,7 @@ class Metadata extends Component
      *
      * @return array
      */
-    public function getSelectOptions($type = null, array $filters = null): array
+    public function getSelectOptions(string $type = null, array $filters = null): array
     {
         $options = [];
 

@@ -115,14 +115,11 @@ class Reports extends Component
     /**
      * Returns an element report.
      *
-     * @param int      $elementId
-     * @param int|null $siteId
-     * @param string   $metric
      *
      * @return array
      * @throws \Exception
      */
-    public function getElementReport($elementId, $siteId, $metric)
+    public function getElementReport(int $elementId, ?int $siteId, string $metric)
     {
         $uri = Analytics::$plugin->getAnalytics()->getElementUrlPath($elementId, $siteId);
 

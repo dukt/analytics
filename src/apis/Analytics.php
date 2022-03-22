@@ -58,12 +58,12 @@ class Analytics extends Api
     /**
      * Populate Account Explorer Settings
      *
-     * @param array $settings
      *
      * @return array
      * @throws \yii\base\InvalidConfigException
+     * @param mixed[] $settings
      */
-    public function populateAccountExplorerSettings($settings = [])
+    public function populateAccountExplorerSettings(array $settings = [])
     {
         if (!empty($settings['accountId']) && !empty($settings['webPropertyId']) && !empty($settings['profileId'])) {
             $apiAccounts = Plugin::$plugin->getApis()->getAnalytics()->getService()->management_accounts->listManagementAccounts();
@@ -96,7 +96,7 @@ class Analytics extends Api
      *
      * @return array
      */
-    public function parseReportResponse($data): array
+    public function parseReportResponse(array $data): array
     {
         $cols = $this->parseReportResponseCols($data);
         $rows = $this->parseReportResponseRows($data, $cols);
@@ -334,12 +334,10 @@ class Analytics extends Api
     /**
      * Format RAW value
      *
-     * @param string $type
-     * @param string $value
      *
      * @return float|string
      */
-    private function formatRawValue($type, $value)
+    private function formatRawValue(string $type, string $value)
     {
         switch ($type) {
             case 'integer':

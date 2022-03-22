@@ -41,11 +41,10 @@ class Oauth extends Component
     /**
      * Returns the OAuth Token.
      *
-     * @param bool $refresh
      *
      * @return AccessToken|null
      */
-    public function getToken($refresh = true)
+    public function getToken(bool $refresh = true)
     {
         $info = Analytics::getInstance()->getInfo();
 

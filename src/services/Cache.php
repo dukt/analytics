@@ -74,7 +74,7 @@ class Cache extends Component
      *
      * @return bool If no error happens during deletion.
      */
-    public function delete($id)
+    public function delete(string $id)
     {
         $cacheKey = $this->getCacheKey($id);
 

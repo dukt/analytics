@@ -52,12 +52,10 @@ class Analytics extends Component
     /**
      * Returns the element URL path.
      *
-     * @param int      $elementId
-     * @param int|null $siteId
      *
      * @return string
      */
-    public function getElementUrlPath($elementId, $siteId): string
+    public function getElementUrlPath(int $elementId, ?int $siteId): string
     {
         $element = Craft::$app->elements->getElementById($elementId, null, $siteId);
 
@@ -87,15 +85,12 @@ class Analytics extends Component
     /**
      * Returns the Analytics tracking object.
      *
-     * @param bool  $isSsl
-     * @param bool  $isDisabled
-     * @param array $options
      *
      * @throws \InvalidArgumentException
      *
      * @return \TheIconic\Tracking\GoogleAnalytics\Analytics
      */
-    public function tracking($isSsl = false, $isDisabled = false, array $options = [])
+    public function tracking(bool $isSsl = false, bool $isDisabled = false, array $options = [])
     {
         $userAgent = Craft::$app->getRequest()->getUserAgent();
 
