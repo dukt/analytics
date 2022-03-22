@@ -21,8 +21,8 @@ class m170324_000003_fix_widget_options extends Migration
         $widgetResults = (new Query())
             ->select('*')
             ->from(['{{%widgets}}'])
-            ->where(['type' => 'dukt\analytics\widgets\Realtime'])
-            ->orWhere(['type' => 'dukt\analytics\widgets\Report'])
+            ->where(['type' => \dukt\analytics\widgets\Realtime::class])
+            ->orWhere(['type' => \dukt\analytics\widgets\Report::class])
             ->all();
 
         if ($widgetResults) {

@@ -210,6 +210,7 @@ class SettingsController extends Controller
      */
     public function actionEditView(int $viewId = null, View $reportingView = null): Response
     {
+        $variables = [];
         $variables['isNewView'] = false;
 
         if ($viewId !== null) {

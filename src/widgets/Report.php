@@ -101,7 +101,7 @@ class Report extends \craft\base\Widget
 
             $reportingViews = Analytics::$plugin->getViews()->getViews();
 
-            if (\count($reportingViews) === 0) {
+            if (\count((array) $reportingViews) === 0) {
                 return $view->renderTemplate('analytics/_special/no-views');
             }
 
@@ -162,7 +162,7 @@ class Report extends \craft\base\Widget
 
         $reportingViews = Analytics::$plugin->getViews()->getViews();
 
-        if (\count($reportingViews) > 0) {
+        if (\count((array) $reportingViews) > 0) {
             $id = 'analytics-settings-'.StringHelper::randomString();
             $namespaceId = Craft::$app->getView()->namespaceInputId($id);
 

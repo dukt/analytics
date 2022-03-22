@@ -69,7 +69,7 @@ class Ecommerce extends \craft\base\Widget
 
         $reportingViews = Analytics::$plugin->getViews()->getViews();
 
-        if (count($reportingViews) === 0) {
+        if (count((array) $reportingViews) === 0) {
             return $view->renderTemplate('analytics/_special/no-views');
         }
 
@@ -119,7 +119,7 @@ class Ecommerce extends \craft\base\Widget
         $settings = $this->getSettings();
         $reportingViews = Analytics::$plugin->getViews()->getViews();
 
-        if (count($reportingViews) > 0) {
+        if (count((array) $reportingViews) > 0) {
             return Craft::$app->getView()->renderTemplate('analytics/_components/widgets/Ecommerce/settings', [
                 'settings' => $settings,
                 'reportingViews' => $reportingViews,

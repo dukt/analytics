@@ -75,7 +75,7 @@ class Realtime extends \craft\base\Widget
             if (Analytics::$plugin->getSettings()->enableWidgets) {
                 $reportingViews = Analytics::$plugin->getViews()->getViews();
 
-                if (count($reportingViews) > 0) {
+                if (count((array) $reportingViews) > 0) {
                     $widgetSettings = $this->settings;
 
                     $reportingView = Analytics::$plugin->getViews()->getViewById($widgetSettings['viewId']);
@@ -144,7 +144,7 @@ class Realtime extends \craft\base\Widget
         $settings = $this->getSettings();
         $reportingViews = Analytics::$plugin->getViews()->getViews();
 
-        if (count($reportingViews) > 0) {
+        if (count((array) $reportingViews) > 0) {
             return Craft::$app->getView()->renderTemplate('analytics/_components/widgets/Realtime/settings', [
                 'settings' => $settings,
                 'reportingViews' => $reportingViews,

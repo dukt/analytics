@@ -45,6 +45,7 @@ class UtilsController extends Controller
      */
     public function actionMetadata(string $q = null, array $columns = null): Response
     {
+        $variables = [];
         $variables['q'] = $q;
         $variables['columns'] = $columns;
         $variables['dimensions'] = Analytics::$plugin->metadata->getDimensions();

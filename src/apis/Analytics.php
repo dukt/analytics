@@ -135,7 +135,7 @@ class Analytics extends Api
         $index = 0;
 
         $items[] = $response->toSimpleObject()->items;
-        $index += count($response->toSimpleObject()->items);
+        $index += is_array($response->toSimpleObject()->items) || $response->toSimpleObject()->items instanceof \Countable ? count($response->toSimpleObject()->items) : 0;
 
         while($index < $totalResults) {
             $startIndex = $index + 1;
@@ -146,7 +146,7 @@ class Analytics extends Api
             ]);
 
             $items[] = $response->toSimpleObject()->items;
-            $index += count($response->toSimpleObject()->items);
+            $index += is_array($response->toSimpleObject()->items) || $response->toSimpleObject()->items instanceof \Countable ? count($response->toSimpleObject()->items) : 0;
         }
 
         return array_merge(...$items);
@@ -177,7 +177,7 @@ class Analytics extends Api
         $index = 0;
 
         $items[] = $response->toSimpleObject()->items;
-        $index += count($response->toSimpleObject()->items);
+        $index += is_array($response->toSimpleObject()->items) || $response->toSimpleObject()->items instanceof \Countable ? count($response->toSimpleObject()->items) : 0;
 
         while($index < $totalResults) {
             $startIndex = $index + 1;
@@ -188,7 +188,7 @@ class Analytics extends Api
             ]);
 
             $items[] = $response->toSimpleObject()->items;
-            $index += count($response->toSimpleObject()->items);
+            $index += is_array($response->toSimpleObject()->items) || $response->toSimpleObject()->items instanceof \Countable ? count($response->toSimpleObject()->items) : 0;
         }
 
         return array_merge(...$items);
@@ -219,7 +219,7 @@ class Analytics extends Api
         $index = 0;
 
         $items[] = $response->toSimpleObject()->items;
-        $index += count($response->toSimpleObject()->items);
+        $index += is_array($response->toSimpleObject()->items) || $response->toSimpleObject()->items instanceof \Countable ? count($response->toSimpleObject()->items) : 0;
 
         while($index < $totalResults) {
             $startIndex = $index + 1;
@@ -230,7 +230,7 @@ class Analytics extends Api
             ]);
 
             $items[] = $response->toSimpleObject()->items;
-            $index += count($response->toSimpleObject()->items);
+            $index += is_array($response->toSimpleObject()->items) || $response->toSimpleObject()->items instanceof \Countable ? count($response->toSimpleObject()->items) : 0;
         }
 
         return array_merge(...$items);
