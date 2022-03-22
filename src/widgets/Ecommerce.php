@@ -42,7 +42,7 @@ class Ecommerce extends \craft\base\Widget
     /**
      * @inheritdoc
      */
-    public static function icon()
+    public static function icon(): ?string
     {
         return Craft::getAlias('@dukt/analytics/icons/report.svg');
     }
@@ -51,11 +51,11 @@ class Ecommerce extends \craft\base\Widget
      * @inheritDoc IWidget::getBodyHtml()
      *
      * @return string|false
-     * @throws \Twig_Error_Loader
+     * @throws \Twig\Error\LoaderError
      * @throws \yii\base\Exception
      * @throws \yii\base\InvalidConfigException
      */
-    public function getBodyHtml()
+    public function getBodyHtml(): ?string
     {
         $view = Craft::$app->getView();
 
@@ -102,7 +102,7 @@ class Ecommerce extends \craft\base\Widget
     /**
      * @inheritdoc
      */
-    public static function maxColspan()
+    public static function maxColspan(): ?int
     {
         return 1;
     }
@@ -111,10 +111,10 @@ class Ecommerce extends \craft\base\Widget
      * @inheritDoc ISavableComponentType::getSettingsHtml()
      *
      * @return string
-     * @throws \Twig_Error_Loader
+     * @throws \Twig\Error\LoaderError
      * @throws \yii\base\Exception
      */
-    public function getSettingsHtml()
+    public function getSettingsHtml(): ?string
     {
         $settings = $this->getSettings();
         $reportingViews = Analytics::$plugin->getViews()->getViews();

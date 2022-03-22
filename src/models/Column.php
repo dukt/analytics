@@ -70,7 +70,7 @@ class Column extends Model
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['addedInApiVersion'], 'number', 'integerOnly' => true],

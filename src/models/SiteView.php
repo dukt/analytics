@@ -41,7 +41,7 @@ class SiteView extends Model
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function rules(): array
     {
         $rules = [
             [['id'], 'number', 'integerOnly' => true]

@@ -43,7 +43,7 @@ class Plugin extends \craft\base\Plugin
     /**
      * @var bool
      */
-    public $hasCpSettings = true;
+    public bool $hasCpSettings = true;
 
     /**
      * @var \dukt\analytics\Plugin The plugin instance.
@@ -122,7 +122,7 @@ class Plugin extends \craft\base\Plugin
     /**
      * @inheritdoc
      */
-    public function getSettingsResponse()
+    public function getSettingsResponse(): mixed
     {
         $url = UrlHelper::cpUrl('analytics/settings');
 
@@ -137,7 +137,7 @@ class Plugin extends \craft\base\Plugin
     /**
      * @inheritdoc
      */
-    protected function createSettingsModel()
+    protected function createSettingsModel(): ?\craft\base\Model
     {
         return new Settings();
     }

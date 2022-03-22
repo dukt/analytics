@@ -70,7 +70,7 @@ class View extends Model
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function rules(): array
     {
         $rules = [
             [['name', 'gaAccountId', 'gaAccountName', 'gaPropertyId', 'gaPropertyName', 'gaViewId', 'gaViewName', 'gaViewCurrency'], 'required'],

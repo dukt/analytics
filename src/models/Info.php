@@ -51,7 +51,7 @@ class Info extends Model
     /**
      * @inheritdoc
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -68,7 +68,7 @@ class Info extends Model
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['id', 'edition'], 'number', 'integerOnly' => true],

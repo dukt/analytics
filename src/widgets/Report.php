@@ -60,7 +60,7 @@ class Report extends \craft\base\Widget
      *
      * @return string
      */
-    public function getTitle(): string
+    public function getTitle(): ?string
     {
         $reportTitle = $this->_getReportTitle();
 
@@ -74,7 +74,7 @@ class Report extends \craft\base\Widget
     /**
      * @inheritdoc
      */
-    public static function icon()
+    public static function icon(): ?string
     {
         return Craft::getAlias('@dukt/analytics/icons/report.svg');
     }
@@ -83,10 +83,10 @@ class Report extends \craft\base\Widget
      * @inheritDoc IWidget::getBodyHtml()
      *
      * @return string|false
-     * @throws \Twig_Error_Loader
+     * @throws \Twig\Error\LoaderError
      * @throws \yii\base\Exception
      */
-    public function getBodyHtml()
+    public function getBodyHtml(): ?string
     {
         $view = Craft::$app->getView();
 
@@ -152,11 +152,11 @@ class Report extends \craft\base\Widget
      * ISavableComponentType::getSettingsHtml()
      *
      * @return null|string
-     * @throws \Twig_Error_Loader
+     * @throws \Twig\Error\LoaderError
      * @throws \yii\base\Exception
      * @throws \yii\base\InvalidConfigException
      */
-    public function getSettingsHtml()
+    public function getSettingsHtml(): ?string
     {
         Craft::$app->getView()->registerAssetBundle(ReportWidgetAsset::class);
 

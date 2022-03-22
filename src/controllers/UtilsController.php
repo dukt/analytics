@@ -26,7 +26,7 @@ class UtilsController extends Controller
     /**
      * @var bool
      */
-    protected $allowAnonymous = true;
+    protected array|bool|int $allowAnonymous = true;
 
     /**
      * @var int
@@ -103,7 +103,7 @@ class UtilsController extends Controller
     {
         $path = Analytics::$plugin->getMetadata()->getDimmetsFilePath();
 
-        FileHelper::removeFile($path);
+        FileHelper::unlink($path);
     }
 
     /**
