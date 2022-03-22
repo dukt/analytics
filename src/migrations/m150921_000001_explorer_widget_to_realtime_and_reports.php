@@ -51,11 +51,7 @@ class m150921_000001_explorer_widget_to_realtime_and_reports extends Migration
                     $newSettings['options']['metric'] = $oldSettings['metric'];
                 }
 
-                if ($oldSettings['menu'] == 'realtimeVisitors') {
-                    $type = 'Analytics_Realtime';
-                } else {
-                    $type = 'Analytics_Report';
-                }
+                $type = $oldSettings['menu'] == 'realtimeVisitors' ? 'Analytics_Realtime' : 'Analytics_Report';
 
 
                 // Update row

@@ -138,11 +138,7 @@ class Analytics extends Component
     public function checkPluginRequirements()
     {
         if ($this->isOauthProviderConfigured()) {
-            if ($this->isTokenSet()) {
-                return true;
-            }
-
-            return false;
+            return $this->isTokenSet();
         }
 
         return false;
@@ -191,12 +187,7 @@ class Analytics extends Component
     private function isTokenSet()
     {
         $token = AnalyticsPlugin::$plugin->getOauth()->getToken(false);
-
-        if ($token !== null) {
-            return true;
-        }
-
-        return false;
+        return $token !== null;
     }
 
 
@@ -228,12 +219,10 @@ class Analytics extends Component
             [$version, $domainDepth, $cid1, $cid2] = preg_split('[\.]', $_COOKIE['_ga'], 4);
             $contents = ['version' => $version, 'domainDepth' => $domainDepth, 'cid' => $cid1.'.'.$cid2];
             $cid = $contents['cid'];
+        } elseif (isset($_COOKIE['_ia']) && $_COOKIE['_ia'] != '') {
+            $cid = $_COOKIE['_ia'];
         } else {
-            if (isset($_COOKIE['_ia']) && $_COOKIE['_ia'] != '') {
-                $cid = $_COOKIE['_ia'];
-            } else {
-                $cid = $this->_gaGenUUID();
-            }
+            $cid = $this->_gaGenUUID();
         }
 
         setcookie('_ia', $cid, time() + 60 * 60 * 24 * 730, '/'); // Two years

@@ -48,13 +48,8 @@ class Metadata extends Component
      */
     public function dimmetsFileExists(): bool
     {
-        $path = Analytics::$plugin->metadata->getDimmetsFilePath();
-
-        if (file_exists($path)) {
-            return true;
-        }
-
-        return false;
+        $path = Analytics::$plugin->getMetadata()->getDimmetsFilePath();
+        return file_exists($path);
     }
 
     /**
@@ -292,7 +287,7 @@ class Metadata extends Component
     private function _loadColumns(): array
     {
         $cols = [];
-        $path = Analytics::$plugin->metadata->getDimmetsFilePath();
+        $path = Analytics::$plugin->getMetadata()->getDimmetsFilePath();
         $contents = file_get_contents($path);
         $columnsResponse = Json::decode($contents);
 
@@ -319,7 +314,7 @@ class Metadata extends Component
      */
     private function filterOptions(array $options, array $filters): array
     {
-        if (\count($filters) === 0) {
+        if ($filters === []) {
             return $options;
         }
 

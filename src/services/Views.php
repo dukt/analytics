@@ -199,7 +199,7 @@ class Views extends Component
     {
         $viewRecord = ViewRecord::findOne($viewId);
 
-        if ($viewRecord === null) {
+        if (!$viewRecord instanceof \dukt\analytics\records\View) {
             return true;
         }
 

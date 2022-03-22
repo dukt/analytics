@@ -49,13 +49,13 @@ class Report extends Field
 
         $siteView = Analytics::$plugin->getViews()->getSiteViewBySiteId($element->siteId);
 
-        if ($siteView === null) {
+        if (!$siteView instanceof \dukt\analytics\models\SiteView) {
             return $view->renderTemplate('analytics/_special/view-not-configured');
         }
 
         $reportingView = $siteView->getView();
 
-        if ($reportingView === null) {
+        if (!$reportingView instanceof \dukt\analytics\models\View) {
             return $view->renderTemplate('analytics/_special/view-not-configured');
         }
 
@@ -107,7 +107,7 @@ class Report extends Field
 
                 // Add cached response to JS options if any
                 $cacheId = ['reports.getElementReport', $request];
-                $response = Analytics::$plugin->cache->get($cacheId);
+                $response = Analytics::$plugin->getCache()->get($cacheId);
 
                 if ($response) {
                     $response = [

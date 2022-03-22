@@ -39,15 +39,15 @@ class SettingsController extends Controller
             $errors = [];
 
             try {
-                $provider = Analytics::$plugin->oauth->getOauthProvider();
-                $token = Analytics::$plugin->oauth->getToken();
+                $provider = Analytics::$plugin->getOauth()->getOauthProvider();
+                $token = Analytics::$plugin->getOauth()->getToken();
 
                 if ($token !== null) {
-                    $oauthAccount = Analytics::$plugin->cache->get(['getAccount', $token]);
+                    $oauthAccount = Analytics::$plugin->getCache()->get(['getAccount', $token]);
 
                     if (!$oauthAccount) {
                         $oauthAccount = $provider->getResourceOwner($token);
-                        Analytics::$plugin->cache->set(['getAccount', $token], $oauthAccount);
+                        Analytics::$plugin->getCache()->set(['getAccount', $token], $oauthAccount);
                     }
 
                     if ($oauthAccount) {
@@ -104,8 +104,8 @@ class SettingsController extends Controller
     public function actionOauth(): Response
     {
         return $this->renderTemplate('analytics/settings/_oauth', [
-            'javascriptOrigin' => Analytics::$plugin->oauth->getJavascriptOrigin(),
-            'redirectUri' => Analytics::$plugin->oauth->getRedirectUri(),
+            'javascriptOrigin' => Analytics::$plugin->getOauth()->getJavascriptOrigin(),
+            'redirectUri' => Analytics::$plugin->getOauth()->getRedirectUri(),
             'googleIconUrl' => Craft::$app->assetManager->getPublishedUrl('@dukt/analytics/icons/google.svg', true),
             'settings' => Analytics::$plugin->getSettings(),
         ]);
@@ -159,7 +159,7 @@ class SettingsController extends Controller
     {
         $accountExplorerData = Analytics::$plugin->getApis()->getAnalytics()->getAccountExplorerData();
 
-        Analytics::$plugin->cache->set(['accountExplorerData'], $accountExplorerData);
+        Analytics::$plugin->getCache()->set(['accountExplorerData'], $accountExplorerData);
 
         return $this->asJson($accountExplorerData);
     }
@@ -179,7 +179,7 @@ class SettingsController extends Controller
         ];
 
         try {
-            $token = Analytics::$plugin->oauth->getToken();
+            $token = Analytics::$plugin->getOauth()->getToken();
 
             if ($isOauthProviderConfigured && $token) {
                 $variables['isConnected'] = true;
@@ -214,10 +214,10 @@ class SettingsController extends Controller
         $variables['isNewView'] = false;
 
         if ($viewId !== null) {
-            if ($reportingView === null) {
+            if (!$reportingView instanceof \dukt\analytics\models\View) {
                 $reportingView = Analytics::$plugin->getViews()->getViewById($viewId);
 
-                if ($reportingView === null) {
+                if (!$reportingView instanceof \dukt\analytics\models\View) {
                     throw new NotFoundHttpException('View not found');
                 }
             }
@@ -337,7 +337,7 @@ class SettingsController extends Controller
         ];
 
         try {
-            $token = Analytics::$plugin->oauth->getToken();
+            $token = Analytics::$plugin->getOauth()->getToken();
 
             if ($isOauthProviderConfigured && $token) {
                 $variables['isConnected'] = true;
@@ -423,7 +423,7 @@ class SettingsController extends Controller
      */
     private function getAccountExplorerOptions(View $reportingView): array
     {
-        $accountExplorerData = Analytics::$plugin->cache->get(['accountExplorerData']);
+        $accountExplorerData = Analytics::$plugin->getCache()->get(['accountExplorerData']);
 
         return [
             'accounts' => $this->getAccountOptions($accountExplorerData, $reportingView),

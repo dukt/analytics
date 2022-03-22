@@ -247,7 +247,7 @@ class Analytics extends Api
         foreach ($data['columnHeaders'] as $col) {
             $dataType = $col->dataType;
             $id = $col->name;
-            $label = Plugin::$plugin->metadata->getDimMet($col->name);
+            $label = Plugin::$plugin->getMetadata()->getDimMet($col->name);
             $type = strtolower($dataType);
 
             switch ($col->name) {
@@ -299,11 +299,11 @@ class Analytics extends Api
                     $value = $this->formatRawValue($col['type'], $_value);
 
                     if ($col['id'] == 'ga:continent') {
-                        $value = Plugin::$plugin->geo->getContinentCode($value);
+                        $value = Plugin::$plugin->getGeo()->getContinentCode($value);
                     }
 
                     if ($col['id'] == 'ga:subContinent') {
-                        $value = Plugin::$plugin->geo->getSubContinentCode($value);
+                        $value = Plugin::$plugin->getGeo()->getSubContinentCode($value);
                     }
 
                     // translate values

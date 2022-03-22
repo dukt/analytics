@@ -101,7 +101,7 @@ class Report extends \craft\base\Widget
 
             $reportingViews = Analytics::$plugin->getViews()->getViews();
 
-            if (\count((array) $reportingViews) === 0) {
+            if ((array) $reportingViews === []) {
                 return $view->renderTemplate('analytics/_special/no-views');
             }
 
@@ -109,7 +109,7 @@ class Report extends \craft\base\Widget
 
             $reportingView = Analytics::$plugin->getViews()->getViewById($widgetSettings['viewId']);
 
-            if ($reportingView === null) {
+            if (!$reportingView instanceof \dukt\analytics\models\View) {
                 return $view->renderTemplate('analytics/_special/view-not-configured');
             }
 
@@ -125,7 +125,7 @@ class Report extends \craft\base\Widget
 
             if (Analytics::$plugin->getSettings()->enableCache === true) {
                 $cacheId = ['getReport', $request];
-                $cachedResponse = Analytics::$plugin->cache->get($cacheId);
+                $cachedResponse = Analytics::$plugin->getCache()->get($cacheId);
             }
 
 
@@ -162,7 +162,7 @@ class Report extends \craft\base\Widget
 
         $reportingViews = Analytics::$plugin->getViews()->getViews();
 
-        if (\count((array) $reportingViews) > 0) {
+        if ((array) $reportingViews !== []) {
             $id = 'analytics-settings-'.StringHelper::randomString();
             $namespaceId = Craft::$app->getView()->namespaceInputId($id);
 
@@ -204,7 +204,7 @@ class Report extends \craft\base\Widget
             case 'area':
 
                 $options = [
-                    'metrics' => Analytics::$plugin->metadata->getSelectMetricOptions()
+                    'metrics' => Analytics::$plugin->getMetadata()->getSelectMetricOptions()
                 ];
 
                 break;
@@ -212,7 +212,7 @@ class Report extends \craft\base\Widget
             case 'counter':
 
                 $options = [
-                    'metrics' => Analytics::$plugin->metadata->getSelectMetricOptions()
+                    'metrics' => Analytics::$plugin->getMetadata()->getSelectMetricOptions()
                 ];
 
                 break;
@@ -220,8 +220,8 @@ class Report extends \craft\base\Widget
             case 'geo':
 
                 $options = [
-                    'dimensions' => Analytics::$plugin->metadata->getSelectDimensionOptions(['ga:city', 'ga:country', 'ga:continent', 'ga:subContinent']),
-                    'metrics' => Analytics::$plugin->metadata->getSelectMetricOptions()
+                    'dimensions' => Analytics::$plugin->getMetadata()->getSelectDimensionOptions(['ga:city', 'ga:country', 'ga:continent', 'ga:subContinent']),
+                    'metrics' => Analytics::$plugin->getMetadata()->getSelectMetricOptions()
                 ];
 
                 break;
@@ -229,8 +229,8 @@ class Report extends \craft\base\Widget
             default:
 
                 $options = [
-                    'dimensions' => Analytics::$plugin->metadata->getSelectDimensionOptions(),
-                    'metrics' => Analytics::$plugin->metadata->getSelectMetricOptions()
+                    'dimensions' => Analytics::$plugin->getMetadata()->getSelectDimensionOptions(),
+                    'metrics' => Analytics::$plugin->getMetadata()->getSelectMetricOptions()
                 ];
         }
 
@@ -252,11 +252,11 @@ class Report extends \craft\base\Widget
                 $options = $this->settings['options'][$chartType];
 
                 if (!empty($options['dimension'])) {
-                    $name[] = Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($options['dimension']));
+                    $name[] = Craft::t('analytics', Analytics::$plugin->getMetadata()->getDimMet($options['dimension']));
                 }
 
                 if (!empty($options['metric'])) {
-                    $name[] = Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($options['metric']));
+                    $name[] = Craft::t('analytics', Analytics::$plugin->getMetadata()->getDimMet($options['metric']));
                 }
             }
 

@@ -159,7 +159,7 @@ class ReportsController extends Controller
         $cacheId = ['getReport', $request];
 
         try {
-            $response = Analytics::$plugin->cache->get($cacheId);
+            $response = Analytics::$plugin->getCache()->get($cacheId);
 
             if (!$response) {
                 switch ($chart) {
@@ -183,7 +183,7 @@ class ReportsController extends Controller
                 }
 
                 if ($response) {
-                    Analytics::$plugin->cache->set($cacheId, $response);
+                    Analytics::$plugin->getCache()->set($cacheId, $response);
                 }
             }
 

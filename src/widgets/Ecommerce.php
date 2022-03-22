@@ -69,14 +69,14 @@ class Ecommerce extends \craft\base\Widget
 
         $reportingViews = Analytics::$plugin->getViews()->getViews();
 
-        if (count((array) $reportingViews) === 0) {
+        if ((array) $reportingViews === []) {
             return $view->renderTemplate('analytics/_special/no-views');
         }
 
         $widgetSettings = $this->settings;
         $reportingView = Analytics::$plugin->getViews()->getViewById($widgetSettings['viewId']);
 
-        if ($reportingView === null) {
+        if (!$reportingView instanceof \dukt\analytics\models\View) {
             return $view->renderTemplate('analytics/_special/view-not-configured');
         }
 
@@ -119,7 +119,7 @@ class Ecommerce extends \craft\base\Widget
         $settings = $this->getSettings();
         $reportingViews = Analytics::$plugin->getViews()->getViews();
 
-        if (count((array) $reportingViews) > 0) {
+        if ((array) $reportingViews !== []) {
             return Craft::$app->getView()->renderTemplate('analytics/_components/widgets/Ecommerce/settings', [
                 'settings' => $settings,
                 'reportingViews' => $reportingViews,
