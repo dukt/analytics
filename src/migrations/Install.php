@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2022, Dukt
+ * @copyright Copyright (c) Dukt
  * @license   https://dukt.net/analytics/docs/license
  */
 
