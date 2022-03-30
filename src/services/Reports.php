@@ -166,6 +166,7 @@ class Reports extends Component
             $criteria->metrics = $metrics;
             $criteria->dimensions = $dimensions;
             $criteria->filtersExpression = $filters;
+            $criteria->includeEmptyRows = true;
 
             $reportResponse = Analytics::$plugin->getApis()->getAnalyticsReporting()->getReport($criteria);
             $response = $this->parseReportingReport($reportResponse);
