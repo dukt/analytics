@@ -5,6 +5,7 @@ Changelog
 
 ### Fixed
 - Fixed a bug where the report field was not including empty rows.
+- Fixed a bug where the report field’s chart was trying to show too many horizontal labels.
 
 ## 4.0.14 - 2022-02-02
 

@@ -74,7 +74,6 @@ Analytics.ChartOptions = Garnish.Base.extend({}, {
                 textStyle: {
                     color: '#058DC7'
                 },
-                showTextEvery: 1,
                 baselineColor: '#fff',
                 gridlines: {
                     color: 'none'
