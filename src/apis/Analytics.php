@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2022, Dukt
+ * @copyright Copyright (c) Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
@@ -58,12 +58,12 @@ class Analytics extends Api
     /**
      * Populate Account Explorer Settings
      *
-     * @param array $settings
      *
      * @return array
      * @throws \yii\base\InvalidConfigException
+     * @param mixed[] $settings
      */
-    public function populateAccountExplorerSettings($settings = [])
+    public function populateAccountExplorerSettings(array $settings = [])
     {
         if (!empty($settings['accountId']) && !empty($settings['webPropertyId']) && !empty($settings['profileId'])) {
             $apiAccounts = Plugin::$plugin->getApis()->getAnalytics()->getService()->management_accounts->listManagementAccounts();
@@ -96,7 +96,7 @@ class Analytics extends Api
      *
      * @return array
      */
-    public function parseReportResponse($data): array
+    public function parseReportResponse(array $data): array
     {
         $cols = $this->parseReportResponseCols($data);
         $rows = $this->parseReportResponseRows($data, $cols);
@@ -135,7 +135,7 @@ class Analytics extends Api
         $index = 0;
 
         $items[] = $response->toSimpleObject()->items;
-        $index += count($response->toSimpleObject()->items);
+        $index += is_array($response->toSimpleObject()->items) || $response->toSimpleObject()->items instanceof \Countable ? count($response->toSimpleObject()->items) : 0;
 
         while($index < $totalResults) {
             $startIndex = $index + 1;
@@ -146,7 +146,7 @@ class Analytics extends Api
             ]);
 
             $items[] = $response->toSimpleObject()->items;
-            $index += count($response->toSimpleObject()->items);
+            $index += is_array($response->toSimpleObject()->items) || $response->toSimpleObject()->items instanceof \Countable ? count($response->toSimpleObject()->items) : 0;
         }
 
         return array_merge(...$items);
@@ -177,7 +177,7 @@ class Analytics extends Api
         $index = 0;
 
         $items[] = $response->toSimpleObject()->items;
-        $index += count($response->toSimpleObject()->items);
+        $index += is_array($response->toSimpleObject()->items) || $response->toSimpleObject()->items instanceof \Countable ? count($response->toSimpleObject()->items) : 0;
 
         while($index < $totalResults) {
             $startIndex = $index + 1;
@@ -188,7 +188,7 @@ class Analytics extends Api
             ]);
 
             $items[] = $response->toSimpleObject()->items;
-            $index += count($response->toSimpleObject()->items);
+            $index += is_array($response->toSimpleObject()->items) || $response->toSimpleObject()->items instanceof \Countable ? count($response->toSimpleObject()->items) : 0;
         }
 
         return array_merge(...$items);
@@ -219,7 +219,7 @@ class Analytics extends Api
         $index = 0;
 
         $items[] = $response->toSimpleObject()->items;
-        $index += count($response->toSimpleObject()->items);
+        $index += is_array($response->toSimpleObject()->items) || $response->toSimpleObject()->items instanceof \Countable ? count($response->toSimpleObject()->items) : 0;
 
         while($index < $totalResults) {
             $startIndex = $index + 1;
@@ -230,7 +230,7 @@ class Analytics extends Api
             ]);
 
             $items[] = $response->toSimpleObject()->items;
-            $index += count($response->toSimpleObject()->items);
+            $index += is_array($response->toSimpleObject()->items) || $response->toSimpleObject()->items instanceof \Countable ? count($response->toSimpleObject()->items) : 0;
         }
 
         return array_merge(...$items);
@@ -247,7 +247,7 @@ class Analytics extends Api
         foreach ($data['columnHeaders'] as $col) {
             $dataType = $col->dataType;
             $id = $col->name;
-            $label = Plugin::$plugin->metadata->getDimMet($col->name);
+            $label = Plugin::$plugin->getMetadata()->getDimMet($col->name);
             $type = strtolower($dataType);
 
             switch ($col->name) {
@@ -299,11 +299,11 @@ class Analytics extends Api
                     $value = $this->formatRawValue($col['type'], $_value);
 
                     if ($col['id'] == 'ga:continent') {
-                        $value = Plugin::$plugin->geo->getContinentCode($value);
+                        $value = Plugin::$plugin->getGeo()->getContinentCode($value);
                     }
 
                     if ($col['id'] == 'ga:subContinent') {
-                        $value = Plugin::$plugin->geo->getSubContinentCode($value);
+                        $value = Plugin::$plugin->getGeo()->getSubContinentCode($value);
                     }
 
                     // translate values
@@ -334,12 +334,10 @@ class Analytics extends Api
     /**
      * Format RAW value
      *
-     * @param string $type
-     * @param string $value
      *
      * @return float|string
      */
-    private function formatRawValue($type, $value)
+    private function formatRawValue(string $type, string $value)
     {
         switch ($type) {
             case 'integer':

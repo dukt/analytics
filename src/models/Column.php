@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2022, Dukt
+ * @copyright Copyright (c) Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
@@ -57,7 +57,7 @@ class Column extends Model
     /**
      * @var bool Allow in segments
      */
-    public $allowInSegments;
+    public $allowInSegments = false;
 
     /**
      * @var int Added in API version

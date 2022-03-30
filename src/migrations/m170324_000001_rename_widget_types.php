@@ -16,8 +16,8 @@ class m170324_000001_rename_widget_types extends Migration
      */
     public function safeUp()
     {
-        $this->update('{{%widgets}}', ['type' => 'dukt\analytics\widgets\Report'], ['type' => 'Analytics_Report']);
-        $this->update('{{%widgets}}', ['type' => 'dukt\analytics\widgets\Realtime'], ['type' => 'Analytics_Realtime']);
+        $this->update('{{%widgets}}', ['type' => \dukt\analytics\widgets\Report::class], ['type' => 'Analytics_Report']);
+        $this->update('{{%widgets}}', ['type' => \dukt\analytics\widgets\Realtime::class], ['type' => 'Analytics_Realtime']);
 
         return true;
     }

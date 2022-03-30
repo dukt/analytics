@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2022, Dukt
+ * @copyright Copyright (c) Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
@@ -38,11 +38,10 @@ class Geo extends Component
     /**
      * Get Continent Code
      *
-     * @param string $label
      *
      * @return mixed
      */
-    public function getContinentCode($label)
+    public function getContinentCode(string $label)
     {
         foreach ($this->_getData('continents') as $continent) {
             if ($continent['label'] === $label) {
@@ -56,11 +55,10 @@ class Geo extends Component
     /**
      * Get Sub-Continent Code
      *
-     * @param string $label
      *
      * @return mixed
      */
-    public function getSubContinentCode($label)
+    public function getSubContinentCode(string $label)
     {
         foreach ($this->_getData('subContinents') as $subContinent) {
             if ($subContinent['label'] === $label) {

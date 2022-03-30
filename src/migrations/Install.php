@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2022, Dukt
+ * @copyright Copyright (c) Dukt
  * @license   https://dukt.net/analytics/docs/license
  */
 
@@ -139,8 +139,8 @@ class Install extends Migration
      */
     protected function addForeignKeys()
     {
-        $this->addForeignKey($this->db->getForeignKeyName('{{%analytics_site_views}}', 'siteId'), '{{%analytics_site_views}}', 'siteId', '{{%sites}}', 'id', 'CASCADE', null);
-        $this->addForeignKey($this->db->getForeignKeyName('{{%analytics_site_views}}', 'viewId'), '{{%analytics_site_views}}', 'viewId', '{{%analytics_views}}', 'id', 'CASCADE', null);
+        $this->addForeignKey($this->db->getForeignKeyName(), '{{%analytics_site_views}}', 'siteId', '{{%sites}}', 'id', 'CASCADE', null);
+        $this->addForeignKey($this->db->getForeignKeyName(), '{{%analytics_site_views}}', 'viewId', '{{%analytics_views}}', 'id', 'CASCADE', null);
     }
 
     /**

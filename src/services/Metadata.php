@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2022, Dukt
+ * @copyright Copyright (c) Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
@@ -48,13 +48,8 @@ class Metadata extends Component
      */
     public function dimmetsFileExists(): bool
     {
-        $path = Analytics::$plugin->metadata->getDimmetsFilePath();
-
-        if (file_exists($path)) {
-            return true;
-        }
-
-        return false;
+        $path = Analytics::$plugin->getMetadata()->getDimmetsFilePath();
+        return file_exists($path);
     }
 
     /**
@@ -102,11 +97,10 @@ class Metadata extends Component
     /**
      * Get a dimension or a metric label from its id
      *
-     * @param string $id
      *
      * @return mixed
      */
-    public function getDimMet($id)
+    public function getDimMet(string $id)
     {
         $columns = $this->getColumns();
 
@@ -120,11 +114,10 @@ class Metadata extends Component
     /**
      * Returns columns based on a search string `$q`
      *
-     * @param string $q
      *
      * @return array
      */
-    public function searchColumns($q): array
+    public function searchColumns(string $q): array
     {
         $columns = $this->getColumns();
         $results = [];
@@ -238,7 +231,7 @@ class Metadata extends Component
      *
      * @return array
      */
-    public function getSelectOptions($type = null, array $filters = null): array
+    public function getSelectOptions(string $type = null, array $filters = null): array
     {
         $options = [];
 
@@ -294,7 +287,7 @@ class Metadata extends Component
     private function _loadColumns(): array
     {
         $cols = [];
-        $path = Analytics::$plugin->metadata->getDimmetsFilePath();
+        $path = Analytics::$plugin->getMetadata()->getDimmetsFilePath();
         $contents = file_get_contents($path);
         $columnsResponse = Json::decode($contents);
 
@@ -321,7 +314,7 @@ class Metadata extends Component
      */
     private function filterOptions(array $options, array $filters): array
     {
-        if (\count($filters) === 0) {
+        if ($filters === []) {
             return $options;
         }
 

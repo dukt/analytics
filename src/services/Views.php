@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2022, Dukt
+ * @copyright Copyright (c) Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
@@ -59,7 +59,7 @@ class Views extends Component
     {
         $result = ViewRecord::findOne($id);
 
-        if ($result) {
+        if ($result !== null) {
             return new View($result->toArray([
                 'id',
                 'name',
@@ -110,7 +110,7 @@ class Views extends Component
             'siteId' => $id
         ]);
 
-        if ($result) {
+        if ($result !== null) {
             return new SiteView($result->toArray([
                 'id',
                 'siteId',
@@ -145,7 +145,7 @@ class Views extends Component
                 ->one();
 
             if (!$viewRecord) {
-                throw new InvalidViewException("No view exists with the ID '{$view->id}'");
+                throw new InvalidViewException(sprintf("No view exists with the ID '%d'", $view->id));
             }
 
             $isNewView = false;
@@ -177,10 +177,10 @@ class Views extends Component
             }
 
             $transaction->commit();
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $transaction->rollBack();
 
-            throw $e;
+            throw $exception;
         }
 
         return true;
@@ -199,7 +199,7 @@ class Views extends Component
     {
         $viewRecord = ViewRecord::findOne($viewId);
 
-        if (!$viewRecord) {
+        if (!$viewRecord instanceof \dukt\analytics\records\View) {
             return true;
         }
 
@@ -258,10 +258,10 @@ class Views extends Component
             }
 
             $transaction->commit();
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $transaction->rollBack();
 
-            throw $e;
+            throw $exception;
         }
 
         return true;

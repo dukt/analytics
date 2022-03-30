@@ -95,6 +95,7 @@ class m180529_125418_info extends Migration
             $settingsJson = Json::encode($settings);
             $this->update('{{%plugins}}', ['settings' => $settingsJson], ['id' => $row['id']]);
         }
+
         echo " done\n";
     }
 

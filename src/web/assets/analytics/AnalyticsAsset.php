@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2022, Dukt
+ * @copyright Copyright (c) Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
@@ -47,8 +47,8 @@ class AnalyticsAsset extends AssetBundle
         parent::registerAssetFiles($view);
 
         $mapsApiKey = Craft::parseEnv(Analytics::$plugin->getSettings()->mapsApiKey);
-        $continents = Analytics::$plugin->geo->getContinents();
-        $subContinents = Analytics::$plugin->geo->getSubContinents();
+        $continents = Analytics::$plugin->getGeo()->getContinents();
+        $subContinents = Analytics::$plugin->getGeo()->getSubContinents();
         $formats = ChartHelper::formats();
 
         $js = "if(typeof Analytics == 'undefined') {";

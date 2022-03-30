@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2022, Dukt
+ * @copyright Copyright (c) Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
@@ -52,12 +52,10 @@ class Analytics extends Component
     /**
      * Returns the element URL path.
      *
-     * @param int      $elementId
-     * @param int|null $siteId
      *
      * @return string
      */
-    public function getElementUrlPath($elementId, $siteId): string
+    public function getElementUrlPath(int $elementId, ?int $siteId): string
     {
         $element = Craft::$app->elements->getElementById($elementId, null, $siteId);
 
@@ -87,15 +85,12 @@ class Analytics extends Component
     /**
      * Returns the Analytics tracking object.
      *
-     * @param bool  $isSsl
-     * @param bool  $isDisabled
-     * @param array $options
      *
      * @throws \InvalidArgumentException
      *
      * @return \TheIconic\Tracking\GoogleAnalytics\Analytics
      */
-    public function tracking($isSsl = false, $isDisabled = false, array $options = [])
+    public function tracking(bool $isSsl = false, bool $isDisabled = false, array $options = [])
     {
         $userAgent = Craft::$app->getRequest()->getUserAgent();
 
@@ -143,11 +138,7 @@ class Analytics extends Component
     public function checkPluginRequirements()
     {
         if ($this->isOauthProviderConfigured()) {
-            if ($this->isTokenSet()) {
-                return true;
-            }
-
-            return false;
+            return $this->isTokenSet();
         }
 
         return false;
@@ -196,12 +187,7 @@ class Analytics extends Component
     private function isTokenSet()
     {
         $token = AnalyticsPlugin::$plugin->getOauth()->getToken(false);
-
-        if ($token) {
-            return true;
-        }
-
-        return false;
+        return $token !== null;
     }
 
 
@@ -219,7 +205,9 @@ class Analytics extends Component
         }
 
         return $gclid;
-    } /* -- _getGclid */
+    }
+
+     /* -- _getGclid */
 
     /**
      * _gaParseCookie handles the parsing of the _ga cookie or setting it to a unique identifier
@@ -232,17 +220,18 @@ class Analytics extends Component
             [$version, $domainDepth, $cid1, $cid2] = preg_split('[\.]', $_COOKIE['_ga'], 4);
             $contents = ['version' => $version, 'domainDepth' => $domainDepth, 'cid' => $cid1.'.'.$cid2];
             $cid = $contents['cid'];
+        } elseif (isset($_COOKIE['_ia']) && $_COOKIE['_ia'] != '') {
+            $cid = $_COOKIE['_ia'];
         } else {
-            if (isset($_COOKIE['_ia']) && $_COOKIE['_ia'] != '') {
-                $cid = $_COOKIE['_ia'];
-            } else {
-                $cid = $this->_gaGenUUID();
-            }
+            $cid = $this->_gaGenUUID();
         }
+
         setcookie('_ia', $cid, time() + 60 * 60 * 24 * 730, '/'); // Two years
 
         return $cid;
-    } /* -- _gaParseCookie */
+    }
+
+     /* -- _gaParseCookie */
 
     /**
      * _gaGenUUID Generate UUID v4 function - needed to generate a CID when one isn't available
@@ -253,18 +242,20 @@ class Analytics extends Component
     {
         return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
             // 32 bits for "time_low"
-            mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+            random_int(0, 0xffff), random_int(0, 0xffff),
             // 16 bits for "time_mid"
-            mt_rand(0, 0xffff),
+            random_int(0, 0xffff),
             // 16 bits for "time_hi_and_version",
             // four most significant bits holds version number 4
-            mt_rand(0, 0x0fff) | 0x4000,
+            random_int(0, 0x0fff) | 0x4000,
             // 16 bits, 8 bits for "clk_seq_hi_res",
             // 8 bits for "clk_seq_low",
             // two most significant bits holds zero and one for variant DCE1.1
-            mt_rand(0, 0x3fff) | 0x8000,
+            random_int(0, 0x3fff) | 0x8000,
             // 48 bits for "node"
-            mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+            random_int(0, 0xffff), random_int(0, 0xffff), random_int(0, 0xffff)
         );
-    } /* -- _gaGenUUID */
+    }
+
+     /* -- _gaGenUUID */
 }

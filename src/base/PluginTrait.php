@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2022, Dukt
+ * @copyright Copyright (c) Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
@@ -198,7 +198,7 @@ trait PluginTrait
 
         if (!$row) {
             $tableName = $this->getDb()->getSchema()->getRawTableName('{{%analytics_info}}');
-            throw new ServerErrorHttpException("The {$tableName} table is missing its row");
+            throw new ServerErrorHttpException(sprintf('The %s table is missing its row', $tableName));
         }
 
         return $this->_info = new Info($row);

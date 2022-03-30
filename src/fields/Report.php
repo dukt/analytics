@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2022, Dukt
+ * @copyright Copyright (c) Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
@@ -49,13 +49,13 @@ class Report extends Field
 
         $siteView = Analytics::$plugin->getViews()->getSiteViewBySiteId($element->siteId);
 
-        if (!$siteView) {
+        if (!$siteView instanceof \dukt\analytics\models\SiteView) {
             return $view->renderTemplate('analytics/_special/view-not-configured');
         }
 
         $reportingView = $siteView->getView();
 
-        if (!$reportingView) {
+        if (!$reportingView instanceof \dukt\analytics\models\View) {
             return $view->renderTemplate('analytics/_special/view-not-configured');
         }
 
@@ -64,7 +64,7 @@ class Report extends Field
             'isNew' => false,
         ];
 
-        if ($element) {
+        if ($element !== null) {
             // Reformat the input name into something that looks more like an ID
             $id = $view->formatInputId($name);
 
@@ -96,10 +96,10 @@ class Report extends Field
                 // Add locale definition to JS options
                 $siteView = Analytics::$plugin->getViews()->getSiteViewBySiteId($element->siteId);
 
-                if ($siteView) {
+                if ($siteView !== null) {
                     $reportingView = $siteView->getView();
 
-                    if ($reportingView) {
+                    if ($reportingView !== null) {
                         // Currency definition
                         $jsOptions['currencyDefinition'] = Analytics::$plugin->getAnalytics()->getCurrencyDefinition($reportingView->gaViewCurrency);
                     }
@@ -107,7 +107,7 @@ class Report extends Field
 
                 // Add cached response to JS options if any
                 $cacheId = ['reports.getElementReport', $request];
-                $response = Analytics::$plugin->cache->get($cacheId);
+                $response = Analytics::$plugin->getCache()->get($cacheId);
 
                 if ($response) {
                     $response = [

@@ -49,8 +49,8 @@ class m170613_000001_views extends Migration
         );
 
         $this->createIndex(null, '{{%analytics_site_views}}', 'siteId,viewId', true);
-        $this->addForeignKey($this->db->getForeignKeyName('{{%analytics_site_views}}', 'siteId'), '{{%analytics_site_views}}', 'siteId', '{{%sites}}', 'id', 'CASCADE', null);
-        $this->addForeignKey($this->db->getForeignKeyName('{{%analytics_site_views}}', 'viewId'), '{{%analytics_site_views}}', 'viewId', '{{%analytics_views}}', 'id', 'CASCADE', null);
+        $this->addForeignKey($this->db->getForeignKeyName(), '{{%analytics_site_views}}', 'siteId', '{{%sites}}', 'id', 'CASCADE', null);
+        $this->addForeignKey($this->db->getForeignKeyName(), '{{%analytics_site_views}}', 'viewId', '{{%analytics_views}}', 'id', 'CASCADE', null);
 
         return true;
     }

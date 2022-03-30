@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2022, Dukt
+ * @copyright Copyright (c) Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
@@ -34,7 +34,7 @@ class Reports extends Component
 
         $tableId = null;
 
-        if ($view) {
+        if ($view !== null) {
             $tableId = 'ga:'.$view->gaViewId;
         }
 
@@ -42,13 +42,13 @@ class Reports extends Component
         $optParams = $request['optParams'];
 
         $cacheId = ['reports.getRealtimeReport', $tableId, $metrics, $optParams];
-        $response = Analytics::$plugin->cache->get($cacheId);
+        $response = Analytics::$plugin->getCache()->get($cacheId);
 
         if (!$response) {
             $response = Analytics::$plugin->getApis()->getAnalytics()->getService()->data_realtime->get($tableId, $metrics, $optParams);
 
             $cacheDuration = Analytics::$plugin->getSettings()->realtimeRefreshInterval;
-            Analytics::$plugin->cache->set($cacheId, $response, $cacheDuration);
+            Analytics::$plugin->getCache()->set($cacheId, $response, $cacheDuration);
         }
 
         return (array)$response;
@@ -115,14 +115,11 @@ class Reports extends Component
     /**
      * Returns an element report.
      *
-     * @param int      $elementId
-     * @param int|null $siteId
-     * @param string   $metric
      *
      * @return array
      * @throws \Exception
      */
-    public function getElementReport($elementId, $siteId, $metric)
+    public function getElementReport(int $elementId, ?int $siteId, string $metric)
     {
         $uri = Analytics::$plugin->getAnalytics()->getElementUrlPath($elementId, $siteId);
 
@@ -138,7 +135,7 @@ class Reports extends Component
 
         $viewId = null;
 
-        if ($siteView) {
+        if ($siteView !== null) {
             $viewId = $siteView->viewId;
         }
 
@@ -158,7 +155,7 @@ class Reports extends Component
         ];
 
         $cacheId = ['reports.getElementReport', $request];
-        $response = Analytics::$plugin->cache->get($cacheId);
+        $response = Analytics::$plugin->getCache()->get($cacheId);
 
         if (!$response) {
 
@@ -169,12 +166,13 @@ class Reports extends Component
             $criteria->metrics = $metrics;
             $criteria->dimensions = $dimensions;
             $criteria->filtersExpression = $filters;
+            $criteria->includeEmptyRows = true;
 
             $reportResponse = Analytics::$plugin->getApis()->getAnalyticsReporting()->getReport($criteria);
             $response = $this->parseReportingReport($reportResponse);
 
             if ($response) {
-                Analytics::$plugin->cache->set($cacheId, $response);
+                Analytics::$plugin->getCache()->set($cacheId, $response);
             }
         }
 
@@ -195,17 +193,14 @@ class Reports extends Component
         $period = ($request['period'] ?? null);
         $metricString = ($request['options']['metric'] ?? null);
 
-        switch ($period) {
-            case 'year':
-                $dimensionString = 'ga:yearMonth';
-                $startDate = date('Y-m-01', strtotime('-1 '.$period));
-                $endDate = date('Y-m-d');
-                break;
-
-            default:
-                $dimensionString = 'ga:date';
-                $startDate = date('Y-m-d', strtotime('-1 '.$period));
-                $endDate = date('Y-m-d');
+        if ($period == 'year') {
+            $dimensionString = 'ga:yearMonth';
+            $startDate = date('Y-m-01', strtotime('-1 '.$period));
+            $endDate = date('Y-m-d');
+        } else {
+            $dimensionString = 'ga:date';
+            $startDate = date('Y-m-d', strtotime('-1 '.$period));
+            $endDate = date('Y-m-d');
         }
 
         $criteria = new ReportRequestCriteria;
@@ -232,7 +227,7 @@ class Reports extends Component
             'type' => 'area',
             'chart' => $report,
             'total' => $total,
-            'metric' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($metricString)),
+            'metric' => Craft::t('analytics', Analytics::$plugin->getMetadata()->getDimMet($metricString)),
             'period' => $period,
             'periodLabel' => Craft::t('analytics', 'This '.$period)
         ];
@@ -273,7 +268,7 @@ class Reports extends Component
         $counter = [
             'type' => $report['cols'][0]['type'],
             'value' => $total,
-            'label' => StringHelper::toLowerCase(Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($metricString)))
+            'label' => StringHelper::toLowerCase(Craft::t('analytics', Analytics::$plugin->getMetadata()->getDimMet($metricString)))
         ];
 
         $view = Analytics::$plugin->getViews()->getViewById($viewId);
@@ -283,7 +278,7 @@ class Reports extends Component
             'type' => 'counter',
             'counter' => $counter,
             'response' => $report,
-            'metric' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($metricString)),
+            'metric' => Craft::t('analytics', Analytics::$plugin->getMetadata()->getDimMet($metricString)),
             'period' => $period,
             'periodLabel' => Craft::t('analytics', 'this '.$period)
         ];
@@ -322,8 +317,8 @@ class Reports extends Component
             'view' => $view->name,
             'type' => 'pie',
             'chart' => $report,
-            'dimension' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($dimensionString)),
-            'metric' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($metricString)),
+            'dimension' => Craft::t('analytics', Analytics::$plugin->getMetadata()->getDimMet($dimensionString)),
+            'metric' => Craft::t('analytics', Analytics::$plugin->getMetadata()->getDimMet($metricString)),
             'period' => $period,
             'periodLabel' => Craft::t('analytics', 'this '.$period)
         ];
@@ -361,8 +356,8 @@ class Reports extends Component
             'view' => $view->name,
             'type' => 'table',
             'chart' => $report,
-            'dimension' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($dimensionString)),
-            'metric' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($metricString)),
+            'dimension' => Craft::t('analytics', Analytics::$plugin->getMetadata()->getDimMet($dimensionString)),
+            'metric' => Craft::t('analytics', Analytics::$plugin->getMetadata()->getDimMet($metricString)),
             'period' => $period,
             'periodLabel' => Craft::t('analytics', 'This '.$period)
         ];
@@ -406,8 +401,8 @@ class Reports extends Component
             'type' => 'geo',
             'chart' => $report,
             'dimensionRaw' => $originDimension,
-            'dimension' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($originDimension)),
-            'metric' => Craft::t('analytics', Analytics::$plugin->metadata->getDimMet($metricString)),
+            'dimension' => Craft::t('analytics', Analytics::$plugin->getMetadata()->getDimMet($originDimension)),
+            'metric' => Craft::t('analytics', Analytics::$plugin->getMetadata()->getDimMet($metricString)),
             'period' => $period,
             'periodLabel' => Craft::t('analytics', 'This '.$period)
         ];
@@ -449,7 +444,7 @@ class Reports extends Component
             foreach ($columnHeaderDimensions as $columnHeaderDimension) {
 
                 $id = $columnHeaderDimension;
-                $label = Analytics::$plugin->metadata->getDimMet($columnHeaderDimension);
+                $label = Analytics::$plugin->getMetadata()->getDimMet($columnHeaderDimension);
 
                 switch ($columnHeaderDimension) {
                     case 'ga:date':
@@ -479,12 +474,12 @@ class Reports extends Component
                     'id' => $id,
                 ];
 
-                array_push($cols, $col);
+                $cols[] = $col;
             }
         }
 
         foreach ($metricHeaderEntries as $metricHeaderEntry) {
-            $label = Analytics::$plugin->metadata->getDimMet($metricHeaderEntry['name']);
+            $label = Analytics::$plugin->getMetadata()->getDimMet($metricHeaderEntry['name']);
 
             $col = [
                 'type' => strtolower($metricHeaderEntry['type']),
@@ -492,7 +487,7 @@ class Reports extends Component
                 'id' => $metricHeaderEntry['name'],
             ];
 
-            array_push($cols, $col);
+            $cols[] = $col;
         }
 
         return $cols;
@@ -521,31 +516,26 @@ class Reports extends Component
 
                     $value = $_dimension;
 
-                    if ($columnHeaderDimensions) {
-                        if (isset($columnHeaderDimensions[$colIndex])) {
-                            switch ($columnHeaderDimensions[$colIndex]) {
-                                case 'ga:continent':
-                                    $value = Analytics::$plugin->geo->getContinentCode($value);
-                                    break;
-                                case 'ga:subContinent':
-                                    $value = Analytics::$plugin->geo->getSubContinentCode($value);
-                                    break;
-                            }
+                    if ($columnHeaderDimensions && isset($columnHeaderDimensions[$colIndex])) {
+                        if ($columnHeaderDimensions[$colIndex] == 'ga:continent') {
+                            $value = Analytics::$plugin->getGeo()->getContinentCode($value);
+                        } elseif ($columnHeaderDimensions[$colIndex] == 'ga:subContinent') {
+                            $value = Analytics::$plugin->getGeo()->getSubContinentCode($value);
                         }
                     }
 
-                    array_push($row, $value);
+                    $row[] = $value;
 
-                    $colIndex++;
+                    ++$colIndex;
                 }
             }
 
             foreach ($_row->getMetrics() as $_metric) {
-                array_push($row, $_metric->getValues()[0]);
-                $colIndex++;
+                $row[] = $_metric->getValues()[0];
+                ++$colIndex;
             }
 
-            array_push($rows, $row);
+            $rows[] = $row;
         }
 
         return $rows;

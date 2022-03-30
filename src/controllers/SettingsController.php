@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2022, Dukt
+ * @copyright Copyright (c) Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
@@ -39,15 +39,15 @@ class SettingsController extends Controller
             $errors = [];
 
             try {
-                $provider = Analytics::$plugin->oauth->getOauthProvider();
-                $token = Analytics::$plugin->oauth->getToken();
+                $provider = Analytics::$plugin->getOauth()->getOauthProvider();
+                $token = Analytics::$plugin->getOauth()->getToken();
 
-                if ($token) {
-                    $oauthAccount = Analytics::$plugin->cache->get(['getAccount', $token]);
+                if ($token !== null) {
+                    $oauthAccount = Analytics::$plugin->getCache()->get(['getAccount', $token]);
 
                     if (!$oauthAccount) {
                         $oauthAccount = $provider->getResourceOwner($token);
-                        Analytics::$plugin->cache->set(['getAccount', $token], $oauthAccount);
+                        Analytics::$plugin->getCache()->set(['getAccount', $token], $oauthAccount);
                     }
 
                     if ($oauthAccount) {
@@ -57,29 +57,29 @@ class SettingsController extends Controller
                         $settings = $plugin->getSettings();
                     }
                 }
-            } catch (Google_Service_Exception $e) {
-                Craft::info('Couldn’t get OAuth account: '.$e->getMessage(), __METHOD__);
+            } catch (Google_Service_Exception $googleServiceException) {
+                Craft::info('Couldn’t get OAuth account: '.$googleServiceException->getMessage(), __METHOD__);
 
-                foreach ($e->getErrors() as $error) {
+                foreach ($googleServiceException->getErrors() as $error) {
                     $errors[] = $error['message'];
                 }
-            } catch (IdentityProviderException $e) {
-                $error = $e->getMessage();
-                $data = $e->getResponseBody();
+            } catch (IdentityProviderException $identityProviderException) {
+                $error = $identityProviderException->getMessage();
+                $data = $identityProviderException->getResponseBody();
 
                 if (isset($data['error_description'])) {
                     $error = $data['error_description'];
                 }
 
                 $errors[] = $error;
-            } catch (Exception $e) {
-                if (method_exists($e, 'getResponse')) {
-                    Craft::info('Couldn’t get OAuth account: '.$e->getResponse(), __METHOD__);
+            } catch (Exception $exception) {
+                if (method_exists($exception, 'getResponse')) {
+                    Craft::info('Couldn’t get OAuth account: '.$exception->getResponse(), __METHOD__);
                 } else {
-                    Craft::info('Couldn’t get OAuth account: '.$e->getMessage(), __METHOD__);
+                    Craft::info('Couldn’t get OAuth account: '.$exception->getMessage(), __METHOD__);
                 }
 
-                $errors[] = $e->getMessage();
+                $errors[] = $exception->getMessage();
             }
         }
 
@@ -104,8 +104,8 @@ class SettingsController extends Controller
     public function actionOauth(): Response
     {
         return $this->renderTemplate('analytics/settings/_oauth', [
-            'javascriptOrigin' => Analytics::$plugin->oauth->getJavascriptOrigin(),
-            'redirectUri' => Analytics::$plugin->oauth->getRedirectUri(),
+            'javascriptOrigin' => Analytics::$plugin->getOauth()->getJavascriptOrigin(),
+            'redirectUri' => Analytics::$plugin->getOauth()->getRedirectUri(),
             'googleIconUrl' => Craft::$app->assetManager->getPublishedUrl('@dukt/analytics/icons/google.svg', true),
             'settings' => Analytics::$plugin->getSettings(),
         ]);
@@ -159,7 +159,7 @@ class SettingsController extends Controller
     {
         $accountExplorerData = Analytics::$plugin->getApis()->getAnalytics()->getAccountExplorerData();
 
-        Analytics::$plugin->cache->set(['accountExplorerData'], $accountExplorerData);
+        Analytics::$plugin->getCache()->set(['accountExplorerData'], $accountExplorerData);
 
         return $this->asJson($accountExplorerData);
     }
@@ -179,16 +179,16 @@ class SettingsController extends Controller
         ];
 
         try {
-            $token = Analytics::$plugin->oauth->getToken();
+            $token = Analytics::$plugin->getOauth()->getToken();
 
             if ($isOauthProviderConfigured && $token) {
                 $variables['isConnected'] = true;
                 $variables['reportingViews'] = Analytics::$plugin->getViews()->getViews();
             }
-        } catch (IdentityProviderException $e) {
-            $variables['error'] = $e->getMessage();
+        } catch (IdentityProviderException $identityProviderException) {
+            $variables['error'] = $identityProviderException->getMessage();
 
-            $data = $e->getResponseBody();
+            $data = $identityProviderException->getResponseBody();
 
             if (isset($data['error_description'])) {
                 $variables['error'] = $data['error_description'];
@@ -210,13 +210,14 @@ class SettingsController extends Controller
      */
     public function actionEditView(int $viewId = null, View $reportingView = null): Response
     {
+        $variables = [];
         $variables['isNewView'] = false;
 
         if ($viewId !== null) {
-            if ($reportingView === null) {
+            if (!$reportingView instanceof \dukt\analytics\models\View) {
                 $reportingView = Analytics::$plugin->getViews()->getViewById($viewId);
 
-                if (!$reportingView) {
+                if (!$reportingView instanceof \dukt\analytics\models\View) {
                     throw new NotFoundHttpException('View not found');
                 }
             }
@@ -228,6 +229,7 @@ class SettingsController extends Controller
                 $reportingView = new View();
                 $variables['isNewView'] = true;
             }
+
             $variables['title'] = Craft::t('analytics', 'Create a new view');
         }
 
@@ -274,6 +276,7 @@ class SettingsController extends Controller
                 $reportingView->gaPropertyName = $dataProperty->name;
             }
         }
+
         foreach ($accountExplorerData['views'] as $dataView) {
             if ($dataView->id == $reportingView->gaViewId) {
                 $reportingView->gaViewName = $dataView->name;
@@ -334,17 +337,17 @@ class SettingsController extends Controller
         ];
 
         try {
-            $token = Analytics::$plugin->oauth->getToken();
+            $token = Analytics::$plugin->getOauth()->getToken();
 
             if ($isOauthProviderConfigured && $token) {
                 $variables['isConnected'] = true;
                 $variables['sites'] = Craft::$app->getSites()->getAllSites();
                 $variables['siteViews'] = Analytics::$plugin->getViews()->getSiteViews();
             }
-        } catch (IdentityProviderException $e) {
-            $variables['error'] = $e->getMessage();
+        } catch (IdentityProviderException $identityProviderException) {
+            $variables['error'] = $identityProviderException->getMessage();
 
-            $data = $e->getResponseBody();
+            $data = $identityProviderException->getResponseBody();
 
             if (isset($data['error_description'])) {
                 $variables['error'] = $data['error_description'];
@@ -420,7 +423,7 @@ class SettingsController extends Controller
      */
     private function getAccountExplorerOptions(View $reportingView): array
     {
-        $accountExplorerData = Analytics::$plugin->cache->get(['accountExplorerData']);
+        $accountExplorerData = Analytics::$plugin->getCache()->get(['accountExplorerData']);
 
         return [
             'accounts' => $this->getAccountOptions($accountExplorerData, $reportingView),

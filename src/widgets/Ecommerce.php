@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2022, Dukt
+ * @copyright Copyright (c) Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
@@ -69,14 +69,14 @@ class Ecommerce extends \craft\base\Widget
 
         $reportingViews = Analytics::$plugin->getViews()->getViews();
 
-        if (count($reportingViews) === 0) {
+        if ((array) $reportingViews === []) {
             return $view->renderTemplate('analytics/_special/no-views');
         }
 
         $widgetSettings = $this->settings;
         $reportingView = Analytics::$plugin->getViews()->getViewById($widgetSettings['viewId']);
 
-        if (!$reportingView) {
+        if (!$reportingView instanceof \dukt\analytics\models\View) {
             return $view->renderTemplate('analytics/_special/view-not-configured');
         }
 
@@ -119,7 +119,7 @@ class Ecommerce extends \craft\base\Widget
         $settings = $this->getSettings();
         $reportingViews = Analytics::$plugin->getViews()->getViews();
 
-        if (count($reportingViews) > 0) {
+        if ((array) $reportingViews !== []) {
             return Craft::$app->getView()->renderTemplate('analytics/_components/widgets/Ecommerce/settings', [
                 'settings' => $settings,
                 'reportingViews' => $reportingViews,

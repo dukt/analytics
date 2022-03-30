@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2022, Dukt
+ * @copyright Copyright (c) Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
@@ -33,6 +33,7 @@ class View extends Model
      * @var string Google Analytics Account ID
      */
     public $gaAccountId;
+
     /**
      * @var string Google Analytics Account Name
      */

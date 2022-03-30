@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2022, Dukt
+ * @copyright Copyright (c) Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
@@ -75,12 +75,12 @@ class Realtime extends \craft\base\Widget
             if (Analytics::$plugin->getSettings()->enableWidgets) {
                 $reportingViews = Analytics::$plugin->getViews()->getViews();
 
-                if (count($reportingViews) > 0) {
+                if ((array) $reportingViews !== []) {
                     $widgetSettings = $this->settings;
 
                     $reportingView = Analytics::$plugin->getViews()->getViewById($widgetSettings['viewId']);
 
-                    if ($reportingView) {
+                    if ($reportingView !== null) {
                         $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
                         $pluginSettings = $plugin->getSettings();
 
@@ -144,7 +144,7 @@ class Realtime extends \craft\base\Widget
         $settings = $this->getSettings();
         $reportingViews = Analytics::$plugin->getViews()->getViews();
 
-        if (count($reportingViews) > 0) {
+        if ((array) $reportingViews !== []) {
             return Craft::$app->getView()->renderTemplate('analytics/_components/widgets/Realtime/settings', [
                 'settings' => $settings,
                 'reportingViews' => $reportingViews,

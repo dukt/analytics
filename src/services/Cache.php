@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2022, Dukt
+ * @copyright Copyright (c) Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
@@ -21,11 +21,11 @@ class Cache extends Component
     /**
      * Get cache
      *
-     * @param $id
+     * @param array $id
      *
      * @return mixed
      */
-    public function get($id)
+    public function get(array $id)
     {
         if (Analytics::$plugin->getSettings()->enableCache == true) {
             $cacheKey = $this->getCacheKey($id);
@@ -39,7 +39,7 @@ class Cache extends Component
     /**
      * Set cache
      *
-     * @param      $id
+     * @param array $id
      * @param      $value
      * @param null $expire
      * @param null $dependency
@@ -48,7 +48,7 @@ class Cache extends Component
      * @return mixed
      * @throws \Exception
      */
-    public function set($id, $value, $expire = null, $dependency = null, $enableCache = null)
+    public function set(array $id, $value, $expire = null, $dependency = null, $enableCache = null)
     {
         if (null === $enableCache) {
             $enableCache = Analytics::$plugin->getSettings()->enableCache;
@@ -70,11 +70,11 @@ class Cache extends Component
     /**
      * Deletes a value with the specified key from cache.
      *
-     * @param string $id The key of the value to be deleted.
+     * @param array $id The key parts pf the value to be deleted.
      *
      * @return bool If no error happens during deletion.
      */
-    public function delete($id)
+    public function delete(array $id)
     {
         $cacheKey = $this->getCacheKey($id);
 

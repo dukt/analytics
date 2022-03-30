@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2022, Dukt
+ * @copyright Copyright (c) Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
@@ -79,22 +79,21 @@ class AnalyticsReporting extends Api
 
     // Private Methods
     // =========================================================================
-
     /**
      * Get reporting reports.
      *
-     * @param array $criterias
      *
      * @return Google_Service_AnalyticsReporting_GetReportsResponse
      * @throws \yii\base\InvalidConfigException
+     * @param mixed[] $criterias
      */
-    private function getReportingReports($criterias)
+    private function getReportingReports(array $criterias)
     {
         $requests = [];
 
         foreach ($criterias as $criteria) {
             $request = $this->getReportingReportRequest($criteria);
-            array_push($requests, $request);
+            $requests[] = $request;
         }
 
         $reportsRequest = new Google_Service_AnalyticsReporting_GetReportsRequest();
@@ -166,13 +165,10 @@ class AnalyticsReporting extends Api
     {
         if ($criteria->gaViewId) {
             $request->setViewId('ga:'.$criteria->gaViewId);
-        } else {
-            if ($criteria->viewId) {
-                $view = Plugin::getInstance()->getViews()->getViewById($criteria->viewId);
-
-                if ($view) {
-                    $request->setViewId($view->gaViewId);
-                }
+        } elseif ($criteria->viewId) {
+            $view = Plugin::getInstance()->getViews()->getViewById($criteria->viewId);
+            if ($view !== null) {
+                $request->setViewId($view->gaViewId);
             }
         }
     }
@@ -186,6 +182,7 @@ class AnalyticsReporting extends Api
         $dateRange = new Google_Service_AnalyticsReporting_DateRange();
         $dateRange->setStartDate($criteria->startDate);
         $dateRange->setEndDate($criteria->endDate);
+
         $request->setDateRanges($dateRange);
     }
 
@@ -229,7 +226,7 @@ class AnalyticsReporting extends Api
         foreach ($_dimensions as $_dimension) {
             $dimension = new Google_Service_AnalyticsReporting_Dimension();
             $dimension->setName($_dimension);
-            array_push($dimensions, $dimension);
+            $dimensions[] = $dimension;
         }
 
         return $dimensions;
@@ -249,7 +246,7 @@ class AnalyticsReporting extends Api
         foreach ($_metrics as $_metric) {
             $metric = new Google_Service_AnalyticsReporting_Metric();
             $metric->setExpression($_metric);
-            array_push($metrics, $metric);
+            $metrics[] = $metric;
         }
 
         return $metrics;

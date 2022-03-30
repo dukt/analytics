@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2022, Dukt
+ * @copyright Copyright (c) Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
@@ -36,8 +36,8 @@ class ReportsController extends Controller
 
         try {
             $response = Analytics::$plugin->getReports()->getEcommerceReport($viewId, $period);
-        } catch(\Google_Service_Exception $e) {
-            return $this->handleGoogleServiceException($e);
+        } catch(\Google_Service_Exception $googleServiceException) {
+            return $this->handleGoogleServiceException($googleServiceException);
         }
 
         return $this->asJson($response);
@@ -59,8 +59,8 @@ class ReportsController extends Controller
 
         try {
             $response = Analytics::$plugin->getReports()->getElementReport($elementId, $siteId, $metric);
-        } catch(\Google_Service_Exception $e) {
-            return $this->handleGoogleServiceException($e);
+        } catch(\Google_Service_Exception $googleServiceException) {
+            return $this->handleGoogleServiceException($googleServiceException);
         }
 
         return $this->asJson([
@@ -97,8 +97,8 @@ class ReportsController extends Controller
 
         try {
             $response = Analytics::$plugin->getReports()->getRealtimeReport($request);
-        } catch(\Google_Service_Exception $e) {
-            return $this->handleGoogleServiceException($e);
+        } catch(\Google_Service_Exception $googleServiceException) {
+            return $this->handleGoogleServiceException($googleServiceException);
         }
 
         if (!empty($response['totalsForAllResults']) && isset($response['totalsForAllResults']['ga:activeVisitors'])) {
@@ -159,7 +159,7 @@ class ReportsController extends Controller
         $cacheId = ['getReport', $request];
 
         try {
-            $response = Analytics::$plugin->cache->get($cacheId);
+            $response = Analytics::$plugin->getCache()->get($cacheId);
 
             if (!$response) {
                 switch ($chart) {
@@ -183,14 +183,14 @@ class ReportsController extends Controller
                 }
 
                 if ($response) {
-                    Analytics::$plugin->cache->set($cacheId, $response);
+                    Analytics::$plugin->getCache()->set($cacheId, $response);
                 }
             }
 
 
             return $this->asJson($response);
-        } catch(\Google_Service_Exception $e) {
-            return $this->handleGoogleServiceException($e);
+        } catch(\Google_Service_Exception $googleServiceException) {
+            return $this->handleGoogleServiceException($googleServiceException);
         }
     }
 
@@ -233,7 +233,7 @@ class ReportsController extends Controller
             'rows' => []
         ];
 
-        for ($i = 0; $i <= 30; $i++) {
+        for ($i = 0; $i <= 30; ++$i) {
             $pageviews['rows'][] = [$i, random_int(0, 20)];
         }
 
@@ -272,7 +272,7 @@ class ReportsController extends Controller
             'rows' => []
         ];
 
-        for ($i = 0; $i <= 30; $i++) {
+        for ($i = 0; $i <= 30; ++$i) {
             $pageviews['rows'][] = [$i, random_int(0, 20)];
         }
 
@@ -307,9 +307,10 @@ class ReportsController extends Controller
     {
         $date = new \DateTime();
         $date = $date->modify('-12 months');
+
         $rows = [];
 
-        for ($i = 1; $i <= 12; $i++) {
+        for ($i = 1; $i <= 12; ++$i) {
             $rows[] = [
                 $date->format('Ym'),
                 random_int(50000, 150000)

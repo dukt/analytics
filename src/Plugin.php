@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2022, Dukt
+ * @copyright Copyright (c) Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
@@ -72,7 +72,7 @@ class Plugin extends \craft\base\Plugin
             'views' => \dukt\analytics\services\Views::class,
         ]);
 
-        Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $event) {
+        Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $event): void {
             $rules = [
                 'analytics/settings' => 'analytics/settings/index',
                 'analytics/settings/oauth' => 'analytics/settings/oauth',
@@ -96,17 +96,17 @@ class Plugin extends \craft\base\Plugin
             $event->rules = array_merge($event->rules, $rules);
         });
 
-        Event::on(Dashboard::class, Dashboard::EVENT_REGISTER_WIDGET_TYPES, function(RegisterComponentTypesEvent $event) {
+        Event::on(Dashboard::class, Dashboard::EVENT_REGISTER_WIDGET_TYPES, function(RegisterComponentTypesEvent $event): void {
             $event->types[] = Ecommerce::class;
             $event->types[] = Realtime::class;
             $event->types[] = Report::class;
         });
 
-        Event::on(Fields::class, Fields::EVENT_REGISTER_FIELD_TYPES, function(RegisterComponentTypesEvent $event) {
+        Event::on(Fields::class, Fields::EVENT_REGISTER_FIELD_TYPES, function(RegisterComponentTypesEvent $event): void {
             $event->types[] = ReportField::class;
         });
 
-        Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, function(Event $event) {
+        Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, function(Event $event): void {
             /** @var CraftVariable $variable */
             $variable = $event->sender;
             $variable->set('analytics', AnalyticsVariable::class);

@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2022, Dukt
+ * @copyright Copyright (c) Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
@@ -45,12 +45,13 @@ class UtilsController extends Controller
      */
     public function actionMetadata(string $q = null, array $columns = null): Response
     {
+        $variables = [];
         $variables['q'] = $q;
         $variables['columns'] = $columns;
-        $variables['dimensions'] = Analytics::$plugin->metadata->getDimensions();
-        $variables['metrics'] = Analytics::$plugin->metadata->getMetrics();
+        $variables['dimensions'] = Analytics::$plugin->getMetadata()->getDimensions();
+        $variables['metrics'] = Analytics::$plugin->getMetadata()->getMetrics();
 
-        $variables['dimmetsFileExists'] = Analytics::$plugin->metadata->dimmetsFileExists();
+        $variables['dimmetsFileExists'] = Analytics::$plugin->getMetadata()->dimmetsFileExists();
 
         return $this->renderTemplate('analytics/utils/metadata/_index', $variables);
     }
@@ -63,7 +64,7 @@ class UtilsController extends Controller
     public function actionSearchMetadata()
     {
         $q = Craft::$app->getRequest()->getParam('q');
-        $columns = Analytics::$plugin->metadata->searchColumns($q);
+        $columns = Analytics::$plugin->getMetadata()->searchColumns($q);
 
         // Send the source back to the template
         Craft::$app->getUrlManager()->setRouteParams([
@@ -100,7 +101,7 @@ class UtilsController extends Controller
      */
     private function _deleteMetadata()
     {
-        $path = Analytics::$plugin->metadata->getDimmetsFilePath();
+        $path = Analytics::$plugin->getMetadata()->getDimmetsFilePath();
 
         FileHelper::removeFile($path);
     }
@@ -130,7 +131,7 @@ class UtilsController extends Controller
 
         $contents = json_encode($columns, JSON_PRETTY_PRINT);
 
-        $path = Analytics::$plugin->metadata->getDimmetsFilePath();
+        $path = Analytics::$plugin->getMetadata()->getDimmetsFilePath();
 
         FileHelper::writeToFile($path, $contents);
     }
@@ -144,7 +145,7 @@ class UtilsController extends Controller
     private function addColumnFromItem(&$columns, $item)
     {
         if (isset($item->attributes['minTemplateIndex'])) {
-            for ($i = $item->attributes['minTemplateIndex']; $i <= $item->attributes['maxTemplateIndex']; $i++) {
+            for ($i = $item->attributes['minTemplateIndex']; $i <= $item->attributes['maxTemplateIndex']; ++$i) {
                 $column = [];
                 $column['id'] = str_replace('XX', $i, $item->id);
                 $column['uiName'] = str_replace('XX', $i, $item->attributes['uiName']);

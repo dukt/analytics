@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2022, Dukt
+ * @copyright Copyright (c) Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
@@ -24,7 +24,7 @@ class OauthController extends Controller
      */
     public function actionConnect()
     {
-        $provider = Analytics::$plugin->oauth->getOauthProvider();
+        $provider = Analytics::$plugin->getOauth()->getOauthProvider();
 
         Craft::$app->getSession()->set('analytics.oauthState', $provider->getState());
 
@@ -49,8 +49,8 @@ class OauthController extends Controller
      */
     public function actionDisconnect()
     {
-        if (Analytics::$plugin->oauth->deleteToken()) {
-            Analytics::$plugin->cache->delete(['accountExplorerData']);
+        if (Analytics::$plugin->getOauth()->deleteToken()) {
+            Analytics::$plugin->getCache()->delete(['accountExplorerData']);
 
             Craft::$app->getSession()->setNotice(Craft::t('analytics', 'Disconnected from Google Analytics.'));
         } else {
@@ -72,7 +72,7 @@ class OauthController extends Controller
      */
     public function actionCallback()
     {
-        $provider = Analytics::$plugin->oauth->getOauthProvider();
+        $provider = Analytics::$plugin->getOauth()->getOauthProvider();
 
         $code = Craft::$app->getRequest()->getParam('code');
 
@@ -83,22 +83,22 @@ class OauthController extends Controller
             ]);
 
             // Save token
-            Analytics::$plugin->oauth->saveToken($token);
+            Analytics::$plugin->getOauth()->saveToken($token);
 
             // Todo: Reset session variables
 
             $info = Analytics::getInstance()->getInfo();
 
-            if ($info->forceConnect === true) {
+            if ($info->forceConnect) {
                 $info->forceConnect = false;
                 Analytics::getInstance()->saveInfo($info);
             }
 
             // Redirect
             Craft::$app->getSession()->setNotice(Craft::t('analytics', 'Connected to Google Analytics.'));
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             // Failed to get the token credentials or user details.
-            Craft::$app->getSession()->setError($e->getMessage());
+            Craft::$app->getSession()->setError($exception->getMessage());
         }
 
         return $this->redirect('analytics/settings');

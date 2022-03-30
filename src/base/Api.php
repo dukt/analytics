@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2022, Dukt
+ * @copyright Copyright (c) Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
@@ -23,7 +23,7 @@ abstract class Api extends Component
     {
         $token = Analytics::$plugin->getOauth()->getToken();
 
-        if ($token) {
+        if ($token !== null) {
             // make token compatible with Google Client
 
             $arrayToken = json_encode([

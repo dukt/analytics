@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://dukt.net/analytics/
- * @copyright Copyright (c) 2022, Dukt
+ * @copyright Copyright (c) Dukt
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
@@ -41,11 +41,10 @@ class Oauth extends Component
     /**
      * Returns the OAuth Token.
      *
-     * @param bool $refresh
      *
      * @return AccessToken|null
      */
-    public function getToken($refresh = true)
+    public function getToken(bool $refresh = true)
     {
         $info = Analytics::getInstance()->getInfo();
 
