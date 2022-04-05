@@ -1,7 +1,7 @@
 Changelog
 =========
 
-## Unreleased
+## 4.0.15 - 2022-03-30
 
 ### Fixed
 - Fixed a bug where the report field was not including empty rows.
