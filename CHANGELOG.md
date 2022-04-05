@@ -1,6 +1,11 @@
 Changelog
 =========
 
+## Unreleased
+
+### Added
+- Initial Craft CMS 4 compatibility.
+
 ## 4.0.15 - 2022-03-30
 
 ### Fixed
