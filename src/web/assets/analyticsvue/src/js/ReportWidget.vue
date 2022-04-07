@@ -3,14 +3,18 @@
     <div
       class="da-font-bold"
     >
-      Title
+      Metric
     </div>
-    <div>Subtitle</div>
+    <div>Period</div>
     <div
       class="da-text-gray-500"
     >
       Site
     </div>
-    <div>[chart]</div>
+    <div
+      class="da-mt-4"
+    >
+      [chart]
+    </div>
   </div>
 </template>

@@ -1,8 +1,29 @@
 <template>
-  <div>
-    <div>View</div>
-    <div>Chart</div>
-    <div>Period</div>
-    <div>Metric</div>
+  <div class="da-bg-gray-100 da-border da-rounded-md da-p-6">
+    <div>
+      <strong>View</strong>
+    </div>
+    <div>
+      <strong>Chart</strong>
+
+      <ul>
+        <li>Area</li>
+        <li>Count</li>
+        <li>Pie</li>
+        <li>Table</li>
+        <li>Geo</li>
+      </ul>
+    </div>
+    <div>
+      <strong>Period</strong>
+      <ul>
+        <li>Week</li>
+        <li>Month</li>
+        <li>Year</li>
+      </ul>
+    </div>
+    <div>
+      <strong>Metric</strong>
+    </div>
   </div>
 </template>
