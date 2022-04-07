@@ -1,0 +1,14 @@
+{% extends "analytics/_layouts/tests" %}
+{% import "_includes/forms" as forms %}
+
+{% set selectedTab = 'vue' %}
+
+{% set content %}
+
+    <h2 class="first">{{ "Report Widget"|t('analytics') }}</h2>
+    <div id="report-widget"></div>
+
+    <h2>{{ "Report Widget Settings"|t('analytics') }}</h2>
+    <div id="report-widget-settings"></div>
+
+{% endset %}

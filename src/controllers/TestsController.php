@@ -12,6 +12,7 @@ use craft\helpers\Json;
 use craft\web\Controller;
 use craft\web\View;
 use dukt\analytics\Plugin as Analytics;
+use dukt\analytics\web\assets\analyticsvue\AnalyticsVueAsset;
 use dukt\analytics\web\assets\tests\TestsAsset;
 use yii\web\Response;
 
@@ -112,5 +113,22 @@ class TestsController extends Controller
         Craft::$app->getView()->registerAssetBundle(TestsAsset::class);
 
         return $this->renderTemplate('analytics/tests/_templateVariables', $variables);
+    }
+
+    /**
+     * Vue
+     *
+     * @param array $variables
+     *
+     * @return Response
+     */
+    public function actionVue(array $variables = [])
+    {
+        Craft::$app->getView()->registerAssetBundle(TestsAsset::class);
+        Craft::$app->getView()->registerAssetBundle(AnalyticsVueAsset::class);
+        Craft::$app->getView()->registerJs('new AnalyticsVueReportWidget().$mount("#report-widget");');
+        Craft::$app->getView()->registerJs('new AnalyticsVueReportWidgetSettings().$mount("#report-widget-settings");');
+
+        return $this->renderTemplate('analytics/tests/_vue', $variables);
     }
 }
