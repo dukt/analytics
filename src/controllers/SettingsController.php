@@ -239,6 +239,7 @@ class SettingsController extends Controller
 
         Craft::$app->getView()->registerAssetBundle(SettingsAsset::class);
         Craft::$app->getView()->registerAssetBundle(AnalyticsVueAsset::class);
+        Craft::$app->getView()->registerJs('new AnalyticsVueSettings().$mount("#analytics-settings");');
 
         return $this->renderTemplate('analytics/settings/views/_edit', $variables);
     }
