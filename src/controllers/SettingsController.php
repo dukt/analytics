@@ -12,6 +12,7 @@ use craft\errors\InvalidPluginException;
 use craft\web\Controller;
 use dukt\analytics\models\SiteView;
 use dukt\analytics\models\View;
+use dukt\analytics\web\assets\analyticsvue\AnalyticsVueAsset;
 use dukt\analytics\web\assets\settings\SettingsAsset;
 use dukt\analytics\Plugin as Analytics;
 use Exception;
@@ -237,6 +238,7 @@ class SettingsController extends Controller
         $variables['accountExplorerOptions'] = $this->getAccountExplorerOptions($reportingView);
 
         Craft::$app->getView()->registerAssetBundle(SettingsAsset::class);
+        Craft::$app->getView()->registerAssetBundle(AnalyticsVueAsset::class);
 
         return $this->renderTemplate('analytics/settings/views/_edit', $variables);
     }
