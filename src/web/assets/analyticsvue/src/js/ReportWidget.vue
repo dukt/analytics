@@ -28,10 +28,13 @@
       </template>
       <template v-else>
         <div>
-          <div class="da-border da-p-4 da-rounded-md">
-            Show <code>{{ reportCriteria.chart }}</code> chart.
-            <area-chart />
-          </div>
+          <template v-if="chartData">
+            <analytics-chart
+              :chart-type="reportCriteria.chart"
+              :chart-data="chartData"
+            />
+          </template>
+
           <div class="da-relative da-mt-6">
             <pre class="da-border da-rounded-md da-bg-gray-100 da-w-96 da-h-96 da-overflow-auto">
               <code class="da-min-w-full da-p-4">{{ reportResponse }}</code>
@@ -45,13 +48,14 @@
 
 <script>
 import reportsApi from './api/reports'
-import AreaChart from '@/js/components/charts/AreaChart';
+import AnalyticsChart from '@/js/components/AnalyticsChart';
+import {responseToDataTable} from '@/js/utils'
 
 export default {
-  components: {AreaChart},
+  components: {AnalyticsChart},
   data() {
     return {
-      loading: false,
+      loading: true,
       reportCriteria: {
         viewId: 1,
         chart: 'area',
@@ -61,6 +65,7 @@ export default {
         },
       },
       reportResponse: null,
+      chartData: null,
     }
   },
 
@@ -69,8 +74,11 @@ export default {
 
     reportsApi.getReport(this.reportCriteria)
       .then(response => {
+        console.log('response', response)
         this.loading = false
         this.reportResponse = response
+        this.chartData = responseToDataTable(response.data.chart)
+        console.log('chartData', this.chartData)
       });
   }
 }
