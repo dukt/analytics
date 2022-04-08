@@ -27,8 +27,15 @@
         <div>Loading…</div>
       </template>
       <template v-else>
-        <div class="da-border da-p-4 da-rounded-md da-bg-gray-100 da-h-64 da-overflow-auto">
-          <pre>{{ reportResponse }}</pre>
+        <div>
+          <div class="da-border da-p-4 da-rounded-md">
+            Show <code>{{ reportCriteria.chart }}</code> chart.
+          </div>
+          <div class="da-relative da-mt-6">
+            <pre class="da-border da-rounded-md da-bg-gray-100 da-w-96 da-h-96 da-overflow-auto">
+              <code class="da-min-w-full da-p-4">{{ reportResponse }}</code>
+            </pre>
+          </div>
         </div>
       </template>
     </div>
