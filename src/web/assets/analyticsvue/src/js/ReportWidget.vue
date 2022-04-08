@@ -30,6 +30,7 @@
         <div>
           <div class="da-border da-p-4 da-rounded-md">
             Show <code>{{ reportCriteria.chart }}</code> chart.
+            <area-chart />
           </div>
           <div class="da-relative da-mt-6">
             <pre class="da-border da-rounded-md da-bg-gray-100 da-w-96 da-h-96 da-overflow-auto">
@@ -44,8 +45,10 @@
 
 <script>
 import reportsApi from './api/reports'
+import AreaChart from '@/js/components/charts/AreaChart';
 
 export default {
+  components: {AreaChart},
   data() {
     return {
       loading: false,
