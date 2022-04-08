@@ -28,30 +28,13 @@ export default {
       required: true,
     },
   },
-  data () {
-    return {
-      headings: ['Tiempo', 'Temperatura'],
-      // chartData: [
-      //   [1,  1000],
-      //   [2,  1170],
-      //   [3,  660],
-      //   [4,  1030]
-      // ]
-    }
-  },
   mounted () {
     // set the library loaded callback here
     google.charts.setOnLoadCallback(() => this.drawChart())
   },
   methods: {
     drawChart () {
-      console.log('----draw chart----', this.chartData)
-      // const dataTable = google.visualization.arrayToDataTable([
-      //   this.headings,
-      //   ...this.chartData
-      // ], false) // 👈 don't forget "false" here to indicate the first row as labels
-
-      const chart = new google.visualization.LineChart(this.$refs.chart) // 👈 use ref here
+      const chart = new google.visualization.LineChart(this.$refs.chart)
       chart.draw(this.chartData, lineChartOptions)
     }
   },
