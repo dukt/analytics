@@ -52,14 +52,16 @@ import AnalyticsChart from '@/js/components/AnalyticsChart';
 import {responseToDataTable} from '@/js/utils'
 
 export default {
-  components: {AnalyticsChart},
+  components: {
+    AnalyticsChart
+  },
   data() {
     return {
       loading: true,
       reportCriteria: {
         viewId: 1,
         chart: 'area',
-        period: 'week',
+        period: 'month',
         options: {
           metric: 'ga:users'
         },
@@ -68,17 +70,14 @@ export default {
       chartData: null,
     }
   },
-
   mounted() {
     this.loading = true
 
     reportsApi.getReport(this.reportCriteria)
       .then(response => {
-        console.log('response', response)
         this.loading = false
         this.reportResponse = response
         this.chartData = responseToDataTable(response.data.chart)
-        console.log('chartData', this.chartData)
       });
   }
 }

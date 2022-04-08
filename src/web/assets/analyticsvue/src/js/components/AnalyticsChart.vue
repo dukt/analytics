@@ -1,8 +1,15 @@
 <template>
   <div class="da-border da-p-4 da-rounded-md">
-    {{ chartType }}
+    <template v-if="!isChartTypeSupported">
+      Chart type “{{ chartType }}” is not supported.
+    </template>
 
-    <div ref="chart" />
+    <div
+      ref="chart"
+      :class="{
+        'da-hidden': !isChartTypeSupported,
+      }"
+    />
   </div>
 </template>
 
@@ -10,12 +17,14 @@
 /* global google */
 google.charts.load('current', {'packages':['corechart']})
 
-const lineChartOptions = {
-  title: 'Data Line',
-  width: '100%',
-  height: 250,
-  legend: { position: 'bottom' }
-}
+import {ChartOptions} from '../ChartOptions'
+
+// const lineChartOptions = {
+//   title: 'Data Line',
+//   width: '100%',
+//   height: 250,
+//   legend: { position: 'bottom' }
+// }
 
 export default {
   props: {
@@ -28,14 +37,33 @@ export default {
       required: true,
     },
   },
+  computed: {
+    isChartTypeSupported() {
+      if (this.chartType === 'area') {
+        return true
+      }
+
+      return false
+    }
+  },
   mounted () {
     // set the library loaded callback here
+    if (!this.isChartTypeSupported) {
+      return null
+    }
+
     google.charts.setOnLoadCallback(() => this.drawChart())
   },
   methods: {
     drawChart () {
-      const chart = new google.visualization.LineChart(this.$refs.chart)
-      chart.draw(this.chartData, lineChartOptions)
+      switch(this.chartType) {
+        case 'area': {
+          const chart = new google.visualization.AreaChart(this.$refs.chart)
+          const chartOptions = new ChartOptions().area()
+          chart.draw(this.chartData, chartOptions)
+          break
+        }
+      }
     }
   },
 }
