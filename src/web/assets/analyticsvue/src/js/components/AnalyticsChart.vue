@@ -19,8 +19,6 @@ google.charts.load('current', {
   packages: ['corechart', 'table', 'geochart']
 })
 
-import {ChartOptions} from '../ChartOptions'
-
 export default {
   props: {
     chartType: {
@@ -30,6 +28,10 @@ export default {
     chartData: {
       type: Array,
       required: true,
+    },
+    chartOptions: {
+      type: Object,
+      default: () => ({}),
     },
   },
   computed: {
@@ -78,23 +80,19 @@ export default {
 
     drawAreaChart() {
       const chart = new google.visualization.AreaChart(this.$refs.chart)
-      const chartOptions = new ChartOptions().area('month')
-      chart.draw(this.chartData, chartOptions)
+      chart.draw(this.chartData, this.chartOptions)
     },
     drawPieChart() {
       const chart = new google.visualization.PieChart(this.$refs.chart)
-      const chartOptions = new ChartOptions().pie()
-      chart.draw(this.chartData, chartOptions)
+      chart.draw(this.chartData, this.chartOptions)
     },
     drawTableChart() {
       const chart = new google.visualization.Table(this.$refs.chart)
-      const chartOptions = new ChartOptions().table()
-      chart.draw(this.chartData, chartOptions)
+      chart.draw(this.chartData, this.chartOptions)
     },
     drawGeoChart() {
       const chart = new google.visualization.GeoChart(this.$refs.chart)
-      const chartOptions = new ChartOptions().geo('ga:continent')
-      chart.draw(this.chartData, chartOptions)
+      chart.draw(this.chartData, this.chartOptions)
     },
   },
 }

@@ -44,6 +44,7 @@
                 <analytics-chart
                   :chart-type="reportCriteria.chart"
                   :chart-data="chartData"
+                  :chart-options="chartOptions"
                 />
               </template>
             </div>
@@ -58,6 +59,7 @@
 import reportsApi from '../../api/reports'
 import AnalyticsChart from '@/js/components/AnalyticsChart';
 import {responseToDataTable} from '@/js/utils'
+import {ChartOptions} from '@/js/ChartOptions';
 
 export default {
   components: {
@@ -95,7 +97,10 @@ export default {
           metric: 'ga:users'
         },
       }
-    }
+    },
+    chartOptions() {
+      return new ChartOptions().area(this.selectedPeriod)
+    },
   },
   mounted() {
     this.getReport()
