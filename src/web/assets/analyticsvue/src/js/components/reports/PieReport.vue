@@ -3,7 +3,7 @@
     <div>
       <div>
         <div
-          class="da-mt-6 da-font-bold"
+          class="da-font-bold"
         >
           {{ reportCriteria.options.metric }}
         </div>
@@ -27,12 +27,6 @@
                   :chart-data="chartData"
                 />
               </template>
-
-              <div class="da-relative da-mt-6">
-                <pre class="da-border da-rounded-md da-bg-gray-100 da-w-96 da-h-96 da-overflow-auto">
-                  <code class="da-min-w-full da-p-4">{{ reportResponse }}</code>
-                </pre>
-              </div>
             </div>
           </template>
         </div>
@@ -42,7 +36,7 @@
 </template>
 
 <script>
-import reportsApi from './api/reports'
+import reportsApi from '../../api/reports'
 import AnalyticsChart from '@/js/components/AnalyticsChart';
 import {responseToDataTable} from '@/js/utils'
 
@@ -55,9 +49,10 @@ export default {
       loading: true,
       reportCriteria: {
         viewId: 1,
-        chart: 'area',
+        chart: 'pie',
         period: 'month',
         options: {
+          dimension: 'ga:userType',
           metric: 'ga:users'
         },
       },

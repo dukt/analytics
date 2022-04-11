@@ -15,16 +15,11 @@
 
 <script>
 /* global google */
-google.charts.load('current', {'packages':['corechart']})
+google.charts.load('current', {
+  packages: ['corechart', 'table', 'geochart']
+})
 
 import {ChartOptions} from '../ChartOptions'
-
-// const lineChartOptions = {
-//   title: 'Data Line',
-//   width: '100%',
-//   height: 250,
-//   legend: { position: 'bottom' }
-// }
 
 export default {
   props: {
@@ -39,7 +34,12 @@ export default {
   },
   computed: {
     isChartTypeSupported() {
-      if (this.chartType === 'area') {
+      if (
+        this.chartType === 'area' ||
+        this.chartType === 'pie' ||
+        this.chartType === 'table' ||
+        this.chartType === 'geo'
+      ) {
         return true
       }
 
@@ -58,13 +58,44 @@ export default {
     drawChart () {
       switch(this.chartType) {
         case 'area': {
-          const chart = new google.visualization.AreaChart(this.$refs.chart)
-          const chartOptions = new ChartOptions().area()
-          chart.draw(this.chartData, chartOptions)
+          this.drawAreaChart()
+          break
+        }
+        case 'pie': {
+          this.drawPieChart()
+          break
+        }
+        case 'table': {
+          this.drawTableChart()
+          break
+        }
+        case 'geo': {
+          this.drawGeoChart()
           break
         }
       }
-    }
+    },
+
+    drawAreaChart() {
+      const chart = new google.visualization.AreaChart(this.$refs.chart)
+      const chartOptions = new ChartOptions().area('month')
+      chart.draw(this.chartData, chartOptions)
+    },
+    drawPieChart() {
+      const chart = new google.visualization.PieChart(this.$refs.chart)
+      const chartOptions = new ChartOptions().pie()
+      chart.draw(this.chartData, chartOptions)
+    },
+    drawTableChart() {
+      const chart = new google.visualization.Table(this.$refs.chart)
+      const chartOptions = new ChartOptions().table()
+      chart.draw(this.chartData, chartOptions)
+    },
+    drawGeoChart() {
+      const chart = new google.visualization.GeoChart(this.$refs.chart)
+      const chartOptions = new ChartOptions().geo('ga:continent')
+      chart.draw(this.chartData, chartOptions)
+    },
   },
 }
 </script>

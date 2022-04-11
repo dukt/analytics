@@ -126,6 +126,7 @@ class TestsController extends Controller
     {
         Craft::$app->getView()->registerAssetBundle(TestsAsset::class);
         Craft::$app->getView()->registerAssetBundle(AnalyticsVueAsset::class);
+        Craft::$app->getView()->registerJs('new AnalyticsVueTests().$mount("#analytics-vue-tests");');
         Craft::$app->getView()->registerJs('new AnalyticsVueReportWidget().$mount("#report-widget");');
         Craft::$app->getView()->registerJs('new AnalyticsVueReportWidgetSettings().$mount("#report-widget-settings");');
 
