@@ -13,8 +13,6 @@
           {{ period.label }}
         </option>
       </select>
-
-      {{ selectedPeriod }}
     </div>
 
     <hr>
@@ -46,7 +44,6 @@
                   :chart-data="chartData"
                   :chart-options="chartOptions"
                 />
-                {{ chartOptions }}
               </template>
             </div>
           </div>
