@@ -6,6 +6,7 @@ import ReportWidget from './js/ReportWidget.vue'
 import ReportWidgetSettings from './js/ReportWidgetSettings.vue'
 import Settings from './js/Settings.vue'
 import Tests from './js/Tests.vue'
+import TestReports from './js/TestReports.vue'
 
 window.AnalyticsVueReportWidget = Vue.extend({
   render: h => h(ReportWidget),
@@ -21,4 +22,8 @@ window.AnalyticsVueSettings = Vue.extend({
 
 window.AnalyticsVueTests = Vue.extend({
   render: h => h(Tests),
+})
+
+window.AnalyticsVueTestReports = Vue.extend({
+  render: h => h(TestReports),
 })

@@ -132,4 +132,20 @@ class TestsController extends Controller
 
         return $this->renderTemplate('analytics/tests/_vue', $variables);
     }
+
+    /**
+     * Vue
+     *
+     * @param array $variables
+     *
+     * @return Response
+     */
+    public function actionVueReports(array $variables = [])
+    {
+        Craft::$app->getView()->registerAssetBundle(TestsAsset::class);
+        Craft::$app->getView()->registerAssetBundle(AnalyticsVueAsset::class);
+        Craft::$app->getView()->registerJs('new AnalyticsVueTestReports().$mount("#analytics-vue-test-reports");');
+
+        return $this->renderTemplate('analytics/tests/_vue-reports', $variables);
+    }
 }
