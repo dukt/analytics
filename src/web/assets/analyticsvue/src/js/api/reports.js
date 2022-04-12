@@ -15,4 +15,13 @@ export default {
         }
       })
   },
+  getReportingViews() {
+    return axios.get(
+      Craft.getActionUrl('analytics/vue/get-reporting-views'),
+      {
+        headers: {
+          'X-CSRF-Token': Craft.csrfTokenValue,
+        }
+      })
+  }
 }

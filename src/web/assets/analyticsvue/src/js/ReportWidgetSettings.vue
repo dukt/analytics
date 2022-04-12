@@ -81,9 +81,12 @@
 </template>
 
 <script>
+import reportsApi from '@/js/api/reports';
+
 export default {
   data() {
     return {
+      reportingViews: [],
       chartTypeOptions: [
         {
           label: 'Area',
@@ -106,12 +109,6 @@ export default {
           value: 'geo',
         },
       ],
-      viewOptions: [
-        {
-          label: 'Dukt.net',
-          value: 'dukt.Net'
-        }
-      ],
       periodOptions: [
         {
           label: 'Week',
@@ -127,6 +124,25 @@ export default {
         }
       ]
     }
+  },
+  computed: {
+      viewOptions() {
+         return this.reportingViews.map(view => {
+           return {
+             label: view.name,
+             value: view.id,
+           }
+         });
+      }
+  },
+  mounted() {
+    this.loading = true
+
+    reportsApi.getReportingViews()
+      .then(response => {
+        this.loading = false
+        this.reportingViews = response.data.views
+      });
   }
 }
 </script>
