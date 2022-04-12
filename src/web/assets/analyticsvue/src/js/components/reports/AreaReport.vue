@@ -46,6 +46,7 @@
                   :chart-data="chartData"
                   :chart-options="chartOptions"
                 />
+                {{ chartOptions }}
               </template>
             </div>
           </div>
@@ -56,6 +57,8 @@
 </template>
 
 <script>
+/* global google */
+
 import reportsApi from '../../api/reports'
 import AnalyticsChart from '@/js/components/AnalyticsChart';
 import {responseToDataTable} from '@/js/utils'
@@ -99,7 +102,9 @@ export default {
       }
     },
     chartOptions() {
-      return new ChartOptions().area(this.selectedPeriod)
+      const chartOptions = new ChartOptions().area(this.selectedPeriod)
+      chartOptions.hAxis.ticks = this.generateTicks()
+      return chartOptions
     },
   },
   mounted() {
@@ -117,8 +122,36 @@ export default {
         .then(response => {
           this.loading = false
           this.reportResponse = response
-          this.chartData = responseToDataTable(response.data.chart)
+          const dataTable = responseToDataTable(response.data.chart)
+          const formattedDataTable = this.formatDataTable(dataTable)
+          this.chartData = formattedDataTable
         });
+    },
+    generateTicks() {
+      var ticks = [];
+
+      for (let i = 0; i < this.reportResponse.data.chart.rows.length; i++) {
+        var rowDate = this.reportResponse.data.chart.rows[i][0]
+        var tickYear = rowDate.substr(0, 4)
+        var tickMonth = rowDate.substr(4, 2) - 1
+        var tickDay = rowDate.substr(6, 2)
+        var tickDate = new Date(tickYear, tickMonth, tickDay)
+        ticks.push(tickDate)
+      }
+
+      return ticks
+    },
+
+    formatDataTable(dataTable) {
+      if (this.reportResponse.data.period === 'year') {
+        var dateFormatter = new google.visualization.DateFormat({
+          pattern: "MMMM yyyy"
+        });
+
+        dateFormatter.format(dataTable, 0);
+      }
+
+      return dataTable
     }
   }
 }
