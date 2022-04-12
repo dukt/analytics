@@ -1,10 +1,13 @@
 <template>
-  <div class="da-grid da-grid-cols-2 da-gap-6">
-    <div>
-      <report-widget />
-    </div>
-    <div>
-      <report-widget-settings />
+  <div>
+    <h2>Report Widget</h2>
+    <div class="da-grid da-grid-cols-2 da-gap-6">
+      <div>
+        <report-widget />
+      </div>
+      <div>
+        <report-widget-settings />
+      </div>
     </div>
   </div>
 </template>
