@@ -123,8 +123,7 @@ export default {
           this.loading = false
           this.reportResponse = response
           const dataTable = responseToDataTable(response.data.chart)
-          const formattedDataTable = this.formatDataTable(dataTable)
-          this.chartData = formattedDataTable
+          this.chartData = this.formatDataTable(dataTable)
         });
     },
     generateTicks() {
