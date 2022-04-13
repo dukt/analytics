@@ -6,9 +6,12 @@
       </div>
       <div class="input">
         <div class="select">
-          <select>
+          <select v-model="selectedReportingView">
             <template v-for="(option, optionKey) in viewOptions">
-              <option :key="optionKey">
+              <option
+                :key="optionKey"
+                :value="option.value"
+              >
                 {{ option.label }}
               </option>
             </template>
@@ -33,6 +36,11 @@
                       'da-border-r': optionKey !== chartTypeOptions.length - 1,
                     }"
                   >
+                    <input
+                      v-model="selectedChart"
+                      type="radio"
+                      :value="option.value"
+                    >
                     {{ option.label }}
                   </div>
                 </li>
@@ -50,9 +58,12 @@
       </div>
       <div class="input">
         <div class="select">
-          <select>
+          <select v-model="selectedPeriod">
             <template v-for="(option, optionKey) in periodOptions">
-              <option :key="optionKey">
+              <option
+                :key="optionKey"
+                :value="option.value"
+              >
                 {{ option.label }}
               </option>
             </template>
@@ -67,15 +78,35 @@
       </div>
       <div class="input">
         <div class="select">
-          <select>
-            <template v-for="(option, optionKey) in []">
-              <option :key="optionKey">
-                {{ option.label }}
-              </option>
+          <select v-model="selectedMetric">
+            <template v-for="(option, optionKey) in metricOptions">
+              <template v-if="option.optgroup">
+                <optgroup
+                  :key="optionKey"
+                  :label="option.optgroup"
+                />
+              </template>
+              <template v-else>
+                <option
+                  :key="optionKey"
+                  :value="option.value"
+                >
+                  {{ option.label }}
+                </option>
+              </template>
             </template>
           </select>
         </div>
       </div>
+    </div>
+
+    <div>
+      <ul>
+        <li>{{ selectedReportingView }}</li>
+        <li>{{ selectedChart }}</li>
+        <li>{{ selectedPeriod }}</li>
+        <li>{{ selectedMetric }}</li>
+      </ul>
     </div>
   </div>
 </template>
@@ -122,26 +153,44 @@ export default {
           label: 'Year',
           value: 'year'
         }
-      ]
+      ],
+      selectedReportingView: null,
+      selectedChart: 'area',
+      selectedPeriod: 'week',
+      selectedMetric: null,
+      selectOptions: null,
     }
   },
   computed: {
-      viewOptions() {
-         return this.reportingViews.map(view => {
-           return {
-             label: view.name,
-             value: view.id,
-           }
-         });
+    viewOptions() {
+      return this.reportingViews.map(view => {
+        return {
+          label: view.name,
+          value: view.id,
+        }
+      });
+    },
+
+    metricOptions() {
+      if (!this.selectOptions) {
+        return []
       }
+      const options = this.selectOptions[this.selectedChart].metrics
+
+      console.log('options', options)
+
+      return options
+    }
   },
   mounted() {
     this.loading = true
 
-    reportsApi.getReportingViews()
+    reportsApi.getReportWidgetSettings()
       .then(response => {
         this.loading = false
         this.reportingViews = response.data.views
+        this.selectOptions = response.data.selectOptions
+        this.selectedReportingView = this.reportingViews[0].id
       });
   }
 }

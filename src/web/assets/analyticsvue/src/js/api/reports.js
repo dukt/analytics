@@ -15,9 +15,9 @@ export default {
         }
       })
   },
-  getReportingViews() {
+  getReportWidgetSettings() {
     return axios.get(
-      Craft.getActionUrl('analytics/vue/get-reporting-views'),
+      Craft.getActionUrl('analytics/vue/get-report-widget-settings'),
       {
         headers: {
           'X-CSRF-Token': Craft.csrfTokenValue,

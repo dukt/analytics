@@ -20,12 +20,36 @@ class VueController extends Controller
     // Public Methods
     // =========================================================================
 
-    public function actionGetReportingViews()
+    public function actionGetReportWidgetSettings()
     {
         $reportingViews = Analytics::$plugin->getViews()->getViews();
+        $selectOptions = Analytics::$plugin->getMetadata()->getSelectOptionsByChartType();
+        $selectOptionsForJson = [];
+
+        foreach($selectOptions as $chartType => $_selectOptions) {
+            foreach($_selectOptions as $dimmetKey => $dimmetOptions) {
+                foreach($dimmetOptions as $optionValue => $option) {
+                    if (is_array($option) && $option['optgroup']) {
+                        $selectOptionsForJson[$chartType][$dimmetKey][] = [
+                            'optgroup' => $option['optgroup'],
+                        ];
+                    } else {
+                        $selectOptionsForJson[$chartType][$dimmetKey][] = [
+                            'label' => $option,
+                            'value' => $optionValue
+                        ];
+                    }
+                }
+            }
+        }
+
+//        echo '<pre>';
+//        var_dump($selectOptions);
+//        echo '</pre>';
 
         return $this->asJson([
             'views' => $reportingViews,
+            'selectOptions' => $selectOptionsForJson,
         ]);
     }
 }
