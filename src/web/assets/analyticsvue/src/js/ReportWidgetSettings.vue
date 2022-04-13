@@ -108,6 +108,15 @@
         <li>{{ selectedMetric }}</li>
       </ul>
     </div>
+
+    <div class="da-mt-6">
+      <input
+        type="button"
+        value="Update Chart"
+        class="da-bg-red-600 da-text-white da-rounded-md da-px-4 da-py-2"
+        @click="updateCriteria"
+      >
+    </div>
   </div>
 </template>
 
@@ -192,6 +201,18 @@ export default {
         this.selectOptions = response.data.selectOptions
         this.selectedReportingView = this.reportingViews[0].id
       });
+  },
+  methods: {
+    updateCriteria() {
+      this.$emit('update-criteria', {
+        viewId: this.selectedReportingView,
+        chart: this.selectedChart,
+        period: this.selectedPeriod,
+        options: {
+          metric: this.selectedMetric
+        },
+      });
+    }
   }
 }
 </script>

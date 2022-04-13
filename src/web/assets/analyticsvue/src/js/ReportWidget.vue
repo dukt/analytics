@@ -1,13 +1,13 @@
 <template>
   <div class="da-border da-rounded-md da-p-6">
-    <div>
+    <div v-if="requestCriteria && requestCriteria.chart">
       <div>
         <div
           class="da-font-bold"
         >
-          {{ reportCriteria.options.metric }}
+          {{ requestCriteria.options.metric }}
         </div>
-        <div>{{ reportCriteria.period }}</div>
+        <div>{{ requestCriteria.period }}</div>
         <div
           class="da-text-gray-500"
         >
@@ -23,7 +23,7 @@
             <div>
               <template v-if="chartData">
                 <analytics-chart
-                  :chart-type="reportCriteria.chart"
+                  :chart-type="requestCriteria.chart"
                   :chart-data="chartData"
                 />
               </template>
@@ -52,31 +52,44 @@ export default {
   components: {
     AnalyticsChart
   },
+  props: {
+    requestCriteria: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
     return {
       debug: false,
       loading: true,
-      reportCriteria: {
-        viewId: 1,
-        chart: 'area',
-        period: 'month',
-        options: {
-          metric: 'ga:users'
-        },
-      },
       reportResponse: null,
       chartData: null,
     }
   },
+  watch: {
+    requestCriteria() {
+      console.log('updaterequestCriteria')
+      this.getReport()
+    }
+  },
   mounted() {
-    this.loading = true
+    this.getReport()
+  },
+  methods: {
+    getReport() {
+      if (!this.requestCriteria) {
+        return
+      }
 
-    reportsApi.getReport(this.reportCriteria)
-      .then(response => {
-        this.loading = false
-        this.reportResponse = response
-        this.chartData = responseToDataTable(response.data.chart)
-      });
+      this.loading = true
+
+      reportsApi.getReport(this.requestCriteria)
+        .then(response => {
+          this.loading = false
+          this.reportResponse = response
+          this.chartData = responseToDataTable(response.data.chart)
+        });
+    }
   }
 }
 </script>

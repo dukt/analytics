@@ -21,6 +21,14 @@ window.AnalyticsVueSettings = Vue.extend({
 })
 
 window.AnalyticsVueTests = Vue.extend({
+  data() {
+    return {
+      selectedReportingView: null,
+      selectedChart: 'area',
+      selectedPeriod: 'week',
+      selectedMetric: null,
+    }
+  },
   render: h => h(Tests),
 })
 
