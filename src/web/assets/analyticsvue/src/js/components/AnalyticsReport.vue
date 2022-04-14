@@ -18,6 +18,9 @@
       <template v-else-if="reportType === 'table'">
         <table-report :report-response="reportResponse" />
       </template>
+      <template v-else-if="reportType === 'geo'">
+        <geo-report :report-response="reportResponse" />
+      </template>
     </div>
   </div>
 </template>
@@ -27,9 +30,10 @@ import AreaReport from '@/js/components/reports/AreaReport';
 import CounterReport from '@/js/components/reports/CounterReport';
 import PieReport from '@/js/components/reports/PieReport';
 import TableReport from '@/js/components/reports/TableReport';
+import GeoReport from '@/js/components/reports/GeoReport';
 
 export default {
-  components: {TableReport, PieReport, CounterReport, AreaReport},
+  components: {GeoReport, TableReport, PieReport, CounterReport, AreaReport},
   props: {
     reportResponse: {
       type: Object,
