@@ -246,7 +246,7 @@ export default {
       return options
     },
     hasDimensions() {
-      return this.selectedChart === 'pie'
+      return this.selectedChart === 'pie' || this.selectedChart === 'table'
     }
   },
   mounted() {
