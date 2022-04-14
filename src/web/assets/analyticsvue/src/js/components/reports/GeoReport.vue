@@ -13,8 +13,6 @@
           />
         </template>
       </div>
-
-      <pre>{{ reportResponse }}</pre>
     </div>
   </div>
 </template>
