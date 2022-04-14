@@ -17,7 +17,7 @@
       <div>
         <template v-if="chartData">
           <analytics-chart
-            :chart-type="reportCriteria.chart"
+            :chart-type="reportResponse.data.type"
             :chart-data="chartData"
             :chart-options="chartOptions"
           />
@@ -46,38 +46,12 @@ export default {
   },
   data() {
     return {
-      loading: true,
       chartData: null,
-      periods: [
-        {
-          value: 'week',
-          label: 'Week',
-        },
-        {
-          value: 'month',
-          label: 'Month',
-        },
-        {
-          value: 'year',
-          label: 'Year',
-        },
-      ],
-      selectedPeriod: 'week',
     }
   },
   computed: {
-    reportCriteria() {
-      return {
-        viewId: 1,
-        chart: 'area',
-        period: this.selectedPeriod,
-        options: {
-          metric: 'ga:users'
-        },
-      }
-    },
     chartOptions() {
-      const chartOptions = new ChartOptions().area(this.selectedPeriod)
+      const chartOptions = new ChartOptions().area(this.reportResponse.data.period)
       chartOptions.hAxis.ticks = this.generateTicks()
       return chartOptions
     },
@@ -86,10 +60,6 @@ export default {
     this.parseReportResponse()
   },
   methods: {
-    onPeriodChange() {
-      this.parseReportResponse()
-    },
-
     parseReportResponse() {
       const dataTable = responseToDataTable(this.reportResponse.data.chart)
       this.chartData = this.formatDataTable(dataTable)
