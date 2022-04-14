@@ -125,7 +125,7 @@
       <input
         type="button"
         value="Update Chart"
-        class="da-bg-red-600 da-text-white da-rounded-md da-px-4 da-py-2"
+        class="da-bg-red-600 da-text-white da-rounded-md da-px-4 da-py-2 da-cursor-pointer"
         @click="updateCriteria"
       >
     </div>
