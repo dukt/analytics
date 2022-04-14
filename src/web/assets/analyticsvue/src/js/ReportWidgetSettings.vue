@@ -27,22 +27,34 @@
       <div class="input">
         <div>
           <div class="da-inline-block">
-            <ul class="da-flex da-border da-bg-white da-rounded-md">
+            <ul class="da-flex da-border da-border-gray-300/70 da-bg-white da-rounded-md">
               <template v-for="(option, optionKey) in chartTypeOptions">
-                <li :key="optionKey">
-                  <div
-                    class="da-px-4 da-py-3 hover:da-bg-gray-100/50 da-cursor-pointer"
-                    :class="{
-                      'da-border-r': optionKey !== chartTypeOptions.length - 1,
-                    }"
-                  >
-                    <input
-                      v-model="selectedChart"
-                      type="radio"
-                      :value="option.value"
-                    >
-                    {{ option.label }}
-                  </div>
+                <li
+                  :key="optionKey"
+                  class="da-relative"
+                >
+                  <label>
+                    <div>
+                      <input
+                        v-model="selectedChart"
+                        type="radio"
+                        :value="option.value"
+                        class="da-peer da-sr-only"
+                      >
+                      <div
+                        class="da-text-gray-700 peer-checked:da-text-black da-px-4 da-py-3 da-cursor-pointer peer-focus-visible:da-ring-2 peer-focus-visible:da-z-50 peer-focus-visible:da-border-transparent da-relative"
+                        :class="{
+                          'da-bg-white hover:da-bg-gray-100/50': option.value !== selectedChart,
+                          'da-bg-gray-100': option.value === selectedChart,
+                          'da-rounded-l-md': optionKey === 0,
+                          'da-rounded-r-md': optionKey === chartTypeOptions.length - 1,
+                          'da-border-r': optionKey !== chartTypeOptions.length - 1,
+                        }"
+                      >
+                        {{ option.label }}
+                      </div>
+                    </div>
+                  </label>
                 </li>
               </template>
             </ul>
@@ -133,8 +145,8 @@ export default {
           value: 'area',
         },
         {
-          label: 'Count',
-          value: 'count',
+          label: 'Counter',
+          value: 'counter',
         },
         {
           label: 'Pie',
