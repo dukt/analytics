@@ -1,31 +1,18 @@
 <template>
   <div class="da-border da-rounded-md da-p-6">
-    <div>
+    <report-header :report-response="reportResponse" />
+
+    <div
+      class="da-mt-4"
+    >
       <div>
-        <div
-          class="da-font-bold"
-        >
-          {{ reportResponse.data.metric }}
-        </div>
-        <div>{{ reportResponse.data.periodLabel }}</div>
-        <div
-          class="da-text-gray-500"
-        >
-          {{ reportResponse.data.view }}
-        </div>
-        <div
-          class="da-mt-4"
-        >
-          <div>
-            <template v-if="chartData">
-              <analytics-chart
-                :chart-type="reportResponse.data.type"
-                :chart-data="chartData"
-                :chart-options="chartOptions"
-              />
-            </template>
-          </div>
-        </div>
+        <template v-if="chartData">
+          <analytics-chart
+            :chart-type="reportResponse.data.type"
+            :chart-data="chartData"
+            :chart-options="chartOptions"
+          />
+        </template>
       </div>
     </div>
   </div>
@@ -35,9 +22,11 @@
 import AnalyticsChart from '@/js/components/AnalyticsChart';
 import {responseToDataTable} from '@/js/utils'
 import {ChartOptions} from '@/js/ChartOptions';
+import ReportHeader from '@/js/components/ReportHeader';
 
 export default {
   components: {
+    ReportHeader,
     AnalyticsChart
   },
   props: {
