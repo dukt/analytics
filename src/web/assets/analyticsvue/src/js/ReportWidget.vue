@@ -21,12 +21,9 @@
           </template>
           <template v-else>
             <div>
-              <template v-if="chartData">
-                <analytics-chart
-                  :chart-type="requestCriteria.chart"
-                  :chart-data="chartData"
-                />
-              </template>
+              <analytics-report
+                :report-response="reportResponse"
+              />
 
               <template v-if="debug">
                 <div class="da-relative da-mt-6">
@@ -45,12 +42,11 @@
 
 <script>
 import reportsApi from './api/reports'
-import AnalyticsChart from '@/js/components/AnalyticsChart';
-import {responseToDataTable} from '@/js/utils'
+import AnalyticsReport from '@/js/components/AnalyticsReport';
 
 export default {
   components: {
-    AnalyticsChart
+    AnalyticsReport
   },
   props: {
     requestCriteria: {
@@ -63,7 +59,6 @@ export default {
       debug: false,
       loading: true,
       reportResponse: null,
-      chartData: null,
     }
   },
   watch: {
@@ -87,7 +82,6 @@ export default {
         .then(response => {
           this.loading = false
           this.reportResponse = response
-          this.chartData = responseToDataTable(response.data.chart)
         });
     }
   }

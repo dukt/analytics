@@ -3,13 +3,15 @@
     <h2>Report Widget</h2>
     <div class="da-grid da-grid-cols-2 da-gap-6">
       <div>
-        <report-widget :request-criteria="requestCriteria" />
-      </div>
-      <div>
         <report-widget-settings @update-criteria="updateRequestCriteria" />
       </div>
+      <div>
+        <report-widget :request-criteria="requestCriteria" />
+        <div class="da-mt-6">
+          <pre>{{ requestCriteria }}</pre>
+        </div>
+      </div>
     </div>
-    #{{ requestCriteria }}#
   </div>
 </template>
 <script>

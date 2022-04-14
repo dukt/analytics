@@ -1,35 +1,62 @@
 <template>
   <div class="da-border da-rounded-md da-p-6">
-    <div
-      class="da-font-bold"
-    >
-      {{ reportResponse.data.metric }}
+    <div>
+      <select
+        v-model="selectedPeriod"
+        @change="onPeriodChange"
+      >
+        <option
+          v-for="(period, index) in periods"
+          :key="index"
+          :value="period.value"
+        >
+          {{ period.label }}
+        </option>
+      </select>
     </div>
-    <div>{{ reportResponse.data.periodLabel }}</div>
-    <div
-      class="da-text-gray-500"
-    >
-      {{ reportResponse.data.view }}
-    </div>
-    <div
-      class="da-mt-4"
-    >
+
+    <hr>
+
+    <template v-if="loading">
+      <div>Loading…</div>
+    </template>
+    <template v-else>
       <div>
-        <template v-if="chartData">
-          <analytics-chart
-            :chart-type="reportCriteria.chart"
-            :chart-data="chartData"
-            :chart-options="chartOptions"
-          />
-        </template>
+        <div>
+          <div
+            class="da-font-bold"
+          >
+            {{ reportResponse.data.metric }}
+          </div>
+          <div>{{ reportResponse.data.periodLabel }}</div>
+          <div
+            class="da-text-gray-500"
+          >
+            {{ reportResponse.data.view }}
+          </div>
+          <div
+            class="da-mt-4"
+          >
+            <div>
+              <template v-if="chartData">
+                <analytics-chart
+                  :chart-type="reportCriteria.chart"
+                  :chart-data="chartData"
+                  :chart-options="chartOptions"
+                />
+              </template>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
 <script>
 /* global google */
 
+import reportsApi from '../../api/reports'
 import AnalyticsChart from '@/js/components/AnalyticsChart';
 import {responseToDataTable} from '@/js/utils'
 import {ChartOptions} from '@/js/ChartOptions';
@@ -38,15 +65,10 @@ export default {
   components: {
     AnalyticsChart
   },
-  props: {
-      reportResponse: {
-        type: Object,
-        required: true
-      }
-  },
   data() {
     return {
       loading: true,
+      reportResponse: null,
       chartData: null,
       periods: [
         {
@@ -83,16 +105,23 @@ export default {
     },
   },
   mounted() {
-    this.parseReportResponse()
+    this.getReport()
   },
   methods: {
     onPeriodChange() {
-      this.parseReportResponse()
+      this.getReport()
     },
 
-    parseReportResponse() {
-      const dataTable = responseToDataTable(this.reportResponse.data.chart)
-      this.chartData = this.formatDataTable(dataTable)
+    getReport() {
+      this.loading = true
+
+      reportsApi.getReport(this.reportCriteria)
+        .then(response => {
+          this.loading = false
+          this.reportResponse = response
+          const dataTable = responseToDataTable(response.data.chart)
+          this.chartData = this.formatDataTable(dataTable)
+        });
     },
     generateTicks() {
       var ticks = [];
