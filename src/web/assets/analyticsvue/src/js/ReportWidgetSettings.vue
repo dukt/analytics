@@ -84,6 +84,36 @@
       </div>
     </div>
 
+    <template v-if="hasDimensions">
+      <div class="field">
+        <div class="heading">
+          <label>Dimension</label>
+        </div>
+        <div class="input">
+          <div class="select">
+            <select v-model="selectedDimension">
+              <template v-for="(option, optionKey) in dimensionOptions">
+                <template v-if="option.optgroup">
+                  <optgroup
+                    :key="optionKey"
+                    :label="option.optgroup"
+                  />
+                </template>
+                <template v-else>
+                  <option
+                    :key="optionKey"
+                    :value="option.value"
+                  >
+                    {{ option.label }}
+                  </option>
+                </template>
+              </template>
+            </select>
+          </div>
+        </div>
+      </div>
+    </template>
+
     <div class="field">
       <div class="heading">
         <label>Metric</label>
@@ -117,6 +147,7 @@
         <li>{{ selectedReportingView }}</li>
         <li>{{ selectedChart }}</li>
         <li>{{ selectedPeriod }}</li>
+        <li>{{ selectedDimension }}</li>
         <li>{{ selectedMetric }}</li>
       </ul>
     </div>
@@ -179,6 +210,7 @@ export default {
       selectedChart: 'area',
       selectedPeriod: 'week',
       selectedMetric: null,
+      selectedDimension: null,
       selectOptions: null,
     }
   },
@@ -201,6 +233,20 @@ export default {
       console.log('options', options)
 
       return options
+    },
+
+    dimensionOptions() {
+      if (!this.selectOptions) {
+        return []
+      }
+      const options = this.selectOptions[this.selectedChart].dimensions
+
+      console.log('options', options)
+
+      return options
+    },
+    hasDimensions() {
+      return this.selectedChart === 'pie'
     }
   },
   mounted() {
@@ -216,13 +262,19 @@ export default {
   },
   methods: {
     updateCriteria() {
+      const options = {
+        metric: this.selectedMetric
+      }
+
+      if (this.hasDimensions) {
+        options.dimension = this.selectedDimension
+      }
+
       this.$emit('update-criteria', {
         viewId: this.selectedReportingView,
         chart: this.selectedChart,
         period: this.selectedPeriod,
-        options: {
-          metric: this.selectedMetric
-        },
+        options,
       });
     }
   }
