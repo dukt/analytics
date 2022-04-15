@@ -10,6 +10,7 @@ namespace dukt\analytics\widgets;
 use Craft;
 use craft\helpers\Json;
 use craft\helpers\StringHelper;
+use dukt\analytics\web\assets\analyticsvue\AnalyticsVueAsset;
 use dukt\analytics\web\assets\reportwidget\ReportWidgetAsset;
 use dukt\analytics\Plugin as Analytics;
 use craft\web\View;
@@ -159,15 +160,21 @@ class Report extends \craft\base\Widget
     public function getSettingsHtml(): ?string
     {
         Craft::$app->getView()->registerAssetBundle(ReportWidgetAsset::class);
+        Craft::$app->getView()->registerAssetBundle(AnalyticsVueAsset::class);
 
         $reportingViews = Analytics::$plugin->getViews()->getViews();
 
         if ((array) $reportingViews !== []) {
-            $id = 'analytics-settings-'.StringHelper::randomString();
+            $randomString = StringHelper::randomString();
+            $id = 'analytics-settings-'.$randomString;
+            $vueId = 'vue-analytics-settings-'.$randomString;
             $namespaceId = Craft::$app->getView()->namespaceInputId($id);
+            $vueNamespaceId = Craft::$app->getView()->namespaceInputId($vueId);
 
             Craft::$app->getView()->registerJs("new Analytics.ReportWidgetSettings('".$namespaceId."');");
 
+
+            // Select options
             $chartTypes = ['area', 'counter', 'pie', 'table', 'geo'];
             $selectOptions = [];
 
@@ -175,14 +182,53 @@ class Report extends \craft\base\Widget
                 $selectOptions[$chartType] = $this->_getSelectOptionsByChartType($chartType);
             }
 
+            // Prepare vue select options for JSON
+            // $selectOptions = Analytics::$plugin->getMetadata()->getSelectOptionsByChartType();
+            $selectOptionsForJson = [];
+
+            foreach($selectOptions as $chartType => $_selectOptions) {
+                foreach($_selectOptions as $dimmetKey => $dimmetOptions) {
+                    foreach($dimmetOptions as $optionValue => $option) {
+                        if (is_array($option) && $option['optgroup']) {
+                            $selectOptionsForJson[$chartType][$dimmetKey][] = [
+                                'optgroup' => $option['optgroup'],
+                            ];
+                        } else {
+                            $selectOptionsForJson[$chartType][$dimmetKey][] = [
+                                'label' => $option,
+                                'value' => $optionValue
+                            ];
+                        }
+                    }
+                }
+            }
+
+            // Settings
             $settings = $this->getSettings();
 
-            return Craft::$app->getView()->renderTemplate('analytics/_components/widgets/Report/settings', [
+            $variables = [
                 'id' => $id,
+                'namespaceId' => $namespaceId,
+                'vueNamespaceId' => $vueNamespaceId,
                 'settings' => $settings,
                 'selectOptions' => $selectOptions,
                 'reportingViews' => $reportingViews,
-            ]);
+            ];
+
+            $vueVariables = [
+                'id' => $id,
+                'namespaceId' => $namespaceId,
+                'vueNamespaceId' => $vueNamespaceId,
+                'settings' => $settings,
+                'selectOptions' => $selectOptionsForJson,
+                'reportingViews' => $reportingViews,
+            ];
+
+            // $view->registerJs('new VideoFieldConstructor({data: {fieldVariables: ' . \json_encode($variables) . '}}).$mount("#' . $view->namespaceInputId($id) . '-vue");');
+            $vueJsonOptions = Json::encode($vueVariables);
+            Craft::$app->getView()->registerJs('new AnalyticsVueReportWidgetSettings({data: {pluginSettings: '.$vueJsonOptions.'}}).$mount("#'.$vueNamespaceId.'");');
+
+            return Craft::$app->getView()->renderTemplate('analytics/_components/widgets/Report/settings', $variables);
         }
 
         return null;

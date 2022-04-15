@@ -43,10 +43,6 @@ class VueController extends Controller
             }
         }
 
-//        echo '<pre>';
-//        var_dump($selectOptions);
-//        echo '</pre>';
-
         return $this->asJson([
             'views' => $reportingViews,
             'selectOptions' => $selectOptionsForJson,
