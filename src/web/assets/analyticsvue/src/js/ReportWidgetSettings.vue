@@ -120,7 +120,7 @@
       </div>
       <div class="input">
         <div class="select">
-          <select v-model="selectedMetric">
+          <select v-model="vSelectedMetric">
             <template v-for="(option, optionKey) in metricOptions">
               <template v-if="option.optgroup">
                 <optgroup
@@ -140,6 +140,30 @@
           </select>
         </div>
       </div>
+    </div>
+
+    <div>
+      <!-- array of strings or numbers -->
+      <v-select
+        v-model="vSelectedMetric"
+        :options="vSelectMetricOptions"
+        :selectable="(option) => {
+          if (option.optgroup) {
+            return false;
+          }
+
+          return true
+        }"
+      >
+        <template #option="option">
+          <template v-if="option.optgroup">
+            ——— {{ option.label }} ———
+          </template>
+          <template v-else>
+            {{ option.label }}
+          </template>
+        </template>
+      </v-select>
     </div>
 
     <div>
@@ -166,7 +190,16 @@
 <script>
 import reportsApi from '@/js/api/reports';
 
+// import Vue from "vue";
+import VSelect from "vue-select";
+
+// Vue.component("v-select", vSelect);
+import "vue-select/dist/vue-select.css";
+
 export default {
+  components: {
+    VSelect,
+  },
   data() {
     return {
       reportingViews: [],
@@ -209,7 +242,7 @@ export default {
       selectedReportingView: null,
       selectedChart: 'area',
       selectedPeriod: 'week',
-      selectedMetric: null,
+      vSelectedMetric: null,
       selectedDimension: null,
       selectOptions: null,
     }
@@ -247,6 +280,35 @@ export default {
     },
     hasDimensions() {
       return this.selectedChart === 'pie' || this.selectedChart === 'table' || this.selectedChart === 'geo'
+    },
+
+    vSelectMetricOptions() {
+      const inputOptions = this.metricOptions
+      const options = []
+
+      for (let i = 0; i < inputOptions.length; i++) {
+        const option = inputOptions[i]
+        if (option.optgroup) {
+          options.push({
+            optgroup: true,
+            label: option.optgroup,
+          })
+        } else {
+          options.push({
+            label: option.label,
+            value: option.value,
+          })
+        }
+      }
+
+      return options
+    },
+    selectedMetric() {
+      if (!this.vSelectedMetric) {
+        return null
+      }
+      
+      return this.vSelectedMetric.value
     }
   },
   mounted() {

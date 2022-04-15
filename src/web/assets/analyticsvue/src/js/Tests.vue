@@ -17,6 +17,7 @@
 <script>
 import ReportWidget from '@/js/ReportWidget';
 import ReportWidgetSettings from '@/js/ReportWidgetSettings';
+
 export default {
   components: {ReportWidgetSettings, ReportWidget},
 
