@@ -15,8 +15,8 @@
   </div>
 </template>
 <script>
-import ReportWidget from '@/js/ReportWidget';
-import ReportWidgetSettings from '@/js/ReportWidgetSettings';
+import ReportWidget from '@/js/tests/ReportWidget';
+import ReportWidgetSettings from '@/js/tests/ReportWidgetSettings';
 
 export default {
   components: {ReportWidgetSettings, ReportWidget},

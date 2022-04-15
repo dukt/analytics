@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import reportsApi from './api/reports'
+import reportsApi from '../api/reports'
 import AnalyticsReport from '@/js/components/AnalyticsReport';
 
 export default {
