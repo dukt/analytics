@@ -172,7 +172,7 @@ class Report extends \craft\base\Widget
             $selectOptions = [];
 
             foreach ($chartTypes as $chartType) {
-                $selectOptions[$chartType] = $this->_geSelectOptionsByChartType($chartType);
+                $selectOptions[$chartType] = $this->_getSelectOptionsByChartType($chartType);
             }
 
             $settings = $this->getSettings();
@@ -198,7 +198,7 @@ class Report extends \craft\base\Widget
      *
      * @return array
      */
-    private function _geSelectOptionsByChartType($chartType)
+    private function _getSelectOptionsByChartType($chartType)
     {
         switch ($chartType) {
             case 'area':
