@@ -2,18 +2,18 @@
 
 import Vue from 'vue'
 import './css/main.pcss'
-import ReportWidget from './js/tests/ReportWidget.vue'
-import ReportWidgetSettings from './js/tests/ReportWidgetSettings.vue'
+import TestReportWidget from './js/tests/ReportWidget.vue'
+import TestReportWidgetSettings from './js/tests/ReportWidgetSettings.vue'
 import Settings from './js/Settings.vue'
 import Tests from './js/tests/Tests.vue'
 import TestReports from './js/tests/TestReports.vue'
 
 window.AnalyticsVueTestReportWidget = Vue.extend({
-  render: h => h(ReportWidget),
+  render: h => h(TestReportWidget),
 })
 
 window.AnalyticsVueTestReportWidgetSettings = Vue.extend({
-  render: h => h(ReportWidgetSettings),
+  render: h => h(TestReportWidgetSettings),
 })
 
 window.AnalyticsVueSettings = Vue.extend({
