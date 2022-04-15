@@ -8,11 +8,11 @@ import Settings from './js/Settings.vue'
 import Tests from './js/tests/Tests.vue'
 import TestReports from './js/tests/TestReports.vue'
 
-window.AnalyticsVueReportWidget = Vue.extend({
+window.AnalyticsVueTestReportWidget = Vue.extend({
   render: h => h(ReportWidget),
 })
 
-window.AnalyticsVueReportWidgetSettings = Vue.extend({
+window.AnalyticsVueTestReportWidgetSettings = Vue.extend({
   render: h => h(ReportWidgetSettings),
 })
 
