@@ -1,22 +1,19 @@
 <template>
   <div
     v-if="reportResponse.data"
-    class="da-border da-rounded-md da-p-6"
   >
-    <div>
-      <div class="da-text-center">
-        <div class="da-text-6xl">
-          {{ counterData.value }}
-        </div>
-        <div class="da-mt-2">
-          <span class="da-text-blue-600">{{ reportResponse.data.metric }}</span>
-          {{ reportResponse.data.periodLabel }}
-        </div>
-        <div
-          class="da-text-gray-500"
-        >
-          {{ reportResponse.data.view }}
-        </div>
+    <div class="da-text-center">
+      <div class="da-text-7xl">
+        {{ counterData.value }}
+      </div>
+      <div class="da-mt-2">
+        <span class="da-text-blue-600">{{ reportResponse.data.metric }}</span>
+        {{ reportResponse.data.periodLabel }}
+      </div>
+      <div
+        class="da-text-gray-500"
+      >
+        {{ reportResponse.data.view }}
       </div>
     </div>
   </div>

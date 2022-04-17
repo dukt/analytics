@@ -1,27 +1,20 @@
 <template>
   <div>
-    <div>
-      <div>
-        reportType: {{ reportType }}
-      </div>
-    </div>
-    <div>
-      <template v-if="reportType === 'area'">
-        <area-report :report-response="reportResponse" />
-      </template>
-      <template v-else-if="reportType === 'counter'">
-        <counter-report :report-response="reportResponse" />
-      </template>
-      <template v-else-if="reportType === 'pie'">
-        <pie-report :report-response="reportResponse" />
-      </template>
-      <template v-else-if="reportType === 'table'">
-        <table-report :report-response="reportResponse" />
-      </template>
-      <template v-else-if="reportType === 'geo'">
-        <geo-report :report-response="reportResponse" />
-      </template>
-    </div>
+    <template v-if="reportType === 'area'">
+      <area-report :report-response="reportResponse" />
+    </template>
+    <template v-else-if="reportType === 'counter'">
+      <counter-report :report-response="reportResponse" />
+    </template>
+    <template v-else-if="reportType === 'pie'">
+      <pie-report :report-response="reportResponse" />
+    </template>
+    <template v-else-if="reportType === 'table'">
+      <table-report :report-response="reportResponse" />
+    </template>
+    <template v-else-if="reportType === 'geo'">
+      <geo-report :report-response="reportResponse" />
+    </template>
   </div>
 </template>
 

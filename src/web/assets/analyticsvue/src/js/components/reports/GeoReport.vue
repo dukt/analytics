@@ -1,5 +1,5 @@
 <template>
-  <div class="da-border da-rounded-md da-p-6">
+  <div>
     <report-header :report-response="reportResponse" />
     <div
       class="da-mt-4"
