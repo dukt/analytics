@@ -1,12 +1,16 @@
 <template>
   <div>
+    <!-- View -->
     <div class="field">
       <div class="heading">
         <label>View</label>
       </div>
       <div class="input">
         <div class="select">
-          <select v-model="viewId">
+          <select
+            v-model="viewId"
+            :name="inputName('viewId')"
+          >
             <template v-for="(option, optionKey) in viewOptions">
               <option
                 :key="optionKey"
@@ -20,6 +24,7 @@
       </div>
     </div>
 
+    <!-- Chart Type -->
     <div class="field">
       <div class="heading">
         <label>Chart Type</label>
@@ -37,6 +42,7 @@
                     <div>
                       <input
                         v-model="chart"
+                        :name="inputName('chart')"
                         type="radio"
                         :value="option.value"
                         class="da-peer da-sr-only"
@@ -63,14 +69,17 @@
       </div>
     </div>
 
-
+    <!-- Period -->
     <div class="field">
       <div class="heading">
         <label>Period</label>
       </div>
       <div class="input">
         <div class="select">
-          <select v-model="period">
+          <select
+            v-model="period"
+            :name="inputName('period')"
+          >
             <template v-for="(option, optionKey) in periodOptions">
               <option
                 :key="optionKey"
@@ -84,14 +93,18 @@
       </div>
     </div>
 
-    <template v-if="hasDimensions">
+    <!-- Dimension -->
+    <template v-if="hasDimension">
       <div class="field">
         <div class="heading">
           <label>Dimension</label>
         </div>
         <div class="input">
           <div class="select">
-            <select v-model="selectedDimension">
+            <select
+              v-model="dimension"
+              :name="inputName('options['+chart+'][dimension]')"
+            >
               <template v-for="(option, optionKey) in dimensionOptions">
                 <template v-if="option.optgroup">
                   <optgroup
@@ -114,37 +127,11 @@
       </div>
     </template>
 
+    <!-- Metric -->
     <div class="field">
       <div class="heading">
         <label>Metric</label>
       </div>
-      <div class="input">
-        <div class="select">
-          <select v-model="metric">
-            <template v-for="(option, optionKey) in metricOptions">
-              <template v-if="option.optgroup">
-                <optgroup
-                  :key="optionKey"
-                  :label="option.optgroup"
-                />
-              </template>
-              <template v-else>
-                <option
-                  :key="optionKey"
-                  :value="option.value"
-                >
-                  {{ option.label }}
-                </option>
-              </template>
-            </template>
-          </select>
-        </div>
-      </div>
-    </div>
-
-    <div>
-      {{ metric }}
-      <!-- array of strings or numbers -->
       <v-select
         v-model="metric"
         :options="vSelectMetricOptions"
@@ -166,18 +153,18 @@
           </template>
         </template>
       </v-select>
-    </div>
-
-    <div>
-      <ul>
-        <li>{{ selectedDimension }}</li>
-        <li>{{ selectedMetric }}</li>
-      </ul>
+      <input
+        type="hidden"
+        :name="inputName('options['+chart+'][metric]')"
+        :value="metric"
+      >
     </div>
   </div>
 </template>
 
 <script>
+/* global Craft */
+
 import VSelect from 'vue-select';
 
 export default {
@@ -229,6 +216,7 @@ export default {
       viewId: null,
       chart: null,
       period: null,
+      dimension: null,
       metric: null,
     }
   },
@@ -263,7 +251,7 @@ export default {
 
       return options
     },
-    hasDimensions() {
+    hasDimension() {
       return this.chart === 'pie' || this.chart === 'table' || this.chart === 'geo'
     },
 
@@ -301,12 +289,25 @@ export default {
     selectOptions() {
       return this.pluginSettings.selectOptions
     },
+    inputName() {
+      return (name) => {
+        if (!name) {
+          return null
+        }
+
+        const namespace = this.pluginSettings.namespace
+
+        return Craft.namespaceInputName(name, namespace)
+      }
+    }
   },
   mounted() {
     this.viewId = this.pluginSettings.settings.viewId
     this.chart = this.pluginSettings.settings.chart
     this.period = this.pluginSettings.settings.period
     this.metric = this.pluginSettings.settings.options[this.chart].metric
+    this.dimension = this.pluginSettings.settings.options[this.chart].dimension
+    this.namespace = this.pluginSettings.namespace
   },
 }
 </script>

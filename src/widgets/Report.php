@@ -218,6 +218,7 @@ class Report extends \craft\base\Widget
             $vueVariables = [
                 'id' => $id,
                 'namespaceId' => $namespaceId,
+                'namespace' => Craft::$app->getView()->getNamespace(),
                 'vueNamespaceId' => $vueNamespaceId,
                 'settings' => $settings,
                 'selectOptions' => $selectOptionsForJson,
