@@ -4,12 +4,14 @@ import Vue from 'vue'
 import './css/main.pcss'
 import TestReportWidget from './js/tests/ReportWidget.vue'
 import TestReportWidgetSettings from './js/tests/ReportWidgetSettings.vue'
+import ReportWidget from './js/ReportWidget.vue'
 import ReportWidgetSettings from './js/ReportWidgetSettings.vue'
 import Settings from './js/Settings.vue'
 import Tests from './js/tests/Tests.vue'
 import TestReports from './js/tests/TestReports.vue'
 
 // Report Widget
+window.AnalyticsVueReportWidget = Vue.extend(ReportWidget)
 window.AnalyticsVueReportWidgetSettings = Vue.extend(ReportWidgetSettings)
 
 // Tests

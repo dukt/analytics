@@ -138,11 +138,14 @@ class Report extends \craft\base\Widget
                 'cachedResponse' => $cachedResponse ?? null,
             ];
 
-            $view->registerAssetBundle(ReportWidgetAsset::class);
+             $view->registerAssetBundle(ReportWidgetAsset::class);
+             $view->registerJs('new Analytics.ReportWidget("widget'.$this->id.'", '.Json::encode($jsOptions).');');
 
-            $view->registerJs('new Analytics.ReportWidget("widget'.$this->id.'", '.Json::encode($jsOptions).');');
+            $view->registerJs('new AnalyticsVueReportWidget({data: {pluginOptions: '.Json::encode($jsOptions).'}}).$mount("#analytics-widget-'.$this->id.'");;');
 
-            return $view->renderTemplate('analytics/_components/widgets/Report/body');
+            return $view->renderTemplate('analytics/_components/widgets/Report/body', [
+                'id' => $this->id
+            ]);
         } catch (\Exception $exception) {
             Craft::error('Couldn’t load report widget: '.$exception->getMessage(). " ".$exception->getTraceAsString(), __METHOD__);
             return $view->renderTemplate('analytics/_special/error');
