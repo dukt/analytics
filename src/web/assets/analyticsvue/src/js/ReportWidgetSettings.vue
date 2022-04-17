@@ -99,30 +99,33 @@
         <div class="heading">
           <label>Dimension</label>
         </div>
-        <div class="input">
-          <div class="select">
-            <select
-              v-model="dimension"
-              :name="inputName('options['+chart+'][dimension]')"
-            >
-              <template v-for="(option, optionKey) in dimensionOptions">
-                <template v-if="option.optgroup">
-                  <optgroup
-                    :key="optionKey"
-                    :label="option.optgroup"
-                  />
-                </template>
-                <template v-else>
-                  <option
-                    :key="optionKey"
-                    :value="option.value"
-                  >
-                    {{ option.label }}
-                  </option>
-                </template>
+        <div>
+          <v-select
+            v-model="dimension"
+            :options="dimensionSelectOptions"
+            :selectable="(option) => {
+              if (option.optgroup) {
+                return false;
+              }
+
+              return true
+            }"
+            :reduce="dimension => dimension.value"
+          >
+            <template #option="option">
+              <template v-if="option.optgroup">
+                ——— {{ option.label }} ———
               </template>
-            </select>
-          </div>
+              <template v-else>
+                {{ option.label }}
+              </template>
+            </template>
+          </v-select>
+          <input
+            type="hidden"
+            :name="inputName('options['+chart+'][dimension]')"
+            :value="dimension"
+          >
         </div>
       </div>
     </template>
