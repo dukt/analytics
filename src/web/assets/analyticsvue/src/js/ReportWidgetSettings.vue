@@ -132,32 +132,34 @@
       <div class="heading">
         <label>Metric</label>
       </div>
-      <v-select
-        v-model="metric"
-        :options="vSelectMetricOptions"
-        :selectable="(option) => {
-          if (option.optgroup) {
-            return false;
-          }
+      <div>
+        <v-select
+          v-model="metric"
+          :options="metricSelectOptions"
+          :selectable="(option) => {
+            if (option.optgroup) {
+              return false;
+            }
 
-          return true
-        }"
-        :reduce="metric => metric.value"
-      >
-        <template #option="option">
-          <template v-if="option.optgroup">
-            ——— {{ option.label }} ———
+            return true
+          }"
+          :reduce="metric => metric.value"
+        >
+          <template #option="option">
+            <template v-if="option.optgroup">
+              ——— {{ option.label }} ———
+            </template>
+            <template v-else>
+              {{ option.label }}
+            </template>
           </template>
-          <template v-else>
-            {{ option.label }}
-          </template>
-        </template>
-      </v-select>
-      <input
-        type="hidden"
-        :name="inputName('options['+chart+'][metric]')"
-        :value="metric"
-      >
+        </v-select>
+        <input
+          type="hidden"
+          :name="inputName('options['+chart+'][metric]')"
+          :value="metric"
+        >
+      </div>
     </div>
   </div>
 </template>
@@ -231,58 +233,32 @@ export default {
     },
 
     metricOptions() {
-      if (!this.selectOptions) {
-        return []
+      if (!this.selectOptions || !this.chart) {
+        return null
       }
-      const options = this.selectOptions[this.chart].metrics
 
-      console.log('options', options)
-
-      return options
+      return this.selectOptions[this.chart].metrics
     },
 
     dimensionOptions() {
-      if (!this.selectOptions) {
-        return []
+      if (!this.selectOptions || !this.chart) {
+        return null
       }
-      const options = this.selectOptions[this.chart].dimensions
-
-      console.log('options', options)
-
-      return options
+      return this.selectOptions[this.chart].dimensions
     },
+
     hasDimension() {
       return this.chart === 'pie' || this.chart === 'table' || this.chart === 'geo'
     },
 
-    vSelectMetricOptions() {
-      const inputOptions = this.metricOptions
-      const options = []
-
-      for (let i = 0; i < inputOptions.length; i++) {
-        const option = inputOptions[i]
-        if (option.optgroup) {
-          options.push({
-            optgroup: true,
-            label: option.optgroup,
-          })
-        } else {
-          options.push({
-            label: option.label,
-            value: option.value,
-          })
-        }
-      }
-
-      return options
+    metricSelectOptions() {
+      return this.parseOptionsForVueSelect(this.metricOptions)
     },
-    selectedMetric() {
-      if (!this.vSelectedMetric) {
-        return null
-      }
 
-      return this.vSelectedMetric.value
+    dimensionSelectOptions() {
+      return this.parseOptionsForVueSelect(this.dimensionOptions)
     },
+
     reportingViews() {
       return this.pluginSettings.reportingViews
     },
@@ -309,5 +285,32 @@ export default {
     this.dimension = this.pluginSettings.settings.options[this.chart].dimension
     this.namespace = this.pluginSettings.namespace
   },
+
+  methods: {
+    parseOptionsForVueSelect(inputOptions) {
+      if (!inputOptions) {
+        return []
+      }
+
+      const options = []
+
+      for (let i = 0; i < inputOptions.length; i++) {
+        const option = inputOptions[i]
+        if (option.optgroup) {
+          options.push({
+            optgroup: true,
+            label: option.optgroup,
+          })
+        } else {
+          options.push({
+            label: option.label,
+            value: option.value,
+          })
+        }
+      }
+
+      return options
+    },
+  }
 }
 </script>
