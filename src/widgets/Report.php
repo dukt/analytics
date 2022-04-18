@@ -141,6 +141,8 @@ class Report extends \craft\base\Widget
              $view->registerAssetBundle(ReportWidgetAsset::class);
              $view->registerJs('new Analytics.ReportWidget("widget'.$this->id.'", '.Json::encode($jsOptions).');');
 
+            $view->registerAssetBundle(AnalyticsVueAsset::class);
+
             $view->registerJs('new AnalyticsVueReportWidget({data: {pluginOptions: '.Json::encode($jsOptions).'}}).$mount("#analytics-widget-'.$this->id.'");;');
 
             return $view->renderTemplate('analytics/_components/widgets/Report/body', [
