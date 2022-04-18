@@ -1,9 +1,7 @@
 {% import "_includes/forms" as forms %}
 
 {% if hasUrl %}
-
     <div data-element-id="{{ element.id }}" data-language="{{ element.site.language }}" data-site-id="{{ element.siteId }}" class="analytics-field">
-
         <span class="uri light right">&nbsp; URL: {{ element.url }}</span>
 
         {% set metricOpts = {
@@ -23,7 +21,6 @@
         <div class="spinner hidden"></div>
         <div class="chart"></div>
         <div class="error"></div>
-
     </div>
 
 {% elseif isNew %}
@@ -39,4 +36,3 @@
     </div>
 
 {% endif %}
-
