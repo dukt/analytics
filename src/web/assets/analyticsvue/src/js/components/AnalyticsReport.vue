@@ -19,11 +19,11 @@
 </template>
 
 <script>
-import AreaReport from '@/js/components/reports/AreaReport';
-import CounterReport from '@/js/components/reports/CounterReport';
-import PieReport from '@/js/components/reports/PieReport';
-import TableReport from '@/js/components/reports/TableReport';
-import GeoReport from '@/js/components/reports/GeoReport';
+import AreaReport from '@/js/components/widget-reports/AreaReport';
+import CounterReport from '@/js/components/widget-reports/CounterReport';
+import PieReport from '@/js/components/widget-reports/PieReport';
+import TableReport from '@/js/components/widget-reports/TableReport';
+import GeoReport from '@/js/components/widget-reports/GeoReport';
 
 export default {
   components: {GeoReport, TableReport, PieReport, CounterReport, AreaReport},
