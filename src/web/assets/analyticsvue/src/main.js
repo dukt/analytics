@@ -6,6 +6,7 @@ import TestReportWidget from './js/tests/ReportWidget.vue'
 import TestReportWidgetSettings from './js/tests/ReportWidgetSettings.vue'
 import ReportWidget from './js/ReportWidget.vue'
 import ReportWidgetSettings from './js/ReportWidgetSettings.vue'
+import ReportField from './js/ReportField.vue'
 import Settings from './js/Settings.vue'
 import Tests from './js/tests/Tests.vue'
 import TestReports from './js/tests/TestReports.vue'
@@ -13,6 +14,9 @@ import TestReports from './js/tests/TestReports.vue'
 // Report Widget
 window.AnalyticsVueReportWidget = Vue.extend(ReportWidget)
 window.AnalyticsVueReportWidgetSettings = Vue.extend(ReportWidgetSettings)
+
+// Report Field
+window.AnalyticsVueReportField = Vue.extend(ReportField)
 
 // Tests
 window.AnalyticsVueTestReportWidget = Vue.extend({

@@ -23,5 +23,19 @@ export default {
           'X-CSRF-Token': Craft.csrfTokenValue,
         }
       })
+  },
+  getElementReport({ elementId, siteId, metric }) {
+    return axios.post(
+      Craft.getActionUrl('analytics/reports/element'),
+      {
+        elementId,
+        siteId,
+        metric,
+      },
+      {
+        headers: {
+          'X-CSRF-Token': Craft.csrfTokenValue,
+        }
+      })
   }
 }

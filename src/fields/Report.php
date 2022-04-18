@@ -11,6 +11,7 @@ use Craft;
 use craft\base\Field;
 use craft\base\ElementInterface;
 use craft\helpers\Json;
+use dukt\analytics\web\assets\analyticsvue\AnalyticsVueAsset;
 use dukt\analytics\web\assets\reportfield\ReportFieldAsset;
 use dukt\analytics\Plugin as Analytics;
 use craft\web\View;
@@ -59,18 +60,18 @@ class Report extends Field
             return $view->renderTemplate('analytics/_special/view-not-configured');
         }
 
+        // Reformat the input name into something that looks more like an ID
+        $id = $view->formatInputId($name);
+
+        // Figure out what that ID is going to look like once it has been namespaced
+        $namespacedId = $view->namespaceInputId($id);
+
         $variables = [
             'hasUrl' => false,
             'isNew' => false,
         ];
 
         if ($element !== null) {
-            // Reformat the input name into something that looks more like an ID
-            $id = $view->formatInputId($name);
-
-            // Figure out what that ID is going to look like once it has been namespaced
-            $namespacedId = $view->namespaceInputId($id);
-
             if ($element->id && $element->uri) {
                 $uri = Analytics::$plugin->getAnalytics()->getElementUrlPath($element->id, $element->siteId);
 
@@ -131,8 +132,11 @@ class Report extends Field
                     'name' => $name,
                     'value' => $value,
                     'model' => $this,
-                    'element' => $element
+                    'element' => $element,
+                    'namespacedId' => $namespacedId,
                 ];
+                $view->registerAssetBundle(AnalyticsVueAsset::class);
+                $view->registerJs('new AnalyticsVueReportField({data: {pluginOptions: '.Json::encode($variables).'}}).$mount("#fields-vue-'.$namespacedId.'");;');
             } elseif (!$element->id) {
                 $variables = [
                     'hasUrl' => false,
