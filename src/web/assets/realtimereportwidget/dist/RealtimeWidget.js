@@ -80,24 +80,26 @@
                     viewId: this.settings.viewId
                 };
 
-                Craft.queueActionRequest('analytics/reports/realtime-widget', data, $.proxy(function(response, textStatus) {
-                    if (textStatus === 'success' && typeof(response.error) === 'undefined') {
-                        this.$error.addClass('hidden');
-                        this.$realtimeVisitors.removeClass('hidden');
-                        this.handleResponse(response);
-                    } else {
-                        var msg = 'An unknown error occured.';
+                Craft.queueActionRequest(() => {
+                    return Craft.sendActionRequest('POST', 'analytics/reports/realtime-widget', {data})
+                        .then((response) => {
+                            if (typeof(response.error) === 'undefined') {
+                                this.$error.addClass('hidden');
+                                this.$realtimeVisitors.removeClass('hidden');
+                                this.handleResponse(response.data);
+                            } else {
+                                var msg = 'An unknown error occured.';
 
-                        if (typeof(response) !== 'undefined' && response && typeof(response.error) !== 'undefined') {
-                            msg = response.error;
-                        }
+                                if (typeof(response) !== 'undefined' && response && typeof(response.error) !== 'undefined') {
+                                    msg = response.error;
+                                }
 
-                        this.$realtimeVisitors.addClass('hidden');
-                        this.$error.html(msg);
-                        this.$error.removeClass('hidden');
-                    }
-
-                }, this));
+                                this.$realtimeVisitors.addClass('hidden');
+                                this.$error.html(msg);
+                                this.$error.removeClass('hidden');
+                            }
+                        })
+                });
             },
 
             handleResponse: function(response) {

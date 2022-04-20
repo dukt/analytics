@@ -1,6 +1,11 @@
 Changelog
 =========
 
+## Unreleased
+
+### Fixed
+- Fixed a bug where the realtime report widget wasn’t working properly due to a javascript error.
+
 ## 5.0.0-beta.1 - 2022-04-06
 
 ### Added
