@@ -116,9 +116,9 @@ class Realtime extends \craft\base\Widget
             '{count} minutes ago',
         ]);
 
-        $view->registerAssetBundle(RealtimeReportWidgetAsset::class);
-        $view->registerJs('var AnalyticsChartLanguage = "'.Craft::$app->language.'";', true);
-        $view->registerJs('new Analytics.Realtime("widget'.$widgetId.'", '.Json::encode($widgetOptions).');');
+//        $view->registerAssetBundle(RealtimeReportWidgetAsset::class);
+//        $view->registerJs('var AnalyticsChartLanguage = "'.Craft::$app->language.'";', true);
+//        $view->registerJs('new Analytics.Realtime("widget'.$widgetId.'", '.Json::encode($widgetOptions).');');
 
         $variables = [
             'id' => $this->id,
