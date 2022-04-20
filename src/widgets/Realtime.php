@@ -10,6 +10,7 @@ namespace dukt\analytics\widgets;
 use Craft;
 use craft\helpers\Json;
 use dukt\analytics\Plugin as Analytics;
+use dukt\analytics\web\assets\analyticsvue\AnalyticsVueAsset;
 use dukt\analytics\web\assets\realtimereportwidget\RealtimeReportWidgetAsset;
 use craft\web\View;
 
@@ -119,9 +120,16 @@ class Realtime extends \craft\base\Widget
         $view->registerJs('var AnalyticsChartLanguage = "'.Craft::$app->language.'";', true);
         $view->registerJs('new Analytics.Realtime("widget'.$widgetId.'", '.Json::encode($widgetOptions).');');
 
-        return $view->renderTemplate('analytics/_components/widgets/Realtime/body', [
-            'reportingView' => $reportingView
-        ]);
+        $variables = [
+            'id' => $this->id,
+            'reportingView' => $reportingView,
+            'refreshInterval' => $realtimeRefreshInterval,
+        ];
+
+        $view->registerAssetBundle(AnalyticsVueAsset::class);
+        $view->registerJs('new AnalyticsVueRealtimeWidget({data: {pluginOptions: '.Json::encode($variables).'}}).$mount("#analytics-widget-'.$this->id.'");;');
+
+        return $view->renderTemplate('analytics/_components/widgets/Realtime/body', $variables);
     }
 
     /**

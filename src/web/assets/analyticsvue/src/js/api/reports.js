@@ -37,5 +37,17 @@ export default {
           'X-CSRF-Token': Craft.csrfTokenValue,
         }
       })
+  },
+  getRealtimeReport({ viewId }) {
+    return axios.post(
+      Craft.getActionUrl('analytics/reports/realtime-widget'),
+      {
+        viewId,
+      },
+      {
+        headers: {
+          'X-CSRF-Token': Craft.csrfTokenValue,
+        }
+      })
   }
 }
