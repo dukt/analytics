@@ -127,8 +127,6 @@ export default {
 
           const dataTable = responseToDataTable(this.reportResponse.data.chart)
           this.chartData = this.formatDataTable(dataTable)
-
-          console.log('response!', response)
         });
     },
 
