@@ -1,5 +1,5 @@
 <template>
-  <div class="da-border da-p-4 da-rounded-md">
+  <div>
     <template v-if="!isChartTypeSupported">
       Chart type “{{ chartType }}” is not supported.
     </template>
@@ -40,7 +40,8 @@ export default {
         this.chartType === 'area' ||
         this.chartType === 'pie' ||
         this.chartType === 'table' ||
-        this.chartType === 'geo'
+        this.chartType === 'geo' ||
+        this.chartType === 'column'
       ) {
         return true
       }
@@ -75,6 +76,10 @@ export default {
           this.drawGeoChart()
           break
         }
+        case 'column': {
+          this.drawColumnChart()
+          break
+        }
       }
     },
 
@@ -92,6 +97,10 @@ export default {
     },
     drawGeoChart() {
       const chart = new google.visualization.GeoChart(this.$refs.chart)
+      chart.draw(this.chartData, this.chartOptions)
+    },
+    drawColumnChart() {
+      const chart = new google.visualization.ColumnChart(this.$refs.chart)
       chart.draw(this.chartData, this.chartOptions)
     },
   },
