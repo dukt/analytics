@@ -15,6 +15,7 @@
           chart-type="area"
           :chart-data="chartData"
           :chart-options="chartOptions"
+          class="da-mt-4"
         />
       </template>
       <div class="tiles">
