@@ -4,11 +4,12 @@
       Loading…
     </template>
     <template v-if="reportResponse">
-      <template v-if="siteName">
-        <div class="da-text-gray-500">
-          {{ siteName }}
-        </div>
-      </template>
+      <div>
+        {{ reportResponse.data.reportData.periodLabel }}
+      </div>
+      <div class="da-text-gray-500">
+        {{ siteName }}
+      </div>
       <template v-if="chartData">
         <analytics-chart
           chart-type="area"
