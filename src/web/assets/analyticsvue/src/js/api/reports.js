@@ -49,5 +49,18 @@ export default {
           'X-CSRF-Token': Craft.csrfTokenValue,
         }
       })
-  }
+  },
+  getEcommerceReport({ viewId, period }) {
+    return axios.post(
+      Craft.getActionUrl('analytics/reports/ecommerce-widget'),
+      {
+        viewId,
+        period
+      },
+      {
+        headers: {
+          'X-CSRF-Token': Craft.csrfTokenValue,
+        }
+      })
+  },
 }

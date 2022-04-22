@@ -147,10 +147,13 @@ export const formatByType = (localeDefinition, type, value) => {
 }
 
 export const formatCurrency = (localeDefinition, value) => {
-  var d3Locale = this.getD3Locale(localeDefinition);
-  var formatter = d3Locale.format(Craft.charts.BaseChart.defaults.formats.currencyFormat);
-
-  return formatter(value);
+  return ''+value
+  // TODO: fix currency formatting
+  //
+  // var d3Locale = this.getD3Locale(localeDefinition);
+  // var formatter = d3Locale.format(Craft.charts.BaseChart.defaults.formats.currencyFormat);
+  //
+  // return formatter(value);
 }
 
 export const formatDuration = (_seconds) => {

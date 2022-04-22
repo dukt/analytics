@@ -9,6 +9,7 @@ namespace dukt\analytics\web\assets\ecommercewidget;
 
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
+use craft\web\assets\d3\D3Asset;
 use dukt\analytics\web\assets\analytics\AnalyticsAsset;
 use dukt\analytics\web\assets\googlecharts\GoogleChartsAsset;
 
@@ -31,6 +32,7 @@ class EcommerceWidgetAsset extends AssetBundle
         // define the dependencies
         $this->depends = [
             CpAsset::class,
+            D3Asset::class,
             GoogleChartsAsset::class,
             AnalyticsAsset::class,
         ];
