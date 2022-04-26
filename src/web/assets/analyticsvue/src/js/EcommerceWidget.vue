@@ -15,6 +15,7 @@
           chart-type="area"
           :chart-data="chartData"
           :chart-options="chartOptions"
+          :chart-scale="reportResponse.data.reportData.period"
           class="da-mt-4"
         />
       </template>

@@ -29,6 +29,10 @@ export default {
       type: Array,
       required: true,
     },
+    chartScale: {
+      type: String,
+      default: null,
+    },
     chartOptions: {
       type: Object,
       default: () => { return {} }
@@ -85,12 +89,17 @@ export default {
 
     drawAreaChart() {
       const chart = new google.visualization.AreaChart(this.$refs.chart)
+
+      // Generate ticks
       const chartOptions = {
         ...this.chartOptions
       }
       chartOptions.hAxis.ticks = this.generateAreaTicks()
 
-      chart.draw(this.chartData, this.chartOptions)
+      // Format data table
+      const chartData = this.formatAreaDataTable(this.chartData)
+
+      chart.draw(chartData, chartOptions)
     },
     drawPieChart() {
       const chart = new google.visualization.PieChart(this.$refs.chart)
@@ -118,6 +127,17 @@ export default {
 
       return ticks
     },
+    formatAreaDataTable(dataTable) {
+      if (this.chartScale === 'year') {
+        var dateFormatter = new google.visualization.DateFormat({
+          pattern: "MMMM yyyy"
+        });
+
+        dateFormatter.format(dataTable, 0);
+      }
+
+      return dataTable
+    }
   },
 }
 </script>
