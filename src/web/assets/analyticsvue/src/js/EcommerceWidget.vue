@@ -58,7 +58,7 @@
 
 <script>
 import reportsApi from '@/js/api/reports';
-import {responseToDataTable} from '@/js/utils';
+import {responseToDataTable, getLocaleDefinition, formatByType} from '@/js/utils';
 import {ChartOptions} from '@/js/ChartOptions';
 import AnalyticsChart from '@/js/components/AnalyticsChart';
 
@@ -105,17 +105,14 @@ export default {
           this.loading = false
           this.reportResponse = response
 
-          this.totalRevenue = response.data.totalRevenue
-          this.totalRevenuePerTransaction = response.data.totalRevenuePerTransaction
-          this.totalTransactions = response.data.totalTransactions
-          this.totalTransactionsPerSession = response.data.totalTransactionsPerSession
+          const localeDefinition = getLocaleDefinition(this.pluginOptions.currencyDefinition)
 
-          this.chartData = responseToDataTable(response.data.reportData.chart)
+          this.totalRevenue = formatByType(localeDefinition, 'currency', response.data.totalRevenue)
+          this.totalRevenuePerTransaction = formatByType(localeDefinition, 'currency', response.data.totalRevenuePerTransaction)
+          this.totalTransactions = formatByType(localeDefinition, 'number', response.data.totalTransactions)
+          this.totalTransactionsPerSession = formatByType(localeDefinition, 'percent', response.data.totalTransactionsPerSession)
 
-          // this.reportType = response.data.type
-          //
-          // const dataTable = responseToDataTable(this.reportResponse.data.chart)
-          // this.chartData = this.formatDataTable(dataTable)
+          this.chartData = responseToDataTable(response.data.reportData.chart, localeDefinition)
         });
     }
   }

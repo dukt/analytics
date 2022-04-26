@@ -146,14 +146,16 @@ export const formatByType = (localeDefinition, type, value) => {
   }
 }
 
+
+export const getD3Locale = (localeDefinition) => {
+  return d3.formatLocale(localeDefinition);
+}
+
 export const formatCurrency = (localeDefinition, value) => {
-  return ''+value
-  // TODO: fix currency formatting
-  //
-  // var d3Locale = this.getD3Locale(localeDefinition);
-  // var formatter = d3Locale.format(Craft.charts.BaseChart.defaults.formats.currencyFormat);
-  //
-  // return formatter(value);
+  var d3Locale = getD3Locale(localeDefinition);
+  var formatter = d3Locale.format(Craft.charts.BaseChart.defaults.formats.currencyFormat);
+
+  return formatter(value);
 }
 
 export const formatDuration = (_seconds) => {
@@ -175,17 +177,11 @@ export const formatDuration = (_seconds) => {
 }
 
 export const formatInteger = (localeDefinition, value) => {
-  return String(value)
-  // TODO
-  // return this.getD3Locale(localeDefinition).format(",")(value);
+  return getD3Locale(localeDefinition).format(",")(value);
 }
 
 export const formatPercent = (localeDefinition, value) => {
-  return this.getD3Locale(localeDefinition).format(Craft.charts.BaseChart.defaults.formats.percentFormat)(value / 100);
-}
-
-export const getD3Locale = (localeDefinition) => {
-  return d3.formatLocale(localeDefinition);
+  return getD3Locale(localeDefinition).format(Craft.charts.BaseChart.defaults.formats.percentFormat)(value / 100);
 }
 
 export const _getD3LocaleDefinition = (extendLocaleDefinition) => {
@@ -194,7 +190,7 @@ export const _getD3LocaleDefinition = (extendLocaleDefinition) => {
 
 export const getLocaleDefinition = (currencyDefinition) => {
   // Get D3 locale definition with currency definition set from the widget's settings
-  return this._getD3LocaleDefinition({
+  return _getD3LocaleDefinition({
     currency: currencyDefinition
   })
 }
