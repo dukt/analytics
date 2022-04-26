@@ -121,7 +121,9 @@ export default {
     getReport() {
       this.loading = true
 
-      reportsApi.getRealtimeReport(this.pluginOptions.reportingView.id)
+      reportsApi.getRealtimeReport({
+          viewId: this.pluginOptions.reportingView.id,
+        })
         .then(response => {
           this.loading = false
 
