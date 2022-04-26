@@ -85,6 +85,11 @@ export default {
 
     drawAreaChart() {
       const chart = new google.visualization.AreaChart(this.$refs.chart)
+      const chartOptions = {
+        ...this.chartOptions
+      }
+      chartOptions.hAxis.ticks = this.generateAreaTicks()
+
       chart.draw(this.chartData, this.chartOptions)
     },
     drawPieChart() {
@@ -102,6 +107,16 @@ export default {
     drawColumnChart() {
       const chart = new google.visualization.ColumnChart(this.$refs.chart)
       chart.draw(this.chartData, this.chartOptions)
+    },
+    generateAreaTicks() {
+      const ticks = [];
+
+      for (let i = 0; i < this.chartData.getNumberOfRows(); i++) {
+        const tickDate = this.chartData.getValue(i, 0)
+        ticks.push(tickDate)
+      }
+
+      return ticks
     },
   },
 }
