@@ -152,24 +152,26 @@ export default {
       data.addColumn('number', Craft.t('analytics', 'Minutes ago'));
       data.addColumn('number', Craft.t('analytics', 'Pageviews'));
 
-      for (let minutesAgo = 30; minutesAgo >= 0; minutesAgo--) {
-        let rowPageviews = 0;
+      if (pageviews.rows) {
+        for (let minutesAgo = 30; minutesAgo >= 0; minutesAgo--) {
+          let rowPageviews = 0;
 
-        pageviews.rows.forEach((row) => {
-          var rowMinutesAgo = parseInt(row[0]);
+          pageviews.rows.forEach((row) => {
+            var rowMinutesAgo = parseInt(row[0]);
 
-          if (rowMinutesAgo === minutesAgo) {
-            rowPageviews = parseInt(row[1]);
+            if (rowMinutesAgo === minutesAgo) {
+              rowPageviews = parseInt(row[1]);
+            }
+          });
+
+          let minutesAgoFormatted = Craft.t('analytics', '{count} minutes ago', {count: minutesAgo})
+
+          if (minutesAgo === 1) {
+            minutesAgoFormatted = Craft.t('analytics', '{count} minute ago', {count: minutesAgo})
           }
-        });
 
-        let minutesAgoFormatted = Craft.t('analytics', '{count} minutes ago', {count: minutesAgo})
-
-        if (minutesAgo === 1) {
-          minutesAgoFormatted = Craft.t('analytics', '{count} minute ago', {count: minutesAgo})
+          data.addRow([{v: minutesAgo, f: minutesAgoFormatted}, rowPageviews]);
         }
-
-        data.addRow([{v: minutesAgo, f: minutesAgoFormatted}, rowPageviews]);
       }
 
       return data
