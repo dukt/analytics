@@ -87,7 +87,7 @@ export default {
       return this.reportResponse.data.reportData.view
     },
     chartOptions() {
-      return new ChartOptions().area()
+      return new ChartOptions().area(this.pluginOptions.period)
     }
   },
   mounted() {
