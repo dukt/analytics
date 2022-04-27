@@ -33,6 +33,10 @@ export default {
     reportResponse: {
       type: Object,
       required: true
+    },
+    localeDefinition: {
+      type: Object,
+      required: true
     }
   },
   data() {
@@ -46,7 +50,7 @@ export default {
     }
   },
   mounted() {
-    this.chartData = responseToDataTable(this.reportResponse.data.chart)
+    this.chartData = responseToDataTable(this.reportResponse.data.chart, this.localeDefinition)
   },
 }
 </script>

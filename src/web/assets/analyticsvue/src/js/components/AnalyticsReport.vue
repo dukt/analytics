@@ -1,19 +1,34 @@
 <template>
   <div>
     <template v-if="reportType === 'area'">
-      <area-report :report-response="reportResponse" />
+      <area-report
+        :report-response="reportResponse"
+        :locale-definition="localeDefinition"
+      />
     </template>
     <template v-else-if="reportType === 'counter'">
-      <counter-report :report-response="reportResponse" />
+      <counter-report
+        :report-response="reportResponse"
+        :locale-definition="localeDefinition"
+      />
     </template>
     <template v-else-if="reportType === 'pie'">
-      <pie-report :report-response="reportResponse" />
+      <pie-report
+        :report-response="reportResponse"
+        :locale-definition="localeDefinition"
+      />
     </template>
     <template v-else-if="reportType === 'table'">
-      <table-report :report-response="reportResponse" />
+      <table-report
+        :report-response="reportResponse"
+        :locale-definition="localeDefinition"
+      />
     </template>
     <template v-else-if="reportType === 'geo'">
-      <geo-report :report-response="reportResponse" />
+      <geo-report
+        :report-response="reportResponse"
+        :locale-definition="localeDefinition"
+      />
     </template>
   </div>
 </template>
@@ -31,7 +46,11 @@ export default {
     reportResponse: {
       type: Object,
       required: true,
-    }
+    },
+    localeDefinition: {
+      type: Object,
+      required: true,
+    },
   },
   computed: {
     reportType() {

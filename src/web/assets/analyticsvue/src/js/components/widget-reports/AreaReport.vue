@@ -18,8 +18,6 @@
 </template>
 
 <script>
-/* global google */
-
 import AnalyticsChart from '@/js/components/AnalyticsChart';
 import {responseToDataTable} from '@/js/utils'
 import {ChartOptions} from '@/js/ChartOptions';
@@ -34,6 +32,10 @@ export default {
       reportResponse: {
         type: Object,
         required: true
+      },
+      localeDefinition: {
+        type: Object,
+        required: true
       }
   },
   data() {
@@ -44,7 +46,7 @@ export default {
   computed: {
     chartOptions() {
       const chartOptions = new ChartOptions().area(this.reportResponse.data.period)
-      chartOptions.hAxis.ticks = this.generateTicks()
+      // chartOptions.hAxis.ticks = this.generateTicks()
       return chartOptions
     },
   },
@@ -53,35 +55,35 @@ export default {
   },
   methods: {
     parseReportResponse() {
-      const dataTable = responseToDataTable(this.reportResponse.data.chart)
-      this.chartData = this.formatDataTable(dataTable)
+      this.chartData = responseToDataTable(this.reportResponse.data.chart, this.localeDefinition)
+      // this.chartData = this.formatDataTable(dataTable)
     },
-    generateTicks() {
-      var ticks = [];
+    // generateTicks() {
+    //   var ticks = [];
+    //
+    //   for (let i = 0; i < this.reportResponse.data.chart.rows.length; i++) {
+    //     var rowDate = this.reportResponse.data.chart.rows[i][0]
+    //     var tickYear = rowDate.substr(0, 4)
+    //     var tickMonth = rowDate.substr(4, 2) - 1
+    //     var tickDay = rowDate.substr(6, 2)
+    //     var tickDate = new Date(tickYear, tickMonth, tickDay)
+    //     ticks.push(tickDate)
+    //   }
+    //
+    //   return ticks
+    // },
 
-      for (let i = 0; i < this.reportResponse.data.chart.rows.length; i++) {
-        var rowDate = this.reportResponse.data.chart.rows[i][0]
-        var tickYear = rowDate.substr(0, 4)
-        var tickMonth = rowDate.substr(4, 2) - 1
-        var tickDay = rowDate.substr(6, 2)
-        var tickDate = new Date(tickYear, tickMonth, tickDay)
-        ticks.push(tickDate)
-      }
-
-      return ticks
-    },
-
-    formatDataTable(dataTable) {
-      if (this.reportResponse.data.period === 'year') {
-        var dateFormatter = new google.visualization.DateFormat({
-          pattern: "MMMM yyyy"
-        });
-
-        dateFormatter.format(dataTable, 0);
-      }
-
-      return dataTable
-    }
+    // formatDataTable(dataTable) {
+    //   if (this.reportResponse.data.period === 'year') {
+    //     var dateFormatter = new google.visualization.DateFormat({
+    //       pattern: "MMMM yyyy"
+    //     });
+    //
+    //     dateFormatter.format(dataTable, 0);
+    //   }
+    //
+    //   return dataTable
+    // }
   }
 }
 </script>

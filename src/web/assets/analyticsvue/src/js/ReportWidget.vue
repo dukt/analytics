@@ -6,6 +6,7 @@
     <template v-else>
       <analytics-report
         :report-response="reportResponse"
+        :locale-definition="localeDefinition"
       />
     </template>
   </div>
@@ -14,6 +15,7 @@
 <script>
 import reportsApi from './api/reports'
 import AnalyticsReport from '@/js/components/AnalyticsReport';
+import {getLocaleDefinition} from '@/js/utils';
 
 export default {
   components: {
@@ -29,6 +31,9 @@ export default {
   computed: {
     requestCriteria() {
       return this.pluginOptions.request
+    },
+    localeDefinition() {
+      return getLocaleDefinition(this.pluginOptions.currencyDefinition);
     }
   },
   watch: {
