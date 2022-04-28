@@ -1,7 +1,7 @@
 Changelog
 =========
 
-## Unreleased
+## 5.0.0-beta.2 - 2022-04-28
 
 ### Fixed
 - Fixed a bug where the loading spinner was not showing up when the Report widget’s frontend was loading.
