@@ -6,6 +6,7 @@ Changelog
 ### Fixed
 - Fixed a bug where the realtime report widget wasn’t working properly due to a javascript error.
 - Fixed a bug where loading spinners were not showing up for report widgets.
+- Fixed a bug where spinners were not showing up for loading buttons.
 
 ## 5.0.0-beta.1 - 2022-04-06
 
