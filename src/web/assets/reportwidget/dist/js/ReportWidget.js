@@ -26,7 +26,7 @@
                 this.$title = $('.title', this.$element);
                 this.$body = $('.body', this.$element);
                 this.$date = $('.date', this.$element);
-                this.$spinner = $('.spinner', this.$element);
+                this.$spinner = $('.da-spinner', this.$element);
                 this.$spinner.removeClass('body-loading');
                 this.$error = $('.error', this.$element);
 
