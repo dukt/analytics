@@ -4,9 +4,9 @@ Changelog
 ## Unreleased
 
 ### Fixed
-- Fixed a bug where the realtime report widget wasn’t working properly due to a javascript error.
-- Fixed a bug where loading spinners were not showing up for report widgets.
-- Fixed a bug where spinners were not showing up for loading buttons.
+- Fixed a bug where the loading spinner was not showing up when the Report widget’s frontend was loading.
+- Fixed a bug in Report and E-commerce widgets where spinners were not showing up for loading submit buttons.
+- Fixed a bug where the Realtime report widget wasn’t working properly due to a javascript error.
 
 ## 5.0.0-beta.1 - 2022-04-06
 
