@@ -1,6 +1,14 @@
 .dukt\\analytics\\widgets\\report {
   z-index: 1;
 
+  .front {
+    .spinner {
+      position: absolute;
+      top: calc(50% - 17px);
+      left: calc(50% - 12px);
+    }
+  }
+
   .settings.icon {
     position: relative;
     z-index: 1;
@@ -29,7 +37,8 @@
   }
 
   .body {
-    min-height: 20px;
+    min-height: 50px;
+
     h2.title {
       display: block;
       margin: 0 0 7px;
@@ -37,14 +46,7 @@
     .date {
       margin-bottom: 14px;
     }
-  }
 
-  .spinner {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-left: -14px;
-    margin-top: -14px;
   }
 
   .report {
