@@ -135,6 +135,7 @@ class Oauth extends Component
      */
     public function getRedirectUri()
     {
-        return UrlHelper::actionUrl('analytics/oauth/callback');
+        $url = UrlHelper::actionUrl('analytics/oauth/callback');
+        return UrlHelper::removeParam($url, 'site');;
     }
 }

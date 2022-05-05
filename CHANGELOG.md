@@ -1,6 +1,11 @@
 Changelog
 =========
 
+## Unreleased
+
+### Fixed
+- Fixed a bug where the `site` query param was present in the OAuth redirect URI.
+
 ## 5.0.0-beta.2 - 2022-04-28
 
 ### Fixed
