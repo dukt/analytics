@@ -21,9 +21,16 @@
         <input type="hidden" name="redirect" value="{{ 'analytics/settings'|hash }}">
 
         <h2 class="first">{{ 'Create the OAuth application'|t('analytics') }}</h2>
-        <p>{{ 'Go to the {link} and create a new project or use an existing one.'|t('analytics', {link: '<a href="https://console.developers.google.com/">'~'Google API Console'|t('analytics')~'</a>'})|raw }}</p>
+        <p>{{ 'Go to the {link} and create a new project or use an existing one.'|t('analytics', {
+                link: '<a href="{url}">{label}</a>'|t('analytics', {
+                    url: 'https://console.developers.google.com/',
+                    label: 'Google API Console'|t('analytics'),
+                })})|raw }}
+        </p>
         <p>{{ "In <strong>API & Services → Library</strong>, search for “analytics”, and enable the “Google Analytics API” and “Google Analytics Reporting API”."|t('analytics')|raw }}</p>
-        <p>{{ "In <strong>API & Services → Credentials</strong>, click the “Create credentials” button and create a new “OAuth client ID” of type “Web Application”."|t('analytics', {link: '<a href="https://console.developers.google.com/">'~'Google API Console'|t('analytics')~'</a>'})|raw }}</p>
+
+        <p>{{ "In <strong>API & Services → Credentials</strong>, click the “Create credentials” button and create a new “OAuth client ID” of type “Web Application”."|t('analytics') }}</p>
+
         <p>{{ "Configure the client with the following javascript origin and redirect urls."|t('analytics') }}</p>
 
         <ul class="bullets">
@@ -33,7 +40,14 @@
 
         <h2>{{ 'Configure the OAuth client'|t('analytics') }}</h2>
         <p>{{ 'Once the OAuth client is created, Google will provide you with a client ID and secret.'|t('analytics') }}</p>
-        <p>{{ ("Copy the client ID & secret from the <a href=\"https://console.developers.google.com/\">"~'Google Api Console'|t('analytics')~"</a> under the API Manager → Credentials tab, paste them below and save.")|raw }}</p>
+
+        <p>{{ 'Copy the client ID & secret from the {link} under the API Manager → Credentials tab, paste them below and save.'|t('analytics', {
+                link: '<a href="{url}">{label}</a>'|t('analytics', {
+                    url: 'https://console.developers.google.com/',
+                    label: 'Google API Console'|t('analytics')
+                }),
+            })|raw }}
+        </p>
 
         {{ forms.autosuggestField({
             label: "Client ID",
