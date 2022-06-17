@@ -11,7 +11,7 @@ use Craft;
 use craft\helpers\Json;
 use craft\web\assets\d3\D3Asset;
 use yii\base\Component;
-use dukt\Analytics\Plugin as AnalyticsPlugin;
+use dukt\analytics\Plugin as AnalyticsPlugin;
 
 class Analytics extends Component
 {

@@ -31,14 +31,14 @@ trait PluginTrait
     // =========================================================================
 
     /**
-     * @var
+     * @var Info
      */
-    private $_info;
+    private Info $_info;
 
     /**
-     * @var
+     * @var bool
      */
-    private $_isInstalled;
+    private bool $_isInstalled;
 
     // Public Methods
     // =========================================================================
@@ -183,7 +183,6 @@ trait PluginTrait
      */
     public function getInfo(): Info
     {
-        /** @var WebApplication|ConsoleApplication $this */
         if ($this->_info !== null) {
             return $this->_info;
         }
@@ -211,7 +210,6 @@ trait PluginTrait
      */
     public function getIsInstalled(): bool
     {
-        /** @var WebApplication|ConsoleApplication $this */
         if ($this->_isInstalled !== null) {
             return $this->_isInstalled;
         }

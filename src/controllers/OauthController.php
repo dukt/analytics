@@ -96,7 +96,7 @@ class OauthController extends Controller
 
             // Redirect
             Craft::$app->getSession()->setNotice(Craft::t('analytics', 'Connected to Google Analytics.'));
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             // Failed to get the token credentials or user details.
             Craft::$app->getSession()->setError($exception->getMessage());
         }
