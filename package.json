@@ -13,12 +13,14 @@
     "hot": "mix watch --hot",
     "production": "mix --production",
     "dev": "npm run development",
-    "build": "npm run production"
+    "build": "npm run production",
+    "test": "npx playwright test"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@playwright/test": "^1.22.2",
     "d3-format": "^1.4.4",
     "del": "^6.0.0",
     "laravel-mix": "^6.0.16",
