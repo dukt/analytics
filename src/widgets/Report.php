@@ -82,7 +82,7 @@ class Report extends \craft\base\Widget
     /**
      * @inheritDoc IWidget::getBodyHtml()
      *
-     * @return string|false
+     * @return string|null
      * @throws \Twig\Error\LoaderError
      * @throws \yii\base\Exception
      */

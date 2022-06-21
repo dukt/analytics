@@ -8,6 +8,7 @@
 namespace dukt\analytics\services;
 
 use Craft;
+use craft\base\Element;
 use craft\helpers\Json;
 use craft\web\assets\d3\D3Asset;
 use yii\base\Component;
@@ -57,6 +58,7 @@ class Analytics extends Component
      */
     public function getElementUrlPath(int $elementId, ?int $siteId): string
     {
+        /** @var Element $element */
         $element = Craft::$app->elements->getElementById($elementId, null, $siteId);
 
         $url = $element->url;

@@ -28,6 +28,7 @@ use yii\base\Event;
 /**
  * Class Plugin
  *
+ * @method Settings getSettings()
  * @package dukt\analytics
  */
 class Plugin extends \craft\base\Plugin
