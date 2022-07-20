@@ -28,6 +28,7 @@ jobs:
           cache: 'yarn'
       - run: yarn
       - run: yarn build
+      - run: cp -vr docs/.vuepress/dist $GITHUB_WORKSPACE
       - name: rsync deployments
         uses: burnett01/rsync-deployments@4.1
         with:
