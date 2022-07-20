@@ -5,13 +5,9 @@ on:
   push:
     branches:
       - v5-develop
-    paths:
-      - 'docs/**'
   pull_request:
     branches:
       - v5-develop
-    paths:
-      - 'docs/**'
 
 jobs:
   build:
