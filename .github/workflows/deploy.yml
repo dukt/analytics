@@ -32,8 +32,6 @@ jobs:
           cache: 'yarn'
       - run: yarn
       - run: yarn build
-      - run: yarn test:e2e --headless
-      - run: yarn lint
       - name: rsync deployments
         uses: burnett01/rsync-deployments@4.1
         with:
