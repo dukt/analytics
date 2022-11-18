@@ -1,6 +1,6 @@
-name: Deploy docs
+name: Deploy plugin docs and changelog
 env:
-  DOCS_DEST_DIR: /analytics/
+  PLUGIN_HANDLE: /analytics/
 on:
   push:
     branches:
@@ -9,7 +9,7 @@ on:
     branches:
       - v5-develop
 jobs:
-  build:
+  build_deploy_docs:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -26,15 +26,37 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: yarn
       - run: yarn build
+      - run: mkdir $GITHUB_WORKSPACE
+      - run: cp -vr docs/.vuepress/dist $GITHUB_WORKSPACE
+      - name: rsync deployments
+        uses: burnett01/rsync-deployments@5.2.1
+        with:
+          switches: -avzr --delete
+          path: ./dist/
+          remote_path: ${{ secrets.PLUGINDOCS_DEPLOY_PATH }}${{ env.PLUGIN_HANDLE }}
+          remote_host: ${{ secrets.PLUGINDOCS_DEPLOY_REMOTE_HOST }}
+          remote_port: ${{ secrets.PLUGINDOCS_DEPLOY_REMOTE_PORT }}
+          remote_user: ${{ secrets.PLUGINDOCS_DEPLOY_REMOTE_USER }}
+          remote_key: ${{ secrets.PLUGINDOCS_DEPLOY_PRIVATE_KEY }}
+  deploy_changelog:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
       - run: mkdir $GITHUB_WORKSPACE/output
-      - run: cp -vr docs/.vuepress/dist $GITHUB_WORKSPACE/output/docs
-      - run: cp -vr ../CHANGELOG.md $GITHUB_WORKSPACE/output/
+      - run: cp -vr CHANGELOG.md $GITHUB_WORKSPACE/output/
       - name: rsync deployments
         uses: burnett01/rsync-deployments@5.2.1
         with:
           switches: -avzr --delete
           path: ./output/
-          remote_path: ${{ secrets.PLUGINDOCS_DEPLOY_PATH }}${{ env.DOCS_DEST_DIR }}
+          remote_path: ${{ secrets.PLUGIN_CHANGELOGS_DEPLOY_PATH }}${{ env.PLUGIN_HANDLE }}
           remote_host: ${{ secrets.PLUGINDOCS_DEPLOY_REMOTE_HOST }}
           remote_port: ${{ secrets.PLUGINDOCS_DEPLOY_REMOTE_PORT }}
           remote_user: ${{ secrets.PLUGINDOCS_DEPLOY_REMOTE_USER }}
