@@ -1,4 +1,4 @@
-name: Deploy plugin docs and changelog
+name: Deploy docs and changelog
 env:
   PLUGIN_HANDLE: /analytics/
 on:
