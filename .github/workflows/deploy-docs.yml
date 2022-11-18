@@ -27,7 +27,7 @@ jobs:
       - run: yarn
       - run: yarn build
       - run: cp -vr docs/.vuepress/dist $GITHUB_WORKSPACE/docs
-      - run: cp -vr ../CHANGELOG.md $GITHUB_WORKSPACE
+      - run: cp -vr ../CHANGELOG.md $GITHUB_WORKSPACE/changelog
       - name: rsync deployments
         uses: burnett01/rsync-deployments@5.2.1
         with:
