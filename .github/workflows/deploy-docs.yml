@@ -50,7 +50,7 @@ jobs:
         uses: burnett01/rsync-deployments@5.2.1
         with:
           switches: -avzr --delete
-          path: ./output/
+          path: ./CHANGELOG.md
           remote_path: ${{ secrets.PLUGIN_CHANGELOGS_DEPLOY_PATH }}${{ env.PLUGIN_HANDLE }}
           remote_host: ${{ secrets.PLUGINDOCS_DEPLOY_REMOTE_HOST }}
           remote_port: ${{ secrets.PLUGINDOCS_DEPLOY_REMOTE_PORT }}
