@@ -29,7 +29,7 @@ jobs:
       - run: cp -vr docs/.vuepress/dist $GITHUB_WORKSPACE/docs
       - run: cp -vr ../CHANGELOG.md $GITHUB_WORKSPACE
       - name: rsync deployments
-        uses: burnett01/rsync-deployments@5
+        uses: burnett01/rsync-deployments@5.2.1
         with:
           switches: -avzr --delete
           path: $GITHUB_WORKSPACE
