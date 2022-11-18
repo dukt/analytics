@@ -19,9 +19,9 @@ jobs:
       matrix:
         node-version: [ 16.x ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
       - run: yarn
@@ -29,7 +29,7 @@ jobs:
       - run: cp -vr docs/.vuepress/dist $GITHUB_WORKSPACE/docs
       - run: cp -vr ../CHANGELOG.md $GITHUB_WORKSPACE
       - name: rsync deployments
-        uses: burnett01/rsync-deployments@4.1
+        uses: burnett01/rsync-deployments@5
         with:
           switches: -avzr --delete
           path: $GITHUB_WORKSPACE
