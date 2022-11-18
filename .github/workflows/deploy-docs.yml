@@ -44,10 +44,6 @@ jobs:
         working-directory: ./
     steps:
       - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
       - run: mkdir $GITHUB_WORKSPACE/output
       - run: cp -vr CHANGELOG.md $GITHUB_WORKSPACE/output/
       - name: rsync deployments
