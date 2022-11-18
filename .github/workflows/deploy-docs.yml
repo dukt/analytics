@@ -26,12 +26,13 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: yarn
       - run: yarn build
-      - run: cp -vr docs/.vuepress/dist $GITHUB_WORKSPACE
+      - run: cp -vr docs/.vuepress/dist $GITHUB_WORKSPACE/docs
+      - run: cp -vr ../CHANGELOG.md $GITHUB_WORKSPACE
       - name: rsync deployments
         uses: burnett01/rsync-deployments@4.1
         with:
           switches: -avzr --delete
-          path: ./dist/
+          path: $GITHUB_WORKSPACE
           remote_path: ${{ secrets.PLUGINDOCS_DEPLOY_PATH }}${{ env.DOCS_DEST_DIR }}
           remote_host: ${{ secrets.PLUGINDOCS_DEPLOY_REMOTE_HOST }}
           remote_port: ${{ secrets.PLUGINDOCS_DEPLOY_REMOTE_PORT }}
