@@ -1,7 +1,7 @@
 name: ci
 on:
   workflow_call:
-    input:
+    inputs:
       plugin_handle:
         required: true
         type: string
