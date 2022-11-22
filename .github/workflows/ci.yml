@@ -11,7 +11,8 @@ jobs:
   ci:
     name: ci
     uses: dukt/analytics/.github/workflows/common.yml@v5-develop
-    secrets: inherit
     with:
       plugin_handle: analytics
+    secrets: inherit
+
 
