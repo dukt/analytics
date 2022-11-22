@@ -4,6 +4,18 @@ on:
     secrets:
       plugin_handle:
         required: true
+      PLUGIN_CHANGELOGS_DEPLOY_PATH:
+        required: true
+      PLUGINDOCS_DEPLOY_PATH:
+        required: true
+      PLUGINDOCS_DEPLOY_REMOTE_HOST:
+        required: true
+      PLUGINDOCS_DEPLOY_REMOTE_PORT:
+        required: true
+      PLUGINDOCS_DEPLOY_REMOTE_USER:
+        required: true
+      PLUGINDOCS_DEPLOY_PRIVATE_KEY:
+        required: true
 jobs:
   build_deploy_docs:
     runs-on: ubuntu-latest
