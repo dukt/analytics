@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - v5-develop
-  pull_request:
-    branches:
-      - v5-develop
 jobs:
   ci:
     name: ci
