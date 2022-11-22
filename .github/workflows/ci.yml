@@ -10,7 +10,7 @@ on:
 jobs:
   ci:
     name: ci
-    uses: dukt/analytics/.github/workflows/common.yml@v5-develop
+    uses: dukt/.github/.github/workflows/deploy-docs-and-changelog.yml
     with:
       plugin_handle: analytics
     secrets: inherit
