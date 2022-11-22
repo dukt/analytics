@@ -28,7 +28,7 @@ jobs:
         with:
           switches: -avzr --delete
           path: ./dist/
-          remote_path: ${{ secrets.PLUGINDOCS_DEPLOY_PATH }}${{ env.PLUGIN_HANDLE }}
+          remote_path: ${{ secrets.PLUGINDOCS_DEPLOY_PATH }}${{ secrets.plugin_handle }}
           remote_host: ${{ secrets.PLUGINDOCS_DEPLOY_REMOTE_HOST }}
           remote_port: ${{ secrets.PLUGINDOCS_DEPLOY_REMOTE_PORT }}
           remote_user: ${{ secrets.PLUGINDOCS_DEPLOY_REMOTE_USER }}
@@ -42,7 +42,7 @@ jobs:
         with:
           switches: -avzr --delete
           path: ./CHANGELOG.md
-          remote_path: ${{ secrets.PLUGIN_CHANGELOGS_DEPLOY_PATH }}${{ env.PLUGIN_HANDLE }}
+          remote_path: ${{ secrets.PLUGIN_CHANGELOGS_DEPLOY_PATH }}${{ secrets.plugin_handle }}
           remote_host: ${{ secrets.PLUGINDOCS_DEPLOY_REMOTE_HOST }}
           remote_port: ${{ secrets.PLUGINDOCS_DEPLOY_REMOTE_PORT }}
           remote_user: ${{ secrets.PLUGINDOCS_DEPLOY_REMOTE_USER }}
