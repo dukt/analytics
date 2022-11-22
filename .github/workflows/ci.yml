@@ -1,0 +1,15 @@
+name: ci
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - v5-develop
+  pull_request:
+    branches:
+      - v5-develop
+jobs:
+  ci:
+    name: ci
+    uses: dukt/analytics/.github/workflows/common.yml@v5-develop
+    secrets:
+      plugin_handle: analytics
