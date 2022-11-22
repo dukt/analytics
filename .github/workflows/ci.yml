@@ -11,11 +11,7 @@ jobs:
   ci:
     name: ci
     uses: dukt/analytics/.github/workflows/common.yml@v5-develop
-    secrets:
+    secrets: inherit
+    with:
       plugin_handle: analytics
-      PLUGIN_CHANGELOGS_DEPLOY_PATH: ${{ secrets.PLUGIN_CHANGELOGS_DEPLOY_PATH }}
-      PLUGINDOCS_DEPLOY_PATH: ${{ secrets.PLUGINDOCS_DEPLOY_PATH }}
-      PLUGINDOCS_DEPLOY_REMOTE_HOST: ${{ secrets.PLUGINDOCS_DEPLOY_REMOTE_HOST }}
-      PLUGINDOCS_DEPLOY_REMOTE_PORT: ${{ secrets.PLUGINDOCS_DEPLOY_REMOTE_PORT }}
-      PLUGINDOCS_DEPLOY_REMOTE_USER: ${{ secrets.PLUGINDOCS_DEPLOY_REMOTE_USER }}
-      PLUGINDOCS_DEPLOY_PRIVATE_KEY: ${{ secrets.PLUGINDOCS_DEPLOY_PRIVATE_KEY }}
+

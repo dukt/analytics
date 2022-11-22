@@ -1,21 +1,10 @@
 name: ci
 on:
   workflow_call:
-    secrets:
+    input:
       plugin_handle:
         required: true
-      PLUGIN_CHANGELOGS_DEPLOY_PATH:
-        required: true
-      PLUGINDOCS_DEPLOY_PATH:
-        required: true
-      PLUGINDOCS_DEPLOY_REMOTE_HOST:
-        required: true
-      PLUGINDOCS_DEPLOY_REMOTE_PORT:
-        required: true
-      PLUGINDOCS_DEPLOY_REMOTE_USER:
-        required: true
-      PLUGINDOCS_DEPLOY_PRIVATE_KEY:
-        required: true
+        type: string
 jobs:
   build_deploy_docs:
     runs-on: ubuntu-latest
@@ -40,7 +29,7 @@ jobs:
         with:
           switches: -avzr --delete
           path: ./dist/
-          remote_path: ${{ secrets.PLUGINDOCS_DEPLOY_PATH }}${{ secrets.plugin_handle }}
+          remote_path: ${{ secrets.PLUGINDOCS_DEPLOY_PATH }}${{ inputs.plugin_handle }}
           remote_host: ${{ secrets.PLUGINDOCS_DEPLOY_REMOTE_HOST }}
           remote_port: ${{ secrets.PLUGINDOCS_DEPLOY_REMOTE_PORT }}
           remote_user: ${{ secrets.PLUGINDOCS_DEPLOY_REMOTE_USER }}
@@ -54,7 +43,7 @@ jobs:
         with:
           switches: -avzr --delete
           path: ./CHANGELOG.md
-          remote_path: ${{ secrets.PLUGIN_CHANGELOGS_DEPLOY_PATH }}${{ secrets.plugin_handle }}
+          remote_path: ${{ secrets.PLUGIN_CHANGELOGS_DEPLOY_PATH }}${{ inputs.plugin_handle }}
           remote_host: ${{ secrets.PLUGINDOCS_DEPLOY_REMOTE_HOST }}
           remote_port: ${{ secrets.PLUGINDOCS_DEPLOY_REMOTE_PORT }}
           remote_user: ${{ secrets.PLUGINDOCS_DEPLOY_REMOTE_USER }}
