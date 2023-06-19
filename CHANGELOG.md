@@ -3,8 +3,19 @@ Changelog
 
 ## Unreleased
 
+### Changed
+- Updated `league/oauth2-google` to 4.0.
+
 ### Fixed
-- Fixed a bug where the realtime report widget wasn’t working properly due to a javascript error.
+- Fixed a bug where the `site` query param was present in the OAuth redirect URI.
+- Fixed english translations.
+
+## 5.0.0-beta.2 - 2022-04-28
+
+### Fixed
+- Fixed a bug where the loading spinner was not showing up when the Report widget’s frontend was loading.
+- Fixed a bug in Report and E-commerce widgets where spinners were not showing up for loading submit buttons.
+- Fixed a bug where the Realtime report widget wasn’t working properly due to a javascript error.
 
 ## 5.0.0-beta.1 - 2022-04-06
 

@@ -32,7 +32,7 @@ class Analytics extends Api
     /**
      * Get columns.
      *
-     * @return Google_Service_Analytics_Columns
+     * @return \Google\Service\Analytics\Columns
      * @throws \yii\base\InvalidConfigException
      */
     public function getColumns()
@@ -290,7 +290,7 @@ class Analytics extends Api
         $rows = [];
 
         if ($data['rows']) {
-            $rows = $data->rows;
+            $rows = $data['rows'];
 
             foreach ($rows as $kRow => $row) {
                 foreach ($row as $_valueKey => $_value) {

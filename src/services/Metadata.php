@@ -55,8 +55,6 @@ class Metadata extends Component
     /**
      * Returns available data types for Google Analytics
      *
-     * @param mixed
-     *
      * @return array
      */
     public function getGoogleAnalyticsDataTypes(): array
@@ -76,8 +74,6 @@ class Metadata extends Component
 
     /**
      * Returns available data types
-     *
-     * @param mixed
      *
      * @return array
      */

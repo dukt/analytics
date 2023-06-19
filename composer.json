@@ -1,7 +1,7 @@
 {
     "name": "dukt/analytics",
     "description": "Customizable statistics widgets and entry tracking for Google Analytics.",
-    "version": "5.0.0-beta.1",
+    "version": "5.0.0-beta.2",
     "type": "craft-plugin",
     "license": "proprietary",
     "keywords": [
@@ -27,7 +27,7 @@
         "php": "^8.0.2",
         "craftcms/cms": "^4.0.0-beta.1",
         "league/oauth2-client": "^2.5.0",
-        "league/oauth2-google": "^3.0.0",
+        "league/oauth2-google": "^4.0.0",
         "google/apiclient": "^v2.6.0",
         "theiconic/php-ga-measurement-protocol": "^2.8.0"
     },
@@ -42,5 +42,17 @@
         "schemaVersion": "1.1.2",
         "documentationUrl": "https://dukt.net/docs/analytics/v4",
         "changelogUrl": "https://raw.githubusercontent.com/dukt/analytics/develop/CHANGELOG.md"
+    },
+    "config": {
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true,
+            "craftcms/plugin-installer": true
+        }
+    },
+    "require-dev": {
+        "craftcms/phpstan": "dev-main"
+    },
+    "scripts": {
+        "phpstan": "phpstan --memory-limit=1G"
     }
 }

@@ -19,8 +19,7 @@
                 // Set elements
                 this.$element = $('#'+element);
                 this.$body = $('.body', this.$element);
-                this.$spinner = $('.spinner', this.$element);
-                this.$spinner.removeClass('body-loading');
+                this.$spinner = $('.da-spinner', this.$element);
                 this.$error = $('<div class="error hidden" />').appendTo(this.$body);
                 this.$period = $('.period', this.$element);
                 this.$revenue = $('.revenue', this.$element);

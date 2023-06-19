@@ -9,6 +9,19 @@ namespace dukt\analytics\records;
 
 use craft\db\ActiveRecord;
 
+/**
+ * View record.
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $gaAccountId
+ * @property string $gaAccountName
+ * @property string $gaPropertyId
+ * @property string $gaPropertyName
+ * @property string $gaViewId
+ * @property string $gaViewName
+ * @property string $gaViewCurrency
+ */
 class View extends ActiveRecord
 {
     // Public Methods

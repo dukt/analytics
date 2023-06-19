@@ -140,9 +140,7 @@ class Views extends Component
         }
 
         if ($view->id) {
-            $viewRecord = ViewRecord::find()
-                ->where(['id' => $view->id])
-                ->one();
+            $viewRecord = ViewRecord::findOne($view->id);
 
             if (!$viewRecord) {
                 throw new InvalidViewException(sprintf("No view exists with the ID '%d'", $view->id));
@@ -226,9 +224,7 @@ class Views extends Component
         }
 
         if ($siteView->siteId) {
-            $siteViewRecord = SiteViewRecord::find()
-                ->where(['siteId' => $siteView->siteId])
-                ->one();
+            $siteViewRecord = SiteViewRecord::findOne(['siteId' => $siteView->siteId]);
 
             if (!$siteViewRecord) {
                 $siteViewRecord = new SiteViewRecord();

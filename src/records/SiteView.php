@@ -9,6 +9,13 @@ namespace dukt\analytics\records;
 
 use craft\db\ActiveRecord;
 
+/**
+ * SiteView record.
+ *
+ * @property int $id
+ * @property int $siteId
+ * @property int $viewId
+ */
 class SiteView extends ActiveRecord
 {
     // Public Methods

@@ -63,6 +63,7 @@ class Oauth extends Component
         if ($refresh && $token->hasExpired()) {
             $provider = $this->getOauthProvider();
             $grant = new \League\OAuth2\Client\Grant\RefreshToken();
+            /** @var AccessToken $newToken */
             $newToken = $provider->getAccessToken($grant, ['refresh_token' => $token->getRefreshToken()]);
 
             $token = new AccessToken([
@@ -135,6 +136,7 @@ class Oauth extends Component
      */
     public function getRedirectUri()
     {
-        return UrlHelper::actionUrl('analytics/oauth/callback');
+        $url = UrlHelper::actionUrl('analytics/oauth/callback');
+        return UrlHelper::removeParam($url, 'site');;
     }
 }

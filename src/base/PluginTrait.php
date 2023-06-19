@@ -12,6 +12,7 @@ use craft\db\Query;
 use craft\helpers\Db;
 use dukt\analytics\models\Info;
 use dukt\analytics\Plugin as Analytics;
+use yii\web\ServerErrorHttpException;
 
 /**
  * PluginTrait implements the common methods and properties for plugin classes.
@@ -31,14 +32,14 @@ trait PluginTrait
     // =========================================================================
 
     /**
-     * @var
+     * @var Info|null
      */
-    private $_info;
+    private ?Info $_info = null;
 
     /**
-     * @var
+     * @var bool|null
      */
-    private $_isInstalled;
+    private ?bool $_isInstalled = null;
 
     // Public Methods
     // =========================================================================
@@ -183,7 +184,6 @@ trait PluginTrait
      */
     public function getInfo(): Info
     {
-        /** @var WebApplication|ConsoleApplication $this */
         if ($this->_info !== null) {
             return $this->_info;
         }
@@ -197,7 +197,7 @@ trait PluginTrait
             ->one();
 
         if (!$row) {
-            $tableName = $this->getDb()->getSchema()->getRawTableName('{{%analytics_info}}');
+            $tableName = Craft::$app->getDb()->getSchema()->getRawTableName('{{%analytics_info}}');
             throw new ServerErrorHttpException(sprintf('The %s table is missing its row', $tableName));
         }
 
@@ -211,7 +211,6 @@ trait PluginTrait
      */
     public function getIsInstalled(): bool
     {
-        /** @var WebApplication|ConsoleApplication $this */
         if ($this->_isInstalled !== null) {
             return $this->_isInstalled;
         }

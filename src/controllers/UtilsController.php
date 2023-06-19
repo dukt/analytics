@@ -11,6 +11,7 @@ use Craft;
 use craft\helpers\FileHelper;
 use craft\web\Controller;
 use dukt\analytics\Plugin as Analytics;
+use Google\Service\Analytics\Column;
 use yii\web\Response;
 
 /**
@@ -140,9 +141,9 @@ class UtilsController extends Controller
      * Add column from item.
      *
      * @param $columns
-     * @param $item
+     * @param Column $item
      */
-    private function addColumnFromItem(&$columns, $item)
+    private function addColumnFromItem(&$columns, Column $item)
     {
         if (isset($item->attributes['minTemplateIndex'])) {
             for ($i = $item->attributes['minTemplateIndex']; $i <= $item->attributes['maxTemplateIndex']; ++$i) {
