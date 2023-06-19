@@ -7,6 +7,7 @@
       <div>
         <template v-if="chartData">
           <analytics-chart
+            class="-da-mx-[24px] -da-mb-[24px]"
             :chart-type="reportResponse.data.type"
             :chart-data="chartData"
             :chart-options="chartOptions"
