@@ -113,4 +113,18 @@ class TestsController extends Controller
 
         return $this->renderTemplate('analytics/tests/_templateVariables', $variables);
     }
+
+    /**
+     * GA4
+     *
+     * @param array $variables
+     *
+     * @return Response
+     */
+    public function actionGa4(array $variables = [])
+    {
+        Craft::$app->getView()->registerAssetBundle(TestsAsset::class);
+
+        return $this->renderTemplate('analytics/tests/_ga4', $variables);
+    }
 }
