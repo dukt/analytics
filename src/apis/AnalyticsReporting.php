@@ -93,6 +93,28 @@ class AnalyticsReporting extends Api
 
         foreach ($criterias as $criteria) {
             $request = $this->getReportingReportRequest($criteria);
+//            $request->viewId = '1547168';
+            /*
+ * object(Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaPropertySummary)#563 (7) {
+  ["displayName"]=>
+  string(16) "Dukt.net  - GA4"
+  ["parent"]=>
+  string(16) "accounts/1547168"
+  ["property"]=>
+  string(20) "properties/309469168"
+  ["propertyType"]=>
+  string(22) "PROPERTY_TYPE_ORDINARY"
+  ["internal_gapi_mappings":protected]=>
+  array(0) {
+  }
+  ["modelData":protected]=>
+  array(0) {
+  }
+  ["processed":protected]=>
+  array(0) {
+  }
+}
+*/
             $requests[] = $request;
         }
 

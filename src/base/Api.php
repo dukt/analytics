@@ -8,6 +8,7 @@
 namespace dukt\analytics\base;
 
 use craft\base\Component;
+use Google\Analytics\Admin\V1beta\AnalyticsAdminServiceClient;
 use Google_Client;
 use dukt\analytics\Plugin as Analytics;
 

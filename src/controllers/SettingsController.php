@@ -12,6 +12,7 @@ use craft\errors\InvalidPluginException;
 use craft\web\Controller;
 use dukt\analytics\models\SiteView;
 use dukt\analytics\models\View;
+use dukt\analytics\Plugin;
 use dukt\analytics\web\assets\settings\SettingsAsset;
 use dukt\analytics\Plugin as Analytics;
 use Exception;
@@ -256,12 +257,23 @@ class SettingsController extends Controller
         $request = Craft::$app->getRequest();
         $accountExplorer = $request->getBodyParam('accountExplorer');
 
+
         $reportingView = new View();
         $reportingView->id = $request->getBodyParam('viewId');
         $reportingView->name = $request->getBodyParam('name');
         $reportingView->gaAccountId = $accountExplorer['account'];
         $reportingView->gaPropertyId = $accountExplorer['property'];
-        $reportingView->gaViewId = $accountExplorer['view'];
+        $reportingView->gaViewId = $accountExplorer['view'] ?? null;
+//
+//        $googleAdminService = Plugin::$plugin->getApis()->getAnalytics()->getGoogleAdminService();
+//
+//        echo '<pre>';
+//        var_dump(
+//            $googleAdminService->accounts->listAccounts()->getAccounts(),
+////            $googleAdminService->properties->listProperties(['filter' => 'parent:accounts/35813838'])->getProperties()
+//        );
+//        echo '</pre>';
+//        die();
 
         $accountExplorerData = Analytics::$plugin->getApis()->getAnalytics()->getAccountExplorerData();
 
@@ -272,8 +284,9 @@ class SettingsController extends Controller
         }
 
         foreach ($accountExplorerData['properties'] as $dataProperty) {
-            if ($dataProperty->id == $reportingView->gaPropertyId) {
-                $reportingView->gaPropertyName = $dataProperty->name;
+
+            if ($dataProperty['id'] == $reportingView->gaPropertyId) {
+                $reportingView->gaPropertyName = $dataProperty['name'];
             }
         }
 

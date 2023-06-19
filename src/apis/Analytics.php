@@ -12,6 +12,7 @@ use dukt\analytics\base\Api;
 use dukt\analytics\Plugin;
 use \Google_Service_Analytics;
 use \Google_Service_Analytics_Columns;
+use \Google\Service\GoogleAnalyticsAdmin;
 
 class Analytics extends Api
 {
@@ -27,6 +28,13 @@ class Analytics extends Api
         $client = $this->getClient();
 
         return new Google_Service_Analytics($client);
+    }
+
+    public function getGoogleAdminService()
+    {
+        $client = $this->getClient();
+
+        return new GoogleAnalyticsAdmin($client);
     }
 
     /**
@@ -158,6 +166,8 @@ class Analytics extends Api
      */
     private function getAllProperties(): array
     {
+        // UA Properties
+
         $startIndex = 1;
         $maxResults = 1000;
         $managementWebProperties = Plugin::$plugin->getApis()->getAnalytics()->getService()->management_webproperties;
@@ -176,7 +186,15 @@ class Analytics extends Api
         $items = [];
         $index = 0;
 
-        $items[] = $response->toSimpleObject()->items;
+        $items[] = array_map(function($item) {
+            return [
+                'type' => 'UA',
+                'id' => $item->id,
+                'accountId' => $item->accountId,
+                'name' => $item->name,
+            ];
+        }, $response->toSimpleObject()->items);
+
         $index += is_array($response->toSimpleObject()->items) || $response->toSimpleObject()->items instanceof \Countable ? count($response->toSimpleObject()->items) : 0;
 
         while($index < $totalResults) {
@@ -187,9 +205,54 @@ class Analytics extends Api
                 'max-results' => $maxResults,
             ]);
 
-            $items[] = $response->toSimpleObject()->items;
+            $items[] = array_map(function($item) {
+                return [
+                    'type' => 'UA',
+                    'id' => $item->id,
+                    'accountId' => $item->accountId,
+                    'name' => $item->name,
+                ];
+            }, $response->toSimpleObject()->items);
             $index += is_array($response->toSimpleObject()->items) || $response->toSimpleObject()->items instanceof \Countable ? count($response->toSimpleObject()->items) : 0;
         }
+
+        // GA4 Properties
+
+        $googleAdminService = Plugin::$plugin->getApis()->getAnalytics()->getGoogleAdminService();
+        $accountSummaries = $googleAdminService->accountSummaries->listAccountSummaries()->getAccountSummaries();
+
+        foreach($accountSummaries as $accountSummary) {
+            $props = $accountSummary->getPropertySummaries();
+
+            $items[] = array_map(function($item) {
+                return [
+                    'type' => 'GA4',
+                    'id' => $item->getProperty(),
+                    'name' => $item->getDisplayName(),
+                    'accountId' => str_replace('accounts/', '', $item->getParent()),
+                    'test' => get_class($item),
+//                'id' => $item->getProperty()->getId(),
+//                'accountId' => $item->getProperty()->getAccount()->getId(),
+//                'name' => $item->getProperty()->getName(),
+                ];
+            }, $props);
+        }
+
+//        $props = $googleAdminService->properties->listProperties(['filter' => 'parent:accounts/1547168'])->getProperties();
+
+
+        /*displayName
+:
+"Côté Mariage  - GA4"
+parent
+:
+"accounts/35813838"
+property
+:
+"properties/352564466"
+propertyType
+:
+"PROPERTY_TYPE_ORDINARY"*/
 
         return array_merge(...$items);
     }

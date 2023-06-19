@@ -135,6 +135,7 @@ class Views extends Component
     {
         if ($runValidation && !$view->validate()) {
             Craft::info('View not saved due to validation error.', __METHOD__);
+            throw new InvalidViewException(sprintf("View doesn't validate"));
 
             return false;
         }

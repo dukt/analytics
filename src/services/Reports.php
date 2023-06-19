@@ -341,6 +341,9 @@ class Reports extends Component
         $metricString = ($request['options']['metric'] ?? null);
 
         $criteria = new ReportRequestCriteria;
+
+
+
         $criteria->viewId = $viewId;
         $criteria->dimensions = $dimensionString;
         $criteria->metrics = $metricString;
