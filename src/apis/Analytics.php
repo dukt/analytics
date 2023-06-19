@@ -10,6 +10,7 @@ namespace dukt\analytics\apis;
 use Craft;
 use dukt\analytics\base\Api;
 use dukt\analytics\Plugin;
+use Google\Service\AnalyticsData;
 use \Google_Service_Analytics;
 use \Google_Service_Analytics_Columns;
 use \Google\Service\GoogleAnalyticsAdmin;
@@ -35,6 +36,13 @@ class Analytics extends Api
         $client = $this->getClient();
 
         return new GoogleAnalyticsAdmin($client);
+    }
+
+    public function getAnalyticsData()
+    {
+        $client = $this->getClient();
+
+        return new AnalyticsData($client);
     }
 
     /**

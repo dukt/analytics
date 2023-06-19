@@ -11,8 +11,10 @@ use Craft;
 use craft\helpers\Json;
 use craft\web\Controller;
 use craft\web\View;
+use dukt\analytics\Plugin;
 use dukt\analytics\Plugin as Analytics;
 use dukt\analytics\web\assets\tests\TestsAsset;
+use Google\Service\AnalyticsData;
 use yii\web\Response;
 
 /**
@@ -124,6 +126,41 @@ class TestsController extends Controller
     public function actionGa4(array $variables = [])
     {
         Craft::$app->getView()->registerAssetBundle(TestsAsset::class);
+
+//        $request = new \Google_Service_AnalyticsReporting_ReportRequest();
+//        $request->setViewId('42395806');
+//        $request->setDateRanges([
+//            'startDate' => '7daysAgo',
+//            'endDate' => 'today',
+//        ]);
+//        $request->setMetrics([
+//            'expression' => 'ga:users',
+//        ]);
+//        $request->setDimensions([
+//            'name' => 'ga:browser',
+//        ]);
+//
+//
+//        $reportsRequest = new \Google_Service_AnalyticsReporting_GetReportsRequest();
+//        $reportsRequest->setReportRequests([$request]);
+//
+//        $response = Analytics::$plugin->getApis()->getAnalyticsReporting()->getService()->reports->batchGet($reportsRequest);
+//
+
+        $request = new \Google\Service\AnalyticsData\RunReportRequest();
+        $request->setDateRanges([
+            'startDate' => '7daysAgo',
+            'endDate' => 'today',
+        ]);
+        $request->setMetrics([
+            'name' => 'newUsers',
+        ]);
+        $request->setDimensions([
+            'name' => 'browser',
+        ]);
+
+        $analyticsData = Plugin::$plugin->getApis()->getAnalytics()->getAnalyticsData();
+        $variables['reportResponse'] = $analyticsData->properties->runReport('properties/309469168', $request);
 
         return $this->renderTemplate('analytics/tests/_ga4', $variables);
     }
