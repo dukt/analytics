@@ -3,6 +3,8 @@
 /**
  * Chart Options
  */
+const merge = require('lodash.merge');
+
 export class ChartOptions {
   constructor() {
     this.defaults = {
@@ -124,40 +126,14 @@ export class ChartOptions {
   }
 
   field() {
-    return {
-      theme: 'maximized',
-      legend: 'none',
-      backgroundColor: '#fdfdfd',
-      colors: ['#058DC7'],
-      areaOpacity: 0.1,
-      lineWidth: 4,
+    var areaOptions = JSON.parse(JSON.stringify(this.defaults.area));
+
+    return merge(areaOptions, {
       height: 120,
       hAxis: {
         format: 'MMM d',
-        textPosition: 'in',
-        textStyle: {
-          color: '#058DC7'
-        },
-        baselineColor: '#fff',
-        gridlines: {
-          color: 'none'
-        }
-      },
-      vAxis: {
-        textPosition: 'in',
-        textStyle: {
-          color: '#058DC7'
-        },
-        baselineColor: '#ccc',
-        gridlines: {
-          color: '#f4f4f4'
-        },
-        // viewWindow: {min:0, max: 10},
-        minValue: 0,
-        maxValue: 10,
-        format: '#'
       }
-    };
+    })
   }
 }
 
