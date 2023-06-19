@@ -53,7 +53,7 @@
 import reportsApi from '@/js/api/reports';
 import {ChartOptions} from '@/js/ChartOptions';
 import AnalyticsChart from '@/js/components/AnalyticsChart';
-import {responseToDataTable} from '@/js/utils';
+import {getLocaleDefinition, responseToDataTable} from '@/js/utils';
 
 export default {
   components: {AnalyticsChart},
@@ -100,6 +100,9 @@ export default {
     chartOptions() {
       return new ChartOptions().field()
     },
+    localeDefinition() {
+      return getLocaleDefinition(this.pluginOptions.currencyDefinition);
+    }
     // chartOptions() {
     //   const chartOptions = new ChartOptions().area(this.reportResponse.data.period)
     //   chartOptions.hAxis.ticks = this.generateTicks()
@@ -125,7 +128,7 @@ export default {
           this.reportResponse = response
           this.reportType = response.data.type
 
-          const dataTable = responseToDataTable(this.reportResponse.data.chart)
+          const dataTable = responseToDataTable(this.reportResponse.data.chart, this.localeDefinition)
           this.chartData = this.formatDataTable(dataTable)
         });
     },
