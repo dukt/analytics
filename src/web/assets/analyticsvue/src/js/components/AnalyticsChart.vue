@@ -61,7 +61,16 @@ export default {
 
     google.charts.setOnLoadCallback(() => this.drawChart())
   },
+  created() {
+    window.addEventListener("resize", this.onResize);
+  },
+  destroyed() {
+    window.removeEventListener("resize", this.onResize);
+  },
   methods: {
+    onResize() {
+      this.drawChart();
+    },
     drawChart () {
       switch(this.chartType) {
         case 'area': {
