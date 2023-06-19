@@ -92,6 +92,7 @@ class Plugin extends \craft\base\Plugin
                 'analytics/tests/report-widgets' => 'analytics/tests/report-widgets',
                 'analytics/tests/template-variables' => 'analytics/tests/template-variables',
                 'analytics/tests/ga4' => 'analytics/tests/ga4',
+                'analytics/tests/ga4-metadata' => 'analytics/tests/ga4-metadata',
             ];
 
             $event->rules = array_merge($event->rules, $rules);

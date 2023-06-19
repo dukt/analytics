@@ -164,4 +164,14 @@ class TestsController extends Controller
 
         return $this->renderTemplate('analytics/tests/_ga4', $variables);
     }
+
+    public function actionGa4Metadata(array $variables = [])
+    {
+        $analyticsData = Plugin::$plugin->getApis()->getAnalytics()->getAnalyticsData();
+        $metadata = $analyticsData->properties->getMetadata('properties/309469168/metadata');
+        $variables['dimensions'] = $metadata->getDimensions();
+        $variables['metrics'] = $metadata->getMetrics();
+
+        return $this->renderTemplate('analytics/tests/_ga4-metadata', $variables);
+    }
 }

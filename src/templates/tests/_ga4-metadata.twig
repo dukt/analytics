@@ -1,0 +1,28 @@
+{% extends "analytics/_layouts/tests" %}
+{% import "_includes/forms" as forms %}
+
+{% set selectedTab = 'ga4Metadata' %}
+
+{% set content %}
+
+    <h2>Metrics</h2>
+
+    <ul>
+        {% for metric in metrics %}
+            <li>
+                <code>{{ metric.apiName }}</code>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Dimensions</h2>
+
+    <ul>
+        {% for dimension in dimensions %}
+            <li>
+                <code>{{ dimension.apiName }}</code>
+            </li>
+        {% endfor %}
+    </ul>
+
+{% endset %}
