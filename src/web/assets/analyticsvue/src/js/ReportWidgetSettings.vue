@@ -30,9 +30,9 @@
         <label>Chart Type</label>
       </div>
       <div class="input">
-        <div>
+        <div class="chart-picker">
           <div class="da-inline-block">
-            <ul class="da-flex da-border da-border-gray-300/70 da-bg-white da-rounded-md">
+            <ul class="chart-types da-flex da-border da-border-gray-300/70 da-bg-white da-rounded-md">
               <template v-for="(option, optionKey) in chartTypeOptions">
                 <li
                   :key="optionKey"

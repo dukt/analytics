@@ -10,7 +10,6 @@ namespace dukt\analytics\web\assets\tests;
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
 use dukt\analytics\web\assets\analytics\AnalyticsAsset;
-use dukt\analytics\web\assets\reportwidget\ReportWidgetAsset;
 
 /**
  * Realtime report widget asset bundle.
@@ -32,7 +31,6 @@ class TestsAsset extends AssetBundle
         $this->depends = [
             CpAsset::class,
             AnalyticsAsset::class,
-            ReportWidgetAsset::class,
         ];
 
         // define the relative path to CSS/JS files that should be registered with the page

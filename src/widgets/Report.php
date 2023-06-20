@@ -11,9 +11,7 @@ use Craft;
 use craft\helpers\Json;
 use craft\helpers\StringHelper;
 use dukt\analytics\web\assets\analyticsvue\AnalyticsVueAsset;
-use dukt\analytics\web\assets\reportwidget\ReportWidgetAsset;
 use dukt\analytics\Plugin as Analytics;
-use craft\web\View;
 
 class Report extends \craft\base\Widget
 {
@@ -138,9 +136,6 @@ class Report extends \craft\base\Widget
                 'cachedResponse' => $cachedResponse ?? null,
             ];
 
-             $view->registerAssetBundle(ReportWidgetAsset::class);
-             $view->registerJs('new Analytics.ReportWidget("widget'.$this->id.'", '.Json::encode($jsOptions).');');
-
             $view->registerAssetBundle(AnalyticsVueAsset::class);
 
             $view->registerJs('new AnalyticsVueReportWidget({data: {pluginOptions: '.Json::encode($jsOptions).'}}).$mount("#analytics-widget-'.$this->id.'");;');
@@ -164,7 +159,6 @@ class Report extends \craft\base\Widget
      */
     public function getSettingsHtml(): ?string
     {
-        Craft::$app->getView()->registerAssetBundle(ReportWidgetAsset::class);
         Craft::$app->getView()->registerAssetBundle(AnalyticsVueAsset::class);
 
         $reportingViews = Analytics::$plugin->getViews()->getViews();
@@ -175,9 +169,6 @@ class Report extends \craft\base\Widget
             $vueId = 'vue-analytics-settings-'.$randomString;
             $namespaceId = Craft::$app->getView()->namespaceInputId($id);
             $vueNamespaceId = Craft::$app->getView()->namespaceInputId($vueId);
-
-            Craft::$app->getView()->registerJs("new Analytics.ReportWidgetSettings('".$namespaceId."');");
-
 
             // Select options
             $chartTypes = ['area', 'counter', 'pie', 'table', 'geo'];
@@ -230,8 +221,8 @@ class Report extends \craft\base\Widget
                 'reportingViews' => $reportingViews,
             ];
 
-            // $view->registerJs('new VideoFieldConstructor({data: {fieldVariables: ' . \json_encode($variables) . '}}).$mount("#' . $view->namespaceInputId($id) . '-vue");');
             $vueJsonOptions = Json::encode($vueVariables);
+
             Craft::$app->getView()->registerJs('new AnalyticsVueReportWidgetSettings({data: {pluginSettings: '.$vueJsonOptions.'}}).$mount("#'.$vueNamespaceId.'");');
 
             return Craft::$app->getView()->renderTemplate('analytics/_components/widgets/Report/settings', $variables);
