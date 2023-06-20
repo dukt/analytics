@@ -10,6 +10,7 @@ namespace dukt\analytics\web\assets\analyticsvue;
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
 use craft\web\assets\vue\VueAsset;
+use dukt\analytics\web\assets\googlecharts\GoogleChartsAsset;
 
 /**
  * Vue asset bundle.
@@ -30,6 +31,7 @@ class AnalyticsVueAsset extends AssetBundle
         // define the dependencies
         $this->depends = [
             CpAsset::class,
+            GoogleChartsAsset::class,
             VueAsset::class,
         ];
 

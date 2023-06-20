@@ -111,10 +111,15 @@
                   :key="viewKey"
                   class="da-px-6 da-py-3"
                 >
-                  {{ view.name }}
+                  {{ view.name }} ({{ view.id }})
 
                   <button
                     class="da-bg-blue-600 da-text-white da-font-medium da-rounded-md da-px-2 da-py-1 da-ml-2"
+                    :class="{
+                      'da-opacity-50': selectedView === view.id,
+                    }"
+                    :disabled="selectedView === view.id"
+                    @click.prevent="selectedView = view.id"
                   >
                     Select
                   </button>
@@ -122,6 +127,33 @@
               </template>
             </ul>
           </div>
+        </div>
+      </div>
+
+      <div class="hidden">
+        <div>
+          Account:
+          <input
+            type="text"
+            name="accountExplorer[account]"
+            :value="selectedAccount"
+          >
+        </div>
+        <div>
+          Property:
+          <input
+            type="text"
+            name="accountExplorer[property]"
+            :value="selectedProperty"
+          >
+        </div>
+        <div>
+          View:
+          <input
+            type="text"
+            name="accountExplorer[view]"
+            :value="selectedView"
+          >
         </div>
       </div>
     </template>
@@ -138,6 +170,8 @@ export default {
       accountExplorerData: null,
       selectedAccount: null,
       selectedProperty: null,
+      selectedView: null,
+      pluginOptions: null,
     }
   },
 
@@ -180,6 +214,11 @@ export default {
         this.loading = false
         this.accountExplorerData = response.data;
       });
+
+
+    this.selectedAccount = this.pluginOptions.reportingView.gaAccountId
+    this.selectedProperty = this.pluginOptions.reportingView.gaPropertyId
+    this.selectedView = this.pluginOptions.reportingView.gaViewId
   }
 }
 </script>

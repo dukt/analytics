@@ -13,6 +13,7 @@ import Settings from './js/Settings.vue'
 import Tests from './js/tests/Tests.vue'
 import TestReports from './js/tests/TestReports.vue'
 
+
 // Ecommerce Widget
 window.AnalyticsVueEcommerceWidget = Vue.extend(EcommerceWidget)
 
@@ -35,9 +36,7 @@ window.AnalyticsVueTestReportWidgetSettings = Vue.extend({
   render: h => h(TestReportWidgetSettings),
 })
 
-window.AnalyticsVueSettings = Vue.extend({
-  render: h => h(Settings),
-})
+window.AnalyticsVueSettings = Vue.extend(Settings)
 
 window.AnalyticsVueTests = Vue.extend({
   data() {
