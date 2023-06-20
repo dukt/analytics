@@ -119,3 +119,25 @@ export default {
   }
 }
 </script>
+
+<style lang="pcss">
+.tiles {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  .tile {
+    margin-top: 14px;
+    flex-grow: 1;
+    flex-basis: 50%;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+
+    .value {
+      font-size: 16px;
+    }
+  }
+}
+</style>
