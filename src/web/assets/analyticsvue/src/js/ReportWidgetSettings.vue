@@ -46,6 +46,7 @@
                         type="radio"
                         :value="option.value"
                         class="da-peer da-sr-only"
+                        @change="onChartChange"
                       >
                       <div
                         class="da-text-gray-700 peer-checked:da-text-black da-px-4 da-py-3 da-cursor-pointer peer-focus-visible:da-ring-2 peer-focus-visible:da-z-50 peer-focus-visible:da-border-transparent da-relative"
@@ -281,15 +282,39 @@ export default {
     }
   },
   mounted() {
-    this.viewId = this.pluginSettings.settings.viewId
-    this.chart = this.pluginSettings.settings.chart
-    this.period = this.pluginSettings.settings.period
-    this.metric = this.pluginSettings.settings.options[this.chart].metric
-    this.dimension = this.pluginSettings.settings.options[this.chart].dimension
+    this.viewId = this.pluginSettings.settings.viewId ?? (this.viewOptions[0].value ?? null)
+    this.chart = this.pluginSettings.settings.chart ?? this.chartTypeOptions[0].value
+    this.period = this.pluginSettings.settings.period ?? this.periodOptions[0].value
     this.namespace = this.pluginSettings.namespace
+
+    this.initMetric()
+    this.initDimension()
   },
 
   methods: {
+    initMetric() {
+      this.metric =
+        (
+          this.pluginSettings.settings.options
+          && this.pluginSettings.settings.options[this.chart].metric
+        ) ?
+          this.pluginSettings.settings.options[this.chart].metric
+          : this.metricSelectOptions.find(option => option.value !== undefined)?.value
+    },
+    initDimension() {
+      this.dimension =
+        (
+          this.pluginSettings.settings.options
+          && this.pluginSettings.settings.options[this.chart].dimension
+        ) ?
+          this.pluginSettings.settings.options[this.chart].dimension
+          : this.dimensionSelectOptions.find(option => option.value !== undefined)?.value
+    },
+    onChartChange() {
+      this.initMetric()
+      this.initDimension()
+    },
+
     parseOptionsForVueSelect(inputOptions) {
       if (!inputOptions) {
         return []
