@@ -9,11 +9,11 @@ namespace dukt\analytics\controllers;
 
 use Craft;
 use craft\errors\InvalidPluginException;
+use craft\helpers\Json;
 use craft\web\Controller;
 use dukt\analytics\models\SiteView;
 use dukt\analytics\models\View;
 use dukt\analytics\web\assets\analyticsvue\AnalyticsVueAsset;
-use dukt\analytics\web\assets\settings\SettingsAsset;
 use dukt\analytics\Plugin as Analytics;
 use Exception;
 use Google_Service_Exception;
@@ -84,7 +84,7 @@ class SettingsController extends Controller
             }
         }
 
-        Craft::$app->getView()->registerAssetBundle(SettingsAsset::class);
+        Craft::$app->getView()->registerAssetBundle(AnalyticsVueAsset::class);
 
         return $this->renderTemplate('analytics/settings/_index', [
             'isOauthProviderConfigured' => $isOauthProviderConfigured,
@@ -237,9 +237,14 @@ class SettingsController extends Controller
         $variables['reportingView'] = $reportingView;
         $variables['accountExplorerOptions'] = $this->getAccountExplorerOptions($reportingView);
 
-        Craft::$app->getView()->registerAssetBundle(SettingsAsset::class);
         Craft::$app->getView()->registerAssetBundle(AnalyticsVueAsset::class);
-        Craft::$app->getView()->registerJs('new AnalyticsVueSettings().$mount("#analytics-settings");');
+
+        $jsOptions = [
+            'reportingView' => $variables['reportingView'],
+            'accountExplorerOptions' => $variables['accountExplorerOptions'],
+        ];
+
+        Craft::$app->getView()->registerJs('new AnalyticsVueSettings({data: {pluginOptions: '.Json::encode($jsOptions).'}}).$mount("#analytics-settings");');
 
         return $this->renderTemplate('analytics/settings/views/_edit', $variables);
     }
