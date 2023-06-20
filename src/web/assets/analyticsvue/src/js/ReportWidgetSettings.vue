@@ -293,23 +293,36 @@ export default {
 
   methods: {
     initMetric() {
-      this.metric =
-        (
-          this.pluginSettings.settings.options
-          && this.pluginSettings.settings.options[this.chart].metric
-        ) ?
-          this.pluginSettings.settings.options[this.chart].metric
-          : this.metricSelectOptions.find(option => option.value !== undefined)?.value
+      if (
+        this.pluginSettings.settings.options
+        && this.pluginSettings.settings.options[this.chart]
+        && this.pluginSettings.settings.options[this.chart].metric
+
+        // Check that the metric exists in the options
+        && this.metricSelectOptions.find(option => option.value === this.pluginSettings.settings.options[this.chart].metric)
+      ) {
+
+        this.metric = this.pluginSettings.settings.options[this.chart].metric
+      } else {
+        this.metric = this.metricSelectOptions.find(option => option.value !== undefined)?.value
+      }
     },
     initDimension() {
-      this.dimension =
-        (
-          this.pluginSettings.settings.options
-          && this.pluginSettings.settings.options[this.chart].dimension
-        ) ?
-          this.pluginSettings.settings.options[this.chart].dimension
-          : this.dimensionSelectOptions.find(option => option.value !== undefined)?.value
+      if (
+        this.pluginSettings.settings.options
+        && this.pluginSettings.settings.options[this.chart]
+        && this.pluginSettings.settings.options[this.chart].dimension
+
+        // Check that the dimension exists in the options
+        && this.dimensionSelectOptions.find(option => option.value === this.pluginSettings.settings.options[this.chart].dimension)
+      ) {
+
+          this.dimension = this.pluginSettings.settings.options[this.chart].dimension
+      } else {
+        this.dimension = this.dimensionSelectOptions.find(option => option.value !== undefined)?.value
+      }
     },
+
     onChartChange() {
       this.initMetric()
       this.initDimension()
