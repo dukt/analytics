@@ -9,12 +9,9 @@ namespace dukt\analytics\fields;
 
 use Craft;
 use craft\base\Field;
-use craft\base\ElementInterface;
 use craft\helpers\Json;
 use dukt\analytics\web\assets\analyticsvue\AnalyticsVueAsset;
-use dukt\analytics\web\assets\reportfield\ReportFieldAsset;
 use dukt\analytics\Plugin as Analytics;
-use craft\web\View;
 
 class Report extends Field
 {
@@ -118,10 +115,6 @@ class Report extends Field
 
                     $jsOptions['cachedResponse'] = $response;
                 }
-
-                // Register JS & Styles
-                $view->registerAssetBundle(ReportFieldAsset::class);
-                $view->registerJs('new AnalyticsReportField("'.$namespacedId.'-field", '.Json::encode($jsOptions).');');
 
                 // Variables
                 $variables = [
