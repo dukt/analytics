@@ -14,9 +14,13 @@
 </template>
 
 <script>
+/* global Analytics */
 /* global google */
+
 google.charts.load('current', {
-  packages: ['corechart', 'table', 'geochart']
+  packages: ['corechart', 'table', 'geochart'],
+  language: Analytics.chartLanguage,
+  mapsApiKey: Analytics.mapsApiKey,
 })
 
 export default {

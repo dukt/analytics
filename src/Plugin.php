@@ -19,7 +19,6 @@ use dukt\analytics\base\PluginTrait;
 use dukt\analytics\fields\Report as ReportField;
 use dukt\analytics\models\Settings;
 use dukt\analytics\web\twig\variables\AnalyticsVariable;
-use dukt\analytics\web\assets\analytics\AnalyticsAsset;
 use dukt\analytics\widgets\Ecommerce;
 use dukt\analytics\widgets\Realtime;
 use dukt\analytics\widgets\Report;
@@ -114,10 +113,6 @@ class Plugin extends \craft\base\Plugin
             $variable = $event->sender;
             $variable->set('analytics', AnalyticsVariable::class);
         });
-
-        if ($this->isInstalled && !Craft::$app->getRequest()->getIsConsoleRequest() && Craft::$app->getRequest()->getIsCpRequest()) {
-            Craft::$app->getView()->registerAssetBundle(AnalyticsAsset::class);
-        }
 
         Craft::setAlias('@analyticsLib', __DIR__ . '/../lib');
     }
