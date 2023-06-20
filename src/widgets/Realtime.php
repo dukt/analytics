@@ -11,8 +11,6 @@ use Craft;
 use craft\helpers\Json;
 use dukt\analytics\Plugin as Analytics;
 use dukt\analytics\web\assets\analyticsvue\AnalyticsVueAsset;
-use dukt\analytics\web\assets\realtimereportwidget\RealtimeReportWidgetAsset;
-use craft\web\View;
 
 class Realtime extends \craft\base\Widget
 {
@@ -115,10 +113,6 @@ class Realtime extends \craft\base\Widget
             '{count} minute ago',
             '{count} minutes ago',
         ]);
-
-//        $view->registerAssetBundle(RealtimeReportWidgetAsset::class);
-//        $view->registerJs('var AnalyticsChartLanguage = "'.Craft::$app->language.'";', true);
-//        $view->registerJs('new Analytics.Realtime("widget'.$widgetId.'", '.Json::encode($widgetOptions).');');
 
         $variables = [
             'id' => $this->id,
