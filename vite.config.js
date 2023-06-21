@@ -3,6 +3,7 @@ import vue from '@vitejs/plugin-vue2'
 import * as path from "path";
 
 import {viteExternalsPlugin} from 'vite-plugin-externals';
+import viteEslintPlugin from 'vite-plugin-eslint';
 
 
 export default defineConfig(({command, mode}) => {
@@ -38,6 +39,10 @@ export default defineConfig(({command, mode}) => {
         'vue-router': 'VueRouter',
         'vuex': 'Vuex',
         'axios': 'axios'
+      }),
+      viteEslintPlugin({
+        cache: false,
+        fix: true,
       }),
     ],
     server: {
