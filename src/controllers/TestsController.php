@@ -13,6 +13,7 @@ use craft\web\Controller;
 use craft\web\View;
 use dukt\analytics\Plugin;
 use dukt\analytics\Plugin as Analytics;
+use dukt\analytics\web\assets\analyticsvue\AnalyticsVueAsset;
 use dukt\analytics\web\assets\tests\TestsAsset;
 use Google\Service\AnalyticsData;
 use yii\web\Response;
@@ -173,5 +174,39 @@ class TestsController extends Controller
         $variables['metrics'] = $metadata->getMetrics();
 
         return $this->renderTemplate('analytics/tests/_ga4-metadata', $variables);
+    }
+
+    /**
+     * Vue
+     *
+     * @param array $variables
+     *
+     * @return Response
+     */
+    public function actionVue(array $variables = [])
+    {
+        Craft::$app->getView()->registerAssetBundle(TestsAsset::class);
+        Craft::$app->getView()->registerAssetBundle(AnalyticsVueAsset::class);
+        Craft::$app->getView()->registerJs('new AnalyticsVueTests().$mount("#analytics-vue-tests");');
+        Craft::$app->getView()->registerJs('new AnalyticsVueTestReportWidget().$mount("#report-widget");');
+        Craft::$app->getView()->registerJs('new AnalyticsVueTestReportWidgetSettings().$mount("#report-widget-settings");');
+
+        return $this->renderTemplate('analytics/tests/_vue', $variables);
+    }
+
+    /**
+     * Vue
+     *
+     * @param array $variables
+     *
+     * @return Response
+     */
+    public function actionVueReports(array $variables = [])
+    {
+        Craft::$app->getView()->registerAssetBundle(TestsAsset::class);
+        Craft::$app->getView()->registerAssetBundle(AnalyticsVueAsset::class);
+        Craft::$app->getView()->registerJs('new AnalyticsVueTestReports().$mount("#analytics-vue-test-reports");');
+
+        return $this->renderTemplate('analytics/tests/_vue-reports', $variables);
     }
 }

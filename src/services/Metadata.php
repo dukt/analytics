@@ -272,6 +272,43 @@ class Metadata extends Component
         return Craft::getAlias('@dukt/analytics/etc/data/dimensions-metrics.json');
     }
 
+
+    public function getSelectOptionsByChartType()
+    {
+        $chartTypes = ['area', 'counter', 'pie', 'table', 'geo'];
+        $selectOptions = [];
+
+        foreach ($chartTypes as $chartType) {
+            switch ($chartType) {
+                case 'area':
+                    $options = [
+                        'metrics' => $this->getSelectMetricOptions()
+                    ];
+
+                    break;
+                case 'counter':
+                    $options = [
+                        'metrics' => $this->getSelectMetricOptions()
+                    ];
+                    break;
+                case 'geo':
+                    $options = [
+                        'dimensions' => $this->getSelectDimensionOptions(['ga:city', 'ga:country', 'ga:continent', 'ga:subContinent']),
+                        'metrics' => $this->getSelectMetricOptions()
+                    ];
+                    break;
+                default:
+                    $options = [
+                        'dimensions' => $this->getSelectDimensionOptions(),
+                        'metrics' => $this->getSelectMetricOptions()
+                    ];
+            }
+
+            $selectOptions[$chartType] = $options;
+        }
+        return $selectOptions;
+    }
+
     // Private Methods
     // =========================================================================
 

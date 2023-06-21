@@ -1,42 +1,13 @@
-{% import "_includes/forms" as forms %}
+{{ craft.analytics.script('src/main.js') }}
 
 {% if hasUrl %}
-
-    <div data-element-id="{{ element.id }}" data-language="{{ element.site.language }}" data-site-id="{{ element.siteId }}" class="analytics-field">
-
-        <span class="uri light right">&nbsp; URL: {{ element.url }}</span>
-
-        {% set metricOpts = {
-            'ga:pageviews':'Pageviews'|t('analytics'),
-            'ga:sessions':'Sessions'|t('analytics'),
-            'ga:bounceRate':'Bounce Rate'|t('analytics'),
-            'ga:avgTimeOnPage':'Avg. time on page'|t('analytics'),
-            'ga:exitRate':'% Exit'|t('analytics'),
-        } %}
-
-        {{ forms.select({
-            class:'analytics-metric',
-            value:'ga:pageviews',
-            options: metricOpts
-        }) }}
-
-        <div class="spinner hidden"></div>
-        <div class="chart"></div>
-        <div class="error"></div>
-
-    </div>
-
+    <div id="vue-{{namespacedId}}"></div>
 {% elseif isNew %}
-
     <div class="analytics-field analytics-error disable-icon">
         <div class="error">{{ "Report will appear when the element is saved."|t('analytics') }}</div>
     </div>
-
 {% else %}
-
     <div class="analytics-field analytics-error">
         <div class="error">{{ "This element doesn't support urls."|t('analytics') }}</div>
     </div>
-
 {% endif %}
-

@@ -12,6 +12,7 @@
 ] %}
 
 {% set content %}
+    {{ craft.analytics.script('src/main.js') }}
 
     {{ csrfInput() }}
 
@@ -30,8 +31,7 @@
         required: true,
     }) }}
 
-    {% include 'analytics/_includes/account-explorer' with {
-        name: 'accountExplorer',
-    } %}
-
+    <div
+        id="analytics-settings"
+    ></div>
 {% endset %}

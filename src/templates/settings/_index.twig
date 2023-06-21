@@ -5,91 +5,95 @@
 {% set selectedNavItem = 'general' %}
 
 {% set content %}
+    {{ craft.analytics.script('src/main.js') }}
 
-    <h2 class="first">{{ 'Google Analytics Account'|t('analytics') }}</h2>
+    <div class="analytics-settings">
 
-    {% if not oauthAccount or info.forceConnect %}
+        <h2 class="first">{{ 'Google Analytics Account'|t('analytics') }}</h2>
 
-        {% if isOauthProviderConfigured %}
-            <p>{{ 'Gettings errors trying to connect? Check your {link}.'|t('analytics', { link: '<a href="'~url('analytics/settings/oauth')~'">OAuth settings</a>' })|raw }}</p>
+        {% if not oauthAccount or info.forceConnect %}
 
-            {% if errors is defined and errors|length > 0 %}
-                <ul class="error">
-                    {% for error in errors %}
-                        <li>{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
+            {% if isOauthProviderConfigured %}
+                <p>{{ 'Gettings errors trying to connect? Check your {link}.'|t('analytics', { link: '<a href="'~url('analytics/settings/oauth')~'">OAuth settings</a>' })|raw }}</p>
 
-            <p><a class="btn submit" href="{{ actionUrl('analytics/oauth/connect') }}">{{"Connect"|t('analytics') }}</a></p>
-        {% else %}
-            <p>{{ 'To get started, go to the OAuth settings and configure your Google application’s client ID & secret.'|t('analytics') }}</p>
-            <p><a class="btn" href="{{ url('analytics/settings/oauth') }}">{{"OAuth Settings"|t('analytics') }}</a></p>
-        {% endif %}
-    {% else %}
-
-        <p>{{ 'You are authenticated to Google Analytics with the following account'|t('analytics') }} :</p>
-
-        <div class="oauth-account">
-            <div class="account-box">
-                <div class="image">
-                    <img src="{{ googleIconUrl }}" height="30" alt="Google OAuth provider">
-                </div>
-                <div class="account-details">
-                    <ul>
-                        <li>{{ oauthAccount.name }}</li>
-
-                        {% if oauthAccount.email is defined and not oauthAccount.email is empty %}
-                            <li class="light">{{ oauthAccount.email }}</li>
-                        {% elseif oauthAccount.uid is defined %}
-                            <li class="light">{{ oauthAccount.uid }}</li>
-                        {% elseif oauthAccount.id is defined %}
-                            <li class="light">{{ oauthAccount.id }}</li>
-                        {% endif %}
+                {% if errors is defined and errors|length > 0 %}
+                    <ul class="error">
+                        {% for error in errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
                     </ul>
+                {% endif %}
+
+                <p><a class="btn submit" href="{{ actionUrl('analytics/oauth/connect') }}">{{"Connect"|t('analytics') }}</a></p>
+            {% else %}
+                <p>{{ 'To get started, go to the OAuth settings and configure your Google application’s client ID & secret.'|t('analytics') }}</p>
+                <p><a class="btn" href="{{ url('analytics/settings/oauth') }}">{{"OAuth Settings"|t('analytics') }}</a></p>
+            {% endif %}
+        {% else %}
+
+            <p>{{ 'You are authenticated to Google Analytics with the following account'|t('analytics') }} :</p>
+
+            <div class="oauth-account">
+                <div class="account-box">
+                    <div class="image">
+                        <img src="{{ googleIconUrl }}" height="30" alt="Google OAuth provider">
+                    </div>
+                    <div class="account-details">
+                        <ul>
+                            <li>{{ oauthAccount.name }}</li>
+
+                            {% if oauthAccount.email is defined and not oauthAccount.email is empty %}
+                                <li class="light">{{ oauthAccount.email }}</li>
+                            {% elseif oauthAccount.uid is defined %}
+                                <li class="light">{{ oauthAccount.uid }}</li>
+                            {% elseif oauthAccount.id is defined %}
+                                <li class="light">{{ oauthAccount.id }}</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+
+                    <div class="buttons">
+                        <a class="icon delete" href="{{ actionUrl('analytics/oauth/disconnect') }}"></a>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <form method="post" accept-charset="UTF-8" data-saveshortcut>
+
+                {{ csrfInput() }}
+
+                <input type="hidden" name="action" value="analytics/settings/save-settings">
+                <input type="hidden" name="pluginHandle" value="analytics">
+                <input type="hidden" name="redirect" value="{{ 'analytics/settings'|hash }}">
+
+                <h2>{{ 'Real-Time'|t('analytics') }}</h2>
+
+                {{ forms.checkboxField({
+                    label: "Enable real-time reporting"|t('analytics'),
+                    name: 'settings[enableRealtime]',
+                    checked: (settings.enableRealtime ? settings.enableRealtime : false),
+                    toggle: 'enableRealtime'
+                }) }}
+
+                <div id="enableRealtime"{% if not settings.enableRealtime %} class="hidden"{% endif %}>
+
+                    {{ forms.textField({
+                        label: "Real-Time Refresh Interval"|t('analytics'),
+                        instructions: "Interval in seconds between requests to real-time API."|t('analytics'),
+                        name: 'settings[realtimeRefreshInterval]',
+                        value: (settings.realtimeRefreshInterval ? settings.realtimeRefreshInterval : ''),
+                        errors: settings.getErrors('realtimeRefreshInterval'),
+                        size: 4
+                    }) }}
                 </div>
 
                 <div class="buttons">
-                    <a class="icon delete" href="{{ actionUrl('analytics/oauth/disconnect') }}"></a>
+                    <input type="submit" class="btn submit force" value="{{ 'Save'|t('analytics') }}">
                 </div>
-            </div>
-        </div>
-
-        <hr />
-
-        <form method="post" accept-charset="UTF-8" data-saveshortcut>
-
-            {{ csrfInput() }}
-
-            <input type="hidden" name="action" value="analytics/settings/save-settings">
-            <input type="hidden" name="pluginHandle" value="analytics">
-            <input type="hidden" name="redirect" value="{{ 'analytics/settings'|hash }}">
-
-            <h2>{{ 'Real-Time'|t('analytics') }}</h2>
-
-            {{ forms.checkboxField({
-                label: "Enable real-time reporting"|t('analytics'),
-                name: 'settings[enableRealtime]',
-                checked: (settings.enableRealtime ? settings.enableRealtime : false),
-                toggle: 'enableRealtime'
-            }) }}
-
-            <div id="enableRealtime"{% if not settings.enableRealtime %} class="hidden"{% endif %}>
-
-                {{ forms.textField({
-                    label: "Real-Time Refresh Interval"|t('analytics'),
-                    instructions: "Interval in seconds between requests to real-time API."|t('analytics'),
-                    name: 'settings[realtimeRefreshInterval]',
-                    value: (settings.realtimeRefreshInterval ? settings.realtimeRefreshInterval : ''),
-                    errors: settings.getErrors('realtimeRefreshInterval'),
-                    size: 4
-                }) }}
-            </div>
-
-            <div class="buttons">
-                <input type="submit" class="btn submit force" value="{{ 'Save'|t('analytics') }}">
-            </div>
-        </form>
-    {% endif %}
+            </form>
+        {% endif %}
+    </div>
 
 {% endset %}
