@@ -39,7 +39,7 @@ class AnalyticsVueAsset extends AssetBundle
             GoogleChartsAsset::class,
             VueAsset::class,
         ];
-        
+
         parent::init();
     }
 
