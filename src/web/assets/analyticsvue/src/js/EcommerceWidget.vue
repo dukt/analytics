@@ -61,7 +61,7 @@
 import reportsApi from '@/js/api/reports';
 import {responseToDataTable, getLocaleDefinition, formatByType} from '@/js/utils';
 import {ChartOptions} from '@/js/ChartOptions';
-import AnalyticsChart from '@/js/components/AnalyticsChart';
+import AnalyticsChart from '@/js/components/AnalyticsChart.vue';
 
 export default {
   components: {AnalyticsChart},

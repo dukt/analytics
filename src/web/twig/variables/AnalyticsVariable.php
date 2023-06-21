@@ -9,9 +9,13 @@ namespace dukt\analytics\web\twig\variables;
 
 use dukt\analytics\models\ReportRequestCriteria;
 use dukt\analytics\Plugin as Analytics;
+use nystudio107\pluginvite\variables\ViteVariableInterface;
+use nystudio107\pluginvite\variables\ViteVariableTrait;
 
-class AnalyticsVariable
+class AnalyticsVariable implements ViteVariableInterface
 {
+    use ViteVariableTrait;
+
     // Public Methods
     // =========================================================================
 

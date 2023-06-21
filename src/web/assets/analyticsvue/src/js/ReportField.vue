@@ -52,7 +52,7 @@
 
 import reportsApi from '@/js/api/reports';
 import {ChartOptions} from '@/js/ChartOptions';
-import AnalyticsChart from '@/js/components/AnalyticsChart';
+import AnalyticsChart from '@/js/components/AnalyticsChart.vue';
 import {getLocaleDefinition, responseToDataTable} from '@/js/utils';
 
 export default {

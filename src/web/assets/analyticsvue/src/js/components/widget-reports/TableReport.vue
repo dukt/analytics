@@ -20,10 +20,10 @@
 </template>
 
 <script>
-import AnalyticsChart from '@/js/components/AnalyticsChart';
+import AnalyticsChart from '@/js/components/AnalyticsChart.vue';
 import {responseToDataTable} from '@/js/utils'
 import {ChartOptions} from '@/js/ChartOptions';
-import ReportHeader from '@/js/components/ReportHeader';
+import ReportHeader from '@/js/components/ReportHeader.vue';
 
 export default {
   components: {

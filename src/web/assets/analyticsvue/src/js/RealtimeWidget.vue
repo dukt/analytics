@@ -62,7 +62,7 @@
 <script>
 /* global google, Craft */
 import reportsApi from '@/js/api/reports';
-import AnalyticsChart from '@/js/components/AnalyticsChart';
+import AnalyticsChart from '@/js/components/AnalyticsChart.vue';
 
 export default {
   components: {AnalyticsChart},

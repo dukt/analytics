@@ -8,11 +8,11 @@
   </div>
 </template>
 <script>
-import GeoReport from '@/js/components/test-reports/GeoReport';
-import AreaReport from '@/js/components/test-reports/AreaReport';
-import PieReport from '@/js/components/test-reports/PieReport';
-import TableReport from '@/js/components/test-reports/TableReport';
-import CounterReport from '@/js/components/test-reports/CounterReport';
+import GeoReport from '@/js/components/test-reports/GeoReport.vue';
+import AreaReport from '@/js/components/test-reports/AreaReport.vue';
+import PieReport from '@/js/components/test-reports/PieReport.vue';
+import TableReport from '@/js/components/test-reports/TableReport.vue';
+import CounterReport from '@/js/components/test-reports/CounterReport.vue';
 export default {
   components: {GeoReport, CounterReport, TableReport, PieReport, AreaReport}
 }

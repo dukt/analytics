@@ -42,7 +42,7 @@
 
 <script>
 import reportsApi from '../api/reports'
-import AnalyticsReport from '@/js/components/AnalyticsReport';
+import AnalyticsReport from '@/js/components/AnalyticsReport.vue';
 
 export default {
   components: {

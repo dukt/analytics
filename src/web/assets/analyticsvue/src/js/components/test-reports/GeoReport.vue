@@ -58,7 +58,7 @@
 
 <script>
 import reportsApi from '../../api/reports'
-import AnalyticsChart from '@/js/components/AnalyticsChart';
+import AnalyticsChart from '@/js/components/AnalyticsChart.vue';
 import {responseToDataTable} from '@/js/utils'
 import {ChartOptions} from '@/js/ChartOptions';
 

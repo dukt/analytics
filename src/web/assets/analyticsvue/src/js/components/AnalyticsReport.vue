@@ -34,11 +34,11 @@
 </template>
 
 <script>
-import AreaReport from '@/js/components/widget-reports/AreaReport';
-import CounterReport from '@/js/components/widget-reports/CounterReport';
-import PieReport from '@/js/components/widget-reports/PieReport';
-import TableReport from '@/js/components/widget-reports/TableReport';
-import GeoReport from '@/js/components/widget-reports/GeoReport';
+import AreaReport from '@/js/components/widget-reports/AreaReport.vue';
+import CounterReport from '@/js/components/widget-reports/CounterReport.vue';
+import PieReport from '@/js/components/widget-reports/PieReport.vue';
+import TableReport from '@/js/components/widget-reports/TableReport.vue';
+import GeoReport from '@/js/components/widget-reports/GeoReport.vue';
 
 export default {
   components: {GeoReport, TableReport, PieReport, CounterReport, AreaReport},
