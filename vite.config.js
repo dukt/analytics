@@ -1,10 +1,8 @@
 import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue2'
 import * as path from "path";
-
 import {viteExternalsPlugin} from 'vite-plugin-externals';
 import viteEslintPlugin from 'vite-plugin-eslint';
-
 
 export default defineConfig(({command, mode}) => {
   process.env = {...process.env, ...loadEnv(mode, process.cwd(), '')};
@@ -46,14 +44,8 @@ export default defineConfig(({command, mode}) => {
       }),
     ],
     server: {
-      // fs: {
-      //   strict: false
-      // },
       host: '0.0.0.0',
       port,
-      // origin: 'http://localhost:' + process.env.DEV_PORT,
-      // port: parseInt(process.env.DEV_PORT),
-      // strictPort: true,
     }
   }
 })
