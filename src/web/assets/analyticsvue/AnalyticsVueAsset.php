@@ -39,15 +39,7 @@ class AnalyticsVueAsset extends AssetBundle
             GoogleChartsAsset::class,
             VueAsset::class,
         ];
-
-        // define the relative path to CSS/JS files that should be registered with the page
-        // when this asset bundle is registered
-
-        // $this->js[] = 'main.js';
-        // $this->css[] = 'css/main.css';
-//        $this->js[] = 'http://localhost:8090/src/main.js';
-//        $this->css[] = 'http://localhost:8090/css/main.css';
-//        <script type="module" src="./src/main.js"></script>
+        
         parent::init();
     }
 
