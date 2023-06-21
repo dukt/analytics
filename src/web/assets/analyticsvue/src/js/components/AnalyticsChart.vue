@@ -30,7 +30,7 @@ export default {
       default: 'area'
     },
     chartData: {
-      type: Array|Object,
+      type: [Array, Object],
       required: true,
     },
     chartScale: {
