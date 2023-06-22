@@ -12,6 +12,7 @@ use dukt\analytics\errors\InvalidElementException;
 use dukt\analytics\models\ReportRequestCriteria;
 use yii\base\Component;
 use dukt\analytics\Plugin as Analytics;
+use Google\Service\AnalyticsData\RunReportResponse;
 
 class Reports extends Component
 {
@@ -261,7 +262,6 @@ class Reports extends Component
         $criteria->endDate = $endDate;
         $criteria->metrics = $metricString;
 
-
         $reportResponse = Analytics::$plugin->getApis()->getAnalyticsReporting()->getReport($criteria);
         $report = $this->parseReportingReport($reportResponse);
 
@@ -425,19 +425,15 @@ class Reports extends Component
     // =========================================================================
 
     /**
-     * @param \Google\Service\AnalyticsData\RunReportResponse $report
+     * @param RunReportResponse $report
      * @return array
      */
-    private function parseReportingReport(\Google\Service\AnalyticsData\RunReportResponse $report): array
+    private function parseReportingReport(RunReportResponse $report): array
     {
         $cols = $this->parseReportingReportCols($report);
         $rows = $this->parseReportingReportRows($report);
         $totals = [$report->getRows()[0]->getMetricValues()[0]->getValue()];
-//        $totals = [0];
-//        echo '<pre>';
-//        var_dump($report->getTotals());
-//        echo '</pre>';
-//        die();
+
         return [
             'cols' => $cols,
             'rows' => $rows,
@@ -446,10 +442,10 @@ class Reports extends Component
     }
 
     /**
-     * @param \Google\Service\AnalyticsData\RunReportResponse $report
+     * @param RunReportResponse $report
      * @return array
      */
-    private function parseReportingReportCols(\Google\Service\AnalyticsData\RunReportResponse $report): array
+    private function parseReportingReportCols(RunReportResponse $report): array
     {
         $cols = [];
 
@@ -501,10 +497,10 @@ class Reports extends Component
     }
 
     /**
-     * @param \Google\Service\AnalyticsData\RunReportResponse $report
+     * @param RunReportResponse $report
      * @return array
      */
-    private function parseReportingReportRows(\Google\Service\AnalyticsData\RunReportResponse $report): array
+    private function parseReportingReportRows(RunReportResponse $report): array
     {
         $rows = [];
         foreach($report->getRows() as $row) {
@@ -519,6 +515,9 @@ class Reports extends Component
 
         }
         return $rows;
+
+// TODO: Review with GEO report
+
 //        $columnHeader = $report->getColumnHeader();
 //        $columnHeaderDimensions = $columnHeader->getDimensions();
 //

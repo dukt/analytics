@@ -114,11 +114,9 @@ class AnalyticsReporting extends Api
      */
     private function getReportingReportRequest(ReportRequestCriteria $criteria)
     {
-        // $request = new RunReportRequest();
         $request = new \Google\Service\AnalyticsData\RunReportRequest();
 
 //        $this->setRequestViewIdFromCriteria($request, $criteria);
-
         $view = Plugin::getInstance()->getViews()->getViewById($criteria->viewId);
         if ($view !== null) {
             $request->setProperty($view->gaPropertyId);
