@@ -5,12 +5,33 @@
 
 {% set content %}
 
+    <pre>{{ dump(metadata) }}</pre>
+    <h2>Metrics Categories</h2>
+
+    <ul>
+        {% for category in metCategories %}
+            <li>
+                <code>{{ category }}</code>
+            </li>
+        {% endfor %}
+    </ul>
+
     <h2>Metrics</h2>
 
     <ul>
         {% for metric in metrics %}
             <li>
                 <code>{{ metric.apiName }}</code>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Dimensions Categories</h2>
+
+    <ul>
+        {% for category in dimCategories %}
+            <li>
+                <code>{{ category }}</code>
             </li>
         {% endfor %}
     </ul>

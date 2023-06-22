@@ -170,6 +170,24 @@ class TestsController extends Controller
     {
         $analyticsData = Plugin::$plugin->getApis()->getAnalytics()->getAnalyticsData();
         $metadata = $analyticsData->properties->getMetadata('properties/309469168/metadata');
+        $variables['metadata'] = $metadata;
+
+        $dimCategories = [];
+
+        foreach($metadata->getDimensions() as $dim) {
+            $dimCategories[$dim->getCategory()] = $dim->getCategory();
+        }
+
+        $variables['dimCategories'] = $dimCategories;
+
+        $metCategories = [];
+
+        foreach($metadata->getDimensions() as $met) {
+            $metCategories[$met->getCategory()] = $met->getCategory();
+        }
+
+        $variables['metCategories'] = $metCategories;
+
         $variables['dimensions'] = $metadata->getDimensions();
         $variables['metrics'] = $metadata->getMetrics();
 
