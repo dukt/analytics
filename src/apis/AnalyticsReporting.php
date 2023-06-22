@@ -10,14 +10,14 @@ namespace dukt\analytics\apis;
 use dukt\analytics\base\Api;
 use dukt\analytics\models\ReportRequestCriteria;
 use dukt\analytics\Plugin;
+use Google\Service\AnalyticsData\BatchRunReportsRequest;
+use Google\Service\AnalyticsData\BatchRunReportsResponse;
+use Google\Service\AnalyticsData\RunReportRequest;
 use \Google_Service_AnalyticsReporting;
 use \Google_Service_AnalyticsReporting_DateRange;
 use \Google_Service_AnalyticsReporting_Dimension;
-use \Google_Service_AnalyticsReporting_GetReportsRequest;
-use \Google_Service_AnalyticsReporting_GetReportsResponse;
 use \Google_Service_AnalyticsReporting_Metric;
 use \Google_Service_AnalyticsReporting_Report;
-use \Google_Service_AnalyticsReporting_ReportRequest;
 
 class AnalyticsReporting extends Api
 {
@@ -83,7 +83,7 @@ class AnalyticsReporting extends Api
      * Get reporting reports.
      *
      *
-     * @return Google_Service_AnalyticsReporting_GetReportsResponse
+     * @return BatchRunReportsResponse
      * @throws \yii\base\InvalidConfigException
      * @param mixed[] $criterias
      */
@@ -93,35 +93,15 @@ class AnalyticsReporting extends Api
 
         foreach ($criterias as $criteria) {
             $request = $this->getReportingReportRequest($criteria);
-//            $request->viewId = '1547168';
-            /*
- * object(Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaPropertySummary)#563 (7) {
-  ["displayName"]=>
-  string(16) "Dukt.net  - GA4"
-  ["parent"]=>
-  string(16) "accounts/1547168"
-  ["property"]=>
-  string(20) "properties/309469168"
-  ["propertyType"]=>
-  string(22) "PROPERTY_TYPE_ORDINARY"
-  ["internal_gapi_mappings":protected]=>
-  array(0) {
-  }
-  ["modelData":protected]=>
-  array(0) {
-  }
-  ["processed":protected]=>
-  array(0) {
-  }
-}
-*/
             $requests[] = $request;
         }
 
-        $reportsRequest = new Google_Service_AnalyticsReporting_GetReportsRequest();
-        $reportsRequest->setReportRequests($requests);
+        $reportsRequest = new BatchRunReportsRequest();
+        $reportsRequest->setRequests($requests);
 
-        return $this->getService()->reports->batchGet($reportsRequest);
+        $analyticsData = Plugin::$plugin->getApis()->getAnalytics()->getAnalyticsData();
+
+        return $analyticsData->properties->batchRunReports('properties/309469168', $reportsRequest);
     }
 
     /**
@@ -129,14 +109,21 @@ class AnalyticsReporting extends Api
      *
      * @param ReportRequestCriteria $criteria
      *
-     * @return Google_Service_AnalyticsReporting_ReportRequest
+     * @return \Google\Service\AnalyticsData\RunReportRequest
      * @throws \yii\base\InvalidConfigException
      */
     private function getReportingReportRequest(ReportRequestCriteria $criteria)
     {
-        $request = new Google_Service_AnalyticsReporting_ReportRequest();
+        // $request = new RunReportRequest();
+        $request = new \Google\Service\AnalyticsData\RunReportRequest();
 
-        $this->setRequestViewIdFromCriteria($request, $criteria);
+//        $this->setRequestViewIdFromCriteria($request, $criteria);
+
+        $view = Plugin::getInstance()->getViews()->getViewById($criteria->viewId);
+        if ($view !== null) {
+            $request->setProperty($view->gaPropertyId);
+        }
+
         $this->setRequestDateRangeFromCriteria($request, $criteria);
         $this->setRequestMetricsFromCriteria($request, $criteria);
         $this->setRequestDimensionsFromCriteria($request, $criteria);
@@ -148,42 +135,45 @@ class AnalyticsReporting extends Api
         if (!empty($criteria->orderBys)) {
             $request->setOrderBys($criteria->orderBys);
         }
+// Replaced with limit/offset
+//        if ($criteria->pageToken) {
+//            $pageToken = (string) $criteria->pageToken;
+//            $request->setPageToken($pageToken);
+//        }
+//
+//        if ($criteria->pageSize) {
+//            $request->setPageSize($criteria->pageSize);
+//        }
 
-        if ($criteria->pageToken) {
-            $pageToken = (string) $criteria->pageToken;
-            $request->setPageToken($pageToken);
-        }
+// Replaced by metric/dimension filter?
+//        if ($criteria->filtersExpression) {
+//            $request->setFiltersExpression($criteria->filtersExpression);
+//        }
 
-        if ($criteria->pageSize) {
-            $request->setPageSize($criteria->pageSize);
-        }
+        // Replaced by setKeepEmptyRows
+//        if ($criteria->includeEmptyRows) {
+//            $request->setIncludeEmptyRows($criteria->includeEmptyRows);
+//        }
 
-        if ($criteria->filtersExpression) {
-            $request->setFiltersExpression($criteria->filtersExpression);
-        }
-
-        if ($criteria->includeEmptyRows) {
-            $request->setIncludeEmptyRows($criteria->includeEmptyRows);
-        }
-
-        if ($criteria->hideTotals) {
-            $request->setHideTotals($criteria->hideTotals);
-        }
-
-        if ($criteria->hideValueRanges) {
-            $request->setHideValueRanges($criteria->hideValueRanges);
-        }
+        // Not replaced
+//        if ($criteria->hideTotals) {
+//            $request->setHideTotals($criteria->hideTotals);
+//        }
+//
+//        if ($criteria->hideValueRanges) {
+//            $request->setHideValueRanges($criteria->hideValueRanges);
+//        }
 
         return $request;
     }
 
     /**
-     * @param Google_Service_AnalyticsReporting_ReportRequest $request
+     * @param RunReportRequest $request
      * @param ReportRequestCriteria                           $criteria
      *
      * @throws \yii\base\InvalidConfigException
      */
-    private function setRequestViewIdFromCriteria(Google_Service_AnalyticsReporting_ReportRequest &$request, ReportRequestCriteria $criteria)
+    private function setRequestViewIdFromCriteria(RunReportRequest &$request, ReportRequestCriteria $criteria)
     {
         if ($criteria->gaViewId) {
             $request->setViewId('ga:'.$criteria->gaViewId);
@@ -196,10 +186,10 @@ class AnalyticsReporting extends Api
     }
 
     /**
-     * @param Google_Service_AnalyticsReporting_ReportRequest $request
+     * @param RunReportRequest $request
      * @param ReportRequestCriteria $criteria
      */
-    private function setRequestDateRangeFromCriteria(Google_Service_AnalyticsReporting_ReportRequest &$request, ReportRequestCriteria $criteria)
+    private function setRequestDateRangeFromCriteria(RunReportRequest &$request, ReportRequestCriteria $criteria)
     {
         $dateRange = new Google_Service_AnalyticsReporting_DateRange();
         $dateRange->setStartDate($criteria->startDate);
@@ -209,28 +199,28 @@ class AnalyticsReporting extends Api
     }
 
     /**
-     * @param Google_Service_AnalyticsReporting_ReportRequest $request
+     * @param RunReportRequest $request
      * @param ReportRequestCriteria $criteria
      */
-    private function setRequestMetricsFromCriteria(Google_Service_AnalyticsReporting_ReportRequest &$request, ReportRequestCriteria $criteria)
+    private function setRequestMetricsFromCriteria(RunReportRequest &$request, ReportRequestCriteria $criteria)
     {
         if ($criteria->metrics) {
             $metricString = $criteria->metrics;
-            $metrics = $this->getMetricsFromString($metricString);
-            $request->setMetrics($metrics);
+//            $metrics = $this->getMetricsFromString($metricString);
+            $request->setMetrics(['name' => $metricString]);
         }
     }
 
     /**
-     * @param Google_Service_AnalyticsReporting_ReportRequest $request
+     * @param RunReportRequest $request
      * @param ReportRequestCriteria $criteria
      */
-    private function setRequestDimensionsFromCriteria(Google_Service_AnalyticsReporting_ReportRequest &$request, ReportRequestCriteria $criteria)
+    private function setRequestDimensionsFromCriteria(RunReportRequest &$request, ReportRequestCriteria $criteria)
     {
         if (!empty($criteria->dimensions)) {
             $dimensionString = $criteria->dimensions;
-            $dimensions = $this->getDimensionsFromString($dimensionString);
-            $request->setDimensions($dimensions);
+//            $dimensions = $this->getDimensionsFromString($dimensionString);
+            $request->setDimensions(['name' => $dimensionString]);
         }
     }
 

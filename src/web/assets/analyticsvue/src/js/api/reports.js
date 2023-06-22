@@ -24,6 +24,15 @@ export default {
         }
       })
   },
+  getDimensionsMetrics(viewId) {
+    return axios.get(
+      Craft.getActionUrl('analytics/vue/get-dimensions-metrics&viewId=' + viewId),
+      {
+        headers: {
+          'X-CSRF-Token': Craft.csrfTokenValue,
+        }
+      })
+  },
   getElementReport({ elementId, siteId, metric }) {
     return axios.post(
       Craft.getActionUrl('analytics/reports/element'),

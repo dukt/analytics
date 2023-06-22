@@ -10,6 +10,7 @@
           <select
             v-model="viewId"
             :name="inputName('viewId')"
+            @change="onViewChange()"
           >
             <template v-for="(option, optionKey) in viewOptions">
               <option
@@ -172,6 +173,7 @@
 /* global Craft */
 
 import VSelect from 'vue-select';
+import reportsApi from './api/reports';
 
 export default {
   components: {
@@ -224,6 +226,8 @@ export default {
       period: null,
       dimension: null,
       metric: null,
+      dimensions: [],
+      metrics: [],
     }
   },
   computed: {
@@ -237,18 +241,31 @@ export default {
     },
 
     metricOptions() {
-      if (!this.selectOptions || !this.chart) {
-        return null
-      }
+      return this.metrics.map(metric => {
+        return {
+          label: metric.name,
+          value: metric.apiName,
+        }
+      });
 
-      return this.selectOptions[this.chart].metrics
+      // if (!this.selectOptions || !this.chart) {
+      //   return null
+      // }
+      //
+      // return this.selectOptions[this.chart].metrics
     },
 
     dimensionOptions() {
-      if (!this.selectOptions || !this.chart) {
-        return null
-      }
-      return this.selectOptions[this.chart].dimensions
+      // if (!this.selectOptions || !this.chart) {
+      //   return null
+      // }
+      // return this.selectOptions[this.chart].dimensions
+      return this.dimensions.map(dimension => {
+        return {
+          label: dimension.name,
+          value: dimension.apiName,
+        }
+      });
     },
 
     hasDimension() {
@@ -287,18 +304,28 @@ export default {
     this.period = this.pluginSettings.settings.period ?? this.periodOptions[0].value
     this.namespace = this.pluginSettings.namespace
 
-    this.initMetric()
-    this.initDimension()
+    this.onViewChange()
   },
 
   methods: {
+
+    onViewChange() {
+      this.refreshDimensionsAndMetrics()
+    },
+    refreshDimensionsAndMetrics() {
+      reportsApi.getDimensionsMetrics(this.viewId)
+        .then((response) => {
+          this.dimensions = response.data.dimensions
+          this.metrics = response.data.metrics
+
+          this.initMetric();
+          this.initDimension();
+        })
+    },
     initMetric() {
       if (
         this.pluginSettings.settings.options
-        && this.pluginSettings.settings.options[this.chart]
         && this.pluginSettings.settings.options[this.chart].metric
-
-        // Check that the metric exists in the options
         && this.metricSelectOptions.find(option => option.value === this.pluginSettings.settings.options[this.chart].metric)
       ) {
 
@@ -317,15 +344,15 @@ export default {
         && this.dimensionSelectOptions.find(option => option.value === this.pluginSettings.settings.options[this.chart].dimension)
       ) {
 
-          this.dimension = this.pluginSettings.settings.options[this.chart].dimension
+        this.dimension = this.pluginSettings.settings.options[this.chart].dimension
       } else {
         this.dimension = this.dimensionSelectOptions.find(option => option.value !== undefined)?.value
       }
     },
 
     onChartChange() {
-      this.initMetric()
-      this.initDimension()
+      // this.initMetric()
+      // this.initDimension()
     },
 
     parseOptionsForVueSelect(inputOptions) {

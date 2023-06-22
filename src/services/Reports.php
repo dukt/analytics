@@ -8,12 +8,10 @@
 namespace dukt\analytics\services;
 
 use Craft;
-use craft\helpers\StringHelper;
 use dukt\analytics\errors\InvalidElementException;
 use dukt\analytics\models\ReportRequestCriteria;
 use yii\base\Component;
 use dukt\analytics\Plugin as Analytics;
-use \Google_Service_AnalyticsReporting_Report;
 
 class Reports extends Component
 {
@@ -141,9 +139,9 @@ class Reports extends Component
 
         $startDate = date('Y-m-d', strtotime('-1 month'));
         $endDate = date('Y-m-d');
-        $dimensions = 'ga:date';
+        $dimensions = 'date';
         $metrics = $metric;
-        $filters = 'ga:pagePath=='.$uri;
+        $filters = 'pagePath=='.$uri;
 
         $request = [
             'viewId' => $viewId,
@@ -167,6 +165,12 @@ class Reports extends Component
             $criteria->dimensions = $dimensions;
             $criteria->filtersExpression = $filters;
             $criteria->includeEmptyRows = true;
+
+            $criteria->orderBys = [
+                'dimension' => [
+                    'dimensionName' => $dimensions,
+                ]
+            ];
 
             $reportResponse = Analytics::$plugin->getApis()->getAnalyticsReporting()->getReport($criteria);
             $response = $this->parseReportingReport($reportResponse);
@@ -194,11 +198,11 @@ class Reports extends Component
         $metricString = ($request['options']['metric'] ?? null);
 
         if ($period == 'year') {
-            $dimensionString = 'ga:yearMonth';
+            $dimensionString = 'yearMonth';
             $startDate = date('Y-m-01', strtotime('-1 '.$period));
             $endDate = date('Y-m-d');
         } else {
-            $dimensionString = 'ga:date';
+            $dimensionString = 'date';
             $startDate = date('Y-m-d', strtotime('-1 '.$period));
             $endDate = date('Y-m-d');
         }
@@ -212,7 +216,9 @@ class Reports extends Component
         $criteria->includeEmptyRows = true;
 
         $criteria->orderBys = [
-            ['fieldName' => $dimensionString, 'orderType' => 'VALUE', 'sortOrder' => 'ASCENDING']
+            'dimension' => [
+                'dimensionName' => $dimensionString,
+            ]
         ];
 
         $reportResponse = Analytics::$plugin->getApis()->getAnalyticsReporting()->getReport($criteria);
@@ -268,7 +274,8 @@ class Reports extends Component
         $counter = [
             'type' => $report['cols'][0]['type'],
             'value' => $total,
-            'label' => StringHelper::toLowerCase(Craft::t('analytics', Analytics::$plugin->getMetadata()->getDimMet($metricString)))
+            // 'label' => StringHelper::toLowerCase(Craft::t('analytics', Analytics::$plugin->getMetadata()->getDimMet($metricString)))
+            'label' => $metricString
         ];
 
         $view = Analytics::$plugin->getViews()->getViewById($viewId);
@@ -278,7 +285,8 @@ class Reports extends Component
             'type' => 'counter',
             'counter' => $counter,
             'response' => $report,
-            'metric' => Craft::t('analytics', Analytics::$plugin->getMetadata()->getDimMet($metricString)),
+//            'metric' => Craft::t('analytics', Analytics::$plugin->getMetadata()->getDimMet($metricString)),
+            'metric' => $metricString,
             'period' => $period,
             'periodLabel' => Craft::t('analytics', 'this '.$period)
         ];
@@ -404,8 +412,10 @@ class Reports extends Component
             'type' => 'geo',
             'chart' => $report,
             'dimensionRaw' => $originDimension,
-            'dimension' => Craft::t('analytics', Analytics::$plugin->getMetadata()->getDimMet($originDimension)),
-            'metric' => Craft::t('analytics', Analytics::$plugin->getMetadata()->getDimMet($metricString)),
+//            'dimension' => Craft::t('analytics', Analytics::$plugin->getMetadata()->getDimMet($originDimension)),
+            'dimension' => $originDimension,
+//            'metric' => Craft::t('analytics', Analytics::$plugin->getMetadata()->getDimMet($metricString)),
+            'metric' => $metricString,
             'period' => $period,
             'periodLabel' => Craft::t('analytics', 'This '.$period)
         ];
@@ -415,15 +425,19 @@ class Reports extends Component
     // =========================================================================
 
     /**
-     * @param Google_Service_AnalyticsReporting_Report $report
+     * @param \Google\Service\AnalyticsData\RunReportResponse $report
      * @return array
      */
-    private function parseReportingReport(Google_Service_AnalyticsReporting_Report $report): array
+    private function parseReportingReport(\Google\Service\AnalyticsData\RunReportResponse $report): array
     {
         $cols = $this->parseReportingReportCols($report);
         $rows = $this->parseReportingReportRows($report);
-        $totals = $report->getData()->getTotals()[0]->getValues();
-
+        $totals = [$report->getRows()[0]->getMetricValues()[0]->getValue()];
+//        $totals = [0];
+//        echo '<pre>';
+//        var_dump($report->getTotals());
+//        echo '</pre>';
+//        die();
         return [
             'cols' => $cols,
             'rows' => $rows,
@@ -432,62 +446,52 @@ class Reports extends Component
     }
 
     /**
-     * @param Google_Service_AnalyticsReporting_Report $report
+     * @param \Google\Service\AnalyticsData\RunReportResponse $report
      * @return array
      */
-    private function parseReportingReportCols(Google_Service_AnalyticsReporting_Report $report): array
+    private function parseReportingReportCols(\Google\Service\AnalyticsData\RunReportResponse $report): array
     {
-        $columnHeader = $report->getColumnHeader();
-        $columnHeaderDimensions = $columnHeader->getDimensions();
-        $metricHeaderEntries = $columnHeader->getMetricHeader()->getMetricHeaderEntries();
-
         $cols = [];
 
-        if ($columnHeaderDimensions) {
-            foreach ($columnHeaderDimensions as $columnHeaderDimension) {
+        foreach($report->getDimensionHeaders() as $dimensionHeader) {
+            $type = '';
 
-                $id = $columnHeaderDimension;
-                $label = Analytics::$plugin->getMetadata()->getDimMet($columnHeaderDimension);
+            switch ($dimensionHeader->getName()) {
+                case 'date':
+                case 'yearMonth':
+                    $type = 'date';
+                    break;
 
-                switch ($columnHeaderDimension) {
-                    case 'ga:date':
-                    case 'ga:yearMonth':
-                        $type = 'date';
-                        break;
+                case 'continent':
+                case 'continentId':
+                    $type = 'continent';
+                    break;
+                case 'subContinent':
+                    $type = 'subContinent';
+                    break;
 
-                    case 'ga:continent':
-                        $type = 'continent';
-                        break;
-                    case 'ga:subContinent':
-                        $type = 'subContinent';
-                        break;
-
-                    case 'ga:latitude':
-                    case 'ga:longitude':
-                        $type = 'float';
-                        break;
-
-                    default:
-                        $type = 'string';
-                }
-
-                $col = [
-                    'type' => $type,
-                    'label' => Craft::t('analytics', $label),
-                    'id' => $id,
-                ];
-
-                $cols[] = $col;
+                case 'latitude':
+                case 'longitude':
+                    $type = 'float';
+                    break;
+                default:
+                    $type = 'string';
             }
-        }
-
-        foreach ($metricHeaderEntries as $metricHeaderEntry) {
-            $label = Analytics::$plugin->getMetadata()->getDimMet($metricHeaderEntry['name']);
 
             $col = [
-                'type' => strtolower($metricHeaderEntry['type']),
-                'label' => Craft::t('analytics', $label),
-                'id' => $metricHeaderEntry['name'],
+                'type' => $type,
+                'label' => Craft::t('analytics', $dimensionHeader->getName()),
+                'id' => $dimensionHeader->getName(),
+            ];
+
+            $cols[] = $col;
+        }
+
+        foreach($report->getMetricHeaders() as $metricHeader) {
+            $col = [
+                'type' => $metricHeader->getType() === 'TYPE_INTEGER' ? 'integer' : $metricHeader->getType(),
+                'label' => Craft::t('analytics', $metricHeader->getName()),
+                'id' => $metricHeader->getName(),
             ];
 
             $cols[] = $col;
@@ -497,50 +501,63 @@ class Reports extends Component
     }
 
     /**
-     * @param Google_Service_AnalyticsReporting_Report $report
+     * @param \Google\Service\AnalyticsData\RunReportResponse $report
      * @return array
      */
-    private function parseReportingReportRows(Google_Service_AnalyticsReporting_Report $report): array
+    private function parseReportingReportRows(\Google\Service\AnalyticsData\RunReportResponse $report): array
     {
-        $columnHeader = $report->getColumnHeader();
-        $columnHeaderDimensions = $columnHeader->getDimensions();
-
         $rows = [];
-
-        foreach ($report->getData()->getRows() as $_row) {
-
-            $colIndex = 0;
-            $row = [];
-
-            $dimensions = $_row->getDimensions();
-
-            if ($dimensions) {
-                foreach ($dimensions as $_dimension) {
-
-                    $value = $_dimension;
-
-                    if ($columnHeaderDimensions && isset($columnHeaderDimensions[$colIndex])) {
-                        if ($columnHeaderDimensions[$colIndex] == 'ga:continent') {
-                            $value = Analytics::$plugin->getGeo()->getContinentCode($value);
-                        } elseif ($columnHeaderDimensions[$colIndex] == 'ga:subContinent') {
-                            $value = Analytics::$plugin->getGeo()->getSubContinentCode($value);
-                        }
-                    }
-
-                    $row[] = $value;
-
-                    ++$colIndex;
-                }
+        foreach($report->getRows() as $row) {
+            $rowValues = [];
+            foreach($row->getDimensionValues() as $dimensionValue) {
+                $rowValues[] = $dimensionValue->getValue();
             }
-
-            foreach ($_row->getMetrics() as $_metric) {
-                $row[] = $_metric->getValues()[0];
-                ++$colIndex;
+            foreach($row->getMetricValues() as $metricValue) {
+                $rowValues[] = $metricValue->getValue();
             }
+            $rows[] = $rowValues;
 
-            $rows[] = $row;
         }
-
         return $rows;
+//        $columnHeader = $report->getColumnHeader();
+//        $columnHeaderDimensions = $columnHeader->getDimensions();
+//
+//        $rows = [];
+//
+//        foreach ($report->getData()->getRows() as $_row) {
+//
+//            $colIndex = 0;
+//            $row = [];
+//
+//            $dimensions = $_row->getDimensions();
+//
+//            if ($dimensions) {
+//                foreach ($dimensions as $_dimension) {
+//
+//                    $value = $_dimension;
+//
+//                    if ($columnHeaderDimensions && isset($columnHeaderDimensions[$colIndex])) {
+//                        if ($columnHeaderDimensions[$colIndex] == 'ga:continent') {
+//                            $value = Analytics::$plugin->getGeo()->getContinentCode($value);
+//                        } elseif ($columnHeaderDimensions[$colIndex] == 'ga:subContinent') {
+//                            $value = Analytics::$plugin->getGeo()->getSubContinentCode($value);
+//                        }
+//                    }
+//
+//                    $row[] = $value;
+//
+//                    ++$colIndex;
+//                }
+//            }
+//
+//            foreach ($_row->getMetrics() as $_metric) {
+//                $row[] = $_metric->getValues()[0];
+//                ++$colIndex;
+//            }
+//
+//            $rows[] = $row;
+//        }
+//
+//        return $rows;
     }
 }

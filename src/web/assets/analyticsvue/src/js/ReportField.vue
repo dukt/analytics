@@ -66,27 +66,27 @@ export default {
       reportResponse: null,
       metricOptions: [
         {
-          label: 'Pageviews',
-          value: 'ga:pageviews',
+          label: 'Screen Page Views',
+          value: 'screenPageViews',
         },
         {
           label: 'Sessions',
-          value: 'ga:sessions',
+          value: 'sessions',
         },
         {
           label: 'Bounce Rate',
-          value: 'ga:bounceRate',
+          value: 'bounceRate',
         },
         {
           label: 'Avg. time on page',
-          value: 'ga:avgTimeOnPage',
+          value: 'avgTimeOnPage',
         },
         {
           label: '% Exit',
-          value: 'ga:exitRate',
+          value: 'exitRate',
         },
       ],
-      metric: 'ga:pageviews',
+      metric: 'screenPageViews',
     }
   },
 

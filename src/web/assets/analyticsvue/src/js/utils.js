@@ -59,6 +59,7 @@ export const responseToDataTable = (response, localeDefinition) => {
         case 'percent':
         case 'time':
         case 'continent':
+        case 'continentId':
         case 'subContinent':
           dataTableRow[keyColumn] = {
             v: formatRawValueByType(localeDefinition, column.type, row[keyColumn]),

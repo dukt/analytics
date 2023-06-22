@@ -98,21 +98,22 @@ export class ChartOptions {
     var options = this.defaults.geo;
 
     switch (dimension) {
-      case 'ga:city':
+      case 'city':
         options.displayMode = 'markers';
         break;
 
-      case 'ga:country':
+      case 'country':
         options.resolution = 'countries';
         options.displayMode = 'regions';
         break;
 
-      case 'ga:continent':
+      case 'continent':
+      case 'continentId':
         options.resolution = 'continents';
         options.displayMode = 'regions';
         break;
 
-      case 'ga:subContinent':
+      case 'subContinent':
         options.resolution = 'subcontinents';
         options.displayMode = 'regions';
         break;

@@ -74,9 +74,9 @@ class Report extends Field
 
                 $startDate = date('Y-m-d', strtotime('-1 month'));
                 $endDate = date('Y-m-d');
-                $metrics = 'ga:pageviews';
-                $dimensions = 'ga:date';
-                $filters = 'ga:pagePath=='.$uri;
+                $metrics = 'views';
+                $dimensions = 'date';
+                $filters = 'pagePath=='.$uri;
 
                 $request = [
                     'startDate' => $startDate,

@@ -43,23 +43,23 @@ export default {
       chartData: null,
       dimensions: [
         {
-          label: 'ga:city',
-          value: 'ga:city'
+          label: 'city',
+          value: 'city'
         },
         {
-          label: 'ga:country',
-          value: 'ga:country'
+          label: 'country',
+          value: 'country'
         },
         {
-          label: 'ga:continent',
-          value: 'ga:continent'
+          label: 'continent',
+          value: 'continent'
         },
         {
-          label: 'ga:subContinent',
-          value: 'ga:subContinent'
+          label: 'subContinent',
+          value: 'subContinent'
         },
       ],
-      selectedDimension: 'ga:country',
+      selectedDimension: 'country',
     }
   },
   computed: {
@@ -69,6 +69,7 @@ export default {
   },
   mounted() {
     this.chartData = responseToDataTable(this.reportResponse.data.chart, this.localeDefinition)
+    console.log('chartData', this.reportResponse.data)
   },
 }
 </script>
