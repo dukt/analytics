@@ -109,12 +109,12 @@ class AnalyticsReporting extends Api
      *
      * @param ReportRequestCriteria $criteria
      *
-     * @return \Google\Service\AnalyticsData\RunReportRequest
+     * @return RunReportRequest
      * @throws \yii\base\InvalidConfigException
      */
     private function getReportingReportRequest(ReportRequestCriteria $criteria)
     {
-        $request = new \Google\Service\AnalyticsData\RunReportRequest();
+        $request = new RunReportRequest();
 
 //        $this->setRequestViewIdFromCriteria($request, $criteria);
         $view = Plugin::getInstance()->getViews()->getViewById($criteria->viewId);
