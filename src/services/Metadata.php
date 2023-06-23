@@ -42,17 +42,6 @@ class Metadata extends Component
     // =========================================================================
 
     /**
-     * Checks whether the dimensions & metrics file exists
-     *
-     * @return bool
-     */
-    public function dimmetsFileExists(): bool
-    {
-        $path = Analytics::$plugin->getMetadata()->getDimmetsFilePath();
-        return file_exists($path);
-    }
-
-    /**
      * Returns available data types for Google Analytics
      *
      * @return array
@@ -105,26 +94,6 @@ class Metadata extends Component
         }
 
         return null;
-    }
-
-    /**
-     * Returns columns based on a search string `$q`
-     *
-     *
-     * @return array
-     */
-    public function searchColumns(string $q): array
-    {
-        $columns = $this->getColumns();
-        $results = [];
-
-        foreach ($columns as $column) {
-            if (stripos($column->id, $q) !== false || stripos($column->uiName, $q) !== false) {
-                $results[] = $column;
-            }
-        }
-
-        return $results;
     }
 
     /**
@@ -235,59 +204,6 @@ class Metadata extends Component
         }
 
         return $cols;
-    }
-
-    /**
-     * @param array $options
-     * @param array $filters
-     *
-     * @return array
-     */
-    private function filterOptions(array $options, array $filters): array
-    {
-        if ($filters === []) {
-            return $options;
-        }
-
-        return $this->getFilteredOptions($options, $filters);
-    }
-
-    /**
-     * Get filtered options.
-     *
-     * @param array $options
-     * @param array $filters
-     *
-     * @return array
-     */
-    private function getFilteredOptions(array $options, array $filters): array
-    {
-        $filteredOptions = [];
-        $optgroup = null;
-        $lastOptgroup = null;
-
-        foreach ($options as $id => $option) {
-            if (isset($option['optgroup'])) {
-                $optgroup = null;
-                $lastOptgroup = $option['optgroup'];
-                continue;
-            }
-
-            foreach ($filters as $filter) {
-                if ($id !== $filter) {
-                    continue;
-                }
-
-                if (!$optgroup) {
-                    $optgroup = $lastOptgroup;
-                    $filteredOptions[]['optgroup'] = $optgroup;
-                }
-
-                $filteredOptions[$id] = $option;
-            }
-        }
-
-        return $filteredOptions;
     }
 
     /**
