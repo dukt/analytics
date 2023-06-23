@@ -7,11 +7,7 @@
 
 namespace dukt\analytics\services;
 
-use Craft;
 use yii\base\Component;
-use craft\helpers\Json;
-use dukt\analytics\models\Column;
-use dukt\analytics\Plugin as Analytics;
 
 class Metadata extends Component
 {
@@ -34,91 +30,8 @@ class Metadata extends Component
      */
     public function getDimMet(string $id)
     {
-        $columns = $this->getColumns();
+        // TODO: fix dimmet mapping
 
-        if (isset($columns[$id])) {
-            return $columns[$id]->uiName;
-        }
-
-        return null;
-    }
-
-    /**
-     * Returns columns
-     *
-     * @param string $type
-     *
-     * @return array
-     */
-    public function getColumns(string $type = null): array
-    {
-        if (!$this->columns) {
-            $this->columns = $this->_loadColumns();
-        }
-
-        if (!$type) {
-            return $this->columns;
-        }
-
-        return $this->getColumnsByType($type);
-    }
-
-    /**
-     * Returns the file path of the dimensions-metrics.json file
-     *
-     * @return string|bool
-     */
-    public function getDimmetsFilePath()
-    {
-        return Craft::getAlias('@dukt/analytics/etc/data/dimensions-metrics.json');
-    }
-
-    // Private Methods
-    // =========================================================================
-
-    /**
-     * Loads the columns from the dimensions-metrics.json file
-     *
-     * @return array
-     */
-    private function _loadColumns(): array
-    {
-        $cols = [];
-        $path = Analytics::$plugin->getMetadata()->getDimmetsFilePath();
-        $contents = file_get_contents($path);
-        $columnsResponse = Json::decode($contents);
-
-        if (!$columnsResponse) {
-            return $cols;
-        }
-
-        foreach ($columnsResponse as $columnResponse) {
-            $cols[$columnResponse['id']] = new Column($columnResponse);
-
-            if ($columnResponse['id'] === 'ga:countryIsoCode') {
-                $cols[$columnResponse['id']]->uiName = 'Country';
-            }
-        }
-
-        return $cols;
-    }
-
-    /**
-     * Get columns by type.
-     *
-     * @param string $type
-     * @return array
-     */
-    private function getColumnsByType(string $type): array
-    {
-        $columns = [];
-
-        foreach ($this->columns as $column) {
-            if ($column->type === $type) {
-                $columns[] = $column;
-            }
-        }
-
-        return $columns;
+        return $id;
     }
 }
