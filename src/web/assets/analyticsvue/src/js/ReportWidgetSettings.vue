@@ -250,18 +250,19 @@ export default {
     },
 
     metricOptions() {
-      return this.metrics.map(metric => {
-        return {
-          label: metric.name,
-          value: metric.apiName,
-        }
-      });
-
       // if (!this.selectOptions || !this.chart) {
       //   return null
       // }
       //
       // return this.selectOptions[this.chart].metrics
+
+      return this.metrics
+        .map(metric => {
+          return {
+            label: metric.name,
+            value: metric.apiName,
+          }
+        });
     },
 
     dimensionOptions() {
@@ -269,12 +270,17 @@ export default {
       //   return null
       // }
       // return this.selectOptions[this.chart].dimensions
-      return this.dimensions.map(dimension => {
-        return {
-          label: dimension.name,
-          value: dimension.apiName,
-        }
-      });
+
+      const geoDimensions = ['city', 'country', 'continent', 'subContinent'];
+
+      return this.dimensions
+        .filter(dimension => (this.chart !== 'geo' || geoDimensions.find(geoDimension => geoDimension === dimension.apiName)))
+        .map(dimension => {
+          return {
+            label: dimension.name,
+            value: dimension.apiName,
+          }
+        });
     },
 
     hasDimension() {
