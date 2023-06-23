@@ -118,7 +118,7 @@ class Report extends \craft\base\Widget
                 'period' => $widgetSettings['period'] ?? null,
                 'options' => $widgetSettings['options'][$widgetSettings['chart']] ?? null,
             ];
-            
+
             // use cached response if available
             if (Analytics::$plugin->getSettings()->enableCache === true) {
                 $cacheId = ['getReport', $request];
