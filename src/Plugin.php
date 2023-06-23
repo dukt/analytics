@@ -109,7 +109,6 @@ class Plugin extends \craft\base\Plugin
                 'analytics/utils' => 'analytics/utils/index',
                 'analytics/tests' => 'analytics/tests/overview',
                 'analytics/tests/overview' => 'analytics/tests/overview',
-                'analytics/tests/data-types' => 'analytics/tests/data-types',
                 'analytics/tests/formatting' => 'analytics/tests/formatting',
                 'analytics/tests/report-widgets' => 'analytics/tests/report-widgets',
                 'analytics/tests/template-variables' => 'analytics/tests/template-variables',

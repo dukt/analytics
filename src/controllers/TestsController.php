@@ -41,21 +41,6 @@ class TestsController extends Controller
     }
 
     /**
-     * Data Types
-     *
-     * @param array $variables
-     *
-     * @return Response
-     */
-    public function actionDataTypes(array $variables = [])
-    {
-        $variables['googleAnalyticsDataTypes'] = Analytics::$plugin->getMetadata()->getGoogleAnalyticsDataTypes();
-        $variables['dataTypes'] = Analytics::$plugin->getMetadata()->getDataTypes();
-
-        return $this->renderTemplate('analytics/tests/_dataTypes', $variables);
-    }
-
-    /**
      * Formatting
      *
      * @param array $variables
