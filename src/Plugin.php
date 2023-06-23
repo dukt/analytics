@@ -110,7 +110,6 @@ class Plugin extends \craft\base\Plugin
                 'analytics/tests/data-types' => 'analytics/tests/data-types',
                 'analytics/tests' => 'analytics/tests/columns',
                 'analytics/tests/columns' => 'analytics/tests/columns',
-                'analytics/tests/column-groups' => 'analytics/tests/column-groups',
                 'analytics/tests/formatting' => 'analytics/tests/formatting',
                 'analytics/tests/report-widgets' => 'analytics/tests/report-widgets',
                 'analytics/tests/template-variables' => 'analytics/tests/template-variables',

@@ -43,20 +43,6 @@ class TestsController extends Controller
     }
 
     /**
-     * Column Groups
-     *
-     * @param array $variables
-     *
-     * @return Response
-     */
-    public function actionColumnGroups(array $variables = [])
-    {
-        $variables['columnGroups'] = Analytics::$plugin->getMetadata()->getColumnGroups();
-
-        return $this->renderTemplate('analytics/tests/_columnGroups', $variables);
-    }
-
-    /**
      * Data Types
      *
      * @param array $variables
