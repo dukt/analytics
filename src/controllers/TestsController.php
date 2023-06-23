@@ -39,19 +39,6 @@ class TestsController extends Controller
     {
         return $this->renderTemplate('analytics/tests/_overview', $variables);
     }
-    /**
-     * Columns
-     *
-     * @param array $variables
-     *
-     * @return Response
-     */
-    public function actionColumns(array $variables = [])
-    {
-        $variables['columns'] = Analytics::$plugin->getMetadata()->getColumns();
-
-        return $this->renderTemplate('analytics/tests/_columns', $variables);
-    }
 
     /**
      * Data Types
