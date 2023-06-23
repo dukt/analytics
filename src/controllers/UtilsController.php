@@ -7,11 +7,7 @@
 
 namespace dukt\analytics\controllers;
 
-use Craft;
-use craft\helpers\FileHelper;
 use craft\web\Controller;
-use dukt\analytics\Plugin as Analytics;
-use Google\Service\Analytics\Column;
 use yii\web\Response;
 
 /**

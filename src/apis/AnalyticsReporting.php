@@ -17,7 +17,6 @@ use \Google_Service_AnalyticsReporting;
 use \Google_Service_AnalyticsReporting_DateRange;
 use \Google_Service_AnalyticsReporting_Dimension;
 use \Google_Service_AnalyticsReporting_Metric;
-use \Google_Service_AnalyticsReporting_Report;
 
 class AnalyticsReporting extends Api
 {

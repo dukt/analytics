@@ -13,7 +13,6 @@ use craft\helpers\Json;
 use craft\web\Controller;
 use dukt\analytics\models\SiteView;
 use dukt\analytics\models\View;
-use dukt\analytics\Plugin;
 use dukt\analytics\web\assets\settings\SettingsAsset;
 use dukt\analytics\web\assets\analyticsvue\AnalyticsVueAsset;
 use dukt\analytics\Plugin as Analytics;
