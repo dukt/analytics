@@ -272,7 +272,7 @@ class Metadata extends Component
         return Craft::getAlias('@dukt/analytics/etc/data/dimensions-metrics.json');
     }
 
-
+    // TODO: remove this method, it has moved to the Vue app
     public function getSelectOptionsByChartType()
     {
         $chartTypes = ['area', 'counter', 'pie', 'table', 'geo'];

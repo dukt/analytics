@@ -46,6 +46,10 @@ class VueController extends Controller
             'metrics' => $metrics,
         ]);
     }
+
+
+    // TODO: remove this method
+
     public function actionGetReportWidgetSettings()
     {
         $reportingViews = Analytics::$plugin->getViews()->getViews();
