@@ -250,13 +250,6 @@ export default {
     },
 
     metricOptions() {
-      // TODO: Remove
-      // if (!this.selectOptions || !this.chart) {
-      //   return null
-      // }
-      //
-      // return this.selectOptions[this.chart].metrics
-
       return this.metrics
         .map(metric => {
           return {
@@ -267,12 +260,6 @@ export default {
     },
 
     dimensionOptions() {
-      // TODO: Remove
-      // if (!this.selectOptions || !this.chart) {
-      //   return null
-      // }
-      // return this.selectOptions[this.chart].dimensions
-
       const geoDimensions = ['city', 'country', 'continent', 'subContinent'];
 
       return this.dimensions

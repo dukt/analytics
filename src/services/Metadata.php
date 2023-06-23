@@ -184,71 +184,6 @@ class Metadata extends Component
     }
 
     /**
-     * Returns select dimension options
-     *
-     * @param array $filters
-     *
-     * @return array
-     */
-    public function getSelectDimensionOptions(array $filters = null): array
-    {
-        $selectDimensionOptions = $this->getSelectOptions('DIMENSION');
-
-        if ($filters) {
-            $selectDimensionOptions = $this->filterOptions($selectDimensionOptions, $filters);
-        }
-
-        return $selectDimensionOptions;
-    }
-
-    /**
-     * Returns select metric options
-     *
-     * @param array $filters
-     *
-     * @return array
-     */
-    public function getSelectMetricOptions(array $filters = null): array
-    {
-        $selectMetricOptions = $this->getSelectOptions('METRIC');
-
-        if ($filters) {
-            $selectMetricOptions = $this->filterOptions($selectMetricOptions, $filters);
-        }
-
-        return $selectMetricOptions;
-    }
-
-    /**
-     * Returns select options
-     *
-     * @param null  $type
-     * @param array $filters
-     *
-     * @return array
-     */
-    public function getSelectOptions(string $type = null, array $filters = null): array
-    {
-        $options = [];
-
-        foreach ($this->getColumnGroups($type) as $group) {
-            $options[]['optgroup'] = Craft::t('analytics', $group);
-
-            foreach ($this->getColumns($type) as $column) {
-                if ($column->group === $group) {
-                    $options[$column->id] = Craft::t('analytics', $column->uiName);
-                }
-            }
-        }
-
-        if ($filters) {
-            $options = $this->filterOptions($options, $filters);
-        }
-
-        return $options;
-    }
-
-    /**
      * Returns the metrics
      *
      * @return array
@@ -270,43 +205,6 @@ class Metadata extends Component
     public function getDimmetsFilePath()
     {
         return Craft::getAlias('@dukt/analytics/etc/data/dimensions-metrics.json');
-    }
-
-    // TODO: remove this method, it has moved to the Vue app
-    public function getSelectOptionsByChartType()
-    {
-        $chartTypes = ['area', 'counter', 'pie', 'table', 'geo'];
-        $selectOptions = [];
-
-        foreach ($chartTypes as $chartType) {
-            switch ($chartType) {
-                case 'area':
-                    $options = [
-                        'metrics' => $this->getSelectMetricOptions()
-                    ];
-
-                    break;
-                case 'counter':
-                    $options = [
-                        'metrics' => $this->getSelectMetricOptions()
-                    ];
-                    break;
-                case 'geo':
-                    $options = [
-                        'dimensions' => $this->getSelectDimensionOptions(['ga:city', 'ga:country', 'ga:continent', 'ga:subContinent']),
-                        'metrics' => $this->getSelectMetricOptions()
-                    ];
-                    break;
-                default:
-                    $options = [
-                        'dimensions' => $this->getSelectDimensionOptions(),
-                        'metrics' => $this->getSelectMetricOptions()
-                    ];
-            }
-
-            $selectOptions[$chartType] = $options;
-        }
-        return $selectOptions;
     }
 
     // Private Methods

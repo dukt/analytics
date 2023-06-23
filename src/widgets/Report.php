@@ -168,35 +168,6 @@ class Report extends \craft\base\Widget
             $namespaceId = Craft::$app->getView()->namespaceInputId($id);
             $vueNamespaceId = Craft::$app->getView()->namespaceInputId($vueId);
 
-            // Select options
-            $chartTypes = ['area', 'counter', 'pie', 'table', 'geo'];
-            $selectOptions = [];
-
-            foreach ($chartTypes as $chartType) {
-                $selectOptions[$chartType] = $this->_getSelectOptionsByChartType($chartType);
-            }
-
-            // Prepare vue select options for JSON
-            // $selectOptions = Analytics::$plugin->getMetadata()->getSelectOptionsByChartType();
-            $selectOptionsForJson = [];
-
-            foreach($selectOptions as $chartType => $_selectOptions) {
-                foreach($_selectOptions as $dimmetKey => $dimmetOptions) {
-                    foreach($dimmetOptions as $optionValue => $option) {
-                        if (is_array($option) && $option['optgroup']) {
-                            $selectOptionsForJson[$chartType][$dimmetKey][] = [
-                                'optgroup' => $option['optgroup'],
-                            ];
-                        } else {
-                            $selectOptionsForJson[$chartType][$dimmetKey][] = [
-                                'label' => $option,
-                                'value' => $optionValue
-                            ];
-                        }
-                    }
-                }
-            }
-
             // Settings
             $settings = $this->getSettings();
 
@@ -205,7 +176,6 @@ class Report extends \craft\base\Widget
                 'namespaceId' => $namespaceId,
                 'vueNamespaceId' => $vueNamespaceId,
                 'settings' => $settings,
-                'selectOptions' => $selectOptions,
                 'reportingViews' => $reportingViews,
             ];
 
@@ -215,7 +185,6 @@ class Report extends \craft\base\Widget
                 'namespace' => Craft::$app->getView()->getNamespace(),
                 'vueNamespaceId' => $vueNamespaceId,
                 'settings' => $settings,
-                'selectOptions' => $selectOptionsForJson,
                 'reportingViews' => $reportingViews,
             ];
 
@@ -231,45 +200,6 @@ class Report extends \craft\base\Widget
 
     // Private Methods
     // =========================================================================
-
-    /**
-     * Returns the dimension & metrics options for a given chart type
-     *
-     * @param $chartType
-     *
-     * @return array
-     */
-    private function _getSelectOptionsByChartType($chartType)
-    {
-        switch ($chartType) {
-            case 'area':
-                $options = [
-                    'metrics' => Analytics::$plugin->getMetadata()->getSelectMetricOptions()
-                ];
-                break;
-
-            case 'counter':
-                $options = [
-                    'metrics' => Analytics::$plugin->getMetadata()->getSelectMetricOptions()
-                ];
-                break;
-
-            case 'geo':
-                $options = [
-                    'dimensions' => Analytics::$plugin->getMetadata()->getSelectDimensionOptions(['ga:city', 'ga:country', 'ga:continent', 'ga:subContinent']),
-                    'metrics' => Analytics::$plugin->getMetadata()->getSelectMetricOptions()
-                ];
-                break;
-
-            default:
-                $options = [
-                    'dimensions' => Analytics::$plugin->getMetadata()->getSelectDimensionOptions(),
-                    'metrics' => Analytics::$plugin->getMetadata()->getSelectMetricOptions()
-                ];
-        }
-
-        return $options;
-    }
 
     /**
      * Returns the title of the report
