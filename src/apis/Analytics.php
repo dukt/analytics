@@ -105,24 +105,6 @@ class Analytics extends Api
         return $settings;
     }
 
-    /**
-     * Parse Report Response
-     *
-     * @param $data
-     *
-     * @return array
-     */
-    public function parseReportResponse(array $data): array
-    {
-        $cols = $this->parseReportResponseCols($data);
-        $rows = $this->parseReportResponseRows($data, $cols);
-
-        return [
-            'cols' => $cols,
-            'rows' => $rows
-        ];
-    }
-
     // Private Methods
     // =========================================================================
 
@@ -246,22 +228,6 @@ class Analytics extends Api
             }, $props);
         }
 
-//        $props = $googleAdminService->properties->listProperties(['filter' => 'parent:accounts/1547168'])->getProperties();
-
-
-        /*displayName
-:
-"Côté Mariage  - GA4"
-parent
-:
-"accounts/35813838"
-property
-:
-"properties/352564466"
-propertyType
-:
-"PROPERTY_TYPE_ORDINARY"*/
-
         return array_merge(...$items);
     }
 
@@ -305,122 +271,5 @@ propertyType
         }
 
         return array_merge(...$items);
-    }
-
-    /**
-     * @param array $data
-     * @return array
-     */
-    private function parseReportResponseCols(array $data): array
-    {
-        $cols = [];
-
-        foreach ($data['columnHeaders'] as $col) {
-            $dataType = $col->dataType;
-            $id = $col->name;
-            $label = Plugin::$plugin->getMetadata()->getDimMet($col->name);
-            $type = strtolower($dataType);
-
-            switch ($col->name) {
-                case 'ga:date':
-                case 'ga:yearMonth':
-                    $type = 'date';
-                    break;
-
-                case 'ga:continent':
-                    $type = 'continent';
-                    break;
-                case 'ga:subContinent':
-                    $type = 'subContinent';
-                    break;
-
-                case 'ga:latitude':
-                case 'ga:longitude':
-                    $type = 'float';
-                    break;
-            }
-
-            $cols[] = [
-                'type' => $type,
-                'dataType' => $dataType,
-                'id' => $id,
-                'label' => Craft::t('analytics', $label),
-            ];
-        }
-
-        return $cols;
-    }
-
-    /**
-     * @param array $data
-     * @param array $cols
-     * @return array
-     */
-    private function parseReportResponseRows(array $data, array $cols): array
-    {
-        $rows = [];
-
-        if ($data['rows']) {
-            $rows = $data['rows'];
-
-            foreach ($rows as $kRow => $row) {
-                foreach ($row as $_valueKey => $_value) {
-                    $col = $cols[$_valueKey];
-
-                    $value = $this->formatRawValue($col['type'], $_value);
-
-                    if ($col['id'] == 'ga:continent') {
-                        $value = Plugin::$plugin->getGeo()->getContinentCode($value);
-                    }
-
-                    if ($col['id'] == 'ga:subContinent') {
-                        $value = Plugin::$plugin->getGeo()->getSubContinentCode($value);
-                    }
-
-                    // translate values
-                    switch ($col['id']) {
-                        case 'ga:country':
-                        case 'ga:city':
-                            // case 'ga:continent':
-                            // case 'ga:subContinent':
-                        case 'ga:userType':
-                        case 'ga:javaEnabled':
-                        case 'ga:deviceCategory':
-                        case 'ga:mobileInputSelector':
-                        case 'ga:channelGrouping':
-                        case 'ga:medium':
-                            $value = Craft::t('analytics', $value);
-                            break;
-                    }
-
-                    // update cell
-                    $rows[$kRow][$_valueKey] = $value;
-                }
-            }
-        }
-
-        return $rows;
-    }
-
-    /**
-     * Format RAW value
-     *
-     *
-     * @return float|string
-     */
-    private function formatRawValue(string $type, string $value)
-    {
-        switch ($type) {
-            case 'integer':
-            case 'currency':
-            case 'float':
-            case 'time':
-            case 'percent':
-                return (float)$value;
-                break;
-
-            default:
-                return (string)$value;
-        }
     }
 }
