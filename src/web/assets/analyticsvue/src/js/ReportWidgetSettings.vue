@@ -250,6 +250,7 @@ export default {
     },
 
     metricOptions() {
+      // TODO: Remove
       // if (!this.selectOptions || !this.chart) {
       //   return null
       // }
@@ -266,6 +267,7 @@ export default {
     },
 
     dimensionOptions() {
+      // TODO: Remove
       // if (!this.selectOptions || !this.chart) {
       //   return null
       // }
