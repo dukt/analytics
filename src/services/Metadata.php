@@ -21,63 +21,10 @@ class Metadata extends Component
     /**
      * @var array|null
      */
-    private $groups;
-
-    /**
-     * @var array|null
-     */
-    private $dimensions;
-
-    /**
-     * @var array|null
-     */
-    private $metrics;
-
-    /**
-     * @var array|null
-     */
     private $columns;
 
     // Public Methods
     // =========================================================================
-
-    /**
-     * Returns available data types for Google Analytics
-     *
-     * @return array
-     */
-    public function getGoogleAnalyticsDataTypes(): array
-    {
-        $columns = $this->getColumns();
-
-        $dataTypes = [];
-
-        foreach ($columns as $column) {
-            if (!isset($dataTypes[$column->dataType]) && !empty($column->dataType)) {
-                $dataTypes[$column->dataType] = $column->dataType;
-            }
-        }
-
-        return $dataTypes;
-    }
-
-    /**
-     * Returns available data types
-     *
-     * @return array
-     */
-    public function getDataTypes(): array
-    {
-        return [
-            'string',
-            'integer',
-            'percent',
-            'time',
-            'currency',
-            'float',
-            'date'
-        ];
-    }
 
     /**
      * Get a dimension or a metric label from its id
@@ -114,56 +61,6 @@ class Metadata extends Component
         }
 
         return $this->getColumnsByType($type);
-    }
-
-    /**
-     * Returns dimension columns
-     *
-     * @return array
-     */
-    public function getDimensions(): array
-    {
-        if (!$this->dimensions) {
-            $this->dimensions = $this->getColumns('DIMENSION');
-        }
-
-        return $this->dimensions;
-    }
-
-    /**
-     * Returns column groups
-     *
-     * @param string|null $type
-     *
-     * @return array
-     */
-    public function getColumnGroups(string $type = null): array
-    {
-        if ($type && isset($this->groups[$type])) {
-            return $this->groups[$type];
-        }
-
-        $groups = $this->_getColumnGroups($type);
-
-        if ($type) {
-            $this->groups[$type] = $groups;
-        }
-
-        return $groups;
-    }
-
-    /**
-     * Returns the metrics
-     *
-     * @return array
-     */
-    public function getMetrics(): array
-    {
-        if (!$this->metrics) {
-            $this->metrics = $this->getColumns('METRIC');
-        }
-
-        return $this->metrics;
     }
 
     /**
@@ -204,25 +101,6 @@ class Metadata extends Component
         }
 
         return $cols;
-    }
-
-    /**
-     * Get column groups.
-     *
-     * @param string|null $type
-     * @return array
-     */
-    private function _getColumnGroups(string $type = null): array
-    {
-        $groups = [];
-
-        foreach ($this->getColumns() as $column) {
-            if (!$type || ($type && $column->type === $type)) {
-                $groups[$column->group] = $column->group;
-            }
-        }
-
-        return $groups;
     }
 
     /**
