@@ -11,14 +11,6 @@ use yii\base\Component;
 
 class Metadata extends Component
 {
-    // Properties
-    // =========================================================================
-
-    /**
-     * @var array|null
-     */
-    private $columns;
-
     // Public Methods
     // =========================================================================
 
