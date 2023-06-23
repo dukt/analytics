@@ -6,21 +6,29 @@
         <label>View</label>
       </div>
       <div class="input">
-        <div class="select">
-          <select
-            v-model="viewId"
-            :name="inputName('viewId')"
-            @change="onViewChange()"
-          >
-            <template v-for="(option, optionKey) in viewOptions">
-              <option
-                :key="optionKey"
-                :value="option.value"
-              >
-                {{ option.label }}
-              </option>
-            </template>
-          </select>
+        <div class="da-flex da-items-center da-gap-3">
+          <div class="select">
+            <select
+              v-model="viewId"
+              :name="inputName('viewId')"
+              @change="onViewChange()"
+            >
+              <template v-for="(option, optionKey) in viewOptions">
+                <option
+                  :key="optionKey"
+                  :value="option.value"
+                >
+                  {{ option.label }}
+                </option>
+              </template>
+            </select>
+          </div>
+          <div
+            class="spinner"
+            :class="{
+              'da-invisible': !loading,
+            }"
+          />
         </div>
       </div>
     </div>
@@ -181,6 +189,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       pluginSettings: null,
       chartTypeOptions: [
         {
@@ -313,6 +322,7 @@ export default {
       this.refreshDimensionsAndMetrics()
     },
     refreshDimensionsAndMetrics() {
+      this.loading = true
       reportsApi.getDimensionsMetrics(this.viewId)
         .then((response) => {
           this.dimensions = response.data.dimensions
@@ -320,6 +330,9 @@ export default {
 
           this.initMetric();
           this.initDimension();
+        })
+        .finally(() => {
+          this.loading = false
         })
     },
     initMetric() {
