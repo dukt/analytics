@@ -29,6 +29,17 @@ class TestsController extends Controller
     // =========================================================================
 
     /**
+     * Overview
+     *
+     * @param array $variables
+     *
+     * @return Response
+     */
+    public function actionOverview(array $variables = [])
+    {
+        return $this->renderTemplate('analytics/tests/_overview', $variables);
+    }
+    /**
      * Columns
      *
      * @param array $variables

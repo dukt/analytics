@@ -107,6 +107,7 @@ class Plugin extends \craft\base\Plugin
                 'analytics/settings/sites' => 'analytics/settings/sites',
                 'analytics/settings/sites/<siteId:\d+>' => 'analytics/settings/edit-site',
                 'analytics/utils' => 'analytics/utils/index',
+                'analytics/tests/overview' => 'analytics/tests/overview',
                 'analytics/tests/data-types' => 'analytics/tests/data-types',
                 'analytics/tests' => 'analytics/tests/columns',
                 'analytics/tests/columns' => 'analytics/tests/columns',
