@@ -104,7 +104,7 @@
     </div>
 
     <!-- Dimension -->
-    <template v-if="hasDimension">
+    <template v-if="chartSupportsDimensions">
       <div class="field">
         <div class="heading">
           <label>Dimension</label>
@@ -283,7 +283,7 @@ export default {
         });
     },
 
-    hasDimension() {
+    chartSupportsDimensions() {
       return this.chart === 'pie' || this.chart === 'table' || this.chart === 'geo'
     },
 
