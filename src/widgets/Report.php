@@ -118,10 +118,8 @@ class Report extends \craft\base\Widget
                 'period' => $widgetSettings['period'] ?? null,
                 'options' => $widgetSettings['options'][$widgetSettings['chart']] ?? null,
             ];
-
-
+            
             // use cached response if available
-
             if (Analytics::$plugin->getSettings()->enableCache === true) {
                 $cacheId = ['getReport', $request];
                 $cachedResponse = Analytics::$plugin->getCache()->get($cacheId);
@@ -245,32 +243,25 @@ class Report extends \craft\base\Widget
     {
         switch ($chartType) {
             case 'area':
-
                 $options = [
                     'metrics' => Analytics::$plugin->getMetadata()->getSelectMetricOptions()
                 ];
-
                 break;
 
             case 'counter':
-
                 $options = [
                     'metrics' => Analytics::$plugin->getMetadata()->getSelectMetricOptions()
                 ];
-
                 break;
 
             case 'geo':
-
                 $options = [
                     'dimensions' => Analytics::$plugin->getMetadata()->getSelectDimensionOptions(['ga:city', 'ga:country', 'ga:continent', 'ga:subContinent']),
                     'metrics' => Analytics::$plugin->getMetadata()->getSelectMetricOptions()
                 ];
-
                 break;
 
             default:
-
                 $options = [
                     'dimensions' => Analytics::$plugin->getMetadata()->getSelectDimensionOptions(),
                     'metrics' => Analytics::$plugin->getMetadata()->getSelectMetricOptions()
