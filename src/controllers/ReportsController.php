@@ -17,7 +17,7 @@ use yii\web\Response;
 class ReportsController extends Controller
 {
     use DemoControllerTrait;
-    
+
     // Public Methods
     // =========================================================================
 
