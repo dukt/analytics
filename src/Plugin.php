@@ -113,8 +113,6 @@ class Plugin extends \craft\base\Plugin
                 'analytics/tests/template-variables' => 'analytics/tests/template-variables',
                 'analytics/tests/ga4' => 'analytics/tests/ga4',
                 'analytics/tests/ga4-metadata' => 'analytics/tests/ga4-metadata',
-                'analytics/tests/vue' => 'analytics/tests/vue',
-                'analytics/tests/vue-reports' => 'analytics/tests/vue-reports',
                 'analytics/api4' => 'analytics/api4',
             ];
 
