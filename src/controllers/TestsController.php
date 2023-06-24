@@ -59,20 +59,6 @@ class TestsController extends Controller
     }
 
     /**
-     * Report Widgets
-     *
-     * @param array $variables
-     *
-     * @return Response
-     */
-    public function actionReportWidgets(array $variables = [])
-    {
-        Craft::$app->getView()->registerAssetBundle(TestsAsset::class);
-
-        return $this->renderTemplate('analytics/tests/_reportWidgets', $variables);
-    }
-
-    /**
      * Template Variables
      *
      * @param array $variables
