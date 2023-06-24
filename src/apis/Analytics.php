@@ -44,17 +44,6 @@ class Analytics extends Api
     }
 
     /**
-     * Get columns.
-     *
-     * @return \Google\Service\Analytics\Columns
-     * @throws \yii\base\InvalidConfigException
-     */
-    public function getColumns()
-    {
-        return Plugin::$plugin->getApis()->getAnalytics()->getService()->metadata_columns->listMetadataColumns('ga');
-    }
-
-    /**
      * Get account explorer data.
      *
      * @return array
