@@ -26,7 +26,7 @@ export default {
   },
   getDimensionsMetrics(viewId) {
     return axios.get(
-      Craft.getActionUrl('analytics/vue/get-dimensions-metrics&viewId=' + viewId),
+      Craft.getActionUrl('analytics/reports/get-dimensions-metrics&viewId=' + viewId),
       {
         headers: {
           'X-CSRF-Token': Craft.csrfTokenValue,

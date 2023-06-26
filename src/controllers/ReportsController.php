@@ -11,7 +11,9 @@ use Craft;
 use craft\web\Controller;
 use dukt\analytics\base\DemoControllerTrait;
 use dukt\analytics\errors\InvalidChartTypeException;
+use dukt\analytics\Plugin;
 use dukt\analytics\Plugin as Analytics;
+use yii\base\InvalidConfigException;
 use yii\web\Response;
 
 class ReportsController extends Controller
@@ -195,6 +197,39 @@ class ReportsController extends Controller
         } catch(\Google_Service_Exception $googleServiceException) {
             return $this->handleGoogleServiceException($googleServiceException);
         }
+    }
+
+    /**
+     * Get dimensions and metrics
+     *
+     * @param int $viewId
+     * @return Response
+     * @throws InvalidConfigException
+     */
+    public function actionGetDimensionsMetrics(int $viewId)
+    {
+        $reportingView = Analytics::$plugin->getViews()->getViewById($viewId);
+        $analyticsData = Plugin::$plugin->getApis()->getAnalytics()->getAnalyticsData();
+        $metadata = $analyticsData->properties->getMetadata($reportingView->gaPropertyId.'/metadata');
+
+        $dimensions = array_map(function($dimension) {
+            return [
+                'apiName' => $dimension->apiName,
+                'name' => $dimension->uiName,
+            ];
+        }, $metadata->getDimensions());
+
+        $metrics = array_map(function($metric) {
+            return [
+                'apiName' => $metric->apiName,
+                'name' => $metric->uiName,
+            ];
+        }, $metadata->getMetrics());
+
+        return $this->asJson([
+            'dimensions' => $dimensions,
+            'metrics' => $metrics,
+        ]);
     }
 
     // Private Methods
