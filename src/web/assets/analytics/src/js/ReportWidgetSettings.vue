@@ -286,8 +286,26 @@ export default {
     _dimensions() {
       const geoDimensions = ['city', 'country', 'continent', 'subContinent'];
       return this.dimensions
-        .filter(dimension => (this.chart !== 'geo' || geoDimensions.find(geoDimension => geoDimension === dimension.apiName)));
+        // Filter geo dimensions
+        .filter(dimension => (this.chart !== 'geo' || geoDimensions.find(geoDimension => geoDimension === dimension.apiName)))
+        .map(dimension => {
+          if (this.chart === 'geo') {
+            switch(dimension.apiName) {
+              case 'continent':
+                return {
+                  ...dimension,
+                  apiName: 'continentId'
+                }
+              case 'city':
+                return {
+                  ...dimension,
+                  apiName: 'cityId'
+                }
+            }
+          }
 
+          return dimension;
+        });
     },
 
     dimensionOptions() {
