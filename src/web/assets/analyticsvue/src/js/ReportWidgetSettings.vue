@@ -180,7 +180,9 @@
 <script>
 /* global Craft */
 
-import VSelect from 'vue-select';
+import VSelect from "vue-select";
+import "vue-select/dist/vue-select.css";
+
 import reportsApi from './api/reports';
 
 export default {
@@ -312,7 +314,6 @@ export default {
   },
 
   methods: {
-
     onViewChange() {
       this.refreshDimensionsAndMetrics()
     },
