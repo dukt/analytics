@@ -5,7 +5,7 @@
  * @license   https://github.com/dukt/analytics/blob/master/LICENSE.md
  */
 
-namespace dukt\analytics\web\assets\analyticsvue;
+namespace dukt\analytics\web\assets\analytics;
 
 use Craft;
 use craft\helpers\ChartHelper;
@@ -20,7 +20,7 @@ use dukt\analytics\web\assets\googlecharts\GoogleChartsAsset;
 /**
  * Vue asset bundle.
  */
-class AnalyticsVueAsset extends AssetBundle
+class AnalyticsAsset extends AssetBundle
 {
     // Public Methods
     // =========================================================================

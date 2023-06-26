@@ -10,7 +10,7 @@ namespace dukt\analytics\fields;
 use Craft;
 use craft\base\Field;
 use craft\helpers\Json;
-use dukt\analytics\web\assets\analyticsvue\AnalyticsVueAsset;
+use dukt\analytics\web\assets\analytics\AnalyticsAsset;
 use dukt\analytics\Plugin as Analytics;
 
 class Report extends Field
@@ -128,7 +128,7 @@ class Report extends Field
                     'element' => $element,
                     'namespacedId' => $namespacedId,
                 ];
-                $view->registerAssetBundle(AnalyticsVueAsset::class);
+                $view->registerAssetBundle(AnalyticsAsset::class);
                 $view->registerJs('new AnalyticsVueReportField({data: {pluginOptions: '.Json::encode($variables).'}}).$mount("#fields-vue-'.$namespacedId.'");;');
             } elseif (!$element->id) {
                 $variables = [

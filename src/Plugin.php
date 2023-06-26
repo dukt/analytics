@@ -19,7 +19,7 @@ use craft\web\twig\variables\CraftVariable;
 use dukt\analytics\base\PluginTrait;
 use dukt\analytics\fields\Report as ReportField;
 use dukt\analytics\models\Settings;
-use dukt\analytics\web\assets\analyticsvue\AnalyticsVueAsset;
+use dukt\analytics\web\assets\analytics\AnalyticsAsset;
 use dukt\analytics\web\twig\variables\AnalyticsVariable;
 use dukt\analytics\widgets\Ecommerce;
 use dukt\analytics\widgets\Realtime;
@@ -73,7 +73,7 @@ class Plugin extends \craft\base\Plugin
                 'views' => \dukt\analytics\services\Views::class,
                 'vite' => [
                     'class' => VitePluginService::class,
-                    'assetClass' => AnalyticsVueAsset::class,
+                    'assetClass' => AnalyticsAsset::class,
                     'useDevServer' => true,
                     'devServerPublic' => 'http://localhost:'.App::env('ANALYTICS_VITE_DEV_PORT'),
                     'serverPublic' => 'https://playground.ddev.site',

@@ -10,7 +10,7 @@ namespace dukt\analytics\widgets;
 use Craft;
 use craft\helpers\Json;
 use dukt\analytics\Plugin as Analytics;
-use dukt\analytics\web\assets\analyticsvue\AnalyticsVueAsset;
+use dukt\analytics\web\assets\analytics\AnalyticsAsset;
 
 class Realtime extends \craft\base\Widget
 {
@@ -120,7 +120,7 @@ class Realtime extends \craft\base\Widget
             'refreshInterval' => $realtimeRefreshInterval,
         ];
 
-        $view->registerAssetBundle(AnalyticsVueAsset::class);
+        $view->registerAssetBundle(AnalyticsAsset::class);
         $view->registerJs('new AnalyticsVueRealtimeWidget({data: {pluginOptions: '.Json::encode($variables).'}}).$mount("#analytics-widget-'.$this->id.'");;');
 
         return $view->renderTemplate('analytics/_components/widgets/Realtime/body', $variables);

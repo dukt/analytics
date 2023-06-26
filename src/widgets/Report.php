@@ -10,7 +10,7 @@ namespace dukt\analytics\widgets;
 use Craft;
 use craft\helpers\Json;
 use craft\helpers\StringHelper;
-use dukt\analytics\web\assets\analyticsvue\AnalyticsVueAsset;
+use dukt\analytics\web\assets\analytics\AnalyticsAsset;
 use dukt\analytics\Plugin as Analytics;
 
 class Report extends \craft\base\Widget
@@ -134,7 +134,7 @@ class Report extends \craft\base\Widget
                 'cachedResponse' => $cachedResponse ?? null,
             ];
 
-            $view->registerAssetBundle(AnalyticsVueAsset::class);
+            $view->registerAssetBundle(AnalyticsAsset::class);
 
             $view->registerJs('new AnalyticsVueReportWidget({data: {pluginOptions: '.Json::encode($jsOptions).'}}).$mount("#analytics-widget-'.$this->id.'");;');
 
@@ -157,7 +157,7 @@ class Report extends \craft\base\Widget
      */
     public function getSettingsHtml(): ?string
     {
-        Craft::$app->getView()->registerAssetBundle(AnalyticsVueAsset::class);
+        Craft::$app->getView()->registerAssetBundle(AnalyticsAsset::class);
 
         $reportingViews = Analytics::$plugin->getViews()->getViews();
 

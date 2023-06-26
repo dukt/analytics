@@ -9,15 +9,15 @@ export default defineConfig(({command, mode}) => {
   const port = process.env.DEV_PORT || 3000;
   return {
     base: command === 'serve' ? '' : '/dist/',
-    // publicDir: './src/web/assets/analyticsvue/dist',
-    root: "./src/web/assets/analyticsvue/",
+    // publicDir: './src/web/assets/analytics/dist',
+    root: "./src/web/assets/analytics/",
     build: {
       emptyOutDir: true,
       manifest: true,
       sourcemap: true,
-      // outDir: './src/web/assets/analyticsvue/dist/',
+      // outDir: './src/web/assets/analytics/dist/',
       rollupOptions: {
-        input: './src/web/assets/analyticsvue/src/main.js',
+        input: './src/web/assets/analytics/src/main.js',
       },
     },
     // define: {
@@ -26,7 +26,7 @@ export default defineConfig(({command, mode}) => {
     // },
     resolve: {
       alias: {
-        '@': path.resolve('./src/web/assets/analyticsvue/src/'),
+        '@': path.resolve('./src/web/assets/analytics/src/'),
       },
       // extensions: ['.vue', '.js']
     },

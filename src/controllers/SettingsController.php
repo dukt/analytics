@@ -14,7 +14,7 @@ use craft\web\Controller;
 use dukt\analytics\models\SiteView;
 use dukt\analytics\models\View;
 use dukt\analytics\web\assets\settings\SettingsAsset;
-use dukt\analytics\web\assets\analyticsvue\AnalyticsVueAsset;
+use dukt\analytics\web\assets\analytics\AnalyticsAsset;
 use dukt\analytics\Plugin as Analytics;
 use Exception;
 use Google_Service_Exception;
@@ -85,7 +85,7 @@ class SettingsController extends Controller
             }
         }
 
-        Craft::$app->getView()->registerAssetBundle(AnalyticsVueAsset::class);
+        Craft::$app->getView()->registerAssetBundle(AnalyticsAsset::class);
 
         return $this->renderTemplate('analytics/settings/_index', [
             'isOauthProviderConfigured' => $isOauthProviderConfigured,
@@ -238,7 +238,7 @@ class SettingsController extends Controller
         $variables['reportingView'] = $reportingView;
         $variables['accountExplorerOptions'] = $this->getAccountExplorerOptions($reportingView);
 
-        Craft::$app->getView()->registerAssetBundle(AnalyticsVueAsset::class);
+        Craft::$app->getView()->registerAssetBundle(AnalyticsAsset::class);
 
         $jsOptions = [
             'reportingView' => $variables['reportingView'],

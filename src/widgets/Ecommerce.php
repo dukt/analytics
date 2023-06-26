@@ -10,7 +10,7 @@ namespace dukt\analytics\widgets;
 use Craft;
 use craft\helpers\Json;
 use dukt\analytics\Plugin as Analytics;
-use dukt\analytics\web\assets\analyticsvue\AnalyticsVueAsset;
+use dukt\analytics\web\assets\analytics\AnalyticsAsset;
 
 class Ecommerce extends \craft\base\Widget
 {
@@ -89,7 +89,7 @@ class Ecommerce extends \craft\base\Widget
             'chartLanguage' => Analytics::$plugin->getAnalytics()->getChartLanguage(),
         ];
 
-        $view->registerAssetBundle(AnalyticsVueAsset::class);
+        $view->registerAssetBundle(AnalyticsAsset::class);
         $view->registerJs('new AnalyticsVueEcommerceWidget({data: {pluginOptions: '.Json::encode($widgetOptions).'}}).$mount("#analytics-widget-'.$widgetId.'");;');
 
         return $view->renderTemplate('analytics/_components/widgets/Ecommerce/body', [
