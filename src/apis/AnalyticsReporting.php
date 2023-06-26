@@ -113,6 +113,7 @@ class AnalyticsReporting extends Api
      */
     private function getReportingReportRequest(ReportRequestCriteria $criteria)
     {
+        // TODO check setting stuff on constructor instead of setters
         $request = new RunReportRequest();
 
 //        $this->setRequestViewIdFromCriteria($request, $criteria);
