@@ -54,10 +54,6 @@ export default {
           label: 'continent',
           value: 'continent'
         },
-        {
-          label: 'subContinent',
-          value: 'subContinent'
-        },
       ],
       selectedDimension: 'country',
     }

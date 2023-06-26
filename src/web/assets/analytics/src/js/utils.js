@@ -60,7 +60,6 @@ export const responseToDataTable = (response, localeDefinition) => {
         case 'time':
         case 'continent':
         case 'continentId':
-        case 'subContinent':
           dataTableRow[keyColumn] = {
             v: formatRawValueByType(localeDefinition, column.type, row[keyColumn]),
             f: formatByType(localeDefinition, column.type, row[keyColumn])
@@ -97,9 +96,6 @@ export const formatByType = (localeDefinition, type, value) => {
   switch (type) {
     case 'continent':
       return Metadata.getContinentByCode(value);
-
-    case 'subContinent':
-      return Metadata.getSubContinentByCode(value);
 
     case 'currency':
       return formatCurrency(localeDefinition, +value);

@@ -112,11 +112,6 @@ export class ChartOptions {
         options.resolution = 'continents';
         options.displayMode = 'regions';
         break;
-
-      case 'subContinent':
-        options.resolution = 'subcontinents';
-        options.displayMode = 'regions';
-        break;
     }
 
     return options;

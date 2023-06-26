@@ -462,9 +462,6 @@ class Reports extends Component
                 case 'continentId':
                     $type = 'continent';
                     break;
-                case 'subContinent':
-                    $type = 'subContinent';
-                    break;
 
                 case 'latitude':
                 case 'longitude':
@@ -538,8 +535,6 @@ class Reports extends Component
 //                    if ($columnHeaderDimensions && isset($columnHeaderDimensions[$colIndex])) {
 //                        if ($columnHeaderDimensions[$colIndex] == 'ga:continent') {
 //                            $value = Analytics::$plugin->getGeo()->getContinentCode($value);
-//                        } elseif ($columnHeaderDimensions[$colIndex] == 'ga:subContinent') {
-//                            $value = Analytics::$plugin->getGeo()->getSubContinentCode($value);
 //                        }
 //                    }
 //

@@ -284,7 +284,7 @@ export default {
     },
 
     _dimensions() {
-      const geoDimensions = ['city', 'country', 'continent', 'subContinent'];
+      const geoDimensions = ['city', 'country', 'continent'];
       return this.dimensions
         // Filter geo dimensions
         .filter(dimension => (this.chart !== 'geo' || geoDimensions.find(geoDimension => geoDimension === dimension.apiName)))

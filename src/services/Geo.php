@@ -26,16 +26,6 @@ class Geo extends Component
     }
 
     /**
-     * Get subcontinents.
-     *
-     * @return array
-     */
-    public function getSubContinents(): array
-    {
-        return $this->_getData('subContinents');
-    }
-
-    /**
      * Get Continent Code
      *
      *
@@ -46,23 +36,6 @@ class Geo extends Component
         foreach ($this->_getData('continents') as $continent) {
             if ($continent['label'] === $label) {
                 return $continent['code'];
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Get Sub-Continent Code
-     *
-     *
-     * @return mixed
-     */
-    public function getSubContinentCode(string $label)
-    {
-        foreach ($this->_getData('subContinents') as $subContinent) {
-            if ($subContinent['label'] === $label) {
-                return $subContinent['code'];
             }
         }
 
