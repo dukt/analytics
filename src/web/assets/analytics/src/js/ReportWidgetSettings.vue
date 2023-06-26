@@ -251,27 +251,63 @@ export default {
       });
     },
 
-    metricOptions() {
+    metricCategories() {
       return this.metrics
-        .map(metric => {
-          return {
-            label: metric.name,
-            value: metric.apiName,
-          }
-        });
+        .map(metric => metric.category)
+        .filter((category, index, self) => self.indexOf(category) === index)
+    },
+
+    dimensionCategories() {
+      return this._dimensions
+        .map(dimension => dimension.category)
+        .filter((category, index, self) => self.indexOf(category) === index)
+    },
+
+    metricOptions() {
+      let options = [];
+
+      this.metricCategories.forEach(category => {
+        options.push({
+          optgroup: category,
+        })
+
+        this.metrics.filter(metric => metric.category === category).forEach(metric => {
+          options.push({
+              label: metric.name,
+              value: metric.apiName,
+            }
+          )
+        })
+      })
+
+      return options;
+    },
+
+    _dimensions() {
+      const geoDimensions = ['city', 'country', 'continent', 'subContinent'];
+      return this.dimensions
+        .filter(dimension => (this.chart !== 'geo' || geoDimensions.find(geoDimension => geoDimension === dimension.apiName)));
+
     },
 
     dimensionOptions() {
-      const geoDimensions = ['city', 'country', 'continent', 'subContinent'];
+      let options = [];
 
-      return this.dimensions
-        .filter(dimension => (this.chart !== 'geo' || geoDimensions.find(geoDimension => geoDimension === dimension.apiName)))
-        .map(dimension => {
-          return {
-            label: dimension.name,
-            value: dimension.apiName,
-          }
-        });
+      this.dimensionCategories.forEach(category => {
+        options.push({
+          optgroup: category,
+        })
+
+        this._dimensions.filter(dimension => dimension.category === category).forEach(dimension => {
+          options.push({
+              label: dimension.name,
+              value: dimension.apiName,
+            }
+          )
+        })
+      })
+
+      return options;
     },
 
     chartSupportsDimensions() {

@@ -216,6 +216,7 @@ class ReportsController extends Controller
             return [
                 'apiName' => $dimension->apiName,
                 'name' => $dimension->uiName,
+                'category' => $dimension->category,
             ];
         }, $metadata->getDimensions());
 
@@ -223,6 +224,7 @@ class ReportsController extends Controller
             return [
                 'apiName' => $metric->apiName,
                 'name' => $metric->uiName,
+                'category' => $metric->category,
             ];
         }, $metadata->getMetrics());
 
