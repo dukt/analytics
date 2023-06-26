@@ -208,6 +208,7 @@ class Analytics extends Api
                     'name' => $item->getDisplayName(),
                     'accountId' => str_replace('accounts/', '', $item->getParent()),
                     'test' => get_class($item),
+                    // TODO
 //                'id' => $item->getProperty()->getId(),
 //                'accountId' => $item->getProperty()->getAccount()->getId(),
 //                'name' => $item->getProperty()->getName(),
