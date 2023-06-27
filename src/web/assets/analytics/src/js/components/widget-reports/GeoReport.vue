@@ -41,17 +41,6 @@ export default {
   data() {
     return {
       chartData: null,
-      dimensions: [
-        {
-          label: 'country',
-          value: 'country'
-        },
-        {
-          label: 'continent',
-          value: 'continent'
-        },
-      ],
-      selectedDimension: 'country',
     }
   },
   computed: {
@@ -61,7 +50,6 @@ export default {
   },
   mounted() {
     this.chartData = responseToDataTable(this.reportResponse.data.chart, this.localeDefinition)
-    console.log('chartData', this.reportResponse.data)
   },
 }
 </script>

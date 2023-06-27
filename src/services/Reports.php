@@ -504,46 +504,5 @@ class Reports extends Component
 
         }
         return $rows;
-
-// TODO: Review with GEO report
-
-//        $columnHeader = $report->getColumnHeader();
-//        $columnHeaderDimensions = $columnHeader->getDimensions();
-//
-//        $rows = [];
-//
-//        foreach ($report->getData()->getRows() as $_row) {
-//
-//            $colIndex = 0;
-//            $row = [];
-//
-//            $dimensions = $_row->getDimensions();
-//
-//            if ($dimensions) {
-//                foreach ($dimensions as $_dimension) {
-//
-//                    $value = $_dimension;
-//
-//                    if ($columnHeaderDimensions && isset($columnHeaderDimensions[$colIndex])) {
-//                        if ($columnHeaderDimensions[$colIndex] == 'ga:continent') {
-//                            $value = Analytics::$plugin->getGeo()->getContinentCode($value);
-//                        }
-//                    }
-//
-//                    $row[] = $value;
-//
-//                    ++$colIndex;
-//                }
-//            }
-//
-//            foreach ($_row->getMetrics() as $_metric) {
-//                $row[] = $_metric->getValues()[0];
-//                ++$colIndex;
-//            }
-//
-//            $rows[] = $row;
-//        }
-//
-//        return $rows;
     }
 }
