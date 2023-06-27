@@ -116,6 +116,7 @@ class AnalyticsReporting extends Api
         // TODO check setting stuff on constructor instead of setters
         $request = new RunReportRequest();
 
+        // TODO
 //        $this->setRequestViewIdFromCriteria($request, $criteria);
         $view = Plugin::getInstance()->getViews()->getViewById($criteria->viewId);
         if ($view !== null) {
@@ -133,6 +134,8 @@ class AnalyticsReporting extends Api
         if (!empty($criteria->orderBys)) {
             $request->setOrderBys($criteria->orderBys);
         }
+// TODO: Update criteria attributes
+//
 // Replaced with limit/offset
 //        if ($criteria->pageToken) {
 //            $pageToken = (string) $criteria->pageToken;
@@ -204,6 +207,7 @@ class AnalyticsReporting extends Api
     {
         if ($criteria->metrics) {
             $metricString = $criteria->metrics;
+            // TODO
 //            $metrics = $this->getMetricsFromString($metricString);
             $request->setMetrics(['name' => $metricString]);
         }
@@ -217,6 +221,7 @@ class AnalyticsReporting extends Api
     {
         if (!empty($criteria->dimensions)) {
             $dimensionString = $criteria->dimensions;
+            // TODO
 //            $dimensions = $this->getDimensionsFromString($dimensionString);
             $request->setDimensions(['name' => $dimensionString]);
         }
@@ -242,6 +247,7 @@ class AnalyticsReporting extends Api
         return $dimensions;
     }
 
+    // TODO: Remove?
     /**
      * Get metrics from string.
      *

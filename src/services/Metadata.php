@@ -22,7 +22,7 @@ class Metadata extends Component
      */
     public function getDimMet(string $id)
     {
-        // TODO: fix dimmet mapping
+        // TODO: fix dimmet mapping or remove method
 
         return $id;
     }
