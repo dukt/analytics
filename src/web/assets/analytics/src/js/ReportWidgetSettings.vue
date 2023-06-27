@@ -284,7 +284,7 @@ export default {
     },
 
     _dimensions() {
-      const geoDimensions = ['city', 'country', 'continent'];
+      const geoDimensions = ['country', 'continent'];
       return this.dimensions
         // Filter geo dimensions
         .filter(dimension => (this.chart !== 'geo' || geoDimensions.find(geoDimension => geoDimension === dimension.apiName)))
@@ -295,11 +295,6 @@ export default {
                 return {
                   ...dimension,
                   apiName: 'continentId'
-                }
-              case 'city':
-                return {
-                  ...dimension,
-                  apiName: 'cityId'
                 }
             }
           }

@@ -98,10 +98,6 @@ export class ChartOptions {
     var options = this.defaults.geo;
 
     switch (dimension) {
-      case 'city':
-        options.displayMode = 'markers';
-        break;
-
       case 'country':
         options.resolution = 'countries';
         options.displayMode = 'regions';

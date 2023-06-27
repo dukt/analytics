@@ -43,10 +43,6 @@ export default {
       chartData: null,
       dimensions: [
         {
-          label: 'city',
-          value: 'city'
-        },
-        {
           label: 'country',
           value: 'country'
         },
