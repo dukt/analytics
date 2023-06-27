@@ -9,7 +9,7 @@
 
     <div class="da-mt-6">
       <h3>
-        Pageviews per minute
+        Active users per minute
       </h3>
 
       <div>
@@ -139,6 +139,7 @@ export default {
     },
 
     parsePageviews(reportResponse) {
+      console.log('reportResponse', reportResponse.data.pageviews)
       this.pageviews = reportResponse.data.pageviews
 
       this.chartData = this.getPageviewsDataTable(this.pageviews);
@@ -150,7 +151,7 @@ export default {
     getPageviewsDataTable(pageviews) {
       let data = new google.visualization.DataTable();
       data.addColumn('number', Craft.t('analytics', 'Minutes ago'));
-      data.addColumn('number', Craft.t('analytics', 'Pageviews'));
+      data.addColumn('number', Craft.t('analytics', 'Active Users'));
 
       if (pageviews.rows) {
         for (let minutesAgo = 30; minutesAgo >= 0; minutesAgo--) {

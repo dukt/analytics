@@ -87,55 +87,71 @@ class ReportsController extends Controller
             return $this->getRealtimeDemoResponse();
         }
 
-
-        // Active users
-
-        $activeUsers = 0;
-
         $viewId = Craft::$app->getRequest()->getBodyParam('viewId');
 
+        // Active users
         $request = [
             'viewId' => $viewId,
-            'metrics' => 'ga:activeVisitors',
+            'metrics' => 'activeUsers',
             'optParams' => []
         ];
 
         try {
             $response = Analytics::$plugin->getReports()->getRealtimeReport($request);
+            $activeUsers = $response->getRowCount() > 0 ? $response->getRows()[0]->getMetricValues()[0]->value : 0;
         } catch(\Google_Service_Exception $googleServiceException) {
             return $this->handleGoogleServiceException($googleServiceException);
         }
 
-        if (!empty($response['totalsForAllResults']) && isset($response['totalsForAllResults']['ga:activeVisitors'])) {
-            $activeUsers = $response['totalsForAllResults']['ga:activeVisitors'];
-        }
-
-
         // Pageviews
-
         $pageviewsRequest = [
             'viewId' => $viewId,
-            'metrics' => 'rt:pageviews',
-            'optParams' => ['dimensions' => 'rt:minutesAgo']
+            'metrics' => 'screenPageViews',
+            'dimensions' => 'minutesAgo',
+            'optParams' => []
         ];
 
-        $pageviews = Analytics::$plugin->getReports()->getRealtimeReport($pageviewsRequest);
+        $response = Analytics::$plugin->getReports()->getRealtimeReport($pageviewsRequest);
 
+        $pageviewsRows = [];
+
+        for ($i = 0; $i < 30; $i++) {
+            $pageviewsRows[$i] = [$i, 0];
+        }
+
+        foreach($response->getRows() as $row) {
+            $minutes = (int) $row->getDimensionValues()[0]->value;
+
+            $pageviewsRows[$minutes] = [$minutes, (int) $row->getMetricValues()[0]->value];
+        }
+
+        $pageviews = [
+            'rows' => $pageviewsRows
+        ];
 
         // Active pages
-
         $activePagesRequest = [
             'viewId' => $viewId,
-            'metrics' => 'rt:activeUsers',
-            'optParams' => ['dimensions' => 'rt:pagePath', 'max-results' => 5]
+            'metrics' => 'activeUsers',
+            'dimensions' => 'unifiedScreenName',
+             'limit' => 5,
+            'optParams' => []
         ];
 
-        $activePages = Analytics::$plugin->getReports()->getRealtimeReport($activePagesRequest);
+        $response = Analytics::$plugin->getReports()->getRealtimeReport($activePagesRequest);
+        $activePages = array_map(function($row) {
+            return [
+                $row->getDimensionValues()[0]->value,
+                $row->getMetricValues()[0]->value,
+            ];
+        }, $response->getRows());
 
         return $this->asJson([
             'activeUsers' => $activeUsers,
             'pageviews' => $pageviews,
-            'activePages' => $activePages,
+            'activePages' => [
+                'rows' => $activePages
+            ],
         ]);
     }
 

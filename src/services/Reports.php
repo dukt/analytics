@@ -10,6 +10,10 @@ namespace dukt\analytics\services;
 use Craft;
 use dukt\analytics\errors\InvalidElementException;
 use dukt\analytics\models\ReportRequestCriteria;
+use dukt\analytics\Plugin;
+use Google\Service\AnalyticsData\BatchRunReportsRequest;
+use Google\Service\AnalyticsData\RunRealtimeReportRequest;
+use Google\Service\AnalyticsData\RunRealtimeReportResponse;
 use yii\base\Component;
 use dukt\analytics\Plugin as Analytics;
 use Google\Service\AnalyticsData\RunReportResponse;
@@ -24,7 +28,7 @@ class Reports extends Component
      *
      * @param array $request
      *
-     * @return array
+     * @return RunRealtimeReportResponse
      * @throws \yii\base\InvalidConfigException
      */
     public function getRealtimeReport(array $request)
@@ -34,23 +38,48 @@ class Reports extends Component
         $tableId = null;
 
         if ($view !== null) {
-            $tableId = 'ga:'.$view->gaViewId;
+            $tableId = $view->gaPropertyId;
         }
 
         $metrics = $request['metrics'];
+        $dimensions = $request['dimensions'] ?? null;
         $optParams = $request['optParams'];
+
 
         $cacheId = ['reports.getRealtimeReport', $tableId, $metrics, $optParams];
         $response = Analytics::$plugin->getCache()->get($cacheId);
 
         if (!$response) {
-            $response = Analytics::$plugin->getApis()->getAnalytics()->getService()->data_realtime->get($tableId, $metrics, $optParams);
+//            $reportsRequest = new BatchRunReportsRequest();
+//            $reportsRequest->setRequests($requests);
+//
+//            $analyticsData = Plugin::$plugin->getApis()->getAnalytics()->getAnalyticsData();
+//
+//            return $analyticsData->properties->batchRunReports('properties/309469168', $reportsRequest);
+//
+            $reportRequest = new RunRealtimeReportRequest();
+            $reportRequest->setMetrics(['name' => $metrics]);
+            if ($dimensions) {
+                $reportRequest->setDimensions(['name' => $dimensions]);
+            }
+
+            if (isset($request['limit'])) {
+                $reportRequest->setLimit($request['limit']);
+            }
+
+            $analyticsData = Plugin::$plugin->getApis()->getAnalytics()->getAnalyticsData();
+//            var_dump($tableId);
+//            die();
+            $response = $analyticsData->properties->runRealtimeReport($tableId, $reportRequest, $optParams);
+
+//            $response = Analytics::$plugin->getApis()->getAnalytics()->getService()->data_realtime->get($tableId, $metrics, $optParams);
+
 
             $cacheDuration = Analytics::$plugin->getSettings()->realtimeRefreshInterval;
             Analytics::$plugin->getCache()->set($cacheId, $response, $cacheDuration);
         }
 
-        return (array)$response;
+        return $response;
     }
 
     /**
