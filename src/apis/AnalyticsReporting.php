@@ -95,12 +95,17 @@ class AnalyticsReporting extends Api
             $requests[] = $request;
         }
 
+        if(count($requests) < 1) {
+            return null;
+        }
+        
         $reportsRequest = new BatchRunReportsRequest();
         $reportsRequest->setRequests($requests);
 
         $analyticsData = Plugin::$plugin->getApis()->getAnalytics()->getAnalyticsData();
 
-        return $analyticsData->properties->batchRunReports('properties/309469168', $reportsRequest);
+        $property = $requests[0]->getProperty();
+        return $analyticsData->properties->batchRunReports($property, $reportsRequest);
     }
 
     /**
