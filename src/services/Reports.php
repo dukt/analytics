@@ -391,10 +391,6 @@ class Reports extends Component
 
         $originDimension = $dimensionString;
 
-        if ($dimensionString === 'ga:city') {
-            $dimensionString = 'ga:latitude,ga:longitude,'.$dimensionString;
-        }
-
         $criteria = new ReportRequestCriteria;
         $criteria->viewId = $viewId;
         $criteria->dimensions = $dimensionString;
@@ -463,10 +459,6 @@ class Reports extends Component
                     $type = 'continent';
                     break;
 
-                case 'latitude':
-                case 'longitude':
-                    $type = 'float';
-                    break;
                 default:
                     $type = 'string';
             }
