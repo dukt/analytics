@@ -1,5 +1,5 @@
 <template>
-  <div class="da-mt-8">
+  <div class="da-mt-2">
     <div class="da-flex da-items-center">
       <div>
         <div class="field">
@@ -26,7 +26,9 @@
     </div>
 
     <template v-if="loading">
-      Loading…
+      <div class="da-mt-4">
+        Loading…
+      </div>
     </template>
     <template v-else>
       <template v-if="reportResponse">
@@ -38,12 +40,6 @@
         />
       </template>
     </template>
-
-    <ul class="da-mt-4">
-      <li>elementId: {{ elementId }}</li>
-      <li>siteId: {{ siteId }}</li>
-      <li>metric: {{ metric }}</li>
-    </ul>
   </div>
 </template>
 
@@ -78,12 +74,8 @@ export default {
           value: 'bounceRate',
         },
         {
-          label: 'Avg. time on page',
-          value: 'avgTimeOnPage',
-        },
-        {
-          label: '% Exit',
-          value: 'exitRate',
+          label: 'Average Session Duration',
+          value: 'averageSessionDuration',
         },
       ],
       metric: 'screenPageViews',

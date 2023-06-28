@@ -7,7 +7,6 @@
 
 return array(
     'analyticsChartLanguage' => 'en',
-    '% Exit' => '% Exit',
     'Account' => 'Account',
     'Active pages' => 'Active pages',
     'Active users' => 'Active users',
