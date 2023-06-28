@@ -478,25 +478,8 @@ class Reports extends Component
         $cols = [];
 
         foreach($report->getDimensionHeaders() as $dimensionHeader) {
-            $type = '';
-
-            switch ($dimensionHeader->getName()) {
-                case 'date':
-                case 'yearMonth':
-                    $type = 'date';
-                    break;
-
-                case 'continent':
-                case 'continentId':
-                    $type = 'continent';
-                    break;
-
-                default:
-                    $type = 'string';
-            }
-
             $col = [
-                'type' => $type,
+                'type' => $this->getDimensionType($dimensionHeader),
                 'label' => Craft::t('analytics', $dimensionHeader->getName()),
                 'id' => $dimensionHeader->getName(),
             ];
@@ -506,7 +489,7 @@ class Reports extends Component
 
         foreach($report->getMetricHeaders() as $metricHeader) {
             $col = [
-                'type' => $metricHeader->getType() === 'TYPE_INTEGER' ? 'integer' : $metricHeader->getType(),
+                'type' => $this->getMetricType($metricHeader),
                 'label' => Craft::t('analytics', $metricHeader->getName()),
                 'id' => $metricHeader->getName(),
             ];
@@ -529,12 +512,64 @@ class Reports extends Component
             foreach($row->getDimensionValues() as $dimensionValue) {
                 $rowValues[] = $dimensionValue->getValue();
             }
-            foreach($row->getMetricValues() as $metricValue) {
-                $rowValues[] = $metricValue->getValue();
+            foreach($row->getMetricValues() as $key => $metricValue) {
+                $metricHeader = $report->getMetricHeaders()[$key];
+
+                switch($this->getMetricType($metricHeader)) {
+                    case 'percent':
+                        $rowValues[] = $metricValue->getValue() * 100;
+                        break;
+                    default:
+                        $rowValues[] = $metricValue->getValue();
+                }
             }
             $rows[] = $rowValues;
 
         }
         return $rows;
+    }
+
+    private function getDimensionType($dimensionHeader) {
+        switch ($dimensionHeader->getName()) {
+            case 'date':
+            case 'yearMonth':
+                return 'date';
+            case 'continent':
+            case 'continentId':
+                return 'continent';
+            default:
+                return 'string';
+        }
+    }
+
+    private function getMetricType($metricHeader) {
+        switch($metricHeader->getName()) {
+            case 'bounceRate':
+            case 'cartToViewRate':
+            case 'crashFreeUsersRate':
+            case 'engagementRate':
+            case 'dauPerMau':
+            case 'dauPerWau':
+            case 'firstTimePurchaserConversionRate':
+            case 'itemListClickThroughRate':
+            case 'itemPromotionClickThroughRate':
+            case 'organicGoogleSearchClickThroughRate':
+            case 'purchaseToViewRate':
+            case 'purchaserConversionRate':
+            case 'sessionConversionRate':
+            case 'userConversionRate':
+                return 'percent';
+            default:
+                switch ($metricHeader->getType()) {
+                    case 'TYPE_INTEGER':
+                        return 'integer';
+                    case 'TYPE_FLOAT':
+                        return 'float';
+                    case 'TYPE_SECONDS':
+                        return 'time';
+                    default:
+                        return $metricHeader->getType();
+                }
+        }
     }
 }
