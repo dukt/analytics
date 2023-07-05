@@ -156,10 +156,9 @@ class AnalyticsReporting extends Api
 //            $request->setFiltersExpression($criteria->filtersExpression);
 //        }
 
-        // Replaced by setKeepEmptyRows
-//        if ($criteria->includeEmptyRows) {
-//            $request->setIncludeEmptyRows($criteria->includeEmptyRows);
-//        }
+        if ($criteria->keepEmptyRows) {
+            $request->setKeepEmptyRows($criteria->keepEmptyRows);
+        }
 
         // Not replaced
 //        if ($criteria->hideTotals) {

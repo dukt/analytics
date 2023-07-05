@@ -78,7 +78,7 @@ class ReportRequestCriteria extends Model
     /**
      * @var bool If set to false, the response does not include rows if all the retrieved metrics are equal to zero. The default is false which will exclude these rows.
      */
-    public $includeEmptyRows = false;
+    public $keepEmptyRows = false;
 
     /**
      * @var bool If set to true, hides the total of all metrics for all the matching rows, for every date range. The default false and will return the totals.

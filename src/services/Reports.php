@@ -117,7 +117,7 @@ class Reports extends Component
         $criteria->endDate = $endDate;
         $criteria->metrics = $metrics;
         $criteria->dimensions = $dimensions;
-        $criteria->includeEmptyRows = true;
+        $criteria->keepEmptyRows = true;
 
         $reportResponse = Analytics::$plugin->getApis()->getAnalyticsReporting()->getReport($criteria);
         $report = $reportResponse->toSimpleObject();
@@ -194,7 +194,7 @@ class Reports extends Component
             $criteria->metrics = $metrics;
             $criteria->dimensions = $dimensions;
             $criteria->filtersExpression = $filters;
-            $criteria->includeEmptyRows = true;
+            $criteria->keepEmptyRows = true;
 
             $criteria->orderBys = [
                 'dimension' => [
@@ -243,7 +243,7 @@ class Reports extends Component
         $criteria->endDate = $endDate;
         $criteria->metrics = $metricString;
         $criteria->dimensions = $dimensionString;
-        $criteria->includeEmptyRows = true;
+        $criteria->keepEmptyRows = true;
 
         $criteria->orderBys = [
             'dimension' => [
