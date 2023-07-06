@@ -139,7 +139,6 @@ export default {
     },
 
     parsePageviews(reportResponse) {
-      console.log('reportResponse', reportResponse.data.pageviews)
       this.pageviews = reportResponse.data.pageviews
 
       this.chartData = this.getPageviewsDataTable(this.pageviews);
