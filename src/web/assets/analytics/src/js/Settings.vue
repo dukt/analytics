@@ -246,7 +246,7 @@ export default {
         this.loading = false
         this.accountExplorerData = response.data;
       });
-    
+
     this.selectedAccount = this.pluginOptions.reportingView.gaAccountId
     this.selectedProperty = this.pluginOptions.reportingView.gaPropertyId
     this.selectedView = this.pluginOptions.reportingView.gaViewId
