@@ -87,7 +87,7 @@ class Install extends Migration
                 'gaPropertyName' => $this->string()->notNull(),
                 'gaViewId' => $this->string(),
                 'gaViewName' => $this->string(),
-                'gaViewCurrency' => $this->string(),
+                'gaCurrency' => $this->string(),
 
                 'dateCreated' => $this->dateTime()->notNull(),
                 'dateUpdated' => $this->dateTime()->notNull(),

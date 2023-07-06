@@ -149,10 +149,10 @@ class Analytics extends Component
     /**
      * Get a currency definition, updated with the currency from the GA view.
      *
-     * @param string|null $gaViewCurrency
+     * @param string|null $gaCurrency
      * @return array
      */
-    public function getCurrencyDefinition(string $gaViewCurrency = null): array
+    public function getCurrencyDefinition(string $gaCurrency = null): array
     {
         // Get the currency definition from `d3-format`
         $d3Asset = new D3Asset();
@@ -160,7 +160,7 @@ class Analytics extends Component
         $currencyDefinition = $localeDefinitionForCurrency['currency'];
 
         // Define the currency symbol based on the GA view currency
-        $currencySymbol = ($gaViewCurrency ? Craft::$app->locale->getCurrencySymbol($gaViewCurrency) : '$');
+        $currencySymbol = ($gaCurrency ? Craft::$app->locale->getCurrencySymbol($gaCurrency) : '$');
 
         // Update the currency definition with the new currency symbol
         foreach ($currencyDefinition as $key => $row) {

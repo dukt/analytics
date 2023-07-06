@@ -20,7 +20,7 @@ use craft\db\ActiveRecord;
  * @property string $gaPropertyName
  * @property string $gaViewId
  * @property string $gaViewName
- * @property string $gaViewCurrency
+ * @property string $gaCurrency
  */
 class View extends ActiveRecord
 {

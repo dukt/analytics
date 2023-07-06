@@ -128,7 +128,7 @@ class Report extends \craft\base\Widget
 
             // render
             $jsOptions = [
-                'currencyDefinition' => Analytics::$plugin->getAnalytics()->getCurrencyDefinition($reportingView->gaViewCurrency),
+                'currencyDefinition' => Analytics::$plugin->getAnalytics()->getCurrencyDefinition($reportingView->gaCurrency),
                 'chartLanguage' => Analytics::$plugin->getAnalytics()->getChartLanguage(),
                 'request' => $request,
                 'cachedResponse' => $cachedResponse ?? null,

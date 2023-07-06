@@ -85,7 +85,7 @@ class Ecommerce extends \craft\base\Widget
         $widgetOptions = [
             'viewId' => $widgetSettings['viewId'],
             'period' => $widgetSettings['period'] ?? null,
-            'currencyDefinition' => Analytics::$plugin->getAnalytics()->getCurrencyDefinition($reportingView->gaViewCurrency),
+            'currencyDefinition' => Analytics::$plugin->getAnalytics()->getCurrencyDefinition($reportingView->gaCurrency),
             'chartLanguage' => Analytics::$plugin->getAnalytics()->getChartLanguage(),
         ];
 

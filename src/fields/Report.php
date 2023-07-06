@@ -99,7 +99,7 @@ class Report extends Field
 
                     if ($reportingView !== null) {
                         // Currency definition
-                        $jsOptions['currencyDefinition'] = Analytics::$plugin->getAnalytics()->getCurrencyDefinition($reportingView->gaViewCurrency);
+                        $jsOptions['currencyDefinition'] = Analytics::$plugin->getAnalytics()->getCurrencyDefinition($reportingView->gaCurrency);
                     }
                 }
 

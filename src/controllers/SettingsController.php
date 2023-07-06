@@ -301,7 +301,7 @@ class SettingsController extends Controller
         foreach ($accountExplorerData['views'] as $dataView) {
             if ($dataView->id == $reportingView->gaViewId) {
                 $reportingView->gaViewName = $dataView->name;
-                $reportingView->gaViewCurrency = $dataView->currency;
+                $reportingView->gaCurrency = $dataView->currency;
             }
         }
 
