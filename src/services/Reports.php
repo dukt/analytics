@@ -203,7 +203,7 @@ class Reports extends Component
             ];
 
             $reportResponse = Analytics::$plugin->getApis()->getAnalyticsReporting()->getReport($criteria);
-            $response = $this->parseReportingReport($reportResponse);
+            $response = $this->parseReportingReport($reportResponse, $criteria);
 
             if ($response) {
                 Analytics::$plugin->getCache()->set($cacheId, $response);
@@ -252,7 +252,7 @@ class Reports extends Component
         ];
 
         $reportResponse = Analytics::$plugin->getApis()->getAnalyticsReporting()->getReport($criteria);
-        $report = $this->parseReportingReport($reportResponse);
+        $report = $this->parseReportingReport($reportResponse, $criteria);
 
         $total = $report['totals'][0];
 
@@ -453,10 +453,10 @@ class Reports extends Component
      * @param RunReportResponse $report
      * @return array
      */
-    private function parseReportingReport(RunReportResponse $report): array
+    private function parseReportingReport(RunReportResponse $report, ReportRequestCriteria $criteria = null): array
     {
         $cols = $this->parseReportingReportCols($report);
-        $rows = $this->parseReportingReportRows($report);
+        $rows = $this->parseReportingReportRows($report, $criteria);
 
         // TODO: Fix totals
         // $totals = [$report->getRows()[0]->getMetricValues()[0]->getValue()];
@@ -504,7 +504,7 @@ class Reports extends Component
      * @param RunReportResponse $report
      * @return array
      */
-    private function parseReportingReportRows(RunReportResponse $report): array
+    private function parseReportingReportRows(RunReportResponse $report, ReportRequestCriteria$criteria = null): array
     {
         $rows = [];
         foreach($report->getRows() as $row) {
@@ -523,9 +523,65 @@ class Reports extends Component
                         $rowValues[] = $metricValue->getValue();
                 }
             }
-            $rows[] = $rowValues;
 
+            $rows[] = $rowValues;
         }
+
+        // Pad missing rows with zeros if criteria’s `keepEmptyRows` is true
+        if ($criteria && $criteria->keepEmptyRows) {
+            // If dimension is `date`, daily
+            if ($criteria->dimensions == 'date') {
+                // Loop from start date to end date to fill empty rows
+                $startDate = new \DateTime($criteria->startDate);
+                $endDate = new \DateTime($criteria->endDate);
+                $interval = new \DateInterval('P1D');
+                $dateRange = new \DatePeriod($startDate, $interval, $endDate);
+
+                $rowsPaddedWithZeros = [];
+                foreach ($dateRange as $date) {
+                    $date = $date->format('Ymd');
+                    $found = false;
+                    foreach ($rows as $row) {
+                        if ($row[0] == $date) {
+                            $found = true;
+                            $rowsPaddedWithZeros[] = $row;
+                        }
+                    }
+                    if (!$found) {
+                        $rowsPaddedWithZeros[] = [$date, 0];
+                    }
+                }
+
+                $rows = $rowsPaddedWithZeros;
+            }
+
+            // If dimension is `yearMonth`, monthly
+            if ($criteria->dimensions == 'yearMonth') {
+                // Loop from start date to end date to fill empty rows
+                $startDate = new \DateTime($criteria->startDate);
+                $endDate = new \DateTime($criteria->endDate);
+                $interval = new \DateInterval('P1M');
+                $dateRange = new \DatePeriod($startDate, $interval, $endDate);
+
+                $rowsPaddedWithZeros = [];
+                foreach ($dateRange as $date) {
+                    $date = $date->format('Ym');
+                    $found = false;
+                    foreach ($rows as $row) {
+                        if ($row[0] == $date) {
+                            $found = true;
+                            $rowsPaddedWithZeros[] = $row;
+                        }
+                    }
+                    if (!$found) {
+                        $rowsPaddedWithZeros[] = [$date, 0];
+                    }
+                }
+
+                $rows = $rowsPaddedWithZeros;
+            }
+        }
+
         return $rows;
     }
 
