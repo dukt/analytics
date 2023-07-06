@@ -25,6 +25,10 @@ class View extends Model
     public $id;
 
     /**
+     * @var string Type (UA or GA4)
+     */
+    public $type;
+    /**
      * @var string Name
      */
     public $name;
@@ -73,7 +77,7 @@ class View extends Model
     public function rules(): array
     {
         $rules = [
-            [['name', 'gaAccountId', 'gaAccountName', 'gaPropertyId', 'gaPropertyName'], 'required'],
+            [['type', 'name', 'gaAccountId', 'gaAccountName', 'gaPropertyId', 'gaPropertyName'], 'required'],
             [['id'], 'number', 'integerOnly' => true]
         ];
 

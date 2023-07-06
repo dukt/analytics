@@ -35,6 +35,7 @@ class Views extends Component
         foreach ($results as $result) {
             $views[] = new View($result->toArray([
                 'id',
+                'type',
                 'name',
                 'gaAccountId',
                 'gaAccountName',
@@ -154,6 +155,7 @@ class Views extends Component
         }
 
         // Shared attributes
+        $viewRecord->type = $view->type;
         $viewRecord->name = $view->name;
         $viewRecord->gaAccountId = $view->gaAccountId;
         $viewRecord->gaAccountName = $view->gaAccountName;

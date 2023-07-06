@@ -14,7 +14,8 @@
                 <tr>
                     <th>{{ "Name"|t('analytics') }}</th>
                     <th>{{ "Google Analytics View"|t('analytics') }}</th>
-                    <th>{{ "Tracking ID"|t('analytics') }}</th>
+                    <th>{{ "Type"|t('analytics') }}</th>
+                    <th>{{ "Property ID"|t('analytics') }}</th>
                     <th>{{ "View ID"|t('analytics') }}</th>
                     <td class="thin"></td>
                 </tr>
@@ -35,6 +36,7 @@
                             <span class="light">—</span>
                         {% endif %}
                     </td>
+                    <td>{{ reportingView.type }}</td>
                     <td>
                         {% if reportingView.gaPropertyId %}
                             <code>{{ reportingView.gaPropertyId }}</code>

@@ -81,6 +81,8 @@ class Install extends Migration
             [
                 'id' => $this->primaryKey(),
                 'name' => $this->string()->notNull(),
+                'type' => $this->enum('type', ['UA', 'GA4'])->notNull(),
+
                 'gaAccountId' => $this->string()->notNull(),
                 'gaAccountName' => $this->string()->notNull(),
                 'gaPropertyId' => $this->string()->notNull(),

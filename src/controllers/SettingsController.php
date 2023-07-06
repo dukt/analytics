@@ -268,6 +268,7 @@ class SettingsController extends Controller
 
         $reportingView = new View();
         $reportingView->id = $request->getBodyParam('viewId');
+        $reportingView->type = $accountExplorer['type'];
         $reportingView->name = $request->getBodyParam('name');
         $reportingView->gaAccountId = $accountExplorer['account'];
         $reportingView->gaPropertyId = $accountExplorer['property'];

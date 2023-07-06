@@ -13,6 +13,7 @@ use craft\db\ActiveRecord;
  * View record.
  *
  * @property int $id
+ * @property string $type
  * @property string $name
  * @property string $gaAccountId
  * @property string $gaAccountName

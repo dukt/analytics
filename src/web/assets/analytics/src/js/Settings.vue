@@ -76,21 +76,43 @@
                 <li
                   :key="propertyKey"
                 >
-                  <button
-                    class="da-px-6 da-py-3 da-block da-w-full da-text-left"
-                    :class="{
-                      'da-bg-gray-100': selectedProperty === property.id,
-                      'hover:da-bg-gray-100/50': selectedProperty !== property.id,
-                    }"
-                    @click.prevent="selectedProperty = property.id"
-                  >
-                    {{ property.name }}
-                    <div
-                      class="da-text-gray-500"
+                  <template v-if="property.type === 'UA'">
+                    <button
+                      class="da-px-6 da-py-3 da-block da-w-full da-text-left"
+                      :class="{
+                        'da-bg-gray-100': selectedProperty === property.id,
+                        'hover:da-bg-gray-100/50': selectedProperty !== property.id,
+                      }"
+                      @click.prevent="selectedProperty = property.id"
                     >
-                      {{ property.id }}
+                      {{ property.name }}
+                      <div
+                        class="da-text-gray-500"
+                      >
+                        {{ property.id }}
+                      </div>
+                    </button>
+                  </template>
+                  <template v-else>
+                    <div class="da-px-6 da-py-3 da-flex da-justify-between">
+                      <div>
+                        {{ property.name }}
+                        <div
+                          class="da-text-gray-500"
+                        >
+                          {{ property.id }}
+                        </div>
+                      </div>
+                      <div>
+                        <button
+                          class="da-bg-blue-600 da-text-white da-font-medium da-rounded-md da-px-2 da-py-1 da-ml-2"
+                          @click.prevent="selectGA4Property(property)"
+                        >
+                          Select GA4 property
+                        </button>
+                      </div>
                     </div>
-                  </button>
+                  </template>
                 </li>
               </template>
             </ul>
@@ -119,9 +141,9 @@
                       'da-opacity-50': selectedView === view.id,
                     }"
                     :disabled="selectedView === view.id"
-                    @click.prevent="selectedView = view.id"
+                    @click.prevent="selectUAView(view)"
                   >
-                    Select
+                    Select UA view
                   </button>
                 </li>
               </template>
@@ -130,7 +152,15 @@
         </div>
       </div>
 
-      <div class="hidden">
+      <div class="">
+        <div>
+          Source Type:
+          <input
+            type="text"
+            name="accountExplorer[type]"
+            :value="selectedSourceType"
+          >
+        </div>
         <div>
           Account:
           <input
@@ -168,6 +198,7 @@ export default {
     return {
       loading: false,
       accountExplorerData: null,
+      selectedSourceType: null,
       selectedAccount: null,
       selectedProperty: null,
       selectedView: null,
@@ -209,16 +240,29 @@ export default {
 
   mounted() {
     this.loading = true
+
     settingsApi.getAccountExplorerData()
       .then(response => {
         this.loading = false
         this.accountExplorerData = response.data;
       });
-
-
+    
     this.selectedAccount = this.pluginOptions.reportingView.gaAccountId
     this.selectedProperty = this.pluginOptions.reportingView.gaPropertyId
     this.selectedView = this.pluginOptions.reportingView.gaViewId
+  },
+
+  methods: {
+    selectUAView(view) {
+      this.selectedSourceType = 'UA'
+      this.selectedView = view.id
+      const selectedProperty = this.properties.find(property => property.id === this.selectedProperty)
+    },
+    selectGA4Property(property) {
+      this.selectedSourceType = 'GA4'
+      this.selectedProperty = property.id
+      this.selectedView = null
+    },
   }
 }
 </script>
