@@ -123,9 +123,9 @@ class AnalyticsReporting extends Api
 
         // TODO
 //        $this->setRequestViewIdFromCriteria($request, $criteria);
-        $view = Plugin::getInstance()->getViews()->getViewById($criteria->viewId);
-        if ($view !== null) {
-            $request->setProperty($view->gaPropertyId);
+        $source = Plugin::getInstance()->getSources()->getSourceById($criteria->sourceId);
+        if ($source !== null) {
+            $request->setProperty($source->gaPropertyId);
         }
 
         $this->setRequestDateRangeFromCriteria($request, $criteria);
@@ -182,10 +182,10 @@ class AnalyticsReporting extends Api
     {
         if ($criteria->gaViewId) {
             $request->setViewId('ga:'.$criteria->gaViewId);
-        } elseif ($criteria->viewId) {
-            $view = Plugin::getInstance()->getViews()->getViewById($criteria->viewId);
-            if ($view !== null) {
-                $request->setViewId($view->gaViewId);
+        } elseif ($criteria->sourceId) {
+            $source = Plugin::getInstance()->getSources()->getSourceById($criteria->sourceId);
+            if ($source !== null) {
+                $request->setViewId($source->gaViewId);
             }
         }
     }

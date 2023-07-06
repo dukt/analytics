@@ -21,7 +21,7 @@ class Report extends \craft\base\Widget
     /**
      * @var string|null
      */
-    public $viewId;
+    public $sourceId;
 
     /**
      * @var bool|null
@@ -98,22 +98,22 @@ class Report extends \craft\base\Widget
                 return $view->renderTemplate('analytics/_components/widgets/Report/disabled');
             }
 
-            $reportingViews = Analytics::$plugin->getViews()->getViews();
+            $sources = Analytics::$plugin->getSources()->getSources();
 
-            if ((array) $reportingViews === []) {
-                return $view->renderTemplate('analytics/_special/no-views');
+            if ((array) $sources === []) {
+                return $view->renderTemplate('analytics/_special/no-sources');
             }
 
             $widgetSettings = $this->settings;
 
-            $reportingView = Analytics::$plugin->getViews()->getViewById($widgetSettings['viewId']);
+            $source = Analytics::$plugin->getSources()->getSourceById($widgetSettings['sourceId']);
 
-            if (!$reportingView instanceof \dukt\analytics\models\View) {
-                return $view->renderTemplate('analytics/_special/view-not-configured');
+            if (!$source instanceof \dukt\analytics\models\Source) {
+                return $view->renderTemplate('analytics/_special/source-not-configured');
             }
 
             $request = [
-                'viewId' => $widgetSettings['viewId'] ?? null,
+                'sourceId' => $widgetSettings['sourceId'] ?? null,
                 'chart' => $widgetSettings['chart'] ?? null,
                 'period' => $widgetSettings['period'] ?? null,
                 'options' => $widgetSettings['options'][$widgetSettings['chart']] ?? null,
@@ -128,7 +128,7 @@ class Report extends \craft\base\Widget
 
             // render
             $jsOptions = [
-                'currencyDefinition' => Analytics::$plugin->getAnalytics()->getCurrencyDefinition($reportingView->gaCurrency),
+                'currencyDefinition' => Analytics::$plugin->getAnalytics()->getCurrencyDefinition($source->gaCurrency),
                 'chartLanguage' => Analytics::$plugin->getAnalytics()->getChartLanguage(),
                 'request' => $request,
                 'cachedResponse' => $cachedResponse ?? null,
@@ -159,9 +159,9 @@ class Report extends \craft\base\Widget
     {
         Craft::$app->getView()->registerAssetBundle(AnalyticsAsset::class);
 
-        $reportingViews = Analytics::$plugin->getViews()->getViews();
+        $sources = Analytics::$plugin->getSources()->getSources();
 
-        if ((array) $reportingViews !== []) {
+        if ((array) $sources !== []) {
             $randomString = StringHelper::randomString();
             $id = 'analytics-settings-'.$randomString;
             $vueId = 'vue-analytics-settings-'.$randomString;
@@ -176,7 +176,7 @@ class Report extends \craft\base\Widget
                 'namespaceId' => $namespaceId,
                 'vueNamespaceId' => $vueNamespaceId,
                 'settings' => $settings,
-                'reportingViews' => $reportingViews,
+                'sources' => $sources,
             ];
 
             $vueVariables = [
@@ -185,7 +185,7 @@ class Report extends \craft\base\Widget
                 'namespace' => Craft::$app->getView()->getNamespace(),
                 'vueNamespaceId' => $vueNamespaceId,
                 'settings' => $settings,
-                'reportingViews' => $reportingViews,
+                'sources' => $sources,
             ];
 
             $vueJsonOptions = Json::encode($vueVariables);

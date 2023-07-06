@@ -14,9 +14,9 @@ use craft\db\ActiveRecord;
  *
  * @property int $id
  * @property int $siteId
- * @property int $viewId
+ * @property int $sourceId
  */
-class SiteView extends ActiveRecord
+class SiteSource extends ActiveRecord
 {
     // Public Methods
     // =========================================================================
@@ -28,6 +28,6 @@ class SiteView extends ActiveRecord
      */
     public static function tableName(): string
     {
-        return '{{%analytics_site_views}}';
+        return '{{%analytics_site_sources}}';
     }
 }

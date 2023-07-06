@@ -23,7 +23,7 @@ use craft\db\ActiveRecord;
  * @property string $gaViewName
  * @property string $gaCurrency
  */
-class View extends ActiveRecord
+class Source extends ActiveRecord
 {
     // Public Methods
     // =========================================================================
@@ -35,6 +35,6 @@ class View extends ActiveRecord
      */
     public static function tableName(): string
     {
-        return '{{%analytics_views}}';
+        return '{{%analytics_sources}}';
     }
 }

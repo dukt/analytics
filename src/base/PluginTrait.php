@@ -24,7 +24,7 @@ use yii\web\ServerErrorHttpException;
  * @property \dukt\analytics\services\Metadata                  $metadata                   The metadata service
  * @property \dukt\analytics\services\Oauth                     $oauth                      The oauth service
  * @property \dukt\analytics\services\Reports                   $reports                    The reports service
- * @property \dukt\analytics\services\Views                     $views                      The views service
+ * @property \dukt\analytics\services\Sources                     $sources                      The sources service
  */
 trait PluginTrait
 {
@@ -129,15 +129,15 @@ trait PluginTrait
     }
 
     /**
-     * Returns the views service.
+     * Returns the sources service.
      *
-     * @return \dukt\analytics\services\Views The views service
+     * @return \dukt\analytics\services\Sources The sources service
      * @throws \yii\base\InvalidConfigException
      */
-    public function getViews()
+    public function getSources()
     {
         /** @var Analytics $this */
-        return $this->get('views');
+        return $this->get('sources');
     }
 
     /**

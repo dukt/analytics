@@ -21,9 +21,9 @@ class ReportRequestCriteria extends Model
     // =========================================================================
 
     /**
-     * @var string View ID
+     * @var string Source ID
      */
-    public $viewId;
+    public $sourceId;
 
     /**
      * @var string Google Analytics View ID

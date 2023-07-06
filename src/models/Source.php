@@ -14,7 +14,7 @@ use craft\base\Model;
  *
  * @package dukt\analytics\models
  */
-class View extends Model
+class Source extends Model
 {
     // Properties
     // =========================================================================

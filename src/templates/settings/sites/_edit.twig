@@ -20,18 +20,18 @@
 
     {{ redirectInput('analytics/settings/sites') }}
 
-    {% set reportingViewOptions = [{ label: "None", value: "" }] %}
-    {% for reportingView in reportingViews %}
-        {% set reportingViewOptions = reportingViewOptions|merge([{ label: reportingView.name, value: reportingView.id }]) %}
+    {% set sourceOptions = [{ label: "None", value: "" }] %}
+    {% for source in sources %}
+        {% set sourceOptions = sourceOptions|merge([{ label: source.name, value: source.id }]) %}
     {% endfor %}
 
     {{ forms.selectField({
         first: true,
         label: "View",
-        instructions: "Select the view this site should be attached to."|t('analytics'),
-        name: 'viewId',
-        options: reportingViewOptions,
-        value: (siteView.viewId is defined ? siteView.viewId : '')
+        instructions: "Select the source this site should be attached to."|t('analytics'),
+        name: 'sourceId',
+        options: sourceOptions,
+        value: (siteSource.sourceId is defined ? siteSource.sourceId : '')
     }) }}
 
 {% endset %}

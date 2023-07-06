@@ -5,6 +5,7 @@ Changelog
 
 ### Changed
 - Updated `league/oauth2-google` to 4.0.
+- Renamed `views` to `sources`.
 
 ### Fixed
 - Fixed a bug where the `site` query param was present in the OAuth redirect URI.

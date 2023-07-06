@@ -9,19 +9,19 @@
                 <tr>
                     <th>{{ "Site"|t('analytics') }}</th>
                     <th>{{ "Base URL"|t('analytics') }}</th>
-                    <th>{{ "View"|t('analytics') }}</th>
+                    <th>{{ "Source"|t('analytics') }}</th>
                 </tr>
             </thead>
             <tbody>
 
                 {% for site in sites %}
 
-                    {% set reportingView = false %}
+                    {% set source = false %}
 
-                    {% for siteView in siteViews %}
-                        {% if siteView.siteId == site.id %}
-                            {% if siteView.view %}
-                                {% set reportingView = siteView.view %}
+                    {% for siteSource in siteSources %}
+                        {% if siteSource.siteId == site.id %}
+                            {% if siteSource.source %}
+                                {% set source = siteSource.source %}
                             {% endif %}
                         {% endif %}
                     {% endfor %}
@@ -30,8 +30,8 @@
                         <td><a href="{{ url('analytics/settings/sites/'~ site.id) }}">{{ site.name }}</a></td>
                         <td><code>{{ site.baseUrl }}</code></td>
                         <td>
-                            {% if reportingView %}
-                                {{ reportingView.name }}
+                            {% if source %}
+                                {{ source.name }}
                             {% endif %}
                         </td>
                     </tr>

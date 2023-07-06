@@ -36,11 +36,11 @@ class ReportsController extends Controller
             return $this->getEcommerceDemoResponse();
         }
 
-        $viewId = Craft::$app->getRequest()->getBodyParam('viewId');
+        $sourceId = Craft::$app->getRequest()->getBodyParam('sourceId');
         $period = Craft::$app->getRequest()->getBodyParam('period');
 
         try {
-            $response = Analytics::$plugin->getReports()->getEcommerceReport($viewId, $period);
+            $response = Analytics::$plugin->getReports()->getEcommerceReport($sourceId, $period);
         } catch(\Google_Service_Exception $googleServiceException) {
             return $this->handleGoogleServiceException($googleServiceException);
         }
@@ -87,11 +87,11 @@ class ReportsController extends Controller
             return $this->getRealtimeDemoResponse();
         }
 
-        $viewId = Craft::$app->getRequest()->getBodyParam('viewId');
+        $sourceId = Craft::$app->getRequest()->getBodyParam('sourceId');
 
         // Active users
         $request = [
-            'viewId' => $viewId,
+            'sourceId' => $sourceId,
             'metrics' => 'activeUsers',
             'optParams' => []
         ];
@@ -105,7 +105,7 @@ class ReportsController extends Controller
 
         // Pageviews
         $pageviewsRequest = [
-            'viewId' => $viewId,
+            'sourceId' => $sourceId,
             'metrics' => 'screenPageViews',
             'dimensions' => 'minutesAgo',
             'optParams' => []
@@ -131,7 +131,7 @@ class ReportsController extends Controller
 
         // Active pages
         $activePagesRequest = [
-            'viewId' => $viewId,
+            'sourceId' => $sourceId,
             'metrics' => 'activeUsers',
             'dimensions' => 'unifiedScreenName',
              'limit' => 5,
@@ -165,13 +165,13 @@ class ReportsController extends Controller
      */
     public function actionReportWidget()
     {
-        $viewId = Craft::$app->getRequest()->getBodyParam('viewId');
+        $sourceId = Craft::$app->getRequest()->getBodyParam('sourceId');
         $chart = Craft::$app->getRequest()->getBodyParam('chart');
         $period = Craft::$app->getRequest()->getBodyParam('period');
         $options = Craft::$app->getRequest()->getBodyParam('options');
 
         $request = [
-            'viewId' => $viewId,
+            'sourceId' => $sourceId,
             'chart' => $chart,
             'period' => $period,
             'options' => $options,
@@ -218,15 +218,15 @@ class ReportsController extends Controller
     /**
      * Get dimensions and metrics
      *
-     * @param int $viewId
+     * @param int $sourceId
      * @return Response
      * @throws InvalidConfigException
      */
-    public function actionGetDimensionsMetrics(int $viewId)
+    public function actionGetDimensionsMetrics(int $sourceId)
     {
-        $reportingView = Analytics::$plugin->getViews()->getViewById($viewId);
+        $source = Analytics::$plugin->getSources()->getSourceById($sourceId);
         $analyticsData = Plugin::$plugin->getApis()->getAnalytics()->getAnalyticsData();
-        $metadata = $analyticsData->properties->getMetadata($reportingView->gaPropertyId.'/metadata');
+        $metadata = $analyticsData->properties->getMetadata($source->gaPropertyId.'/metadata');
 
         $dimensions = array_map(function($dimension) {
             return [

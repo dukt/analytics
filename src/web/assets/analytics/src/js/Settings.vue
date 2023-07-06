@@ -247,16 +247,16 @@ export default {
         this.accountExplorerData = response.data;
       });
 
-    this.selectedAccount = this.pluginOptions.reportingView.gaAccountId
-    this.selectedProperty = this.pluginOptions.reportingView.gaPropertyId
-    this.selectedView = this.pluginOptions.reportingView.gaViewId
+    this.selectedAccount = this.pluginOptions.source.gaAccountId
+    this.selectedProperty = this.pluginOptions.source.gaPropertyId
+    this.selectedView = this.pluginOptions.source.gaViewId
   },
 
   methods: {
     selectUAView(view) {
       this.selectedSourceType = 'UA'
       this.selectedView = view.id
-      const selectedProperty = this.properties.find(property => property.id === this.selectedProperty)
+      // const selectedProperty = this.properties.find(property => property.id === this.selectedProperty)
     },
     selectGA4Property(property) {
       this.selectedSourceType = 'GA4'

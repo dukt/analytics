@@ -11,8 +11,8 @@ use Craft;
 use craft\errors\InvalidPluginException;
 use craft\helpers\Json;
 use craft\web\Controller;
-use dukt\analytics\models\SiteView;
-use dukt\analytics\models\View;
+use dukt\analytics\models\SiteSource;
+use dukt\analytics\models\Source;
 use dukt\analytics\web\assets\settings\SettingsAsset;
 use dukt\analytics\web\assets\analytics\AnalyticsAsset;
 use dukt\analytics\Plugin as Analytics;
@@ -172,7 +172,7 @@ class SettingsController extends Controller
      * @return Response
      * @throws \yii\base\InvalidConfigException
      */
-    public function actionViews(): Response
+    public function actionSources(): Response
     {
         $isOauthProviderConfigured = Analytics::$plugin->getAnalytics()->isOauthProviderConfigured();
 
@@ -185,7 +185,7 @@ class SettingsController extends Controller
 
             if ($isOauthProviderConfigured && $token) {
                 $variables['isConnected'] = true;
-                $variables['reportingViews'] = Analytics::$plugin->getViews()->getViews();
+                $variables['sources'] = Analytics::$plugin->getSources()->getSources();
             }
         } catch (IdentityProviderException $identityProviderException) {
             $variables['error'] = $identityProviderException->getMessage();
@@ -197,68 +197,68 @@ class SettingsController extends Controller
             }
         }
 
-        return $this->renderTemplate('analytics/settings/views/_index', $variables);
+        return $this->renderTemplate('analytics/settings/sources/_index', $variables);
     }
 
     /**
-     * Edit a view.
+     * Edit a source.
      *
-     * @param int|null  $viewId
-     * @param View|null $reportingView
+     * @param int|null  $sourceId
+     * @param Source|null $source
      *
      * @return Response
      * @throws NotFoundHttpException
      * @throws \yii\base\InvalidConfigException
      */
-    public function actionEditView(int $viewId = null, View $reportingView = null): Response
+    public function actionEditSource(int $sourceId = null, Source $source = null): Response
     {
         $variables = [];
-        $variables['isNewView'] = false;
+        $variables['isNewSource'] = false;
 
-        if ($viewId !== null) {
-            if (!$reportingView instanceof \dukt\analytics\models\View) {
-                $reportingView = Analytics::$plugin->getViews()->getViewById($viewId);
+        if ($sourceId !== null) {
+            if (!$source instanceof \dukt\analytics\models\Source) {
+                $source = Analytics::$plugin->getSources()->getSourceById($sourceId);
 
-                if (!$reportingView instanceof \dukt\analytics\models\View) {
+                if (!$source instanceof \dukt\analytics\models\Source) {
                     throw new NotFoundHttpException('View not found');
                 }
             }
 
-            $variables['title'] = $reportingView->name;
-            $variables['reportingView'] = $reportingView;
+            $variables['title'] = $source->name;
+            $variables['source'] = $source;
         } else {
-            if ($reportingView === null) {
-                $reportingView = new View();
-                $variables['isNewView'] = true;
+            if ($source === null) {
+                $source = new Source();
+                $variables['isNewSource'] = true;
             }
 
-            $variables['title'] = Craft::t('analytics', 'Create a new view');
+            $variables['title'] = Craft::t('analytics', 'Create a new source');
         }
 
-        $variables['reportingView'] = $reportingView;
-        $variables['accountExplorerOptions'] = $this->getAccountExplorerOptions($reportingView);
+        $variables['source'] = $source;
+        $variables['accountExplorerOptions'] = $this->getAccountExplorerOptions($source);
 
         Craft::$app->getView()->registerAssetBundle(AnalyticsAsset::class);
 
         $jsOptions = [
-            'reportingView' => $variables['reportingView'],
+            'source' => $variables['source'],
             'accountExplorerOptions' => $variables['accountExplorerOptions'],
         ];
 
         Craft::$app->getView()->registerJs('new AnalyticsVueSettings({data: {pluginOptions: '.Json::encode($jsOptions).'}}).$mount("#analytics-settings");');
 
-        return $this->renderTemplate('analytics/settings/views/_edit', $variables);
+        return $this->renderTemplate('analytics/settings/sources/_edit', $variables);
     }
 
     /**
-     * Saves a view.
+     * Saves a source.
      *
      * @return null|Response
      * @throws \dukt\analytics\errors\InvalidViewException
      * @throws \yii\base\InvalidConfigException
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionSaveView()
+    public function actionSaveSource()
     {
         $this->requirePostRequest();
 
@@ -266,13 +266,13 @@ class SettingsController extends Controller
         $accountExplorer = $request->getBodyParam('accountExplorer');
 
 
-        $reportingView = new View();
-        $reportingView->id = $request->getBodyParam('viewId');
-        $reportingView->type = $accountExplorer['type'];
-        $reportingView->name = $request->getBodyParam('name');
-        $reportingView->gaAccountId = $accountExplorer['account'];
-        $reportingView->gaPropertyId = $accountExplorer['property'];
-        $reportingView->gaViewId = $accountExplorer['view'] ?? null;
+        $source = new Source();
+        $source->id = $request->getBodyParam('sourceId');
+        $source->type = $accountExplorer['type'];
+        $source->name = $request->getBodyParam('name');
+        $source->gaAccountId = $accountExplorer['account'];
+        $source->gaPropertyId = $accountExplorer['property'];
+        $source->gaViewId = $accountExplorer['view'] ?? null;
 // TODO
 //        $googleAdminService = Plugin::$plugin->getApis()->getAnalytics()->getGoogleAdminService();
 //
@@ -287,32 +287,32 @@ class SettingsController extends Controller
         $accountExplorerData = Analytics::$plugin->getApis()->getAnalytics()->getAccountExplorerData();
 
         foreach ($accountExplorerData['accounts'] as $dataAccount) {
-            if ($dataAccount->id == $reportingView->gaAccountId) {
-                $reportingView->gaAccountName = $dataAccount->name;
+            if ($dataAccount->id == $source->gaAccountId) {
+                $source->gaAccountName = $dataAccount->name;
             }
         }
 
         foreach ($accountExplorerData['properties'] as $dataProperty) {
 
-            if ($dataProperty['id'] == $reportingView->gaPropertyId) {
-                $reportingView->gaPropertyName = $dataProperty['name'];
+            if ($dataProperty['id'] == $source->gaPropertyId) {
+                $source->gaPropertyName = $dataProperty['name'];
             }
         }
 
         foreach ($accountExplorerData['views'] as $dataView) {
-            if ($dataView->id == $reportingView->gaViewId) {
-                $reportingView->gaViewName = $dataView->name;
-                $reportingView->gaCurrency = $dataView->currency;
+            if ($dataView->id == $source->gaViewId) {
+                $source->gaViewName = $dataView->name;
+                $source->gaCurrency = $dataView->currency;
             }
         }
 
         // Save it
-        if (!Analytics::$plugin->getViews()->saveView($reportingView)) {
-            Craft::$app->getSession()->setError(Craft::t('analytics', 'Couldn’t save the view.'));
+        if (!Analytics::$plugin->getSources()->saveSource($source)) {
+            Craft::$app->getSession()->setError(Craft::t('analytics', 'Couldn’t save the source.'));
 
             // Send the view back to the template
             Craft::$app->getUrlManager()->setRouteParams([
-                'reportingView' => $reportingView
+                'source' => $source
             ]);
 
             return null;
@@ -320,26 +320,26 @@ class SettingsController extends Controller
 
         Craft::$app->getSession()->setNotice(Craft::t('analytics', 'View saved.'));
 
-        return $this->redirectToPostedUrl($reportingView);
+        return $this->redirectToPostedUrl($source);
     }
 
     /**
-     * Deletes a view.
+     * Deletes a source.
      *
      * @return Response
      * @throws \Throwable
      * @throws \yii\db\StaleObjectException
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionDeleteView(): Response
+    public function actionDeleteSource(): Response
     {
         $this->requirePostRequest();
         $this->requireAcceptsJson();
 
         $request = Craft::$app->getRequest();
-        $viewId = $request->getRequiredBodyParam('id');
+        $sourceId = $request->getRequiredBodyParam('id');
 
-        Analytics::$plugin->getViews()->deleteViewById($viewId);
+        Analytics::$plugin->getSources()->deleteSourceById($sourceId);
 
         return $this->asJson(['success' => true]);
     }
@@ -364,7 +364,7 @@ class SettingsController extends Controller
             if ($isOauthProviderConfigured && $token) {
                 $variables['isConnected'] = true;
                 $variables['sites'] = Craft::$app->getSites()->getAllSites();
-                $variables['siteViews'] = Analytics::$plugin->getViews()->getSiteViews();
+                $variables['siteSources'] = Analytics::$plugin->getSources()->getSiteSources();
             }
         } catch (IdentityProviderException $identityProviderException) {
             $variables['error'] = $identityProviderException->getMessage();
@@ -390,13 +390,13 @@ class SettingsController extends Controller
     public function actionEditSite($siteId): Response
     {
         $site = Craft::$app->getSites()->getSiteById($siteId);
-        $siteView = Analytics::$plugin->getViews()->getSiteViewBySiteId($siteId);
-        $reportingViews = Analytics::$plugin->getViews()->getViews();
+        $siteSource = Analytics::$plugin->getSources()->getSiteSourceBySiteId($siteId);
+        $sources = Analytics::$plugin->getSources()->getSources();
 
         return $this->renderTemplate('analytics/settings/sites/_edit', [
             'site' => $site,
-            'siteView' => $siteView,
-            'reportingViews' => $reportingViews,
+            'siteSource' => $siteSource,
+            'sources' => $sources,
         ]);
     }
 
@@ -414,53 +414,53 @@ class SettingsController extends Controller
 
         $request = Craft::$app->getRequest();
 
-        $siteView = new SiteView();
-        $siteView->siteId = $request->getBodyParam('siteId');
-        $siteView->viewId = $request->getBodyParam('viewId');
+        $siteSource = new SiteSource();
+        $siteSource->siteId = $request->getBodyParam('siteId');
+        $siteSource->sourceId = $request->getBodyParam('sourceId');
 
         // Save it
-        if (!Analytics::$plugin->getViews()->saveSiteView($siteView)) {
-            Craft::$app->getSession()->setError(Craft::t('analytics', 'Couldn’t save the site view.'));
+        if (!Analytics::$plugin->getSources()->saveSiteSource($siteSource)) {
+            Craft::$app->getSession()->setError(Craft::t('analytics', 'Couldn’t save the site source.'));
 
             // Send the view back to the template
             Craft::$app->getUrlManager()->setRouteParams([
-                'siteView' => $siteView
+                'siteSource' => $siteSource
             ]);
 
             return null;
         }
 
-        Craft::$app->getSession()->setNotice(Craft::t('analytics', 'Site view saved.'));
+        Craft::$app->getSession()->setNotice(Craft::t('analytics', 'Site source saved.'));
 
-        return $this->redirectToPostedUrl($siteView);
+        return $this->redirectToPostedUrl($siteSource);
     }
 
     // Private Methods
     // =========================================================================
 
     /**
-     * @param View $reportingView
+     * @param Source $source
      *
      * @return array
      */
-    private function getAccountExplorerOptions(View $reportingView): array
+    private function getAccountExplorerOptions(Source $source): array
     {
         $accountExplorerData = Analytics::$plugin->getCache()->get(['accountExplorerData']);
 
         return [
-            'accounts' => $this->getAccountOptions($accountExplorerData, $reportingView),
-            'properties' => $this->getPropertyOptions($accountExplorerData, $reportingView),
-            'views' => $this->getViewOptions($accountExplorerData, $reportingView),
+            'accounts' => $this->getAccountOptions($accountExplorerData, $source),
+            'properties' => $this->getPropertyOptions($accountExplorerData, $source),
+            'views' => $this->getViewOptions($accountExplorerData, $source),
         ];
     }
 
     /**
      * @param      $accountExplorerData
-     * @param View $reportingView
+     * @param Source $source
      *
      * @return array
      */
-    private function getAccountOptions($accountExplorerData, View $reportingView): array
+    private function getAccountOptions($accountExplorerData, Source $source): array
     {
         $accountOptions = [];
 
@@ -469,7 +469,7 @@ class SettingsController extends Controller
                 $accountOptions[] = ['label' => $account->name, 'value' => $account->id];
             }
         } else {
-            $accountOptions[] = ['label' => $reportingView->gaAccountName, 'value' => $reportingView->gaAccountId];
+            $accountOptions[] = ['label' => $source->gaAccountName, 'value' => $source->gaAccountId];
         }
 
         return $accountOptions;
@@ -477,11 +477,11 @@ class SettingsController extends Controller
 
     /**
      * @param      $accountExplorerData
-     * @param View $reportingView
+     * @param Source $source
      *
      * @return array
      */
-    private function getPropertyOptions($accountExplorerData, View $reportingView): array
+    private function getPropertyOptions($accountExplorerData, Source $source): array
     {
         $propertyOptions = [];
 
@@ -490,7 +490,7 @@ class SettingsController extends Controller
                 $propertyOptions[] = ['label' => $webProperty->name, 'value' => $webProperty->id];
             }
         } else {
-            $propertyOptions[] = ['label' => $reportingView->gaPropertyName, 'value' => $reportingView->gaPropertyId];
+            $propertyOptions[] = ['label' => $source->gaPropertyName, 'value' => $source->gaPropertyId];
         }
 
         return $propertyOptions;
@@ -498,11 +498,11 @@ class SettingsController extends Controller
 
     /**
      * @param      $accountExplorerData
-     * @param View $reportingView
+     * @param Source $source
      *
      * @return array
      */
-    private function getViewOptions($accountExplorerData, View $reportingView): array
+    private function getViewOptions($accountExplorerData, Source $source): array
     {
         $viewOptions = [];
 
@@ -511,7 +511,7 @@ class SettingsController extends Controller
                 $viewOptions[] = ['label' => $dataView->name, 'value' => $dataView->id];
             }
         } else {
-            $viewOptions[] = ['label' => $reportingView->gaViewName, 'value' => $reportingView->gaViewId];
+            $viewOptions[] = ['label' => $source->gaViewName, 'value' => $source->gaViewId];
         }
 
         return $viewOptions;

@@ -70,7 +70,7 @@ class Plugin extends \craft\base\Plugin
                 'metadata' => \dukt\analytics\services\Metadata::class,
                 'oauth' => \dukt\analytics\services\Oauth::class,
                 'reports' => \dukt\analytics\services\Reports::class,
-                'views' => \dukt\analytics\services\Views::class,
+                'sources' => \dukt\analytics\services\Sources::class,
                 'vite' => [
                     'class' => VitePluginService::class,
                     'assetClass' => AnalyticsAsset::class,
@@ -101,9 +101,9 @@ class Plugin extends \craft\base\Plugin
             $rules = [
                 'analytics/settings' => 'analytics/settings/index',
                 'analytics/settings/oauth' => 'analytics/settings/oauth',
-                'analytics/settings/views' => 'analytics/settings/views',
-                'analytics/settings/views/new' => 'analytics/settings/edit-view',
-                'analytics/settings/views/<viewId:\d+>' => 'analytics/settings/edit-view',
+                'analytics/settings/sources' => 'analytics/settings/sources',
+                'analytics/settings/sources/new' => 'analytics/settings/edit-source',
+                'analytics/settings/sources/<sourceId:\d+>' => 'analytics/settings/edit-source',
                 'analytics/settings/sites' => 'analytics/settings/sites',
                 'analytics/settings/sites/<siteId:\d+>' => 'analytics/settings/edit-site',
                 'analytics/utils' => 'analytics/utils/index',

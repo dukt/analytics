@@ -33,12 +33,12 @@ class Reports extends Component
      */
     public function getRealtimeReport(array $request)
     {
-        $view = Analytics::$plugin->getViews()->getViewById($request['viewId']);
+        $source = Analytics::$plugin->getSources()->getSourceById($request['sourceId']);
 
         $tableId = null;
 
-        if ($view !== null) {
-            $tableId = $view->gaPropertyId;
+        if ($source !== null) {
+            $tableId = $source->gaPropertyId;
         }
 
         $metrics = $request['metrics'];
@@ -85,12 +85,12 @@ class Reports extends Component
     /**
      * Get e-commerce report.
      *
-     * @param $viewId
+     * @param $sourceId
      * @param $period
      *
      * @return array
      */
-    public function getEcommerceReport($viewId, $period)
+    public function getEcommerceReport($sourceId, $period)
     {
         $startDate = '7daysAgo';
         $endDate = 'today';
@@ -112,7 +112,7 @@ class Reports extends Component
         $metrics = 'ga:transactionRevenue,ga:revenuePerTransaction,ga:transactions,ga:transactionsPerSession';
 
         $criteria = new ReportRequestCriteria;
-        $criteria->viewId = $viewId;
+        $criteria->sourceId = $sourceId;
         $criteria->startDate = $startDate;
         $criteria->endDate = $endDate;
         $criteria->metrics = $metrics;
@@ -123,7 +123,7 @@ class Reports extends Component
         $report = $reportResponse->toSimpleObject();
         $reportData = $this->parseReportingReport($reportResponse);
 
-        $view = Analytics::$plugin->getViews()->getViewById($viewId);
+        $source = Analytics::$plugin->getSources()->getSourceById($sourceId);
 
         return [
             'period' => $startDate.' - '.$endDate,
@@ -132,7 +132,7 @@ class Reports extends Component
             'totalTransactions' => $report->data->totals[0]->values[2],
             'totalTransactionsPerSession' => $report->data->totals[0]->values[3],
             'reportData' => [
-                'view' => $view->name,
+                'source' => $source->name,
                 'chart' => $reportData,
                 'period' => $period,
                 'periodLabel' => Craft::t('analytics', 'This '.$period)
@@ -159,12 +159,12 @@ class Reports extends Component
             $uri = '';
         }
 
-        $siteView = Analytics::$plugin->getViews()->getSiteViewBySiteId($siteId);
+        $siteSource = Analytics::$plugin->getSources()->getSiteSourceBySiteId($siteId);
 
-        $viewId = null;
+        $sourceId = null;
 
-        if ($siteView !== null) {
-            $viewId = $siteView->viewId;
+        if ($siteSource !== null) {
+            $sourceId = $siteSource->sourceId;
         }
 
         $startDate = date('Y-m-d', strtotime('-1 month'));
@@ -174,7 +174,7 @@ class Reports extends Component
         $filters = 'pagePath=='.$uri;
 
         $request = [
-            'viewId' => $viewId,
+            'sourceId' => $sourceId,
             'startDate' => $startDate,
             'endDate' => $endDate,
             'metrics' => $metrics,
@@ -188,7 +188,7 @@ class Reports extends Component
         if (!$response) {
 
             $criteria = new ReportRequestCriteria;
-            $criteria->viewId = $viewId;
+            $criteria->sourceId = $sourceId;
             $criteria->startDate = $startDate;
             $criteria->endDate = $endDate;
             $criteria->metrics = $metrics;
@@ -223,7 +223,7 @@ class Reports extends Component
      */
     public function getAreaReport(array $request)
     {
-        $viewId = ($request['viewId'] ?? null);
+        $sourceId = ($request['sourceId'] ?? null);
         $period = ($request['period'] ?? null);
         $metricString = ($request['options']['metric'] ?? null);
 
@@ -238,7 +238,7 @@ class Reports extends Component
         }
 
         $criteria = new ReportRequestCriteria;
-        $criteria->viewId = $viewId;
+        $criteria->sourceId = $sourceId;
         $criteria->startDate = $startDate;
         $criteria->endDate = $endDate;
         $criteria->metrics = $metricString;
@@ -256,10 +256,10 @@ class Reports extends Component
 
         $total = $report['totals'][0];
 
-        $view = Analytics::$plugin->getViews()->getViewById($viewId);
+        $source = Analytics::$plugin->getSources()->getSourceById($sourceId);
 
         return [
-            'view' => $view->name,
+            'source' => $source->name,
             'type' => 'area',
             'chart' => $report,
             'total' => $total,
@@ -279,14 +279,14 @@ class Reports extends Component
      */
     public function getCounterReport(array $request)
     {
-        $viewId = ($request['viewId'] ?? null);
+        $sourceId = ($request['sourceId'] ?? null);
         $period = ($request['period'] ?? null);
         $metricString = ($request['options']['metric'] ?? null);
         $startDate = date('Y-m-d', strtotime('-1 '.$period));
         $endDate = date('Y-m-d');
 
         $criteria = new ReportRequestCriteria;
-        $criteria->viewId = $viewId;
+        $criteria->sourceId = $sourceId;
         $criteria->startDate = $startDate;
         $criteria->endDate = $endDate;
         $criteria->metrics = $metricString;
@@ -307,10 +307,10 @@ class Reports extends Component
             'label' => $metricString
         ];
 
-        $view = Analytics::$plugin->getViews()->getViewById($viewId);
+        $source = Analytics::$plugin->getSources()->getSourceById($sourceId);
 
         return [
-            'view' => $view->name,
+            'source' => $source->name,
             'type' => 'counter',
             'counter' => $counter,
             'response' => $report,
@@ -331,7 +331,7 @@ class Reports extends Component
      */
     public function getPieReport(array $request)
     {
-        $viewId = ($request['viewId'] ?? null);
+        $sourceId = ($request['sourceId'] ?? null);
         $period = ($request['period'] ?? null);
         $dimensionString = ($request['options']['dimension'] ?? null);
         $metricString = ($request['options']['metric'] ?? null);
@@ -339,7 +339,7 @@ class Reports extends Component
         $endDate = date('Y-m-d');
 
         $criteria = new ReportRequestCriteria;
-        $criteria->viewId = $viewId;
+        $criteria->sourceId = $sourceId;
         $criteria->startDate = $startDate;
         $criteria->endDate = $endDate;
         $criteria->metrics = $metricString;
@@ -348,10 +348,10 @@ class Reports extends Component
         $reportResponse = Analytics::$plugin->getApis()->getAnalyticsReporting()->getReport($criteria);
         $report = $this->parseReportingReport($reportResponse);
 
-        $view = Analytics::$plugin->getViews()->getViewById($viewId);
+        $source = Analytics::$plugin->getSources()->getSourceById($sourceId);
 
         return [
-            'view' => $view->name,
+            'source' => $source->name,
             'type' => 'pie',
             'chart' => $report,
             'dimension' => Craft::t('analytics', Analytics::$plugin->getMetadata()->getDimMet($dimensionString)),
@@ -371,7 +371,7 @@ class Reports extends Component
      */
     public function getTableReport(array $request)
     {
-        $viewId = ($request['viewId'] ?? null);
+        $sourceId = ($request['sourceId'] ?? null);
 
         $period = ($request['period'] ?? null);
         $dimensionString = ($request['options']['dimension'] ?? null);
@@ -381,7 +381,7 @@ class Reports extends Component
 
 
 
-        $criteria->viewId = $viewId;
+        $criteria->sourceId = $sourceId;
         $criteria->dimensions = $dimensionString;
         $criteria->metrics = $metricString;
         $criteria->startDate = date('Y-m-d', strtotime('-1 '.$period));
@@ -390,10 +390,10 @@ class Reports extends Component
         $reportResponse = Analytics::$plugin->getApis()->getAnalyticsReporting()->getReport($criteria);
         $report = $this->parseReportingReport($reportResponse);
 
-        $view = Analytics::$plugin->getViews()->getViewById($viewId);
+        $source = Analytics::$plugin->getSources()->getSourceById($sourceId);
 
         return [
-            'view' => $view->name,
+            'source' => $source->name,
             'type' => 'table',
             'chart' => $report,
             'dimension' => Craft::t('analytics', Analytics::$plugin->getMetadata()->getDimMet($dimensionString)),
@@ -413,7 +413,7 @@ class Reports extends Component
      */
     public function getGeoReport(array $request)
     {
-        $viewId = ($request['viewId'] ?? null);
+        $sourceId = ($request['sourceId'] ?? null);
         $period = ($request['period'] ?? null);
         $dimensionString = ($request['options']['dimension'] ?? null);
         $metricString = ($request['options']['metric'] ?? null);
@@ -421,7 +421,7 @@ class Reports extends Component
         $originDimension = $dimensionString;
 
         $criteria = new ReportRequestCriteria;
-        $criteria->viewId = $viewId;
+        $criteria->sourceId = $sourceId;
         $criteria->dimensions = $dimensionString;
         $criteria->metrics = $metricString;
         $criteria->startDate = date('Y-m-d', strtotime('-1 '.$period));
@@ -430,10 +430,10 @@ class Reports extends Component
         $reportResponse = Analytics::$plugin->getApis()->getAnalyticsReporting()->getReport($criteria);
         $report = $this->parseReportingReport($reportResponse);
 
-        $view = Analytics::$plugin->getViews()->getViewById($viewId);
+        $source = Analytics::$plugin->getSources()->getSourceById($sourceId);
 
         return [
-            'view' => $view->name,
+            'source' => $source->name,
             'type' => 'geo',
             'chart' => $report,
             'dimensionRaw' => $originDimension,

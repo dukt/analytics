@@ -11,11 +11,11 @@ use craft\base\Model;
 use dukt\analytics\Plugin as Analytics;
 
 /**
- * Class SiteView
+ * Class SiteSource
  *
  * @package dukt\analytics\models
  */
-class SiteView extends Model
+class SiteSource extends Model
 {
     // Properties
     // =========================================================================
@@ -31,9 +31,9 @@ class SiteView extends Model
     public $siteId;
 
     /**
-     * @var int View ID
+     * @var int Source ID
      */
-    public $viewId;
+    public $sourceId;
 
     // Public Methods
     // =========================================================================
@@ -51,11 +51,11 @@ class SiteView extends Model
     }
 
     /**
-     * @return View|null
+     * @return Source|null
      * @throws \yii\base\InvalidConfigException
      */
-    public function getView()
+    public function getSource()
     {
-        return Analytics::$plugin->getViews()->getViewById($this->viewId);
+        return Analytics::$plugin->getSources()->getSourceById($this->sourceId);
     }
 }

@@ -17,7 +17,7 @@ class Realtime extends \craft\base\Widget
     // Properties
     // =========================================================================
 
-    public $viewId;
+    public $sourceId;
 
     // Public Methods
     // =========================================================================
@@ -78,18 +78,18 @@ class Realtime extends \craft\base\Widget
             return $view->renderTemplate('analytics/_components/widgets/Realtime/disabled');
         }
 
-        $reportingViews = Analytics::$plugin->getViews()->getViews();
+        $sources = Analytics::$plugin->getSources()->getSources();
 
-        if ((array) $reportingViews === []) {
-            return $view->renderTemplate('analytics/_special/no-views');
+        if ((array) $sources === []) {
+            return $view->renderTemplate('analytics/_special/no-sources');
         }
 
         $widgetSettings = $this->settings;
 
-        $reportingView = Analytics::$plugin->getViews()->getViewById($widgetSettings['viewId']);
+        $source = Analytics::$plugin->getSources()->getSourceById($widgetSettings['sourceId']);
 
-        if ($reportingView === null) {
-            return $view->renderTemplate('analytics/_special/view-not-configured');
+        if ($source === null) {
+            return $view->renderTemplate('analytics/_special/source-not-configured');
         }
 
         $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
@@ -103,7 +103,7 @@ class Realtime extends \craft\base\Widget
 
         $widgetId = $this->id;
         $widgetOptions = [
-            'viewId' => $widgetSettings['viewId'],
+            'sourceId' => $widgetSettings['sourceId'],
             'refreshInterval' => $realtimeRefreshInterval,
         ];
 
@@ -116,7 +116,7 @@ class Realtime extends \craft\base\Widget
 
         $variables = [
             'id' => $this->id,
-            'reportingView' => $reportingView,
+            'source' => $source,
             'refreshInterval' => $realtimeRefreshInterval,
         ];
 
@@ -144,12 +144,12 @@ class Realtime extends \craft\base\Widget
     public function getSettingsHtml(): ?string
     {
         $settings = $this->getSettings();
-        $reportingViews = Analytics::$plugin->getViews()->getViews();
+        $sources = Analytics::$plugin->getSources()->getSources();
 
-        if ((array) $reportingViews !== []) {
+        if ((array) $sources !== []) {
             return Craft::$app->getView()->renderTemplate('analytics/_components/widgets/Realtime/settings', [
                 'settings' => $settings,
-                'reportingViews' => $reportingViews,
+                'sources' => $sources,
             ]);
         }
 

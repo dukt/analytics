@@ -24,9 +24,9 @@ export default {
         }
       })
   },
-  getDimensionsMetrics(viewId) {
+  getDimensionsMetrics(sourceId) {
     return axios.get(
-      Craft.getActionUrl('analytics/reports/get-dimensions-metrics&viewId=' + viewId),
+      Craft.getActionUrl('analytics/reports/get-dimensions-metrics&sourceId=' + sourceId),
       {
         headers: {
           'X-CSRF-Token': Craft.csrfTokenValue,
@@ -47,11 +47,11 @@ export default {
         }
       })
   },
-  getRealtimeReport({ viewId }) {
+  getRealtimeReport({ sourceId }) {
     return axios.post(
       Craft.getActionUrl('analytics/reports/realtime-widget'),
       {
-        viewId,
+        sourceId,
       },
       {
         headers: {
@@ -59,11 +59,11 @@ export default {
         }
       })
   },
-  getEcommerceReport({ viewId, period }) {
+  getEcommerceReport({ sourceId, period }) {
     return axios.post(
       Craft.getActionUrl('analytics/reports/ecommerce-widget'),
       {
-        viewId,
+        sourceId,
         period
       },
       {

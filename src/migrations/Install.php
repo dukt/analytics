@@ -77,7 +77,7 @@ class Install extends Migration
     protected function createTables()
     {
         $this->createTable(
-            '{{%analytics_views}}',
+            '{{%analytics_sources}}',
             [
                 'id' => $this->primaryKey(),
                 'name' => $this->string()->notNull(),
@@ -98,11 +98,11 @@ class Install extends Migration
         );
 
         $this->createTable(
-            '{{%analytics_site_views}}',
+            '{{%analytics_site_sources}}',
             [
                 'id' => $this->primaryKey(),
                 'siteId' => $this->integer()->notNull(),
-                'viewId' => $this->integer(),
+                'sourceId' => $this->integer(),
 
                 'dateCreated' => $this->dateTime()->notNull(),
                 'dateUpdated' => $this->dateTime()->notNull(),
@@ -131,7 +131,7 @@ class Install extends Migration
      */
     protected function createIndexes()
     {
-        $this->createIndex(null, '{{%analytics_site_views}}', 'siteId,viewId', true);
+        $this->createIndex(null, '{{%analytics_site_sources}}', 'siteId,sourceId', true);
     }
 
     /**
@@ -141,8 +141,8 @@ class Install extends Migration
      */
     protected function addForeignKeys()
     {
-        $this->addForeignKey($this->db->getForeignKeyName(), '{{%analytics_site_views}}', 'siteId', '{{%sites}}', 'id', 'CASCADE', null);
-        $this->addForeignKey($this->db->getForeignKeyName(), '{{%analytics_site_views}}', 'viewId', '{{%analytics_views}}', 'id', 'CASCADE', null);
+        $this->addForeignKey($this->db->getForeignKeyName(), '{{%analytics_site_sources}}', 'siteId', '{{%sites}}', 'id', 'CASCADE', null);
+        $this->addForeignKey($this->db->getForeignKeyName(), '{{%analytics_site_sources}}', 'sourceId', '{{%analytics_sources}}', 'id', 'CASCADE', null);
     }
 
     /**
@@ -165,8 +165,8 @@ class Install extends Migration
      */
     protected function removeTables()
     {
-        $this->dropTable('{{%analytics_views}}');
-        $this->dropTable('{{%analytics_site_views}}');
+        $this->dropTable('{{%analytics_sources}}');
+        $this->dropTable('{{%analytics_site_sources}}');
         $this->dropTable('{{%analytics_info}}');
     }
 
@@ -177,8 +177,8 @@ class Install extends Migration
      */
     protected function removeForeignKeys()
     {
-        if ($this->db->tableExists('{{%analytics_site_views}}')) {
-            MigrationHelper::dropAllForeignKeysOnTable('{{%analytics_site_views}}');
+        if ($this->db->tableExists('{{%analytics_site_sources}}')) {
+            MigrationHelper::dropAllForeignKeysOnTable('{{%analytics_site_sources}}');
         }
     }
 }

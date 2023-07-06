@@ -8,7 +8,7 @@
     { label: "Settings"|t('analytics'), url: url('settings') },
     { label: "Plugins"|t('analytics'), url: url('settings/plugins') },
     { label: "Analytics"|t('analytics'), url: url('analytics/settings') },
-    { label: "Views"|t('analytics'), url: url('analytics/settings/views') }
+    { label: "Sources"|t('analytics'), url: url('analytics/settings/sources') }
 ] %}
 
 {% set content %}
@@ -16,18 +16,18 @@
 
     {{ csrfInput() }}
 
-    <input type="hidden" name="action" value="analytics/settings/save-view">
+    <input type="hidden" name="action" value="analytics/settings/save-source">
 
-    {{ redirectInput('analytics/settings/views') }}
+    {{ redirectInput('analytics/settings/sources') }}
 
-    {% if not isNewView %}<input type="hidden" name="viewId" value="{{ reportingView.id }}">{% endif %}
+    {% if not isNewSource %}<input type="hidden" name="sourceId" value="{{ source.id }}">{% endif %}
 
     {{ forms.textField({
         first: true,
         label: "Name",
         name: 'name',
-        value: (reportingView is defined ? reportingView.name : null),
-        errors: reportingView.getErrors('name'),
+        value: (source is defined ? source.name : null),
+        errors: source.getErrors('name'),
         required: true,
     }) }}
 

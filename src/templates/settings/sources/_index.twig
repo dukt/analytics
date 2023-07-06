@@ -1,19 +1,19 @@
 {% extends "analytics/settings/_layout" %}
 
-{% set selectedNavItem = 'views' %}
+{% set selectedNavItem = 'sources' %}
 
 {% set content %}
 
     {% if isConnected %}
-        <p id="noviews"{% if reportingViews|length %} class="hidden"{% endif %}>
-            {{ "No views exist yet."|t('analytics') }}
+        <p id="nosources"{% if sources|length %} class="hidden"{% endif %}>
+            {{ "No sources exist yet."|t('analytics') }}
         </p>
 
-        <table id="views" class="data fullwidth collapsible">
+        <table id="sources" class="data fullwidth collapsible">
             <thead>
                 <tr>
                     <th>{{ "Name"|t('analytics') }}</th>
-                    <th>{{ "Google Analytics View"|t('analytics') }}</th>
+                    <th>{{ "Source"|t('analytics') }}</th>
                     <th>{{ "Type"|t('analytics') }}</th>
                     <th>{{ "Property ID"|t('analytics') }}</th>
                     <th>{{ "View ID"|t('analytics') }}</th>
@@ -22,31 +22,31 @@
             </thead>
             <tbody>
 
-            {% for reportingView in reportingViews %}
-                <tr data-id="{{ reportingView.id }}" data-name="{{ reportingView.name }}">
-                    <td><a href="{{ url('analytics/settings/views/'~reportingView.id) }}">{{ reportingView.name }}</a></td>
+            {% for source in sources %}
+                <tr data-id="{{ source.id }}" data-name="{{ source.name }}">
+                    <td><a href="{{ url('analytics/settings/sources/'~source.id) }}">{{ source.name }}</a></td>
                     <td>
-                        {% if reportingView.gaViewId %}
+                        {% if source.gaViewId %}
                             <div class="light">
-                                {{ reportingView.gaAccountName }} →
-                                {{ reportingView.gaPropertyName }}
+                                {{ source.gaAccountName }} →
+                                {{ source.gaPropertyName }}
                             </div>
-                            {{ reportingView.gaViewName }}
+                            {{ source.gaViewName }}
                         {% else %}
                             <span class="light">—</span>
                         {% endif %}
                     </td>
-                    <td>{{ reportingView.type }}</td>
+                    <td>{{ source.type }}</td>
                     <td>
-                        {% if reportingView.gaPropertyId %}
-                            <code>{{ reportingView.gaPropertyId }}</code>
+                        {% if source.gaPropertyId %}
+                            <code>{{ source.gaPropertyId }}</code>
                         {% else %}
                             <span class="light">—</span>
                         {% endif %}
                     </td>
                     <td>
-                        {% if reportingView.gaViewId %}
-                            <code>{{ reportingView.gaViewId }}</code>
+                        {% if source.gaViewId %}
+                            <code>{{ source.gaViewId }}</code>
                         {% else %}
                             <span class="light">—</span>
                         {% endif %}
@@ -59,15 +59,15 @@
         </table>
 
         <div class="buttons">
-            <a href="{{ url('analytics/settings/views/new') }}" class="btn submit add icon">{{ 'New View'|t('analytics') }}</a>
+            <a href="{{ url('analytics/settings/sources/new') }}" class="btn submit add icon">{{ 'New source'|t('analytics') }}</a>
         </div>
 
         {% js %}
         new Craft.AdminTable({
-            tableSelector: '#views',
-            noItemsSelector: '#noviews',
+            tableSelector: '#sources',
+            noItemsSelector: '#nosources',
             sortable: false,
-            deleteAction: 'analytics/settings/delete-view'
+            deleteAction: 'analytics/settings/delete-source'
         });
         {% endjs %}
     {% elseif error is defined %}

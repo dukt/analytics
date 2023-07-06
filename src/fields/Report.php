@@ -45,16 +45,16 @@ class Report extends Field
             return $view->renderTemplate('analytics/_components/fieldtypes/Report/disabled');
         }
 
-        $siteView = Analytics::$plugin->getViews()->getSiteViewBySiteId($element->siteId);
+        $siteSource = Analytics::$plugin->getSources()->getSiteSourceBySiteId($element->siteId);
 
-        if (!$siteView instanceof \dukt\analytics\models\SiteView) {
-            return $view->renderTemplate('analytics/_special/view-not-configured');
+        if (!$siteSource instanceof \dukt\analytics\models\SiteSource) {
+            return $view->renderTemplate('analytics/_special/source-not-configured');
         }
 
-        $reportingView = $siteView->getView();
+        $source = $siteSource->getView();
 
-        if (!$reportingView instanceof \dukt\analytics\models\View) {
-            return $view->renderTemplate('analytics/_special/view-not-configured');
+        if (!$source instanceof \dukt\analytics\models\Source) {
+            return $view->renderTemplate('analytics/_special/source-not-configured');
         }
 
         // Reformat the input name into something that looks more like an ID
@@ -92,14 +92,14 @@ class Report extends Field
                 ];
 
                 // Add locale definition to JS options
-                $siteView = Analytics::$plugin->getViews()->getSiteViewBySiteId($element->siteId);
+                $siteSource = Analytics::$plugin->getSources()->getSiteSourceBySiteId($element->siteId);
 
-                if ($siteView !== null) {
-                    $reportingView = $siteView->getView();
+                if ($siteSource !== null) {
+                    $source = $siteSource->getView();
 
-                    if ($reportingView !== null) {
+                    if ($source !== null) {
                         // Currency definition
-                        $jsOptions['currencyDefinition'] = Analytics::$plugin->getAnalytics()->getCurrencyDefinition($reportingView->gaCurrency);
+                        $jsOptions['currencyDefinition'] = Analytics::$plugin->getAnalytics()->getCurrencyDefinition($source->gaCurrency);
                     }
                 }
 

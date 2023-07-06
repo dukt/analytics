@@ -99,7 +99,7 @@ export default {
       this.loading = true
 
       reportsApi.getEcommerceReport({
-          viewId: this.pluginOptions.viewId,
+          sourceId: this.pluginOptions.sourceId,
           period: this.pluginOptions.period,
         })
         .then(response => {

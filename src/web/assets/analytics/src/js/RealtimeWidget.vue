@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="da-text-gray-500">
-      {{ pluginOptions.reportingView.name }}
+      {{ pluginOptions.source.name }}
     </div>
     <div class="da-mt-2 da-text-6xl">
       {{ activeUsers }}
@@ -122,7 +122,7 @@ export default {
       this.loading = true
 
       reportsApi.getRealtimeReport({
-          viewId: this.pluginOptions.reportingView.id,
+          sourceId: this.pluginOptions.source.id,
         })
         .then(response => {
           this.loading = false

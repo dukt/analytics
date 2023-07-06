@@ -1,16 +1,16 @@
 <template>
   <div>
-    <!-- View -->
+    <!-- Source -->
     <div class="field">
       <div class="heading">
-        <label>View</label>
+        <label>Source</label>
       </div>
       <div class="input">
         <div class="da-flex da-items-center da-gap-3">
           <div class="select">
             <select
-              v-model="viewId"
-              :name="inputName('viewId')"
+              v-model="sourceId"
+              :name="inputName('sourceId')"
               @change="onViewChange()"
             >
               <template v-for="(option, optionKey) in viewOptions">
@@ -232,7 +232,7 @@ export default {
       vSelectedMetric: null,
       selectedDimension: null,
 
-      viewId: null,
+      sourceId: null,
       chart: null,
       period: null,
       dimension: null,
@@ -243,7 +243,7 @@ export default {
   },
   computed: {
     viewOptions() {
-      return this.reportingViews.map(view => {
+      return this.sources.map(view => {
         return {
           label: view.name,
           value: view.id,
@@ -335,8 +335,8 @@ export default {
       return this.parseOptionsForVueSelect(this.dimensionOptions)
     },
 
-    reportingViews() {
-      return this.pluginSettings.reportingViews
+    sources() {
+      return this.pluginSettings.sources
     },
     selectOptions() {
       return this.pluginSettings.selectOptions
@@ -354,7 +354,7 @@ export default {
     }
   },
   mounted() {
-    this.viewId = this.pluginSettings.settings.viewId ?? (this.viewOptions[0].value ?? null)
+    this.sourceId = this.pluginSettings.settings.sourceId ?? (this.viewOptions[0].value ?? null)
     this.chart = this.pluginSettings.settings.chart ?? this.chartTypeOptions[0].value
     this.period = this.pluginSettings.settings.period ?? this.periodOptions[0].value
     this.namespace = this.pluginSettings.namespace
@@ -368,7 +368,7 @@ export default {
     },
     refreshDimensionsAndMetrics() {
       this.loading = true
-      reportsApi.getDimensionsMetrics(this.viewId)
+      reportsApi.getDimensionsMetrics(this.sourceId)
         .then((response) => {
           this.dimensions = response.data.dimensions
           this.metrics = response.data.metrics

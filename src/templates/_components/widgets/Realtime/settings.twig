@@ -1,14 +1,14 @@
 {% import "_includes/forms" as forms %}
 
-{% set reportingViewOptions = [] %}
-{% for reportingView in reportingViews %}
-    {% set reportingViewOptions = reportingViewOptions|merge([{ label: reportingView.name, value: reportingView.id }]) %}
+{% set sourceOptions = [] %}
+{% for source in sources %}
+    {% set sourceOptions = sourceOptions|merge([{ label: source.name, value: source.id }]) %}
 {% endfor %}
 
 {{ forms.selectField({
-    label: "View"|t('analytics'),
-    name: 'viewId',
-    class: 'view',
-    options: reportingViewOptions,
-    value: settings.viewId
+    label: "Source"|t('analytics'),
+    name: 'sourceId',
+    class: 'source',
+    options: sourceOptions,
+    value: settings.sourceId
 }) }}
