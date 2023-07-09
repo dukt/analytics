@@ -12,6 +12,7 @@ use dukt\analytics\models\ReportRequestCriteria;
 use dukt\analytics\Plugin;
 use Google\Service\AnalyticsData\BatchRunReportsRequest;
 use Google\Service\AnalyticsData\BatchRunReportsResponse;
+use Google\Service\AnalyticsData\FilterExpression;
 use Google\Service\AnalyticsData\RunReportRequest;
 use \Google_Service_AnalyticsReporting;
 use \Google_Service_AnalyticsReporting_DateRange;
@@ -139,35 +140,28 @@ class AnalyticsReporting extends Api
         if (!empty($criteria->orderBys)) {
             $request->setOrderBys($criteria->orderBys);
         }
-// TODO: Update criteria attributes
-//
-// Replaced with limit/offset
-//        if ($criteria->pageToken) {
-//            $pageToken = (string) $criteria->pageToken;
-//            $request->setPageToken($pageToken);
-//        }
-//
-//        if ($criteria->pageSize) {
-//            $request->setPageSize($criteria->pageSize);
-//        }
 
-// Replaced by metric/dimension filter?
-//        if ($criteria->filtersExpression) {
-//            $request->setFiltersExpression($criteria->filtersExpression);
-//        }
+        if ($criteria->offset) {
+            $request->setOffset($criteria->offset);
+        }
+
+        if ($criteria->limit) {
+            $request->setLimit($criteria->limit);
+        }
 
         if ($criteria->keepEmptyRows) {
             $request->setKeepEmptyRows($criteria->keepEmptyRows);
         }
 
-        // Not replaced
-//        if ($criteria->hideTotals) {
-//            $request->setHideTotals($criteria->hideTotals);
-//        }
-//
-//        if ($criteria->hideValueRanges) {
-//            $request->setHideValueRanges($criteria->hideValueRanges);
-//        }
+        if ($criteria->dimensionFilter) {
+            $filterExpression = new FilterExpression($criteria->dimensionFilter);
+            $request->setDimensionFilter($filterExpression);
+        }
+
+        if ($criteria->metricFilter) {
+            $filterExpression = new FilterExpression($criteria->metricFilter);
+            $request->setMetricFilter($filterExpression);
+        }
 
         return $request;
     }
@@ -210,10 +204,14 @@ class AnalyticsReporting extends Api
     private function setRequestMetricsFromCriteria(RunReportRequest &$request, ReportRequestCriteria $criteria)
     {
         if ($criteria->metrics) {
-            $metricString = $criteria->metrics;
-            // TODO
+            if (is_string($criteria->metrics)) {
+                $metricString = $criteria->metrics;
+                // TODO
 //            $metrics = $this->getMetricsFromString($metricString);
-            $request->setMetrics(['name' => $metricString]);
+                $request->setMetrics(['name' => $metricString]);
+            } else {
+                $request->setMetrics($criteria->metrics);
+            }
         }
     }
 
@@ -223,11 +221,15 @@ class AnalyticsReporting extends Api
      */
     private function setRequestDimensionsFromCriteria(RunReportRequest &$request, ReportRequestCriteria $criteria)
     {
-        if (!empty($criteria->dimensions)) {
-            $dimensionString = $criteria->dimensions;
-            // TODO
+        if ($criteria->dimensions) {
+            if (is_string($criteria->dimensions)) {
+                $dimensionString = $criteria->dimensions;
+                // TODO
 //            $dimensions = $this->getDimensionsFromString($dimensionString);
-            $request->setDimensions(['name' => $dimensionString]);
+                $request->setDimensions(['name' => $dimensionString]);
+            } else {
+                $request->setDimensions($criteria->dimensions);
+            }
         }
     }
 

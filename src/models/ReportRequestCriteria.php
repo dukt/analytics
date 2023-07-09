@@ -61,34 +61,29 @@ class ReportRequestCriteria extends Model
     public $orderBys = [];
 
     /**
-     * @var int Page size
+     * @var int Offset
      */
-    public $pageSize;
+    public $offset;
 
     /**
-     * @var string A continuation token to get the next page of the results. Adding this to the request will return the rows after the pageToken.
+     * @var int Limit
      */
-    public $pageToken;
+    public $limit;
 
     /**
-     * @var string Filters expression
+     * @var array Dimension filter
      */
-    public $filtersExpression;
+    public $dimensionFilter;
+
+    /**
+     * @var array Metric filter
+     */
+    public $metricFilter;
 
     /**
      * @var bool If set to false, the response does not include rows if all the retrieved metrics are equal to zero. The default is false which will exclude these rows.
      */
     public $keepEmptyRows = false;
-
-    /**
-     * @var bool If set to true, hides the total of all metrics for all the matching rows, for every date range. The default false and will return the totals.
-     */
-    public $hideTotals = false;
-
-    /**
-     * @var bool If set to true, hides the minimum and maximum across all matching rows. The default is false and the value ranges are returned.
-     */
-    public $hideValueRanges = false;
 
     // Public Methods
     // =========================================================================
