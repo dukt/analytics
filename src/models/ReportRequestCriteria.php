@@ -46,14 +46,14 @@ class ReportRequestCriteria extends Model
     public $samplingLevel;
 
     /**
-     * @var string Metrics
+     * @var string|array|null Metrics
      */
     public $metrics;
 
     /**
-     * @var array Dimensions
+     * @var string|array|null Dimensions
      */
-    public $dimensions = [];
+    public $dimensions;
 
     /**
      * @var array Order Bys
