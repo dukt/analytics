@@ -41,11 +41,6 @@ class ReportRequestCriteria extends Model
     public $endDate;
 
     /**
-     * @var string Sampling level
-     */
-    public $samplingLevel;
-
-    /**
      * @var string|array|null Metrics
      */
     public $metrics;
