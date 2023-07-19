@@ -133,10 +133,6 @@ class AnalyticsReporting extends Api
         $this->setRequestMetricsFromCriteria($request, $criteria);
         $this->setRequestDimensionsFromCriteria($request, $criteria);
 
-        if ($criteria->samplingLevel) {
-            $request->setSamplingLevel($criteria->samplingLevel);
-        }
-
         if (!empty($criteria->orderBys)) {
             $request->setOrderBys($criteria->orderBys);
         }
