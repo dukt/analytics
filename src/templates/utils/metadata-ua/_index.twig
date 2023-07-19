@@ -1,7 +1,7 @@
 {% extends "analytics/_layouts/utils" %}
 {% import "_includes/forms" as forms %}
 
-{% set selectedTab = 'metadata' %}
+{% set selectedTab = 'metadataUA' %}
 
 {% set content %}
     <h2>{{ "Status"|t('analytics') }}</h2>
@@ -13,13 +13,13 @@
         </ul>
 
         <div class="buttons">
-            <a href="{{ actionUrl('analytics/utils/load-metadata') }}" class="btn">{{ "Refresh Metadata"|t('analytics') }}</a>
+            <a href="{{ actionUrl('analytics/utils/load-metadata-ua') }}" class="btn">{{ "Refresh Metadata"|t('analytics') }}</a>
         </div>
     {% else %}
         <p>{{ "Metadata file doesn’t exist"|t('analytics') }}</p>
 
         <div class="buttons">
-            <a href="{{ actionUrl('analytics/utils/load-metadata') }}" class="btn">{{ "Load Metadata"|t('analytics') }}</a>
+            <a href="{{ actionUrl('analytics/utils/load-metadata-ua') }}" class="btn">{{ "Load Metadata"|t('analytics') }}</a>
         </div>
     {% endif %}
 
@@ -31,7 +31,7 @@
 
         {{ csrfInput() }}
 
-        <input type="hidden" name="action" value="analytics/utils/search-metadata">
+        <input type="hidden" name="action" value="analytics/utils/search-metadata-ua">
 
         {{ forms.textField({
             first: true,

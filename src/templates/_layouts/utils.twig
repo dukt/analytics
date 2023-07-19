@@ -1,7 +1,8 @@
 {% extends "_layouts/cp" %}
 
 {% set tabs = {
-    metadata: { label: "Metadata"|t('analytics'), url: url('analytics/utils/metadata') },
+    overview: { label: "Overview"|t('analytics'), url: url('analytics/utils') },
+    metadataUA: { label: "Metadata UA"|t('analytics'), url: url('analytics/utils/metadata-ua') },
 } %}
 
 {% set title = 'Analytics Utilities'|t('analytics')%}

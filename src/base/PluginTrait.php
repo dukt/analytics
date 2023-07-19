@@ -21,7 +21,7 @@ use yii\web\ServerErrorHttpException;
  * @property \dukt\analytics\services\Apis                      $apis                       The apis service
  * @property \dukt\analytics\services\Cache                     $cache                      The cache service
  * @property \dukt\analytics\services\Geo                       $geo                        The geo service
- * @property \dukt\analytics\services\Metadata                  $metadata                   The metadata service
+ * @property \dukt\analytics\services\MetadataUA                  $metadataUA                   The metadataUA service
  * @property \dukt\analytics\services\Oauth                     $oauth                      The oauth service
  * @property \dukt\analytics\services\Reports                   $reports                    The reports service
  * @property \dukt\analytics\services\Sources                     $sources                      The sources service
@@ -95,13 +95,13 @@ trait PluginTrait
     /**
      * Returns the metadata service.
      *
-     * @return \dukt\analytics\services\Metadata The metadata service
+     * @return \dukt\analytics\services\MetadataUA The metadata service
      * @throws \yii\base\InvalidConfigException
      */
-    public function getMetadata()
+    public function getMetadataUA()
     {
         /** @var Analytics $this */
-        return $this->get('metadata');
+        return $this->get('metadataUA');
     }
 
     /**
