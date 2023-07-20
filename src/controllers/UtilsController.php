@@ -8,6 +8,7 @@
 namespace dukt\analytics\controllers;
 
 use craft\web\Controller;
+use dukt\analytics\Plugin;
 use yii\web\Response;
 use dukt\analytics\Plugin as Analytics;
 use Craft;
@@ -42,6 +43,40 @@ class UtilsController extends Controller
 
     // Public Methods
     // =========================================================================
+
+    public function actionMetadataGa4(string $property = null, array $columns = null): Response
+    {
+        $variables = [];
+        $variables['property'] = $property;
+
+
+        $analyticsData = Plugin::$plugin->getApis()->getAnalytics()->getAnalyticsData();
+        $metadataResponse = $analyticsData->properties->getMetadata($property.'/metadata');
+        $metadata = $metadataResponse->toSimpleObject();
+
+
+        $variables['metadata'] = $metadata;
+
+        return $this->renderTemplate('analytics/utils/metadata-ga4/_index', $variables);
+    }
+
+    /**
+     * Get the GA meta data.
+     *
+     * @return null
+     */
+    public function actionGetMetadataGa4()
+    {
+        $property = Craft::$app->getRequest()->getParam('property');
+//        $columns = Analytics::$plugin->getMetadataUA()->searchColumns($property);
+
+        // Send the source back to the template
+        Craft::$app->getUrlManager()->setRouteParams([
+            'property' => $property,
+        ]);
+
+        return null;
+    }
 
     /**
      * Metadata.

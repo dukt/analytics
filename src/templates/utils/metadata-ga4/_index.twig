@@ -1,0 +1,30 @@
+{% extends "analytics/_layouts/utils" %}
+{% import "_includes/forms" as forms %}
+
+{% set selectedTab = 'metadataGA4' %}
+
+{% set content %}
+
+    <h2>{{ "Search"|t('analytics') }}</h2>
+
+    <form action="" method="post">
+
+        {{ csrfInput() }}
+
+        <input type="hidden" name="action" value="analytics/utils/get-metadata-ga4">
+
+        {{ forms.textField({
+            first: true,
+            placeholder: "Google Analytics 4 Property"|t('analytics'),
+            name: 'property',
+            value: (property is defined ? property),
+        }) }}
+
+        <input type="submit" class="btn submit" value="Get Dimensions & Metrics" />
+    </form>
+
+    {% if metadata is defined %}
+        {{ dump(metadata) }}
+    {% endif %}
+
+{% endset %}
