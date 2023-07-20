@@ -7,12 +7,7 @@
 
     <h2>{{ "Search"|t('analytics') }}</h2>
 
-    <form action="" method="post">
-
-        {{ csrfInput() }}
-
-        <input type="hidden" name="action" value="analytics/utils/get-metadata-ga4">
-
+    <form action="" method="get">
         {{ forms.textField({
             first: true,
             placeholder: "Google Analytics 4 Property"|t('analytics'),
@@ -23,8 +18,41 @@
         <input type="submit" class="btn submit" value="Get Dimensions & Metrics" />
     </form>
 
-    {% if metadata is defined %}
-        {{ dump(metadata) }}
-    {% endif %}
 
+    {% if metadata is defined %}
+        {% set dimensions = metadata.dimensions %}
+        {% set metrics = metadata.metrics %}
+        <hr>
+
+        <ul>
+            <li>
+                <a href="#dimensions">Dimensions ({{ dimensions|length }})</a>
+            </li>
+            <li>
+                <a href="#metrics">Metrics ({{ metrics|length }})</a>
+            </li>
+        </ul>
+
+        <hr>
+
+        <a id="dimensions"></a>
+        <h2>Dimensions ({{ dimensions|length }})</h2>
+
+        {% for dimension in dimensions %}
+            <hr>
+
+            {{ dump(dimension) }}
+        {% endfor %}
+
+        <hr>
+
+        <a id="metrics"></a>
+        <h2>Metrics ({{ metrics|length }})</h2>
+
+        {% for metric in metrics %}
+            <hr>
+
+            {{ dump(metric) }}
+        {% endfor %}
+    {% endif %}
 {% endset %}

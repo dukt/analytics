@@ -49,33 +49,15 @@ class UtilsController extends Controller
         $variables = [];
         $variables['property'] = $property;
 
+        if ($property) {
+            $analyticsData = Plugin::$plugin->getApis()->getAnalytics()->getAnalyticsData();
+            $metadata = $analyticsData->properties->getMetadata($property.'/metadata');
 
-        $analyticsData = Plugin::$plugin->getApis()->getAnalytics()->getAnalyticsData();
-        $metadataResponse = $analyticsData->properties->getMetadata($property.'/metadata');
-        $metadata = $metadataResponse->toSimpleObject();
+            $variables['metadata'] = $metadata;
+        }
 
-
-        $variables['metadata'] = $metadata;
 
         return $this->renderTemplate('analytics/utils/metadata-ga4/_index', $variables);
-    }
-
-    /**
-     * Get the GA meta data.
-     *
-     * @return null
-     */
-    public function actionGetMetadataGa4()
-    {
-        $property = Craft::$app->getRequest()->getParam('property');
-//        $columns = Analytics::$plugin->getMetadataUA()->searchColumns($property);
-
-        // Send the source back to the template
-        Craft::$app->getUrlManager()->setRouteParams([
-            'property' => $property,
-        ]);
-
-        return null;
     }
 
     /**
