@@ -30,7 +30,7 @@
         </div>
         <div class="tile">
           <div class="label light">
-            {{ "Average Order" }}
+            {{ "Revenue Per Transaction" }}
           </div>
           <div class="value revenue-per-transaction">
             {{ totalRevenuePerTransaction }}
@@ -46,7 +46,7 @@
         </div>
         <div class="tile">
           <div class="label light">
-            {{ "Conversion Rate" }}
+            {{ "Transactions Per Session" }}
           </div>
           <div class="value transactions-per-session">
             {{ totalTransactionsPerSession }}
@@ -111,9 +111,26 @@ export default {
           this.totalRevenue = formatByType(localeDefinition, 'currency', response.data.totalRevenue)
           this.totalRevenuePerTransaction = formatByType(localeDefinition, 'currency', response.data.totalRevenuePerTransaction)
           this.totalTransactions = formatByType(localeDefinition, 'number', response.data.totalTransactions)
-          this.totalTransactionsPerSession = formatByType(localeDefinition, 'percent', response.data.totalTransactionsPerSession)
+          this.totalTransactionsPerSession = formatByType(localeDefinition, 'number', response.data.totalTransactionsPerSession)
 
-          this.chartData = responseToDataTable(response.data.reportData.chart, localeDefinition)
+          const geoChartDataRows = [];
+
+          response.data.reportData.chart.rows.forEach(row => {
+            geoChartDataRows.push([
+              row[0],
+              row[1],
+            ])
+          })
+
+          const geoChartData = {
+            cols: [
+              response.data.reportData.chart.cols[0],
+              response.data.reportData.chart.cols[1],
+            ],
+            rows: geoChartDataRows,
+          }
+
+          this.chartData = responseToDataTable(geoChartData, localeDefinition)
         });
     }
   }

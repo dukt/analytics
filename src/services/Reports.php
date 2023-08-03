@@ -94,7 +94,7 @@ class Reports extends Component
     {
         $startDate = '7daysAgo';
         $endDate = 'today';
-        $dimensions = 'ga:date';
+        $dimensions = 'date';
 
         switch ($period) {
             case 'week':
@@ -105,11 +105,16 @@ class Reports extends Component
                 break;
             case 'year':
                 $startDate = '365daysAgo';
-                $dimensions = 'ga:yearMonth';
+                $dimensions = 'yearMonth';
                 break;
         }
 
-        $metrics = 'ga:transactionRevenue,ga:revenuePerTransaction,ga:transactions,ga:transactionsPerSession';
+        $metrics = [
+            ['name' => 'totalRevenue'],
+            ['name' => 'averageRevenuePerUser'],
+            ['name' => 'transactions'],
+            ['name' => 'transactionsPerPurchaser'],
+        ];
 
         $criteria = new ReportRequestCriteria;
         $criteria->sourceId = $sourceId;
@@ -120,17 +125,16 @@ class Reports extends Component
         $criteria->keepEmptyRows = true;
 
         $reportResponse = Analytics::$plugin->getApis()->getAnalyticsReporting()->getReport($criteria);
-        $report = $reportResponse->toSimpleObject();
-        $reportData = $this->parseReportingReport($reportResponse);
+        $reportData = $this->parseReportingReport($reportResponse, $criteria);
 
         $source = Analytics::$plugin->getSources()->getSourceById($sourceId);
 
         return [
             'period' => $startDate.' - '.$endDate,
-            'totalRevenue' => $report->data->totals[0]->values[0],
-            'totalRevenuePerTransaction' => $report->data->totals[0]->values[1],
-            'totalTransactions' => $report->data->totals[0]->values[2],
-            'totalTransactionsPerSession' => $report->data->totals[0]->values[3],
+            'totalRevenue' => $reportData['totals'][0]->metricValues[0]->value,
+            'totalRevenuePerTransaction' => $reportData['totals'][0]->metricValues[1]->value,
+            'totalTransactions' => $reportData['totals'][0]->metricValues[2]->value,
+            'totalTransactionsPerSession' => $reportData['totals'][0]->metricValues[3]->value,
             'reportData' => [
                 'source' => $source->name,
                 'chart' => $reportData,
@@ -460,7 +464,7 @@ class Reports extends Component
 
         // TODO: Fix totals
         // $totals = [$report->getRows()[0]->getMetricValues()[0]->getValue()];
-        $totals = [0];
+        $totals = $report->getTotals();
 
         return [
             'cols' => $cols,
@@ -538,17 +542,27 @@ class Reports extends Component
                 $dateRange = new \DatePeriod($startDate, $interval, $endDate);
 
                 $rowsPaddedWithZeros = [];
+
+                // Loop through date range
                 foreach ($dateRange as $date) {
+                    // Check if row exists for this date
                     $date = $date->format('Ymd');
                     $found = false;
                     foreach ($rows as $row) {
                         if ($row[0] == $date) {
+                            // Date found, add row as is
                             $found = true;
                             $rowsPaddedWithZeros[] = $row;
                         }
                     }
+
+                    // Date not found, add row with zeros
                     if (!$found) {
-                        $rowsPaddedWithZeros[] = [$date, 0];
+                        $rowPaddedWithZeros = [$date];
+                        for ($i = 1; $i <= count($report->getMetricHeaders()); $i++) {
+                            $rowPaddedWithZeros[] = "0";
+                        }
+                        $rowsPaddedWithZeros[] = $rowPaddedWithZeros;
                     }
                 }
 
@@ -574,7 +588,11 @@ class Reports extends Component
                         }
                     }
                     if (!$found) {
-                        $rowsPaddedWithZeros[] = [$date, 0];
+                        $rowPaddedWithZeros = [$date];
+                        for ($i = 1; $i <= count($report->getMetricHeaders()); $i++) {
+                            $rowPaddedWithZeros[] = "0";
+                        }
+                        $rowsPaddedWithZeros[] = $rowPaddedWithZeros;
                     }
                 }
 
@@ -617,6 +635,8 @@ class Reports extends Component
                 return 'percent';
             default:
                 switch ($metricHeader->getType()) {
+                    case 'TYPE_CURRENCY':
+                        return 'currency';
                     case 'TYPE_INTEGER':
                         return 'integer';
                     case 'TYPE_FLOAT':

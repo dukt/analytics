@@ -159,6 +159,8 @@ class AnalyticsReporting extends Api
             $request->setMetricFilter($filterExpression);
         }
 
+        $request->setMetricAggregations(['TOTAL']);
+
         return $request;
     }
 
