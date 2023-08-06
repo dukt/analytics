@@ -19,6 +19,7 @@ use craft\web\twig\variables\CraftVariable;
 use dukt\analytics\base\PluginTrait;
 use dukt\analytics\fields\Report as ReportField;
 use dukt\analytics\models\Settings;
+use dukt\analytics\services\MetadataGA4;
 use dukt\analytics\web\assets\analytics\AnalyticsAsset;
 use dukt\analytics\web\twig\variables\AnalyticsVariable;
 use dukt\analytics\widgets\Ecommerce;
@@ -67,6 +68,7 @@ class Plugin extends \craft\base\Plugin
                 'apis' => \dukt\analytics\services\Apis::class,
                 'cache' => \dukt\analytics\services\Cache::class,
                 'geo' => \dukt\analytics\services\Geo::class,
+                'metadataGA4' => \dukt\analytics\services\MetadataGA4::class,
                 'metadataUA' => \dukt\analytics\services\MetadataUA::class,
                 'oauth' => \dukt\analytics\services\Oauth::class,
                 'reports' => \dukt\analytics\services\Reports::class,

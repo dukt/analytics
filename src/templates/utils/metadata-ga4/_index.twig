@@ -7,16 +7,38 @@
 
     <h2>{{ "Search"|t('analytics') }}</h2>
 
-    <form action="" method="get">
+    <form action="" method="post">
         {{ forms.textField({
             first: true,
-            placeholder: "Google Analytics 4 Property"|t('analytics'),
+            label: "Google Analytics 4 Property"|t('analytics'),
+            instructions: "The Google Analytics 4 property in a “properties/000000000” format."|t('analytics'),
+            placeholder: "properties/000000000"|t('analytics'),
             name: 'property',
             value: (property is defined ? property),
         }) }}
 
-        <input type="submit" class="btn submit" value="Get Dimensions & Metrics" />
+        {{ csrfInput() }}
+
+        <div class="buttons">
+            {#<input type="hidden" name="action" value="analytics/utils/import-metadata-ga4">#}
+
+            <input type="submit" name="pull" class="btn submit" value="Pull Dimensions & Metrics" />
+            <input type="submit" name="import" class="btn submit" value="Import Dimensions & Metrics" />
+        </div>
     </form>
+
+    <form method="post">
+
+
+    </form>
+
+    {% if simpleMetadata is defined %}
+        <hr>
+
+        <h2>Property</h2>
+
+        {{ dump(simpleMetadata) }}
+    {% endif %}
 
 
     {% if metadata is defined %}

@@ -50,12 +50,38 @@ class UtilsController extends Controller
         $variables['property'] = $property;
 
         if ($property) {
-            $analyticsData = Plugin::$plugin->getApis()->getAnalytics()->getAnalyticsData();
-            $metadata = $analyticsData->properties->getMetadata($property.'/metadata');
+            // Get dimmets
+            if (Craft::$app->getRequest()->getParam('pull')) {
+                $analyticsData = Plugin::$plugin->getApis()->getAnalytics()->getAnalyticsData();
+                $metadata = $analyticsData->properties->getMetadata($property.'/metadata');
 
-            $variables['metadata'] = $metadata;
+                $simpleMetadata = [
+                    'dimensions' => [],
+                    'metrics' => [],
+                ];
+
+                foreach ($metadata->dimensions as $dimension) {
+                    $simpleMetadata['dimensions'][$dimension->apiName] = $dimension->uiName;
+                }
+
+                foreach ($metadata->metrics as $metric) {
+                    $simpleMetadata['metrics'][$metric->apiName] = $metric->uiName;
+                }
+
+                $variables['metadata'] = $metadata;
+                $variables['simpleMetadata'] = $simpleMetadata;
+
+                Craft::$app->getSession()->setNotice(Craft::t('analytics', 'Metadata pulled.'));
+            }
+
+            // Import dimmets
+            if (Craft::$app->getRequest()->getParam('import')) {
+                $this->_deleteMetadataGa4();
+                $this->_importMetadataGa4($property);
+
+                Craft::$app->getSession()->setNotice(Craft::t('analytics', 'Metadata imported!!.'));
+            }
         }
-
 
         return $this->renderTemplate('analytics/utils/metadata-ga4/_index', $variables);
     }
@@ -100,6 +126,18 @@ class UtilsController extends Controller
         return null;
     }
 
+    public function actionImportMetadataGa4()
+    {
+//        $this->_deleteMetadataGa4();
+        $this->_importMetadataGa4();
+
+        Craft::$app->getSession()->setNotice(Craft::t('analytics', 'Metadata imported.'));
+
+        $referrer = Craft::$app->getRequest()->referrer;
+
+        return $this->redirect($referrer);
+    }
+
     /**
      * Loads metadata.
      *
@@ -107,8 +145,8 @@ class UtilsController extends Controller
      */
     public function actionLoadMetadataUa()
     {
-        $this->_deleteMetadata();
-        $this->_importMetadata();
+        $this->_deleteMetadataUA();
+        $this->_importMetadataUA();
 
         Craft::$app->getSession()->setNotice(Craft::t('analytics', 'Metadata loaded.'));
 
@@ -124,7 +162,50 @@ class UtilsController extends Controller
     /**
      * Deletes metadata.
      */
-    private function _deleteMetadata()
+    private function _deleteMetadataGa4()
+    {
+        $path = Analytics::$plugin->getMetadataGA4()->getDimmetsFilePath();
+
+        FileHelper::unlink($path);
+    }
+
+    /**
+     * Imports metadata.
+     */
+    private function _importMetadataGa4(string $property)
+    {
+        if (!$property) {
+            return null;
+        }
+
+        $analyticsData = Plugin::$plugin->getApis()->getAnalytics()->getAnalyticsData();
+        $metadata = $analyticsData->properties->getMetadata($property.'/metadata');
+
+        $simpleMetadata = [
+            'dimensions' => [],
+            'metrics' => [],
+        ];
+
+        foreach ($metadata->dimensions as $dimension) {
+            $simpleMetadata['dimensions'][$dimension->apiName] = $dimension->uiName;
+        }
+
+        foreach ($metadata->metrics as $metric) {
+            $simpleMetadata['metrics'][$metric->apiName] = $metric->uiName;
+        }
+
+
+        $contents = json_encode($simpleMetadata, JSON_PRETTY_PRINT);
+
+        $path = Analytics::$plugin->getMetadataGA4()->getDimmetsFilePath();
+
+        FileHelper::writeToFile($path, $contents);
+    }
+
+    /**
+     * Deletes metadata.
+     */
+    private function _deleteMetadataUA()
     {
         $path = Analytics::$plugin->getMetadataUA()->getDimmetsFilePath();
 
@@ -134,7 +215,7 @@ class UtilsController extends Controller
     /**
      * Imports metadata.
      */
-    private function _importMetadata()
+    private function _importMetadataUA()
     {
         $columns = [];
 

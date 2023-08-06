@@ -267,7 +267,7 @@ class Reports extends Component
             'type' => 'area',
             'chart' => $report,
             'total' => $total,
-            'metric' => Craft::t('analytics', Analytics::$plugin->getMetadataUA()->getDimMet($metricString)),
+            'metric' => Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($metricString)),
             'period' => $period,
             'periodLabel' => Craft::t('analytics', 'This '.$period)
         ];
@@ -307,7 +307,7 @@ class Reports extends Component
         $counter = [
             'type' => $report['cols'][0]['type'],
             'value' => $total,
-            // 'label' => StringHelper::toLowerCase(Craft::t('analytics', Analytics::$plugin->getMetadataUA()->getDimMet($metricString)))
+            // 'label' => StringHelper::toLowerCase(Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($metricString)))
             'label' => $metricString
         ];
 
@@ -318,7 +318,7 @@ class Reports extends Component
             'type' => 'counter',
             'counter' => $counter,
             'response' => $report,
-//            'metric' => Craft::t('analytics', Analytics::$plugin->getMetadataUA()->getDimMet($metricString)),
+//            'metric' => Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($metricString)),
             'metric' => $metricString,
             'period' => $period,
             'periodLabel' => Craft::t('analytics', 'this '.$period)
@@ -358,8 +358,8 @@ class Reports extends Component
             'source' => $source->name,
             'type' => 'pie',
             'chart' => $report,
-            'dimension' => Craft::t('analytics', Analytics::$plugin->getMetadataUA()->getDimMet($dimensionString)),
-            'metric' => Craft::t('analytics', Analytics::$plugin->getMetadataUA()->getDimMet($metricString)),
+            'dimension' => Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($dimensionString)),
+            'metric' => Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($metricString)),
             'period' => $period,
             'periodLabel' => Craft::t('analytics', 'this '.$period)
         ];
@@ -400,8 +400,8 @@ class Reports extends Component
             'source' => $source->name,
             'type' => 'table',
             'chart' => $report,
-            'dimension' => Craft::t('analytics', Analytics::$plugin->getMetadataUA()->getDimMet($dimensionString)),
-            'metric' => Craft::t('analytics', Analytics::$plugin->getMetadataUA()->getDimMet($metricString)),
+            'dimension' => Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($dimensionString)),
+            'metric' => Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($metricString)),
             'period' => $period,
             'periodLabel' => Craft::t('analytics', 'This '.$period)
         ];
@@ -441,9 +441,9 @@ class Reports extends Component
             'type' => 'geo',
             'chart' => $report,
             'dimensionRaw' => $originDimension,
-//            'dimension' => Craft::t('analytics', Analytics::$plugin->getMetadataUA()->getDimMet($originDimension)),
+//            'dimension' => Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($originDimension)),
             'dimension' => $originDimension,
-//            'metric' => Craft::t('analytics', Analytics::$plugin->getMetadataUA()->getDimMet($metricString)),
+//            'metric' => Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($metricString)),
             'metric' => $metricString,
             'period' => $period,
             'periodLabel' => Craft::t('analytics', 'This '.$period)

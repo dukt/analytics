@@ -216,11 +216,11 @@ class Report extends \craft\base\Widget
                 $options = $this->settings['options'][$chartType];
 
                 if (!empty($options['dimension'])) {
-                    $name[] = Craft::t('analytics', Analytics::$plugin->getMetadataUA()->getDimMet($options['dimension']));
+                    $name[] = Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($options['dimension']));
                 }
 
                 if (!empty($options['metric'])) {
-                    $name[] = Craft::t('analytics', Analytics::$plugin->getMetadataUA()->getDimMet($options['metric']));
+                    $name[] = Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($options['metric']));
                 }
             }
 
