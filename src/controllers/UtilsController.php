@@ -126,18 +126,6 @@ class UtilsController extends Controller
         return null;
     }
 
-    public function actionImportMetadataGa4()
-    {
-//        $this->_deleteMetadataGa4();
-        $this->_importMetadataGa4();
-
-        Craft::$app->getSession()->setNotice(Craft::t('analytics', 'Metadata imported.'));
-
-        $referrer = Craft::$app->getRequest()->referrer;
-
-        return $this->redirect($referrer);
-    }
-
     /**
      * Loads metadata.
      *
