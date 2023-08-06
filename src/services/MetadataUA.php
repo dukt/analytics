@@ -104,7 +104,7 @@ class MetadataUA extends Component
             return $columns[$id]->uiName;
         }
 
-        return null;
+        return $id;
     }
 
     /**
