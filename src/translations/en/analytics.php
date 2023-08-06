@@ -92,7 +92,7 @@ return array(
     'Real-Time Refresh Interval' => 'Real-Time Refresh Interval',
     'Real-Time' => 'Real-Time',
     'Realtime reporting is disabled.' => 'Realtime reporting is disabled.',
-    'Refresh Metadata' => 'Refresh Metadata',
+    'Refresh Metadata JSON file' => 'Refresh Metadata JSON file',
     'Refresh' => 'Refresh',
     'Report Widgets' => 'Report Widgets',
     'Report will appear when the element is saved.' => 'Report will appear when the element is saved.',
