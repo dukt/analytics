@@ -265,7 +265,6 @@ class SettingsController extends Controller
         $request = Craft::$app->getRequest();
         $accountExplorer = $request->getBodyParam('accountExplorer');
 
-
         $source = new Source();
         $source->id = $request->getBodyParam('sourceId');
         $source->type = $accountExplorer['type'];
