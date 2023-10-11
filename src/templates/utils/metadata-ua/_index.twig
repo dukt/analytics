@@ -12,16 +12,13 @@
             <li>{{ "{count}  metrics loaded."|t('analytics', { count: metrics|length }) }}</li>
         </ul>
 
-        <div class="buttons">
-            <a href="{{ actionUrl('analytics/utils/load-metadata-ua') }}" class="btn">{{ "Refresh Metadata JSON file"|t('analytics') }}</a>
-        </div>
     {% else %}
         <p>{{ "Metadata file doesn’t exist"|t('analytics') }}</p>
-
-        <div class="buttons">
-            <a href="{{ actionUrl('analytics/utils/load-metadata-ua') }}" class="btn">{{ "Load Metadata"|t('analytics') }}</a>
-        </div>
     {% endif %}
+
+    <div class="buttons">
+        <a href="{{ actionUrl('analytics/utils/load-metadata-ua') }}" class="btn submit">{{ "Import and write UA dimensions & metrics"|t('analytics') }}</a>
+    </div>
 
     <hr>
 
@@ -40,7 +37,7 @@
             value: (q is defined ? q),
         }) }}
 
-        <input type="submit" class="btn submit" value="Search" />
+        <input type="submit" class="btn" value="Search" />
 
     </form>
 
