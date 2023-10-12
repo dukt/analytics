@@ -292,9 +292,9 @@ class SettingsController extends Controller
         }
 
         foreach ($accountExplorerData['properties'] as $dataProperty) {
-
             if ($dataProperty['id'] == $source->gaPropertyId) {
                 $source->gaPropertyName = $dataProperty['name'];
+                $source->gaCurrency = $dataProperty['currency'];
             }
         }
 

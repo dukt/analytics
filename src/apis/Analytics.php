@@ -199,19 +199,18 @@ class Analytics extends Api
         $accountSummaries = $googleAdminService->accountSummaries->listAccountSummaries()->getAccountSummaries();
 
         foreach($accountSummaries as $accountSummary) {
-            $props = $accountSummary->getPropertySummaries();
+            // We need to get the actual list of properties to get all property details (like currency)
+            $props = $googleAdminService->properties->listProperties([
+                'filter' => 'parent:' . $accountSummary->account
+            ])->getProperties();
 
             $items[] = array_map(function($item) {
                 return [
                     'type' => 'GA4',
-                    'id' => $item->getProperty(),
+                    'id' => $item->getName(),
                     'name' => $item->getDisplayName(),
                     'accountId' => str_replace('accounts/', '', $item->getParent()),
-                    'test' => get_class($item),
-                    // TODO
-//                'id' => $item->getProperty()->getId(),
-//                'accountId' => $item->getProperty()->getAccount()->getId(),
-//                'name' => $item->getProperty()->getName(),
+                    'currency' => $item->getCurrencyCode(),
                 ];
             }, $props);
         }
