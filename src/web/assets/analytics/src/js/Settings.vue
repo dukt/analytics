@@ -94,7 +94,10 @@
                     </button>
                   </template>
                   <template v-else>
-                    <div class="da-px-6 da-py-3 da-flex da-justify-between">
+                    <div
+                      class="da-px-6 da-py-3 da-flex da-justify-between"
+                      :class="{ 'da-bg-gray-100': selectedProperty === property.id }"
+                    >
                       <div>
                         {{ property.name }}
                         <div
@@ -106,6 +109,10 @@
                       <div>
                         <button
                           class="da-bg-blue-600 da-text-white da-font-medium da-rounded-md da-px-2 da-py-1 da-ml-2"
+                          :class="{
+                            'da-opacity-50': selectedProperty === property.id,
+                          }"
+                          :disabled="selectedProperty === property.id"
                           @click.prevent="selectGA4Property(property)"
                         >
                           Select GA4 property
@@ -132,6 +139,7 @@
                 <li
                   :key="viewKey"
                   class="da-px-6 da-py-3"
+                  :class="{ 'da-bg-gray-100': selectedView === view.id }"
                 >
                   {{ view.name }} ({{ view.id }})
 
