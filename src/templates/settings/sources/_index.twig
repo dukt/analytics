@@ -17,6 +17,7 @@
                     <th>{{ "Type"|t('analytics') }}</th>
                     <th>{{ "Property ID"|t('analytics') }}</th>
                     <th>{{ "View ID"|t('analytics') }}</th>
+                    <th>{{ "Currency"|t('analytics') }}</th>
                     <td class="thin"></td>
                 </tr>
             </thead>
@@ -51,6 +52,13 @@
                     <td>
                         {% if source.gaViewId %}
                             <code>{{ source.gaViewId }}</code>
+                        {% else %}
+                            <span class="light">—</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if source.gaCurrency %}
+                            <code>{{ source.gaCurrency }}</code>
                         {% else %}
                             <span class="light">—</span>
                         {% endif %}

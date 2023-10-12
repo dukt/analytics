@@ -39,6 +39,7 @@ class Sources extends Component
                 'name',
                 'gaAccountId',
                 'gaAccountName',
+                'gaCurrency',
                 'gaPropertyId',
                 'gaPropertyName',
                 'gaViewId',
