@@ -31,7 +31,38 @@
         required: true,
     }) }}
 
+    <input
+            type="hidden"
+            id="accountExplorerType"
+            name="accountExplorer[type]"
+            value="{{ source.type }}"
+    >
+    <input
+            type="hidden"
+            id="accountExplorerAccount"
+            name="accountExplorer[account]"
+            value="{{ source.gaAccountId }}"
+    >
+    <input
+            type="hidden"
+            id="accountExplorerProperty"
+            name="accountExplorer[property]"
+            value="{{ source.gaPropertyId }}"
+    >
+    <input
+            type="hidden"
+            id="accountExplorerView"
+            name="accountExplorer[view]"
+            value="{{ source.gaViewId }}"
+    >
+    <input
+            type="hidden"
+            id="accountExplorerCurrency"
+            name="accountExplorer[currency]"
+            value="{{ source.gaCurrency }}"
+    >
+
     <div
-        id="analytics-settings"
+            id="analytics-settings"
     ></div>
 {% endset %}

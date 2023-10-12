@@ -17,7 +17,7 @@
           >
             Analytics Accounts
           </div>
-          <div>
+          <div class="da-max-h-[22rem] da-overflow-auto">
             <ul>
               <template v-for="(account, accountKey) in accounts">
                 <li
@@ -70,7 +70,7 @@
           >
             Properties &amp; Apps
           </div>
-          <div>
+          <div class="da-max-h-[22rem] da-overflow-auto">
             <ul>
               <template v-for="(property, propertyKey) in properties">
                 <li
@@ -126,7 +126,7 @@
           >
             Views
           </div>
-          <div>
+          <div class="da-max-h-[22rem] da-overflow-auto">
             <ul>
               <template v-for="(view, viewKey) in views">
                 <li
@@ -151,41 +151,6 @@
           </div>
         </div>
       </div>
-
-      <div class="">
-        <div>
-          Source Type:
-          <input
-            type="text"
-            name="accountExplorer[type]"
-            :value="selectedSourceType"
-          >
-        </div>
-        <div>
-          Account:
-          <input
-            type="text"
-            name="accountExplorer[account]"
-            :value="selectedAccount"
-          >
-        </div>
-        <div>
-          Property:
-          <input
-            type="text"
-            name="accountExplorer[property]"
-            :value="selectedProperty"
-          >
-        </div>
-        <div>
-          View:
-          <input
-            type="text"
-            name="accountExplorer[view]"
-            :value="selectedView"
-          >
-        </div>
-      </div>
     </template>
   </div>
 </template>
@@ -202,6 +167,7 @@ export default {
       selectedAccount: null,
       selectedProperty: null,
       selectedView: null,
+      selectedCurrency: null,
       pluginOptions: null,
     }
   },
@@ -257,12 +223,32 @@ export default {
       this.selectedSourceType = 'UA'
       this.selectedView = view.id
       // const selectedProperty = this.properties.find(property => property.id === this.selectedProperty)
+
+      this.setFormData()
     },
     selectGA4Property(property) {
+      console.log('property', property)
+
       this.selectedSourceType = 'GA4'
       this.selectedProperty = property.id
       this.selectedView = null
+
+      this.setFormData()
     },
+
+    setFormData() {
+      document.getElementById('accountExplorerType').value = this.selectedSourceType
+      document.getElementById('accountExplorerAccount').value = this.selectedAccount
+      document.getElementById('accountExplorerProperty').value = this.selectedProperty
+
+      if (this.selectedSourceType === 'UA') {
+        document.getElementById('accountExplorerView').value = this.selectedView
+      } else {
+        document.getElementById('accountExplorerView').value = ''
+      }
+
+      document.getElementById('accountExplorerCurrency').value = ''
+    }
   }
 }
 </script>

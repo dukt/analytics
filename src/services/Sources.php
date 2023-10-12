@@ -63,6 +63,7 @@ class Sources extends Component
         if ($result !== null) {
             return new Source($result->toArray([
                 'id',
+                'type',
                 'name',
                 'gaAccountId',
                 'gaAccountName',
