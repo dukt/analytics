@@ -32,6 +32,10 @@
                                 {{ source.gaPropertyName }}
                             </div>
                             {{ source.gaViewName }}
+                        {% elseif source.gaPropertyName %}
+                            <div class="light">
+                                {{ source.gaPropertyName }}
+                            </div>
                         {% else %}
                             <span class="light">—</span>
                         {% endif %}
