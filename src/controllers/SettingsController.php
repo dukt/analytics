@@ -272,17 +272,6 @@ class SettingsController extends Controller
         $source->gaAccountId = $accountExplorer['account'];
         $source->gaPropertyId = $accountExplorer['property'];
         $source->gaViewId = $accountExplorer['view'] ?? null;
-// TODO
-//        $googleAdminService = Plugin::$plugin->getApis()->getAnalytics()->getGoogleAdminService();
-//
-//        echo '<pre>';
-//        var_dump(
-//            $googleAdminService->accounts->listAccounts()->getAccounts(),
-////            $googleAdminService->properties->listProperties(['filter' => 'parent:accounts/35813838'])->getProperties()
-//        );
-//        echo '</pre>';
-//        die();
-
         $accountExplorerData = Analytics::$plugin->getApis()->getAnalytics()->getAccountExplorerData();
 
         foreach ($accountExplorerData['accounts'] as $dataAccount) {
