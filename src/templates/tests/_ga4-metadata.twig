@@ -4,46 +4,66 @@
 {% set selectedTab = 'ga4Metadata' %}
 
 {% set content %}
+    <form action="" method="get">
+        {{ forms.textField({
+            first: true,
+            label: "Google Analytics 4 Property"|t('analytics'),
+            instructions: "The Google Analytics 4 property in a “properties/000000000” format."|t('analytics'),
+            placeholder: "properties/000000000"|t('analytics'),
+            name: 'property',
+            value: (property is defined ? property),
+        }) }}
 
-    <pre>{{ dump(metadata) }}</pre>
-    <h2>Metrics Categories</h2>
+        <div class="buttons">
+            <input type="submit" class="btn submit" value="Get Property Metadata" />
+        </div>
+    </form>
 
-    <ul>
-        {% for category in metCategories %}
-            <li>
-                <code>{{ category }}</code>
-            </li>
-        {% endfor %}
-    </ul>
+    {% if error is defined %}
+        {{ dump(error) }}
+    {% endif %}
 
-    <h2>Metrics</h2>
+    {% if metadata is defined %}
+        <hr>
 
-    <ul>
-        {% for metric in metrics %}
-            <li>
-                <code>{{ metric.apiName }}</code>
-            </li>
-        {% endfor %}
-    </ul>
+        <h2>Metrics Categories</h2>
 
-    <h2>Dimensions Categories</h2>
+        <ul>
+            {% for category in metCategories %}
+                <li>
+                    <code>{{ category }}</code>
+                </li>
+            {% endfor %}
+        </ul>
 
-    <ul>
-        {% for category in dimCategories %}
-            <li>
-                <code>{{ category }}</code>
-            </li>
-        {% endfor %}
-    </ul>
+        <h2>Metrics</h2>
 
-    <h2>Dimensions</h2>
+        <ul>
+            {% for metric in metrics %}
+                <li>
+                    <code>{{ metric.apiName }}</code>
+                </li>
+            {% endfor %}
+        </ul>
 
-    <ul>
-        {% for dimension in dimensions %}
-            <li>
-                <code>{{ dimension.apiName }}</code>
-            </li>
-        {% endfor %}
-    </ul>
+        <h2>Dimensions Categories</h2>
 
+        <ul>
+            {% for category in dimCategories %}
+                <li>
+                    <code>{{ category }}</code>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <h2>Dimensions</h2>
+
+        <ul>
+            {% for dimension in dimensions %}
+                <li>
+                    <code>{{ dimension.apiName }}</code>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 {% endset %}

@@ -75,50 +75,71 @@ class TestsController extends Controller
      *
      * @return Response
      */
-    public function actionGa4(array $variables = [])
+    public function actionGa4(string $property = null)
     {
-        $request = new RunReportRequest();
-        $request->setDateRanges([
-            'startDate' => '7daysAgo',
-            'endDate' => 'today',
-        ]);
-        $request->setMetrics([
-            'name' => 'newUsers',
-        ]);
-        $request->setDimensions([
-            'name' => 'browser',
-        ]);
+        $variables = [
+            'property' => $property,
+        ];
 
-        $analyticsData = Plugin::$plugin->getApis()->getAnalytics()->getAnalyticsData();
-        $variables['reportResponse'] = $analyticsData->properties->runReport('properties/309469168', $request);
+        if ($property) {
+            $request = new RunReportRequest();
+            $request->setDateRanges([
+                'startDate' => '7daysAgo',
+                'endDate' => 'today',
+            ]);
+            $request->setMetrics([
+                'name' => 'newUsers',
+            ]);
+            $request->setDimensions([
+                'name' => 'browser',
+            ]);
+
+            $analyticsData = Plugin::$plugin->getApis()->getAnalytics()->getAnalyticsData();
+
+            try {
+                $variables['reportResponse'] = $analyticsData->properties->runReport($property, $request);
+            } catch (\Google\Service\Exception $e) {
+                $variables['error'] = $e->getMessage();
+            }
+        }
 
         return $this->renderTemplate('analytics/tests/_ga4', $variables);
     }
 
-    public function actionGa4Metadata(array $variables = [])
+    public function actionGa4Metadata(string $property = null)
     {
-        $analyticsData = Plugin::$plugin->getApis()->getAnalytics()->getAnalyticsData();
-        $metadata = $analyticsData->properties->getMetadata('properties/309469168/metadata');
-        $variables['metadata'] = $metadata;
+        $variables = [
+            'property' => $property,
+        ];
 
-        $dimCategories = [];
+        if ($property) {
+            $analyticsData = Plugin::$plugin->getApis()->getAnalytics()->getAnalyticsData();
+            try {
+                $metadata = $analyticsData->properties->getMetadata($property.'/metadata');
+                $variables['metadata'] = $metadata;
 
-        foreach($metadata->getDimensions() as $dim) {
-            $dimCategories[$dim->getCategory()] = $dim->getCategory();
+                $dimCategories = [];
+
+                foreach($metadata->getDimensions() as $dim) {
+                    $dimCategories[$dim->getCategory()] = $dim->getCategory();
+                }
+
+                $variables['dimCategories'] = $dimCategories;
+
+                $metCategories = [];
+
+                foreach($metadata->getDimensions() as $met) {
+                    $metCategories[$met->getCategory()] = $met->getCategory();
+                }
+
+                $variables['metCategories'] = $metCategories;
+
+                $variables['dimensions'] = $metadata->getDimensions();
+                $variables['metrics'] = $metadata->getMetrics();
+            } catch (\Google\Service\Exception $e) {
+                $variables['error'] = $e->getMessage();
+            }
         }
-
-        $variables['dimCategories'] = $dimCategories;
-
-        $metCategories = [];
-
-        foreach($metadata->getDimensions() as $met) {
-            $metCategories[$met->getCategory()] = $met->getCategory();
-        }
-
-        $variables['metCategories'] = $metCategories;
-
-        $variables['dimensions'] = $metadata->getDimensions();
-        $variables['metrics'] = $metadata->getMetrics();
 
         return $this->renderTemplate('analytics/tests/_ga4-metadata', $variables);
     }

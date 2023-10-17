@@ -4,7 +4,27 @@
 {% set selectedTab = 'ga4' %}
 
 {% set content %}
+    <form action="" method="get">
+        {{ forms.textField({
+            first: true,
+            label: "Google Analytics 4 Property"|t('analytics'),
+            instructions: "The Google Analytics 4 property in a “properties/000000000” format."|t('analytics'),
+            placeholder: "properties/000000000"|t('analytics'),
+            name: 'property',
+            value: (property is defined ? property),
+        }) }}
 
-<pre>{{ dump(reportResponse) }}</pre>
+        <div class="buttons">
+            <input type="submit" class="btn submit" value="Run Report" />
+        </div>
+    </form>
 
+    {% if error is defined %}
+        <hr>
+        <pre>{{ dump(error) }}</pre>
+    {% endif %}
+    {% if reportResponse is defined %}
+        <hr>
+        <pre>{{ dump(reportResponse) }}</pre>
+    {% endif %}
 {% endset %}
