@@ -13,6 +13,7 @@ use craft\web\Controller;
 use craft\web\View;
 use dukt\analytics\Plugin;
 use dukt\analytics\Plugin as Analytics;
+use dukt\analytics\web\assets\analytics\AnalyticsAsset;
 use yii\web\Response;
 use Google\Service\AnalyticsData\RunReportRequest;
 
@@ -47,11 +48,17 @@ class TestsController extends Controller
      */
     public function actionFormatting(array $variables = [])
     {
+        Craft::$app->getView()->registerAssetBundle(AnalyticsAsset::class);
+
         $currencyDefinition = Analytics::$plugin->getAnalytics()->getCurrencyDefinition();
 
         $js = 'AnalyticsCurrencyDefinition = '.Json::encode($currencyDefinition).';';
 
         Craft::$app->getView()->registerJs($js, View::POS_BEGIN);
+
+        $jsOptions = [];
+
+        Craft::$app->getView()->registerJs('new AnalyticsVueTestsFormatting({data: {pluginOptions: '.Json::encode($jsOptions).'}}).$mount("#analytics-tests-formatting");');
 
         return $this->renderTemplate('analytics/tests/_formatting', $variables);
     }

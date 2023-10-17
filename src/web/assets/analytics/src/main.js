@@ -8,6 +8,7 @@ import ReportWidgetSettings from './js/ReportWidgetSettings.vue'
 import RealtimeWidget from './js/RealtimeWidget.vue'
 import ReportField from './js/ReportField.vue'
 import Settings from './js/Settings.vue'
+import TestsFormatting from './js/tests/Formatting.vue'
 
 
 // Ecommerce Widget
@@ -23,4 +24,8 @@ window.AnalyticsVueRealtimeWidget = Vue.extend(RealtimeWidget)
 // Report Field
 window.AnalyticsVueReportField = Vue.extend(ReportField)
 
+// Settings
 window.AnalyticsVueSettings = Vue.extend(Settings)
+
+// Tests
+window.AnalyticsVueTestsFormatting = Vue.extend(TestsFormatting)
