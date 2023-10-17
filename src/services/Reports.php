@@ -50,13 +50,6 @@ class Reports extends Component
         $response = Analytics::$plugin->getCache()->get($cacheId);
 
         if (!$response) {
-//            $reportsRequest = new BatchRunReportsRequest();
-//            $reportsRequest->setRequests($requests);
-//
-//            $analyticsData = Plugin::$plugin->getApis()->getAnalytics()->getAnalyticsData();
-//
-//            return $analyticsData->properties->batchRunReports('properties/309469168', $reportsRequest);
-//
             $reportRequest = new RunRealtimeReportRequest();
             $reportRequest->setMetrics(['name' => $metrics]);
             if ($dimensions) {
@@ -68,12 +61,7 @@ class Reports extends Component
             }
 
             $analyticsData = Plugin::$plugin->getApis()->getAnalytics()->getAnalyticsData();
-//            var_dump($tableId);
-//            die();
             $response = $analyticsData->properties->runRealtimeReport($tableId, $reportRequest, $optParams);
-
-//            $response = Analytics::$plugin->getApis()->getAnalytics()->getService()->data_realtime->get($tableId, $metrics, $optParams);
-
 
             $cacheDuration = Analytics::$plugin->getSettings()->realtimeRefreshInterval;
             Analytics::$plugin->getCache()->set($cacheId, $response, $cacheDuration);
