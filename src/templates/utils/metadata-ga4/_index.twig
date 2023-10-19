@@ -7,7 +7,7 @@
 
     <h2>{{ "Search"|t('analytics') }}</h2>
 
-    <form action="" method="post">
+    <form action="" method="get">
         {{ forms.textField({
             first: true,
             label: "Google Analytics 4 Property"|t('analytics'),
@@ -16,9 +16,7 @@
             name: 'property',
             value: (property is defined ? property),
         }) }}
-
-        {{ csrfInput() }}
-
+        
         <div class="buttons">
             <input type="submit" name="pull" class="btn submit" value="Show Dimensions & Metrics" />
             <input type="submit" name="import" class="btn submit" value="Import & Write Dimensions & Metrics" />
