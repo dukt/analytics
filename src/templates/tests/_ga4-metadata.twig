@@ -28,42 +28,75 @@
 
         <h2>Metrics Categories</h2>
 
-        <ul>
+        <table class="table data fullwidth">
+            <thead>
+            <tr>
+                <th>Category</th>
+            </tr>
+            </thead>
+            <tbody>
             {% for category in metCategories %}
-                <li>
-                    <code>{{ category }}</code>
-                </li>
+                <tr>
+                    <td>{{ category }}</td>
+                </tr>
             {% endfor %}
-        </ul>
+            </tbody>
+        </table>
 
         <h2>Metrics</h2>
 
-        <ul>
-            {% for metric in metrics %}
-                <li>
-                    <code>{{ metric.apiName }}</code>
-                </li>
-            {% endfor %}
-        </ul>
+        <table class="table data fullwidth">
+            <thead>
+            <tr>
+                <th>UI Name</th>
+                <th>API Name</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for metric in metrics %}
+                    <tr>
+                        <td>{{ metric.uiName }}</td>
+                        <td><code>{{ metric.apiName }}: {{ metric.uiName }}</code></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
         <h2>Dimensions Categories</h2>
 
-        <ul>
-            {% for category in dimCategories %}
-                <li>
-                    <code>{{ category }}</code>
-                </li>
-            {% endfor %}
-        </ul>
+        <table class="table data fullwidth">
+            <thead>
+            <tr>
+                <th>Category</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for category in dimCategories %}
+                    <tr>
+                        <td>{{ category }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
         <h2>Dimensions</h2>
 
-        <ul>
+
+        <table class="table data fullwidth">
+            <thead>
+            <tr>
+                <th>UI Name</th>
+                <th>API Name</th>
+            </tr>
+            </thead>
+            <tbody>
             {% for dimension in dimensions %}
-                <li>
-                    <code>{{ dimension.apiName }}</code>
-                </li>
+                <tr>
+                    <td>{{ dimension.uiName }}</td>
+                    <td><code>{{ dimension.apiName }}: {{ dimension.uiName }}</code></td>
+                </tr>
             {% endfor %}
-        </ul>
+            </tbody>
+        </table>
     {% endif %}
 {% endset %}
