@@ -44,50 +44,8 @@ class UtilsController extends Controller
     // Public Methods
     // =========================================================================
 
-    public function actionMetadataGa4(string $property = null, array $columns = null): Response
-    {
-        $variables = [];
-        $variables['property'] = $property;
-
-        if ($property) {
-            // Get dimmets
-            if (Craft::$app->getRequest()->getParam('pull')) {
-                $analyticsData = Plugin::$plugin->getApis()->getAnalytics()->getAnalyticsData();
-                $metadata = $analyticsData->properties->getMetadata($property.'/metadata');
-
-                $simpleMetadata = [
-                    'dimensions' => [],
-                    'metrics' => [],
-                ];
-
-                foreach ($metadata->dimensions as $dimension) {
-                    $simpleMetadata['dimensions'][$dimension->apiName] = $dimension->uiName;
-                }
-
-                foreach ($metadata->metrics as $metric) {
-                    $simpleMetadata['metrics'][$metric->apiName] = $metric->uiName;
-                }
-
-                $variables['metadata'] = $metadata;
-                $variables['simpleMetadata'] = $simpleMetadata;
-
-                Craft::$app->getSession()->setNotice(Craft::t('analytics', 'Metadata pulled.'));
-            }
-
-            // Import dimmets
-            if (Craft::$app->getRequest()->getParam('import')) {
-                $this->_deleteMetadataGa4();
-                $this->_importMetadataGa4($property);
-
-                Craft::$app->getSession()->setNotice(Craft::t('analytics', 'Metadata imported!!.'));
-            }
-        }
-
-        return $this->renderTemplate('analytics/utils/metadata-ga4/_index', $variables);
-    }
-
     /**
-     * Metadata.
+     * UA Metadata.
      * Index
      *
      * @param string|null $q
@@ -145,50 +103,6 @@ class UtilsController extends Controller
 
     // Private Methods
     // =========================================================================
-
-
-    /**
-     * Deletes metadata.
-     */
-    private function _deleteMetadataGa4()
-    {
-        $path = Analytics::$plugin->getMetadataGA4()->getDimmetsFilePath();
-
-        FileHelper::unlink($path);
-    }
-
-    /**
-     * Imports metadata.
-     */
-    private function _importMetadataGa4(string $property)
-    {
-        if (!$property) {
-            return null;
-        }
-
-        $analyticsData = Plugin::$plugin->getApis()->getAnalytics()->getAnalyticsData();
-        $metadata = $analyticsData->properties->getMetadata($property.'/metadata');
-
-        $simpleMetadata = [
-            'dimensions' => [],
-            'metrics' => [],
-        ];
-
-        foreach ($metadata->dimensions as $dimension) {
-            $simpleMetadata['dimensions'][$dimension->apiName] = $dimension->uiName;
-        }
-
-        foreach ($metadata->metrics as $metric) {
-            $simpleMetadata['metrics'][$metric->apiName] = $metric->uiName;
-        }
-
-
-        $contents = json_encode($simpleMetadata, JSON_PRETTY_PRINT);
-
-        $path = Analytics::$plugin->getMetadataGA4()->getDimmetsFilePath();
-
-        FileHelper::writeToFile($path, $contents);
-    }
 
     /**
      * Deletes metadata.

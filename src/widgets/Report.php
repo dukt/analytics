@@ -19,9 +19,9 @@ class Report extends \craft\base\Widget
     // =========================================================================
 
     /**
-     * @var string|null
+     * @var int
      */
-    public $sourceId;
+    public ?int $sourceId = null;
 
     /**
      * @var bool|null
@@ -216,11 +216,11 @@ class Report extends \craft\base\Widget
                 $options = $this->settings['options'][$chartType];
 
                 if (!empty($options['dimension'])) {
-                    $name[] = Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($options['dimension']));
+                    $name[] = Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($this->settings['sourceId'], $options['dimension']));
                 }
 
                 if (!empty($options['metric'])) {
-                    $name[] = Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($options['metric']));
+                    $name[] = Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($this->settings['sourceId'], $options['metric']));
                 }
             }
 

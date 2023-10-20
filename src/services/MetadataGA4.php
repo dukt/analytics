@@ -8,8 +8,7 @@
 namespace dukt\analytics\services;
 
 use Craft;
-use craft\helpers\Json;
-use dukt\analytics\models\Column;
+use dukt\analytics\Plugin;
 use dukt\analytics\Plugin as Analytics;
 use yii\base\Component;
 
@@ -23,58 +22,63 @@ class MetadataGA4 extends Component
      */
     private $data;
 
+    private $metadatas = [];
+
     // Public Methods
     // =========================================================================
 
     /**
-     * Returns the file path of the dimensions-metrics.json file
-     *
-     * @return string|bool
-     */
-    public function getDimmetsFilePath()
-    {
-        return Craft::getAlias('@dukt/analytics/etc/data/dimensions-metrics/ga4.json');
-    }
-
-    /**
-     * Get a dimension or a metric label from its id
+     * Get a dimension or a metric label from its apiName
      *
      *
      * @return mixed
      */
-    public function getDimMet(string $id)
+    public function getDimMet(int $sourceId, string $apiName)
     {
-        $data = $this->_loadData();
+        $metadata = $this->getMetadataBySourceId($sourceId);
 
-        if (isset($data['dimensions']) && isset($data['dimensions'][$id])) {
-            return $data['dimensions'][$id];
+        foreach ($metadata->getDimensions() as $dimension) {
+            if ($dimension->apiName === $apiName) {
+                return $dimension->uiName;
+            }
         }
-
-        if (isset($data['metrics']) && isset($data['metrics'][$id])) {
-            return $data['metrics'][$id];
-        }
-
-        return $id;
-    }
-
-    // Private Methods
-    // =========================================================================
-
-    /**
-     * Loads the columns from the dimensions-metrics.json file
-     */
-    private function _loadData()
-    {
-        if (!$this->data) {
-            $path = Analytics::$plugin->getMetadataGA4()->getDimmetsFilePath();
-            $contents = file_get_contents($path);
-            $response = Json::decode($contents);
-
-            if ($response) {
-                $this->data = $response;
+        foreach ($metadata->getMetrics() as $metric) {
+            if ($metric->apiName === $apiName) {
+                return $metric->uiName;
             }
         }
 
-        return $this->data;
+        return $apiName;
+    }
+
+    /**
+     * Get metadata for a given source.
+     *
+     * @param $sourceId
+     * @return \Google\Service\AnalyticsData\Metadata|mixed|null
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function getMetadataBySourceId($sourceId)
+    {
+        if (isset($this->metadatas[$sourceId])) {
+            return $this->metadatas[$sourceId];
+        }
+
+        $cacheId = ['analytics:metadata', $sourceId];
+
+        $response = Analytics::$plugin->getCache()->get($cacheId);
+
+        if (!$response) {
+            $source = Analytics::$plugin->getSources()->getSourceById($sourceId);
+            $analyticsData = Plugin::$plugin->getApis()->getAnalytics()->getAnalyticsData();
+
+            $response = $analyticsData->properties->getMetadata($source->gaPropertyId.'/metadata');
+
+            if ($response) {
+                Analytics::$plugin->getCache()->set($cacheId, $response);
+            }
+        }
+
+        return $this->metadatas[$sourceId] = $response;
     }
 }

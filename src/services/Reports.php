@@ -8,10 +8,10 @@
 namespace dukt\analytics\services;
 
 use Craft;
+use craft\helpers\StringHelper;
 use dukt\analytics\errors\InvalidElementException;
 use dukt\analytics\models\ReportRequestCriteria;
 use dukt\analytics\Plugin;
-use Google\Service\AnalyticsData\BatchRunReportsRequest;
 use Google\Service\AnalyticsData\RunRealtimeReportRequest;
 use Google\Service\AnalyticsData\RunRealtimeReportResponse;
 use yii\base\Component;
@@ -255,7 +255,7 @@ class Reports extends Component
             'type' => 'area',
             'chart' => $report,
             'total' => $total,
-            'metric' => Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($metricString)),
+            'metric' => Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($sourceId, $metricString)),
             'period' => $period,
             'periodLabel' => Craft::t('analytics', 'This '.$period)
         ];
@@ -284,7 +284,8 @@ class Reports extends Component
         $criteria->metrics = $metricString;
 
         $reportResponse = Analytics::$plugin->getApis()->getAnalyticsReporting()->getReport($criteria);
-        $report = $this->parseReportingReport($reportResponse);
+
+        $report = $this->parseReportingReport($reportResponse, $criteria);
 
         $total = 0;
 
@@ -306,8 +307,7 @@ class Reports extends Component
             'type' => 'counter',
             'counter' => $counter,
             'response' => $report,
-//            'metric' => Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($metricString)),
-            'metric' => $metricString,
+            'metric' => Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($sourceId, $metricString)),
             'period' => $period,
             'periodLabel' => Craft::t('analytics', 'this '.$period)
         ];
@@ -338,7 +338,7 @@ class Reports extends Component
         $criteria->dimensions = $dimensionString;
 
         $reportResponse = Analytics::$plugin->getApis()->getAnalyticsReporting()->getReport($criteria);
-        $report = $this->parseReportingReport($reportResponse);
+        $report = $this->parseReportingReport($reportResponse, $criteria);
 
         $source = Analytics::$plugin->getSources()->getSourceById($sourceId);
 
@@ -346,8 +346,8 @@ class Reports extends Component
             'source' => $source->name,
             'type' => 'pie',
             'chart' => $report,
-            'dimension' => Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($dimensionString)),
-            'metric' => Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($metricString)),
+            'dimension' => Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($sourceId, $dimensionString)),
+            'metric' => Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($sourceId, $metricString)),
             'period' => $period,
             'periodLabel' => Craft::t('analytics', 'this '.$period)
         ];
@@ -380,7 +380,7 @@ class Reports extends Component
         $criteria->endDate = date('Y-m-d');
 
         $reportResponse = Analytics::$plugin->getApis()->getAnalyticsReporting()->getReport($criteria);
-        $report = $this->parseReportingReport($reportResponse);
+        $report = $this->parseReportingReport($reportResponse, $criteria);
 
         $source = Analytics::$plugin->getSources()->getSourceById($sourceId);
 
@@ -388,8 +388,8 @@ class Reports extends Component
             'source' => $source->name,
             'type' => 'table',
             'chart' => $report,
-            'dimension' => Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($dimensionString)),
-            'metric' => Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($metricString)),
+            'dimension' => Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($sourceId, $dimensionString)),
+            'metric' => Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($sourceId, $metricString)),
             'period' => $period,
             'periodLabel' => Craft::t('analytics', 'This '.$period)
         ];
@@ -420,7 +420,7 @@ class Reports extends Component
         $criteria->endDate = date('Y-m-d');
 
         $reportResponse = Analytics::$plugin->getApis()->getAnalyticsReporting()->getReport($criteria);
-        $report = $this->parseReportingReport($reportResponse);
+        $report = $this->parseReportingReport($reportResponse, $criteria);
 
         $source = Analytics::$plugin->getSources()->getSourceById($sourceId);
 
@@ -429,10 +429,8 @@ class Reports extends Component
             'type' => 'geo',
             'chart' => $report,
             'dimensionRaw' => $originDimension,
-//            'dimension' => Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($originDimension)),
-            'dimension' => $originDimension,
-//            'metric' => Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($metricString)),
-            'metric' => $metricString,
+            'dimension' => Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($sourceId, $originDimension)),
+            'metric' => Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($sourceId, $metricString)),
             'period' => $period,
             'periodLabel' => Craft::t('analytics', 'This '.$period)
         ];
@@ -447,7 +445,7 @@ class Reports extends Component
      */
     private function parseReportingReport(RunReportResponse $report, ReportRequestCriteria $criteria = null): array
     {
-        $cols = $this->parseReportingReportCols($report);
+        $cols = $this->parseReportingReportCols($report, $criteria);
         $rows = $this->parseReportingReportRows($report, $criteria);
 
         // TODO: Fix totals
@@ -465,14 +463,23 @@ class Reports extends Component
      * @param RunReportResponse $report
      * @return array
      */
-    private function parseReportingReportCols(RunReportResponse $report): array
+    private function parseReportingReportCols(RunReportResponse $report, ReportRequestCriteria $criteria = null): array
     {
         $cols = [];
 
+        $metadata = Analytics::$plugin->getMetadataGA4()->getMetadataBySourceId($criteria->sourceId);
+
         foreach($report->getDimensionHeaders() as $dimensionHeader) {
+            $metadataDimension = null;
+            foreach ($metadata->getDimensions() as $row) {
+                if ($row->getApiName() == $dimensionHeader->getName()) {
+                    $metadataDimension = $row;
+                }
+            }
+
             $col = [
                 'type' => $this->getDimensionType($dimensionHeader),
-                'label' => Craft::t('analytics', $dimensionHeader->getName()),
+                'label' => Craft::t('analytics', $metadataDimension->getUiName()),
                 'id' => $dimensionHeader->getName(),
             ];
 
@@ -480,9 +487,16 @@ class Reports extends Component
         }
 
         foreach($report->getMetricHeaders() as $metricHeader) {
+            $metadataMetric = null;
+            foreach ($metadata->getMetrics() as $row) {
+                if ($row->getApiName() == $metricHeader->getName()) {
+                    $metadataMetric = $row;
+                }
+            }
+
             $col = [
                 'type' => $this->getMetricType($metricHeader),
-                'label' => Craft::t('analytics', $metricHeader->getName()),
+                'label' => Craft::t('analytics', $metadataMetric->getUiName()),
                 'id' => $metricHeader->getName(),
             ];
 
@@ -496,7 +510,7 @@ class Reports extends Component
      * @param RunReportResponse $report
      * @return array
      */
-    private function parseReportingReportRows(RunReportResponse $report, ReportRequestCriteria$criteria = null): array
+    private function parseReportingReportRows(RunReportResponse $report, ReportRequestCriteria $criteria = null): array
     {
         $rows = [];
         foreach($report->getRows() as $row) {

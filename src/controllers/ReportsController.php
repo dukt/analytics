@@ -11,7 +11,6 @@ use Craft;
 use craft\web\Controller;
 use dukt\analytics\base\DemoControllerTrait;
 use dukt\analytics\errors\InvalidChartTypeException;
-use dukt\analytics\Plugin;
 use dukt\analytics\Plugin as Analytics;
 use yii\base\InvalidConfigException;
 use yii\web\Response;
@@ -224,23 +223,21 @@ class ReportsController extends Controller
      */
     public function actionGetDimensionsMetrics(int $sourceId)
     {
-        $source = Analytics::$plugin->getSources()->getSourceById($sourceId);
-        $analyticsData = Plugin::$plugin->getApis()->getAnalytics()->getAnalyticsData();
-        $metadata = $analyticsData->properties->getMetadata($source->gaPropertyId.'/metadata');
+        $metadata = Analytics::$plugin->getMetadataGA4()->getMetadataBySourceId($sourceId);
 
         $dimensions = array_map(function($dimension) {
             return [
                 'apiName' => $dimension->apiName,
-                'name' => $dimension->uiName,
-                'category' => $dimension->category,
+                'name' => Craft::t('analytics', $dimension->uiName),
+                'category' => Craft::t('analytics', $dimension->category),
             ];
         }, $metadata->getDimensions());
 
         $metrics = array_map(function($metric) {
             return [
                 'apiName' => $metric->apiName,
-                'name' => $metric->uiName,
-                'category' => $metric->category,
+                'name' => Craft::t('analytics', $metric->uiName),
+                'category' => Craft::t('analytics', $metric->category),
             ];
         }, $metadata->getMetrics());
 
