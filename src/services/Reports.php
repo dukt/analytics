@@ -532,6 +532,7 @@ class Reports extends Component
                 // Loop from start date to end date to fill empty rows
                 $startDate = new \DateTime($criteria->startDate);
                 $endDate = new \DateTime($criteria->endDate);
+                $endDate->modify('+1 day');
                 $interval = new \DateInterval('P1D');
                 $dateRange = new \DatePeriod($startDate, $interval, $endDate);
 
@@ -568,6 +569,7 @@ class Reports extends Component
                 // Loop from start date to end date to fill empty rows
                 $startDate = new \DateTime($criteria->startDate);
                 $endDate = new \DateTime($criteria->endDate);
+                $endDate->modify('+1 month');
                 $interval = new \DateInterval('P1M');
                 $dateRange = new \DatePeriod($startDate, $interval, $endDate);
 
