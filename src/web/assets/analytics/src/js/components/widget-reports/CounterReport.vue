@@ -3,37 +3,55 @@
     v-if="reportResponse.data"
   >
     <div class="da-text-center">
-      <div class="da-text-7xl">
-        {{ counterData.value }}
+      <div class="da-text-5xl">
+        {{ counterValue }}
       </div>
       <div class="da-mt-2">
-        <span class="da-text-blue-600">{{ reportResponse.data.metric }}</span>
+        <strong>{{ reportResponse.data.metric }}</strong>
         {{ reportResponse.data.periodLabel }}
       </div>
       <div
-        class="da-text-gray-500"
+        class="da-text-gray-500 da-text-sm da-mt-1"
       >
-        {{ reportResponse.data.view }}
+        {{ reportResponse.data.source }}
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import {responseToDataTable} from "@/js/utils";
+
 export default {
   props: {
     reportResponse: {
       type: Object,
       required: true
+    },
+    localeDefinition: {
+      type: Object,
+      required: true
     }
   },
   computed: {
-    counterData() {
-      if (!this.reportResponse || !this.reportResponse.data || !this.reportResponse.data.counter) {
+    counterValue() {
+      if (!this.reportResponse || !this.reportResponse.data || !this.reportResponse.data.response) {
         return null
       }
 
-      return this.reportResponse.data.counter
+      if (this.reportResponse.data.response.rows.length === 0) {
+        return 0
+      }
+
+      const response = responseToDataTable(this.reportResponse.data.response, this.localeDefinition)
+
+      const value = response.getFormattedValue(0, 0)
+
+      if (!value) {
+        return 0
+      }
+
+      return value
     }
   }
 }

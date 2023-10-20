@@ -289,23 +289,15 @@ class Reports extends Component
 
         $total = 0;
 
-        if (!empty($report['totals'][0])) {
-            $total = $report['totals'][0];
+        if (!empty($report['totals'][0][0]['value'])) {
+            $total = $report['totals'][0][0]['value'];
         }
-
-        $counter = [
-            'type' => $report['cols'][0]['type'],
-            'value' => $total,
-            // 'label' => StringHelper::toLowerCase(Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($metricString)))
-            'label' => $metricString
-        ];
 
         $source = Analytics::$plugin->getSources()->getSourceById($sourceId);
 
         return [
             'source' => $source->name,
             'type' => 'counter',
-            'counter' => $counter,
             'response' => $report,
             'metric' => Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($sourceId, $metricString)),
             'period' => $period,
