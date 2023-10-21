@@ -113,24 +113,24 @@ export default {
           this.totalTransactions = formatByType(localeDefinition, 'number', response.data.totalTransactions)
           this.totalTransactionsPerSession = formatByType(localeDefinition, 'number', response.data.totalTransactionsPerSession)
 
-          const geoChartDataRows = [];
+          const chartDataRows = [];
 
           response.data.reportData.chart.rows.forEach(row => {
-            geoChartDataRows.push([
+            chartDataRows.push([
               row[0],
               row[1],
             ])
           })
 
-          const geoChartData = {
+          const chartData = {
             cols: [
               response.data.reportData.chart.cols[0],
               response.data.reportData.chart.cols[1],
             ],
-            rows: geoChartDataRows,
+            rows: chartDataRows,
           }
 
-          this.chartData = responseToDataTable(geoChartData, localeDefinition)
+          this.chartData = responseToDataTable(chartData, localeDefinition)
         });
     }
   }
