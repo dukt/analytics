@@ -101,7 +101,7 @@ export const formatByType = (localeDefinition, type, value) => {
       return formatCurrency(localeDefinition, +value);
 
     case 'float':
-      return +value;
+      return (+value).toFixed(2);
 
     case 'integer':
       return formatInteger(localeDefinition, +value);
