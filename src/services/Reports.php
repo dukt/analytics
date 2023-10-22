@@ -287,18 +287,12 @@ class Reports extends Component
 
         $report = $this->parseReportingReport($reportResponse, $criteria);
 
-        $total = 0;
-
-        if (!empty($report['totals'][0][0]['value'])) {
-            $total = $report['totals'][0][0]['value'];
-        }
-
         $source = Analytics::$plugin->getSources()->getSourceById($sourceId);
 
         return [
             'source' => $source->name,
             'type' => 'counter',
-            'response' => $report,
+            'report' => $report,
             'metric' => Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($sourceId, $metricString)),
             'period' => $period,
             'periodLabel' => Craft::t('analytics', 'this '.$period)

@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import {responseToDataTable} from "@/js/utils";
+import {formatByType} from "@/js/utils";
 
 export default {
   props: {
@@ -33,25 +33,29 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      pluginOptions: null,
+    }
+  },
   computed: {
     counterValue() {
-      if (!this.reportResponse || !this.reportResponse.data || !this.reportResponse.data.response) {
+      if (!this.reportResponse || !this.reportResponse.data || !this.reportResponse.data.report) {
         return null
       }
 
-      if (this.reportResponse.data.response.rows.length === 0) {
-        return 0
+      const report = this.reportResponse.data.report
+      let value = 0
+
+      if (report.totals[0][0]?.value) {
+        value = report.totals[0][0].value
       }
 
-      const response = responseToDataTable(this.reportResponse.data.response, this.localeDefinition)
+      // get type from report instead of hardcoded currency
+      const type = report.cols[0].type
 
-      const value = response.getFormattedValue(0, 0)
-
-      if (!value) {
-        return 0
-      }
-
-      return value
+      // Return formatted value
+      return formatByType(this.localeDefinition, type, value)
     }
   }
 }
