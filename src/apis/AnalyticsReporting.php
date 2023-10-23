@@ -120,8 +120,6 @@ class AnalyticsReporting extends Api
         // TODO check setting stuff on constructor instead of setters
         $request = new RunReportRequest();
 
-        // TODO
-//        $this->setRequestViewIdFromCriteria($request, $criteria);
         $source = Plugin::getInstance()->getSources()->getSourceById($criteria->sourceId);
         if ($source !== null) {
             $request->setProperty($source->gaPropertyId);
@@ -160,24 +158,6 @@ class AnalyticsReporting extends Api
         $request->setMetricAggregations(['TOTAL']);
 
         return $request;
-    }
-
-    /**
-     * @param RunReportRequest $request
-     * @param ReportRequestCriteria                           $criteria
-     *
-     * @throws \yii\base\InvalidConfigException
-     */
-    private function setRequestViewIdFromCriteria(RunReportRequest &$request, ReportRequestCriteria $criteria)
-    {
-        if ($criteria->gaViewId) {
-            $request->setViewId('ga:'.$criteria->gaViewId);
-        } elseif ($criteria->sourceId) {
-            $source = Plugin::getInstance()->getSources()->getSourceById($criteria->sourceId);
-            if ($source !== null) {
-                $request->setViewId($source->gaViewId);
-            }
-        }
     }
 
     /**
