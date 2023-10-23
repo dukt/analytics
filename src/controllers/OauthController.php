@@ -84,7 +84,7 @@ class OauthController extends Controller
 
             // Save token
             Analytics::$plugin->getOauth()->saveToken($token);
-            
+
             $info = Analytics::getInstance()->getInfo();
 
             if ($info->forceConnect) {

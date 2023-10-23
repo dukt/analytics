@@ -433,9 +433,6 @@ class Reports extends Component
     {
         $cols = $this->parseReportingReportCols($report, $criteria);
         $rows = $this->parseReportingReportRows($report, $criteria);
-
-        // TODO: Fix totals
-        // $totals = [$report->getRows()[0]->getMetricValues()[0]->getValue()];
         $totals = $report->getTotals();
 
         return [
