@@ -227,7 +227,6 @@ class AnalyticsReporting extends Api
         return $dimensions;
     }
 
-    // TODO: Remove?
     /**
      * Get metrics from string.
      *
