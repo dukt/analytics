@@ -204,9 +204,8 @@ class AnalyticsReporting extends Api
         if ($criteria->metrics) {
             if (is_string($criteria->metrics)) {
                 $metricString = $criteria->metrics;
-                // TODO
-//            $metrics = $this->getMetricsFromString($metricString);
-                $request->setMetrics(['name' => $metricString]);
+                $metrics = $this->getMetricsFromString($metricString);
+                $request->setMetrics($metrics);
             } else {
                 $request->setMetrics($criteria->metrics);
             }
@@ -222,9 +221,8 @@ class AnalyticsReporting extends Api
         if ($criteria->dimensions) {
             if (is_string($criteria->dimensions)) {
                 $dimensionString = $criteria->dimensions;
-                // TODO
-//            $dimensions = $this->getDimensionsFromString($dimensionString);
-                $request->setDimensions(['name' => $dimensionString]);
+                $dimensions = $this->getDimensionsFromString($dimensionString);
+                $request->setDimensions($dimensions);
             } else {
                 $request->setDimensions($criteria->dimensions);
             }
@@ -243,7 +241,7 @@ class AnalyticsReporting extends Api
         $dimensions = [];
         $_dimensions = explode(',', $string);
         foreach ($_dimensions as $_dimension) {
-            $dimension = new Google_Service_AnalyticsReporting_Dimension();
+            $dimension = new \Google\Service\AnalyticsData\Dimension();
             $dimension->setName($_dimension);
             $dimensions[] = $dimension;
         }
@@ -264,8 +262,8 @@ class AnalyticsReporting extends Api
         $metrics = [];
         $_metrics = explode(',', $string);
         foreach ($_metrics as $_metric) {
-            $metric = new Google_Service_AnalyticsReporting_Metric();
-            $metric->setExpression($_metric);
+            $metric = new \Google\Service\AnalyticsData\Metric();
+            $metric->setName($_metric);
             $metrics[] = $metric;
         }
 
