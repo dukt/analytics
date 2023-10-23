@@ -117,7 +117,7 @@ class AnalyticsReporting extends Api
      */
     private function getReportingReportRequest(ReportRequestCriteria $criteria)
     {
-        // TODO check setting stuff on constructor instead of setters
+        // TODO: Set attributes on the constructor instead of setters
         $request = new RunReportRequest();
 
         $source = Plugin::getInstance()->getSources()->getSourceById($criteria->sourceId);
