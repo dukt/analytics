@@ -16,8 +16,6 @@ use Google\Service\AnalyticsData\FilterExpression;
 use Google\Service\AnalyticsData\RunReportRequest;
 use \Google_Service_AnalyticsReporting;
 use \Google_Service_AnalyticsReporting_DateRange;
-use \Google_Service_AnalyticsReporting_Dimension;
-use \Google_Service_AnalyticsReporting_Metric;
 
 class AnalyticsReporting extends Api
 {
