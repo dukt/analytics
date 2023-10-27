@@ -475,7 +475,7 @@ class SettingsController extends Controller
 
         if (isset($accountExplorerData['properties'])) {
             foreach ($accountExplorerData['properties'] as $webProperty) {
-                $propertyOptions[] = ['label' => $webProperty->name, 'value' => $webProperty->id];
+                $propertyOptions[] = ['label' => $webProperty['name'], 'value' => $webProperty['id']];
             }
         } else {
             $propertyOptions[] = ['label' => $source->gaPropertyName, 'value' => $source->gaPropertyId];
