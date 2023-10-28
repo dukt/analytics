@@ -1,8 +1,10 @@
 {% extends "analytics/settings/_layout" %}
 
 {% import "_includes/forms" as forms %}
+{% import 'analytics/_macros' as macros %}
 
-{% set selectedNavItem = 'general' %}
+{% set selectedSubnavItem = 'settings' %}
+{% set title = 'Analytics Settings'|t('analytics')%}
 
 {% set content %}
     {{ craft.analytics.register('src/main.js') }}
@@ -86,6 +88,20 @@
                         value: (settings.realtimeRefreshInterval ? settings.realtimeRefreshInterval : ''),
                         errors: settings.getErrors('realtimeRefreshInterval'),
                         size: 4
+                    }) }}
+                </div>
+
+                <hr>
+
+                <div>
+                    {{ forms.lightswitchField({
+                        label: 'Enable CP Section' | t('analytics'),
+                        instructions: 'Whether to enable Analytics in the main sidebar navigation.' | t('analytics'),
+                        id: 'hasCpSection',
+                        name: 'settings[hasCpSection]',
+                        on: settings.hasCpSection,
+                        errors: settings.getErrors('hasCpSection'),
+                        warning: macros.configWarning('hasCpSection', 'analytics'),
                     }) }}
                 </div>
 

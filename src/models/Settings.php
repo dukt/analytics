@@ -39,6 +39,11 @@ class Settings extends Model
     public $enableWidgets = true;
 
     /**
+     * @var bool Whether to enable Analytics in the main sidebar navigation.
+     */
+    public bool $hasCpSection = true;
+
+    /**
      * @var string|null Google Maps API key. Used by the Geo chart.
      */
     public $mapsApiKey;

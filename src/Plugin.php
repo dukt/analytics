@@ -101,6 +101,7 @@ class Plugin extends \craft\base\Plugin
 
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $event): void {
             $rules = [
+                'analytics' => 'analytics/settings/sources',
                 'analytics/settings' => 'analytics/settings/index',
                 'analytics/settings/oauth' => 'analytics/settings/oauth',
                 'analytics/settings/sources' => 'analytics/settings/sources',
@@ -142,6 +143,8 @@ class Plugin extends \craft\base\Plugin
         });
 
         Craft::setAlias('@analyticsLib', __DIR__ . '/../lib');
+
+        $this->hasCpSection = $this->getSettings()->hasCpSection;
     }
 
     /**
@@ -154,6 +157,31 @@ class Plugin extends \craft\base\Plugin
         Craft::$app->controller->redirect($url);
 
         return '';
+    }
+
+    public function getCpNavItem(): ?array
+    {
+        $nav = parent::getCpNavItem();
+        $nav['label'] =  Craft::t('analytics', 'Analytics');
+
+        $nav['subnav']['sources'] = [
+            'label' => Craft::t('analytics', 'Sources'),
+            'url' => 'analytics/settings/sources',
+        ];
+
+        $nav['subnav']['sites'] = [
+            'label' => Craft::t('analytics', 'Sites'),
+            'url' => 'analytics/settings/sites',
+        ];
+
+        if (Craft::$app->getUser()->getIsAdmin() && Craft::$app->getConfig()->getGeneral()->allowAdminChanges) {
+            $nav['subnav']['settings'] = [
+                'label' => Craft::t('analytics', 'Settings'),
+                'url' => 'analytics/settings',
+            ];
+        }
+
+        return $nav;
     }
 
     // Protected Methods

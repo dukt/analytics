@@ -1,17 +1,5 @@
 {% extends "_layouts/cp" %}
-{% set title = "Analytics"|t('analytics')%}
 
 {% set crumbs = [
-    { label: "Settings"|t('analytics'), url: url('settings') },
-    { label: "Plugins"|t('analytics'), url: url('settings/plugins') }
+    { label: "Analytics"|t('analytics'), url: url('analytics') },
 ] %}
-
-{% set navItems = {
-    general: { label: "General Settings"|t('analytics'), url: url('analytics/settings') },
-    sources: { label: "Sources"|t('analytics'), url: url('analytics/settings/sources') },
-    sites: { label: "Sites"|t('analytics'), url: url('analytics/settings/sites') },
-} %}
-
-{% block sidebar %}
-    {% include "_includes/nav" with { items: navItems, selectedItem: selectedNavItem } only %}
-{% endblock %}
