@@ -105,6 +105,27 @@
                         errors: settings.getErrors('hasCpSection'),
                         warning: macros.configWarning('hasCpSection', 'analytics'),
                     }) }}
+
+                    {{ forms.lightswitchField({
+                        label: 'Enable Cache' | t('analytics'),
+                        instructions: 'Whether to cache API requests.' | t('analytics'),
+                        id: 'enableCache',
+                        name: 'settings[enableCache]',
+                        on: settings.enableCache,
+                        warning: macros.configWarning('enableCache', 'analytics'),
+                        toggle: '#cache-duration',
+                    }) }}
+
+                    <div id="cache-duration" class="{{ not settings.enableCache ? 'hidden' }}">
+                        {{ forms.textField({
+                            label: 'Cache Duration' | t('analytics'),
+                            instructions: 'Set the cache duration. Accepts a [Date Interval](https://www.php.net/manual/en/dateinterval.construct.php) or a number of seconds.' | t('analytics'),
+                            id: 'cacheDuration',
+                            name: 'settings[cacheDuration]',
+                            value: settings.cacheDuration,
+                            warning: macros.configWarning('cacheDuration', 'analytics'),
+                        }) }}
+                    </div>
                 </div>
 
                 <div class="buttons">
