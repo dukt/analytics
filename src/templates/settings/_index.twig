@@ -72,18 +72,20 @@
 
                 <h2>{{ 'Real-Time'|t('analytics') }}</h2>
 
-                {{ forms.checkboxField({
-                    label: "Enable real-time reporting"|t('analytics'),
+                {{ forms.lightswitchField({
+                    label: 'Enable real-time reporting' | t('analytics'),
+                    instructions: 'Whether to enable real-time reporting widget.' | t('analytics'),
                     name: 'settings[enableRealtime]',
-                    checked: (settings.enableRealtime ? settings.enableRealtime : false),
-                    toggle: 'enableRealtime'
+                    on: settings.enableRealtime,
+                    errors: settings.getErrors('enableRealtime'),
+                    warning: macros.configWarning('enableRealtime', 'analytics'),
+                    toggle: '#realtime-refresh-interval',
                 }) }}
 
-                <div id="enableRealtime"{% if not settings.enableRealtime %} class="hidden"{% endif %}>
-
+                <div id="realtime-refresh-interval"{{ not settings.enableRealtime ? ' class="hidden"' }}>
                     {{ forms.textField({
                         label: "Real-Time Refresh Interval"|t('analytics'),
-                        instructions: "Interval in seconds between requests to real-time API."|t('analytics'),
+                        instructions: "Interval in seconds between requests to the real-time API."|t('analytics'),
                         name: 'settings[realtimeRefreshInterval]',
                         value: (settings.realtimeRefreshInterval ? settings.realtimeRefreshInterval : ''),
                         errors: settings.getErrors('realtimeRefreshInterval'),
