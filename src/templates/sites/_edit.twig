@@ -1,24 +1,23 @@
 {% extends "_layouts/cp" %}
 
+{% set selectedSubnavItem = 'sites' %}
 {% set fullPageForm = true %}
 
 {% import "_includes/forms" as forms %}
 
 {% set crumbs = [
-    { label: "Settings"|t('analytics'), url: url('settings') },
-    { label: "Plugins"|t('analytics'), url: url('settings/plugins') },
-    { label: "Analytics"|t('analytics'), url: url('analytics/settings') },
-    { label: "Sites"|t('analytics'), url: url('analytics/settings/sites') }
+    { label: "Analytics"|t('analytics'), url: url('analytics') },
+    { label: "Sites"|t('analytics'), url: url('analytics/sites') }
 ] %}
 
 {% set title = site.name %}
 
 {% set content %}
 
-    <input type="hidden" name="action" value="analytics/settings/save-site">
+    <input type="hidden" name="action" value="analytics/sites/save">
     <input type="hidden" name="siteId" value="{{ site.id }}">
 
-    {{ redirectInput('analytics/settings/sites') }}
+    {{ redirectInput('analytics/sites') }}
 
     {% set sourceOptions = [{ label: "None", value: "" }] %}
     {% for source in sources %}

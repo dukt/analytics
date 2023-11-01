@@ -1,14 +1,13 @@
 {% extends "_layouts/cp" %}
 
+{% set selectedSubnavItem = 'sources' %}
 {% set fullPageForm = true %}
 
 {% import "_includes/forms" as forms %}
 
 {% set crumbs = [
-    { label: "Settings"|t('analytics'), url: url('settings') },
-    { label: "Plugins"|t('analytics'), url: url('settings/plugins') },
-    { label: "Analytics"|t('analytics'), url: url('analytics/settings') },
-    { label: "Sources"|t('analytics'), url: url('analytics/settings/sources') }
+    { label: "Analytics"|t('analytics'), url: url('analytics') },
+    { label: "Sources"|t('analytics'), url: url('analytics/sources') }
 ] %}
 
 {% set content %}
@@ -16,9 +15,9 @@
 
     {{ csrfInput() }}
 
-    <input type="hidden" name="action" value="analytics/settings/save-source">
+    <input type="hidden" name="action" value="analytics/sources/save">
 
-    {{ redirectInput('analytics/settings/sources') }}
+    {{ redirectInput('analytics/sources') }}
 
     {% if not isNewSource %}<input type="hidden" name="sourceId" value="{{ source.id }}">{% endif %}
 

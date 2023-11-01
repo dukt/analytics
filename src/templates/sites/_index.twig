@@ -28,7 +28,7 @@
                     {% endfor %}
 
                     <tr>
-                        <td><a href="{{ url('analytics/settings/sites/'~ site.id) }}">{{ site.name }}</a></td>
+                        <td><a href="{{ url('analytics/sites/'~ site.id) }}">{{ site.name }}</a></td>
                         <td><code>{{ site.baseUrl }}</code></td>
                         <td>
                             {% if source %}

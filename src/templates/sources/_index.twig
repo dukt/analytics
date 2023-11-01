@@ -26,7 +26,7 @@
 
             {% for source in sources %}
                 <tr data-id="{{ source.id }}" data-name="{{ source.name }}">
-                    <td><a href="{{ url('analytics/settings/sources/'~source.id) }}">{{ source.name }}</a></td>
+                    <td><a href="{{ url('analytics/sources/'~source.id) }}">{{ source.name }}</a></td>
                     <td>
                         {% if source.gaViewId %}
                             <div class="light">
@@ -72,7 +72,7 @@
         </table>
 
         <div class="buttons">
-            <a href="{{ url('analytics/settings/sources/new') }}" class="btn submit add icon">{{ 'New source'|t('analytics') }}</a>
+            <a href="{{ url('analytics/sources/new') }}" class="btn submit add icon">{{ 'New source'|t('analytics') }}</a>
         </div>
 
         {% js %}
@@ -80,7 +80,7 @@
             tableSelector: '#sources',
             noItemsSelector: '#nosources',
             sortable: false,
-            deleteAction: 'analytics/settings/delete-source'
+            deleteAction: 'analytics/sources/delete'
         });
         {% endjs %}
     {% elseif error is defined %}

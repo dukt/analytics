@@ -101,14 +101,14 @@ class Plugin extends \craft\base\Plugin
 
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $event): void {
             $rules = [
-                'analytics' => 'analytics/settings/sources',
+                'analytics' => 'analytics/sources/index',
                 'analytics/settings' => 'analytics/settings/index',
                 'analytics/settings/oauth' => 'analytics/settings/oauth',
-                'analytics/settings/sources' => 'analytics/settings/sources',
-                'analytics/settings/sources/new' => 'analytics/settings/edit-source',
-                'analytics/settings/sources/<sourceId:\d+>' => 'analytics/settings/edit-source',
-                'analytics/settings/sites' => 'analytics/settings/sites',
-                'analytics/settings/sites/<siteId:\d+>' => 'analytics/settings/edit-site',
+                'analytics/sources' => 'analytics/sources/index',
+                'analytics/sources/new' => 'analytics/sources/edit',
+                'analytics/sources/<sourceId:\d+>' => 'analytics/sources/edit',
+                'analytics/sites' => 'analytics/sites/index',
+                'analytics/sites/<siteId:\d+>' => 'analytics/sites/edit',
                 'analytics/utils' => 'analytics/utils/index',
                 'analytics/utils/metadata-ua' => 'analytics/utils/metadata-ua',
                 'analytics/tests' => 'analytics/tests/overview',
@@ -166,12 +166,12 @@ class Plugin extends \craft\base\Plugin
 
         $nav['subnav']['sources'] = [
             'label' => Craft::t('analytics', 'Sources'),
-            'url' => 'analytics/settings/sources',
+            'url' => 'analytics/sources',
         ];
 
         $nav['subnav']['sites'] = [
             'label' => Craft::t('analytics', 'Sites'),
-            'url' => 'analytics/settings/sites',
+            'url' => 'analytics/sites',
         ];
 
         if (Craft::$app->getUser()->getIsAdmin() && Craft::$app->getConfig()->getGeneral()->allowAdminChanges) {
