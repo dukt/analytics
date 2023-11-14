@@ -39,6 +39,9 @@ class SettingsController extends Controller
                 $provider = Analytics::$plugin->getOauth()->getOauthProvider();
                 $token = Analytics::$plugin->getOauth()->getToken();
 
+                $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
+                $settings = $plugin->getSettings();
+
                 if ($token !== null) {
                     $oauthAccount = Analytics::$plugin->getCache()->get(['getAccount', $token]);
 
@@ -49,9 +52,6 @@ class SettingsController extends Controller
 
                     if ($oauthAccount) {
                         Craft::info("Account:\r\n".print_r($oauthAccount, true), __METHOD__);
-
-                        $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
-                        $settings = $plugin->getSettings();
                     }
                 }
             } catch (Google_Service_Exception $googleServiceException) {
