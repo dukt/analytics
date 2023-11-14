@@ -1,72 +1,63 @@
 {% extends "_layouts/cp" %}
 
 {% set crumbs = [
-{ label: "Settings"|t('analytics'), url: url('settings') },
-{ label: "Plugins"|t('analytics'), url: url('settings/plugins') },
-{ label: "Analytics"|t('analytics'), url: url('analytics/settings') }
+    { label: "Analytics"|t('analytics'), url: url('analytics') },
+    { label: "Settings"|t('analytics'), url: url('analytics/settings') },
 ] %}
 
-{% set title = "OAuth Settings"|t('analytics')%}
+{% set selectedSubnavItem = 'settings' %}
+{% set fullPageForm = true %}
+{% set title = "OAuth"|t('analytics')%}
 
 {% import "_includes/forms" as forms %}
 
 {% set content %}
+    <input type="hidden" name="action" value="analytics/settings/save-settings">
+    <input type="hidden" name="pluginHandle" value="analytics">
+    <input type="hidden" name="redirect" value="{{ 'analytics/settings'|hash }}">
 
-    <form method="post" accept-charset="UTF-8" data-saveshortcut>
+    <h2 class="first">{{ 'Create the OAuth application'|t('analytics') }}</h2>
+    <p>{{ 'Go to the {link} and create a new project or use an existing one.'|t('analytics', {
+            link: '<a href="{url}">{label}</a>'|t('analytics', {
+                url: 'https://console.developers.google.com/',
+                label: 'Google API Console'|t('analytics'),
+            })})|raw }}
+    </p>
+    <p>{{ "In “API & Services → Library”, search for “analytics”, and enable the “Google Analytics API” and “Google Analytics Reporting API”."|t('analytics') }}</p>
 
-        {{ csrfInput() }}
+    <p>{{ "In “API & Services → Credentials”, click the “Create credentials” button and create a new “OAuth client ID” of type “Web Application”."|t('analytics') }}</p>
 
-        <input type="hidden" name="action" value="analytics/settings/save-settings">
-        <input type="hidden" name="pluginHandle" value="analytics">
-        <input type="hidden" name="redirect" value="{{ 'analytics/settings'|hash }}">
+    <p>{{ "Configure the client with the following javascript origin and redirect urls."|t('analytics') }}</p>
 
-        <h2 class="first">{{ 'Create the OAuth application'|t('analytics') }}</h2>
-        <p>{{ 'Go to the {link} and create a new project or use an existing one.'|t('analytics', {
-                link: '<a href="{url}">{label}</a>'|t('analytics', {
-                    url: 'https://console.developers.google.com/',
-                    label: 'Google API Console'|t('analytics'),
-                })})|raw }}
-        </p>
-        <p>{{ "In <strong>API & Services → Library</strong>, search for “analytics”, and enable the “Google Analytics API” and “Google Analytics Reporting API”."|t('analytics')|raw }}</p>
+    <ul class="bullets">
+        <li><strong>Javascript Origin:</strong> <code>{{ javascriptOrigin }}</code></li>
+        <li><strong>Redirect URI:</strong> <code>{{ redirectUri }}</code></li>
+    </ul>
 
-        <p>{{ "In <strong>API & Services → Credentials</strong>, click the “Create credentials” button and create a new “OAuth client ID” of type “Web Application”."|t('analytics') }}</p>
+    <h2>{{ 'Configure the OAuth client'|t('analytics') }}</h2>
+    <p>{{ 'Once the OAuth client is created, Google will provide you with a client ID and secret.'|t('analytics') }}</p>
 
-        <p>{{ "Configure the client with the following javascript origin and redirect urls."|t('analytics') }}</p>
+    <p>{{ 'Copy the client ID & secret from the {link} under the API Manager → Credentials tab, paste them below and save.'|t('analytics', {
+            link: '<a href="{url}">{label}</a>'|t('analytics', {
+                url: 'https://console.developers.google.com/',
+                label: 'Google API Console'|t('analytics')
+            }),
+        })|raw }}
+    </p>
 
-        <ul class="bullets">
-            <li><strong>Javascript Origin:</strong> <code>{{ javascriptOrigin }}</code></li>
-            <li><strong>Redirect URI:</strong> <code>{{ redirectUri }}</code></li>
-        </ul>
+    {{ forms.autosuggestField({
+        label: "Client ID",
+        name: 'settings[oauthClientId]',
+        value: settings.oauthClientId,
+        suggestions: craft.cp.getEnvSuggestions(),
+        suggestEnvVars: true,
+    }) }}
 
-        <h2>{{ 'Configure the OAuth client'|t('analytics') }}</h2>
-        <p>{{ 'Once the OAuth client is created, Google will provide you with a client ID and secret.'|t('analytics') }}</p>
-
-        <p>{{ 'Copy the client ID & secret from the {link} under the API Manager → Credentials tab, paste them below and save.'|t('analytics', {
-                link: '<a href="{url}">{label}</a>'|t('analytics', {
-                    url: 'https://console.developers.google.com/',
-                    label: 'Google API Console'|t('analytics')
-                }),
-            })|raw }}
-        </p>
-
-        {{ forms.autosuggestField({
-            label: "Client ID",
-            name: 'settings[oauthClientId]',
-            value: settings.oauthClientId,
-            suggestions: craft.cp.getEnvSuggestions(),
-            suggestEnvVars: true,
-        }) }}
-
-        {{ forms.autosuggestField({
-            label: "Client Secret",
-            name: 'settings[oauthClientSecret]',
-            value: settings.oauthClientSecret,
-            suggestions: craft.cp.getEnvSuggestions(),
-            suggestEnvVars: true,
-        }) }}
-
-        <div class="buttons">
-            <input type="submit" class="btn submit force" value="{{ 'Save'|t('analytics') }}">
-        </div>
-    </form>
+    {{ forms.autosuggestField({
+        label: "Client Secret",
+        name: 'settings[oauthClientSecret]',
+        value: settings.oauthClientSecret,
+        suggestions: craft.cp.getEnvSuggestions(),
+        suggestEnvVars: true,
+    }) }}
 {% endset %}

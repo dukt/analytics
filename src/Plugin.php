@@ -174,12 +174,10 @@ class Plugin extends \craft\base\Plugin
             'url' => 'analytics/sites',
         ];
 
-        if (Craft::$app->getUser()->getIsAdmin() && Craft::$app->getConfig()->getGeneral()->allowAdminChanges) {
-            $nav['subnav']['settings'] = [
-                'label' => Craft::t('analytics', 'Settings'),
-                'url' => 'analytics/settings',
-            ];
-        }
+        $nav['subnav']['settings'] = [
+            'label' => Craft::t('analytics', 'Settings'),
+            'url' => 'analytics/settings',
+        ];
 
         return $nav;
     }

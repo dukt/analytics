@@ -1,2 +1,9 @@
 {{ craft.analytics.register('src/main.js') }}
-<p class="light">{{ "No sources. {sourcesLink}."|t('analytics', { sourcesLink: '<a href="{sourcesUrl}">{sourcesLabel}</a>'|t('analytics', {sourcesLabel: 'Setup a source'|t('analytics'), sourcesUrl: url('analytics/sources'), }) })|raw }}</p>
+
+<p class="light">
+    {% if currentUser.can('accessPlugin-analytics') %}
+        {{ "No sources. {sourcesLink}."|t('analytics', { sourcesLink: '<a href="{sourcesUrl}">{sourcesLabel}</a>'|t('analytics', {sourcesLabel: 'Setup a source'|t('analytics'), sourcesUrl: url('analytics/sources'), }) })|raw }}
+    {% else %}
+        {{ "No sources."|t('analytics') }}
+    {% endif %}
+</p>

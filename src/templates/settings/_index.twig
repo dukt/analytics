@@ -3,8 +3,13 @@
 {% import "_includes/forms" as forms %}
 {% import 'analytics/_macros' as macros %}
 
+
+{% if craft.app.config.general.allowAdminChanges %}
+    {% set fullPageForm = true %}
+{% endif %}
+
 {% set selectedSubnavItem = 'settings' %}
-{% set title = 'Analytics Settings'|t('analytics')%}
+{% set title = 'Settings'|t('analytics')%}
 
 {% set content %}
     {{ craft.analytics.register('src/main.js') }}
@@ -16,7 +21,9 @@
         {% if not oauthAccount or info.forceConnect %}
 
             {% if isOauthProviderConfigured %}
-                <p>{{ 'Gettings errors trying to connect? Check your {link}.'|t('analytics', { link: '<a href="'~url('analytics/settings/oauth')~'">OAuth settings</a>' })|raw }}</p>
+                {% if craft.app.config.general.allowAdminChanges %}
+                    <p>{{ 'Gettings errors trying to connect? Check your {link}.'|t('analytics', { link: '<a href="'~url('analytics/settings/oauth')~'">OAuth settings</a>' })|raw }}</p>
+                {% endif %}
 
                 {% if errors is defined and errors|length > 0 %}
                     <ul class="error">
@@ -26,13 +33,12 @@
                     </ul>
                 {% endif %}
 
-                <p><a class="btn submit" href="{{ actionUrl('analytics/oauth/connect') }}">{{"Connect"|t('analytics') }}</a></p>
+                <p><a class="btn" href="{{ actionUrl('analytics/oauth/connect') }}">{{"Connect"|t('analytics') }}</a></p>
             {% else %}
                 <p>{{ 'To get started, go to the OAuth settings and configure your Google application’s client ID & secret.'|t('analytics') }}</p>
                 <p><a class="btn" href="{{ url('analytics/settings/oauth') }}">{{"OAuth Settings"|t('analytics') }}</a></p>
             {% endif %}
         {% else %}
-
             <p>{{ 'You are authenticated to Google Analytics with the following account'|t('analytics') }} :</p>
 
             <div class="oauth-account">
@@ -59,80 +65,74 @@
                     </div>
                 </div>
             </div>
+        {% endif %}
 
+        {% if craft.app.config.general.allowAdminChanges %}
             <hr />
 
-            <form method="post" accept-charset="UTF-8" data-saveshortcut>
+            {{ csrfInput() }}
 
-                {{ csrfInput() }}
+            <input type="hidden" name="action" value="analytics/settings/save-settings">
+            <input type="hidden" name="pluginHandle" value="analytics">
+            <input type="hidden" name="redirect" value="{{ 'analytics/settings'|hash }}">
 
-                <input type="hidden" name="action" value="analytics/settings/save-settings">
-                <input type="hidden" name="pluginHandle" value="analytics">
-                <input type="hidden" name="redirect" value="{{ 'analytics/settings'|hash }}">
+            <h2>{{ 'Real-Time'|t('analytics') }}</h2>
 
-                <h2>{{ 'Real-Time'|t('analytics') }}</h2>
+            {{ forms.lightswitchField({
+                label: 'Enable real-time reporting' | t('analytics'),
+                instructions: 'Whether to enable real-time reporting widget.' | t('analytics'),
+                name: 'settings[enableRealtime]',
+                on: settings.enableRealtime,
+                errors: settings.getErrors('enableRealtime'),
+                warning: macros.configWarning('enableRealtime', 'analytics'),
+                toggle: '#realtime-refresh-interval',
+            }) }}
 
-                {{ forms.lightswitchField({
-                    label: 'Enable real-time reporting' | t('analytics'),
-                    instructions: 'Whether to enable real-time reporting widget.' | t('analytics'),
-                    name: 'settings[enableRealtime]',
-                    on: settings.enableRealtime,
-                    errors: settings.getErrors('enableRealtime'),
-                    warning: macros.configWarning('enableRealtime', 'analytics'),
-                    toggle: '#realtime-refresh-interval',
+            <div id="realtime-refresh-interval"{{ not settings.enableRealtime ? ' class="hidden"' }}>
+                {{ forms.textField({
+                    label: "Real-Time Refresh Interval"|t('analytics'),
+                    instructions: "Interval in seconds between requests to the real-time API."|t('analytics'),
+                    name: 'settings[realtimeRefreshInterval]',
+                    value: (settings.realtimeRefreshInterval ? settings.realtimeRefreshInterval : ''),
+                    errors: settings.getErrors('realtimeRefreshInterval'),
+                    size: 4
                 }) }}
+            </div>
 
-                <div id="realtime-refresh-interval"{{ not settings.enableRealtime ? ' class="hidden"' }}>
-                    {{ forms.textField({
-                        label: "Real-Time Refresh Interval"|t('analytics'),
-                        instructions: "Interval in seconds between requests to the real-time API."|t('analytics'),
-                        name: 'settings[realtimeRefreshInterval]',
-                        value: (settings.realtimeRefreshInterval ? settings.realtimeRefreshInterval : ''),
-                        errors: settings.getErrors('realtimeRefreshInterval'),
-                        size: 4
-                    }) }}
-                </div>
+            <hr>
 
-                <hr>
+            <h2>{{ 'Plugin'|t('analytics') }}</h2>
 
-                <div>
-                    {{ forms.lightswitchField({
-                        label: 'Enable CP Section' | t('analytics'),
-                        instructions: 'Whether to enable Analytics in the main sidebar navigation.' | t('analytics'),
-                        id: 'hasCpSection',
-                        name: 'settings[hasCpSection]',
-                        on: settings.hasCpSection,
-                        errors: settings.getErrors('hasCpSection'),
-                        warning: macros.configWarning('hasCpSection', 'analytics'),
-                    }) }}
+            {{ forms.lightswitchField({
+                label: 'Enable CP Section' | t('analytics'),
+                instructions: 'Whether to enable Analytics in the main sidebar navigation.' | t('analytics'),
+                id: 'hasCpSection',
+                name: 'settings[hasCpSection]',
+                on: settings.hasCpSection,
+                errors: settings.getErrors('hasCpSection'),
+                warning: macros.configWarning('hasCpSection', 'analytics'),
+            }) }}
 
-                    {{ forms.lightswitchField({
-                        label: 'Enable Cache' | t('analytics'),
-                        instructions: 'Whether to cache API requests.' | t('analytics'),
-                        id: 'enableCache',
-                        name: 'settings[enableCache]',
-                        on: settings.enableCache,
-                        warning: macros.configWarning('enableCache', 'analytics'),
-                        toggle: '#cache-duration',
-                    }) }}
+            {{ forms.lightswitchField({
+                label: 'Enable Cache' | t('analytics'),
+                instructions: 'Whether to cache API requests.' | t('analytics'),
+                id: 'enableCache',
+                name: 'settings[enableCache]',
+                on: settings.enableCache,
+                warning: macros.configWarning('enableCache', 'analytics'),
+                toggle: '#cache-duration',
+            }) }}
 
-                    <div id="cache-duration" class="{{ not settings.enableCache ? 'hidden' }}">
-                        {{ forms.textField({
-                            label: 'Cache Duration' | t('analytics'),
-                            instructions: 'Set the cache duration. Accepts a [Date Interval](https://www.php.net/manual/en/dateinterval.construct.php) or a number of seconds.' | t('analytics'),
-                            id: 'cacheDuration',
-                            name: 'settings[cacheDuration]',
-                            value: settings.cacheDuration,
-                            warning: macros.configWarning('cacheDuration', 'analytics'),
-                        }) }}
-                    </div>
-                </div>
-
-                <div class="buttons">
-                    <input type="submit" class="btn submit force" value="{{ 'Save'|t('analytics') }}">
-                </div>
-            </form>
+            <div id="cache-duration" class="{{ not settings.enableCache ? 'hidden' }}">
+                {{ forms.textField({
+                    label: 'Cache Duration' | t('analytics'),
+                    instructions: 'Set the cache duration. Accepts a [Date Interval](https://www.php.net/manual/en/dateinterval.construct.php) or a number of seconds.' | t('analytics'),
+                    id: 'cacheDuration',
+                    name: 'settings[cacheDuration]',
+                    value: settings.cacheDuration,
+                    warning: macros.configWarning('cacheDuration', 'analytics'),
+                }) }}
+            </div>
         {% endif %}
     </div>
-
 {% endset %}
