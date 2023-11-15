@@ -9,7 +9,6 @@ namespace dukt\analytics\controllers;
 
 use Craft;
 use craft\helpers\Json;
-use craft\web\Controller;
 use craft\web\View;
 use dukt\analytics\Plugin;
 use dukt\analytics\Plugin as Analytics;

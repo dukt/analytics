@@ -8,7 +8,6 @@
 namespace dukt\analytics\controllers;
 
 use Craft;
-use craft\web\Controller;
 use dukt\analytics\models\SiteSource;
 use dukt\analytics\Plugin as Analytics;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;

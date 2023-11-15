@@ -7,8 +7,6 @@
 
 namespace dukt\analytics\controllers;
 
-use craft\web\Controller;
-use dukt\analytics\Plugin;
 use yii\web\Response;
 use dukt\analytics\Plugin as Analytics;
 use Craft;
