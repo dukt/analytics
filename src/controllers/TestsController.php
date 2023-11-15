@@ -22,8 +22,10 @@ use Google\Service\AnalyticsData\RunReportRequest;
  *
  * @package dukt\analytics\controllers
  */
-class TestsController extends Controller
+class TestsController extends BaseAccessController
 {
+    protected bool $requirePluginAccess = true;
+
     // Public Methods
     // =========================================================================
 

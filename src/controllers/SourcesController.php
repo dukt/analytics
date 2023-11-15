@@ -9,7 +9,6 @@ namespace dukt\analytics\controllers;
 
 use Craft;
 use craft\helpers\Json;
-use craft\web\Controller;
 use dukt\analytics\models\Source;
 use dukt\analytics\web\assets\analytics\AnalyticsAsset;
 use dukt\analytics\Plugin as Analytics;
@@ -17,8 +16,10 @@ use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
-class SourcesController extends Controller
+class SourcesController extends BaseAccessController
 {
+    protected bool $requirePluginAccess = true;
+
     // Public Methods
     // =========================================================================
 

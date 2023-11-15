@@ -19,8 +19,10 @@ use craft\helpers\FileHelper;
  *
  * @package dukt\analytics\controllers
  */
-class UtilsController extends Controller
+class UtilsController extends BaseAccessController
 {
+    protected bool $requirePluginAccess = true;
+
     // Properties
     // =========================================================================
 

@@ -8,12 +8,13 @@
 namespace dukt\analytics\controllers;
 
 use Craft;
-use craft\web\Controller;
 use dukt\analytics\Plugin as Analytics;
 use yii\web\Response;
 
-class OauthController extends Controller
+class OauthController extends BaseAccessController
 {
+    protected bool $requirePluginAccess = true;
+
     // Public Methods
     // =========================================================================
 

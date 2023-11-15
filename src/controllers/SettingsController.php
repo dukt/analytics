@@ -9,7 +9,6 @@ namespace dukt\analytics\controllers;
 
 use Craft;
 use craft\errors\InvalidPluginException;
-use craft\web\Controller;
 use dukt\analytics\web\assets\analytics\AnalyticsAsset;
 use dukt\analytics\Plugin as Analytics;
 use Exception;
@@ -17,8 +16,10 @@ use Google_Service_Exception;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use yii\web\Response;
 
-class SettingsController extends Controller
+class SettingsController extends BaseAccessController
 {
+    protected bool $requirePluginAccess = true;
+
     // Public Methods
     // =========================================================================
 

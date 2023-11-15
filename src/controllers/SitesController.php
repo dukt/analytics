@@ -14,8 +14,10 @@ use dukt\analytics\Plugin as Analytics;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use yii\web\Response;
 
-class SitesController extends Controller
+class SitesController extends BaseAccessController
 {
+    protected bool $requirePluginAccess = true;
+
     // Public Methods
     // =========================================================================
 
