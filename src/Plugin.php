@@ -50,6 +50,11 @@ class Plugin extends \craft\base\Plugin
     public bool $hasCpSettings = true;
 
     /**
+     * @inheritDoc
+     */
+    public string $schemaVersion = '1.1.2';
+
+    /**
      * @var \dukt\analytics\Plugin The plugin instance.
      */
     public static $plugin;
