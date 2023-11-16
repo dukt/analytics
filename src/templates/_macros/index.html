@@ -1,6 +1,6 @@
 {% macro configWarning(setting, file) -%}
 {%- set configArray = craft.app.config.getConfigFromFile(file) -%}
-{%- if vuiGetValue(configArray, setting) is not null -%}
+{%- if configArray[setting] is defined and configArray[setting] is not null -%}
 {{- "This is being overridden by the `#{setting}` setting in the `config/#{file}.php` file." |raw }}
 {%- else -%}
 {{ false }}
