@@ -52,7 +52,7 @@ class Plugin extends \craft\base\Plugin
     /**
      * @inheritDoc
      */
-    public string $schemaVersion = '1.1.2';
+    public string $schemaVersion = '2.0.0';
 
     /**
      * @var \dukt\analytics\Plugin The plugin instance.
