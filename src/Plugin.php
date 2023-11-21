@@ -114,8 +114,6 @@ class Plugin extends \craft\base\Plugin
                 'analytics/sources/<sourceId:\d+>' => 'analytics/sources/edit',
                 'analytics/sites' => 'analytics/sites/index',
                 'analytics/sites/<siteId:\d+>' => 'analytics/sites/edit',
-                'analytics/utils' => 'analytics/utils/index',
-                'analytics/utils/metadata-ua' => 'analytics/utils/metadata-ua',
                 'analytics/tests' => 'analytics/tests/overview',
                 'analytics/tests/overview' => 'analytics/tests/overview',
                 'analytics/tests/formatting' => 'analytics/tests/formatting',
