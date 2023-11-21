@@ -66,8 +66,23 @@
                           'da-rounded-r-md': optionKey === chartTypeOptions.length - 1,
                           'da-border-r': optionKey !== chartTypeOptions.length - 1,
                         }"
+                        :title="option.label"
                       >
-                        {{ option.label }}
+                        <template v-if="option.value === 'area'">
+                          <ChartArea class="da-w-5 da-h-5" />
+                        </template>
+                        <template v-else-if="option.value === 'counter'">
+                          <NumberIcon class="da-w-5 da-h-5" />
+                        </template>
+                        <template v-else-if="option.value === 'pie'">
+                          <ChartPieIcon class="da-w-5 da-h-5" />
+                        </template>
+                        <template v-else-if="option.value === 'table'">
+                          <TableIcon class="da-w-5 da-h-5" />
+                        </template>
+                        <template v-else-if="option.value === 'geo'">
+                          <EarthIcon class="da-w-5 da-h-5" />
+                        </template>
                       </div>
                     </div>
                   </label>
@@ -184,9 +199,19 @@ import VSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 
 import reportsApi from './api/reports';
+import ChartPieIcon from "@/js/components/icons/ChartPieIcon.vue";
+import EarthIcon from "@/js/components/icons/EarthIcon.vue";
+import TableIcon from "@/js/components/icons/TableIcon.vue";
+import NumberIcon from "@/js/components/icons/NumberIcon.vue";
+import ChartArea from "@/js/components/icons/ChartArea.vue";
 
 export default {
   components: {
+    ChartArea,
+    NumberIcon,
+    TableIcon,
+    EarthIcon,
+    ChartPieIcon,
     VSelect,
   },
   data() {
