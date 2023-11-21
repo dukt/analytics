@@ -33,6 +33,8 @@ class m231115_165849_views_to_sources extends Migration
             ->select(['id', 'settings'])
             ->from(['{{%widgets}}'])
             ->where(['type' => 'dukt\analytics\widgets\Report'])
+            ->orWhere(['type' => 'dukt\analytics\widgets\Realtime'])
+            ->orWhere(['type' => 'dukt\analytics\widgets\Ecommerce'])
             ->all();
 
         foreach ($widgetRows as $widgetRow) {
