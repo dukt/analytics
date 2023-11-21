@@ -13,6 +13,7 @@ use craft\web\View;
 use dukt\analytics\Plugin;
 use dukt\analytics\Plugin as Analytics;
 use dukt\analytics\web\assets\analytics\AnalyticsAsset;
+use yii\base\InvalidConfigException;
 use yii\web\Response;
 use Google\Service\AnalyticsData\RunReportRequest;
 
@@ -79,9 +80,9 @@ class TestsController extends BaseAccessController
     /**
      * GA4
      *
-     * @param array $variables
-     *
+     * @param string|null $property
      * @return Response
+     * @throws InvalidConfigException
      */
     public function actionGa4(string $property = null)
     {
