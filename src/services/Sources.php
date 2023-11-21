@@ -26,9 +26,15 @@ class Sources extends Component
      *
      * @return array|null
      */
-    public function getSources()
+    public function getSources($type = 'GA4')
     {
-        $results = SourceRecord::find()->all();
+        $where = [];
+
+        if ($type !== '*') {
+            $where = ['type' => $type];
+        }
+
+        $results = SourceRecord::find()->where($where)->all();
 
         $sources = [];
 

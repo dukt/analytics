@@ -30,6 +30,12 @@
         required: true,
     }) }}
 
+    {% if source.type == 'UA' %}
+        <div class="warning da-mb-4" data-icon="alert">
+            This Universal Analytics (UA) property cannot be used to show reports, please choose a Google Analytics 4 (GA4) property instead.
+        </div>
+    {% endif %}
+
     <input
             type="hidden"
             id="accountExplorerType"

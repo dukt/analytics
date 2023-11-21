@@ -42,7 +42,18 @@
                             <span class="light">—</span>
                         {% endif %}
                     </td>
-                    <td>{{ source.type }}</td>
+                    <td>
+                        {% if source.type == 'UA' %}
+
+                            <div class="warning" data-icon="alert">
+                                Universal Analytics
+                            </div>
+                        {% elseif source.type == 'GA4' %}
+                            Google Analytics 4
+                        {% else %}
+                            {{ source.type }}
+                        {% endif %}
+                    </td>
                     <td>
                         {% if source.gaPropertyId %}
                             <code>{{ source.gaPropertyId }}</code>

@@ -8,11 +8,14 @@
 namespace dukt\analytics\controllers;
 
 use Craft;
+use craft\db\Query;
 use craft\helpers\Json;
 use dukt\analytics\models\Source;
+use dukt\analytics\records\Source as SourceRecord;
 use dukt\analytics\web\assets\analytics\AnalyticsAsset;
 use dukt\analytics\Plugin as Analytics;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
+use yii\db\Exception;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
@@ -42,7 +45,7 @@ class SourcesController extends BaseAccessController
 
             if ($isOauthProviderConfigured && $token) {
                 $variables['isConnected'] = true;
-                $variables['sources'] = Analytics::$plugin->getSources()->getSources();
+                $variables['sources'] = Analytics::$plugin->getSources()->getSources('*');
             }
         } catch (IdentityProviderException $identityProviderException) {
             $variables['error'] = $identityProviderException->getMessage();
@@ -77,12 +80,11 @@ class SourcesController extends BaseAccessController
                 $source = Analytics::$plugin->getSources()->getSourceById($sourceId);
 
                 if (!$source instanceof \dukt\analytics\models\Source) {
-                    throw new NotFoundHttpException('View not found');
+                    throw new NotFoundHttpException('Source not found');
                 }
             }
 
             $variables['title'] = $source->name;
-            $variables['source'] = $source;
         } else {
             if ($source === null) {
                 $source = new Source();
@@ -122,34 +124,50 @@ class SourcesController extends BaseAccessController
         $request = Craft::$app->getRequest();
         $accountExplorer = $request->getBodyParam('accountExplorer');
 
+        $sourceId = $request->getBodyParam('sourceId');
+        $sourceRecord = SourceRecord::findOne($sourceId);
+
         $source = new Source();
         $source->id = $request->getBodyParam('sourceId');
-        $source->type = $accountExplorer['type'];
         $source->name = $request->getBodyParam('name');
-        $source->gaAccountId = $accountExplorer['account'];
-        $source->gaPropertyId = $accountExplorer['property'];
-        $source->gaViewId = $accountExplorer['view'] ?? null;
-        $accountExplorerData = Analytics::$plugin->getApis()->getAnalytics()->getAccountExplorerData();
+        $source->type = $accountExplorer['type'];
 
-        foreach ($accountExplorerData['accounts'] as $dataAccount) {
-            if ($dataAccount->id == $source->gaAccountId) {
-                $source->gaAccountName = $dataAccount->name;
+        if ($source->type === 'GA4') {
+            $source->gaAccountId = $accountExplorer['account'];
+            $source->gaPropertyId = $accountExplorer['property'];
+            $source->gaViewId = $accountExplorer['view'] ?? null;
+
+            $accountExplorerData = Analytics::$plugin->getApis()->getAnalytics()->getAccountExplorerData();
+
+            foreach ($accountExplorerData['accounts'] as $dataAccount) {
+                if ($dataAccount->id == $source->gaAccountId) {
+                    $source->gaAccountName = $dataAccount->name;
+                }
             }
+
+            foreach ($accountExplorerData['properties'] as $dataProperty) {
+                if ($dataProperty['id'] == $source->gaPropertyId) {
+                    $source->gaPropertyName = $dataProperty['name'];
+                    $source->gaCurrency = $dataProperty['currency'];
+                }
+            }
+
+            foreach ($accountExplorerData['views'] as $dataView) {
+                if ($dataView->id == $source->gaViewId) {
+                    $source->gaViewName = $dataView->name;
+                    $source->gaCurrency = $dataView->currency;
+                }
+            }
+        } else {
+            $source->gaAccountId = $sourceRecord->gaAccountId;
+            $source->gaAccountName = $sourceRecord->gaAccountName;
+            $source->gaPropertyId = $sourceRecord->gaPropertyId;
+            $source->gaPropertyName = $sourceRecord->gaPropertyName;
+            $source->gaViewId = $sourceRecord->gaViewId;
+            $source->gaViewName = $sourceRecord->gaViewName;
+            $source->gaCurrency = $sourceRecord->gaCurrency;
         }
 
-        foreach ($accountExplorerData['properties'] as $dataProperty) {
-            if ($dataProperty['id'] == $source->gaPropertyId) {
-                $source->gaPropertyName = $dataProperty['name'];
-                $source->gaCurrency = $dataProperty['currency'];
-            }
-        }
-
-        foreach ($accountExplorerData['views'] as $dataView) {
-            if ($dataView->id == $source->gaViewId) {
-                $source->gaViewName = $dataView->name;
-                $source->gaCurrency = $dataView->currency;
-            }
-        }
 
         // Save it
         if (!Analytics::$plugin->getSources()->saveSource($source)) {
@@ -161,6 +179,11 @@ class SourcesController extends BaseAccessController
             ]);
 
             return null;
+        }
+
+        // Update widgets and fields with new dimensions and metrics
+        if ($sourceRecord && $sourceRecord->type === 'UA' && $source->type === 'GA4') {
+            $this->migrateDimensionsAndMetricsToGA4($sourceId);
         }
 
         Craft::$app->getSession()->setNotice(Craft::t('analytics', 'View saved.'));
@@ -284,5 +307,240 @@ class SourcesController extends BaseAccessController
         }
 
         return $viewOptions;
+    }
+
+    /**
+     * @param int $sourceId
+     * @return void
+     * @throws Exception
+     */
+    private function migrateDimensionsAndMetricsToGA4(int $sourceId): void
+    {
+        $widgetRows = (new Query())
+            ->select(['id', 'settings'])
+            ->from(['{{%widgets}}'])
+            ->where(['type' => 'dukt\analytics\widgets\Report'])
+            ->all();
+
+        foreach ($widgetRows as $widgetRow) {
+            $widgetSettings = Json::decodeIfJson($widgetRow['settings']);
+
+            if (
+                is_array($widgetSettings)
+                && isset($widgetSettings['sourceId'])
+                && (int) $widgetSettings['sourceId'] === $sourceId
+                && isset($widgetSettings['options'][$widgetSettings['chart']])
+            ) {
+                $chartOptions = $widgetSettings['options'][$widgetSettings['chart']];
+                $newChartOptions = [];
+
+                if (isset($chartOptions['metric'])) {
+                    $newChartOptions['metric'] = $this->uaToGa4($chartOptions['metric']);
+                }
+
+                if (isset($chartOptions['dimension'])) {
+                    $newChartOptions['dimension'] = $this->uaToGa4($chartOptions['dimension']);
+                }
+
+                $widgetSettings['options'] = [
+                    $widgetSettings['chart'] => $newChartOptions
+                ];
+
+                // Update widget settings
+                Craft::$app->getDb()->createCommand()
+                    ->update('{{%widgets}}', [
+                        'settings' => Json::encode($widgetSettings),
+                    ], ['id' => $widgetRow['id']])
+                    ->execute();
+            }
+        }
+    }
+
+    /**
+     * @param string $uaDimensionOrMetric
+     * @return string
+     */
+    private function uaToGa4(string $uaDimensionOrMetric): string
+    {
+        $uaToGa4 = [
+            // User
+
+            // - Metrics
+            'ga:users' => 'totalUsers',
+            'ga:newUsers' => 'newUsers',
+            'ga:1dayUsers' => 'active1DayUsers',
+            'ga:7dayUsers' => 'active7DayUsers',
+            'ga:28dayUsers' => 'active28DayUsers',
+            'ga:sessionsPerUser' => 'sessionsPerUser',
+
+            // Session
+
+            // - Metrics
+            'ga:sessions' => 'sessions',
+            'ga:sessionDuration' => 'userEngagementDuration',
+            'ga:hits' => 'eventCount',
+
+            // Traffic Sources
+
+            // - Dimensions
+            'ga:fullReferrer' => 'pageReferrer',
+            'ga:campaign' => 'sessionCampaignName',
+            'ga:source' => 'sessionSource',
+            'ga:medium' => 'sessionMedium',
+            'ga:campaignCode' => 'sessionCampaignId',
+
+            // Adwords
+
+            // - Dimensions
+            'ga:adFormat' => 'adFormat',
+            'ga:adGroup' => 'sessionGoogleAdsAdGroupName',
+            'ga:adDistributionNetwork' => 'sessionGoogleAdsAdNetworkType',
+            'ga:adMatchedQuery' => 'sessionGoogleAdsQuery',
+            'ga:adwordsCampaignID' => 'sessionCampaignId',
+            'ga:adwordsAdGroupID' => 'sessionGoogleAdsAdGroupId',
+            'ga:adwordsCreativeID' => 'sessionGoogleAdsCreativeId',
+
+            // - Metrics
+            'ga:adClicks' => 'advertiserAdClicks',
+            'ga:impressions' => 'advertiserAdImpressions',
+            'ga:adCost' => 'adveristerAdCost',
+
+            // Platform or Devide
+
+            // - Dimensions
+            'ga:browser' => 'browser',
+            'ga:operatingSystem' => 'operatingSystem',
+            'ga:operatingSystemVersion' => 'operatingSystemVersion',
+            'ga:mobileDeviceBranding' => 'mobileDeviceBranding',
+            'ga:mobileDeviceModel' => 'mobileDeviceModel',
+            'ga:deviceCategory' => 'deviceCategory',
+            'ga:dataSource' => 'platform',
+
+            // Geo Network
+
+            // - Dimensions
+            'ga:country' => 'country',
+            'ga:region' => 'region',
+            'ga:city' => 'city',
+            'ga:cityId' => 'cityId',
+            'ga:countryIsoCode' => 'countryId',
+
+            // System
+
+            // - Dimensions
+            'ga:language' => 'language',
+            'ga:screenResolution' => 'screenResolution',
+
+            // Page Tracking
+
+            // - Dimensions
+            'ga:hostname' => 'hostName',
+            'ga:pagePath' => 'pagePathPlusQueryString',
+            'ga:pageTitle' => 'pageTitle',
+
+            // - Metrics
+            'ga:pageviews' => 'screenPageViews',
+            'ga:timeOnPage' => 'userEngagementDuration',
+
+            // App Tracking
+
+            // - Dimensions
+            'ga:appVersion' => 'appVersion',
+            'ga:screenName' => 'unifiedScreenName',
+
+            // - Metrics
+            'ga:screenviews' => 'screenPageViews',
+
+            // Event Tracking
+
+            // - Dimensions
+            'ga:eventLabel' => 'eventName',
+
+            // - Metrics
+            'ga:totalEvents' => 'eventCount',
+            'ga:eventValue' => 'eventValue',
+
+            // Ecommerce
+
+            // - Dimensions
+            'ga:productBrand' => 'itemBrand',
+            'ga:productCategory' => 'itemCategory',
+            'ga:productCategoryHierarchy' => 'itemCategory',
+            'ga:productSku' => 'itemId',
+            'ga:productListName' => 'itemListName',
+            'ga:productName' => 'itemName',
+            'ga:internalPromotionCreative' => 'itemPromotionCreativeName',
+            'ga:internalPromotionId' => 'itemPromotionId',
+            'ga:internalPromotionName' => 'itemPromotionName',
+            'ga:orderCouponCode' => 'orderCoupon',
+            'ga:transactionId' => 'transactionId',
+
+            // - Metrics
+            'ga:productAddsToCart' => 'addToCarts',
+            'ga:cartToDetailRate' => 'cartToViewRate',
+            'ga:productCheckouts' => 'checkouts',
+            'ga:uniquePurchases' => 'ecommercePurchases',
+            'ga:productListCTR' => 'itemListClickThroughRate',
+            'ga:productListClicks' => 'itemListClicks',
+            'ga:productListViews' => 'itemListViews',
+            'ga:internalPromotionCTR' => 'itemPromotionClickThroughRate',
+            'ga:internalPromotionClicks' => 'itemPromotionClicks',
+            'ga:internalPromotionViews' => 'itemPromotionViews',
+            'ga:itemQuantity' => 'itemPurchaseQuantity',
+            'ga:itemRevenue' => 'itemRevenue',
+            'ga:productDetailViews' => 'itemViews',
+
+            // Time
+
+            // - Dimensions
+            'ga:date' => 'date',
+            'ga:year' => 'year',
+            'ga:month' => 'month',
+            'ga:week' => 'week',
+            'ga:day' => 'day',
+            'ga:hour' => 'hour',
+            'ga:minute' => 'minute',
+            'ga:nthMonth' => 'nthMonth',
+            'ga:nthWeek' => 'nthWeek',
+            'ga:nthDay' => 'nthDay',
+            'ga:nthMinute' => 'nthMinute',
+            'ga:dayOfWeek' => 'dayOfWeek',
+            'ga:dateHour' => 'dateHour',
+            'ga:dateHourMinute' => 'dateHourMinute',
+            'ga:nthHour' => 'nthHour',
+
+            // Audience
+
+            // - Dimensions
+            'ga:userAgeBracket' => 'userAgeBracket',
+            'ga:userGender' => 'userGender',
+            'ga:interestInMarketCategory' => 'brandingInterest',
+
+            // Lifetime Value and Cohorts
+
+            // - Dimensions
+            'ga:acquisitionCampaign' => 'firstUserCampaignName',
+            'ga:acquisitionMedium' => 'firstUserMedium',
+            'ga:acquisitionSource' => 'firstUserSource',
+            'ga:cohort' => 'cohort',
+            'ga:cohortNthDay' => 'cohortNthDay',
+            'ga:cohortNthMonth' => 'cohortNthMonth',
+            'ga:cohortNthWeek' => 'cohortNthWeek',
+
+            // - Metrics
+            'ga:cohortActiveUsers' => 'cohortActiveUsers',
+            'ga:cohortTotalUsers' => 'cohortTotalUsers',
+
+            // Channel Grouping
+
+            // - Dimensions
+            'ga:channelGrouping' => 'sessionDefaultChannelGrouping',
+        ];
+
+        if ($uaToGa4[$uaDimensionOrMetric]) {
+            return $uaToGa4[$uaDimensionOrMetric];
+        }
+
+        return $uaDimensionOrMetric;
     }
 }
