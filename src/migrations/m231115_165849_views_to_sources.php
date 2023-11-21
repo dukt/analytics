@@ -41,7 +41,7 @@ class m231115_165849_views_to_sources extends Migration
             $widgetSettings = Json::decodeIfJson($widgetRow['settings']);
 
             if (is_array($widgetSettings) && isset($widgetSettings['viewId'])) {
-                $widgetSettings['sourceId'] = $widgetSettings['viewId'];
+                $widgetSettings = ['sourceId' => $widgetSettings['viewId']] + $widgetSettings;
                 unset($widgetSettings['viewId']);
 
                 $this->update('{{%widgets}}', [
