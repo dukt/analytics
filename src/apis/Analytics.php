@@ -144,6 +144,7 @@ class Analytics extends Api
     {
         // GA4 Properties
 
+        $items = [];
         $googleAdminService = Plugin::$plugin->getApis()->getAnalytics()->getGoogleAdminService();
         $accountSummaries = $googleAdminService->accountSummaries->listAccountSummaries()->getAccountSummaries();
 
