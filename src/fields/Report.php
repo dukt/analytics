@@ -51,7 +51,7 @@ class Report extends Field
             return $view->renderTemplate('analytics/_special/source-not-configured');
         }
 
-        $source = $siteSource->getView();
+        $source = $siteSource->getSource();
 
         if (!$source instanceof \dukt\analytics\models\Source) {
             return $view->renderTemplate('analytics/_special/source-not-configured');
@@ -95,7 +95,7 @@ class Report extends Field
                 $siteSource = Analytics::$plugin->getSources()->getSiteSourceBySiteId($element->siteId);
 
                 if ($siteSource !== null) {
-                    $source = $siteSource->getView();
+                    $source = $siteSource->getSource();
 
                     if ($source !== null) {
                         // Currency definition
