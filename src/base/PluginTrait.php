@@ -26,6 +26,7 @@ use yii\web\ServerErrorHttpException;
  * @property \dukt\analytics\services\Oauth                     $oauth                      The oauth service
  * @property \dukt\analytics\services\Reports                   $reports                    The reports service
  * @property \dukt\analytics\services\Sources                     $sources                      The sources service
+ * @property \nystudio107\pluginvite\services\VitePluginService  $vite                      The vite plugin service
  */
 trait PluginTrait
 {
