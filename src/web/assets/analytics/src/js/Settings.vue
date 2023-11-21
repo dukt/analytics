@@ -2,7 +2,7 @@
   <div>
     <template v-if="loading">
       <div>
-        Loading…
+        Loading Google Analytics accounts…
       </div>
     </template>
     <template v-else>
