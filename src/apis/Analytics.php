@@ -54,7 +54,6 @@ class Analytics extends Api
         return [
             'accounts' => $this->getAllAccounts(),
             'properties' => $this->getAllProperties(),
-            'views' => $this->getAllViews(),
         ];
     }
 
@@ -143,56 +142,6 @@ class Analytics extends Api
      */
     private function getAllProperties(): array
     {
-        // UA Properties
-
-        $startIndex = 1;
-        $maxResults = 1000;
-        $managementWebProperties = Plugin::$plugin->getApis()->getAnalytics()->getService()->management_webproperties;
-
-        $response = $managementWebProperties->listManagementWebproperties('~all', [
-            'start-index' => $startIndex,
-            'max-results' => $maxResults,
-        ]);
-
-        $totalResults = (int) $response->totalResults;
-
-        if ($totalResults === 0) {
-            return [];
-        }
-
-        $items = [];
-        $index = 0;
-
-        $items[] = array_map(function($item) {
-            return [
-                'type' => 'UA',
-                'id' => $item->id,
-                'accountId' => $item->accountId,
-                'name' => $item->name,
-            ];
-        }, $response->toSimpleObject()->items);
-
-        $index += is_array($response->toSimpleObject()->items) || $response->toSimpleObject()->items instanceof \Countable ? count($response->toSimpleObject()->items) : 0;
-
-        while($index < $totalResults) {
-            $startIndex = $index + 1;
-
-            $response = $managementWebProperties->listManagementWebproperties('~all', [
-                'start-index' => $startIndex,
-                'max-results' => $maxResults,
-            ]);
-
-            $items[] = array_map(function($item) {
-                return [
-                    'type' => 'UA',
-                    'id' => $item->id,
-                    'accountId' => $item->accountId,
-                    'name' => $item->name,
-                ];
-            }, $response->toSimpleObject()->items);
-            $index += is_array($response->toSimpleObject()->items) || $response->toSimpleObject()->items instanceof \Countable ? count($response->toSimpleObject()->items) : 0;
-        }
-
         // GA4 Properties
 
         $googleAdminService = Plugin::$plugin->getApis()->getAnalytics()->getGoogleAdminService();
@@ -213,48 +162,6 @@ class Analytics extends Api
                     'currency' => $item->getCurrencyCode(),
                 ];
             }, $props);
-        }
-
-        return array_merge(...$items);
-    }
-
-    /**
-     * @return array
-     * @throws \yii\base\InvalidConfigException
-     */
-    private function getAllViews(): array
-    {
-        $startIndex = 1;
-        $maxResults = 1000;
-        $managementWebProfiles = Plugin::$plugin->getApis()->getAnalytics()->getService()->management_profiles;
-
-        $response = $managementWebProfiles->listManagementProfiles('~all', '~all', [
-            'start-index' => $startIndex,
-            'max-results' => $maxResults,
-        ]);
-
-        $totalResults = (int) $response->totalResults;
-
-        if ($totalResults === 0) {
-            return [];
-        }
-
-        $items = [];
-        $index = 0;
-
-        $items[] = $response->toSimpleObject()->items;
-        $index += is_array($response->toSimpleObject()->items) || $response->toSimpleObject()->items instanceof \Countable ? count($response->toSimpleObject()->items) : 0;
-
-        while($index < $totalResults) {
-            $startIndex = $index + 1;
-
-            $response = $managementWebProfiles->listManagementProfiles('~all', '~all', [
-                'start-index' => $startIndex,
-                'max-results' => $maxResults,
-            ]);
-
-            $items[] = $response->toSimpleObject()->items;
-            $index += is_array($response->toSimpleObject()->items) || $response->toSimpleObject()->items instanceof \Countable ? count($response->toSimpleObject()->items) : 0;
         }
 
         return array_merge(...$items);

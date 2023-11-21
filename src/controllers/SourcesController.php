@@ -151,13 +151,6 @@ class SourcesController extends BaseAccessController
                     $source->gaCurrency = $dataProperty['currency'];
                 }
             }
-
-            foreach ($accountExplorerData['views'] as $dataView) {
-                if ($dataView->id == $source->gaViewId) {
-                    $source->gaViewName = $dataView->name;
-                    $source->gaCurrency = $dataView->currency;
-                }
-            }
         } else {
             $source->gaAccountId = $sourceRecord->gaAccountId;
             $source->gaAccountName = $sourceRecord->gaAccountName;

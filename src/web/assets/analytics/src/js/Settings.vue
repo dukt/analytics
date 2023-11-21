@@ -125,39 +125,6 @@
             </ul>
           </div>
         </div>
-        <div
-          class="da-flex-1"
-        >
-          <div
-            class="da-border-b da-font-medium da-text-gray-500 da-px-6 da-py-3"
-          >
-            Views
-          </div>
-          <div class="da-max-h-[22rem] da-overflow-auto">
-            <ul>
-              <template v-for="(view, viewKey) in views">
-                <li
-                  :key="viewKey"
-                  class="da-px-6 da-py-3"
-                  :class="{ 'da-bg-gray-100': selectedView === view.id }"
-                >
-                  {{ view.name }} ({{ view.id }})
-
-                  <button
-                    class="da-bg-blue-600 da-text-white da-font-medium da-rounded-md da-px-2 da-py-1 da-ml-2"
-                    :class="{
-                      'da-opacity-50': selectedView === view.id,
-                    }"
-                    :disabled="selectedView === view.id"
-                    @click.prevent="selectUAView(view)"
-                  >
-                    Select UA view
-                  </button>
-                </li>
-              </template>
-            </ul>
-          </div>
-        </div>
       </div>
     </template>
   </div>
@@ -198,17 +165,6 @@ export default {
       }
 
       return this.accountExplorerData.properties.filter(property => property.accountId === this.selectedAccount)
-    },
-    views() {
-      if (!this.accountExplorerData) {
-        return []
-      }
-
-      if (!this.selectedProperty) {
-        return []
-      }
-
-      return this.accountExplorerData.views.filter(view => view.webPropertyId === this.selectedProperty)
     },
   },
 
