@@ -163,7 +163,15 @@ class Reports extends Component
         $endDate = date('Y-m-d');
         $dimensions = 'date';
         $metrics = $metric;
-        $filters = 'pagePath=='.$uri;
+        $dimensionFilter = [
+            'filter' => new \Google\Service\AnalyticsData\Filter([
+                'fieldName' => 'pagePath',
+                'stringFilter' => [
+                    'value' => $uri,
+                    'matchType' => 'EXACT'
+                ]
+            ])
+        ];
 
         $request = [
             'sourceId' => $sourceId,
@@ -171,7 +179,7 @@ class Reports extends Component
             'endDate' => $endDate,
             'metrics' => $metrics,
             'dimensions' => $dimensions,
-            'filters' => $filters
+            'dimensionFilter' => $dimensionFilter
         ];
 
         $cacheId = ['reports.getElementReport', $request];
@@ -185,7 +193,7 @@ class Reports extends Component
             $criteria->endDate = $endDate;
             $criteria->metrics = $metrics;
             $criteria->dimensions = $dimensions;
-            $criteria->filtersExpression = $filters;
+            $criteria->dimensionFilter = $dimensionFilter;
             $criteria->keepEmptyRows = true;
 
             $criteria->orderBys = [
