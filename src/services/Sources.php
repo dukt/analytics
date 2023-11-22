@@ -15,6 +15,7 @@ use dukt\analytics\records\Source as SourceRecord;
 use dukt\analytics\records\SiteSource as SiteSourceRecord;
 use yii\base\Component;
 use Exception;
+use craft\db\Query;
 
 class Sources extends Component
 {
@@ -34,23 +35,14 @@ class Sources extends Component
             $where = ['type' => $type];
         }
 
-        $results = SourceRecord::find()->where($where)->all();
+        $results = $this->_createSourceQuery()
+            ->where($where)
+            ->all();
 
         $sources = [];
 
         foreach ($results as $result) {
-            $sources[] = new Source($result->toArray([
-                'id',
-                'type',
-                'name',
-                'gaAccountId',
-                'gaAccountName',
-                'gaCurrency',
-                'gaPropertyId',
-                'gaPropertyName',
-                'gaViewId',
-                'gaViewName',
-            ]));
+            $sources[] = new Source($result);
         }
 
         return $sources;
@@ -65,21 +57,12 @@ class Sources extends Component
      */
     public function getSourceById($id)
     {
-        $result = SourceRecord::findOne($id);
+        $result = $this->_createSourceQuery()
+            ->where(['id' => $id])
+            ->one();
 
         if ($result !== null) {
-            return new Source($result->toArray([
-                'id',
-                'type',
-                'name',
-                'gaAccountId',
-                'gaAccountName',
-                'gaPropertyId',
-                'gaPropertyName',
-                'gaCurrency',
-                'gaViewId',
-                'gaViewName',
-            ]));
+            return new Source($result);
         }
 
         return null;
@@ -92,15 +75,13 @@ class Sources extends Component
      */
     public function getSiteSources()
     {
-        $results = SiteSourceRecord::find()->all();
+        $results = $this->_createSiteSourceQuery()
+            ->all();
 
         $sources = [];
 
         foreach ($results as $result) {
-            $sources[] = new SiteSource($result->toArray([
-                'siteId',
-                'sourceId',
-            ]));
+            $sources[] = new SiteSource($result);
         }
 
         return $sources;
@@ -272,5 +253,34 @@ class Sources extends Component
         }
 
         return true;
+    }
+
+    private function _createSourceQuery(): Query
+    {
+        return (new Query())
+            ->select([
+                'id',
+                'type',
+                'name',
+                'gaAccountId',
+                'gaAccountName',
+                'gaPropertyId',
+                'gaPropertyName',
+                'gaViewId',
+                'gaViewName',
+                'gaCurrency',
+            ])
+            ->from(['{{%analytics_sources}}']);
+    }
+
+    private function _createSiteSourceQuery(): Query
+    {
+        return (new Query())
+            ->select([
+                'id',
+                'siteId',
+                'sourceId',
+            ])
+            ->from(['{{%analytics_site_sources}}']);
     }
 }
