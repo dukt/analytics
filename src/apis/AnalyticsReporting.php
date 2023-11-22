@@ -39,7 +39,7 @@ class AnalyticsReporting extends Api
      * @param ReportRequestCriteria $criteria
      * @param bool                  $toArray
      *
-     * @return array|Google_Service_AnalyticsReporting_Report
+     * @return \Google\Service\AnalyticsData\RunReportResponse
      * @throws \yii\base\InvalidConfigException
      */
     public function getReport(ReportRequestCriteria $criteria, bool $toArray = false)
@@ -59,7 +59,7 @@ class AnalyticsReporting extends Api
      * @param array $criterias
      * @param bool  $toArray
      *
-     * @return array
+     * @return \Google\Service\AnalyticsData\RunReportResponse[]
      * @throws \yii\base\InvalidConfigException
      */
     public function getReports(array $criterias, bool $toArray = false)
