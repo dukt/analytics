@@ -514,7 +514,7 @@ class Reports extends Component
 
                 switch($this->getMetricType($metricHeader)) {
                     case 'percent':
-                        $rowValues[] = $metricValue->getValue() * 100;
+                        $rowValues[] = (float) $metricValue->getValue() * 100;
                         break;
                     default:
                         $rowValues[] = $metricValue->getValue();
