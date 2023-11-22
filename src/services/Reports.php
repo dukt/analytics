@@ -8,7 +8,6 @@
 namespace dukt\analytics\services;
 
 use Craft;
-use craft\helpers\StringHelper;
 use dukt\analytics\errors\InvalidElementException;
 use dukt\analytics\models\ReportRequestCriteria;
 use dukt\analytics\Plugin;
