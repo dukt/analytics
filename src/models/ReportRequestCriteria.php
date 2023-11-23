@@ -26,11 +26,6 @@ class ReportRequestCriteria extends Model
     public $sourceId;
 
     /**
-     * @var string Google Analytics View ID
-     */
-    public $gaViewId;
-
-    /**
      * @var string Start date
      */
     public $startDate;
