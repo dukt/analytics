@@ -8,5 +8,5 @@ Customizable statistics widgets and entry tracking for Craft & Google Analytics.
 
 The license fee for this plugin is $99 (license + one year of updates) via the Craft Plugin Store, then $29 per year for updates.
 
-Licenses purchased before April 4 for Craft 2 have been grandfathered into a lifetime of free updates, and therefore can be used with Craft 3.
-You can claim your existing licenses at [id.craftcms.com](https://id.craftcms.com).
+The license renewal policy only applies to licenses purchased on or after April 4th, 2018. Licenses purchased before April 4th, 2018 have been grandfathered into a lifetime of free updates.
+You can claim your existing licenses at [console.craftcms.com](https://console.craftcms.com).
