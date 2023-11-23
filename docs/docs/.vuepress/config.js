@@ -52,7 +52,6 @@ module.exports = {
                  collapsable: false,
                  children: [
                      'requesting-analytics-api',
-                     'tracking',
                  ]
              }
          ],
