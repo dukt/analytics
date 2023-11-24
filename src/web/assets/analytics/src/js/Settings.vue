@@ -179,20 +179,10 @@ export default {
 
     this.selectedAccount = this.pluginOptions.source.gaAccountId
     this.selectedProperty = this.pluginOptions.source.gaPropertyId
-    this.selectedView = this.pluginOptions.source.gaViewId
   },
 
   methods: {
-    selectUAView(view) {
-      this.selectedSourceType = 'UA'
-      this.selectedView = view.id
-      // const selectedProperty = this.properties.find(property => property.id === this.selectedProperty)
-
-      this.setFormData()
-    },
     selectGA4Property(property) {
-      console.log('property', property)
-
       this.selectedSourceType = 'GA4'
       this.selectedProperty = property.id
       this.selectedView = null
