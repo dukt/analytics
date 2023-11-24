@@ -69,19 +69,19 @@
                         :title="option.label"
                       >
                         <template v-if="option.value === 'area'">
-                          <ChartArea class="da-w-5 da-h-5" />
+                          <ChartArea class="da-w-4 da-h-4" />
                         </template>
                         <template v-else-if="option.value === 'counter'">
-                          <NumberIcon class="da-w-5 da-h-5" />
+                          <NumberIcon class="da-w-4 da-h-4" />
                         </template>
                         <template v-else-if="option.value === 'pie'">
-                          <ChartPieIcon class="da-w-5 da-h-5" />
+                          <ChartPieIcon class="da-w-4 da-h-4" />
                         </template>
                         <template v-else-if="option.value === 'table'">
-                          <TableIcon class="da-w-5 da-h-5" />
+                          <TableIcon class="da-w-4 da-h-4" />
                         </template>
                         <template v-else-if="option.value === 'geo'">
-                          <EarthIcon class="da-w-5 da-h-5" />
+                          <EarthIcon class="da-w-4 da-h-4" />
                         </template>
                       </div>
                     </div>
