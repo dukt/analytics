@@ -1,7 +1,7 @@
 # Requesting Google Analytics’ API
 
 ## Request
-Use the `craft.analytics.api` method to request the Google Analytics’ [Core Reporting API](https://developers.google.com/analytics/devguides/reporting/core/v4/) from your templates and show reporting data on the front-end.
+Use the `craft.analytics.api` method to request the [Google Analytics Data API](https://developers.google.com/analytics/devguides/reporting/data/v1) from your templates and show reporting data on the front-end.
 
 ```twig
 {% set response = craft.analytics.api({
