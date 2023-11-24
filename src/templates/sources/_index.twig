@@ -3,6 +3,10 @@
 {% set selectedSubnavItem = 'sources' %}
 {% set title = 'Sources'|t('analytics')%}
 
+{% block actionButton %}
+    <a href="{{ url('analytics/sources/new') }}" class="btn submit add icon">{{ 'New source'|t('analytics') }}</a>
+{% endblock %}
+
 {% set content %}
 
     {% if isConnected %}
@@ -81,10 +85,6 @@
 
             </tbody>
         </table>
-
-        <div class="buttons">
-            <a href="{{ url('analytics/sources/new') }}" class="btn submit add icon">{{ 'New source'|t('analytics') }}</a>
-        </div>
 
         {% js %}
         new Craft.AdminTable({
