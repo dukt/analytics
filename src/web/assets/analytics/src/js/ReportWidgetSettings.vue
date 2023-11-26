@@ -406,36 +406,62 @@ export default {
         })
     },
     initMetric() {
-      if (
-        this.pluginSettings.settings.options
-        && this.pluginSettings.settings.options[this.chart].metric
-        && this.metricSelectOptions.find(option => option.value === this.pluginSettings.settings.options[this.chart].metric)
-      ) {
+      // if (this.metricSelectOptions.find(option => option.value === this.metric)) {
+      //   // The metric is already selected
+      //   return;
+      // }
 
-        this.metric = this.pluginSettings.settings.options[this.chart].metric
+      const options = this.pluginSettings.settings.options;
+
+      if (
+        options?.[this.chart]?.metric &&
+        this.metricSelectOptions.find(option => option.value === options[this.chart].metric)
+      ) {
+        // Select metric from the saved chart options with the same type
+        this.metric = options[this.chart].metric;
+      } else if (
+        Object.values(options).length > 0 &&
+        Object.values(options)[0].metric &&
+        this.metricSelectOptions.find(option => option.value === Object.values(options)[0].metric)
+      ) {
+        // Select metric from the saved chart options with a different type
+        this.metric = Object.values(options)[0].metric;
       } else {
-        this.metric = this.metricSelectOptions.find(option => option.value !== undefined)?.value
+        // Select first metric in the list
+        this.metric = this.metricSelectOptions.find(option => option.value !== undefined)?.value;
       }
     },
+
     initDimension() {
+      // if (this.dimensionSelectOptions.find(option => option.value === this.dimension)) {
+      //   // The dimension is already selected
+      //   return;
+      // }
+
+      const options = this.pluginSettings.settings.options;
+
       if (
-        this.pluginSettings.settings.options
-        && this.pluginSettings.settings.options[this.chart]
-        && this.pluginSettings.settings.options[this.chart].dimension
-
-        // Check that the dimension exists in the options
-        && this.dimensionSelectOptions.find(option => option.value === this.pluginSettings.settings.options[this.chart].dimension)
+        options?.[this.chart]?.dimension &&
+        this.dimensionSelectOptions.find(option => option.value === options[this.chart].dimension)
       ) {
-
-        this.dimension = this.pluginSettings.settings.options[this.chart].dimension
+        // Select dimension from the saved chart options with the same type
+        this.dimension = options[this.chart].dimension;
+      } else if (
+        Object.values(options).length > 0 &&
+        Object.values(options)[0].dimension &&
+        this.dimensionSelectOptions.find(option => option.value === Object.values(options)[0].dimension)
+      ) {
+        // Select dimension from the saved chart options with a different type
+        this.dimension = Object.values(options)[0].dimension;
       } else {
-        this.dimension = this.dimensionSelectOptions.find(option => option.value !== undefined)?.value
+        // Select first dimension in the list
+        this.dimension = this.dimensionSelectOptions.find(option => option.value !== undefined)?.value;
       }
     },
 
     onChartChange() {
-      // this.initMetric()
-      // this.initDimension()
+      this.initMetric()
+      this.initDimension()
     },
 
     parseOptionsForVueSelect(inputOptions) {
