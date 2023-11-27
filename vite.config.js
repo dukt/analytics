@@ -17,7 +17,7 @@ export default defineConfig(({command, mode}) => {
       sourcemap: true,
       // outDir: './src/web/assets/analytics/dist/',
       rollupOptions: {
-        input: './src/web/assets/analytics/src/main.js',
+        input: path.resolve('./src/web/assets/analytics/src/main.js'),
       },
     },
     // define: {
