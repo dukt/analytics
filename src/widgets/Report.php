@@ -116,7 +116,7 @@ class Report extends \craft\base\Widget
                 'sourceId' => $widgetSettings['sourceId'] ?? null,
                 'chart' => $widgetSettings['chart'] ?? null,
                 'period' => $widgetSettings['period'] ?? null,
-                'options' => $widgetSettings['options'][$widgetSettings['chart']] ?? null,
+                'options' => $widgetSettings['options'] ?? null,
             ];
 
             // use cached response if available
@@ -212,8 +212,8 @@ class Report extends \craft\base\Widget
             $name = [];
             $chartType = $this->settings['chart'];
 
-            if (isset($this->settings['options'][$chartType])) {
-                $options = $this->settings['options'][$chartType];
+            if (isset($this->settings['options'])) {
+                $options = $this->settings['options'];
 
                 if (!empty($options['dimension'])) {
                     $name[] = Craft::t('analytics', Analytics::$plugin->getMetadataGA4()->getDimMet($this->settings['sourceId'], $options['dimension']));

@@ -148,7 +148,7 @@
           </v-select>
           <input
             type="hidden"
-            :name="inputName('options['+chart+'][dimension]')"
+            :name="inputName('options[dimension]')"
             :value="dimension"
           >
         </div>
@@ -184,7 +184,7 @@
         </v-select>
         <input
           type="hidden"
-          :name="inputName('options['+chart+'][metric]')"
+          :name="inputName('options[metric]')"
           :value="metric"
         >
       </div>
