@@ -3,7 +3,7 @@
     <!-- Source -->
     <div class="field">
       <div class="heading">
-        <label>Source</label>
+        <label>{{ t('analytics', "Source") }}</label>
       </div>
       <div class="input">
         <div class="da-flex da-items-center da-gap-3">
@@ -36,7 +36,7 @@
     <!-- Chart Type -->
     <div class="field">
       <div class="heading">
-        <label>Chart Type</label>
+        <label>{{ t('analytics', "Chart Type") }}</label>
       </div>
       <div class="input">
         <div class="chart-picker">
@@ -97,7 +97,7 @@
     <!-- Period -->
     <div class="field">
       <div class="heading">
-        <label>Period</label>
+        <label>{{ t('analytics', "Period") }}</label>
       </div>
       <div class="input">
         <div class="select">
@@ -122,7 +122,7 @@
     <template v-if="chartSupportsDimensions">
       <div class="field">
         <div class="heading">
-          <label>Dimension</label>
+          <label>{{ t('analytics', "Dimension") }}</label>
         </div>
         <div>
           <v-select
@@ -158,7 +158,7 @@
     <!-- Metric -->
     <div class="field">
       <div class="heading">
-        <label>Metric</label>
+        <label>{{ t('analytics', "Metric") }}</label>
       </div>
       <div>
         <v-select
@@ -204,6 +204,7 @@ import EarthIcon from "@/js/components/icons/EarthIcon.vue";
 import TableIcon from "@/js/components/icons/TableIcon.vue";
 import NumberIcon from "@/js/components/icons/NumberIcon.vue";
 import ChartArea from "@/js/components/icons/ChartArea.vue";
+import {t} from '@/js/utils';
 
 export default {
   components: {
@@ -388,6 +389,7 @@ export default {
   },
 
   methods: {
+    t,
     onViewChange() {
       this.refreshDimensionsAndMetrics()
     },

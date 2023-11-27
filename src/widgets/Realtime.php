@@ -112,6 +112,10 @@ class Realtime extends \craft\base\Widget
             'Pageviews',
             '{count} minute ago',
             '{count} minutes ago',
+            'Active users per minute',
+            'Active pages',
+            'Page',
+            'Users',
         ]);
 
         $variables = [

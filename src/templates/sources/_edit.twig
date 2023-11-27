@@ -23,7 +23,7 @@
 
     {{ forms.textField({
         first: true,
-        label: "Name",
+        label: "Name"|t('analytics'),
         name: 'name',
         value: (source is defined ? source.name : null),
         errors: source.getErrors('name'),

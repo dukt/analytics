@@ -105,6 +105,13 @@ class SourcesController extends BaseAccessController
         ];
 
         Craft::$app->getView()->registerJs('new AnalyticsVueSettings({data: {pluginOptions: '.Json::encode($jsOptions).'}}).$mount("#analytics-settings");');
+        Craft::$app->getView()->registerTranslations('analytics', [
+            'Loading Google Analytics accounts…',
+            'Analytics Accounts',
+            'Properties & Apps',
+            'Select GA4 property',
+        ]);
+
 
         return $this->renderTemplate('analytics/sources/_edit', $variables);
     }

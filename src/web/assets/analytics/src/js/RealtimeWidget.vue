@@ -9,7 +9,7 @@
 
     <div class="da-mt-6">
       <h3>
-        Active users per minute
+        {{ t('analytics', "Active users per minute") }}
       </h3>
 
       <div>
@@ -25,7 +25,7 @@
 
     <div class="active-pages da-mt-6">
       <h3>
-        Active pages
+        {{ t('analytics', "Active pages") }}
       </h3>
 
       <template v-if="activePages">
@@ -33,10 +33,10 @@
           <thead>
             <tr>
               <th class="col-page">
-                Page
+                {{ t('analytics', "Page") }}
               </th>
               <th class="col-users">
-                Users
+                {{ t('analytics', "Users") }}
               </th>
             </tr>
           </thead>
@@ -63,6 +63,7 @@
 /* global google, Craft */
 import reportsApi from '@/js/api/reports';
 import AnalyticsChart from '@/js/components/AnalyticsChart.vue';
+import {t} from '@/js/utils';
 
 export default {
   components: {AnalyticsChart},
@@ -118,6 +119,7 @@ export default {
   },
 
   methods: {
+    t,
     getReport() {
       this.loading = true
 

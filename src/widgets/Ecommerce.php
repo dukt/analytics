@@ -91,6 +91,13 @@ class Ecommerce extends \craft\base\Widget
 
         $view->registerAssetBundle(AnalyticsAsset::class);
         $view->registerJs('new AnalyticsVueEcommerceWidget({data: {pluginOptions: '.Json::encode($widgetOptions).'}}).$mount("#analytics-widget-'.$widgetId.'");;');
+        $view->registerTranslations('analytics', [
+            'Loading…',
+            'Total Revenue',
+            'Revenue Per Transaction',
+            'Transactions',
+            'Transactions Per Session',
+        ]);
 
         return $view->renderTemplate('analytics/_components/widgets/Ecommerce/body', [
             'id' => $this->id,

@@ -2,7 +2,7 @@
   <div>
     <template v-if="loading">
       <div>
-        Loading Google Analytics accounts…
+        {{ t('analytics', "Loading Google Analytics accounts…") }}
       </div>
     </template>
     <template v-else>
@@ -15,7 +15,7 @@
           <div
             class="da-border-b da-font-medium da-text-gray-500 da-px-6 da-py-3"
           >
-            Analytics Accounts
+            {{ t('analytics', "Analytics Accounts") }}
           </div>
           <div class="da-max-h-[22rem] da-overflow-auto">
             <ul>
@@ -68,7 +68,7 @@
           <div
             class="da-border-b da-font-medium da-text-gray-500 da-px-6 da-py-3"
           >
-            Properties &amp; Apps
+            {{ t('analytics', "Properties &amp; Apps") }}
           </div>
           <div class="da-max-h-[22rem] da-overflow-auto">
             <ul>
@@ -115,7 +115,7 @@
                           :disabled="selectedProperty === property.id"
                           @click.prevent="selectGA4Property(property)"
                         >
-                          Select GA4 property
+                          {{ t('analytics', "Select GA4 property") }}
                         </button>
                       </div>
                     </div>
@@ -132,6 +132,7 @@
 
 <script>
 import settingsApi from './api/settings'
+import {t} from '@/js/utils'
 
 export default {
   data() {
@@ -182,6 +183,7 @@ export default {
   },
 
   methods: {
+    t,
     selectGA4Property(property) {
       this.selectedSourceType = 'GA4'
       this.selectedProperty = property.id

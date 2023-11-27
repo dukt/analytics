@@ -191,3 +191,7 @@ export const getLocaleDefinition = (currencyDefinition) => {
     currency: currencyDefinition
   })
 }
+
+export const t = (category, message, params) => {
+  return Craft.t(category, message, params)
+}

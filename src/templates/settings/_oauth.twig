@@ -30,8 +30,8 @@
     <p>{{ "Configure the client with the following javascript origin and redirect urls."|t('analytics') }}</p>
 
     <ul class="bullets">
-        <li><strong>Javascript Origin:</strong> <code>{{ javascriptOrigin }}</code></li>
-        <li><strong>Redirect URI:</strong> <code>{{ redirectUri }}</code></li>
+        <li><strong>{{ "Javascript Origin:"|t('analytics') }}</strong> <code>{{ javascriptOrigin }}</code></li>
+        <li><strong>{{ "Redirect URI:"|t('analytics') }}</strong> <code>{{ redirectUri }}</code></li>
     </ul>
 
     <h2>{{ 'Configure the OAuth client'|t('analytics') }}</h2>
@@ -46,7 +46,7 @@
     </p>
 
     {{ forms.autosuggestField({
-        label: "Client ID",
+        label: "Client ID"|t('analytics'),
         name: 'settings[oauthClientId]',
         value: settings.oauthClientId,
         suggestions: craft.cp.getEnvSuggestions(),
@@ -54,7 +54,7 @@
     }) }}
 
     {{ forms.autosuggestField({
-        label: "Client Secret",
+        label: "Client Secret"|t('analytics'),
         name: 'settings[oauthClientSecret]',
         value: settings.oauthClientSecret,
         suggestions: craft.cp.getEnvSuggestions(),

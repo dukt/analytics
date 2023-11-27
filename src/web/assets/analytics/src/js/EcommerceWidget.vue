@@ -1,7 +1,7 @@
 <template>
   <div>
     <template v-if="loading">
-      Loading…
+      {{ t('analytics', "Loading…") }}
     </template>
     <template v-if="reportResponse">
       <div>
@@ -22,7 +22,7 @@
       <div class="tiles">
         <div class="tile">
           <div class="label light">
-            {{ "Total Revenue" }}
+            {{ t('analytics', "Total Revenue") }}
           </div>
           <div class="value revenue">
             {{ totalRevenue }}
@@ -30,7 +30,7 @@
         </div>
         <div class="tile">
           <div class="label light">
-            {{ "Revenue Per Transaction" }}
+            {{ t('analytics', "Revenue Per Transaction") }}
           </div>
           <div class="value revenue-per-transaction">
             {{ totalRevenuePerTransaction }}
@@ -38,7 +38,7 @@
         </div>
         <div class="tile">
           <div class="label light">
-            {{ "Transactions" }}
+            {{ t('analytics', "Transactions") }}
           </div>
           <div class="value transactions">
             {{ totalTransactions }}
@@ -46,7 +46,7 @@
         </div>
         <div class="tile">
           <div class="label light">
-            {{ "Transactions Per Session" }}
+            {{ t('analytics', "Transactions Per Session") }}
           </div>
           <div class="value transactions-per-session">
             {{ totalTransactionsPerSession }}
@@ -59,7 +59,7 @@
 
 <script>
 import reportsApi from '@/js/api/reports';
-import {responseToDataTable, getLocaleDefinition, formatByType} from '@/js/utils';
+import {responseToDataTable, getLocaleDefinition, formatByType, t} from '@/js/utils';
 import {ChartOptions} from '@/js/ChartOptions';
 import AnalyticsChart from '@/js/components/AnalyticsChart.vue';
 
@@ -95,6 +95,7 @@ export default {
     this.getReport()
   },
   methods: {
+    t,
     getReport() {
       this.loading = true
 

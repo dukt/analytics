@@ -190,6 +190,13 @@ class Report extends \craft\base\Widget
 
             $vueJsonOptions = Json::encode($vueVariables);
 
+            Craft::$app->getView()->registerTranslations('analytics', [
+                'Source',
+                'Chart Type',
+                'Period',
+                'Dimension',
+                'Metric',
+            ]);
             Craft::$app->getView()->registerJs('new AnalyticsVueReportWidgetSettings({data: {pluginSettings: '.$vueJsonOptions.'}}).$mount("#'.$vueNamespaceId.'");');
 
             return Craft::$app->getView()->renderTemplate('analytics/_components/widgets/Report/settings', $variables);
