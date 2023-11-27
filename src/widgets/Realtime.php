@@ -101,12 +101,6 @@ class Realtime extends \craft\base\Widget
 
         $realtimeRefreshInterval = Analytics::$plugin->getAnalytics()->getRealtimeRefreshInterval();
 
-        $widgetId = $this->id;
-        $widgetOptions = [
-            'sourceId' => $widgetSettings['sourceId'],
-            'refreshInterval' => $realtimeRefreshInterval,
-        ];
-
         $view->registerTranslations('analytics', [
             'Minutes ago',
             'Pageviews',
