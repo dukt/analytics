@@ -9,14 +9,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "old-development": "mix",
-    "old-watch": "mix watch",
-    "old-watch-poll": "mix watch -- --watch-options-poll=1000",
-    "old-hot": "mix watch --hot",
-    "old-production": "mix --production",
-    "old-dev": "npm run development",
-    "old-build": "npm run production",
-    "old-test": "npx playwright test"
+    "test": "npx playwright test"
   },
   "keywords": [],
   "author": "",
