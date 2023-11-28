@@ -65,7 +65,7 @@ return array(
     'Geo' => 'Geo',
     'Gettings errors trying to connect? Check your {link}.' => 'Gettings errors trying to connect? Check your {link}.',
     'Go to the {link} and create a new project or use an existing one.' => 'Go to the {link} and create a new project or use an existing one.',
-    'Google API Console' => 'Google API Console',
+    'Google Cloud Console' => 'Google Cloud Console',
     'Google Analytics Account' => 'Google Analytics Account',
     'Google Analytics Data Types' => 'Google Analytics Data Types',
     'Google Maps API Key' => 'Google Maps API Key',

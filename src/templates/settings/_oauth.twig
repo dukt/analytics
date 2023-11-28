@@ -19,8 +19,8 @@
     <h2 class="first">{{ 'Create the OAuth application'|t('analytics') }}</h2>
     <p>{{ 'Go to the {link} and create a new project or use an existing one.'|t('analytics', {
             link: '<a href="{url}">{label}</a>'|t('analytics', {
-                url: 'https://console.developers.google.com/',
-                label: 'Google API Console'|t('analytics'),
+                url: 'https://console.cloud.google.com/',
+                label: 'Google Cloud Console'|t('analytics'),
             })})|raw }}
     </p>
     <p>{{ "In “API & Services → Library”, search for “analytics”, and enable the “Google Analytics API” and “Google Analytics Reporting API”."|t('analytics') }}</p>
@@ -39,8 +39,8 @@
 
     <p>{{ 'Copy the client ID & secret from the {link} under the API Manager → Credentials tab, paste them below and save.'|t('analytics', {
             link: '<a href="{url}">{label}</a>'|t('analytics', {
-                url: 'https://console.developers.google.com/',
-                label: 'Google API Console'|t('analytics')
+                url: 'https://console.cloud.google.com/',
+                label: 'Google Cloud Console'|t('analytics')
             }),
         })|raw }}
     </p>
