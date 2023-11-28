@@ -33,15 +33,15 @@ class SettingsController extends BaseAccessController
     {
         $isOauthProviderConfigured = Analytics::$plugin->getAnalytics()->isOauthProviderConfigured();
 
+        $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
+        $settings = $plugin->getSettings();
+
         if ($isOauthProviderConfigured) {
             $errors = [];
 
             try {
                 $provider = Analytics::$plugin->getOauth()->getOauthProvider();
                 $token = Analytics::$plugin->getOauth()->getToken();
-
-                $plugin = Craft::$app->getPlugins()->getPlugin('analytics');
-                $settings = $plugin->getSettings();
 
                 if ($token !== null) {
                     $oauthAccount = Analytics::$plugin->getCache()->get(['getAccount', $token]);
