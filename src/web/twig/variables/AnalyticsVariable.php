@@ -30,16 +30,4 @@ class AnalyticsVariable implements ViteVariableInterface
     {
         return new ReportRequestCriteria($attributes);
     }
-
-    /**
-     * Returns the Analytics tracking object.
-     *
-     *
-     * @return \TheIconic\Tracking\GoogleAnalytics\Analytics
-     * @throws \yii\base\InvalidConfigException
-     */
-    public function tracking(bool $isSsl = false, bool $isDisabled = false, array $options = [])
-    {
-        return Analytics::$plugin->getAnalytics()->tracking($isSsl, $isDisabled, $options);
-    }
 }

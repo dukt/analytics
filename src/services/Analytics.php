@@ -85,40 +85,6 @@ class Analytics extends Component
     }
 
     /**
-     * Returns the Analytics tracking object.
-     *
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return \TheIconic\Tracking\GoogleAnalytics\Analytics
-     */
-    public function tracking(bool $isSsl = false, bool $isDisabled = false, array $options = [])
-    {
-        $userAgent = Craft::$app->getRequest()->getUserAgent();
-
-        if (empty($userAgent)) {
-            $userAgent = "User-Agent:Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13\r\n";
-        }
-
-        $referrer = Craft::$app->getRequest()->getReferrer();
-
-        if (empty($referrer)) {
-            $referrer = '';
-        }
-
-        $analyticsTracking = new \TheIconic\Tracking\GoogleAnalytics\Analytics($isSsl, $isDisabled, $options);
-        $analyticsTracking
-            ->setProtocolVersion('1')
-            ->setUserAgentOverride($userAgent)
-            ->setDocumentHostName(Craft::$app->getRequest()->getServerName())
-            ->setDocumentReferrer($referrer)
-            ->setAsyncRequest(false)
-            ->setClientId($this->_gaParseCookie());
-
-        return $analyticsTracking;
-    }
-
-    /**
      * Checks if the OAuth provider is configured.
      *
      * @return bool

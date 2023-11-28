@@ -29,7 +29,6 @@
         "league/oauth2-client": "^2.5.0",
         "league/oauth2-google": "^4.0.0",
         "google/apiclient": "^v2.6.0",
-        "theiconic/php-ga-measurement-protocol": "^2.8.0",
         "nystudio107/craft-plugin-vite": "^4.0"
     },
     "autoload": {
