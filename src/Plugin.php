@@ -55,6 +55,11 @@ class Plugin extends \craft\base\Plugin
     public string $schemaVersion = '2.0.0';
 
     /**
+     * @inheritdoc
+     */
+    public string $minVersionRequired = '4.0.15';
+
+    /**
      * @var \dukt\analytics\Plugin The plugin instance.
      */
     public static $plugin;
