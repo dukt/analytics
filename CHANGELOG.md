@@ -3,13 +3,24 @@ Changelog
 
 ## Unreleased
 
+### Added
+- Added support for Google Analytics 4 (GA4) properties.
+- Added Analytics as a CP section.
+- Added enable CP section, enable cache, cache duration, and Google Maps API key to the plugin’s settings.
+- Added flow to upgrade an Universal Analytics (UA) source to a Google Analytics 4 (GA4) source.
+
 ### Changed
-- Updated `league/oauth2-google` to 4.0.
-- Renamed `views` to `sources`.
+- Renamed views to sources. 
+- Disabled city support for the geo chart since [latitude and longitude are not currently provided by the GA4 API](https://github.com/googleanalytics/ga-dev-tools/issues/962).
+- Changed `craftcms/cms` requirement to `^4.0.0`.
+- Updated schema version to `2.0.0`.
+- Moved `schemaVersion` to plugin file.
+- Updated `league/oauth2-google` to `4.0`.
+- Updated from webpack to Vite.
 
 ### Fixed
 - Fixed a bug where the `site` query param was present in the OAuth redirect URI.
-- Fixed english translations.
+- Fixed a bug where the chart wouldn’t get redrawn on window resize.
 
 ## 5.0.0-beta.2 - 2022-04-28
 
