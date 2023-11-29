@@ -39,7 +39,7 @@
     "extra": {
         "name": "Analytics",
         "handle": "analytics",
-        "documentationUrl": "https://dukt.net/docs/analytics",
+        "documentationUrl": "https://dukt.net/docs/analytics"
     },
     "config": {
         "allow-plugins": {
