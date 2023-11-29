@@ -28,6 +28,7 @@ module.exports = {
                      'requirements',
                      'installation',
                      'connect-google-analytics',
+                     'upgrading-ua-to-ga4',
                      'configuration',
                  ]
              },
