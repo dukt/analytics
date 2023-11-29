@@ -19,7 +19,6 @@ use craft\web\twig\variables\CraftVariable;
 use dukt\analytics\base\PluginTrait;
 use dukt\analytics\fields\Report as ReportField;
 use dukt\analytics\models\Settings;
-use dukt\analytics\services\MetadataGA4;
 use dukt\analytics\web\assets\analytics\AnalyticsAsset;
 use dukt\analytics\web\twig\variables\AnalyticsVariable;
 use dukt\analytics\widgets\Ecommerce;
