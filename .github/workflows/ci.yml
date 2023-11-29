@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - v5-develop
+      - v5
 jobs:
   ci:
     name: ci

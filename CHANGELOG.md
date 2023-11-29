@@ -1,7 +1,7 @@
 Changelog
 =========
 
-## Unreleased
+## 5.0.0 - 2023-11-29
 
 ### Added
 - Added support for Google Analytics 4 (GA4) properties.
@@ -20,7 +20,7 @@ Changelog
 
 ### Fixed
 - Fixed a bug where the `site` query param was present in the OAuth redirect URI.
-- Fixed a bug where the chart wouldn’t get redrawn on window resize.
+- Fixed a bug where the chart would not get redrawn on window resize.
 
 ## 5.0.0-beta.2 - 2022-04-28
 
